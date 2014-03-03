@@ -21,6 +21,7 @@ var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var forgotController = require('./controllers/forgot');
 var resetController = require('./controllers/reset');
+var testController = require('./controllers/test');
 
 /**
  * API keys + Passport configuration.
@@ -132,6 +133,9 @@ app.get('/api/github', passportConf.isAuthenticated, passportConf.isAuthorized, 
 app.get('/api/twitter', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTwitter);
 app.get('/api/venmo', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getVenmo);
 app.post('/api/venmo', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.postVenmo);
+app.get('/save-a-million', testController.saveDBTest);
+app.get('/fetch-test', testController.fetchDummyTwitterStream);
+app.get('/query-test', testController.queryDummyTwitterStream);
 
 /**
  * OAuth routes for sign-in.
