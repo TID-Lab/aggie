@@ -8,39 +8,55 @@ var Chance = require('chance');
 var fs = require('fs');
 
 exports.saveDBTest = function(req, res) {
+
+    //the amounts of tweets to save
     var MAX = 1000;
-    var id = 0;
+
+    //random obj generator
+    var chance = new Chance();
+
+    //start the timer for the test
     console.time("SaveM");
+
+    //callback to check if saved failed
     var callback = function(err, results) {
         if (err) return handleError(err);
         console.log(results);
         id++;
 
     };
+
+    //new Testing entry
     var item = new Testing({
-        message: "message" + id,
-        source: "TWITTER",
-        user_name: "Alex Stelea",
-        user_handle: "alex_stelea",
+        message: chance.sentance(),
+        source: Testing.TWITTER,
+        user_name: chance.name(),
+        user_handle: change.twitter(),
         user_image_url: "imglink",
-        timestamp: "2013-13-12",
+        timestamp: new Date().toISOString().slice(0, 10),
         terms: ['bar', 'foo']
     });
-    while (id < MAX) {
 
+    //save all the items
+    while (id < MAX) {
         item.save(callback);
     }
 
+    //log the end of the saves
     console.timeEnd("SaveM");
+
+    //remove all the added entries
     var b = Testing.remove({}, function(err) {
         if (err) return handleError(err);
         console.log("removed");
     });
+
+    //execute delete query
     b.exec();
+
+    //Send status of test
     res.send("Saved " + id);
-
 };
-
 
 exports.fetchDummyTwitterStream = function(req, res) {
 
@@ -96,7 +112,7 @@ exports.fetchDummyTwitterStream = function(req, res) {
         for (var x = 0; x < newJSON.length; x++) {
             var item = new Testing({
                 message: newJSON[x].text,
-                source: "TWITTER",
+                source: Testing.TWITTER,
                 user_name: newJSON[x].user.name,
                 user_handle: newJSON[x].user.screen_name,
                 user_image_url: newJSON[x].user.profile_image_url,
@@ -104,36 +120,31 @@ exports.fetchDummyTwitterStream = function(req, res) {
                 terms: []
             }).save();
         }
-
         counter++;
 
         console.log(counter + " " + Object.keys(newJSON).length);
-
-
     };
 
     var timeoutsSecond = setInterval(generateTweets, 1000);
     setTimeout(endTimeout, 10000);
-
 
     var endTimeout = function() {
         console.timeEnd("startSave");
         clearInterval(timeoutsSecond);
         res.send("Tested " + TWEETS_TO_GENERATE + " tweets a second");
     };
-
 };
 
 exports.queryDummyTwitterStream = function(req, res) {
 
-	//Find all the sources that are Twitter
-	//Todo 
+    //Find all the sources that are Twitter
     Testing.find({
-        "source": 'TWITTER'
+        "source": Testing.TWITTER
     }, function(err, data) {
         console.log(">>>> " + data);
+
+        //Count the amount of instances
         results = Object.keys(data).length;
         res.send("End of query test " + results);
     });
-
 };
