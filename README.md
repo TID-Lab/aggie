@@ -1,32 +1,10 @@
-![Alt](https://lh4.googleusercontent.com/-PVw-ZUM9vV8/UuWeH51os0I/AAAAAAAAD6M/0Ikg7viJftQ/w1286-h566-no/hackathon-starter-logo.jpg)
-Hackathon Starter [![Dependency Status](https://david-dm.org/sahat/hackathon-starter.png?theme=shields.io)](https://david-dm.org/sahat/hackathon-starter) [![Build Status](https://travis-ci.org/sahat/hackathon-starter.png)](https://travis-ci.org/sahat/hackathon-starter)
+
+Aggie App
 =================
-A boilerplate for **Node.js** web applications.
 
-**Live Demo**: http://hackathonstarter.herokuapp.com :octocat:
 
-If you have attended any hackathons in the past then you know how much time it takes to
-get a project started. Decide on an idea, pick a programming language, pick a web framework,
-pick a CSS framework. A while later, you will have an initial project up on GitHub, and only then can other team members
-start contributing. Or what about doing something as simple as OAuth 2.0 Authentication? You can spend hours
-on it if you are not familiar with how OAuth 2.0 works. *(As a side-note, over a year ago
-I had no idea WTF REST or OAuth were, or how to do a simple "Sign in with Facebook".
-It was a frustrating experience to say the least.)*
+This is the future of Aggie. Forked from a great boilerplate, this project features the backbone to make Aggie 2.0 a fast and effective social media tool.  
 
-When I started this project, my primary focus was on **simplicity** and **ease of use**.
-I also tried to make it as **generic** and **reusable** as possible to cover most use cases of hackathon web apps,
-without being too specific. In the worst case you can use this as a guide for your projects, if for example you are only
-interested in **Sign in with Google** authentication and nothing else.
-
-Chances are, you might not need all 4 types of OAuth 1.0a/OAuth2 authentication methods, or all 12+ API examples. So, use what you need and delete what you don't need. As of recently, it is possible to selectively *enable/disable* authentication methods in `config/secrets.js`.
-
-<h4 align="center">Flatly Bootstrap Theme</h3>
-
-![Alt](https://lh6.googleusercontent.com/-NikjFtdyOq8/UsCv7URplAI/AAAAAAAADrE/a417u0cZU7Y/w1278-h958-no/Screenshot+2013-12-29+18.27.10.png)
-
-<h4 align="center">Default Theme</h3>
-
-![Alt](https://lh5.googleusercontent.com/-KmlaMLKGCqg/UuWt4MrXzeI/AAAAAAAAD6o/KUucObo33zU/w1170-h860-no/Screenshot+2014-01-26+19.52.03.png)
 
 Table of Contents
 -----------------
@@ -177,29 +155,6 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRe
 
 <hr>
 
-<img src="https://s3.amazonaws.com/venmo/venmo_logo_blue.png" width="200">
-- Visit the **Account** section of your Venmo profile after logging in
-- Click on the **Developers** tab
-- Then click on the [new](https://venmo.com/account/app/new) link next to **Your Applications (0)**
-- Fill in the required fields: *App Name* and *What Will The App Be Used For?*
-- For **Web Redirect URL** enter: http://localhost:3000/auth/venmo/callback
-- Hit **Create** button
-- Back on the **Developers** tab click on **view** link next to **Your Applications (1) new**
-- Copy and paste **ID** and **Secret** keys into `config/secrets.js`
-
-<hr>
-
-<img src="https://www.paypalobjects.com/webstatic/developer/logo_paypal-developer_beta.png" width="200">
-- Visit [PayPal Developer](https://developer.paypal.com/)
-- Log in to your PayPal account
-- Click **Applications > Create App** in the navigation bar
-- Enter *Application Name*, then click **Create app**
-- Copy and paste *Client ID* and *Secret* keys into `config/secrets.js`
-- *App ID* is **client_id**, *App Secret* is **client_secret**
-- Change **host** to api.paypal.com if you want to test against production and use the live credentials
-
-<hr>
-
 <img src="https://www.dropboxatwork.com/wp-content/uploads/2013/02/foursquare-logo.png" width="200">
 - Go to [foursquare for Developers](https://developer.foursquare.com/)
 - Click on **My Apps** in the top menu
@@ -218,14 +173,6 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRe
 - For **Default Callback URL**: http://localhost:3000/auth/tumblr/callback
 - Click **✔Register**
 - Copy and paste *OAuth consumer key* and *OAuth consumer secret* keys into `config/secrets.js`
-
-<hr>
-
-<img src="http://www.outofoursystem.com/wp-content/uploads/2012/06/steam-logo-white.jpg" width="200">
-- Go to http://steamcommunity.com/dev/apikey
-- Sign in with your existing Steam account
-- Enter your *Domain Name*, then and click **Register**
-- Copy and paste *Key* into `config/secrets.js`
 
 <hr>
 
@@ -267,6 +214,7 @@ List of Packages
 | ------------- |:-------------:|
 | async         | Utility library that provides asynchronous control flow. |
 | bcrypt-nodejs | Library for hashing and salting user passwords. |
+| chance | Random generator library for sentances/ names / accounts / etc
 | cheerio | Scrape web pages using jQuery-style syntax.  |
 | connect-mongo | MongoDB session store for Express. |
 | connect-assets | Compiles LESS stylesheets, concatenates/minifies JavaScript. |
