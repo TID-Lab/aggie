@@ -10,7 +10,7 @@ var fs = require('fs');
 exports.saveDBTest = function(req, res) {
 
     //the amounts of tweets to save
-    var MAX = 1000;
+    var TWEETS_TO_SAVE = 1000;
 
     //random obj generator
     var chance = new Chance();
@@ -38,7 +38,7 @@ exports.saveDBTest = function(req, res) {
     });
 
     //save all the items
-    while (id < MAX) {
+    while (id < TWEETS_TO_SAVE) {
         item.save(callback);
     }
 
@@ -66,7 +66,7 @@ exports.fetchDummyTwitterStream = function(req, res) {
     //sync loading of file
     var text = fs.readFileSync(__dirname + '/sample_tweet.txt');
 
-    //convert buffer to string 
+    //convert buffer to string
     var string = text.toString();
 
     //initialize chance instance
@@ -105,7 +105,7 @@ exports.fetchDummyTwitterStream = function(req, res) {
         //end json file
         file += "]";
 
-        // String -> JSON 
+        // String -> JSON
         var newJSON = JSON.parse(file);
 
         //Save all the JSON into mongodb
