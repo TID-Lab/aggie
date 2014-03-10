@@ -132,6 +132,7 @@ exports.postUpdateProfile = function(req, res, next) {
     user.profile.gender = req.body.gender || '';
     user.profile.location = req.body.location || '';
     user.profile.website = req.body.website || '';
+    user.isAdminFlag = req.body.isAdminFlag || '';
 
     user.save(function(err) {
       if (err) return next(err);
