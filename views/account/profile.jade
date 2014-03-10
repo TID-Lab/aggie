@@ -15,6 +15,15 @@ block content
       .col-sm-4
         input.form-control(type='text', name='name', id='name', value='#{user.profile.name}')
     .form-group
+      label.col-sm-2.control-label(for='isAdminFlag') isAdminFlag
+      .col-sm-4
+        label.radio
+          input(type='radio', checked=user.isAdminFlag==false, name='isAdminFlag', value=true, data-toggle='radio')
+          span False
+        label.radio
+          input(type='radio', checked=user.isAdminFlag==true, name='isAdminFlag', value=false, data-toggle='radio')
+          span True
+    .form-group
       label.col-sm-2.control-label(for='gender') Gender
       .col-sm-4
         label.radio
