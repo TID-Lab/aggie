@@ -1,5 +1,5 @@
 var Twit = require('twit');
-var config = require('../../config/secrets').twitter;
+var config = require('../../../config/secrets').twitter;
 
 var TwitterContentService = function(options) {
   this.twit = new Twit(config);
@@ -10,6 +10,10 @@ var TwitterContentService = function(options) {
   }
   this._isStreaming = false;
 };
+
+var ContentService = require('../content-service');
+var util = require('util');
+util.inherits(TwitterContentService, ContentService);
 
 // Set/change filter stream
 TwitterContentService.prototype.setFilterStream = function(filter) {
