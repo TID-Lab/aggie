@@ -1,24 +1,25 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
+var ContentService = require('../content-service');
+var util = require('util');
 
 var TwitterContentService = function(options) {
   this.twit = new Twit(config);
   if (typeof options === 'string') {
-    this.options = {track: options};
+    this.filter = options;
   } else {
-    this.options = options || {};
+    this.filter = options.filter;
   }
+  this.type = 'twitter';
   this._isStreaming = false;
 };
 
-var ContentService = require('../content-service');
-var util = require('util');
 util.inherits(TwitterContentService, ContentService);
 
 // Set/change filter stream
 TwitterContentService.prototype.setFilterStream = function(filter) {
   if (typeof filter === 'string') {
-    this.options.track = filter;
+    this.filter = filter;
   }
 };
 
@@ -28,7 +29,7 @@ TwitterContentService.prototype.start = function() {
     this.stream.start();
   } else {
     this.streamName = 'statuses/filter';
-    this.stream = this.twit.stream(this.streamName, this.options);
+    this.stream = this.twit.stream(this.streamName, {track: this.filter});
   }
   this._isStreaming = true;
 };
