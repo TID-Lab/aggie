@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var TwitterContentService = require('../controllers/fetching/twitter-content-service');
+var TwitterContentService = require('../controllers/fetching/content-services/twitter-content-service');
 
 describe('Twitter content service', function() {
   before(function(done) {
@@ -12,7 +12,7 @@ describe('Twitter content service', function() {
     twitterContentService.on('data', function(data) {
       expect(data).to.have.property('text');
       expect(data.text.toLowerCase()).to.contain('t');
-      // Stop to ensure a single fetch
+      // Stop stream to ensure a single fetch
       twitterContentService.stop();
       done();
     });
