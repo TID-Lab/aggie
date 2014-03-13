@@ -15,14 +15,52 @@ var Bot = function(options) {
 
 util.inherits(Bot, EventEmitter);
 
-Bot.prototype.on = function(event, callback) {
+Bot.prototype.start = function() {
+  if (this.enabled) return;
   var self = this;
-  this.contentService.on(event, function(data) {
-    if (event === 'data') {
+  self.enabled = true;
+  self.contentService.on('data', function(data) {
+    if (self.enabled) {
       data = self.contentService.parse(data);
-      callback(data);
+      self.emit('data', data);
+      self.addToQueue(data);
     }
   });
+};
+
+Bot.prototype.getQueue = function() {
+  this.queue = this.queue || [];
+  this.queueLimit = this.queueLimit || this.contentService.bufferLength;
+  this.droppedRecords = this.droppedRecords || 0;
+  return this.queue;
+};
+
+Bot.prototype.stop = function() {
+  this.enabled = false;
+};
+
+Bot.prototype.addToQueue = function(report) {
+  if (!this.queue) {
+    this.getQueue();
+  }
+  this.queue.push(report);
+  if (this.queue.length > this.contentService.bufferLength) {
+    this.queue.shift();
+    this.droppedRecords++;
+  }
+  this.emit('report', this.queue);
+  return this.queue.length;
+};
+
+Bot.prototype.fetchNext = function() {
+  if (!this.queue) {
+    this.getQueue();
+  }
+  if (this.queue.length) {
+    return this.queue.shift();
+  } else {
+    return null;
+  }
 };
 
 module.exports = Bot;

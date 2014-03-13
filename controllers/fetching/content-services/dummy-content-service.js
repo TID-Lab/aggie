@@ -19,6 +19,7 @@ var DummyContentService = function(options) {
   }
   this.source = 'dummy';
   this.type = 'push';
+  this.bufferLength = 2;
 };
 
 util.inherits(DummyContentService, ContentService);
