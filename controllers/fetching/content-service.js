@@ -3,10 +3,10 @@ var util = require('util');
 
 // Wrapper class for specific content services
 var ContentService = function(options) {
-  this.type = options.type || 'dummy';
+  this.source = options.source || 'dummy';
   this.filter = options.filter;
   EventEmitter.call(this);
-  var SubContentService = require('./content-services/' + this.type + '-content-service');
+  var SubContentService = require('./content-services/' + this.source + '-content-service');
   return new SubContentService(options);
 };
 

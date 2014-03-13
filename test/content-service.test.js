@@ -4,7 +4,7 @@ var DummyContentService = require('../controllers/fetching/content-services/dumm
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = new ContentService({type: 'dummy', filter: 't'});
+    contentService = new ContentService({source: 'dummy', filter: 't'});
     done();
   });
 

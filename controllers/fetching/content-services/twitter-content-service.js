@@ -10,7 +10,8 @@ var TwitterContentService = function(options) {
   } else {
     this.filter = options.filter;
   }
-  this.type = 'twitter';
+  this.source = 'twitter';
+  this.type = 'push';
   this._isStreaming = false;
 };
 
