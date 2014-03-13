@@ -44,11 +44,12 @@ Bot.prototype.addToQueue = function(report) {
     this.getQueue();
   }
   this.queue.push(report);
-  if (this.queue.length > this.contentService.bufferLength) {
-    this.queue.shift();
-    this.droppedRecords++;
-  }
   this.emit('report', this.queue);
+  if (this.queue.length > this.contentService.bufferLength) {
+    var dropped = this.queue.shift();
+    this.droppedRecords++;
+    this.emit('dropped', dropped);
+  }
   return this.queue.length;
 };
 
