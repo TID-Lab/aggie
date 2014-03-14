@@ -3,13 +3,20 @@ var util = require('util');
 
 // Wrapper class for specific content services
 var ContentService = function(options) {
-  this.source = options.source || 'dummy';
-  this.filter = options.filter;
+  this.source = this.source || options.source;
+  this.filter = this.filter || options.filter;
   EventEmitter.call(this);
-  var SubContentService = require('./content-services/' + this.source + '-content-service');
-  return new SubContentService(options);
 };
 
 util.inherits(ContentService, EventEmitter);
 
-module.exports = ContentService;
+module.exports = function factory(options) {
+  var SubContentService = csType(options.source);
+  return new SubContentService(options);
+};
+
+module.exports.ContentService = ContentService;
+
+var csType = function(source) {
+  return require('./content-services/' + source + '-content-service');
+};

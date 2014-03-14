@@ -1,6 +1,6 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
-var ContentService = require('../content-service');
+var ContentService = require('../content-service').ContentService;
 var util = require('util');
 
 var TwitterContentService = function(options) {
@@ -13,6 +13,7 @@ var TwitterContentService = function(options) {
   this.source = 'twitter';
   this.type = 'push';
   this._isStreaming = false;
+  ContentService.call(this, options);
 };
 
 util.inherits(TwitterContentService, ContentService);

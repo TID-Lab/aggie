@@ -1,11 +1,11 @@
 var expect = require('chai').expect;
 var Bot = require('../controllers/fetching/bot');
-var ContentService = require('../controllers/fetching/content-service');
+var ContentService = require('../controllers/fetching/content-service').ContentService;
 var Report = require('../models/report');
 
 describe('Bot', function() {
   before(function(done) {
-    bot = new Bot({type: 'dummy', filter: 't'});
+    bot = Bot({source: 'dummy', filter: 't'});
     done();
   });
 

@@ -1,19 +1,19 @@
 var expect = require('chai').expect;
 var PushBot = require('../controllers/fetching/bots/push-bot');
-var Bot = require('../controllers/fetching/bot');
+var Bot = require('../controllers/fetching/bot').Bot;
 var ContentService = require('../controllers/fetching/content-service');
 var Report = require('../models/report');
 
 describe('Push bot', function() {
   before(function(done) {
-    pushBot = new PushBot({type: 'dummy', filter: 't'});
+    var contentService = ContentService({source: 'dummy', filter: 't'});
+    pushBot = new PushBot(contentService);
     done();
   });
 
   it('should instantiate a push-type content service', function() {
-    expect(pushBot).to.have.property('contentService');
-    expect(pushBot.contentService).to.be.instanceOf(ContentService);
-    expect(pushBot.contentService.type).to.equal('push');
+    expect(pushBot.type).to.equal('push');
+    expect(pushBot).to.be.instanceOf(Bot);
   });
 
   it('should tell content service to start streaming reports', function(done) {

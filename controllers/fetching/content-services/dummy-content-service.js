@@ -8,7 +8,7 @@ var data = [
 ];
 
 var Report = require('../../../models/report');
-var ContentService = require('../content-service');
+var ContentService = require('../content-service').ContentService;
 var util = require('util');
 
 var DummyContentService = function(options) {
@@ -20,6 +20,7 @@ var DummyContentService = function(options) {
   this.source = 'dummy';
   this.type = 'push';
   this.bufferLength = 2;
+  ContentService.call(this, options);
 };
 
 util.inherits(DummyContentService, ContentService);

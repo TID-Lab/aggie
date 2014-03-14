@@ -1,16 +1,12 @@
 var ContentService = require('./content-service');
-var Report = require('../../models/report');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-var Bot = function(options) {
-  options = options || {};
-  options.source = options.source || 'dummy';
-  options.filter = options.filter || '';
-  this.contentService = new ContentService(options);
+var Bot = function(contentService) {
+  this.contentService = this.contentService || contentService;
+  this.type = this.contentService.type;
+  this.enabled = false;
   EventEmitter.call(this);
-  var SubBot = require('./bots/' + this.contentService.type + '-bot');
-  return new SubBot(options);
 };
 
 util.inherits(Bot, EventEmitter);
@@ -64,4 +60,14 @@ Bot.prototype.fetchNext = function() {
   }
 };
 
-module.exports = Bot;
+module.exports = function factory(options) {
+  var contentService = ContentService(options);
+  var SubBot = botType(contentService);
+  return new SubBot(contentService);
+};
+
+module.exports.Bot = Bot;
+
+var botType = function(contentService) {
+  return require('./bots/' + contentService.type + '-bot');
+};

@@ -1,15 +1,8 @@
-var Bot = require('../bot');
-var ContentService = require('../content-service');
-var Report = require('../../../models/report');
-var EventEmitter = require('events').EventEmitter;
+var Bot = require('../bot').Bot;
 var util = require('util');
 
-var PushBot = function(options) {
-  options = options || {};
-  options.source = options.source || 'dummy';
-  options.filter = options.filter || '';
-  this.contentService = new ContentService(options);
-  EventEmitter.call(this);
+var PushBot = function(contentService) {
+  Bot.call(this, contentService);
 };
 
 util.inherits(PushBot, Bot);

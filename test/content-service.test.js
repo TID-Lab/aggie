@@ -4,12 +4,12 @@ var DummyContentService = require('../controllers/fetching/content-services/dumm
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = new ContentService({source: 'dummy', filter: 't'});
+    contentService = ContentService({source: 'dummy', filter: 't'});
     done();
   });
 
   it('should instantiate correct content service', function() {
-    expect(contentService).to.be.instanceOf(ContentService);
+    expect(contentService).to.be.instanceOf(ContentService.ContentService);
     expect(contentService).to.be.instanceOf(DummyContentService);
   });
 
