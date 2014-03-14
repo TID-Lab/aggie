@@ -1,10 +1,12 @@
 var ContentService = require('./content-service');
+var CircularQueue = require('./circular-queue');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
 var Bot = function(contentService) {
   this.contentService = this.contentService || contentService;
   this.type = this.contentService.type;
+  this.queue = new CircularQueue();
   this.enabled = false;
   EventEmitter.call(this);
 };
@@ -15,48 +17,24 @@ Bot.prototype.start = function() {
   if (this.enabled) return;
   var self = this;
   self.enabled = true;
-  self.contentService.on('report', function(data) {
+  self.contentService.on('report', function(report) {
     if (self.enabled) {
-      self.addToQueue(data);
+      self.queue.add(report);
+      self.emit('report', report);
     }
   });
 };
 
-Bot.prototype.getQueue = function() {
-  this.queue = this.queue || [];
-  this.queueLimit = this.queueLimit || this.contentService.bufferLength;
-  this.droppedRecords = this.droppedRecords || 0;
-  return this.queue;
-};
-
 Bot.prototype.stop = function() {
+  var self = this;
   this.enabled = false;
-};
-
-Bot.prototype.addToQueue = function(report) {
-  if (!this.queue) {
-    this.getQueue();
-  }
-  this.queue.push(report);
-  this.emit('report', report);
-  this.emit('reports', this.queue);
-  if (this.queue.length > this.contentService.bufferLength) {
-    var dropped = this.queue.shift();
-    this.droppedRecords++;
-    this.emit('dropped', dropped);
-  }
-  return this.queue.length;
+  this.contentService.removeListener('report', function() {
+    self.emit('stop');
+  });
 };
 
 Bot.prototype.fetchNext = function() {
-  if (!this.queue) {
-    this.getQueue();
-  }
-  if (this.queue.length) {
-    return this.queue.shift();
-  } else {
-    return null;
-  }
+  return this.queue.fetch();
 };
 
 module.exports = function factory(options) {
