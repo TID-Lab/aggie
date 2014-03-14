@@ -18,7 +18,7 @@ CircularQueue.prototype.add = function(element) {
   if (dropped) this.emit('drop', dropped);
   this.data[this.next] = element;
   if (this.isFull()) {
-    this.pointer = (this.pointer + 1) % this.capacity();
+    this.pointer = (this.pointer + 1) % this.capacity;
   } else {
     this.size++;
   }
