@@ -1,5 +1,6 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
+var Report = require('../../../models/report');
 var ContentService = require('../content-service').ContentService;
 var util = require('util');
 
@@ -46,13 +47,32 @@ TwitterContentService.prototype.stop = function() {
 
 // Wrapper for stream event listener
 TwitterContentService.prototype.on = function(event, callback) {
+  var self = this;
   // Create and start stream if not yet created
   if (!this.stream) {
     this.start();
   }
-  event = event === 'data' ? 'tweet' : event;
+  event = event === 'report' ? 'tweet' : event;
   // Listen to stream event and return it to allow chaining
-  return this.stream.on(event, callback);
+  return this.stream.on(event, function(data) {
+    if (event === 'tweet') {
+      var report = self.parse(data);
+      callback(report);
+    } else {
+      callback(data);
+    }
+  });
+};
+
+TwitterContentService.prototype.parse = function(data) {
+  return new Report({
+    fetchedAt: Date.now(),
+    authoredAt: data.created_at,
+    createdAt: data.created_at,
+    content: data.text,
+    author: data.user.screen_name,
+    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
+  });
 };
 
 module.exports = TwitterContentService;

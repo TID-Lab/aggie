@@ -15,10 +15,8 @@ Bot.prototype.start = function() {
   if (this.enabled) return;
   var self = this;
   self.enabled = true;
-  self.contentService.on('data', function(data) {
+  self.contentService.on('report', function(data) {
     if (self.enabled) {
-      data = self.contentService.parse(data);
-      self.emit('data', data);
       self.addToQueue(data);
     }
   });
@@ -40,7 +38,8 @@ Bot.prototype.addToQueue = function(report) {
     this.getQueue();
   }
   this.queue.push(report);
-  this.emit('report', this.queue);
+  this.emit('report', report);
+  this.emit('reports', this.queue);
   if (this.queue.length > this.contentService.bufferLength) {
     var dropped = this.queue.shift();
     this.droppedRecords++;

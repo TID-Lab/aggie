@@ -35,10 +35,11 @@ DummyContentService.prototype.start = function() {
   }
 };
 
-DummyContentService.prototype.fetch = function(self, report) {
+DummyContentService.prototype.fetch = function(self, data) {
   var pattern = new RegExp(self.filter, 'im');
-  if (self._isStreaming && pattern.test(report.text)) {
-    self.emit('data', report);
+  if (self._isStreaming && pattern.test(data.text)) {
+    var report = self.parse(data);
+    self.emit('report', report);
   }
 };
 

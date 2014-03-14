@@ -18,10 +18,10 @@ describe('Push bot', function() {
 
   it('should tell content service to start streaming reports', function(done) {
     pushBot.start();
-    pushBot.on('data', function(data) {
-      expect(data).to.be.instanceOf(Report);
-      expect(data).to.have.property('content');
-      expect(data.content).to.contain('t');
+    pushBot.on('report', function(report) {
+      expect(report).to.be.instanceOf(Report);
+      expect(report).to.have.property('content');
+      expect(report.content).to.contain('t');
       // Stop stream to ensure a single fetch
       pushBot.stop();
       done();
