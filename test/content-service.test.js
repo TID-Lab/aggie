@@ -1,15 +1,16 @@
 var expect = require('chai').expect;
+var csFactory = require('../controllers/fetching/content-service-factory');
 var ContentService = require('../controllers/fetching/content-service');
 var DummyContentService = require('../controllers/fetching/content-services/dummy-content-service');
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = ContentService({source: 'dummy', filter: 't'});
+    contentService = csFactory({source: 'dummy', filter: 't'});
     done();
   });
 
   it('should instantiate correct content service', function() {
-    expect(contentService).to.be.instanceOf(ContentService.ContentService);
+    expect(contentService).to.be.instanceOf(ContentService);
     expect(contentService).to.be.instanceOf(DummyContentService);
   });
 

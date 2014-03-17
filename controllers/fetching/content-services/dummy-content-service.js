@@ -7,7 +7,7 @@ var data = [
   { text: '0123456789' },
 ];
 
-var ContentService = require('../content-service').ContentService;
+var ContentService = require('../content-service');
 var util = require('util');
 
 var DummyContentService = function(options) {

@@ -1,4 +1,4 @@
-var Bot = require('../bot').Bot;
+var Bot = require('../bot');
 var util = require('util');
 
 var PushBot = function(contentService) {

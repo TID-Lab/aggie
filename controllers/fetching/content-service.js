@@ -10,13 +10,4 @@ var ContentService = function(options) {
 
 util.inherits(ContentService, EventEmitter);
 
-module.exports = function factory(options) {
-  var SubContentService = csType(options.source);
-  return new SubContentService(options);
-};
-
-module.exports.ContentService = ContentService;
-
-var csType = function(source) {
-  return require('./content-services/' + source + '-content-service');
-};
+module.exports = ContentService;

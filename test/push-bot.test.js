@@ -1,11 +1,11 @@
 var expect = require('chai').expect;
 var PushBot = require('../controllers/fetching/bots/push-bot');
-var Bot = require('../controllers/fetching/bot').Bot;
-var ContentService = require('../controllers/fetching/content-service');
+var Bot = require('../controllers/fetching/bot');
+var csFactory = require('../controllers/fetching/content-service-factory');
 
 describe('Push bot', function() {
   before(function(done) {
-    var contentService = ContentService({source: 'dummy', filter: 't'});
+    var contentService = csFactory({source: 'dummy', filter: 't'});
     pushBot = new PushBot(contentService);
     done();
   });

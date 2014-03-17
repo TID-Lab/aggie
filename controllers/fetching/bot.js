@@ -1,4 +1,3 @@
-var ContentService = require('./content-service');
 var CircularQueue = require('./circular-queue');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
@@ -37,14 +36,4 @@ Bot.prototype.fetchNext = function() {
   return this.queue.fetch();
 };
 
-module.exports = function factory(options) {
-  var contentService = ContentService(options);
-  var SubBot = botType(contentService);
-  return new SubBot(contentService);
-};
-
-module.exports.Bot = Bot;
-
-var botType = function(contentService) {
-  return require('./bots/' + contentService.type + '-bot');
-};
+module.exports = Bot;

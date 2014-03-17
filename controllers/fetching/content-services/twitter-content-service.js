@@ -1,6 +1,6 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
-var ContentService = require('../content-service').ContentService;
+var ContentService = require('../content-service');
 var util = require('util');
 
 var TwitterContentService = function(options) {
