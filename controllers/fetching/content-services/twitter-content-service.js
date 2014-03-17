@@ -1,6 +1,5 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
-var Report = require('../../../models/report');
 var ContentService = require('../content-service').ContentService;
 var util = require('util');
 
@@ -65,14 +64,15 @@ TwitterContentService.prototype.on = function(event, callback) {
 };
 
 TwitterContentService.prototype.parse = function(data) {
-  return new Report({
+  var report_data = {
     fetchedAt: Date.now(),
     authoredAt: data.created_at,
     createdAt: data.created_at,
     content: data.text,
     author: data.user.screen_name,
     url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
-  });
+  };
+  return report_data;
 };
 
 module.exports = TwitterContentService;

@@ -2,7 +2,6 @@ var expect = require('chai').expect;
 var PushBot = require('../controllers/fetching/bots/push-bot');
 var Bot = require('../controllers/fetching/bot').Bot;
 var ContentService = require('../controllers/fetching/content-service');
-var Report = require('../models/report');
 
 describe('Push bot', function() {
   before(function(done) {
@@ -18,10 +17,9 @@ describe('Push bot', function() {
 
   it('should tell content service to start streaming reports', function(done) {
     pushBot.start();
-    pushBot.on('report', function(report) {
-      expect(report).to.be.instanceOf(Report);
-      expect(report).to.have.property('content');
-      expect(report.content).to.contain('t');
+    pushBot.on('report', function(report_data) {
+      expect(report_data).to.have.property('content');
+      expect(report_data.content).to.contain('t');
       // Stop stream to ensure a single fetch
       pushBot.stop();
       done();

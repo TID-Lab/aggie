@@ -17,10 +17,10 @@ Bot.prototype.start = function() {
   if (this.enabled) return;
   var self = this;
   self.enabled = true;
-  self.contentService.on('report', function(report) {
+  self.contentService.on('report', function(report_data) {
     if (self.enabled) {
-      self.queue.add(report);
-      self.emit('report', report);
+      self.queue.add(report_data);
+      self.emit('report', report_data);
     }
   });
 };

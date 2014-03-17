@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var Bot = require('../controllers/fetching/bot');
 var ContentService = require('../controllers/fetching/content-service').ContentService;
-var Report = require('../models/report');
 
 describe('Bot', function() {
   before(function(done) {
@@ -26,7 +25,6 @@ describe('Bot', function() {
     var remaining = 4;
     bot.on('report', function() {
       var data = bot.fetchNext();
-      expect(data).to.be.instanceOf(Report);
       expect(data).to.have.property('content');
       expect(data.content.toLowerCase()).to.contain('t');
       reports.push(data);

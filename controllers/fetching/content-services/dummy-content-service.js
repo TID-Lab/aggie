@@ -7,7 +7,6 @@ var data = [
   { text: '0123456789' },
 ];
 
-var Report = require('../../../models/report');
 var ContentService = require('../content-service').ContentService;
 var util = require('util');
 
@@ -44,10 +43,11 @@ DummyContentService.prototype.fetch = function(self, data) {
 };
 
 DummyContentService.prototype.parse = function(data) {
-  return new Report({
+  var report_data = {
     content: data.text,
     fetchedAt: Date.now()
-  });
+  };
+  return report_data;
 };
 
 // Stop the stream
