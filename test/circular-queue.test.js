@@ -3,49 +3,58 @@ var CircularQueue = require('../controllers/fetching/circular-queue');
 
 describe('Circular queue', function() {
   before(function(done) {
-    queue = new CircularQueue(2);
+    queue = new CircularQueue(3);
     done();
   });
 
   it('should instantiate a new circular queue', function(done) {
-    expect(queue.size).to.equal(2);
-    expect(queue.length).to.equal(0);
+    expect(queue.capacity).to.equal(3);
+    expect(queue.count).to.equal(0);
+    expect(queue.drops).to.equal(0);
+    expect(queue.peek()).to.be.undefined;
     done();
   });
 
   it('should add new elements', function(done) {
     queue.add('one');
     queue.add('two');
-    expect(queue.length).to.equal(2);
-    expect(queue.elements[0]).to.equal('one');
-    expect(queue.elements[1]).to.equal('two');
+    expect(queue.count).to.equal(2);
+    expect(queue.drops).to.equal(0);
+    expect(queue.peek()).to.equal('one');
     done();
   });
 
   it('should fetch elements', function(done) {
-    var element = queue.fetch();
-    expect(queue.length).to.equal(1);
-    expect(element).to.equal('one');
+    var one = queue.fetch();
+    expect(queue.count).to.equal(1);
+    expect(one).to.equal('one');
+    expect(queue.peek()).to.equal('two');
     done();
   });
 
   it('should overwrite elements', function(done) {
     queue.add('three');
-    expect(queue.length).to.equal(2);
-    expect(queue.elements[0]).to.equal('three');
-    expect(queue.elements[1]).to.equal('two');
+    queue.add('four');
+    queue.add('five');
+    queue.add('six');
+    queue.add('seven');
+    expect(queue.count).to.equal(3);
+    expect(queue.drops).to.equal(3);
+    expect(queue.peek()).to.equal('five');
     done();
   });
 
-  it('should drop elements', function(done) {
-    queue.on('drop', function(dropped) {
-      expect(dropped).to.equal('two');
-      expect(queue.length).to.equal(2);
-      expect(queue.elements[0]).to.equal('three');
-      expect(queue.elements[1]).to.equal('four');
-      done();
-    });
-    queue.add('four');
+  it('should fetch newer elements', function(done) {
+    var five = queue.fetch();
+    var six = queue.fetch();
+    var seven = queue.fetch();
+    expect(five).to.equal('five');
+    expect(six).to.equal('six');
+    expect(seven).to.equal('seven');
+    expect(queue.count).to.equal(0);
+    expect(queue.drops).to.equal(3);
+    expect(queue.peek()).to.be.undefined;
+    done();
   });
 
 });

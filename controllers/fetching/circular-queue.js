@@ -1,51 +1,50 @@
-var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-var CircularQueue = function(size) {
-  this.size = size || 50;
+var CircularQueue = function(capacity) {
+  this.capacity = capacity || CircularQueue.DEFAULT_CAPACITY;
   this.start = 0;
-  this.length = 0;
-  this.elements = new Array(this.size);
-  EventEmitter.call(this);
+  this.count = 0;
+  this.drops = 0;
+  this.elements = new Array(this.capacity);
 };
 
-util.inherits(CircularQueue, EventEmitter);
+CircularQueue.DEFAULT_CAPACITY = 50;
 
 CircularQueue.prototype.add = function(element) {
-  var end = (this.start + this.length) % this.size;
+  var end = (this.start + this.count) % this.capacity;
   var dropped = this.peek(end);
+  if (dropped) this.drops++;
   this.elements[end] = element;
   if (this.isFull()) {
-    this.start = (this.start + 1) % this.size;
+    this.start = (this.start + 1) % this.capacity;
   } else {
-    this.length++;
+    this.count++;
   }
-  this.emit('add', element);
-  if (dropped) this.emit('drop', dropped);
-  return this.length;
+  return this.count;
 };
 
 CircularQueue.prototype.peek = function(i) {
-  var element = this.elements[i || this.start];
+  if (i === undefined) i = this.start;
+  var element = this.elements[i];
   return util._extend(element);
 };
 
 CircularQueue.prototype.fetch = function() {
   var element = this.peek();
   if (element) {
-    this.length--;
-    this.start = (this.start + 1) % this.size;
+    this.count--;
+    this.elements[this.start] = undefined;
+    this.start = (this.start + 1) % this.capacity;
   }
-  this.emit('fetch', element);
   return element;
 };
 
 CircularQueue.prototype.isEmpty = function() {
-  return this.length === 0;
+  return this.count === 0;
 };
 
 CircularQueue.prototype.isFull = function() {
-  return this.length === this.size;
+  return this.count === this.capacity;
 };
 
 module.exports = CircularQueue;
