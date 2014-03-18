@@ -57,7 +57,7 @@ describe('Circular queue', function() {
     done();
   });
 
-  it('should fetch work with an empty queue', function(done) {
+  it('should return undefined when fetching an empty queue', function(done) {
       expect(queue.isEmpty()).to.be.true;
       var eight = queue.fetch();
       expect(eight).to.be.undefined;
