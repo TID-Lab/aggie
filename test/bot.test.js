@@ -4,7 +4,7 @@ var ContentService = require('../controllers/fetching/content-service');
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory({source: 'dummy', filter: 't'});
+    bot = botFactory.create({source: 'dummy', filter: 't'});
     done();
   });
 

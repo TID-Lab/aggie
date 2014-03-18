@@ -5,7 +5,7 @@ var DummyContentService = require('../controllers/fetching/content-services/dumm
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = csFactory({source: 'dummy', filter: 't'});
+    contentService = csFactory.create({source: 'dummy', filter: 't'});
     done();
   });
 
