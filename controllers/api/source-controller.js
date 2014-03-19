@@ -1,8 +1,6 @@
 var api = require('../api');
 var Source = require('../../models/source');
-
-var EventEmitter = require('events').EventEmitter;
-var emitter = new EventEmitter();
+var pm = require('../process-manager');
 
 // Create a new Source
 api.post('/api/source', function(req, res) {
@@ -14,7 +12,7 @@ api.post('/api/source', function(req, res) {
       if (err) return res.send(500, err);
 
       res.send(200, source);
-      emitter.emit('source:create', source);
+      pm.emit('source:create', source);
     });
   });
 });
@@ -55,7 +53,7 @@ api.put('/api/source/:_id', function(req, res) {
         if (err) return res.send(500, err);
 
         res.send(200, source);
-        emitter.emit('source:update', source);
+        pm.emit('source:update', source);
       });
     });
 
@@ -71,7 +69,7 @@ api.delete('/api/source/:_id', function(req, res) {
       if (err) return res.send(500, err);
 
       res.send(200);
-      emitter.emit('source:delete', source);
+      pm.emit('source:delete', source);
     });
   });
 });

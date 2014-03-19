@@ -6,3 +6,4 @@ var ProcessManager = function() {};
 util.inherits(ProcessManager, EventEmitter);
 
 module.exports = new ProcessManager();
+module.exports.ProcessManager = ProcessManager;
