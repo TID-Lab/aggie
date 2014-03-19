@@ -1,19 +1,11 @@
+var api = require('../api');
 var Source = require('../../models/source');
 
 var EventEmitter = require('events').EventEmitter;
 var emitter = new EventEmitter();
 
-var express = require('express');
-var app = express();
-
-var config = require('../../config/secrets').mongodb;
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://' + config.host + '/' + config.db);
-
-module.exports = app;
-
 // Create a new Source
-app.post('/api/source', function(req, res) {
+api.post('/api/source', function(req, res) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
@@ -28,7 +20,7 @@ app.post('/api/source', function(req, res) {
 });
 
 // Get a list of all Sources
-app.get('/api/source', function(req, res) {
+api.get('/api/source', function(req, res) {
   Source.find(function(err, sources) {
     if (sources.length === 0) res.send(404);
     else if (err) res.send(500, err);
@@ -37,7 +29,7 @@ app.get('/api/source', function(req, res) {
 });
 
 // Get a Source by _id
-app.get('/api/source/:_id', function(req, res) {
+api.get('/api/source/:_id', function(req, res) {
   Source.findOne({_id: req.params._id}, function(err, source) {
     if (!source) res.send(404);
     else if (err) res.send(500, err);
@@ -46,7 +38,7 @@ app.get('/api/source/:_id', function(req, res) {
 });
 
 // Update a Source
-app.put('/api/source/:_id', function(req, res) {
+api.put('/api/source/:_id', function(req, res) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
@@ -71,7 +63,7 @@ app.put('/api/source/:_id', function(req, res) {
 });
 
 // Delete a Source
-app.delete('/api/source/:_id', function(req, res) {
+api.delete('/api/source/:_id', function(req, res) {
   Source.findOne({_id: req.params._id}, function(err, source) {
     if (err || !source) return res.send(404, err);
 
@@ -83,3 +75,5 @@ app.delete('/api/source/:_id', function(req, res) {
     });
   });
 });
+
+module.exports = api;
