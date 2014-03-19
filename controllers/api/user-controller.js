@@ -1,4 +1,4 @@
-var api = require('../api');
+var api = require('../api').app;
 var User = require('../../models/user');
 
 api.post('/api/user', function(req, res) {
