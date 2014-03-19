@@ -1,5 +1,6 @@
 var request = require('supertest');
 var expect = require('chai').expect;
+var _ = require('underscore');
 var sourceController = require('../../../controllers/api/source-controller');
 
 describe('Source controller', function() {
@@ -26,7 +27,7 @@ describe('Source controller', function() {
     });
   });
 
-  describe('GET /api/source/:id', function() {
+  describe('GET /api/source/:_id', function() {
     it('should return source', function(done) {
       request(sourceController)
         .get('/api/source/' + source._id)
@@ -39,36 +40,37 @@ describe('Source controller', function() {
     });
   });
 
-  //*describe('PUT /api/source/:id', function() {
-    //*it('should update source', function(done) {
-      //*source.displayName = 'Updated test source';
-      //*request(sourceController)
-        //*.put('/api/source/' + source._id)
-        //*.send(source)
-        //*.expect(200)
-        //*.end(function(err, res) {
-          //*if (err) return done(err);
-          //*compare.call(this, res.body, source);
-          //*done();
-        //*});
-    //*});
-  //*});
+  describe('PUT /api/source/:_id', function() {
+    it('should update source', function(done) {
+      source.keywords = 'e';
+      request(sourceController)
+        .put('/api/source/' + source._id)
+        .send(source)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          compare.call(this, res.body, source);
+          done();
+        });
+    });
+  });
 
-  //*describe('GET /api/source', function() {
-    //*it('should get a list of all sources', function(done) {
-      //*request(sourceController)
-        //*.get('/api/source')
-        //*.expect(200)
-        //*.end(function(err, res) {
-          //*if (err) return done(err);
-          //*expect(res.body).to.have.length(1);
-          //*compare(res.body[0], source);
-          //*done();
-        //*});
-    //*});
-  //*});
+  describe('GET /api/source', function() {
+    it('should get a list of all sources', function(done) {
+      request(sourceController)
+        .get('/api/source')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.not.be.empty;
+          compare(_.findWhere(res.body, {_id: source._id}), source);
+          done();
+        });
+    });
+  });
 
-  describe('DELETE /api/source/:id', function() {
+  describe('DELETE /api/source/:_id', function() {
     it('should delete source', function(done) {
       request(sourceController)
         .del('/api/source/' + source._id)
