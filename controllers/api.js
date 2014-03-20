@@ -3,13 +3,11 @@ var config = require('../config/secrets');
 var mongoose = require('mongoose');
 var express = require('express');
 
-var API = function(options) {
-  if (options) this.config = _.defaults(options, config);
-  else this.config = config;
-
-  mongoose.connect('mongodb://' + this.config.mongodb.host + '/' + this.config.mongodb.db);
+var API = function() {
+  this.config = config;
+  this.mongoose = mongoose;
   this.app = express();
+  mongoose.connect('mongodb://' + this.config.mongodb.host + '/' + this.config.mongodb.db);
 };
 
 module.exports = new API();
-module.exports.API = API;

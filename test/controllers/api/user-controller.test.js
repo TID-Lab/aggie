@@ -1,5 +1,12 @@
 var request = require('supertest');
 var expect = require('chai').expect;
+
+// Change database
+var api = require('../../../controllers/api');
+api.mongoose.disconnect(function() {
+  api.mongoose.connect('mongodb://localhost/aggie-test');
+});
+
 var userController = require('../../../controllers/api/user-controller');
 
 describe('User controller', function() {
