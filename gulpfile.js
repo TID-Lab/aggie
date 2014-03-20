@@ -4,7 +4,7 @@ var mocha = require('gulp-mocha');
 
 var paths = { 
   js: ['controllers/**/*.js', 'models/*.js'],
-  test: ['test/**/*.test.js']
+  test: ['test/init.js', 'test/**/*.test.js']
 };
 
 gulp.task('lint', function() {
