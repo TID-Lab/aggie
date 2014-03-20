@@ -1,6 +1,5 @@
-var api = require('../api');
+var api = require('../api').app;
 var Source = require('../../models/source');
-
 var EventEmitter = require('events').EventEmitter;
 var emitter = new EventEmitter();
 

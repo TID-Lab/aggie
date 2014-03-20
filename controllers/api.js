@@ -1,9 +1,13 @@
+var _ = require('underscore');
 var config = require('../config/secrets');
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://' + config.mongodb.host + '/' + config.mongodb.db);
-
 var express = require('express');
-var app = express();
 
-module.exports = app;
+var API = function() {
+  this.config = config;
+  this.mongoose = mongoose;
+  this.app = express();
+  mongoose.connect('mongodb://' + this.config.mongodb.host + '/' + this.config.mongodb.db);
+};
+
+module.exports = new API();
