@@ -1,11 +1,11 @@
 var expect = require('chai').expect;
-var csFactory = require('../controllers/fetching/content-service-factory');
+var contentServiceFactory = require('../controllers/fetching/content-service-factory');
 var ContentService = require('../controllers/fetching/content-service');
 var DummyContentService = require('../controllers/fetching/content-services/dummy-content-service');
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = csFactory.create({source: 'dummy', filter: 't'});
+    contentService = contentServiceFactory.create({source: 'dummy', filter: 't'});
     done();
   });
 

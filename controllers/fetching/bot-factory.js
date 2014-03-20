@@ -1,9 +1,9 @@
-var csFactory = require('./content-service-factory');
+var contentServiceFactory = require('./content-service-factory');
 
 var BotFactory = function() {};
 
 BotFactory.prototype.create = function(options) {
-  var contentService = csFactory.create(options);
+  var contentService = contentServiceFactory.create(options);
   var SubBot = this.botType(contentService);
   return new SubBot(contentService);
 };
