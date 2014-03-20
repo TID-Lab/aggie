@@ -1,8 +1,13 @@
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
 // Wrapper class for specific content services
 var ContentService = function(options) {
-  var source = options.type || 'dummy';
-  var SubContentService = require('./content-services/' + source + '-content-service');
-  return new SubContentService(options.filter);
+  this.source = this.source || options.source;
+  this.filter = this.filter || options.filter;
+  EventEmitter.call(this);
 };
+
+util.inherits(ContentService, EventEmitter);
 
 module.exports = ContentService;

@@ -3,7 +3,7 @@ var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 
 var paths = { 
-  js: ['controllers/**/*.js'],
+  js: ['controllers/**/*.js', 'models/*.js'],
   test: ['test/init.js', 'test/**/*.test.js']
 };
 
