@@ -9,9 +9,9 @@ describe('Twitter content service', function() {
 
   it('should fetch content from Twitter', function(done) {
     twitterContentService.start();
-    twitterContentService.on('data', function(data) {
-      expect(data).to.have.property('text');
-      expect(data.text.toLowerCase()).to.contain('t');
+    twitterContentService.on('report', function(report_data) {
+      expect(report_data).to.have.property('content');
+      expect(report_data.content.toLowerCase()).to.contain('t');
       // Stop stream to ensure a single fetch
       twitterContentService.stop();
       done();

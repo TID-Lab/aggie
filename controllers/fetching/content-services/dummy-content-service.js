@@ -7,22 +7,22 @@ var data = [
   { text: '0123456789' },
 ];
 
-var EventEmitter = require('events').EventEmitter;
+var ContentService = require('../content-service');
 var util = require('util');
 
 var DummyContentService = function(options) {
   if (typeof options === 'string') {
-    this.options = {filter: options};
+    this.filter = options;
   } else {
-    this.options = options || {};
+    this.filter = options.filter;
   }
-  EventEmitter.call(this);
+  this.source = 'dummy';
+  this.type = 'push';
+  this.bufferLength = 2;
+  ContentService.call(this, options);
 };
 
-var ContentService = require('../content-service');
-var util = require('util');
 util.inherits(DummyContentService, ContentService);
-util.inherits(DummyContentService, EventEmitter);
 
 // Start/resume streaming of filtered data
 DummyContentService.prototype.start = function() {
@@ -30,15 +30,24 @@ DummyContentService.prototype.start = function() {
   this._isStreaming = true;
   for (var i in data) {
     // Emit new data every 500ms
-    setTimeout(this.filter, 500, this, data[i]);
+    setTimeout(this.fetch, 500, this, data[i]);
   }
 };
 
-DummyContentService.prototype.filter = function(self, report) {
-  var pattern = new RegExp(self.options.filter, 'im');
-  if (self._isStreaming && pattern.test(report.text)) {
-    self.emit('data', report);
+DummyContentService.prototype.fetch = function(self, data) {
+  var pattern = new RegExp(self.filter, 'im');
+  if (self._isStreaming && pattern.test(data.text)) {
+    var report = self.parse(data);
+    self.emit('report', report);
   }
+};
+
+DummyContentService.prototype.parse = function(data) {
+  var report_data = {
+    content: data.text,
+    fetchedAt: Date.now()
+  };
+  return report_data;
 };
 
 // Stop the stream
