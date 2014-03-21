@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
-var botFactory = require('../controllers/fetching/bot-factory');
-var ContentService = require('../controllers/fetching/content-service');
+var botFactory = require(root_path + '/controllers/fetching/bot-factory');
+var ContentService = require(root_path + '/controllers/fetching/content-service');
 
 describe('Bot', function() {
   before(function(done) {
@@ -23,7 +23,7 @@ describe('Bot', function() {
   it('should fetch report data', function(done) {
     var reports = [];
     var remaining = 4;
-    bot.on('report', function() {
+    bot.on('reports', function() {
       var data = bot.fetchNext();
       expect(data).to.have.property('content');
       expect(data.content.toLowerCase()).to.contain('t');
