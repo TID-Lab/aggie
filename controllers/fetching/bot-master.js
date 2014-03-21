@@ -1,38 +1,41 @@
 var _ = require('underscore');
+var Source = require('../../models/source');
+var botFactory = require('./bot-factory');
 
 var BotMaster = function() {
+  var self = this;
   this.bots = [];
+
+  // Instantiate new bots when sources are saved
+  process.on('source:save', function(source) {
+    var bot_data = _.omit(source, ['_id', 'type']);
+    bot_data.source = source.type;
+    var bot = botFactory.create(bot_data);
+    // Add to master list
+    self.add(bot);
+  });
 };
 
 BotMaster.prototype.add = function(bot) {
   this.bots.push(bot);
 };
 
-BotMaster.prototype.start = function(bot) {
-  if (bot) return bot.start();
+BotMaster.prototype.start = function() {
   this.bots.forEach(function(bot) {
     bot.start();
   });
 };
 
-BotMaster.prototype.stop = function(bot) {
-  if (bot) return bot.stop();
+BotMaster.prototype.stop = function() {
   this.bots.forEach(function(bot) {
     bot.stop();
   });
 };
 
-BotMaster.prototype.kill = function(bot) {
-  if (bot) {
-    this.bots = _.without(this.bots, bot);
-    bot.removeAllListeners();
-    bot = undefined;
-    return;
+BotMaster.prototype.kill = function() {
+  for (var i in this.bots) {
+    delete this.bots[i];
   }
-  this.bots = _.map(this.bots, function(bot) {
-    bot.removeAllListeners();
-    return undefined;
-  });
   this.bots = [];
 };
 
