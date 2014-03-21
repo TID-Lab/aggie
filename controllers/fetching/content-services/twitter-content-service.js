@@ -51,12 +51,12 @@ TwitterContentService.prototype.on = function(event, callback) {
   if (!this.stream) {
     this.start();
   }
-  event = event === 'report' ? 'tweet' : event;
+  event = event === 'reports' ? 'tweet' : event;
   // Listen to stream event and return it to allow chaining
   return this.stream.on(event, function(data) {
     if (event === 'tweet') {
       var report = self.parse(data);
-      callback(report);
+      callback([report]);
     } else {
       callback(data);
     }

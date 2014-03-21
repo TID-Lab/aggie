@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var CircularQueue = require('../controllers/fetching/circular-queue');
+var CircularQueue = require(root_path + '/controllers/fetching/circular-queue');
 
 describe('Circular queue', function() {
   before(function(done) {
