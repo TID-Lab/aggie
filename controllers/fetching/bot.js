@@ -16,10 +16,12 @@ Bot.prototype.start = function() {
   if (this.enabled) return;
   var self = this;
   self.enabled = true;
-  self.contentService.on('report', function(report_data) {
+  self.contentService.on('reports', function(reports_data) {
     if (self.enabled) {
-      self.queue.add(report_data);
-      self.emit('report', report_data);
+      reports_data.forEach(function(report_data) {
+        self.queue.add(report_data);
+      });
+      self.emit('reports', reports_data);
     }
   });
 };
@@ -27,7 +29,7 @@ Bot.prototype.start = function() {
 Bot.prototype.stop = function() {
   var self = this;
   this.enabled = false;
-  this.contentService.removeListener('report', function() {
+  this.contentService.removeListener('reports', function() {
     self.emit('stop');
   });
 };

@@ -1,6 +1,6 @@
 var request = require('supertest');
 var expect = require('chai').expect;
-var userController = require('../../../controllers/api/user-controller');
+var userController = require(root_path + '/controllers/api/user-controller');
 
 describe('User controller', function() {
   before(function(done) {
