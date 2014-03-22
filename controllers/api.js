@@ -7,7 +7,7 @@ var API = function() {
   this.config = config;
   this.mongoose = mongoose;
   this.app = express();
-  mongoose.connect('mongodb://' + this.config.mongodb.host + '/' + this.config.mongodb.db);
+  mongoose.connect(this.config.db);
 };
 
 module.exports = new API();
