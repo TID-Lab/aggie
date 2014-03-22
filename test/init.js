@@ -29,5 +29,5 @@ after(function(done) {
     database.mongoose.disconnect(function() {
       done();
     });
-  })
+  });
 });
