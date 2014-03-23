@@ -3,6 +3,8 @@ var ContentService = require('../content-service');
 var graph = require('fbgraph');
 var util = require('util');
 var async = require('async');
+var cp = require('child_process');
+var requests = require('request');
 
 var FacebookContentService = function(options) {
 
@@ -19,7 +21,11 @@ var FacebookContentService = function(options) {
         return "Incorrect page for POST";
     }
     this.source = 'facebook';
+    this.resultsPerFetch = 100;
     this._isStreaming = false;
+    this.next = undefined;
+    this.untilCrawlDate = options.untilCrawlDate;
+
 };
 
 FacebookContentService.prototype.setCrawlDate = function(crawlDate) {
@@ -29,60 +35,100 @@ FacebookContentService.prototype.setCrawlDate = function(crawlDate) {
 FacebookContentService.prototype.fetch = function() {
 
     //This will need to be changed into an array 
-    commentsOnPost = '';
+    var fbContentService = this;
 
+    var options = {
+        since: this.lastCrawlDate,
+        limit: this.resultsPerFetch,
+        until: this.untilCrawlDate,
+    };
+    if (this.next) {
+        options = {
+            since: this.lastCrawlDate,
+            limit: this.resultsPerFetch,
+            until: this.next,
+        };
+    }
+    console.log(options);
     graph
-        .get(this.fbPage + '/feed/', {
-            limit: 100,
-            since: this.lastCrawlDate
-        }, function(err, res) {
+        .get(this.fbPage + '/feed/', options, function(err, res) {
 
-            console.log(err);
-            console.log(res);
 
-            async.parallel([
-                function(callback) {
-                    request("http://google.jp", function(err, response, body) {
-                        if (err) {
-                            console.log(err);
-                            callback(true);
-                            return;
-                        }
-                        console.log("function: 1");
-                        callback(false);
-                    });
-                },
-                function(callback) {
-                    request("http://google.com", function(err, response, body) {
-                        if (err) {
-                            console.log(err);
-                            callback(true);
-                            return;
-                        }
-                        console.log("function: 2");
-                        callback(false);
-                    });
-                }
-            ]);
-            if (res.paging && res.paging.next) {
-                console.log('paging has next');
-                graph.get(res.paging.next);
+            if (err) {
+                console.error(err);
             }
 
-            // for (var i = res['data'].length - 1; i >= 0; i--) {
+            //messages array
+            messagesOnFeed = [];
 
-            //     var postHasComments = (res['data'][i]['comments']);
+            //comments array
+            commentsOnPost = [];
 
-            //     if (postHasComments) {
-            //         commentsOnPost += (postHasComments['data'][0].message);
-            //     }
-            // }
+            //length of array
+            var responseLength = res.data.length;
+
+            // var newestPost = null;
+            for (var i = responseLength - 1; i >= 0; i--) {
+
+                var postHasData = res.data[i];
+                var postHasComments = (res.data[i].comments);
+
+
+                //check if date is valid for each post
+                var validDate = (new Date(res.data[i].created_time) <= new Date(fbContentService.untilCrawlDate * 1000));
+
+                if (postHasData && validDate) {
+                    messagesOnFeed.push(postHasData);
+
+                }
+                if (postHasComments && validDate) {
+                    commentsOnPost.push(postHasComments.data[0]);
+                }
+            }
+
+            function getURLParameter(name, url) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
+            }
+
+
+            if (res.paging && res.paging.next) {
+
+
+                //This part is very confusing, paging.next gives me a previus entry
+                fbContentService.next = getURLParameter('until', res.paging.next);
+                console.log(fbContentService.next);
+
+
+                async.parallel([
+                        function(callback) {
+                            var content = fbContentService.parse(messagesOnFeed, commentsOnPost);
+                            callback(null, 'content saved');
+                            return content;
+
+                        },
+
+                        function(callback) {
+                            fbContentService.fetch();
+                            callback(null, 'Fetched new source');
+                        }
+                    ],
+                    function(err, results) {
+                        console.log(results);
+                        return results;
+
+                    });
+
+            }
         });
 
-    console.log(commentsOnPost);
+    return 'done';
+};
 
-    return commentsOnPost;
+FacebookContentService.prototype.parse = function(messagesOnFeed, commentsOnPost) {
+    console.log(messagesOnFeed.length);
+    console.log(commentsOnPost.length);
 
+    return messagesOnFeed + commentsOnPost;
 };
 
 module.exports = FacebookContentService;
