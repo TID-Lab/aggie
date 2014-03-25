@@ -5,7 +5,7 @@ var DummyContentService = require(root_path + '/controllers/fetching/content-ser
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = contentServiceFactory.create({source: 'dummy', filter: 't'});
+    contentService = contentServiceFactory.create({sourceType: 'dummy', keywords: 't'});
     done();
   });
 

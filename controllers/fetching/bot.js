@@ -4,7 +4,7 @@ var util = require('util');
 
 var Bot = function(contentService) {
   this.contentService = this.contentService || contentService;
-  this.type = this.contentService.type;
+  this.type = this.contentService.botType;
   this.queue = new CircularQueue();
   this.enabled = false;
   EventEmitter.call(this);

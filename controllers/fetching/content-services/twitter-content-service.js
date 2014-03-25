@@ -5,23 +5,19 @@ var util = require('util');
 
 var TwitterContentService = function(options) {
   this.twit = new Twit(config);
-  if (typeof options === 'string') {
-    this.filter = options;
-  } else {
-    this.filter = options.filter;
-  }
-  this.source = 'twitter';
-  this.type = 'push';
+  this.keywords = options.keywords;
+  this.sourceType = 'twitter';
+  this.botType = 'push';
   this._isStreaming = false;
-  ContentService.call(this, options);
+  ContentService.call(this);
 };
 
 util.inherits(TwitterContentService, ContentService);
 
 // Set/change filter stream
-TwitterContentService.prototype.setFilterStream = function(filter) {
-  if (typeof filter === 'string') {
-    this.filter = filter;
+TwitterContentService.prototype.setFilterStream = function(keywords) {
+  if (typeof keywords === 'string') {
+    this.keywords = keywords;
   }
 };
 
@@ -31,7 +27,7 @@ TwitterContentService.prototype.start = function() {
     this.stream.start();
   } else {
     this.streamName = 'statuses/filter';
-    this.stream = this.twit.stream(this.streamName, {track: this.filter});
+    this.stream = this.twit.stream(this.streamName, {track: this.keywords});
   }
   this._isStreaming = true;
 };
