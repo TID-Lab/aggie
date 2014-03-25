@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var _ = require('underscore');
 var botMaster = require('../../../controllers/fetching/bot-master');
 var Bot = require('../../../controllers/fetching/bot');
 var Source = require('../../../models/source');
@@ -20,7 +21,7 @@ describe('Bot master', function() {
     done();
   });
 
-  it('should reuse bots when similar source is loaded', function(done) {
+  it('should avoid duplicate bots', function(done) {
     expect(botMaster.bots).to.have.length(3);
     Source.create({type: 'dummy', keywords: 'one'});
     expect(botMaster.bots).to.have.length(3);
@@ -29,9 +30,9 @@ describe('Bot master', function() {
 
   it('should return bot instance from filtered search', function(done) {
     var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bot = botMaster.getBot(filters);
-    expect(bot).to.be.an.instanceof(Bot);
-    expect(bot).to.equal(botMaster.bots[0]);
+    var bots = botMaster.getBots(filters);
+    expect(bots[0]).to.be.an.instanceof(Bot);
+    expect(bots[0].contentService.keywords).to.equal('two');
     done();
   });
 
@@ -57,9 +58,11 @@ describe('Bot master', function() {
   it('should kill a single bot', function(done) {
     var length = botMaster.bots.length;
     var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bot = botMaster.getBot(filters);
-    botMaster.kill(bot);
+    var bots = botMaster.getBots(filters);
+    botMaster.kill(bots[0]);
     expect(botMaster.bots).to.have.length(length - 1);
+    var bots = botMaster.getBots(filters);
+    expect(bots).to.be.empty;
     done();
   });
 

@@ -7,22 +7,28 @@ var BotMaster = function() {
   this.bots = [];
 
   // Instantiate new bots when sources are saved
-  process.on('source:save', function(source) {
-    self.load(source);
+  process.on('source:save', function(source_data) {
+    self.load(source_data);
+  });
+
+  // Kill bots when removed from datbase
+  process.on('source:remove', function(source_data) {
+    var bot = self.sourceToBot(source_data);
+    self.kill(bot);
   });
 };
 
+// Create bot from source data
+BotMaster.prototype.sourceToBot = function(source_data) {
+  var bot_data = _.pick(source_data, ['resource_id', 'url', 'keywords']);
+  bot_data.sourceType = source_data.type;
+  return botFactory.create(bot_data);
+};
+
 // Load Bot from source data
-BotMaster.prototype.load = function(source) {
-  var bot_data = _.pick(source, ['resource_id', 'url', 'keywords']);
-  bot_data.sourceType = source.type;
-  // Kill existing matching bots
-  var existing = this.getBot(bot_data);
-  if (existing) {
-    this.kill(existing);
-  }
-  // And reload them
-  var bot = botFactory.create(bot_data);
+BotMaster.prototype.load = function(source_data) {
+  var bot = this.sourceToBot(source_data);
+  this.kill(bot);
   this.add(bot);
 };
 
@@ -33,23 +39,25 @@ BotMaster.prototype.loadAll = function(filters, callback) {
     callback = filters;
     filters = undefined;
   }
+  // Find sources from the database
   Source.find(filters, function(err, sources) {
+    if (err) return callback(err);
     var remaining = sources.length;
-    if (!err) sources.forEach(function(source) {
+    sources.forEach(function(source) {
       self.load(source);
+      // Callback after all sources have been loaded
       if (--remaining === 0 && callback) callback();
     });
   });
 };
 
-// Return Bot matching filters
-BotMaster.prototype.getBot = function(filters) {
+// Get all bots matching the filter hash
+BotMaster.prototype.getBots = function(filters) {
   var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
   filters = _.pick(filters, keys);
-  var bot = _.find(this.bots, function(bot) {
+  return _.filter(this.bots, function(bot) {
     return _.chain(bot.contentService).pick(keys).isEqual(filters).value();
   });
-  return bot;
 };
 
 // Add Bot to array of tracked bots
@@ -76,7 +84,7 @@ BotMaster.prototype.stop = function() {
 // being garbage collected.
 BotMaster.prototype.kill = function(bot) {
   if (bot) {
-    // Kill single bot
+    // Remove bot instance from list of bots
     this.bots = _.without(this.bots, bot);
   } else {
     // Kill all bots
