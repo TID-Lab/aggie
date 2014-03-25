@@ -73,7 +73,8 @@ describe('Bot master', function() {
   });
 
   it('should reload bots for all saved sources', function(done) {
-    botMaster.loadAll(function() {
+    botMaster.loadAll(function(err) {
+      if (err) return done(err);
       expect(botMaster.bots).to.not.be.empty;
       done();
     });
