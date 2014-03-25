@@ -5,8 +5,7 @@ var BotFactory = function() {};
 BotFactory.prototype.create = function(options) {
   var contentService = contentServiceFactory.create(options);
   var SubBot = this.botType(contentService);
-  var bot = new SubBot(contentService);
-  return bot;
+  return new SubBot(contentService);
 };
 
 BotFactory.prototype.botType = function(contentService) {
