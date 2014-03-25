@@ -9,12 +9,12 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  process.emit('source:save', this);
+  process.emit('source:save', this.toObject());
   next();
 });
 
 sourceSchema.pre('remove', function(next) {
-  process.emit('source:remove', this);
+  process.emit('source:remove', this.toObject());
   next();
 });
 

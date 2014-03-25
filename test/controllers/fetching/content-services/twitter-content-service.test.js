@@ -3,7 +3,7 @@ var TwitterContentService = require(root_path + '/controllers/fetching/content-s
 
 describe('Twitter content service', function() {
   before(function(done) {
-    twitterContentService = new TwitterContentService('t');
+    twitterContentService = new TwitterContentService({keywords: 't'});
     done();
   });
 
