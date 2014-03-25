@@ -9,7 +9,7 @@ BotFactory.prototype.create = function(options) {
 };
 
 BotFactory.prototype.botType = function(contentService) {
-  return require('./bots/' + contentService.type + '-bot');
+  return require('./bots/' + contentService.botType + '-bot');
 };
 
 // Export a new instance, ensuring a singleton

@@ -1,7 +1,5 @@
 var api = require('../api').app;
 var Source = require('../../models/source');
-var EventEmitter = require('events').EventEmitter;
-var emitter = new EventEmitter();
 
 // Create a new Source
 api.post('/api/source', function(req, res) {
@@ -11,9 +9,7 @@ api.post('/api/source', function(req, res) {
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
       if (err) return res.send(500, err);
-
       res.send(200, source);
-      emitter.emit('source:create', source);
     });
   });
 });
@@ -53,9 +49,7 @@ api.put('/api/source/:_id', function(req, res) {
       }
       source.save(function(err) {
         if (err) return res.send(500, err);
-
         res.send(200, source);
-        emitter.emit('source:update', source);
       });
     });
 
@@ -69,9 +63,7 @@ api.delete('/api/source/:_id', function(req, res) {
 
     source.remove(function(err) {
       if (err) return res.send(500, err);
-
       res.send(200);
-      emitter.emit('source:delete', source);
     });
   });
 });
