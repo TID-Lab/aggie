@@ -1,6 +1,7 @@
 var request = require('supertest');
 var expect = require('chai').expect;
-var userController = require('../../../controllers/api/user-controller');
+var _ = require('underscore');
+var userController = require(root_path + '/controllers/api/user-controller');
 
 describe('User controller', function() {
   before(function(done) {
@@ -19,7 +20,13 @@ describe('User controller', function() {
       request(userController)
         .post('/api/user')
         .send(user)
-        .expect(200, done);
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.property('_id');
+          user._id = res.body._id;
+          done();
+        });
     });
   });
 
@@ -58,8 +65,9 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.have.length(1);
-          compare(res.body[0], user);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.not.be.empty;
+          compare(_.findWhere(res.body, {_id: user._id}), user);
           done();
         });
     });
@@ -72,8 +80,8 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/user')
-            .expect(200, [], done);
+            .get('/api/user/' + user.id)
+            .expect(404, done);
         });
     });
   });

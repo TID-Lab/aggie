@@ -1,24 +1,27 @@
 var Twit = require('twit');
 var config = require('../../../config/secrets').twitter;
+var ContentService = require('../content-service');
+var util = require('util');
 
 var TwitterContentService = function(options) {
   this.twit = new Twit(config);
   if (typeof options === 'string') {
-    this.options = {track: options};
+    this.filter = options;
   } else {
-    this.options = options || {};
+    this.filter = options.filter;
   }
+  this.source = 'twitter';
+  this.type = 'push';
   this._isStreaming = false;
+  ContentService.call(this, options);
 };
 
-var ContentService = require('../content-service');
-var util = require('util');
 util.inherits(TwitterContentService, ContentService);
 
 // Set/change filter stream
 TwitterContentService.prototype.setFilterStream = function(filter) {
   if (typeof filter === 'string') {
-    this.options.track = filter;
+    this.filter = filter;
   }
 };
 
@@ -28,7 +31,7 @@ TwitterContentService.prototype.start = function() {
     this.stream.start();
   } else {
     this.streamName = 'statuses/filter';
-    this.stream = this.twit.stream(this.streamName, this.options);
+    this.stream = this.twit.stream(this.streamName, {track: this.filter});
   }
   this._isStreaming = true;
 };
@@ -43,13 +46,33 @@ TwitterContentService.prototype.stop = function() {
 
 // Wrapper for stream event listener
 TwitterContentService.prototype.on = function(event, callback) {
+  var self = this;
   // Create and start stream if not yet created
   if (!this.stream) {
     this.start();
   }
-  event = event === 'data' ? 'tweet' : event;
+  event = event === 'reports' ? 'tweet' : event;
   // Listen to stream event and return it to allow chaining
-  return this.stream.on(event, callback);
+  return this.stream.on(event, function(data) {
+    if (event === 'tweet') {
+      var report = self.parse(data);
+      callback([report]);
+    } else {
+      callback(data);
+    }
+  });
+};
+
+TwitterContentService.prototype.parse = function(data) {
+  var report_data = {
+    fetchedAt: Date.now(),
+    authoredAt: data.created_at,
+    createdAt: data.created_at,
+    content: data.text,
+    author: data.user.screen_name,
+    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
+  };
+  return report_data;
 };
 
 module.exports = TwitterContentService;

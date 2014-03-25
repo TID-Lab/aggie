@@ -1,4 +1,4 @@
-var api = require('../api');
+var api = require('../api').app;
 var Source = require('../../models/source');
 var pm = require('../process-manager');
 
@@ -20,8 +20,8 @@ api.post('/api/source', function(req, res) {
 // Get a list of all Sources
 api.get('/api/source', function(req, res) {
   Source.find(function(err, sources) {
-    if (sources.length === 0) res.send(404);
-    else if (err) res.send(500, err);
+    if (err) res.send(500, err);
+    else if (sources.length === 0) res.send(404);
     else res.send(200, sources);
   });
 });
@@ -29,8 +29,8 @@ api.get('/api/source', function(req, res) {
 // Get a Source by _id
 api.get('/api/source/:_id', function(req, res) {
   Source.findOne({_id: req.params._id}, function(err, source) {
-    if (!source) res.send(404);
-    else if (err) res.send(500, err);
+    if (err) res.send(500, err);
+    else if (!source) res.send(404);
     else res.send(200, source);
   });
 });
@@ -44,7 +44,8 @@ api.put('/api/source/:_id', function(req, res) {
     data = JSON.parse(data);
 
     Source.findOne({_id: req.params._id}, function(err, source) {
-      if (err) return res.send(404, err);
+      if (err) return res.send(500, err);
+      else if (!source) return res.send(404);
 
       for (var attr in data) {
         source[attr] = data[attr];
