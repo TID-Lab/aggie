@@ -5,7 +5,7 @@ var contentServiceFactory = require(root_path + '/controllers/fetching/content-s
 
 describe('Push bot', function() {
   before(function(done) {
-    var contentService = contentServiceFactory.create({source: 'dummy', filter: 't'});
+    var contentService = contentServiceFactory.create({sourceType: 'dummy', keywords: 't'});
     pushBot = new PushBot(contentService);
     done();
   });

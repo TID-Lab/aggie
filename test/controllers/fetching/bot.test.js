@@ -4,7 +4,7 @@ var ContentService = require(root_path + '/controllers/fetching/content-service'
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory.create({source: 'dummy', filter: 't'});
+    bot = botFactory.create({sourceType: 'dummy', keywords: 't'});
     done();
   });
 
