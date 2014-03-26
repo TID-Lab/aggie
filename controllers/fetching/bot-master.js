@@ -42,6 +42,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
   // Find sources from the database
   Source.find(filters, function(err, sources) {
     if (err) return callback(err);
+    if (sources.length === 0) return callback();
     var remaining = sources.length;
     sources.forEach(function(source) {
       self.load(source);
@@ -63,6 +64,9 @@ BotMaster.prototype.getBots = function(filters) {
 // Add Bot to array of tracked bots
 BotMaster.prototype.add = function(bot) {
   this.bots.push(bot);
+  bot.on('reports', function(report_data) {
+    process.emit('bot:reports', bot);
+  });
 };
 
 // Start all bots
