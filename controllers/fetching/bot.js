@@ -38,4 +38,8 @@ Bot.prototype.fetchNext = function() {
   return this.queue.fetch();
 };
 
+Bot.prototype.isEmpty = function() {
+  return this.queue.isEmpty();
+};
+
 module.exports = Bot;
