@@ -57,13 +57,30 @@ api.put('/api/source/:_id', function(req, res) {
 });
 
 // Delete a Source
-api.delete('/api/source/:_id', function(req, res) {
+api.delete('/api/source/:_id', function(req, res, next) {
+  if (req.params._id === '_all') return next();
   Source.findOne({_id: req.params._id}, function(err, source) {
-    if (err || !source) return res.send(404, err);
+    if (err) return res.send(500, err);
+    if (!source) return res.send(404);
 
     source.remove(function(err) {
       if (err) return res.send(500, err);
       res.send(200);
+    });
+  });
+});
+
+// Delete all Sources
+api.delete('/api/source/_all', function(req, res) {
+  Source.find(function(err, sources) {
+    if (err) return res.send(500, err);
+    if (sources.length === 0) return res.send(200);
+    var remaining = sources.length;
+    sources.forEach(function(source) {
+      source.remove(function(err) {
+        if (err) return res.send(500, err);
+        if (--remaining === 0) return res.send(200);
+      });
     });
   });
 });
