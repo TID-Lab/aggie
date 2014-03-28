@@ -1,0 +1,48 @@
+var request = require('supertest');
+var expect = require('chai').expect;
+var fetchingController = require(root_path + '/controllers/api/fetching-controller');
+var botMaster = require(root_path + '/controllers/fetching/bot-master');
+var Source = require(root_path + '/models/source');
+
+describe('Fetching controller', function() {
+  before(function(done) {
+    botMaster.kill();
+    Source.create({type: 'dummy', keywords: 'one'});
+    Source.create({type: 'dummy', keywords: 'two'});
+    Source.create({type: 'dummy', keywords: 'three'});
+    done();
+  });
+
+  describe('PUT /api/fetching/on', function() {
+    it('should enable all bots', function(done) {
+      request(fetchingController)
+        .put('/api/fetching/on')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          botMaster.bots.forEach(function(bot) {
+            expect(bot).to.have.property('enabled');
+            expect(bot.enabled).to.be.true;
+          });
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/fetching/off', function() {
+    it('should disable all bots', function(done) {
+      request(fetchingController)
+        .put('/api/fetching/off')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          botMaster.bots.forEach(function(bot) {
+            expect(bot).to.have.property('enabled');
+            expect(bot.enabled).to.be.false;
+          });
+          done();
+        });
+    });
+  });
+
+});
