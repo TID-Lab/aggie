@@ -44,13 +44,11 @@ describe('Report writer', function() {
 
   describe('bot processing function', function() {
     before(function(done) {
-      bot = botFactory.create({sourceType: 'twitter', keywords: 'http'});
+      bot = botFactory.create({sourceType: 'dummy', keywords: 'e'});
       bot.start();
-      // Stream data for ~1.5 seconds, then stop
       setTimeout(function() {
-        bot.stop();
         done();
-      }, 1500);
+      }, 100);
     });
 
     it('should process all queued reports from a single bot', function(done) {
@@ -58,17 +56,24 @@ describe('Report writer', function() {
       reportWriter.processBot(bot, function(err) {
         if (err) return done(err);
         expect(bot.isEmpty()).to.be.true;
-        Report.find(function(err, reports) {
-          if (err) return done(err);
-          expect(reports).to.be.an.instanceof(Array);
-          expect(reports).to.not.be.empty;
-          reports = _.filter(reports, function(report) {
-            return report.content && report.content.indexOf('http') > -1;
+        process.nextTick(function() {
+          Report.find(function(err, reports) {
+            if (err) return done(err);
+            expect(reports).to.be.an.instanceof(Array);
+            expect(reports).to.not.be.empty;
+            reports = _.filter(reports, function(report) {
+              return report.content && report.content.indexOf('e') > -1;
+            });
+            expect(reports).to.not.be.empty;
+            done();
           });
-          expect(reports).to.not.be.empty;
-          done();
         });
       });
+    });
+
+    after(function(done) {
+      bot.stop();
+      done();
     });
   });
 
@@ -80,9 +85,9 @@ describe('Report writer', function() {
       reportWriter.busy = true;
 
       // Create sources for the most common words in English
-      Source.create({type: 'twitter', keywords: 'the'});
-      Source.create({type: 'twitter', keywords: 'be'});
-      Source.create({type: 'twitter', keywords: 'to'});
+      Source.create({type: 'dummy', keywords: 'a'});
+      Source.create({type: 'dummy', keywords: 'b'});
+      Source.create({type: 'dummy', keywords: 'c'});
 
       // Queue starting bots after sources are loaded
       process.nextTick(function() {
@@ -91,13 +96,12 @@ describe('Report writer', function() {
       });
     });
 
-    // Stream data for ~4 seconds
+    // Stream data for 100ms
     before(function(done) {
-      this.timeout(5000);
       setTimeout(function() {
         botMaster.stop();
         done();
-      }, 4000);
+      }, 100);
     });
 
     // Count queued and database data

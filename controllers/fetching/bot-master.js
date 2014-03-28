@@ -67,6 +67,12 @@ BotMaster.prototype.add = function(bot) {
   bot.on('reports', function(reports_data) {
     process.emit('bot:reports', bot);
   });
+  bot.on('empty', function(bot) {
+    process.emit('bot:empty', bot);
+  });
+  bot.on('notEmpty', function(bot) {
+    process.emit('bot:notEmpty', bot);
+  });
 };
 
 // Start all bots
