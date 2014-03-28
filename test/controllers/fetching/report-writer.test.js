@@ -100,21 +100,38 @@ describe('Report writer', function() {
       }, 4000);
     });
 
-    it('should process all queued reports from all bots', function(done) {
-      // Verify that at there are queued reports
-      var haveData = _.any(botMaster.bots, function(bot) {
-        return !bot.isEmpty();
+    // Count queued and database data
+    before(function(done) {
+       // Verify that at there are queued reports
+      queueCount = _.reduce(botMaster.bots, function(count, bot) {
+        return count + bot.queue.count;
+      }, 0);
+
+      // Verify number of reports in database
+      reportCount = 0;
+      Report.find(function(err, reports) {
+        reportCount = reports.length;
+        done();
       });
-      expect(haveData).to.be.true;
+    });
+
+    it('should process all queued reports from all bots', function(done) {
+     expect(queueCount).to.be.greaterThan(0);
       // Mark report writer as no longer busy
       reportWriter.busy = false;
       // Process all queued data
       reportWriter.process(function() {
+        // Verify that bots are all empty
         var haveData = _.any(botMaster.bots, function(bot) {
           return !bot.isEmpty();
         });
         expect(haveData).to.be.false;
-        done();
+
+        // Verify that reports were inserted into database
+        Report.find(function(err, reports) {
+          expect(reports.length).to.equal(queueCount + reportCount);
+          done();
+        });
       });
     });
   });
