@@ -11,6 +11,10 @@ h2 {
   font-size: 16px;
 }
 
+ul#requests li {
+  line-height: 20px;
+}
+
 #status {
   font-weight: bold;
   margin-bottom: 5px;
