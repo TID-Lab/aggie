@@ -6,6 +6,10 @@
   <script type="text/javascript" src="lib/underscore-1.6.0.min.js"></script>
   <script type="text/javascript" src="lib/backbone-1.1.2.min.js"></script>
   <script type="text/javascript" src="lib/toolbox-base.js"></script>
+  <script type="text/javascript" src="lib/jquery.serialize-hash.js"></script>
+  <script type="text/javascript" src="request_handler.js"></script>
+  <script type="text/javascript" src="basic_request_handler.js"></script>
+  <script type="text/javascript" src="form_request_handler.js"></script>
   <script type="text/javascript" src="explorer.js"></script>
 </head>
 <body>
@@ -13,14 +17,16 @@
   <h2>Request</h2>
   <ul>
     <li id="create_twitter">
-      <form>
+      <form action="/api/source" method="post">
+        <input type="hidden" name="type" value="twitter" />
+        <input type="hidden" name="enabled" value="true" />
         Create Twitter Source with keywords:
-        <input type="text" id="keywords" />
+        <input type="text" name="keywords" />
         <input type="submit">
       </form>
     </li>
     <li id="list_sources">
-      <a href="#">List all sources</a>
+      <a href="/api/source">List all sources</a>
     </li>
   </ul>
   <h2>Response</h2>
