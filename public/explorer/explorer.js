@@ -12,6 +12,7 @@ var TwitterSourceCreationHandler = Toolbox.Base.extend({
   },
 
   submit: function() {
+    var self = this;
     $.ajax({
       url: '/api/source',
       type: 'post',
@@ -20,11 +21,17 @@ var TwitterSourceCreationHandler = Toolbox.Base.extend({
         keywords: this.form.find('#keywords').val(),
         enabled: true
       })
-    }).done(function(data){
+    }).done(function(data, status, jqxhr){
       $('#response').html(JSON.stringify(data));
+      self.updateRequestStatus(jqxhr, 'success');
     }).fail(function(jqxhr, status, error){
-      $('#response').html(status + ' ' + error);
+      $('#response').html(jqxhr.responseText);
+      self.updateRequestStatus(jqxhr, 'error');
     });
+  },
+
+  updateRequestStatus: function(jqxhr, success_or_error) {
+    $('#status').html(jqxhr.status + ' ' + jqxhr.statusText).removeClass().addClass(success_or_error);
   }
 });
 
