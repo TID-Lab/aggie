@@ -21,5 +21,6 @@ h2 {
 }
 
 #response {
-
+  font-family: Lucidatypewriter, monospace;
+  font-size: 12px;
 }

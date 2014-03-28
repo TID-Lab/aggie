@@ -22,7 +22,7 @@ var TwitterSourceCreationHandler = Toolbox.Base.extend({
         enabled: true
       })
     }).done(function(data, status, jqxhr){
-      $('#response').html(JSON.stringify(data));
+      $('#response').html(JSON.stringify(data, undefined, 2));
       self.updateRequestStatus(jqxhr, 'success');
     }).fail(function(jqxhr, status, error){
       $('#response').html(jqxhr.responseText);
