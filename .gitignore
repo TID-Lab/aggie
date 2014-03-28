@@ -25,3 +25,5 @@ config/secrets.js
 config/secrets.json
 
 buildAssets
+
+NOTES
