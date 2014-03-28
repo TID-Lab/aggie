@@ -13,6 +13,14 @@ describe('Fetching controller', function() {
     done();
   });
 
+  describe('GET /api/fetching', function() {
+    it('should return fetching status as disabled', function(done) {
+      request(fetchingController)
+        .get('/api/fetching')
+        .expect(200, {enabled: false}, done);
+    });
+  });
+
   describe('PUT /api/fetching/on', function() {
     it('should enable all bots', function(done) {
       request(fetchingController)
@@ -29,6 +37,14 @@ describe('Fetching controller', function() {
     });
   });
 
+  describe('GET /api/fetching', function() {
+    it('should return fetching status as enabled', function(done) {
+      request(fetchingController)
+        .get('/api/fetching')
+        .expect(200, {enabled: true}, done);
+    });
+  });
+
   describe('PUT /api/fetching/off', function() {
     it('should disable all bots', function(done) {
       request(fetchingController)
@@ -42,6 +58,14 @@ describe('Fetching controller', function() {
           });
           done();
         });
+    });
+  });
+
+  describe('GET /api/fetching', function() {
+    it('should return fetching status as disabled', function(done) {
+      request(fetchingController)
+        .get('/api/fetching')
+        .expect(200, {enabled: false}, done);
     });
   });
 

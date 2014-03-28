@@ -1,7 +1,11 @@
 var api = require('../api').app;
 var botMaster = require('../fetching/bot-master');
 
-// Enable global fetching
+api.get('/api/fetching', function(req, res) {
+  res.send(200, {enabled: botMaster.enabled});
+});
+
+// Enable/disable global fetching
 api.put('/api/fetching/:op', function(req, res) {
   switch(req.params.op) {
     case 'on':

@@ -5,9 +5,11 @@ var botFactory = require('./bot-factory');
 var BotMaster = function() {
   var self = this;
   this.bots = [];
+  this.enabled = false;
 
   // Instantiate new bots when sources are saved
   process.on('source:save', function(source_data) {
+    source_data.enabled = self.enabled;
     self.load(source_data);
   });
 
@@ -67,6 +69,7 @@ BotMaster.prototype.add = function(bot) {
 
 // Start all bots
 BotMaster.prototype.start = function() {
+  this.enabled = true;
   this.bots.forEach(function(bot) {
     bot.start();
   });
@@ -74,6 +77,7 @@ BotMaster.prototype.start = function() {
 
 // Stop all bots
 BotMaster.prototype.stop = function() {
+  this.enabled = false;
   this.bots.forEach(function(bot) {
     bot.stop();
   });
