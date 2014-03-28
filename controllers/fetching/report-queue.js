@@ -28,7 +28,12 @@ ReportQueue.prototype.nextBot = function() {
 };
 
 ReportQueue.prototype.nextReport = function() {
-  return this.nextBot().fetchNext();
+  var bot = this.nextBot();
+  if (bot) return bot.fetchNext();
+};
+
+ReportQueue.prototype.isEmpty = function() {
+  return this.bots.length === 0;
 };
 
 module.exports = new ReportQueue();

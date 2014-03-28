@@ -11,6 +11,9 @@ describe('Report queue', function() {
 
   describe('base functions', function() {
     before(function(done) {
+      botMaster.kill();
+      reportQueue.bots = [];
+      reportQueue.pointer = 0;
       one = botFactory.create({sourceType: 'dummy', keywords: '1', interval: 0});
       one.start();
       two = botFactory.create({sourceType: 'dummy', keywords: '2', interval: 0});

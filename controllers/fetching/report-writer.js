@@ -1,5 +1,6 @@
 var Report = require('../../models/report');
 var botMaster = require('./bot-master');
+var reportQueue = require('./report-queue');
 
 var ReportWriter = function() {
   this.busy = false;
@@ -17,45 +18,27 @@ ReportWriter.prototype.process = function(callback) {
   // Mark as busy
   this.busy = true;
   var self = this;
-  // Clone bot list
-  var bots = botMaster.bots.slice(0);
-  // Process one bot at a time, asynchronously
-  (function processOneBot() {
-    // Get next bot
-    var bot = bots.splice(0, 1)[0];
-    // Process reports from bot
-    self.processBot(bot, function(err) {
-      if (err) return callback(err);
-      if (bots.length === 0) {
-        self.busy = false;
-        return callback();
-      }
-      // Process next bot asynchronously
-      process.nextTick(processOneBot);
-    });
-  })();
-};
-
-// Process all reports from a single bot, one at a time
-ReportWriter.prototype.processBot = function(bot, callback) {
-  if (bot.isEmpty()) return callback();
-  var self = this;
-  (function processOneReport() {
-    // Fetch next report
-    var report_data = self.fetch(bot);
+  // Process one report at a time, asynchronously
+  (function processNextReport() {
+    // Get next report
+    var report_data = self.fetch();
     if (!report_data) return callback();
     // Write to database
     self.write(report_data, function(err) {
       if (err) return callback(err);
-      // Process next report asynchronously
-      process.nextTick(processOneReport);
+      if (reportQueue.isEmpty()) {
+        self.busy = false;
+        return callback();
+      }
+      // Enqueue processing of the next report
+      process.nextTick(processNextReport);
     });
   })();
 };
 
-// Fetch next report from a bot
-ReportWriter.prototype.fetch = function(bot) {
-  return bot.fetchNext();
+// Fetch next report from the next bot
+ReportWriter.prototype.fetch = function() {
+  return reportQueue.nextReport();
 };
 
 // Write report data to database

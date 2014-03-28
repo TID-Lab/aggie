@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var _ = require('underscore');
 var reportWriter = require(root_path + '/controllers/fetching/report-writer');
+var reportQueue = require(root_path + '/controllers/fetching/report-queue');
 var botFactory = require(root_path + '/controllers/fetching/bot-factory');
 var botMaster = require(root_path + '/controllers/fetching/bot-master');
 var Report = require(root_path + '/models/report');
@@ -10,6 +11,10 @@ describe('Report writer', function() {
 
   describe('base functions', function() {
     beforeEach(function(done) {
+      botMaster.kill();
+      reportWriter.busy = true;
+      reportQueue.bots = [];
+      reportQueue.pointer = 0;
       bot = botFactory.create({sourceType: 'dummy', keywords: 'Lorem ipsum'});
       bot.start();
       done();
@@ -17,7 +22,8 @@ describe('Report writer', function() {
 
     it('should fetch reports from available bots', function(done) {
       bot.once('reports', function() {
-        var report_data = reportWriter.fetch(this);
+        reportQueue.enqueue(this);
+        var report_data = reportWriter.fetch();
         expect(report_data).to.have.property('content');
         expect(report_data.content).to.contain('Lorem ipsum');
         done();
@@ -26,7 +32,8 @@ describe('Report writer', function() {
 
     it('should write reports to database', function(done) {
       bot.once('reports', function() {
-        var report_data = reportWriter.fetch(this);
+        reportQueue.enqueue(this);
+        var report_data = reportWriter.fetch();
         reportWriter.write(report_data, function(err, report) {
           if (err) return done(err);
           expect(report).to.have.property('_id');
@@ -42,44 +49,11 @@ describe('Report writer', function() {
     });
   });
 
-  describe('bot processing function', function() {
-    before(function(done) {
-      bot = botFactory.create({sourceType: 'dummy', keywords: 'e'});
-      bot.start();
-      setTimeout(function() {
-        done();
-      }, 100);
-    });
-
-    it('should process all queued reports from a single bot', function(done) {
-      expect(bot.isEmpty()).to.be.false;
-      reportWriter.processBot(bot, function(err) {
-        if (err) return done(err);
-        expect(bot.isEmpty()).to.be.true;
-        process.nextTick(function() {
-          Report.find(function(err, reports) {
-            if (err) return done(err);
-            expect(reports).to.be.an.instanceof(Array);
-            expect(reports).to.not.be.empty;
-            reports = _.filter(reports, function(report) {
-              return report.content && report.content.indexOf('e') > -1;
-            });
-            expect(reports).to.not.be.empty;
-            done();
-          });
-        });
-      });
-    });
-
-    after(function(done) {
-      bot.stop();
-      done();
-    });
-  });
-
   describe('master processing function', function() {
     before(function(done) {
       botMaster.kill();
+      reportQueue.bots = [];
+      reportQueue.pointer = 0;
 
       // Mark report writer as busy so that we can manually control processing
       reportWriter.busy = true;
