@@ -1,0 +1,59 @@
+<html>
+<head>
+  <title>Aggie API Explorer</title>
+  <link href="explorer.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
+  <script type="text/javascript" src="lib/underscore-1.6.0.min.js"></script>
+  <script type="text/javascript" src="lib/backbone-1.1.2.min.js"></script>
+  <script type="text/javascript" src="lib/toolbox-base.js"></script>
+  <script type="text/javascript" src="lib/jquery.serialize-hash.js"></script>
+  <script type="text/javascript" src="request_handler.js"></script>
+  <script type="text/javascript" src="basic_request_handler.js"></script>
+  <script type="text/javascript" src="form_request_handler.js"></script>
+  <script type="text/javascript" src="request_definition_loader.js"></script>
+</head>
+<body>
+  <h1>Aggie API Explorer</h1>
+  <h2>Request</h2>
+  <ul id="requests">
+    <li>
+      <form action="/api/source" method="post">
+        <input type="hidden" name="type" value="twitter" />
+        <input type="hidden" name="enabled" value="true" />
+        Create Twitter source with keywords (e.g. banana,apple):
+        <input type="text" name="keywords" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <a href="/api/source">List sources</a>
+    </li>
+    <li>
+      <a href="/api/report">List reports</a>
+    </li>
+    <li>
+      <a href="/api/source/all" data-method="delete">Delete all sources</a>
+    </li>
+    <li>
+      <a href="/api/fetching" data-method="get">Check fetching status</a>
+    </li>
+    <li>
+      <a href="/api/fetching/on" data-method="put">Enable fetching</a>
+    </li>
+    <li>
+      <a href="/api/fetching/off" data-method="put">Disable fetching</a>
+    </li>
+  </ul>
+  <h2>Response</h2>
+  <div id="status"></div>
+  <pre id="response">
+[No request sent yet.]
+  </pre>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      new RequestDefinitionLoader('#requests');
+    });
+  </script>
+</body>
+</html>
