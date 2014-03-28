@@ -64,7 +64,7 @@ BotMaster.prototype.getBots = function(filters) {
 // Add Bot to array of tracked bots
 BotMaster.prototype.add = function(bot) {
   this.bots.push(bot);
-  bot.on('reports', function(report_data) {
+  bot.on('reports', function(reports_data) {
     process.emit('bot:reports', bot);
   });
 };

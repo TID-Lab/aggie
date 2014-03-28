@@ -74,28 +74,49 @@ describe('Report writer', function() {
 
   describe('master processing function', function() {
     before(function(done) {
+      botMaster.kill();
+
+      // Mark report writer as busy so that we can manually control processing
+      reportWriter.busy = true;
+
       // Create sources for the most common words in English
       Source.create({type: 'twitter', keywords: 'the'});
       Source.create({type: 'twitter', keywords: 'be'});
       Source.create({type: 'twitter', keywords: 'to'});
+
+      // Queue starting bots after sources are loaded
       process.nextTick(function() {
         botMaster.start();
         done();
       });
     });
 
-    it('should process all queued reports from all bots', function(done) {
-      // Stream data for ~1.5
+    // Stream data for ~4 seconds
+    before(function(done) {
+      this.timeout(5000);
       setTimeout(function() {
-        expect(reportWriter.busy).to.be.true;
-        process.nextTick(function() {
-          expect(reportWriter.busy).to.be.true;
-        });
         botMaster.stop();
         done();
-      }, 1500);
+      }, 4000);
     });
 
+    it('should process all queued reports from all bots', function(done) {
+      // Verify that at there are queued reports
+      var haveData = _.any(botMaster.bots, function(bot) {
+        return !bot.isEmpty();
+      });
+      expect(haveData).to.be.true;
+      // Mark report writer as no longer busy
+      reportWriter.busy = false;
+      // Process all queued data
+      reportWriter.process(function() {
+        var haveData = _.any(botMaster.bots, function(bot) {
+          return !bot.isEmpty();
+        });
+        expect(haveData).to.be.false;
+        done();
+      });
+    });
   });
 
 });
