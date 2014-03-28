@@ -1,0 +1,34 @@
+body {
+  font-family: Helvetica;
+  font-size: 13px;
+}
+
+form {
+  margin: 0;
+}
+
+h2 {
+  font-size: 16px;
+}
+
+ul#requests li {
+  line-height: 20px;
+}
+
+#status {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#status.success {
+  color: Green;
+}
+
+#status.error {
+  color: Red;
+}
+
+#response {
+  font-family: Lucidatypewriter, monospace;
+  font-size: 12px;
+}
