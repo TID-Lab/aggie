@@ -10,13 +10,13 @@
   <script type="text/javascript" src="request_handler.js"></script>
   <script type="text/javascript" src="basic_request_handler.js"></script>
   <script type="text/javascript" src="form_request_handler.js"></script>
-  <script type="text/javascript" src="explorer.js"></script>
+  <script type="text/javascript" src="request_definition_loader.js"></script>
 </head>
 <body>
   <h1>Aggie API Explorer</h1>
   <h2>Request</h2>
-  <ul>
-    <li id="create_twitter">
+  <ul id="requests">
+    <li>
       <form action="/api/source" method="post">
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
@@ -25,7 +25,7 @@
         <input type="submit">
       </form>
     </li>
-    <li id="list_sources">
+    <li>
       <a href="/api/source">List all sources</a>
     </li>
   </ul>
@@ -34,5 +34,11 @@
   <pre id="response">
 [No request sent yet.]
   </pre>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      new RequestDefinitionLoader('#requests');
+    });
+  </script>
 </body>
 </html>

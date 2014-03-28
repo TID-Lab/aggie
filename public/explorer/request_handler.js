@@ -1,6 +1,5 @@
 var RequestHandler = Toolbox.Base.extend({
-  constructor: function(id) {
-    this.id = id;
+  constructor: function() {
   },
 
   submit: function(params) {

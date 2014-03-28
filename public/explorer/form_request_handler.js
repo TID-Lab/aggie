@@ -1,10 +1,6 @@
 var FormRequestHandler = RequestHandler.extend({
-  constructor: function(id) {
+  constructor: function(form) {
     var self = this;
-
-    FormRequestHandler.__super__.constructor.call(this, id);
-
-    var form = $('#' + id + ' form');
 
     // submit event handler
     form.on('submit', function(e){

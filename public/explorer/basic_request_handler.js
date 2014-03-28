@@ -1,11 +1,8 @@
 var BasicRequestHandler = RequestHandler.extend({
-  constructor: function(id) {
+  constructor: function(link) {
     var self = this;
 
-    BasicRequestHandler.__super__.constructor.call(this, id);
-
-    var link = $('#' + id + ' a');
-    $('#' + id + ' a').on('click', function(e){
+    link.on('click', function(e){
       self.submit({
         type: link.data('method') || 'get',
         url: link.attr('href'),
