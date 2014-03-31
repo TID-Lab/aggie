@@ -18,6 +18,11 @@ var BotMaster = function() {
     var bot = self.sourceToBot(source_data);
     self.kill(bot);
   });
+
+  // Load all source when initializing
+  process.nextTick(function() {
+    self.loadAll();
+  });
 };
 
 // Create bot from source data
