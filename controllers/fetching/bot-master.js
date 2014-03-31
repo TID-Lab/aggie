@@ -1,18 +1,19 @@
 var _ = require('underscore');
 var Source = require('../../models/source');
 var botFactory = require('./bot-factory');
+var childProcess = require('../child-process');
 
 var BotMaster = function() {
   var self = this;
   this.bots = [];
 
   // Instantiate new bots when sources are saved
-  process.on('source:save', function(source_data) {
+  childProcess.on('source:save', function(source_data) {
     self.load(source_data);
   });
 
   // Kill bots when removed from datbase
-  process.on('source:remove', function(source_data) {
+  childProcess.on('source:remove', function(source_data) {
     var bot = self.sourceToBot(source_data);
     self.kill(bot);
   });
