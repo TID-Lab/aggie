@@ -18,7 +18,6 @@ api.post('/api/source', function(req, res) {
 api.get('/api/source', function(req, res) {
   Source.find(function(err, sources) {
     if (err) res.send(500, err);
-    else if (sources.length === 0) res.send(404);
     else res.send(200, sources);
   });
 });

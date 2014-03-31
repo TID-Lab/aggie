@@ -91,7 +91,7 @@ describe('Source controller', function() {
         .end(function(err, res) {
           request(sourceController)
             .get('/api/source')
-            .expect(404, done);
+            .expect(200, [], done);
         });
     });
   });

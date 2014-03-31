@@ -31,7 +31,6 @@ describe('Report controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
-          console.log(res.body);
           done();
         });
     });
