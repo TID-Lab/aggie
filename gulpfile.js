@@ -15,7 +15,7 @@ gulp.task('lint', function() {
 
 gulp.task('test', function() {
   gulp.src(paths.test)
-    .pipe(mocha());
+    .pipe(mocha({reporter: 'spec'}));
 });
 
 gulp.task('watch', function() {

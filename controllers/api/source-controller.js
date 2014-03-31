@@ -1,6 +1,5 @@
 var api = require('../api').app;
 var Source = require('../../models/source');
-var pm = require('../process-manager');
 
 // Create a new Source
 api.post('/api/source', function(req, res) {
@@ -10,9 +9,7 @@ api.post('/api/source', function(req, res) {
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
       if (err) return res.send(500, err);
-
       res.send(200, source);
-      pm.emit('source:create', source);
     });
   });
 });
@@ -52,9 +49,7 @@ api.put('/api/source/:_id', function(req, res) {
       }
       source.save(function(err) {
         if (err) return res.send(500, err);
-
         res.send(200, source);
-        pm.emit('source:update', source);
       });
     });
 
@@ -68,9 +63,7 @@ api.delete('/api/source/:_id', function(req, res) {
 
     source.remove(function(err) {
       if (err) return res.send(500, err);
-
       res.send(200);
-      pm.emit('source:delete', source);
     });
   });
 });

@@ -11,15 +11,11 @@ var ContentService = require('../content-service');
 var util = require('util');
 
 var DummyContentService = function(options) {
-  if (typeof options === 'string') {
-    this.filter = options;
-  } else {
-    this.filter = options.filter;
-  }
-  this.source = 'dummy';
-  this.type = 'push';
+  this.keywords = options.keywords;
+  this.sourceType = 'dummy';
+  this.botType = 'push';
   this.bufferLength = 2;
-  ContentService.call(this, options);
+  ContentService.call(this);
 };
 
 util.inherits(DummyContentService, ContentService);
@@ -35,7 +31,7 @@ DummyContentService.prototype.start = function() {
 };
 
 DummyContentService.prototype.fetch = function(self, data) {
-  var pattern = new RegExp(self.filter, 'im');
+  var pattern = new RegExp(self.keywords, 'im');
   if (self._isStreaming && pattern.test(data.text)) {
     var report = self.parse(data);
     self.emit('reports', [report]);
