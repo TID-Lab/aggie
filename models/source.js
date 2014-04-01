@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var processManager = require('../controllers/process-manager');
 
 var sourceSchema = new mongoose.Schema({
   type: String,
@@ -10,12 +9,12 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  processManager.broadcast('source:save', this.toObject());
+  this.emit('save', this.toObject());
   next();
 });
 
 sourceSchema.pre('remove', function(next) {
-  processManager.broadcast('source:remove', this.toObject());
+  this.emit('remove', this.toObject());
   next();
 });
 

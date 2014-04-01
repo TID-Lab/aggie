@@ -1,39 +1,32 @@
-var child_process = require('child_process');
+var path = require('path');
 var _ = require('underscore');
+// We only need `fork()` to create new processes
+var fork = require('child_process').fork;
 
 var ProcessManager = function() {
   this.children = [];
+  this.routes = [];
 };
 
+// Fork a module and add it to the children list
+// @modulePath Path of the module relative to the root directory
 ProcessManager.prototype.fork = function(modulePath) {
   var self = this;
   modulePath = require.resolve(modulePath);
-  var moduleName = this._parseName(modulePath);
-  if (!this.isForked(moduleName)) {
-    var child = child_process.fork(modulePath);
+  moduleName = path.basename(modulePath, '.js');
+  var child = this.getChild(moduleName);
+  if (!child) {
+    var child = fork(modulePath);
     // Add module metadata
     child.modulePath = modulePath;
     child.moduleName = moduleName;
-    // Listen to messages from child and broadcast
-    child.on('message', function(message) {
-      self.broadcast(message, moduleName);
+    // Listen to messages from child
+    child.on('message', function(message, data) {
+      self.messageHandler(message, data, child);
     });
     this.children.push(child);
-    return child;
   }
-  return this.getChild(moduleName);
-};
-
-// Parse module name from resolved path
-ProcessManager.prototype._parseName = function(modulePath) {
-  return _.last(modulePath.split('/')).split('.')[0];
-};
-
-// Determine if a process has been forked
-ProcessManager.prototype.isForked = function(moduleName) {
-  return _.any(this.children, function(child) {
-    return child.moduleName === moduleName;
-  });
+  return child;
 };
 
 // Get child process from module name
@@ -41,23 +34,29 @@ ProcessManager.prototype.getChild = function(moduleName) {
   return _.findWhere(this.children, {moduleName: moduleName});
 };
 
-// Send message to all forked processes
-ProcessManager.prototype.broadcast = function(message, data, moduleName) {
-  if (typeof data === 'string' && moduleName === undefined) {
-    moduleName = data;
-    data = undefined;
+// Handle different types of messages
+ProcessManager.prototype.messageHandler = function(message, data, child) {
+  switch (message) {
+    case 'register':
+      data.child = child;
+      this.registerRoute(data);
+      break;
+    default:
+      this.forwardMessage(message, child);
+      break;
   }
-  // Emit in global process scope
-  if (this.children.length === 0) {
-    process.emit('message', message, data);
-  }
-  // Send to each child process
-  this.children.forEach(function(child) {
-    // Avoid echoing
-    if (child.moduleName !== moduleName) {
-      child.send(message, data);
-    }
-  });
+};
+
+// Add route to map
+ProcessManager.prototype.registerRoute = function(options) {
+  this.routes.push(options);
+};
+
+// Forward message from a child process to another child process
+ProcessManager.prototype.forwardMessage = function(message, fromChild) {
+  var route = _.findWhere(this.routes, {moduleName: fromChild.moduleName});
+  var toChild = this.getChild(route.moduleName);
+  toChild.send(message);
 };
 
 module.exports = new ProcessManager();

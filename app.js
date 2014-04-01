@@ -1,12 +1,10 @@
-var app = require('./controllers/api').app;
 var express = require('express');
+var app = express();
 
-// Load all API controllers
-require('./controllers/api/incident-controller');
-require('./controllers/api/report-controller');
-require('./controllers/api/source-controller');
-require('./controllers/api/trend-controller');
-require('./controllers/api/user-controller');
+var processManager = require('./controllers/process-manager');
+processManager.fork('/controllers/api');
+processManager.fork('/controllers/fetching');
+processManager.fork('/controllers/streaming');
 
 app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), function() {
