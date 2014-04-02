@@ -4,6 +4,7 @@ var botFactory = require('./bot-factory');
 
 var BotMaster = function() {
   this.bots = [];
+  this.enabled = false;
 };
 
 // Initialize event listeners
@@ -12,6 +13,7 @@ BotMaster.prototype.init = function(sourceEventEmitter) {
 
   // Instantiate new bots when sources are saved
   sourceEventEmitter.on('save', function(source_data) {
+    source_data.enabled = self.enabled;
     self.load(source_data);
   });
 
@@ -20,6 +22,9 @@ BotMaster.prototype.init = function(sourceEventEmitter) {
     var bot = self.sourceToBot(source_data);
     self.kill(bot);
   });
+
+  // Load all sources when initializing
+  this.loadAll();
 };
 
 // Create bot from source data
@@ -43,6 +48,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
     callback = filters;
     filters = undefined;
   }
+  if (!callback) callback = function() {};
   // Find sources from the database
   Source.find(filters, function(err, sources) {
     if (err) return callback(err);
@@ -50,7 +56,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
     sources.forEach(function(source) {
       self.load(source);
       // Callback after all sources have been loaded
-      if (--remaining === 0 && callback) callback();
+      if (--remaining === 0) callback();
     });
   });
 };
@@ -71,6 +77,7 @@ BotMaster.prototype.add = function(bot) {
 
 // Start all bots
 BotMaster.prototype.start = function() {
+  this.enabled = true;
   this.bots.forEach(function(bot) {
     bot.start();
   });
@@ -78,6 +85,7 @@ BotMaster.prototype.start = function() {
 
 // Stop all bots
 BotMaster.prototype.stop = function() {
+  this.enabled = false;
   this.bots.forEach(function(bot) {
     bot.stop();
   });
