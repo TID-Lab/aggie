@@ -101,7 +101,7 @@ describe('Report queue', function() {
       botMaster.bots.forEach(function(bot) {
         bot.clearQueue();
       });
-      expect(reportQueue.bots).to.be.empty;
+      expect(reportQueue._bots).to.be.empty;
       done();
     });
 

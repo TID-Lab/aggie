@@ -45,7 +45,7 @@ describe('Bot', function() {
   it('should clear its own queue', function(done) {
     bot.on('empty', function() {
       expect(bot.queue.count).to.equal(0);
-      expect(bot.empty).to.be.true;
+      expect(bot.isEmpty()).to.be.true;
       done();
     });
     bot.clearQueue();

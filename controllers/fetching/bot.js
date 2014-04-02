@@ -7,7 +7,6 @@ var Bot = function(contentService) {
   this.type = this.contentService.botType;
   this.queue = new CircularQueue();
   this.enabled = false;
-  this.empty = true;
   EventEmitter.call(this);
 };
 
@@ -20,11 +19,8 @@ Bot.prototype.start = function() {
   self.contentService.on('reports', function(reports_data) {
     if (self.enabled) {
       reports_data.forEach(function(report_data) {
+        if (self.isEmpty()) self.emit('notEmpty');
         self.queue.add(report_data);
-        if (self.empty) {
-          self.empty = false;
-          self.emit('notEmpty');
-        }
       });
       self.emit('reports', reports_data);
     }
@@ -42,13 +38,12 @@ Bot.prototype.stop = function() {
 // Fetch next available report in the queue
 Bot.prototype.fetchNext = function() {
   // Return if queue is empty
-  if (this.empty) return;
+  if (this.isEmpty()) return;
 
   var report_data = this.queue.fetch();
 
   // Notify of queue being empty
   if (this.isEmpty()) {
-    this.empty = true;
     this.emit('empty');
   }
 
@@ -61,7 +56,6 @@ Bot.prototype.isEmpty = function() {
 
 Bot.prototype.clearQueue = function() {
   this.queue.clear();
-  this.empty = true;
   this.emit('empty');
 };
 

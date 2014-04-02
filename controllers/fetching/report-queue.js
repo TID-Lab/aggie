@@ -15,7 +15,8 @@ var ReportQueue = function() {
 
 // Add bot to queue
 ReportQueue.prototype.enqueue = function(bot) {
-  this._bots.push(bot);
+  var index = this._bots.indexOf(bot);
+  if (index === -1) this._bots.push(bot);
 };
 
 // Remove bot from queue

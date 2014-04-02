@@ -17,23 +17,27 @@ ReportWriter.prototype.process = function(callback) {
   if (this._busy) return callback();
   // Mark as busy
   this._busy = true;
-  var self = this;
   // Process one report at a time, asynchronously
-  (function processNextReport() {
-    // Get next report
-    var report_data = self.fetch();
-    if (!report_data) return callback();
-    // Write to database
-    self.write(report_data, function(err) {
-      if (err) return callback(err);
-      if (reportQueue.isEmpty()) {
-        self._busy = false;
-        return callback();
-      }
-      // Enqueue processing of the next report
-      process.nextTick(processNextReport);
+  this._processNextReport(callback);
+};
+
+ReportWriter.prototype._processNextReport = function(callback) {
+  var self = this;
+  // Get next report
+  var report_data = this.fetch();
+  if (!report_data) return callback();
+  // Write to database
+  this.write(report_data, function(err) {
+    if (err) return callback(err);
+    if (reportQueue.isEmpty()) {
+      self._busy = false;
+      return callback();
+    }
+    // Enqueue processing of the next report
+    process.nextTick(function() {
+      self._processNextReport(callback);
     });
-  })();
+  });
 };
 
 // Fetch next report from the next bot
