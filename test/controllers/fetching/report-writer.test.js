@@ -12,7 +12,6 @@ describe('Report writer', function() {
   describe('base functions', function() {
     beforeEach(function(done) {
       botMaster.kill();
-      reportWriter._busy = true;
       reportQueue.clear();
       bot = botFactory.create({sourceType: 'dummy', keywords: 'Lorem ipsum'});
       bot.start();
@@ -53,9 +52,6 @@ describe('Report writer', function() {
       botMaster.kill();
       reportQueue.clear();
 
-      // Mark report writer as busy so that we can manually control processing
-      reportWriter._busy = true;
-
       // Create sources for the most common words in English
       Source.create({type: 'dummy', keywords: 'a'});
       Source.create({type: 'dummy', keywords: 'b'});
@@ -78,7 +74,7 @@ describe('Report writer', function() {
 
     // Count queued and database data
     before(function(done) {
-       // Verify that at there are queued reports
+      // Verify that at there are queued reports
       queueCount = _.reduce(botMaster.bots, function(count, bot) {
         return count + bot.queue.count;
       }, 0);
@@ -92,9 +88,7 @@ describe('Report writer', function() {
     });
 
     it('should process all queued reports from all bots', function(done) {
-     expect(queueCount).to.be.greaterThan(0);
-      // Mark report writer as no longer busy
-      reportWriter._busy = false;
+      expect(queueCount).to.be.greaterThan(0);
       // Process all queued data
       reportWriter.process(function() {
         // Verify that bots are all empty

@@ -72,7 +72,6 @@ describe('Report queue', function() {
 
   describe('bot management', function() {
     before(function(done) {
-      reportWriter._busy = true;
       botMaster.kill();
       reportQueue.clear();
       Source.create({type: 'dummy', keywords: 'one'});
@@ -92,7 +91,11 @@ describe('Report queue', function() {
     });
 
     it('should have added bots to the queue', function(done) {
-      expect(reportQueue._bots).to.have.length(3);
+      reportQueue.on('notEmpty', function() {
+        setTimeout(function() {
+          expect(reportQueue._bots).to.have.length(3);
+        }, 1000);
+      });
       done();
     });
 

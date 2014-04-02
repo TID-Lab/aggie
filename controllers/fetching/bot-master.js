@@ -22,7 +22,9 @@ var BotMaster = function() {
   });
 
   // Load all sources when initializing
-  this.loadAll();
+  process.nextTick(function() {
+    self.loadAll();
+  });
 };
 
 util.inherits(BotMaster, EventEmitter);

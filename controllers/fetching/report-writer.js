@@ -1,11 +1,9 @@
 var Report = require('../../models/report');
-var botMaster = require('./bot-master');
 var reportQueue = require('./report-queue');
 
 var ReportWriter = function() {
-  this._busy = false;
   var self = this;
-  botMaster.on('bot:reports', function() {
+  reportQueue.on('notEmpty', function() {
     self.process();
   });
 };
@@ -13,10 +11,6 @@ var ReportWriter = function() {
 // Process all queued reports, one bot at a time
 ReportWriter.prototype.process = function(callback) {
   if (!callback) callback = function() {};
-  // Return if busy
-  if (this._busy) return callback();
-  // Mark as busy
-  this._busy = true;
   // Process one report at a time, asynchronously
   this._processNextReport(callback);
 };
@@ -30,7 +24,6 @@ ReportWriter.prototype._processNextReport = function(callback) {
   this.write(report_data, function(err) {
     if (err) return callback(err);
     if (reportQueue.isEmpty()) {
-      self._busy = false;
       return callback();
     }
     // Enqueue processing of the next report

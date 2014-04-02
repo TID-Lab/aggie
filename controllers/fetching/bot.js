@@ -18,8 +18,8 @@ Bot.prototype.start = function() {
   self.enabled = true;
   self.contentService.on('reports', function(reports_data) {
     if (self.enabled) {
+      if (self.isEmpty()) self.emit('notEmpty');
       reports_data.forEach(function(report_data) {
-        if (self.isEmpty()) self.emit('notEmpty');
         self.queue.add(report_data);
       });
       self.emit('reports', reports_data);

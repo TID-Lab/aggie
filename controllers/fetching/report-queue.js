@@ -1,17 +1,29 @@
 var botMaster = require('./bot-master');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 var ReportQueue = function() {
   this._bots = [];
   this._pointer = 0;
+  EventEmitter.call(this);
+
   var self = this;
   // Listen to (not)empty events from Bot Master
   botMaster.on('bot:notEmpty', function(bot) {
+    var isEmpty = false;
+    if (self.isEmpty()) isEmpty = true;
     self.enqueue(bot);
+    // Emit event in the next cycle to allow binding of listeners
+    process.nextTick(function() {
+      if (isEmpty) self.emit('notEmpty');
+    });
   });
   botMaster.on('bot:empty', function(bot) {
     self.dequeue(bot);
   });
 };
+
+util.inherits(ReportQueue, EventEmitter);
 
 // Add bot to queue
 ReportQueue.prototype.enqueue = function(bot) {
