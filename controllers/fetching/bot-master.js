@@ -19,10 +19,8 @@ var BotMaster = function() {
     self.kill(bot);
   });
 
-  // Load all source when initializing
-  process.nextTick(function() {
-    self.loadAll();
-  });
+  // Load all sources when initializing
+  this.loadAll();
 };
 
 // Create bot from source data
@@ -46,6 +44,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
     callback = filters;
     filters = undefined;
   }
+  if (!callback) callback = function() {};
   // Find sources from the database
   Source.find(filters, function(err, sources) {
     if (err) return callback(err);
@@ -53,7 +52,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
     sources.forEach(function(source) {
       self.load(source);
       // Callback after all sources have been loaded
-      if (--remaining === 0 && callback) callback();
+      if (--remaining === 0) callback();
     });
   });
 };
