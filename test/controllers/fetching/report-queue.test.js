@@ -12,8 +12,7 @@ describe('Report queue', function() {
   describe('base functions', function() {
     before(function(done) {
       botMaster.kill();
-      reportQueue.bots = [];
-      reportQueue.pointer = 0;
+      reportQueue.clear();
       one = botFactory.create({sourceType: 'dummy', keywords: '1', interval: 0});
       one.start();
       two = botFactory.create({sourceType: 'dummy', keywords: '2', interval: 0});
@@ -24,30 +23,25 @@ describe('Report queue', function() {
     });
 
     it('should add bots to the queue', function(done) {
-      expect(reportQueue.bots).to.be.an.instanceof(Array);
-      expect(reportQueue.bots).to.be.empty;
+      expect(reportQueue._bots).to.be.an.instanceof(Array);
+      expect(reportQueue._bots).to.be.empty;
       reportQueue.enqueue(one);
       reportQueue.enqueue(two);
       reportQueue.enqueue(three);
-      expect(reportQueue.bots).to.have.length(3);
+      expect(reportQueue._bots).to.have.length(3);
       done();
     });
 
     it('should get bots in order', function(done) {
-      expect(reportQueue.pointer).to.equal(0);
       var bot = reportQueue.nextBot();
       expect(bot.contentService.keywords).to.equal('1');
-      expect(reportQueue.pointer).to.equal(1);
       var bot = reportQueue.nextBot();
       expect(bot.contentService.keywords).to.equal('2');
-      expect(reportQueue.pointer).to.equal(2);
       var bot = reportQueue.nextBot();
       expect(bot.contentService.keywords).to.equal('3');
-      expect(reportQueue.pointer).to.equal(3);
       // Wrap around
       var bot = reportQueue.nextBot();
       expect(bot.contentService.keywords).to.equal('1');
-      expect(reportQueue.pointer).to.equal(1);
       done();
     });
 
@@ -66,10 +60,10 @@ describe('Report queue', function() {
     });
 
     it('should remove bots from the queue', function(done) {
-      expect(reportQueue.bots).to.have.length(3);
+      expect(reportQueue._bots).to.have.length(3);
       reportQueue.dequeue(one);
       reportQueue.dequeue(two);
-      expect(reportQueue.bots).to.have.length(1);
+      expect(reportQueue._bots).to.have.length(1);
       var bot = reportQueue.nextBot();
       expect(bot.contentService.keywords).to.equal('3');
       done();
@@ -78,9 +72,9 @@ describe('Report queue', function() {
 
   describe('bot management', function() {
     before(function(done) {
-      reportWriter.busy = true;
+      reportWriter._busy = true;
       botMaster.kill();
-      reportQueue.bots = [];
+      reportQueue.clear();
       Source.create({type: 'dummy', keywords: 'one'});
       Source.create({type: 'dummy', keywords: 'two'});
       Source.create({type: 'dummy', keywords: 'three'});
@@ -98,15 +92,14 @@ describe('Report queue', function() {
     });
 
     it('should have added bots to the queue', function(done) {
-      expect(reportQueue.bots).to.have.length(3);
+      expect(reportQueue._bots).to.have.length(3);
       done();
     });
 
     it('should have removed empty bots from the queue', function(done) {
       // Destroy existing circular queue in each bot
       botMaster.bots.forEach(function(bot) {
-        bot.queue = new CircularQueue();
-        bot.fetchNext();
+        bot.clearQueue();
       });
       expect(reportQueue.bots).to.be.empty;
       done();

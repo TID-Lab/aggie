@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var Source = require('../../models/source');
 var botFactory = require('./bot-factory');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 var BotMaster = function() {
   var self = this;
@@ -22,6 +24,8 @@ var BotMaster = function() {
   // Load all sources when initializing
   this.loadAll();
 };
+
+util.inherits(BotMaster, EventEmitter);
 
 // Create bot from source data
 BotMaster.prototype.sourceToBot = function(source_data) {
@@ -69,15 +73,16 @@ BotMaster.prototype.getBots = function(filters) {
 
 // Add Bot to array of tracked bots
 BotMaster.prototype.add = function(bot) {
+  var self = this;
   this.bots.push(bot);
   bot.on('reports', function(reports_data) {
-    process.emit('bot:reports', bot);
+    self.emit('bot:reports', bot);
   });
-  bot.on('empty', function(bot) {
-    process.emit('bot:empty', bot);
+  bot.on('empty', function() {
+    self.emit('bot:empty', bot);
   });
-  bot.on('notEmpty', function(bot) {
-    process.emit('bot:notEmpty', bot);
+  bot.on('notEmpty', function() {
+    self.emit('bot:notEmpty', bot);
   });
 };
 
@@ -103,7 +108,8 @@ BotMaster.prototype.stop = function() {
 BotMaster.prototype.kill = function(bot) {
   if (bot) {
     // Remove bot instance from list of bots
-    this.bots = _.without(this.bots, bot);
+    var index = this.bots.indexOf(bot);
+    if (index > -1) this.bots.splice(index, 1);
   } else {
     // Kill all bots
     for (var i in this.bots) {

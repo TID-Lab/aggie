@@ -23,7 +23,7 @@ Bot.prototype.start = function() {
         self.queue.add(report_data);
         if (self.empty) {
           self.empty = false;
-          self.emit('notEmpty', self);
+          self.emit('notEmpty');
         }
       });
       self.emit('reports', reports_data);
@@ -39,20 +39,30 @@ Bot.prototype.stop = function() {
   });
 };
 
+// Fetch next available report in the queue
 Bot.prototype.fetchNext = function() {
+  // Return if queue is empty
+  if (this.empty) return;
+
   var report_data = this.queue.fetch();
-  if (report_data && this.empty) {
-    this.empty = false;
-    this.emit('notEmpty', this);
-  } else if (!report_data && !this.empty) {
+
+  // Notify of queue being empty
+  if (this.isEmpty()) {
     this.empty = true;
-    this.emit('empty', this);
+    this.emit('empty');
   }
+
   return report_data;
 };
 
 Bot.prototype.isEmpty = function() {
   return this.queue.isEmpty();
+};
+
+Bot.prototype.clearQueue = function() {
+  this.queue.clear();
+  this.empty = true;
+  this.emit('empty');
 };
 
 module.exports = Bot;
