@@ -13,13 +13,6 @@ describe('Process manager', function() {
     done();
   });
 
-  it('should determine if a process is already forked', function() {
-    var isForked = processManager.isForked('fetching');
-    expect(isForked).to.be.true;
-    var isForked = processManager.isForked('streaming');
-    expect(isForked).to.be.false;
-  });
-
   it('should get a forked process', function() {
     var child = processManager.getChild('fetching');
     expect(child).to.have.property('moduleName');

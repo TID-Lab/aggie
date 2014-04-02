@@ -1,11 +1,13 @@
 var expect = require('chai').expect;
 var _ = require('underscore');
+var EventEmitter = require('events').EventEmitter;
 var botMaster = require(root_path + '/controllers/fetching/bot-master');
 var Bot = require(root_path + '/controllers/fetching/bot');
 var Source = require(root_path + '/models/source');
 
 describe('Bot master', function() {
   before(function(done) {
+    botMaster.init(new EventEmitter);
     botMaster.kill();
     Source.create({type: 'dummy', keywords: 'one'});
     Source.create({type: 'dummy', keywords: 'two'});

@@ -21,6 +21,7 @@ ChildProcess.prototype.sendToParent = function(message, data) {
 // Register an event proxy with the parent process manager
 ChildProcess.prototype.createEventProxy = function(options) {
   this.sendToParent('register', options);
+  return new EventEmitter();
 };
 
 // Initialize child process as a singleton
