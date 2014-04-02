@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var botMaster = require('./bot-master');
 
 var ReportQueue = function() {
