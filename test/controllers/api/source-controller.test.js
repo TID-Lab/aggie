@@ -83,6 +83,19 @@ describe('Source controller', function() {
     });
   });
 
+  describe('DELETE /api/source/_all', function() {
+    it('should delete all sources', function(done) {
+      request(sourceController)
+        .del('/api/source/_all')
+        .expect(200)
+        .end(function(err, res) {
+          request(sourceController)
+            .get('/api/source')
+            .expect(200, [], done);
+        });
+    });
+  });
+
 });
 
 var compare = function(a, b) {

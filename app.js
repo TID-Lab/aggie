@@ -2,6 +2,7 @@ var app = require('./controllers/api').app;
 var express = require('express');
 
 // Load all API controllers
+require('./controllers/api/fetching-controller');
 require('./controllers/api/incident-controller');
 require('./controllers/api/report-controller');
 require('./controllers/api/source-controller');
