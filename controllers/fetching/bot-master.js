@@ -17,8 +17,8 @@ var BotMaster = function() {
 
   // Kill bots when removed from datbase
   process.on('source:remove', function(source_data) {
-    var bot = self.sourceToBot(source_data);
-    self.kill(bot);
+    var bot = self.getBot(source_data);
+    if (bot) self.kill(bot);
   });
 
   // Load all sources when initializing
@@ -39,8 +39,9 @@ BotMaster.prototype.sourceToBot = function(source_data) {
 
 // Load Bot from source data
 BotMaster.prototype.load = function(source_data) {
-  var bot = this.sourceToBot(source_data);
-  this.kill(bot);
+  var bot = this.getBot(source_data);
+  if (bot) this.kill(bot);
+  else bot = this.sourceToBot(source_data);
   this.add(bot);
 };
 
@@ -66,10 +67,11 @@ BotMaster.prototype.loadAll = function(filters, callback) {
 };
 
 // Get all bots matching the filter hash
-BotMaster.prototype.getBots = function(filters) {
+BotMaster.prototype.getBot = function(filters) {
   var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
+  if (!filters.sourceType) filters.sourceType = filters.type;
   filters = _.pick(filters, keys);
-  return _.filter(this.bots, function(bot) {
+  return _.find(this.bots, function(bot) {
     return _.chain(bot.contentService).pick(keys).isEqual(filters).value();
   });
 };
