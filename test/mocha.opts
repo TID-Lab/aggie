@@ -1,1 +1,3 @@
+./test/init.js
+./test/**/*.js
 --reporter spec

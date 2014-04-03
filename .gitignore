@@ -22,6 +22,7 @@ Thumbs.db
 
 public/css/styles.css
 config/secrets.js
+config/secrets.json
 
 buildAssets
 
