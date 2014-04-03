@@ -22,6 +22,7 @@ var BotMaster = function() {
   });
 
   // Load all sources when initializing
+  // Defer to next cycle to allow event listener binding
   process.nextTick(function() {
     self.loadAll();
   });
