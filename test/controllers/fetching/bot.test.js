@@ -4,7 +4,7 @@ var ContentService = require(root_path + '/controllers/fetching/content-service'
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory.create({sourceType: 'dummy', keywords: 't'});
+    bot = botFactory.create({sourceType: 'dummy', keywords: 't', interval: 500});
     done();
   });
 
@@ -40,6 +40,15 @@ describe('Bot', function() {
     expect(bot).to.have.property('enabled');
     expect(bot.enabled).to.be.false;
     done();
+  });
+
+  it('should clear its own queue', function(done) {
+    bot.on('empty', function() {
+      expect(bot.queue.count).to.equal(0);
+      expect(bot.isEmpty()).to.be.true;
+      done();
+    });
+    bot.clearQueue();
   });
 
 });

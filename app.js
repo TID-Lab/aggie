@@ -1,6 +1,9 @@
 var app = require('./controllers/api').app;
 var express = require('express');
 
+// Load main modules
+require('./controllers/fetching');
+
 // Load all API controllers
 require('./controllers/api/fetching-controller');
 require('./controllers/api/incident-controller');
