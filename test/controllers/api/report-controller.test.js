@@ -8,7 +8,7 @@ var Source = require(root_path + '/models/source');
 describe('Report controller', function() {
   // Create a source for streaming data
   before(function(done) {
-    Source.create({type: 'twitter', keywords: 'http'});
+    Source.create({type: 'dummy', keywords: 'Lorem ipsum'});
     process.nextTick(function() {
       botMaster.start();
       done();
@@ -20,7 +20,7 @@ describe('Report controller', function() {
     setTimeout(function() {
       botMaster.stop();
       done();
-    }, 1500);
+    }, 100);
   });
 
   describe('GET /api/report', function() {

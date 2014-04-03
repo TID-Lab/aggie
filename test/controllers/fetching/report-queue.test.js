@@ -92,9 +92,9 @@ describe('Report queue', function() {
 
     it('should have added bots to the queue', function(done) {
       reportQueue.on('notEmpty', function() {
-        setTimeout(function() {
+        process.nextTick(function() {
           expect(reportQueue._bots).to.have.length(3);
-        }, 1000);
+        });
       });
       done();
     });

@@ -51,6 +51,8 @@ describe('Report writer', function() {
     before(function(done) {
       botMaster.kill();
       reportQueue.clear();
+      // Remove listener to prevent automatic processing
+      reportQueue.removeAllListeners('notEmpty');
 
       // Create sources for the most common words in English
       Source.create({type: 'dummy', keywords: 'a'});
