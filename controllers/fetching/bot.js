@@ -28,11 +28,9 @@ Bot.prototype.start = function() {
 };
 
 Bot.prototype.stop = function() {
-  var self = this;
   this.enabled = false;
-  this.contentService.removeListener('reports', function() {
-    self.emit('stop');
-  });
+  this.contentService.removeAllListeners('reports');
+  this.emit('stop');
 };
 
 // Fetch next available report in the queue

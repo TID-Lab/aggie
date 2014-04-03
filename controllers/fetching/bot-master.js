@@ -112,6 +112,8 @@ BotMaster.prototype.stop = function() {
 // being garbage collected.
 BotMaster.prototype.kill = function(bot) {
   if (bot) {
+    // Stop bot to ensure unbinding of listeners
+    bot.stop();
     // Remove bot instance from list of bots
     var index = this.bots.indexOf(bot);
     if (index > -1) this.bots.splice(index, 1);

@@ -66,10 +66,10 @@ TwitterContentService.prototype.parse = function(data) {
     content: data.text,
     author: data.user.screen_name,
     url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str,
-    source: [{
+    _source: {
       type: 'twitter',
       keywords: this.keywords
-    }]
+    }
   };
   return report_data;
 };

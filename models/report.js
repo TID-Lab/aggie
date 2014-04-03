@@ -10,18 +10,18 @@ var schema = new mongoose.Schema({
   author: String,
   status: String,
   url: String,
-  source: [Source.schema]
+  _source: {type: String, ref: 'Source'}
 });
 
 schema.pre('save', function(next) {
   var report = this;
   report.storedAt = Date.now();
-  if (!report.source[0]) return next();
-  report.source[0]._id = undefined;
+  if (!report._source) return next();
   // Find actual source object and store it as a sub-document
-  Source.findOne(report.source[0], function(err, source) {
-    if (err) return next(err);
-    report.source[0] = source;
+  Source.findOne(report._source, function(err, source) {
+    report._source = undefined;
+    if (err || !source) return next(err);
+    report._source = source._id;
     next();
   });
 });
