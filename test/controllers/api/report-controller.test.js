@@ -36,6 +36,20 @@ describe('Report controller', function() {
     });
   });
 
+  describe('DELETE /api/report/_all', function() {
+    it('should delete all reports', function(done) {
+      request(reportController)
+        .del('/api/report/_all')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          request(reportController)
+            .get('/api/report')
+            .expect(200, [], done);
+        });
+    });
+  });
+
 });
 
 var compare = function(a, b) {
