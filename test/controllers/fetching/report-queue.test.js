@@ -86,15 +86,14 @@ describe('Report queue', function() {
     // Stream data for 100ms
     before(function(done) {
       setTimeout(function() {
+        botMaster.stop();
         done();
       }, 100);
     });
 
     it('should have added bots to the queue', function(done) {
       reportQueue.on('notEmpty', function() {
-        process.nextTick(function() {
-          expect(reportQueue._bots).to.have.length(3);
-        });
+        expect(reportQueue._bots).to.have.length(3);
       });
       done();
     });
@@ -105,11 +104,6 @@ describe('Report queue', function() {
         bot.clearQueue();
       });
       expect(reportQueue._bots).to.be.empty;
-      done();
-    });
-
-    after(function(done) {
-      botMaster.stop();
       done();
     });
   });

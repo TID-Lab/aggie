@@ -5,21 +5,26 @@ var util = require('util');
 var ReportQueue = function() {
   this._bots = [];
   this._pointer = 0;
-  EventEmitter.call(this);
 
   var self = this;
   // Listen to (not)empty events from Bot Master
   botMaster.on('bot:notEmpty', function(bot) {
-    var isEmpty = false;
-    if (self.isEmpty()) isEmpty = true;
+    var wasEmpty = self.isEmpty();
     self.enqueue(bot);
     // Emit event in the next cycle to allow binding of listeners
     process.nextTick(function() {
-      if (isEmpty) self.emit('notEmpty');
+      // Notify if queue changed from empty to not-empty
+      if (wasEmpty && !self.isEmpty()) self.emit('notEmpty');
     });
   });
   botMaster.on('bot:empty', function(bot) {
+    var wasEmpty = self.isEmpty();
     self.dequeue(bot);
+    // Emit event in the next cycle to allow binding of listeners
+    process.nextTick(function() {
+      // Notify if queue changed from not-empty to empty
+      if (!wasEmpty && self.isEmpty()) self.emit('empty');
+    });
   });
 };
 

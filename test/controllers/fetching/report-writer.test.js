@@ -50,9 +50,10 @@ describe('Report writer', function() {
   describe('master processing function', function() {
     before(function(done) {
       botMaster.kill();
-      reportQueue.clear();
       // Remove listener to prevent automatic processing
+      reportQueue.removeAllListeners('empty');
       reportQueue.removeAllListeners('notEmpty');
+      reportQueue.clear();
 
       // Create sources for the most common words in English
       Source.create({type: 'dummy', keywords: 'a'});
@@ -75,6 +76,8 @@ describe('Report writer', function() {
     });
 
     // Count queued and database data
+    var queueCount = 0;
+    var reportCount = 0;
     before(function(done) {
       // Verify that at there are queued reports
       queueCount = _.reduce(botMaster.bots, function(count, bot) {
@@ -82,7 +85,6 @@ describe('Report writer', function() {
       }, 0);
 
       // Verify number of reports in database
-      reportCount = 0;
       Report.find(function(err, reports) {
         reportCount = reports.length;
         done();
@@ -91,20 +93,26 @@ describe('Report writer', function() {
 
     it('should process all queued reports from all bots', function(done) {
       expect(queueCount).to.be.greaterThan(0);
-      // Process all queued data
-      reportWriter.process(function() {
+      // Listen to queue to determine when it's empty
+      reportQueue.on('empty', function() {
+        expect(reportQueue.isEmpty()).to.be.true;
         // Verify that bots are all empty
         var haveData = _.any(botMaster.bots, function(bot) {
           return !bot.isEmpty();
         });
         expect(haveData).to.be.false;
 
-        // Verify that reports were inserted into database
-        Report.find(function(err, reports) {
-          expect(reports.length).to.equal(queueCount + reportCount);
-          done();
+        // Let all reports be processed
+        process.nextTick(function() {
+          // Verify that reports were inserted into database
+          Report.find(function(err, reports) {
+            expect(reports.length).to.equal(queueCount + reportCount);
+            done();
+          });
         });
       });
+      // Start processing of all queued data
+      reportWriter.process();
     });
   });
 
