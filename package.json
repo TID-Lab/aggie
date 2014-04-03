@@ -1,6 +1,6 @@
 {
   "name": "aggie",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/TID-Lab/aggie.git"
@@ -24,5 +24,9 @@
     "gulp": "~3.5.5",
     "gulp-mocha": "~0.4.1",
     "gulp-jshint": "~1.5.0"
+  },
+  "subdomain": "aggie",
+  "engines": {
+    "node": "0.10.x"
   }
 }
