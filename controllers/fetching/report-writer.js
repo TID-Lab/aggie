@@ -10,11 +10,6 @@ var ReportWriter = function() {
 
 // Process all queued reports until ReportQueue is empty
 ReportWriter.prototype.process = function() {
-  // Process one report at a time, asynchronously
-  this._processNextReport();
-};
-
-ReportWriter.prototype._processNextReport = function() {
   var self = this;
   // Get next report
   var report_data = this.fetch();
@@ -25,7 +20,7 @@ ReportWriter.prototype._processNextReport = function() {
     if (reportQueue.isEmpty()) return;
     // Enqueue processing of the next report
     process.nextTick(function() {
-      self._processNextReport();
+      self.process();
     });
   });
 };
