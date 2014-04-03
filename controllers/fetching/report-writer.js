@@ -1,5 +1,7 @@
 var Report = require('../../models/report');
 var reportQueue = require('./report-queue');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 var ReportWriter = function() {
   var self = this;
@@ -7,6 +9,8 @@ var ReportWriter = function() {
     self.process();
   });
 };
+
+util.inherits(ReportWriter, EventEmitter);
 
 // Process all queued reports until ReportQueue is empty
 ReportWriter.prototype.process = function() {
