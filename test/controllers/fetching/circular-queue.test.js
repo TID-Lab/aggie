@@ -58,10 +58,20 @@ describe('Circular queue', function() {
   });
 
   it('should return undefined when fetching an empty queue', function(done) {
-      expect(queue.isEmpty()).to.be.true;
-      var eight = queue.fetch();
-      expect(eight).to.be.undefined;
-      done();
+    expect(queue.isEmpty()).to.be.true;
+    var eight = queue.fetch();
+    expect(eight).to.be.undefined;
+    done();
+  });
+
+  it('should clear itself', function(done) {
+    queue.add('eight');
+    queue.add('nine');
+    queue.add('ten');
+    expect(queue.count).to.equal(3);
+    queue.clear();
+    expect(queue.count).to.equal(0);
+    done();
   });
 
 });
