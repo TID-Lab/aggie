@@ -24,5 +24,5 @@ ChildProcess.prototype.createEventProxy = function(options) {
   return new EventEmitter();
 };
 
-// Initialize child process as a singleton
+// Initialize a single ChildProcess per forked module
 module.exports = new ChildProcess();
