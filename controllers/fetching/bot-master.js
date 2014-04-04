@@ -9,6 +9,8 @@ var BotMaster = function() {
   this.enabled = false;
 };
 
+util.inherits(BotMaster, EventEmitter);
+
 // Initialize event listeners
 BotMaster.prototype.init = function(sourceEventEmitter) {
   var self = this;
@@ -31,8 +33,6 @@ BotMaster.prototype.init = function(sourceEventEmitter) {
     self.loadAll();
   });
 };
-
-util.inherits(BotMaster, EventEmitter);
 
 // Create bot from source data
 BotMaster.prototype.sourceToBot = function(source_data) {
