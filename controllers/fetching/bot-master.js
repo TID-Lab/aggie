@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var Source = require('../../models/source');
 var botFactory = require('./bot-factory');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 var BotMaster = function() {
   this.bots = [];
@@ -19,13 +21,18 @@ BotMaster.prototype.init = function(sourceEventEmitter) {
 
   // Kill bots when removed from datbase
   sourceEventEmitter.on('remove', function(source_data) {
-    var bot = self.sourceToBot(source_data);
-    self.kill(bot);
+    var bot = self.getBot(source_data);
+    if (bot) self.kill(bot);
   });
 
   // Load all sources when initializing
-  this.loadAll();
+  // Defer to next cycle to allow event listener binding
+  process.nextTick(function() {
+    self.loadAll();
+  });
 };
+
+util.inherits(BotMaster, EventEmitter);
 
 // Create bot from source data
 BotMaster.prototype.sourceToBot = function(source_data) {
@@ -36,8 +43,9 @@ BotMaster.prototype.sourceToBot = function(source_data) {
 
 // Load Bot from source data
 BotMaster.prototype.load = function(source_data) {
-  var bot = this.sourceToBot(source_data);
-  this.kill(bot);
+  var bot = this.getBot(source_data);
+  if (bot) this.kill(bot);
+  else bot = this.sourceToBot(source_data);
   this.add(bot);
 };
 
@@ -52,6 +60,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
   // Find sources from the database
   Source.find(filters, function(err, sources) {
     if (err) return callback(err);
+    if (sources.length === 0) return callback();
     var remaining = sources.length;
     sources.forEach(function(source) {
       self.load(source);
@@ -62,17 +71,28 @@ BotMaster.prototype.loadAll = function(filters, callback) {
 };
 
 // Get all bots matching the filter hash
-BotMaster.prototype.getBots = function(filters) {
+BotMaster.prototype.getBot = function(filters) {
   var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
+  if (!filters.sourceType) filters.sourceType = filters.type;
   filters = _.pick(filters, keys);
-  return _.filter(this.bots, function(bot) {
+  return _.find(this.bots, function(bot) {
     return _.chain(bot.contentService).pick(keys).isEqual(filters).value();
   });
 };
 
 // Add Bot to array of tracked bots
 BotMaster.prototype.add = function(bot) {
+  var self = this;
   this.bots.push(bot);
+  bot.on('reports', function(reports_data) {
+    self.emit('bot:reports', bot);
+  });
+  bot.on('empty', function() {
+    self.emit('bot:empty', bot);
+  });
+  bot.on('notEmpty', function() {
+    self.emit('bot:notEmpty', bot);
+  });
 };
 
 // Start all bots
@@ -96,8 +116,11 @@ BotMaster.prototype.stop = function() {
 // being garbage collected.
 BotMaster.prototype.kill = function(bot) {
   if (bot) {
+    // Stop bot to ensure unbinding of listeners
+    bot.stop();
     // Remove bot instance from list of bots
-    this.bots = _.without(this.bots, bot);
+    var index = this.bots.indexOf(bot);
+    if (index > -1) this.bots.splice(index, 1);
   } else {
     // Kill all bots
     for (var i in this.bots) {

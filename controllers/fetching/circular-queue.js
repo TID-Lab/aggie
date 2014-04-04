@@ -47,4 +47,10 @@ CircularQueue.prototype.isFull = function() {
   return this.count === this.capacity;
 };
 
+CircularQueue.prototype.clear = function() {
+  this.start = 0;
+  this.count = 0;
+  this.elements = new Array(this.capacity);
+};
+
 module.exports = CircularQueue;

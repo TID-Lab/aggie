@@ -32,9 +32,9 @@ describe('Bot master', function() {
 
   it('should return bot instance from filtered search', function(done) {
     var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bots = botMaster.getBots(filters);
-    expect(bots[0]).to.be.an.instanceof(Bot);
-    expect(bots[0].contentService.keywords).to.equal('two');
+    var bot = botMaster.getBot(filters);
+    expect(bot).to.be.an.instanceof(Bot);
+    expect(bot.contentService.keywords).to.equal('two');
     done();
   });
 
@@ -60,11 +60,11 @@ describe('Bot master', function() {
   it('should kill a single bot', function(done) {
     var length = botMaster.bots.length;
     var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bots = botMaster.getBots(filters);
-    botMaster.kill(bots[0]);
+    var bot = botMaster.getBot(filters);
+    botMaster.kill(bot);
     expect(botMaster.bots).to.have.length(length - 1);
-    var bots = botMaster.getBots(filters);
-    expect(bots).to.be.empty;
+    var bot = botMaster.getBot(filters);
+    expect(bot).to.be.undefined;
     done();
   });
 

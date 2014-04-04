@@ -61,12 +61,15 @@ TwitterContentService.prototype.on = function(event, callback) {
 
 TwitterContentService.prototype.parse = function(data) {
   var report_data = {
-    fetchedAt: Date.now(),
     authoredAt: data.created_at,
-    createdAt: data.created_at,
+    fetchedAt: Date.now(),
     content: data.text,
     author: data.user.screen_name,
-    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
+    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str,
+    _source: {
+      type: 'twitter',
+      keywords: this.keywords
+    }
   };
   return report_data;
 };

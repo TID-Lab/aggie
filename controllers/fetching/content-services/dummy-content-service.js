@@ -4,13 +4,21 @@ var data = [
   { text: 'Hello world!' },
   { text: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' },
   { text: 'abcdefghijklmnopqrstuvwxyx' },
-  { text: '0123456789' },
+  { text: '1 one' },
+  { text: '2 two' },
+  { text: '3 three' },
+  { text: '4 four' },
+  { text: 'One one' },
+  { text: 'Two two' },
+  { text: 'Three three' },
+  { text: 'Four four' }
 ];
 
 var ContentService = require('../content-service');
 var util = require('util');
 
 var DummyContentService = function(options) {
+  this.interval = options.interval || 0;
   this.keywords = options.keywords;
   this.sourceType = 'dummy';
   this.botType = 'push';
@@ -25,8 +33,8 @@ DummyContentService.prototype.start = function() {
   var self = this;
   this._isStreaming = true;
   for (var i in data) {
-    // Emit new data every 500ms
-    setTimeout(this.fetch, 500, this, data[i]);
+    // Emit new data every interval
+    setTimeout(this.fetch, this.interval, this, data[i]);
   }
 };
 
