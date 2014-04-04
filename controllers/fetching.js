@@ -6,10 +6,13 @@ var childProcess = require('./child-process');
 
 // Initialize Bot Master
 var eventProxy = childProcess.createEventProxy({source: 'Source', moduleName: 'api'});
-require('./fetching/bot-master').init(eventProxy);
+var botMaster = require('./fetching/bot-master');
+botMaster.init(eventProxy);
 
 // Initialize Report Writer
-require('./fetching/report-writer');
+var reportWriter = require('./fetching/report-writer');
 
 // Export fetching module itself as a child process
 module.exports = childProcess;
+module.exports.botMaster = botMaster;
+module.exports.reportWriter = reportWriter;

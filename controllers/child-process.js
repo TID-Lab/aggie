@@ -4,18 +4,20 @@ var util = require('util');
 var ChildProcess = function() {
   var self = this;
   // Listen to message from parent process
-  process.on('message', function(event, data) {
-    // Reply back with 'echo' event for testing purposes
-    if (event === 'echo') process.send(event);
-    else self.emit(event, data);
+  process.on('message', function(message) {
+    // Reply to 'ping' with 'pong' for testing purposes
+    if (message === 'ping') self.sendToParent('pong');
+    else self.emit(message.event, message);
   });
 };
 
 util.inherits(ChildProcess, EventEmitter);
 
 // Wrapper around `process.send()`
-ChildProcess.prototype.sendToParent = function(message, data) {
-  process.send(message, data);
+ChildProcess.prototype.sendToParent = function(event, data) {
+  data = data || {};
+  data.event = event;
+  process.send(data);
 };
 
 // Register an event proxy with the parent process manager

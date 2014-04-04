@@ -21,43 +21,27 @@ describe('Process manager', function() {
 
   it('should echo messages between parent-child process', function(done) {
     var fetching = processManager.getChild('fetching');
-    fetching.once('message', function(message) {
-      expect(message).to.contain('echo');
+    fetching.once('pong', function(message) {
+      expect(message).to.have.property('event');
+      expect(message.event).to.contain('pong');
       done();
     });
-    fetching.send('echo');
-  });
-
-  it('should broadcast messages to all forked process', function(done) {
-    var modules = 2;
-    // "Streaming" module to listen
-    var streaming = processManager.fork('/controllers/streaming');
-    streaming.once('message', function(message) {
-      expect(message).to.contain('echo');
-      if (--modules === 0) done();
-      streaming.removeListener('message', function() {});
-    });
-    // "Fetching" module to listen
-    var fetching = processManager.fork('/controllers/fetching');
-    fetching.once('message', function(message) {
-      expect(message).to.contain('echo');
-      if (--modules === 0) done();
-      fetching.removeListener('message', function() {});
-    });
-    // Broadcast message
-    processManager.broadcast('echo');
+    fetching.send('ping');
   });
 
   it('should transmit messages between different forked process', function(done) {
-    // "Streaming" module to listen
-    var streaming = processManager.fork('/controllers/streaming');
-    streaming.once('message', function(message) {
-      expect(message).to.contain('echo');
+    // "Fetching" module to listen
+    var fetching = processManager.getChild('fetching');
+    fetching.once('pong', function(message) {
+      expect(message).to.have.property('event');
+      expect(message.event).to.contain('pong');
       done();
     });
-    // "Fetching" module to send
-    var fetching = processManager.getChild('fetching');
-    fetching.send('echo');
+    // "API" module to send
+    var api = processManager.fork('/controllers/api');
+    process.nextTick(function() {
+      api.send('ping');
+    });
   });
 
 });
