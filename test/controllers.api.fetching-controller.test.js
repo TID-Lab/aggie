@@ -1,8 +1,9 @@
-var request = require('supertest');
+require('./init');
 var expect = require('chai').expect;
-var fetchingController = require(root_path + '/controllers/api/fetching-controller');
-var botMaster = require(root_path + '/controllers/fetching/bot-master');
-var Source = require(root_path + '/models/source');
+var request = require('supertest');
+var fetchingController = require('../controllers/api/fetching-controller');
+var botMaster = require('../controllers/fetching/bot-master');
+var Source = require('../models/source');
 
 describe('Fetching controller', function() {
   before(function(done) {

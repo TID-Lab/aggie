@@ -23,7 +23,6 @@ var DummyContentService = function(options) {
   this.sourceType = 'dummy';
   this.botType = 'push';
   this.bufferLength = 2;
-  ContentService.call(this);
 };
 
 util.inherits(DummyContentService, ContentService);

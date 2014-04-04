@@ -9,7 +9,6 @@ var TwitterContentService = function(options) {
   this.sourceType = 'twitter';
   this.botType = 'push';
   this._isStreaming = false;
-  ContentService.call(this);
 };
 
 util.inherits(TwitterContentService, ContentService);

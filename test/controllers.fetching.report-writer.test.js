@@ -1,11 +1,12 @@
+require('./init');
 var expect = require('chai').expect;
 var _ = require('underscore');
-var reportWriter = require(root_path + '/controllers/fetching/report-writer');
-var reportQueue = require(root_path + '/controllers/fetching/report-queue');
-var botFactory = require(root_path + '/controllers/fetching/bot-factory');
-var botMaster = require(root_path + '/controllers/fetching/bot-master');
-var Report = require(root_path + '/models/report');
-var Source = require(root_path + '/models/source');
+var reportWriter = require('../controllers/fetching/report-writer');
+var reportQueue = require('../controllers/fetching/report-queue');
+var botFactory = require('../controllers/fetching/bot-factory');
+var botMaster = require('../controllers/fetching/bot-master');
+var Report = require('../models/report');
+var Source = require('../models/source');
 
 describe('Report writer', function() {
 

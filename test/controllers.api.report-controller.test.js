@@ -1,9 +1,10 @@
-var request = require('supertest');
+require('./init');
 var expect = require('chai').expect;
+var request = require('supertest');
 var _ = require('underscore');
-var reportController = require(root_path + '/controllers/api/report-controller');
-var botMaster = require(root_path + '/controllers/fetching/bot-master');
-var Source = require(root_path + '/models/source');
+var reportController = require('../controllers/api/report-controller');
+var botMaster = require('../controllers/fetching/bot-master');
+var Source = require('../models/source');
 
 describe('Report controller', function() {
   // Create a source for streaming data
@@ -15,7 +16,7 @@ describe('Report controller', function() {
     });
   });
 
-  // Stream data for ~1.5 seconds
+  // Stream data for 100ms
   before(function(done) {
     setTimeout(function() {
       botMaster.stop();

@@ -1,7 +1,8 @@
-var request = require('supertest');
+require('./init');
 var expect = require('chai').expect;
+var request = require('supertest');
 var _ = require('underscore');
-var sourceController = require(root_path + '/controllers/api/source-controller');
+var sourceController = require('../controllers/api/source-controller');
 
 describe('Source controller', function() {
   before(function(done) {

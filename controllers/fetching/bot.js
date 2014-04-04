@@ -7,7 +7,6 @@ var Bot = function(contentService) {
   this.type = this.contentService.botType;
   this.queue = new CircularQueue();
   this.enabled = false;
-  EventEmitter.call(this);
 };
 
 util.inherits(Bot, EventEmitter);
