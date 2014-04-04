@@ -1,11 +1,12 @@
+require('./init');
 var expect = require('chai').expect;
-var reportQueue = require(root_path + '/controllers/fetching/report-queue');
-var reportWriter = require(root_path + '/controllers/fetching/report-writer');
-var botFactory = require(root_path + '/controllers/fetching/bot-factory');
-var botMaster = require(root_path + '/controllers/fetching/bot-master');
-var CircularQueue = require(root_path + '/controllers/fetching/circular-queue');
-var Report = require(root_path + '/models/report');
-var Source = require(root_path + '/models/source');
+var reportQueue = require('../controllers/fetching/report-queue');
+var reportWriter = require('../controllers/fetching/report-writer');
+var botFactory = require('../controllers/fetching/bot-factory');
+var botMaster = require('../controllers/fetching/bot-master');
+var CircularQueue = require('../controllers/fetching/circular-queue');
+var Report = require('../models/report');
+var Source = require('../models/source');
 
 describe('Report queue', function() {
 

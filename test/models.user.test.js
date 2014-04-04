@@ -1,6 +1,7 @@
+require('./init');
 var chai = require('chai');
 var should = chai.should();
-var User = require(root_path + '/models/user');
+var User = require('../models/user');
 
 describe('User attributes', function() {
   before(function(done) {

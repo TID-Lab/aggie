@@ -1,9 +1,10 @@
+require('./init');
 var expect = require('chai').expect;
 var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
-var botMaster = require(root_path + '/controllers/fetching/bot-master');
-var Bot = require(root_path + '/controllers/fetching/bot');
-var Source = require(root_path + '/models/source');
+var botMaster = require('../controllers/fetching/bot-master');
+var Bot = require('../controllers/fetching/bot');
+var Source = require('../models/source');
 
 describe('Bot master', function() {
   before(function(done) {

@@ -1,7 +1,8 @@
+require('./init');
 var expect = require('chai').expect;
-var contentServiceFactory = require(root_path + '/controllers/fetching/content-service-factory');
-var ContentService = require(root_path + '/controllers/fetching/content-service');
-var DummyContentService = require(root_path + '/controllers/fetching/content-services/dummy-content-service');
+var contentServiceFactory = require('../controllers/fetching/content-service-factory');
+var ContentService = require('../controllers/fetching/content-service');
+var DummyContentService = require('../controllers/fetching/content-services/dummy-content-service');
 
 describe('Content service', function() {
   before(function(done) {

@@ -12,7 +12,7 @@ var ProcessManager = function() {
 // @modulePath Path of the module relative to the root directory
 ProcessManager.prototype.fork = function(modulePath) {
   var self = this;
-  modulePath = require.resolve(modulePath);
+  modulePath = require.resolve(path.join(process.env.PWD, modulePath));
   moduleName = path.basename(modulePath, '.js');
   var child = this.getChild(moduleName);
   if (!child) {

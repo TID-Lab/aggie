@@ -1,12 +1,12 @@
 var expect = require('chai').expect;
-var processManager = require(root_path + '/controllers/process-manager');
+var processManager = require('../controllers/process-manager');
 
 describe('Process manager', function() {
 
   it('should fork a process', function(done) {
     expect(processManager.children).to.be.an.instanceOf(Array);
     expect(processManager.children).to.have.length(0);
-    var child = processManager.fork(root_path + '/controllers/fetching');
+    var child = processManager.fork('/controllers/fetching');
     expect(child).to.have.property('pid');
     expect(child.pid).to.be.above(process.pid);
     expect(processManager.children).to.have.length(1);
@@ -31,14 +31,14 @@ describe('Process manager', function() {
   it('should broadcast messages to all forked process', function(done) {
     var modules = 2;
     // "Streaming" module to listen
-    var streaming = processManager.fork(root_path + '/controllers/streaming');
+    var streaming = processManager.fork('/controllers/streaming');
     streaming.once('message', function(message) {
       expect(message).to.contain('echo');
       if (--modules === 0) done();
       streaming.removeListener('message', function() {});
     });
     // "Fetching" module to listen
-    var fetching = processManager.fork(root_path + '/controllers/fetching');
+    var fetching = processManager.fork('/controllers/fetching');
     fetching.once('message', function(message) {
       expect(message).to.contain('echo');
       if (--modules === 0) done();
@@ -50,7 +50,7 @@ describe('Process manager', function() {
 
   it('should transmit messages between different forked process', function(done) {
     // "Streaming" module to listen
-    var streaming = processManager.fork(root_path + '/controllers/streaming');
+    var streaming = processManager.fork('/controllers/streaming');
     streaming.once('message', function(message) {
       expect(message).to.contain('echo');
       done();

@@ -1,8 +1,4 @@
-// Set global variable with main application path
-var path = require('path');
-root_path = path.join(__dirname, '..');
-
-var api = require(root_path + '/controllers/api');
+var api = require('../controllers/api');
 
 // Change database before starting any test
 before(function(done) {
