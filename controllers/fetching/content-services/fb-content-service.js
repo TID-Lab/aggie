@@ -11,7 +11,7 @@ var FacebookContentService = function(options) {
     if (options.lastCrawlDate) {
         this.lastCrawlDate = options.lastCrawlDate;
     } else {
-        this.lastCrawlDate = null;
+        this.lastCrawlDate = new Date().toISOString();
     }
 
     if (typeof options.fbPage === 'string') {
@@ -19,11 +19,11 @@ var FacebookContentService = function(options) {
     } else {
         return "Incorrect page for POST";
     }
+
     this.source = 'facebook';
     this.resultsPerFetch = 100;
     this._isStreaming = false;
-    this.nextPagingItem = undefined;
-    this.untilCrawlDate = options.untilCrawlDate;
+    this.nextPage = undefined;
 
 };
 
@@ -37,88 +37,86 @@ FacebookContentService.prototype.fetch = function() {
     var fbContentService = this;
 
     var options = {
-        since: this.lastCrawlDate,
         limit: this.resultsPerFetch,
-        until: this.untilCrawlDate,
     };
 
-    //here we check if there is a next page 
-    if (this.nextPagingItem) {
-        options = {
-            since: this.lastCrawlDate,
-            limit: this.resultsPerFetch,
-            until: this.nextPagingItem,
-        };
-    }
-
-    // console.log(options);
     graph
-        .get(this.fbPage + '/feed/', options, function(err, res) {
+        .get(((this.nextPage !== undefined) ? (this.nextPage) : (this.fbPage + '/feed/')), options, function(err, res) {
             if (err) {
                 console.error(err);
             }
-
             //messages array
             messagesOnFeed = [];
+
             //comments array
             commentsOnPost = [];
+
             //length of array
             var responseLength = res.data.length;
 
-            // var newestPost = null;
+            var fetchPrevPage = (new Date(res.data[fbContentService.resultsPerFetch - 1].created_time) > new Date(fbContentService.lastCrawlDate));
+
+            //load the next batch of issues
             for (var i = responseLength - 1; i >= 0; i--) {
-                
+
                 var postHasData = res.data[i];
                 var postHasComments = (res.data[i].comments);
 
                 //check if date is valid for each post
-                var validDate = (new Date(res.data[i].created_time) <= new Date(fbContentService.untilCrawlDate * 1000));
+                var validDate = (new Date(res.data[i].created_time) > new Date(fbContentService.lastCrawlDate));
 
+                //debug
+                if (!validDate) {
+                    console.log("no new sources since last crawl date");
+                }
                 if (postHasData && validDate) {
                     messagesOnFeed.push(postHasData);
                 }
                 if (postHasComments && validDate) {
                     commentsOnPost.push(postHasComments.data[0]);
                 }
+
+
+                if (res.paging) {
+                    if (res.paging.next && fetchPrevPage) {
+                        fbContentService.nextPage = res.paging.next;
+                    }
+                }
+
             }
+            console.log('Messages Length: ' + messagesOnFeed.length);
+            console.log('Comments Length: ' + commentsOnPost.length);
 
-            //helper method to remove url param
-            function getURLParameter(name, url) {
-                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
-            }
-
-            if (res.paging && res.paging.next) {
-
-                //This part is very confusing, paging.next gives me a previus entry
-                fbContentService.next = getURLParameter('until', res.paging.next);
-                // console.log(fbContentService.next);
-
-                async.parallel([
-                        function(callback) {
-                            var content = fbContentService.parse(messagesOnFeed, commentsOnPost);
-                            callback(null, 'content saved');
-                            return content;
-                        },
-                        function(callback) {
+            async.parallel([
+                    function(callback) {
+                        var content = fbContentService.parse(messagesOnFeed, commentsOnPost);
+                        this.lastCrawlDate = new Date();
+                        callback(null, 'content saved');
+                        return content;
+                    },
+                    function(callback) {
+                        var status = 'No new page fetched';
+                        if (fetchPrevPage) {
+                            this.lastCrawlDate = new Date();
+                            status = 'New page fetched';
                             fbContentService.fetch();
-                            callback(null, 'Fetched new source');
-                        }
-                    ],
-                    function(err, results) {
-                        console.log(results);
-                        return results;
 
-                    });
-            }
+                        }
+                        callback(null, status);
+                    }
+                ],
+                function(err, results) {
+                    console.log(results);
+                    return results;
+
+                });
         });
 
+    //TODO
     return 'done';
 };
 
 FacebookContentService.prototype.parse = function(messagesOnFeed, commentsOnPost) {
-    console.log(messagesOnFeed.length);
-    console.log(commentsOnPost.length);
-
     return messagesOnFeed + commentsOnPost;
 };
 
