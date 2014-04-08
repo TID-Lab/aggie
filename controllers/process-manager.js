@@ -16,7 +16,7 @@ ProcessManager.prototype.fork = function(modulePath) {
   moduleName = path.basename(modulePath, '.js');
   var child = this.getChild(moduleName);
   if (!child) {
-    var child = fork(modulePath);
+    child = fork(modulePath);
     // Add module metadata
     child.modulePath = modulePath;
     child.moduleName = moduleName;
@@ -27,6 +27,12 @@ ProcessManager.prototype.fork = function(modulePath) {
     this.children.push(child);
   }
   return child;
+};
+
+// Kill forked module
+ProcessManager.prototype.kill = function(moduleName) {
+  var child = this.getChild(moduleName);
+  if (child) child.kill();
 };
 
 // Get child process from module name
@@ -47,8 +53,11 @@ ProcessManager.prototype.messageHandler = function(data, child) {
 };
 
 // Add route to map
-ProcessManager.prototype.registerRoute = function(options, fromChild) {
-  this.routes.push({moduleName: fromChild.moduleName, listenTo: options.moduleName});
+ProcessManager.prototype.registerRoute = function(options, child) {
+  options.listenerModule = child.moduleName;
+  this.routes.push(options);
+  var emitter = this.fork(options.emitterModule);
+  if (emitter) emitter.send(options);
 };
 
 // Forward message from a child process to another child process
@@ -59,7 +68,7 @@ ProcessManager.prototype.forwardMessage = function(data, fromChild) {
     // When forwarding a 'pong' response, send 'ping' to the recipient to get
     // 'pong' back and complete the forward ping-pong cycle between two modules
     if (data.event === 'pong') data = 'ping';
-    var toChild = self.getChild(route.moduleName);
+    var toChild = self.fork(route.moduleName);
     if (toChild) toChild.send(data);
   });
   // Emit same event in the parent process
