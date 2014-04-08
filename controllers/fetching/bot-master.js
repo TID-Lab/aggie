@@ -34,6 +34,20 @@ BotMaster.prototype.init = function(sourceEventEmitter) {
   });
 };
 
+// Control bot master status remotely
+BotMaster.prototype.statusControl = function(sourceEventEmitter) {
+  var self = this;
+  sourceEventEmitter.on('start', function() {
+    self.start();
+  });
+  sourceEventEmitter.on('stop', function() {
+    self.stop();
+  });
+  sourceEventEmitter.on('getStatus', function() {
+    self.emit('status', self.enabled);
+  });
+};
+
 // Create bot from source data
 BotMaster.prototype.sourceToBot = function(source_data) {
   var bot_data = _.pick(source_data, ['resource_id', 'url', 'keywords']);

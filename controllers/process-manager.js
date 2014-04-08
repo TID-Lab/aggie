@@ -29,12 +29,6 @@ ProcessManager.prototype.fork = function(modulePath) {
   return child;
 };
 
-// Kill forked module
-ProcessManager.prototype.kill = function(moduleName) {
-  var child = this.getChild(moduleName);
-  if (child) child.kill();
-};
-
 // Get child process from module name
 ProcessManager.prototype.getChild = function(moduleName) {
   return _.findWhere(this.children, {moduleName: moduleName});

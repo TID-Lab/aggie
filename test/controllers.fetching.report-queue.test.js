@@ -74,6 +74,7 @@ describe('Report queue', function() {
   describe('bot management', function() {
     before(function(done) {
       botMaster.kill();
+      botMaster.init(Source.schema);
       reportQueue.clear();
       Source.create({type: 'dummy', keywords: 'one'});
       Source.create({type: 'dummy', keywords: 'two'});

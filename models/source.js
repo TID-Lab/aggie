@@ -1,3 +1,4 @@
+var database = require('../controllers/database');
 var mongoose = require('mongoose');
 
 var sourceSchema = new mongoose.Schema({

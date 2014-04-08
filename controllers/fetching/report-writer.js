@@ -36,7 +36,9 @@ ReportWriter.prototype.fetch = function() {
 
 // Write report data to database
 ReportWriter.prototype.write = function(report_data, callback) {
-  Report.create(report_data, callback);
+  Report.create(report_data, function(err, report) {
+    callback(err, report);
+  });
 };
 
 module.exports = new ReportWriter();

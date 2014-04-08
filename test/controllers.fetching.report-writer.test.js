@@ -13,6 +13,7 @@ describe('Report writer', function() {
   describe('base functions', function() {
     beforeEach(function(done) {
       botMaster.kill();
+      botMaster.init(Source.schema);
       reportQueue.clear();
       bot = botFactory.create({sourceType: 'dummy', keywords: 'Lorem ipsum'});
       bot.start();

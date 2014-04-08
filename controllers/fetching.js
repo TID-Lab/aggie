@@ -5,11 +5,14 @@
 var childProcess = require('./child-process');
 
 // Initialize Bot Master
-var eventProxy = childProcess.createEventProxy({emitter: '/models/source', emitterModule: '/controllers/api'});
 var botMaster = require('./fetching/bot-master');
-botMaster.init(eventProxy);
+var initEventProxy = childProcess.createEventProxy({emitter: '/models/source', subclass: 'schema', emitterModule: 'api'});
+var statusEventProxy = childProcess.createEventProxy({emitter: '/controllers/api/fetching-controller', emitterModule: 'api'});
+botMaster.init(initEventProxy);
+botMaster.statusControl(statusEventProxy);
 // Register event listeners for Bot Master
-childProcess.registerEventListeners(eventProxy);
+childProcess.registerEventListeners(initEventProxy);
+childProcess.registerEventListeners(statusEventProxy);
 
 // Initialize Report Writer
 var reportWriter = require('./fetching/report-writer');

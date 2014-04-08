@@ -8,6 +8,9 @@ var Source = require('../models/source');
 describe('Fetching controller', function() {
   before(function(done) {
     botMaster.kill();
+    botMaster.init(Source.schema);
+    botMaster.statusControl(fetchingController);
+    fetchingController.statusListener(botMaster);
     Source.create({type: 'dummy', keywords: 'one'});
     Source.create({type: 'dummy', keywords: 'two'});
     Source.create({type: 'dummy', keywords: 'three'});
