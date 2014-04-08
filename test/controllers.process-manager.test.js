@@ -32,25 +32,22 @@ describe('Process manager', function() {
   it('should transmit messages between different forked process', function(done) {
     // "Fetching" module to listen
     var fetching = processManager.getChild('fetching');
-    processManager.registerRoute({
-      events: ['pong'],
-      emitter: '/controllers/api',
-      emitterModule: '/controllers/api',
-      event: 'register',
-      listenerModule: 'fetching'
-    }, fetching);
-    //*var fetching = processManager.kill('fetching');
-    //*var fetching = processManager.fork('/controllers/fetching');
     fetching.once('pong', function(message) {
       expect(message).to.have.property('event');
       expect(message.event).to.contain('pong');
       done();
     });
+    // Register "Fetching" as a listener of "API" for the "pong" event
+    processManager.registerRoute({
+      events: ['pong'],
+      emitter: '/controllers/api',
+      emitterModule: 'api',
+      listenerModule: '/controllers/fetching',
+      event: 'register'
+    }, fetching);
     // "API" module to send
     var api = processManager.fork('/controllers/api');
-    process.nextTick(function() {
-      api.send('ping');
-    });
+    api.send('ping');
   });
 
 });

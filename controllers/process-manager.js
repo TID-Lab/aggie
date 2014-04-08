@@ -55,24 +55,26 @@ ProcessManager.prototype.messageHandler = function(data, child) {
 // Add route to map
 ProcessManager.prototype.registerRoute = function(options, child) {
   options.listenerModule = child.moduleName;
-  this.routes.push(options);
-  var emitter = this.fork(options.emitterModule);
-  if (emitter) emitter.send(options);
+  this.routes.push(_.omit(options, 'event'));
+  var emitter = this.getChild(options.emitterModule);
+  if (emitter && options.event === 'register') emitter.send(options);
 };
 
 // Forward message from a child process to another child process
-ProcessManager.prototype.forwardMessage = function(data, fromChild) {
+ProcessManager.prototype.forwardMessage = function(data, emitterChild) {
   var self = this;
-  var routes = _.where(this.routes, {listenTo: fromChild.moduleName});
+  var routes = _.where(this.routes, {emitterModule: emitterChild.moduleName});
   routes.forEach(function(route) {
-    // When forwarding a 'pong' response, send 'ping' to the recipient to get
-    // 'pong' back and complete the forward ping-pong cycle between two modules
-    if (data.event === 'pong') data = 'ping';
-    var toChild = self.fork(route.moduleName);
-    if (toChild) toChild.send(data);
+    if (_.contains(route.events, data.event)) {
+      var listeningChild = self.getChild(route.listenerModule);
+      // When forwarding a 'pong' response, send 'ping' to the recipient to get
+      // 'pong' back and complete the forward ping-pong cycle between two modules
+      if (data.event === 'pong' && listeningChild.moduleName !== emitterChild.moduleName) data = 'ping';
+      if (listeningChild) listeningChild.send(data);
+    }
   });
   // Emit same event in the parent process
-  fromChild.emit(data.event, data);
+  emitterChild.emit(data.event, data);
 };
 
 module.exports = new ProcessManager();
