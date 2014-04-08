@@ -22,6 +22,7 @@ app.put('/api/fetching/:op', function(req, res) {
   }
 });
 
+// Use an external event emitter to relay status information
 app.statusListener = function(sourceEventEmitter) {
   sourceEventEmitter.on('status', function(status) {
     app.emit('status', status);
