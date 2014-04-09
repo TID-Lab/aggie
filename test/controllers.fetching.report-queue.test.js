@@ -20,7 +20,10 @@ describe('Report queue', function() {
       two.start();
       three = botFactory.create({sourceType: 'dummy', keywords: '3', interval: 0});
       three.start();
-      done();
+      // Stream data for 100ms
+      setTimeout(function() {
+        done();
+      }, 100);
     });
 
     it('should add bots to the queue', function(done) {

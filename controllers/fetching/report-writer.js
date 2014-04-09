@@ -21,7 +21,7 @@ ReportWriter.prototype.process = function() {
   // Write to database
   this.write(report_data, function(err) {
     if (err) return self.emit('error', err);
-    if (reportQueue.isEmpty()) return;
+    if (reportQueue.isEmpty()) return self.emit('done');
     // Enqueue processing of the next report
     process.nextTick(function() {
       self.process();
