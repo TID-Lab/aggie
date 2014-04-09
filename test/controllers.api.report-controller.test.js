@@ -10,6 +10,7 @@ var Source = require('../models/source');
 describe('Report controller', function() {
   // Create a source for streaming data
   before(function(done) {
+    botMaster.addListeners('source', Source.schema);
     Source.create({type: 'dummy', keywords: 'Lorem ipsum'});
     process.nextTick(function() {
       botMaster.start();
@@ -19,13 +20,11 @@ describe('Report controller', function() {
 
   // Stream data for 100ms
   before(function(done) {
-    setTimeout(function() {
-      // Wait until all reports have been processed
-      reportWriter.once('done', function() {
-        done();
-      });
-      botMaster.stop();
-    }, 100);
+    // Wait until all reports have been processed
+    reportWriter.once('done', function() {
+      done();
+    });
+    botMaster.stop();
   });
 
   describe('GET /api/report', function() {

@@ -5,18 +5,34 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
 var BotMaster = function() {
-  var self = this;
   this.bots = [];
   this.enabled = false;
+};
+
+util.inherits(BotMaster, EventEmitter);
+
+BotMaster.prototype.addListeners = function(type, emitter) {
+  switch (type) {
+    case 'source':
+      this._addSourceListeners(emitter);
+      break;
+    case 'fetching':
+      this._addFetchingListeners(emitter);
+      break;
+  }
+};
+// Initialize event listeners
+BotMaster.prototype._addSourceListeners = function(emitter) {
+  var self = this;
 
   // Instantiate new bots when sources are saved
-  process.on('source:save', function(source_data) {
+  emitter.on('save', function(source_data) {
     source_data.enabled = self.enabled;
     self.load(source_data);
   });
 
   // Kill bots when removed from datbase
-  process.on('source:remove', function(source_data) {
+  emitter.on('remove', function(source_data) {
     var bot = self.getBot(source_data);
     if (bot) self.kill(bot);
   });
@@ -28,7 +44,19 @@ var BotMaster = function() {
   });
 };
 
-util.inherits(BotMaster, EventEmitter);
+// Control bot master status remotely
+BotMaster.prototype._addFetchingListeners = function(emitter) {
+  var self = this;
+  emitter.on('start', function() {
+    self.start();
+  });
+  emitter.on('stop', function() {
+    self.stop();
+  });
+  emitter.on('getStatus', function() {
+    self.emit('status', {enabled: self.enabled});
+  });
+};
 
 // Create bot from source data
 BotMaster.prototype.sourceToBot = function(source_data) {

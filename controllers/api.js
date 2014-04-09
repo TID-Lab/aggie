@@ -1,30 +1,31 @@
-var _ = require('underscore');
-var config = require('../config/secrets');
-var mongoose = require('mongoose');
+var childProcess = require('./child-process');
+
+// Start express server
 var express = require('express');
+var app = express();
 
-var API = function() {
-  this.config = config;
-  this.mongoose = mongoose;
-  this.app = express();
-  this.mongoConnect();
-};
+// Add all controllers
+var fetchingController = require('./api/fetching-controller');
+app.use(fetchingController);
+app.use(require('./api/report-controller'));
+app.use(require('./api/source-controller'));
+app.use(require('./api/user-controller'));
 
-API.prototype.mongoConnect = function() {
-  // Override secrets.json if environment variable is set
-  var mongoConnectionURL = process.env.MONGO_CONNECTION_URL;
-  if (!mongoConnectionURL) {
-    mongoConnectionURL = 'mongodb://';
-    var username = this.config.mongodb.username;
-    var password = this.config.mongodb.password;
-    if (username && password) {
-      mongoConnectionURL += username + ':' + password + '@';
-    }
-    mongoConnectionURL += this.config.mongodb.host;
-    if (this.config.mongodb.port) mongoConnectionURL += ':' + this.config.mongodb.port;
-    mongoConnectionURL += '/' + this.config.mongodb.db;
-  }
-  this.mongoose.connect(mongoConnectionURL);
-};
+// Create event proxy between fetching controller and bot master
+fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
+  emitter: '/controllers/fetching/bot-master',
+  emitterModule: 'fetching'
+}));
 
-module.exports = new API();
+// The API explorer is a client-side thing so it's loaded as static.
+var path = require('path');
+app.use('/explorer', express.static(path.join(__dirname, '../public/explorer')));
+
+// Listen for API in a different port
+app.set('port', process.env.PORT || 3000);
+app.listen(app.get('port'), function() {
+  console.log("✔ Aggie is listening on port %d", app.get('port'));
+});
+
+module.exports = childProcess;
+module.exports.app = app;
