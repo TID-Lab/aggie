@@ -4,6 +4,7 @@ var request = require('supertest');
 var _ = require('underscore');
 var reportController = require('../controllers/api/report-controller');
 var botMaster = require('../controllers/fetching/bot-master');
+var reportWriter = require('../controllers/fetching/report-writer');
 var Source = require('../models/source');
 
 describe('Report controller', function() {
@@ -19,8 +20,11 @@ describe('Report controller', function() {
   // Stream data for 100ms
   before(function(done) {
     setTimeout(function() {
+      // Wait until all reports have been processed
+      reportWriter.once('done', function() {
+        done();
+      });
       botMaster.stop();
-      done();
     }, 100);
   });
 
