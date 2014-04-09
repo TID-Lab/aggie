@@ -7,7 +7,7 @@ var ChildProcess = function() {
   this.eventProxies = [];
   var self = this;
   // Listen to message from parent process
-  process.on('message', function(message, sendHandle) {
+  process.on('message', function(message) {
     // Reply to 'ping' with 'pong' for testing purposes
     if (message === 'ping') self.sendToParent('pong');
     else if (message.event === 'register') self.registerOutgoingEmitter(message);

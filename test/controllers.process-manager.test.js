@@ -66,7 +66,7 @@ describe('Process manager', function() {
     processManager.fork('/controllers/api');
     processManager.fork('/controllers/fetching');
     var getReports = function(callback) {
-      request('http://localhost:3001')
+      request('http://localhost:3000')
         .get('/api/report')
         .expect(200)
         .end(function(err, res) {
@@ -77,7 +77,7 @@ describe('Process manager', function() {
         });
     };
     var createSource = function(data, callback) {
-      request('http://localhost:3001')
+      request('http://localhost:3000')
         .post('/api/source')
         .send(data)
         .expect(200)
@@ -89,7 +89,7 @@ describe('Process manager', function() {
         });
     };
     var toggleFetching = function(state, callback) {
-      request('http://localhost:3001')
+      request('http://localhost:3000')
         .put('/api/fetching/' + state)
         .expect(200)
         .end(function(err, res) {

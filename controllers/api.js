@@ -17,11 +17,14 @@ fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
   emitterModule: 'fetching'
 }));
 
+// The API explorer is a client-side thing so it's loaded as static.
+var path = require('path');
+app.use('/explorer', express.static(path.join(__dirname, '../public/explorer')));
+
 // Listen for API in a different port
-// TODO: Send handler between parent and child process to reuse port number
-app.set('port', process.env.PORT ? process.env.PORT + 1 : 3001);
+app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), function() {
-  console.log("✔ Aggie API listening on port %d", app.get('port'));
+  console.log("✔ Aggie is listening on port %d", app.get('port'));
 });
 
 module.exports = childProcess;

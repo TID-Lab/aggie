@@ -54,7 +54,7 @@ BotMaster.prototype._addFetchingListeners = function(emitter) {
     self.stop();
   });
   emitter.on('getStatus', function() {
-    self.emit('status', self.enabled);
+    self.emit('status', {enabled: self.enabled});
   });
 };
 

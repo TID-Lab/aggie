@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 app.get('/api/fetching', function(req, res) {
-  app.on('status', function(status) {
+  app.once('status', function(status) {
     res.send(200, {enabled: status});
   });
   app.emit('getStatus');
@@ -33,7 +33,7 @@ app.addListeners = function(type, emitter) {
 
 app._addBotMasterListeners = function(emitter) {
   emitter.on('status', function(status) {
-    app.emit('status', status);
+    app.emit('status', status.enabled);
   });
 };
 
