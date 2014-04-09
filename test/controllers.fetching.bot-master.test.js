@@ -10,7 +10,7 @@ var Source = require('../models/source');
 describe('Bot master', function() {
   before(function(done) {
     botMaster.kill();
-    botMaster.init(Source.schema);
+    botMaster.addListeners('source', Source.schema);
     setTimeout(function() {
       Source.create({type: 'dummy', keywords: 'one'});
       Source.create({type: 'dummy', keywords: 'two'});

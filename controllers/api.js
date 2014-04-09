@@ -11,10 +11,11 @@ app.use(require('./api/report-controller'));
 app.use(require('./api/source-controller'));
 app.use(require('./api/user-controller'));
 
-// Create event proxies between fetching controller and bot master
-var statusEventProxy = childProcess.createEventProxy({emitter: '/controllers/fetching/bot-master', emitterModule: 'fetching'});
-fetchingController.statusListener(statusEventProxy);
-childProcess.registerEventListeners(statusEventProxy);
+// Create event proxy between fetching controller and bot master
+fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
+  emitter: '/controllers/fetching/bot-master',
+  emitterModule: 'fetching'
+}));
 
 // Listen for API in a different port
 // TODO: Send handler between parent and child process to reuse port number
