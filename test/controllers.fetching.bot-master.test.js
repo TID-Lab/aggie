@@ -1,6 +1,8 @@
 require('./init');
 var expect = require('chai').expect;
+var request = require('supertest');
 var _ = require('underscore');
+var EventEmitter = require('events').EventEmitter;
 var botMaster = require('../controllers/fetching/bot-master');
 var Bot = require('../controllers/fetching/bot');
 var Source = require('../models/source');
@@ -8,10 +10,13 @@ var Source = require('../models/source');
 describe('Bot master', function() {
   before(function(done) {
     botMaster.kill();
-    Source.create({type: 'dummy', keywords: 'one'});
-    Source.create({type: 'dummy', keywords: 'two'});
-    Source.create({type: 'dummy', keywords: 'three'});
-    done();
+    botMaster.addListeners('source', Source.schema);
+    setTimeout(function() {
+      Source.create({type: 'dummy', keywords: 'one'});
+      Source.create({type: 'dummy', keywords: 'two'});
+      Source.create({type: 'dummy', keywords: 'three'});
+      done();
+    }, 1000);
   });
 
   it('should track all instantiated bots', function(done) {

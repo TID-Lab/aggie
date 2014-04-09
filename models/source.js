@@ -1,3 +1,4 @@
+var database = require('../controllers/database');
 var mongoose = require('mongoose');
 
 var sourceSchema = new mongoose.Schema({
@@ -9,12 +10,12 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  process.emit('source:save', this.toObject());
+  sourceSchema.emit('save', this.toObject());
   next();
 });
 
 sourceSchema.pre('remove', function(next) {
-  process.emit('source:remove', this.toObject());
+  sourceSchema.emit('remove', this.toObject());
   next();
 });
 
