@@ -18,13 +18,15 @@ describe('Report controller', function() {
     });
   });
 
-  // Stream data for 100ms
   before(function(done) {
     // Wait until all reports have been processed
     reportWriter.once('done', function() {
       done();
     });
-    botMaster.stop();
+    // Stream data for 100ms
+    setTimeout(function() {
+      botMaster.stop();
+    }, 100);
   });
 
   describe('GET /api/report', function() {
