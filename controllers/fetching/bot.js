@@ -15,9 +15,9 @@ util.inherits(Bot, EventEmitter);
 
 Bot.prototype.start = function() {
   if (this.enabled) return;
+  this.enabled = true;
   var self = this;
-  self.enabled = true;
-  self.contentService.on('reports', function(reports_data) {
+  this.contentService.on('reports', function(reports_data) {
     if (self.enabled) {
       if (self.isEmpty()) self.emit('notEmpty');
       reports_data.forEach(function(report_data) {
@@ -29,13 +29,14 @@ Bot.prototype.start = function() {
       self.emit('reports', reports_data);
     }
   });
-  self.contentService.on('warning', function(warning) {
+  this.on('warning', function(warning) {
     logger.warning(warning);
   });
-  self.contentService.on('error', function(error) {
-    logger.error(error);
+  this.contentService.on('warning', function(warning) {
+    logger.warning(warning);
   });
-  self.on('error', function(error) {
+  this.contentService.on('error', function(error) {
+    self.stop();
     logger.error(error);
   });
 };
@@ -45,7 +46,7 @@ Bot.prototype.start = function() {
 Bot.prototype._logDrops = [true, true];
 Bot.prototype.logDrops = function() {
   if (_.all(this._logDrops)) {
-    this.emit('error', new Error('Queue full, reports being dropped. Monitor queue status for updates.'));
+    this.emit('warning', new Error('Queue full, reports being dropped. Monitor queue status for updates.'));
     this._logDrops = [false, false];
     var self = this;
     setTimeout(function() {
