@@ -63,7 +63,7 @@ TwitterContentService.prototype.addListeners = function() {
     self.emit('warning', new Error('Twitter sent disconnect: ' + JSON.stringify(message.disconnect)));
   });
   this.stream.on('reconnect', function(request, response, connectInterval) {
-    self.emit('warning', new Error('Reconnecting to Twitter in ' + connectInterval + ' seconds'));
+    self.emit('warning', new Error('Reconnecting to Twitter in ' + (connectInterval / 1000) + ' seconds'));
   });
   this.stream.on('warning', function(message) {
     self.emit('warning', new Error('Twitter sent warning: ' + JSON.stringify(message.warning)));

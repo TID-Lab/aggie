@@ -62,7 +62,9 @@ BotMaster.prototype._addFetchingListeners = function(emitter) {
 BotMaster.prototype.sourceToBot = function(source_data) {
   var bot_data = _.pick(source_data, ['resource_id', 'url', 'keywords']);
   bot_data.sourceType = source_data.type;
-  return botFactory.create(bot_data);
+  var bot = botFactory.create(bot_data);
+  bot._sourceId = source_data._id;
+  return bot;
 };
 
 // Load Bot from source data
@@ -104,10 +106,47 @@ BotMaster.prototype.getBot = function(filters) {
   });
 };
 
+// Get source from bot information
+BotMaster.prototype.getSource = function(bot, callback) {
+  if (bot._sourceId) {
+    Source.findById(bot._sourceId, function(err, source) {
+      if (err) return callback(err);
+      callback(null, source);
+    });
+  } else {
+    var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
+    var filter = _.pick(bot.contentService, keys);
+    filter.type = filter.sourceType;
+    delete filter.sourceType;
+    Source.findOne(filter, function(err, source) {
+      if (err) return callback(err);
+      callback(null, source);
+    });
+  }
+};
+
 // Add Bot to array of tracked bots
 BotMaster.prototype.add = function(bot) {
   var self = this;
   this.bots.push(bot);
+  bot.on('start', function() {
+    // Mark Source as enabled
+    self.getSource(bot, function(err, source) {
+      if (!source.enabled) {
+        source.enabled = true;
+        source.save();
+      }
+    });
+  });
+  bot.on('stop', function() {
+    // Mark Source as disabled
+    self.getSource(bot, function(err, source) {
+      if (source.enabled) {
+        source.enabled = false;
+        source.save();
+      }
+    });
+  });
   bot.on('reports', function(reports_data) {
     self.emit('bot:reports', bot);
   });

@@ -9,6 +9,15 @@ var Bot = function(contentService) {
   this.type = this.contentService.botType;
   this.queue = new CircularQueue(contentService.queueCapacity);
   this.enabled = false;
+  // Error handlers
+  this.on('warning', function(warning) {
+    logger.warning(warning);
+  });
+  var self = this;
+  this.on('error', function(error) {
+    self.stop();
+    logger.error(error);
+  });
 };
 
 util.inherits(Bot, EventEmitter);
@@ -29,16 +38,13 @@ Bot.prototype.start = function() {
       self.emit('reports', reports_data);
     }
   });
-  this.on('warning', function(warning) {
-    logger.warning(warning);
-  });
   this.contentService.on('warning', function(warning) {
-    logger.warning(warning);
+    self.emit('warning', warning);
   });
   this.contentService.on('error', function(error) {
-    self.stop();
-    logger.error(error);
+    self.emit('error', error);
   });
+  this.emit('start');
 };
 
 // Variable to determine whether the Bot needs to log dropped reports.
