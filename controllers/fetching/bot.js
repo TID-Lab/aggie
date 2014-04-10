@@ -2,22 +2,12 @@ var CircularQueue = require('./circular-queue');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var _ = require('underscore');
-var logger = require('../logger');
 
 var Bot = function(contentService) {
   this.contentService = this.contentService || contentService;
   this.type = this.contentService.botType;
   this.queue = new CircularQueue(contentService.queueCapacity);
   this.enabled = false;
-  // Error handlers
-  this.on('warning', function(warning) {
-    logger.warning(warning);
-  });
-  var self = this;
-  this.on('error', function(error) {
-    self.stop();
-    logger.error(error);
-  });
 };
 
 util.inherits(Bot, EventEmitter);

@@ -6,16 +6,20 @@ var sourceSchema = new mongoose.Schema({
   resource_id: String,
   url: String,
   keywords: String,
-  enabled: Boolean
+  enabled: Boolean,
+  events: Array,
+  unreadErrorCount: Number
 });
 
 sourceSchema.pre('save', function(next) {
-  sourceSchema.emit('save', this.toObject());
+  // Use set source.silent = true to avoid emitting save event
+  if (!this.silent) sourceSchema.emit('save', this.toObject());
   next();
 });
 
 sourceSchema.pre('remove', function(next) {
-  sourceSchema.emit('remove', this.toObject());
+  // Use set source.silent = true to avoid emitting remove event
+  if (!this.silent) sourceSchema.emit('remove', this.toObject());
   next();
 });
 

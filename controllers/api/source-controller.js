@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var Source = require('../../models/source');
+var _ = require('underscore');
 
 // Create a new Source
 app.post('/api/source', function(req, res) {
@@ -18,6 +19,9 @@ app.post('/api/source', function(req, res) {
 // Get a list of all Sources
 app.get('/api/source', function(req, res) {
   Source.find(function(err, sources) {
+    sources.forEach(function(source) {
+      source.events = _fetchErrors(source);
+    });
     if (err) res.send(500, err);
     else res.send(200, sources);
   });
@@ -28,7 +32,10 @@ app.get('/api/source/:_id', function(req, res) {
   Source.findOne({_id: req.params._id}, function(err, source) {
     if (err) res.send(500, err);
     else if (!source) res.send(404);
-    else res.send(200, source);
+    else {
+      source.events = _fetchErrors(source);
+      res.send(200, source);
+    }
   });
 });
 
@@ -84,5 +91,16 @@ app.delete('/api/source/_all', function(req, res) {
     });
   });
 });
+
+function _fetchErrors(source) {
+  if (source.unreadErrorCount > 0) {
+    var events = _.chain(source.events).sortBy('datetime').last(source.unreadErrorCount).value();
+    source.unreadErrorCount = 0;
+    source.silent = true;
+    source.save();
+    return events;
+  }
+  return [];
+};
 
 module.exports = app;

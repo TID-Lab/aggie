@@ -27,7 +27,7 @@ BotMaster.prototype._addSourceListeners = function(emitter) {
 
   // Instantiate new bots when sources are saved
   emitter.on('save', function(source_data) {
-    source_data.enabled = self.enabled;
+    if (!self.enabled) source_data.enabled = false;
     self.load(source_data);
   });
 
@@ -72,6 +72,7 @@ BotMaster.prototype.load = function(source_data) {
   var bot = this.getBot(source_data);
   if (bot) this.kill(bot);
   else bot = this.sourceToBot(source_data);
+  if (source_data.enabled) bot.start();
   this.add(bot);
 };
 
@@ -134,6 +135,7 @@ BotMaster.prototype.add = function(bot) {
     self.getSource(bot, function(err, source) {
       if (!source.enabled) {
         source.enabled = true;
+        source.silent = true;
         source.save();
       }
     });
@@ -143,6 +145,7 @@ BotMaster.prototype.add = function(bot) {
     self.getSource(bot, function(err, source) {
       if (source.enabled) {
         source.enabled = false;
+        source.silent = true;
         source.save();
       }
     });
@@ -155,6 +158,25 @@ BotMaster.prototype.add = function(bot) {
   });
   bot.on('notEmpty', function() {
     self.emit('bot:notEmpty', bot);
+  });
+  bot.on('warning', function(warning) {
+    // Log warning in Source
+    self.getSource(bot, function(err, source) {
+      source.events.push({datetime: Date.now(), type: 'warning', message: warning.message});
+      source.unreadErrorCount++;
+      source.silent = true;
+      source.save();
+    });
+  });
+  bot.on('error', function(error) {
+    // Log error in Source
+    self.getSource(bot, function(err, source) {
+      source.events.push({datetime: Date.now(), type: 'error', message: error.message});
+      source.unreadErrorCount++;
+      source.silent = true;
+      source.save();
+    });
+    bot.stop();
   });
 };
 
