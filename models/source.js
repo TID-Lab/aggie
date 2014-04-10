@@ -12,13 +12,13 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  // Use set source.silent = true to avoid emitting save event
+  // Set source.silent = true to avoid emitting save event
   if (!this.silent) sourceSchema.emit('save', this.toObject());
   next();
 });
 
 sourceSchema.pre('remove', function(next) {
-  // Use set source.silent = true to avoid emitting remove event
+  // Set source.silent = true to avoid emitting remove event
   if (!this.silent) sourceSchema.emit('remove', this.toObject());
   next();
 });
