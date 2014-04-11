@@ -1,5 +1,6 @@
 var config = require('../../../config/secrets').facebook;
 var ContentService = require('../content-service');
+var fbDumb = require('./facebook-dummy-content-service');
 var graph = require('fbgraph');
 var util = require('util');
 var async = require('async');
@@ -11,8 +12,13 @@ var async = require('async');
 var FacebookContentService = function(options) {
 
     graph.setAccessToken(config.accessToken);
-
-    this.lastCrawlDate = options.lastCrawlDate || new Date().toISOString();
+    var a = new fbDumb();
+    a.start();
+    var self = this;
+    a.on('report', function(report_data) {
+        self.parse(report_data);
+    });
+    this.lastCrawlDate = options.lastCrawlDate || Math.round(Date.now() / 1000);
 
 
     // TODO TOM: You don't need to check the type here I think. Source should be responsible for validating the URL.
@@ -30,95 +36,109 @@ var FacebookContentService = function(options) {
     this.resultsPerFetch = options.resultsPerFetch || 100;
     this._isStreaming = false;
     this._nextPage = undefined;
+    this._isBusy = false;
+    ContentService.call(this, options);
+
 };
 
 util.inherits(FacebookContentService, ContentService);
 
-
 FacebookContentService.prototype.fetch = function() {
+
+
+    function itemCheck(self, entry) {
+
+        var data = entry;
+        var comments = entry.comments;
+
+        var validDate = entry.updated_time > self.lastCrawlDate;
+
+        if (data && validDate) {
+            self.emit('report', self.parse(data));
+        }
+        if (comments && validDate) {
+            // self.emit(comments.data[0]);
+        }
+
+    }
 
     var self = this;
 
-    var options = {
-        limit: this.resultsPerFetch,
-    };
-
+    var query = "SELECT post_id, updated_time, message, comments FROM stream WHERE (source_id=" + self.fbPage + " AND updated_time<" + self.lastCrawlDate + ") ORDER BY updated_time LIMIT " + this.resultsPerFetch;
     graph
-        .get(((this.nextPage !== undefined) ? (this.nextPage) : (this.fbPage + '/feed/')), options, function(err, res) {
+        .fql(query, function(err, res) {
             // TODO: TOM: Will need a better way to handle errors. Stay tuned. See issue #1120.
             if (err) {
                 console.error(err);
             }
 
-            messagesOnFeed = [];
-
-            commentsOnPost = [];
-
+            //console.log(res.data[0].comments);
             var responseLength = res.data.length;
 
-            // TODO : TOM: This whole piece of logic can also be moved into a private method (this method is quite huge as it is).
-            var fetchPrevPage = res.data[responseLength - 1].created_time > self.lastCrawlDate;
+            // Check the last item to see if 
+            if (responseLength > 0) {
 
-            // Load the next batch of issues
-            for (var i = responseLength - 1; i >= 0; i--) {
+                //Check if we need to fetch the p
+                var fetchPrevPage = res.data[0].updated_time > self.lastCrawlDate;
 
-                // DONE TOM: Why not just call these 'data' and 'comments'?
-                var data = res.data[i];
-                var comments = (res.data[i].comments);
+                if (fetchPrevPage && !self._isBusy) {
+                    self.lastCrawlDate = Date.now();
+                    self._isBusy = true;
+                    // console.log(self.lastCrawlDate);
+                    // console.log(self._isBusy);
 
-                // check if date is valid for each post
-                var validDate = res.data[i].created_time > self.lastCrawlDate;
-
-                // TOM: I don't really understand what happens after this point. We should setup a meeting to chat.
-                if (!validDate) {
-                    console.log("no new sources since last crawl date");
-                }
-                if (data && validDate) {
-                    messagesOnFeed.push(data);
-                }
-                if (comments && validDate) {
-                    commentsOnPost.push(comments.data[0]);
                 }
 
-                if (res.paging) {
-                    if (res.paging.next && fetchPrevPage) {
-                        self.nextPage = res.paging.next;
-                    }
+                // Load the next batch of issues
+                for (var i = 0; i < responseLength; i++) {
+
+                    itemCheck(self, res.data[i]);
+
                 }
+
+
             }
-            console.log('Messages Length: ' + messagesOnFeed.length);
-            console.log('Comments Length: ' + commentsOnPost.length);
 
-            async.parallel([
-                    function(callback) {
-                        var content = self.parse(messagesOnFeed, commentsOnPost);
-                        this.lastCrawlDate = new Date();
-                        callback(null, 'content saved');
-                        return content;
-                    },
-                    function(callback) {
-                        var status = 'No new page fetched';
-                        if (fetchPrevPage) {
-                            this.lastCrawlDate = new Date();
-                            status = 'New page fetched';
-                            self.fetch();
-                        }
-                        callback(null, status);
-                    }
-                ],
-                function(err, results) {
-                    console.log(results);
-                    return results;
 
-                });
+
+            //     async.parallel([
+            //             function(callback) {
+            //                 var content = self.parse(messagesOnFeed, commentsOnPost);
+            //                 this.lastCrawlDate = new Date();
+            //                 callback(null, 'content saved');
+            //                 return content;
+            //             },
+            //             function(callback) {
+            //                 var status = 'No new page fetched';
+            //                 if (fetchPrevPage) {
+            //                     this.lastCrawlDate = new Date();
+            //                     status = 'New page fetched';
+            //                     self.fetch();
+            //                 }
+            //                 callback(null, status);
+            //             }
+            //         ],
+            //         function(err, results) {
+            //             console.log(results);
+            //             return results;
+
+            //         });
         });
 
-    //TODO
-    return 'done';
 };
 
-FacebookContentService.prototype.parse = function(messagesOnFeed, commentsOnPost) {
-    return messagesOnFeed + commentsOnPost;
+FacebookContentService.prototype.parse = function(data) {
+    var report_data = {
+        fetchedAt: Date.now(),
+        authoredAt: data.created_time,
+        createdAt: data.updated_time,
+        content: data.message,
+        id : data.post_id,
+        author: 'TODO author',
+        url: 'TODO url'
+    };
+    console.log(report_data);
+    return report_data;
 };
 
 module.exports = FacebookContentService;
