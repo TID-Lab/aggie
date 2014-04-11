@@ -7,13 +7,22 @@ var DummyContentService = require('../lib/fetching/content-services/dummy-conten
 describe('Content service', function() {
   before(function(done) {
     contentService = contentServiceFactory.create({sourceType: 'dummy', keywords: 't'});
+
     done();
   });
 
   it('should instantiate correct content service', function() {
     expect(contentService).to.be.instanceOf(ContentService);
     expect(contentService).to.be.instanceOf(DummyContentService);
+   
   });
+
+  it('should instantiate correct facebook content service', function() {
+    expect(fbContentService).to.be.instanceOf(ContentService);
+    expect(fbContentService).to.be.instanceOf(FacebookDummyContentService);
+   
+  });
+
 
   it('should fetch content from a specific service', function(done) {
     contentService.start();
@@ -22,6 +31,16 @@ describe('Content service', function() {
       expect(report_data.content.toLowerCase()).to.contain('t');
       // Stop stream to ensure a single fetch
       contentService.stop();
+      done();
+    });
+    
+  });
+
+   it('should fetch content from a facebook service', function(done) {
+    fbContentService.start();
+    fbContentService.on('report', function(report_data) {
+      // Stop stream to ensure a single fetch
+      fbContentService.stop();
       done();
     });
   });
