@@ -45,7 +45,6 @@ util.inherits(FacebookContentService, ContentService);
 
 FacebookContentService.prototype.fetch = function() {
 
-
     function itemCheck(self, entry) {
 
         var data = entry;
@@ -84,16 +83,15 @@ FacebookContentService.prototype.fetch = function() {
                 if (fetchPrevPage && !self._isBusy) {
                     self.lastCrawlDate = Date.now();
                     self._isBusy = true;
+                    self.fetch();
                     // console.log(self.lastCrawlDate);
                     // console.log(self._isBusy);
 
                 }
 
-                // Load the next batch of issues
+                // Load the next batch of issues sorted in ascending order
                 for (var i = 0; i < responseLength; i++) {
-
                     itemCheck(self, res.data[i]);
-
                 }
 
 
