@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
 var sourceController = require('../controllers/api/source-controller');
+var Source = require('../models/source');
 
 describe('Source controller', function() {
   before(function(done) {
@@ -39,6 +40,29 @@ describe('Source controller', function() {
           done();
         });
     });
+
+    it('should get latest logged events', function(done) {
+      // Make sure we use the correct model instance
+      Source.findById(source._id, function(err, foundSource) {
+        // Log a new event
+        foundSource.logEvent('warning', 'This is a test', function(err) {
+          request(sourceController)
+            .get('/api/source/' + source._id)
+            .expect(200)
+            .end(function(err, res) {
+              if (err) return done(err);
+              expect(res.body).to.have.property('events');
+              expect(res.body).to.have.property('unreadErrorCount')
+              expect(res.body.events).to.be.an.instanceof(Array);
+              expect(res.body.events).to.have.length(1);
+              expect(res.body.unreadErrorCount).to.equal(1);
+              source.events = res.body.events;
+              source.unreadErrorCount = res.body.unreadErrorCount;
+              done();
+            });
+        });
+      });
+    });
   });
 
   describe('PUT /api/source/:_id', function() {
@@ -51,6 +75,34 @@ describe('Source controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           compare.call(this, res.body, source);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/source/_events/:_id', function() {
+    it('should reset unread error count', function(done) {
+      expect(source.unreadErrorCount).to.equal(1);
+      request(sourceController)
+        .put('/api/source/_events/' + source._id)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.property('unreadErrorCount');
+          expect(res.body.unreadErrorCount).to.equal(0);
+          source.unreadErrorCount = res.body.unreadErrorCount;
+          done();
+        });
+    });
+    it('should return an empty events array', function(done) {
+      request(sourceController)
+        .get('/api/source/' + source._id)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.property('events');
+          expect(res.body.events).to.be.an.instanceof(Array);
+          expect(res.body.events).to.be.empty;
           done();
         });
     });

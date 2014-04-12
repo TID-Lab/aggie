@@ -7,27 +7,45 @@ var sourceSchema = new mongoose.Schema({
   resource_id: String,
   url: String,
   keywords: String,
-  enabled: Boolean,
-  events: Array,
-  unreadErrorCount: Number
+  enabled: {type: Boolean, default: true},
+  events: {type: Array, default: []},
+  unreadErrorCount: {type: Number, default: 0}
 });
 
-sourceSchema.post('save', function(source) {
-  // Set source.silent = true to avoid emitting save event
-  if (!source.silent) sourceSchema.emit('save', source.toObject());
-});
-
-sourceSchema.pre('remove', function(next) {
-  // Set source.silent = true to avoid emitting remove event
-  if (!this.silent) sourceSchema.emit('remove', this.toObject());
+sourceSchema.pre('save', function(next) {
+  if (this.isNew) sourceSchema.emit('create', this.toObject());
   next();
 });
 
+sourceSchema.pre('remove', function(next) {
+  sourceSchema.emit('remove', this.toObject());
+  next();
+});
+
+// Enable source
+sourceSchema.methods.enable = function() {
+  if (!this.enabled) {
+    this.enabled = true;
+    this.save(function(err, source) {
+      sourceSchema.emit('enable', source.toObject());
+    });
+  }
+};
+
+// Disable source
+sourceSchema.methods.disable = function() {
+  if (this.enabled) {
+    this.enabled = false;
+    this.save(function(err, source) {
+      sourceSchema.emit('disable', source.toObject());
+    });
+  }
+};
+
 // Log events in source
 sourceSchema.methods.logEvent = function(level, message, callback) {
-  this.events.push({datetime: Date.now(), type: 'level', message: message});
+  this.events.push({datetime: Date.now(), type: level, message: message});
   this.unreadErrorCount++;
-  this.silent = true;
   this.save(callback);
 };
 
@@ -36,16 +54,18 @@ var Source = mongoose.model('Source', sourceSchema);
 // Get source from bot information
 Source.findByBot = function(bot, callback) {
   if (bot._sourceId) {
+    // If source id is included in bot, find by id
     Source.findById(bot._sourceId, function(err, source) {
       if (err) callback(err);
       else callback(null, source);
     });
   } else {
+    // Find a source based on source data
     var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
-    var filter = _.pick(bot.contentService, keys);
-    filter.type = filter.sourceType;
-    delete filter.sourceType;
-    Source.findOne(filter, function(err, source) {
+    var source_data = _.pick(bot.contentService, keys);
+    source_data.type = source_data.sourceType;
+    delete source_data.sourceType;
+    Source.findOne(source_data, function(err, source) {
       if (err) return callback(err);
       callback(null, source);
     });
@@ -61,6 +81,16 @@ Source.findByIdWithLatestEvents = function(_id, callback) {
       source.events = _.chain(source.events).sortBy('datetime').last(source.unreadErrorCount).value();
     }
     callback(null, source);
+  });
+};
+
+// Reset unread error count back to zero
+Source.resetUnreadErrorCount = function(_id, callback) {
+  Source.findById(_id, '-events', function(err, source) {
+    if (err) return callback(err);
+    if (!source) return callback(null, null);
+    source.unreadErrorCount = 0;
+    source.save(callback);
   });
 };
 

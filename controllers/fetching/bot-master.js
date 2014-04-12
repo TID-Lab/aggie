@@ -25,8 +25,8 @@ BotMaster.prototype.addListeners = function(type, emitter) {
 BotMaster.prototype._addSourceListeners = function(emitter) {
   var self = this;
 
-  // Instantiate new bots when sources are saved
-  emitter.on('save', function(source_data) {
+  // Instantiate new bot when new source is created
+  emitter.on('create', function(source_data) {
     if (!self.enabled) source_data.enabled = false;
     self.load(source_data);
   });
@@ -35,6 +35,18 @@ BotMaster.prototype._addSourceListeners = function(emitter) {
   emitter.on('remove', function(source_data) {
     var bot = self.getBot(source_data);
     if (bot) self.kill(bot);
+  });
+
+  // Listen to `enable` event from the API process
+  emitter.on('enable', function(source_data) {
+    var bot = self.getBot(source_data);
+    if (self.enabled && bot) bot.start();
+  });
+
+  // Listen to `disable` event from the API process
+  emitter.on('disable', function(source_data) {
+    var bot = self.getBot(source_data);
+    if (bot) bot.stop();
   });
 
   // Load all sources when initializing
@@ -72,7 +84,7 @@ BotMaster.prototype.load = function(source_data) {
   var bot = this.getBot(source_data);
   if (bot) this.kill(bot);
   else bot = this.sourceToBot(source_data);
-  if (source_data.enabled) bot.start();
+  if (this.enabled && source_data.enabled) bot.start();
   this.add(bot);
 };
 
@@ -111,26 +123,6 @@ BotMaster.prototype.getBot = function(filters) {
 BotMaster.prototype.add = function(bot) {
   var self = this;
   this.bots.push(bot);
-  bot.on('start', function() {
-    // Mark Source as enabled
-    Source.findByBot(bot, function(err, source) {
-      if (!source.enabled) {
-        source.enabled = true;
-        source.silent = true;
-        source.save();
-      }
-    });
-  });
-  bot.on('stop', function() {
-    // Mark Source as disabled
-    Source.findByBot(bot, function(err, source) {
-      if (source.enabled) {
-        source.enabled = false;
-        source.silent = true;
-        source.save();
-      }
-    });
-  });
   bot.on('reports', function(reports_data) {
     self.emit('bot:reports', bot);
   });
@@ -143,31 +135,35 @@ BotMaster.prototype.add = function(bot) {
   bot.on('warning', function(warning) {
     // Log warning in Source
     Source.findByBot(bot, function(err, source) {
-      source.logEvent('warning', warning.message);
+      if (source) source.logEvent('warning', warning.message);
     });
   });
   bot.on('error', function(error) {
     // Log error in Source
     Source.findByBot(bot, function(err, source) {
-      source.logEvent('error', error.message);
+      if (source) {
+        source.logEvent('error', error.message);
+        source.disable();
+      }
     });
-    bot.stop();
   });
 };
 
 // Start all bots
 BotMaster.prototype.start = function() {
+  var self = this;
   this.enabled = true;
   this.bots.forEach(function(bot) {
-    bot.start();
+    self.enableBot(bot);
   });
 };
 
 // Stop all bots
 BotMaster.prototype.stop = function() {
+  var self = this;
   this.enabled = false;
   this.bots.forEach(function(bot) {
-    bot.stop();
+    self.disableBot(bot);
   });
 };
 
@@ -177,18 +173,39 @@ BotMaster.prototype.stop = function() {
 BotMaster.prototype.kill = function(bot) {
   if (bot) {
     // Stop bot to ensure unbinding of listeners
-    bot.stop();
+    this.disableBot(bot);
     // Remove bot instance from list of bots
     var index = this.bots.indexOf(bot);
     if (index > -1) this.bots.splice(index, 1);
   } else {
     // Kill all bots
     for (var i in this.bots) {
+      this.disableBot(this.bots[i]);
       this.bots[i] = null;
       delete this.bots[i];
     }
     this.bots = [];
   }
+};
+
+BotMaster.prototype.enableBot = function(bot) {
+  // Start bot from current process
+  if (this.enabled) bot.start();
+  // Find corresponding source
+  Source.findByBot(bot, function(err, source) {
+    // Enable source
+    if (source) source.enable();
+  });
+};
+
+BotMaster.prototype.disableBot = function(bot) {
+  // Stop bot from current process
+  bot.stop();
+  // Find corresponding source
+  Source.findByBot(bot, function(err, source) {
+    // Disable source
+    if (source) source.disable();
+  });
 };
 
 module.exports = new BotMaster();

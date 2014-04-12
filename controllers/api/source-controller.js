@@ -52,10 +52,10 @@ app.put('/api/source/:_id', function(req, res, next) {
 
 // Reset unread error count
 app.put('/api/source/_events/:_id', function(req, res) {
-  Source.update({_id: req.params._id}, {unreadErrorCount: 0}, function(err, numberAffected) {
+  Source.resetUnreadErrorCount(req.params._id, function(err, source, numberAffected) {
     if (err) res.send(500, err);
-    else if (!numberAffected) res.send(404);
-    else res.send(200);
+    else if (!source) res.send(404);
+    else res.send(200, source);
   });
 });
 

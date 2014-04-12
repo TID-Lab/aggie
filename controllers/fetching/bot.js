@@ -8,6 +8,8 @@ var Bot = function(contentService) {
   this.type = this.contentService.botType;
   this.queue = new CircularQueue(contentService.queueCapacity);
   this.enabled = false;
+  // Variable to determine whether the Bot needs to log dropped reports.
+  this._logDrops = {timeout: true, notEmpty: true};
 };
 
 util.inherits(Bot, EventEmitter);
@@ -34,22 +36,18 @@ Bot.prototype.start = function() {
   this.contentService.on('error', function(error) {
     self.emit('error', error);
   });
-  this.emit('start');
 };
 
-// Variable to determine whether the Bot needs to log dropped reports.
-// First element is for timeout, second element is for notEmpty event.
-Bot.prototype._logDrops = [true, true];
 Bot.prototype.logDrops = function() {
-  if (_.all(this._logDrops)) {
+  if (_.all(_.values(this._logDrops))) {
     this.emit('warning', new Error('Queue full, reports being dropped. Monitor queue status for updates.'));
-    this._logDrops = [false, false];
+    this._logDrops = {timeout: false, notEmpty: false};
     var self = this;
     setTimeout(function() {
-      self._logDrops[0] = true;
+      self._logDrops.timeout = true;
     }, 60000);
     this.once('notEmpty', function() {
-      self._logDrops[1] = true;
+      self._logDrops.notEmpty = true;
     });
   }
 };
@@ -60,7 +58,6 @@ Bot.prototype.stop = function() {
   this.contentService.removeAllListeners('warning');
   this.contentService.removeAllListeners('error');
   this.removeAllListeners('error');
-  this.emit('stop');
 };
 
 // Fetch next available report in the queue

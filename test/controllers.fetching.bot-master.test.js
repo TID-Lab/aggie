@@ -55,10 +55,13 @@ describe('Bot master', function() {
 
   it('should stop all bots', function(done) {
     botMaster.stop();
-    expect(botMaster.bots[0].enabled).to.be.false;
-    expect(botMaster.bots[1].enabled).to.be.false;
-    expect(botMaster.bots[2].enabled).to.be.false;
-    done();
+    // Allow some time for bots to be fully stopped
+    setTimeout(function() {
+      expect(botMaster.bots[0].enabled).to.be.false;
+      expect(botMaster.bots[1].enabled).to.be.false;
+      expect(botMaster.bots[2].enabled).to.be.false;
+      done();
+    }, 100);
   });
 
   it('should kill a single bot', function(done) {
