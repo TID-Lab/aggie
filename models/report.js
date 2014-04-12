@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var textSearch = require('mongoose-text-search');
 var Source = require('./source');
 var Query = require('./query');
+var _ = require('underscore');
 
 var schema = new mongoose.Schema({
   authoredAt: Date,
@@ -18,7 +19,6 @@ var schema = new mongoose.Schema({
 
 // Give the report schema text search capabilities
 schema.plugin(textSearch);
-
 // Add a text index to the `content` field
 schema.index({content: 'text'});
 

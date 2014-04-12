@@ -26,10 +26,18 @@
       </form>
     </li>
     <li>
-      <a href="/api/source">List sources</a>
+      <form action="/api/report" method="post">
+        <input type="hidden" name="type" value="Report" />
+        Search for Report data:
+        <input type="text" name="keywords" />
+        <input type="submit">
+      </form>
     </li>
     <li>
-      <a href="/api/report">List reports</a>
+      <a href="/api/source" data-method="get">List sources</a>
+    </li>
+    <li>
+      <a href="/api/report" data-method="get">List reports</a>
     </li>
     <li>
       <a href="/api/source/_all" data-method="delete">Delete all sources</a>

@@ -51,6 +51,8 @@ describe('Report controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body[0]).to.have.property('content');
+          expect(res.body[0].content.toLowerCase()).to.contain('lorem');
           done();
         });
     });

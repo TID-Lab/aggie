@@ -14,9 +14,7 @@ var Query = mongoose.model('Query', schema);
 
 // Find a query that matches the parameters, or instantiate a new one
 Query.getQuery = function(queryData, callback) {
-  if (queryData instanceof mongoose.Model) {
-    queryData = queryData.toObject();
-  }
+  if (queryData instanceof mongoose.Model) queryData = queryData.toObject();
   Query.findOne(queryData, function(err, query) {
     if (query === null) query = new Query(queryData);
     callback(err, query);

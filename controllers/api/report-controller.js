@@ -16,6 +16,7 @@ app.post('/api/report', function(req, res) {
   req.on('data', function(chunk) {
     queryData += chunk;
   }).on('end', function() {
+    queryData = JSON.parse(queryData);
     Report.queryReports(queryData, function(err, reports) {
       if (err) res.send(500, err);
       else res.send(200, reports);
