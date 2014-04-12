@@ -42,6 +42,20 @@ describe('Report controller', function() {
     });
   });
 
+  describe('POST /api/report', function() {
+    it('should query for reports', function(done) {
+      request(reportController)
+        .post('/api/report')
+        .send({keywords: 'lorem'})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          done();
+        });
+    });
+  });
+
   describe('DELETE /api/report/_all', function() {
     it('should delete all reports', function(done) {
       request(reportController)

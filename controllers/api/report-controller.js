@@ -10,6 +10,19 @@ app.get('/api/report', function(req, res) {
   });
 });
 
+// Query for Reports
+app.post('/api/report', function(req, res) {
+  var queryData = '';
+  req.on('data', function(chunk) {
+    queryData += chunk;
+  }).on('end', function() {
+    Report.queryReports(queryData, function(err, reports) {
+      if (err) res.send(500, err);
+      else res.send(200, reports);
+    });
+  });
+});
+
 // Delete all reports
 app.delete('/api/report/_all', function(req, res) {
   Report.find(function(err, reports) {
