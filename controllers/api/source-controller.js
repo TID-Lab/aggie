@@ -10,18 +10,16 @@ app.post('/api/source', function(req, res) {
     data += chunk;
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
-      if (err) return res.send(500, err);
-      res.send(200, source);
+      if (err) res.send(500, err);
+      else res.send(200, source);
     });
   });
 });
 
 // Get a list of all Sources
 app.get('/api/source', function(req, res) {
-  Source.find(function(err, sources) {
-    sources.forEach(function(source) {
-      source.events = _fetchErrors(source);
-    });
+  // Find all, exclude `events` field
+  Source.find({}, '-events', function(err, sources) {
     if (err) res.send(500, err);
     else res.send(200, sources);
   });
@@ -29,47 +27,44 @@ app.get('/api/source', function(req, res) {
 
 // Get a Source by _id
 app.get('/api/source/:_id', function(req, res) {
-  Source.findOne({_id: req.params._id}, function(err, source) {
+  Source.findByIdWithLatestEvents(req.params._id, function(err, source) {
     if (err) res.send(500, err);
     else if (!source) res.send(404);
-    else {
-      source.events = _fetchErrors(source);
-      res.send(200, source);
-    }
+    else res.send(200, source);
   });
 });
 
 // Update a Source
-app.put('/api/source/:_id', function(req, res) {
+app.put('/api/source/:_id', function(req, res, next) {
+  if (req.params._id === '_events') return next();
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
   }).on('end', function() {
     data = JSON.parse(data);
-
-    Source.findOne({_id: req.params._id}, function(err, source) {
-      if (err) return res.send(500, err);
-      else if (!source) return res.send(404);
-
-      for (var attr in data) {
-        source[attr] = data[attr];
-      }
-      source.save(function(err) {
-        if (err) return res.send(500, err);
-        res.send(200, source);
-      });
+    Source.update({_id: req.params._id}, _.omit(data, ['_id', 'events']), function(err, numberAffected) {
+      if (err) res.send(500, err);
+      else if (!numberAffected) res.send(404);
+      else res.send(200);
     });
+  });
+});
 
+// Reset unread error count
+app.put('/api/source/_events/:_id', function(req, res) {
+  Source.update({_id: req.params._id}, {unreadErrorCount: 0}, function(err, numberAffected) {
+    if (err) res.send(500, err);
+    else if (!numberAffected) res.send(404);
+    else res.send(200);
   });
 });
 
 // Delete a Source
 app.delete('/api/source/:_id', function(req, res, next) {
   if (req.params._id === '_all') return next();
-  Source.findOne({_id: req.params._id}, function(err, source) {
+  Source.findById(req.params._id, function(err, source) {
     if (err) return res.send(500, err);
     if (!source) return res.send(404);
-
     source.remove(function(err) {
       if (err) return res.send(500, err);
       res.send(200);
@@ -91,16 +86,5 @@ app.delete('/api/source/_all', function(req, res) {
     });
   });
 });
-
-function _fetchErrors(source) {
-  if (source.unreadErrorCount > 0) {
-    var events = _.chain(source.events).sortBy('datetime').last(source.unreadErrorCount).value();
-    source.unreadErrorCount = 0;
-    source.silent = true;
-    source.save();
-    return events;
-  }
-  return [];
-};
 
 module.exports = app;
