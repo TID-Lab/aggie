@@ -26,13 +26,13 @@ BotMaster.prototype._addSourceListeners = function(emitter) {
   var self = this;
 
   // Clean-up old listeners
-  emitter.removeAllListeners('create');
+  emitter.removeAllListeners('save');
   emitter.removeAllListeners('remove');
   emitter.removeAllListeners('enable');
   emitter.removeAllListeners('disable');
 
-  // Instantiate new bot when new source is created
-  emitter.on('create', function(source) {
+  // Load bot when source is saved
+  emitter.on('save', function(source) {
     self.load(source._id);
   });
 
@@ -87,7 +87,7 @@ BotMaster.prototype.sourceToBot = function(sourceId, callback) {
     if (err) return callback(err);
     if (!source) return callback(new Error('Source not found'));
     var bot_data = _.pick(source, ['resource_id', 'url', 'keywords', 'enabled']);
-    bot_data.sourceId = source._id;
+    bot_data.sourceId = source._id.toString();
     bot_data.sourceType = source.type;
     var bot = botFactory.create(bot_data);
     callback(null, source, bot);
@@ -96,17 +96,20 @@ BotMaster.prototype.sourceToBot = function(sourceId, callback) {
 
 // Load Bot from source data
 BotMaster.prototype.load = function(sourceId) {
+  var self = this;
+
+  // If bot exists, kill so that it can be re-added
   var bot = this.getBot(sourceId);
   if (bot) {
     this.kill(bot);
-  } else {
-    var self = this;
-    this.sourceToBot(sourceId, function(err, source, bot) {
-      if (err || !source) return;
-      if (self.enabled && source.enabled) bot.start();
-      self.add(bot);
-    });
   }
+
+  // Get a new bot based on the Source
+  this.sourceToBot(sourceId, function(err, source, bot) {
+    if (err || !source) return;
+    if (self.enabled && source.enabled) bot.start();
+    self.add(bot);
+  });
 };
 
 // Load all existing Sources
@@ -132,7 +135,7 @@ BotMaster.prototype.loadAll = function(filters, callback) {
 
 // Get all bots matching the filter hash
 BotMaster.prototype.getBot = function(sourceId) {
-  return _.findWhere(this.bots, {sourceId: sourceId});
+  return _.findWhere(this.bots, {sourceId: sourceId.toString()});
 };
 
 // Add Bot to array of tracked bots

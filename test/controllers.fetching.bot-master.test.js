@@ -80,6 +80,28 @@ describe('Bot master', function() {
     done();
   });
 
+  it('should reload a bot', function(done) {
+    var sourceId = botMaster.bots[0].sourceId;
+    var bot = botMaster.getBot(sourceId);
+    Source.findById(sourceId, function(err, source) {
+      if (err) return done(err);
+      expect(source).to.be.an.instanceof(Source);
+      source.keywords = 'four';
+      source.save(function(err, source, numberAffected) {
+        if (err) return done(err);
+        expect(numberAffected).to.equal(1);
+        expect(source).to.be.an.instanceof(Source);
+        setTimeout(function() {
+          var bot = botMaster.getBot(sourceId);
+          expect(bot).to.have.property('contentService');
+          expect(bot.contentService).to.have.property('keywords');
+          expect(bot.contentService.keywords).to.equal('four');
+          done();
+        }, 100);
+      });
+    });
+  });
+
   it('should kill all bots', function(done) {
     botMaster.kill();
     expect(botMaster.bots).to.be.empty;
