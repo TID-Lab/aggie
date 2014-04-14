@@ -9,6 +9,7 @@ var TwitterContentService = function(options) {
   this.sourceType = 'twitter';
   this.botType = 'push';
   this._isStreaming = false;
+  ContentService.call(this);
 };
 
 util.inherits(TwitterContentService, ContentService);
@@ -27,6 +28,7 @@ TwitterContentService.prototype.start = function() {
   } else {
     this.streamName = 'statuses/filter';
     this.stream = this.twit.stream(this.streamName, {track: this.keywords});
+    this.addListeners();
   }
   this._isStreaming = true;
 };
@@ -40,21 +42,31 @@ TwitterContentService.prototype.stop = function() {
 };
 
 // Wrapper for stream event listener
-TwitterContentService.prototype.on = function(event, callback) {
-  var self = this;
-  // Create and start stream if not yet created
-  if (!this.stream) {
-    this.start();
+TwitterContentService.prototype.addListeners = function() {
+  if (this.stream) {
+    // Avoid re-adding the same listeners
+    var listeners = this.stream.listeners('tweet');
+    if (listeners.length !== 0) return;
+  } else {
+    // Bail if stream has not been started
+    return;
   }
-  event = event === 'reports' ? 'tweet' : event;
-  // Listen to stream event and return it to allow chaining
-  return this.stream.on(event, function(data) {
-    if (event === 'tweet') {
-      var report = self.parse(data);
-      callback([report]);
-    } else {
-      callback(data);
-    }
+  var self = this;
+  this.stream.on('tweet', function(tweet) {
+    var report_data = self.parse(tweet);
+    self.emit('reports', [report_data]);
+  });
+  this.stream.on('limit', function(message) {
+    self.emit('warning', new Error('Twitter sent rate limitation: ' + JSON.stringify(message.limit)));
+  });
+  this.stream.on('disconnect', function(message) {
+    self.emit('warning', new Error('Twitter sent disconnect: ' + JSON.stringify(message.disconnect)));
+  });
+  this.stream.on('reconnect', function(request, response, connectInterval) {
+    self.emit('warning', new Error('Reconnecting to Twitter in ' + (connectInterval / 1000) + ' seconds'));
+  });
+  this.stream.on('warning', function(message) {
+    self.emit('warning', new Error('Twitter sent warning: ' + JSON.stringify(message.warning)));
   });
 };
 

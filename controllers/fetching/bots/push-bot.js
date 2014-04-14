@@ -1,8 +1,8 @@
 var Bot = require('../bot');
 var util = require('util');
 
-var PushBot = function(contentService) {
-  Bot.call(this, contentService);
+var PushBot = function(options) {
+  Bot.call(this, options);
 };
 
 util.inherits(PushBot, Bot);

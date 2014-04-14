@@ -11,10 +11,12 @@ describe('Report controller', function() {
   // Create a source for streaming data
   before(function(done) {
     botMaster.addListeners('source', Source.schema);
-    Source.create({type: 'dummy', keywords: 'Lorem ipsum'});
     process.nextTick(function() {
-      botMaster.start();
-      done();
+      Source.create({type: 'dummy', keywords: 'Lorem ipsum'});
+      process.nextTick(function() {
+        botMaster.start();
+        done();
+      });
     });
   });
 
