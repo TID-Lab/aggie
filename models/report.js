@@ -38,15 +38,11 @@ schema.pre('save', function(next) {
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
-Report.queryReports = function(queryData, callback) {
-  if (typeof queryData === 'function') return Report.find(queryData);
-  queryData.type = 'Report';
-  Query.getQuery(queryData, function(err, query) {
+Report.queryReports = function(query, callback) {
+  if (typeof query === 'function') return Report.find(query);
+  Report.textSearch(query.keywords, function(err, reports) {
     if (err) return callback(err);
-    Report.textSearch(query.keywords, function(err, reports) {
-      if (err) return callback(err);
-      callback(null, _.pluck(reports.results, 'obj'));
-    });
+    callback(null, _.pluck(reports.results, 'obj'));
   });
 };
 

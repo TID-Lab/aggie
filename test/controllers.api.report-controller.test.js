@@ -40,13 +40,10 @@ describe('Report controller', function() {
           done();
         });
     });
-  });
 
-  describe('POST /api/report', function() {
     it('should query for reports', function(done) {
       request(reportController)
-        .post('/api/report')
-        .send({keywords: 'lorem'})
+        .get('/api/report?keywords=lorem')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
