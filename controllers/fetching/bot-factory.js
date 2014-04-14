@@ -1,11 +1,12 @@
+var _ = require('underscore');
 var contentServiceFactory = require('./content-service-factory');
 
 var BotFactory = function() {};
 
 BotFactory.prototype.create = function(options) {
-  var contentService = contentServiceFactory.create(options);
-  var SubBot = this.botType(contentService);
-  return new SubBot(contentService);
+  options.contentService = contentServiceFactory.create(options);
+  var SubBot = this.botType(options.contentService);
+  return new SubBot(options);
 };
 
 BotFactory.prototype.botType = function(contentService) {
