@@ -13,3 +13,13 @@ This is the future of Aggie.
 1. Start Mongo DB.
 1. To run tests, run `gulp`.
 1. To start server, run `npm start`.
+
+## To enable full-text search in MongoDB
+
+MongoDB 2.6+ has full-text search enabled by default. For 2.4 use the following
+commands:
+
+1. `mongo aggie --eval 'db.adminCommand({setParameter: 1, textSearchEnabled: true});'`
+1. `mongo aggie --eval 'db.reports.ensureIndex({"content": "text"});'`
+1. `mongo aggie-test --eval 'db.adminCommand({setParameter: 1, textSearchEnabled: true});'`
+1. For the _aggie-test_ database, the `ensureIndex` command is run automatically when running tests
