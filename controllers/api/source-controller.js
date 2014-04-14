@@ -1,30 +1,33 @@
-var api = require('../api').app;
+var express = require('express');
+var app = express();
 var Source = require('../../models/source');
+var _ = require('underscore');
 
 // Create a new Source
-api.post('/api/source', function(req, res) {
+app.post('/api/source', function(req, res) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
-      if (err) return res.send(500, err);
-      res.send(200, source);
+      if (err) res.send(500, err);
+      else res.send(200, source);
     });
   });
 });
 
 // Get a list of all Sources
-api.get('/api/source', function(req, res) {
-  Source.find(function(err, sources) {
+app.get('/api/source', function(req, res) {
+  // Find all, exclude `events` field
+  Source.find({}, '-events', function(err, sources) {
     if (err) res.send(500, err);
     else res.send(200, sources);
   });
 });
 
 // Get a Source by _id
-api.get('/api/source/:_id', function(req, res) {
-  Source.findOne({_id: req.params._id}, function(err, source) {
+app.get('/api/source/:_id', function(req, res) {
+  Source.findByIdWithLatestEvents(req.params._id, function(err, source) {
     if (err) res.send(500, err);
     else if (!source) res.send(404);
     else res.send(200, source);
@@ -32,36 +35,36 @@ api.get('/api/source/:_id', function(req, res) {
 });
 
 // Update a Source
-api.put('/api/source/:_id', function(req, res) {
+app.put('/api/source/:_id', function(req, res, next) {
+  if (req.params._id === '_events') return next();
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
   }).on('end', function() {
     data = JSON.parse(data);
-
-    Source.findOne({_id: req.params._id}, function(err, source) {
-      if (err) return res.send(500, err);
-      else if (!source) return res.send(404);
-
-      for (var attr in data) {
-        source[attr] = data[attr];
-      }
-      source.save(function(err) {
-        if (err) return res.send(500, err);
-        res.send(200, source);
-      });
+    Source.update({_id: req.params._id}, _.omit(data, ['_id', 'events']), function(err, numberAffected) {
+      if (err) res.send(500, err);
+      else if (!numberAffected) res.send(404);
+      else res.send(200);
     });
+  });
+});
 
+// Reset unread error count
+app.put('/api/source/_events/:_id', function(req, res) {
+  Source.resetUnreadErrorCount(req.params._id, function(err, source, numberAffected) {
+    if (err) res.send(500, err);
+    else if (!source) res.send(404);
+    else res.send(200, source);
   });
 });
 
 // Delete a Source
-api.delete('/api/source/:_id', function(req, res, next) {
+app.delete('/api/source/:_id', function(req, res, next) {
   if (req.params._id === '_all') return next();
-  Source.findOne({_id: req.params._id}, function(err, source) {
+  Source.findById(req.params._id, function(err, source) {
     if (err) return res.send(500, err);
     if (!source) return res.send(404);
-
     source.remove(function(err) {
       if (err) return res.send(500, err);
       res.send(200);
@@ -70,7 +73,7 @@ api.delete('/api/source/:_id', function(req, res, next) {
 });
 
 // Delete all Sources
-api.delete('/api/source/_all', function(req, res) {
+app.delete('/api/source/_all', function(req, res) {
   Source.find(function(err, sources) {
     if (err) return res.send(500, err);
     if (sources.length === 0) return res.send(200);
@@ -84,4 +87,4 @@ api.delete('/api/source/_all', function(req, res) {
   });
 });
 
-module.exports = api;
+module.exports = app;

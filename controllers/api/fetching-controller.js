@@ -1,22 +1,40 @@
-var api = require('../api').app;
-var botMaster = require('../fetching/bot-master');
+var express = require('express');
+var app = express();
 
-api.get('/api/fetching', function(req, res) {
-  res.send(200, {enabled: botMaster.enabled});
+app.get('/api/fetching', function(req, res) {
+  app.once('status', function(status) {
+    res.send(200, {enabled: status});
+  });
+  app.emit('getStatus');
 });
 
 // Enable/disable global fetching
-api.put('/api/fetching/:op', function(req, res) {
+app.put('/api/fetching/:op', function(req, res) {
   switch(req.params.op) {
     case 'on':
-      botMaster.start();
+      app.emit('start');
       return res.send(200);
     case 'off':
-      botMaster.stop();
+      app.emit('stop');
       return res.send(200);
     default:
       return res.send(404);
   }
 });
 
-module.exports = api;
+// Use an external event emitter to relay status information
+app.addListeners = function(type, emitter) {
+  switch (type) {
+    case 'botMaster':
+      this._addBotMasterListeners(emitter);
+      break;
+  }
+};
+
+app._addBotMasterListeners = function(emitter) {
+  emitter.on('status', function(status) {
+    app.emit('status', status.enabled);
+  });
+};
+
+module.exports = app;

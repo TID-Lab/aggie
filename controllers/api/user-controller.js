@@ -1,8 +1,9 @@
-var api = require('../api').app;
+var express = require('express');
+var app = express();
 var User = require('../../models/user');
 
 // Create a new User
-api.post('/api/user', function(req, res) {
+app.post('/api/user', function(req, res) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
@@ -15,7 +16,7 @@ api.post('/api/user', function(req, res) {
 });
 
 // Get a list of all Users
-api.get('/api/user', function(req, res) {
+app.get('/api/user', function(req, res) {
   User.find(function(err, users) {
     if (err) res.send(500, err);
     else if (users.length === 0) res.send(404);
@@ -24,7 +25,7 @@ api.get('/api/user', function(req, res) {
 });
 
 // Get a User by id
-api.get('/api/user/:id', function(req, res) {
+app.get('/api/user/:id', function(req, res) {
   User.findOne({id: req.params.id}, function(err, user) {
     if (err) res.send(500, err);
     else if (!user) res.send(404);
@@ -33,7 +34,7 @@ api.get('/api/user/:id', function(req, res) {
 });
 
 // Update a User
-api.put('/api/user/:id', function(req, res) {
+app.put('/api/user/:id', function(req, res) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
@@ -56,7 +57,7 @@ api.put('/api/user/:id', function(req, res) {
 });
 
 // Delete a User
-api.delete('/api/user/:id', function(req, res) {
+app.delete('/api/user/:id', function(req, res) {
   User.findOne({id: req.params.id}, function(err, user) {
     if (err) return res.send(500, err);
     if (!user) return res.send(404);
@@ -68,4 +69,4 @@ api.delete('/api/user/:id', function(req, res) {
   });
 });
 
-module.exports = api;
+module.exports = app;

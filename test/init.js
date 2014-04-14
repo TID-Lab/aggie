@@ -1,21 +1,22 @@
-// Set global variable with main application path
-var path = require('path');
-root_path = path.join(__dirname, '..');
-
-var api = require(root_path + '/controllers/api');
+var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie-test';
+var database = require('../controllers/database');
+var Report = require('../models/report');
 
 // Change database before starting any test
 before(function(done) {
-  api.mongoose.disconnect(function() {
-    api.mongoose.connect('mongodb://localhost/aggie-test');
-    done();
+  database.mongoose.disconnect(function() {
+    database.mongoose.connect(dbConnectURL);
+    // Enable full-text indexing for Reports
+    Report.ensureIndexes(function() {
+      done();
+    });
   });
 });
 
 // Drop test database after all tests are done
 after(function(done) {
-  api.mongoose.connection.db.dropDatabase(function() {
-    api.mongoose.disconnect(function() {
+  database.mongoose.connection.db.dropDatabase(function() {
+    database.mongoose.disconnect(function() {
       done();
     });
   })

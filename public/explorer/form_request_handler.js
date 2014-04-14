@@ -4,10 +4,11 @@ var FormRequestHandler = RequestHandler.extend({
 
     // submit event handler
     form.on('submit', function(e){
+      var method = form.attr('method') || 'get';
       self.submit({
-        type: form.attr('method') || 'get',
+        type: method,
         url: form.attr('action'),
-        data: form.serializeHash()
+        data: method == 'get' ? form.serialize() : form.serializeHash()
       });
       e.preventDefault();
     });

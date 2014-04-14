@@ -26,6 +26,13 @@
       </form>
     </li>
     <li>
+      <form action="/api/report" method="get">
+        Search for Report data:
+        <input type="text" name="keywords" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
       <a href="/api/source">List sources</a>
     </li>
     <li>
@@ -38,7 +45,7 @@
       <a href="/api/report/_all" data-method="delete">Delete all reports</a>
     </li>
     <li>
-      <a href="/api/fetching" data-method="get">Check fetching status</a>
+      <a href="/api/fetching">Check fetching status</a>
     </li>
     <li>
       <a href="/api/fetching/on" data-method="put">Enable fetching</a>
