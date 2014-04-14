@@ -13,12 +13,16 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  if (this.isNew) sourceSchema.emit('create', this.toObject());
+  this._wasNew = this.isNew;
   next();
 });
 
+sourceSchema.post('save', function() {
+  if (this._wasNew) sourceSchema.emit('create', {_id: this._id});
+});
+
 sourceSchema.pre('remove', function(next) {
-  sourceSchema.emit('remove', this.toObject());
+  sourceSchema.emit('remove', {_id: this._id});
   next();
 });
 
@@ -27,7 +31,7 @@ sourceSchema.methods.enable = function() {
   if (!this.enabled) {
     this.enabled = true;
     this.save(function(err, source) {
-      sourceSchema.emit('enable', source.toObject());
+      sourceSchema.emit('enable', {_id: source._id});
     });
   }
 };
@@ -37,7 +41,7 @@ sourceSchema.methods.disable = function() {
   if (this.enabled) {
     this.enabled = false;
     this.save(function(err, source) {
-      sourceSchema.emit('disable', source.toObject());
+      sourceSchema.emit('disable', {_id: source._id});
     });
   }
 };
@@ -50,27 +54,6 @@ sourceSchema.methods.logEvent = function(level, message, callback) {
 };
 
 var Source = mongoose.model('Source', sourceSchema);
-
-// Get source from bot information
-Source.findByBot = function(bot, callback) {
-  if (bot._sourceId) {
-    // If source id is included in bot, find by id
-    Source.findById(bot._sourceId, function(err, source) {
-      if (err) callback(err);
-      else callback(null, source);
-    });
-  } else {
-    // Find a source based on source data
-    var keys = ['sourceType', 'resource_id', 'url', 'keywords'];
-    var source_data = _.pick(bot.contentService, keys);
-    source_data.type = source_data.sourceType;
-    delete source_data.sourceType;
-    Source.findOne(source_data, function(err, source) {
-      if (err) return callback(err);
-      callback(null, source);
-    });
-  }
-};
 
 // Get latest unread error messages
 Source.findByIdWithLatestEvents = function(_id, callback) {

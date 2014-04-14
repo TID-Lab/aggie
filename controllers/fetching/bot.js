@@ -3,10 +3,11 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var _ = require('underscore');
 
-var Bot = function(contentService) {
-  this.contentService = this.contentService || contentService;
+var Bot = function(options) {
+  this.sourceId = options.sourceId;
+  this.contentService = this.contentService || options.contentService;
   this.type = this.contentService.botType;
-  this.queue = new CircularQueue(contentService.queueCapacity);
+  this.queue = new CircularQueue(options.queueCapacity);
   this.enabled = false;
   // Variable to determine whether the Bot needs to log dropped reports.
   this._logDrops = {timeout: true, notEmpty: true};

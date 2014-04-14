@@ -11,12 +11,14 @@ describe('Bot master', function() {
   before(function(done) {
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
-    setTimeout(function() {
+    process.nextTick(function() {
       Source.create({type: 'dummy', keywords: 'one'});
       Source.create({type: 'dummy', keywords: 'two'});
       Source.create({type: 'dummy', keywords: 'three'});
-      done();
-    }, 1000);
+      setTimeout(function() {
+        done();
+      }, 500);
+    });
   });
 
   it('should track all instantiated bots', function(done) {
@@ -34,11 +36,12 @@ describe('Bot master', function() {
     done();
   });
 
-  it('should return bot instance from filtered search', function(done) {
-    var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bot = botMaster.getBot(filters);
+  it('should return bot instance from a source ID', function(done) {
+    var sourceId = botMaster.bots[1].sourceId;
+    var keywords = botMaster.bots[1].contentService.keywords;
+    var bot = botMaster.getBot(sourceId);
     expect(bot).to.be.an.instanceof(Bot);
-    expect(bot.contentService.keywords).to.equal('two');
+    expect(bot.contentService.keywords).to.equal(keywords);
     done();
   });
 
@@ -47,10 +50,12 @@ describe('Bot master', function() {
     expect(botMaster.bots[1].enabled).to.be.false;
     expect(botMaster.bots[2].enabled).to.be.false;
     botMaster.start();
-    expect(botMaster.bots[0].enabled).to.be.true;
-    expect(botMaster.bots[1].enabled).to.be.true;
-    expect(botMaster.bots[2].enabled).to.be.true;
-    done();
+    setTimeout(function() {
+      expect(botMaster.bots[0].enabled).to.be.true;
+      expect(botMaster.bots[1].enabled).to.be.true;
+      expect(botMaster.bots[2].enabled).to.be.true;
+      done();
+    }, 100);
   });
 
   it('should stop all bots', function(done) {
@@ -66,11 +71,11 @@ describe('Bot master', function() {
 
   it('should kill a single bot', function(done) {
     var length = botMaster.bots.length;
-    var filters = {sourceType: 'dummy', keywords: 'two'};
-    var bot = botMaster.getBot(filters);
+    var sourceId = botMaster.bots[1].sourceId;
+    var bot = botMaster.getBot(sourceId);
     botMaster.kill(bot);
     expect(botMaster.bots).to.have.length(length - 1);
-    var bot = botMaster.getBot(filters);
+    var bot = botMaster.getBot(sourceId);
     expect(bot).to.be.undefined;
     done();
   });
@@ -84,8 +89,10 @@ describe('Bot master', function() {
   it('should reload bots for all saved sources', function(done) {
     botMaster.loadAll(function(err) {
       if (err) return done(err);
-      expect(botMaster.bots).to.not.be.empty;
-      done();
+      setTimeout(function() {
+        expect(botMaster.bots).to.not.be.empty;
+        done();
+      }, 100);
     });
   });
 
