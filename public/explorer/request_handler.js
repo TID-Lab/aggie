@@ -5,8 +5,8 @@ var RequestHandler = Toolbox.Base.extend({
   submit: function(params) {
     var self = this;
 
-    // params.data is passed as a plain hash
-    params.data = JSON.stringify(params.data);
+    // params.data is passed as a plain hash, but needs to be JSON unless GET request
+    if (params.method != 'get') params.data = JSON.stringify(params.data);
 
     // show loading message
     self.updateRequestStatus();

@@ -46,15 +46,6 @@ app.delete('/api/report/_all', function(req, res) {
 function parseQueryData(queryString) {
   if (!queryString) return;
 
-  // Data sent as serialized
-  if (!_.has(queryString, 'keywords')) {
-    queryString = _.keys(queryString);
-    if (queryString[0]) {
-      // Parse into a readable query string
-      queryString = JSON.parse(queryString[0]);
-    }
-  }
-
   // Data passed through URL parameters
   if (_.has(queryString, 'keywords')) {
     return {type: 'Report', keywords: queryString.keywords};
