@@ -40,6 +40,19 @@ describe('Report controller', function() {
           done();
         });
     });
+
+    it('should query for reports', function(done) {
+      request(reportController)
+        .get('/api/report?keywords=lorem')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body[0]).to.have.property('content');
+          expect(res.body[0].content.toLowerCase()).to.contain('lorem');
+          done();
+        });
+    });
   });
 
   describe('DELETE /api/report/_all', function() {
