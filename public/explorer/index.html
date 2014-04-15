@@ -17,6 +17,24 @@
   <h2>Request</h2>
   <ul id="requests">
     <li>
+      <form action="/login" method="post">
+        Login (username: <em>admin</em>, password: <em>letmein</em>)
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <input type="submit" value="Login">
+      </form>
+    </li>
+    <li>
+      <form action="/reset-password" method="post">
+        Reset password. Enter email address:
+        <input type="text" name="email" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <a href="/logout">Logout</a>
+    </li>
+    <li>
       <form action="/api/source" method="post">
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
@@ -31,6 +49,23 @@
         <input type="text" name="keywords" />
         <input type="submit">
       </form>
+    </li>
+    <li>
+      Create new user:
+      <form action="/api/user" method="post">
+        Full name
+        <input type="text" name="displayName" />
+        Email
+        <input type="text" name="email" />
+        Username
+        <input type="text" name="username" />
+        Password
+        <input type="password" name="password" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <a href="/api/user">List users</a>
     </li>
     <li>
       <a href="/api/source">List sources</a>

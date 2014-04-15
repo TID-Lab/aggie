@@ -4,7 +4,16 @@ var childProcess = require('./child-process');
 var express = require('express');
 var app = express();
 
-// Add all controllers
+// Enable user authentication
+var auth = require('./api/authentication');
+app.use(auth);
+
+// Ensure that all API calls are authenticated
+app.all('/api/*', auth.ensureAuthenticated);
+
+app.use(require('./api/reset-password'));
+
+// Add all API controllers
 var fetchingController = require('./api/fetching-controller');
 app.use(fetchingController);
 app.use(require('./api/report-controller'));

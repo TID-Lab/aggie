@@ -3,16 +3,13 @@ var app = express();
 var Source = require('../../models/source');
 var _ = require('underscore');
 
+app.use(express.bodyParser());
+
 // Create a new Source
 app.post('/api/source', function(req, res) {
-  var data = '';
-  req.on('data', function(chunk) {
-    data += chunk;
-  }).on('end', function() {
-    Source.create(JSON.parse(data), function(err, source) {
-      if (err) res.send(500, err);
-      else res.send(200, source);
-    });
+  Source.create(req.body, function(err, source) {
+    if (err) res.send(500, err);
+    else res.send(200, source);
   });
 });
 
@@ -37,16 +34,10 @@ app.get('/api/source/:_id', function(req, res) {
 // Update a Source
 app.put('/api/source/:_id', function(req, res, next) {
   if (req.params._id === '_events') return next();
-  var data = '';
-  req.on('data', function(chunk) {
-    data += chunk;
-  }).on('end', function() {
-    data = JSON.parse(data);
-    Source.update({_id: req.params._id}, _.omit(data, ['_id', 'events']), function(err, numberAffected) {
-      if (err) res.send(500, err);
-      else if (!numberAffected) res.send(404);
-      else res.send(200);
-    });
+  Source.update({_id: req.params._id}, _.omit(req.body, ['_id', 'events']), function(err, numberAffected) {
+    if (err) res.send(500, err);
+    else if (!numberAffected) res.send(404);
+    else res.send(200);
   });
 });
 
