@@ -1,5 +1,5 @@
 var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
@@ -19,7 +19,7 @@ userSchema.pre('save', function(next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
-  if (!email.isValidAddress(user.email)) return next(new Error('Invalid email address'));
+  if (!email.isValidAddress(user.email)) return next(new Error.HTTP('Invalid email address', 422));
 
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return next(err);

@@ -65,6 +65,16 @@ describe('Process manager', function() {
   it('should simulate a full inter-process messaging workflow', function(done) {
     processManager.fork('/controllers/api');
     processManager.fork('/controllers/fetching');
+    var loginUser = function(callback) {
+      request('http://localhost:3000')
+        .post('/login')
+        .send({username: 'admin', password: 'letmein'})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          callback();
+        });
+    };
     var getReports = function(callback) {
       request('http://localhost:3000')
         .get('/api/report')
@@ -97,20 +107,22 @@ describe('Process manager', function() {
           callback();
         });
     };
-    getReports(function(reports) {
-      expect(reports).to.be.an.instanceof(Array);
-      var length = reports.length;
-      createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
-        toggleFetching('on', function() {
-          setTimeout(function() {
-            toggleFetching('off', function() {
-              getReports(function(reports) {
-                expect(reports).to.be.an.instanceof(Array);
-                expect(reports).to.have.length.greaterThan(length);
-                done();
+    loginUser(function() {
+      getReports(function(reports) {
+        expect(reports).to.be.an.instanceof(Array);
+        var length = reports.length;
+        createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
+          toggleFetching('on', function() {
+            setTimeout(function() {
+              toggleFetching('off', function() {
+                getReports(function(reports) {
+                  expect(reports).to.be.an.instanceof(Array);
+                  expect(reports).to.have.length.greaterThan(length);
+                  done();
+                });
               });
-            });
-          }, 500);
+            }, 500);
+          });
         });
       });
     });

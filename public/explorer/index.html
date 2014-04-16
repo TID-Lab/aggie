@@ -26,8 +26,16 @@
     </li>
     <li>
       <form action="/reset-password" method="post">
-        Reset password. Enter email address:
+        Forgot password. Enter email address:
         <input type="text" name="email" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <form action="/reset-password" method="put">
+        Reset password. Paste token and enter new password:
+        <input type="text" name="token" />
+        <input type="password" name="password" />
         <input type="submit">
       </form>
     </li>

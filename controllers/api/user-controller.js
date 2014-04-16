@@ -1,14 +1,21 @@
 var express = require('express');
 var app = express();
 var User = require('../../models/user');
+var mailer = require('../mailer');
 
 app.use(express.bodyParser());
 
 // Create a new User
 app.post('/api/user', function(req, res) {
   User.create(req.body, function(err, user) {
-    if (err) res.send(500, err);
-    else res.send(200, user);
+    if (err) res.send(err.status || 500, err);
+    else {
+      // Send email
+      mailer.sendFromTemplate({template: 'newUser', user: user}, function(err) {
+        if (err) return res.send(err.status || 500);
+        res.send(200, user);
+      });
+    }
   });
 });
 
@@ -40,7 +47,7 @@ app.put('/api/user/:username', function(req, res) {
       user[attr] = req.body[attr];
     }
     user.save(function(err) {
-      if (err) res.send(500, err);
+      if (err) res.send(err.status || 500, err);
       else res.send(200, user);
     });
   });
