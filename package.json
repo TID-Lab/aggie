@@ -16,6 +16,7 @@
     "fbgraph": "~0.2.9",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
+    "nodemailer": "~0.6.3",
     "twit": "~1.1.12",
     "underscore": "~1.6.0"
   },
