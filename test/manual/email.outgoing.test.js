@@ -1,11 +1,16 @@
 var config = require('../../config/secrets').email;
 var nodemailer = require("nodemailer");
 
-var transport = nodemailer.createTransport.apply(this, config);
+if (!process.argv[2]) {
+  console.log("Usage: node test/manual/email.outgoing.test.js <destination-email-address>");
+  process.exit();
+}
+
+var transport = nodemailer.createTransport.apply(this, config.transport);
 
 var mailOptions = {
-  from: "Tom Smyth ✔ <tom@sassafras.coop>",
-  to: "tomsmyth@gmail.com",
+  from: config.from,
+  to: process.argv[2],
   subject: "Hello ✔",
   text: "Hello world ✔",
   html: "<b>Hello world ✔</b>"
