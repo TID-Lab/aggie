@@ -1,10 +1,11 @@
 var express = require('express');
-var app = express();
+var MongoStore = require('connect-mongo')(express);
 var User = require('../../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var config = require('../../config/secrets');
 var _ = require('underscore');
+var app = express();
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -49,7 +50,7 @@ var stubCookie = {path: '/', httpOnly: true, maxAge: 864e9};
 var session = express.session({
   key: key,
   secret: config.secret,
-  store: new express.session.MemoryStore(),
+  store: new MongoStore(config.mongodb),
   cookie: stubCookie
 });
 session.key = key;
@@ -61,18 +62,13 @@ app.use(function(req, res, next) {
     res.cookie(stubKey, 'yes', stubCookie);
     session(req, res, next);
   } else {
-    // There's no user object, so we'll just destroy the session.
-    if (req.cookies[key]) res.cookie(key, '', _.defaults({ maxAge: - 864e9 }, req.session.cookie));
     // Delete the stub cookie if one exists.
     if (req.cookies[stubKey]) res.cookie(stubKey, '', _.defaults({ maxAge: - 864e9 }, stubCookie));
-    req.session.destroy(function(err) {
-      if (err) return next(err);
-      next();
-    });
+    next();
   }
 });
 
-// Initialize Passport!  Also use passport.session() middleware, to support
+// Initialize Passport. Also use passport.session() middleware, to support
 // persistent login sessions.
 app.use(passport.initialize());
 app.use(passport.session());

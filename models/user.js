@@ -5,6 +5,7 @@ var crypto = require('crypto');
 var email = require('email');
 
 var SALT_WORK_FACTOR = 10;
+var PASSWORD_MIN_LENGTH = 6;
 
 var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
@@ -19,7 +20,8 @@ userSchema.pre('save', function(next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
-  if (!email.isValidAddress(user.email)) return next(new Error.HTTP('Invalid email address', 422));
+  if (!email.isValidAddress(user.email)) return next(new Error.HTTP('email_invalid', 422));
+  if (user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.HTTP('password_too_short', 422));
 
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return next(err);

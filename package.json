@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "connect-mongo": "~0.4.0",
     "email": "~0.2.6",
     "express": "~3.4.8",
     "fbgraph": "~0.2.9",

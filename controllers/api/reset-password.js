@@ -20,11 +20,11 @@ function authEmail(req, res, next) {
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) return next(err);
     if (!user.email) {
-      next(new Error.HTTP('Email not found', 404));
+      next(new Error.HTTP(404));
     } else {
       sendEmail(user, req, function(err) {
         if (err) next(new Error('Could not send email. Contact your administrator.'));
-        else res.send(200, { message: 'Email has been sent' });
+        else res.send(200);
       });
     }
   });
