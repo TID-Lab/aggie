@@ -1,4 +1,4 @@
-var config = require('../config/secrets').email;
+var config = require('../../config/secrets').email;
 var nodemailer = require("nodemailer");
 
 var transport = nodemailer.createTransport.apply(this, config);
