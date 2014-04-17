@@ -3,18 +3,18 @@ var config = require('../config/secrets');
 var _ = require('underscore');
 
 var Mailer = function() {
-  this.smtpTransport = nodemailer.createTransport(config.email[0]);
+  this.smtpTransport = nodemailer.createTransport(config.email.transport[0]);
 };
 
 Mailer.prototype.send = function(subject, body, to, from, callback) {
   if (typeof from === 'function') {
     callback = from;
-    from = config.adminEmail;
+    from = config.email.from;
   }
   if (!callback) callback = function() {};
 
   var mailOptions = {
-    from: from || config.adminEmail,
+    from: from || config.email.from,
     to: to,
     subject: subject,
     html: body
@@ -29,7 +29,7 @@ Mailer.prototype.send = function(subject, body, to, from, callback) {
 // Send email from pre-defined templates
 Mailer.prototype.sendFromTemplate = function(options, callback) {
   var to = options.to || options.user.email;
-  var from = options.from || config.adminEmail;
+  var from = options.from || config.email.from;
   var template = options.template;
 
   var subject = this.templates[template].subject;

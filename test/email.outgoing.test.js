@@ -1,1 +1,0 @@
-var config = require('../config/secrets').email;
