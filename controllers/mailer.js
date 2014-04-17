@@ -43,7 +43,7 @@ Mailer.prototype.sendFromTemplate = function(options, callback) {
 Mailer.prototype.templates = {
   newUser: {
     subject: 'New user created',
-    body: 'Hi <%= user.displayName %>,<br><br>A new user has been created...'
+    body: 'Hi <%= user.email %>,<br><br>A new user has been created...'
   },
   forgotPassword: {
     subject: 'Your password reset request',

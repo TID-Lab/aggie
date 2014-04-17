@@ -21,7 +21,6 @@ function createAdminUser(callback) {
     if (!user) {
       var userData = {
         provider: 'aggie',
-        displayName: 'Administrator',
         email: config.email.from,
         username: 'admin',
         password: config.adminPassword

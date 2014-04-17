@@ -11,8 +11,7 @@ var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
   username: {type: String, required: true, unique: true},
   email: {type: String, require: true, unique: true},
-  password: {type: String, required: true},
-  displayName: {type: String}
+  password: {type: String, required: true}
 });
 
 // Hash the password for security

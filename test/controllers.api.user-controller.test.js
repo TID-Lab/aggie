@@ -9,7 +9,6 @@ describe('User controller', function() {
     user = {
       provider: 'test',
       username: 'test-user',
-      displayName: 'Test User',
       email: 'test@example.com',
       password: 'letmein'
     };
@@ -46,7 +45,7 @@ describe('User controller', function() {
 
   describe('PUT /api/user/:username', function() {
     it('should update user', function(done) {
-      user.displayName = 'Updated test user';
+      user.email = 'updated@example.com';
       request(userController)
         .put('/api/user/' + user.username)
         .send(user)
