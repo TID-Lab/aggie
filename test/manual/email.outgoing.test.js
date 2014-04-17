@@ -14,7 +14,7 @@ var mailOptions = {
 // send mail with defined transport object
 transport.sendMail(mailOptions, function(err, response){
   if (err) {
-    console.log(error);
+    console.log(err);
   } else {
     console.log("Message sent: " + response.message);
   }
