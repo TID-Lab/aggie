@@ -2,17 +2,18 @@ var express = require('express');
 var app = express();
 var User = require('../../models/user');
 var mailer = require('../mailer');
+var _ = require('underscore');
 
 app.use(express.bodyParser());
 
 // Create a new User
 app.post('/api/user', function(req, res) {
   User.create(req.body, function(err, user) {
-    if (err) res.send(err.status || 500, err);
+    if (err) return parseError(res, err);
     else {
       // Send email
       mailer.sendFromTemplate({template: 'newUser', user: user}, function(err) {
-        if (err) return res.send(err.status || 500);
+        if (err) return parseError(res, err);
         res.send(200, user);
       });
     }
@@ -40,14 +41,14 @@ app.get('/api/user/:username', function(req, res) {
 // Update a User
 app.put('/api/user/:username', function(req, res) {
   User.findOne({username: req.params.username}, function(err, user) {
-    if (err) return res.send(500, err);
+    if (err) return parseError(res, err);
     if (!user) return res.send(404);
 
     for (var attr in req.body) {
       user[attr] = req.body[attr];
     }
     user.save(function(err) {
-      if (err) res.send(err.status || 500, err);
+      if (err) return parseError(res, err);
       else res.send(200, user);
     });
   });
@@ -65,5 +66,30 @@ app.delete('/api/user/:username', function(req, res) {
     });
   });
 });
+
+// Determine error status and messages
+function parseError(res, err) {
+  if (err.errors) {
+    var errors = [];
+    _.each(err.errors, function(error) {
+      switch (error.type) {
+        case 'required':
+          errors.push(error.path + '_' + error.type);
+          break;
+        default:
+          errors.push(error.message);
+          break;
+      }
+    });
+    res.send(422, errors.length === 1 ? errors[0] : errors);
+  } else if (err.err) {
+    switch (err.code) {
+      case 11000:
+        res.send(422, err.err.replace(/(.*)\$(.*)\_(.*)/, '$2') + '_not_unique');
+    }
+  } else {
+    res.send(err.status || 500, err.message);
+  }
+};
 
 module.exports = app;

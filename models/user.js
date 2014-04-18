@@ -3,6 +3,7 @@ var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
+require('../controllers/http-error');
 
 var SALT_WORK_FACTOR = 10;
 var PASSWORD_MIN_LENGTH = 6;
@@ -10,7 +11,7 @@ var PASSWORD_MIN_LENGTH = 6;
 var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
   username: {type: String, required: true, unique: true},
-  email: {type: String, require: true, unique: true},
+  email: {type: String, required: true, unique: true},
   password: {type: String, required: true}
 });
 
