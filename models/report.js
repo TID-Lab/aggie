@@ -40,7 +40,25 @@ var Report = mongoose.model('Report', schema);
 // Query reports based on passed query data
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
-  Report.textSearch(query.keywords, function(err, reports) {
+
+  // Determine status filter
+  if (query.status === 'assigned') query.status = {'$exists': true};
+  else if (query.status === 'unassigned') query.status = {'$exists': false};
+
+  // Determine inclusive date filters
+  if (query.after || query.before) {
+    query.storedAt = {};
+    if (query.after) {
+      query.storedAt['$gte'] = query.after;
+      delete query.after;
+    }
+    if (query.before) {
+      query.storedAt['$lte'] = query.before;
+      delete query.before;
+    }
+  }
+
+  Report.textSearch(query.keywords, _.pick(query, ['status', 'after', 'before', 'source_id']), function(err, reports) {
     if (err) return callback(err);
     callback(null, _.pluck(reports.results, 'obj'));
   });
