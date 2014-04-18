@@ -102,7 +102,7 @@ app.get('/logout', function(req, res) {
 //   the request is authenticated (typically via a persistent login session),
 //   the request will proceed.
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) return next();
+  if (config.adminParty || req.isAuthenticated()) return next();
   res.send(403);
 };
 
