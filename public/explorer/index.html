@@ -21,14 +21,25 @@
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
         Create Twitter source with keywords (e.g. banana,apple):
-        <input type="text" name="keywords" />
+        <input type="text" name="keywords" placeholder="Keyword" />
         <input type="submit">
       </form>
     </li>
     <li>
       <form action="/api/report" method="get">
         Search for Report data:
-        <input type="text" name="keywords" />
+        <input type="text" name="keywords" placeholder="Keywords" />
+        Status:
+        <select name="status">
+          <option value=""></option>
+          <option value="relevant">Relevant</option>
+          <option value="irrelevant">Irrelevant</option>
+          <option value="assigned">Assigned</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+        <input type="text" name="after" placeholder="After (date)" />
+        <input type="text" name="before" placeholder="Before (date)" />
+        <input type="text" name="source_id" placeholder="Source ID" />
         <input type="submit">
       </form>
     </li>
