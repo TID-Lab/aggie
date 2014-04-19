@@ -13,6 +13,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "express": "~3.4.8",
+    "express-spa-router": "0.0.6",
     "fbgraph": "~0.2.9",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
