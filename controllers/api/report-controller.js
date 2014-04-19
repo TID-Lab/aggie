@@ -48,7 +48,7 @@ function parseQueryData(queryString) {
 
   // Data passed through URL parameters
   if (_.has(queryString, 'keywords')) {
-    return {type: 'Report', keywords: queryString.keywords};
+    return _.extend({type: 'Report'}, _.pick(queryString, ['keywords', 'status', 'after', 'before', 'source_id']));
   }
 };
 
