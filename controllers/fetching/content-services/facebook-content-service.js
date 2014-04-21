@@ -1,6 +1,6 @@
 var config = require('../../../config/secrets').facebook;
 var ContentService = require('../content-service');
-var fbDumb = require('./facebook-dummy-content-service');
+var FBTest = require('./facebook-dummy-content-service');
 var graph = require('fbgraph');
 var util = require('util');
 var async = require('async');
@@ -12,12 +12,14 @@ var async = require('async');
 var FacebookContentService = function(options) {
 
     graph.setAccessToken(config.accessToken);
-    var a = new fbDumb();
-    a.start();
-    var self = this;
-    a.on('report', function(report_data) {
-        self.parse(report_data);
-    });
+    if (options.test) {
+        var fbTest = new FBTest();
+        fbTest.start();
+        a.on('report', function(report_data) {
+            this.emit('report', this.parse(report_data));
+        });
+    }
+
     this.lastCrawlDate = options.lastCrawlDate || Math.round(Date.now() / 1000);
 
 
@@ -33,94 +35,56 @@ var FacebookContentService = function(options) {
 
     this.source = 'facebook';
 
-    this.resultsPerFetch = options.resultsPerFetch || 100;
     this._isStreaming = false;
-    this._nextPage = undefined;
-    this._isBusy = false;
     ContentService.call(this, options);
 
 };
 
 util.inherits(FacebookContentService, ContentService);
 
+FacebookContentService.prototype.itemCheck = function(entry) {
+    var self = this;
+    var data = entry;
+    
+    var comments = entry.comments.comment_list;
+
+    var validDate = entry.updated_time < self.lastCrawlDate;
+
+    if (data && validDate) {
+        self.emit('report', self.parse(data));
+    }
+    if (comments && validDate) {
+        for (var i = 0; i < comments.count; i++) {
+            var emitNewComment = comments.data[i] < self.updated_time;
+
+            if (emitNewComment) {
+                self.emit('report', self.parse(comments.data[i]));
+            }
+        }
+    }
+};
+
+
 FacebookContentService.prototype.fetch = function() {
 
-    function itemCheck(self, entry) {
-
-        var data = entry;
-        var comments = entry.comments;
-
-        var validDate = entry.updated_time > self.lastCrawlDate;
-
-        if (data && validDate) {
-            self.emit('report', self.parse(data));
-        }
-        if (comments && validDate) {
-            // self.emit(comments.data[0]);
-        }
-
-    }
-
     var self = this;
-
-    var query = "SELECT post_id, updated_time, message, comments FROM stream WHERE (source_id=" + self.fbPage + " AND updated_time<" + self.lastCrawlDate + ") ORDER BY updated_time LIMIT " + this.resultsPerFetch;
+    var query = "SELECT post_id, updated_time, message, comments FROM stream WHERE (source_id=" + self.fbPage + " AND updated_time<" + self.lastCrawlDate + ") ORDER BY updated_time";
     graph
         .fql(query, function(err, res) {
             // TODO: TOM: Will need a better way to handle errors. Stay tuned. See issue #1120.
             if (err) {
                 console.error(err);
             }
-
-            //console.log(res.data[0].comments);
             var responseLength = res.data.length;
-
-            // Check the last item to see if 
+            console.log(responseLength);
+            // Check if valid entry length
             if (responseLength > 0) {
 
-                //Check if we need to fetch the p
-                var fetchPrevPage = res.data[0].updated_time > self.lastCrawlDate;
-
-                if (fetchPrevPage && !self._isBusy) {
-                    self.lastCrawlDate = Date.now();
-                    self._isBusy = true;
-                    self.fetch();
-                    // console.log(self.lastCrawlDate);
-                    // console.log(self._isBusy);
-
-                }
-
-                // Load the next batch of issues sorted in ascending order
+                // Loop through and return them item by item
                 for (var i = 0; i < responseLength; i++) {
-                    itemCheck(self, res.data[i]);
+                    self.itemCheck(res.data[i]);
                 }
-
-
             }
-
-
-
-            //     async.parallel([
-            //             function(callback) {
-            //                 var content = self.parse(messagesOnFeed, commentsOnPost);
-            //                 this.lastCrawlDate = new Date();
-            //                 callback(null, 'content saved');
-            //                 return content;
-            //             },
-            //             function(callback) {
-            //                 var status = 'No new page fetched';
-            //                 if (fetchPrevPage) {
-            //                     this.lastCrawlDate = new Date();
-            //                     status = 'New page fetched';
-            //                     self.fetch();
-            //                 }
-            //                 callback(null, status);
-            //             }
-            //         ],
-            //         function(err, results) {
-            //             console.log(results);
-            //             return results;
-
-            //         });
         });
 
 };
@@ -128,14 +92,13 @@ FacebookContentService.prototype.fetch = function() {
 FacebookContentService.prototype.parse = function(data) {
     var report_data = {
         fetchedAt: Date.now(),
-        authoredAt: data.created_time,
-        createdAt: data.updated_time,
-        content: data.message,
-        id : data.post_id,
+        authoredAt: data.updated_time || data.time,
+        createdAt: data.updated_time || data.time,
+        content: data.message || data.text,
+        id: data.post_id || data.id,
         author: 'TODO author',
         url: 'TODO url'
     };
-    console.log(report_data);
     return report_data;
 };
 
