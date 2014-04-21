@@ -7,7 +7,7 @@ var schema = new mongoose.Schema({
   status: String, // The Report pertinence being sought
   after: Date, // Lower date bound
   before: Date, // Upper date bound
-  source_id: String
+  sourceId: String
 });
 
 var Query = mongoose.model('Query', schema);

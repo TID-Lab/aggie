@@ -58,8 +58,8 @@ Report.queryReports = function(query, callback) {
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
 
-  // Convert source_id to _source ID for Report compatibility
-  if (query.source_id) query.filter._source = query.source_id;
+  // Convert sourceId to _source ID for Report compatibility
+  if (query.sourceId) query.filter._source = query.sourceId;
 
   Report.textSearch(query.keywords, _.pick(query, 'filter'), function(err, reports) {
     if (err) return callback(err);
