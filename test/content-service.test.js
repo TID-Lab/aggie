@@ -7,7 +7,7 @@ var FacebookDummyContentService = require('../controllers/fetching/content-servi
 describe('Content service', function() {
   before(function(done) {
     contentService = contentServiceFactory.create({source: 'dummy', filter: 't'});
-    fbContentService = contentServiceFactory.create({source: 'facebook-dummy', fbPage: 'dummy'});
+    fbContentService = contentServiceFactory.create({test: true, source: 'facebook-dummy', fbPage: 'dummy'});
     done();
   });
 
@@ -34,15 +34,6 @@ describe('Content service', function() {
       done();
     });
     
-  });
-
-   it('should fetch content from a facebook service', function(done) {
-    fbContentService.start();
-    fbContentService.on('report', function(report_data) {
-      // Stop stream to ensure a single fetch
-      fbContentService.stop();
-      done();
-    });
   });
 
 });

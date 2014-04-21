@@ -61,6 +61,7 @@ FacebookDummyContentService.prototype.start = function() {
 FacebookDummyContentService.prototype.fetch = function(self, data) {
     if (self._isStreaming) {
         self.emit('report', data);
+        self.emit('report', data.comments[0].comment_list[0]);
     }
 };
 

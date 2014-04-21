@@ -14,30 +14,19 @@ describe('Facebook content service', function() {
         expect(facebookContentService).to.be.instanceOf(FacebookContentService);
     });
 
-    it('should fetch content from Facebook', function(done) {
-        var data = facebookContentService.fetch();
-        should.not.exist(data);
-        // facebookContentService.should.have.property('lastCrawlDate');
-        // // Stop stream to ensure a single fetch
-        // facebookContentService.setCrawlDate("2013");
-        // (facebookContentService.should.have.property('lastCrawlDate')).to.equal("2013");
-        done();
+    it('should fetch content from Facebook', function() {
+        facebookContentService.fetch();
+        facebookContentService.on('report', function(report_data) {
+            expect(report_data).to.have.property('fetchedAt');
+            expect(report_data).to.have.property('createdAt');
+            expect(report_data).to.have.property('authoredAt');
+            expect(report_data).to.have.property('id');
+            expect(report_data).to.have.property('author');
+            expect(report_data).to.have.property('url');
+            // console.log('------------------');
+            // console.log(report_data);
+            // console.log('------------------');
+        });
     });
 });
 
-describe('Facebook content 1 weeks ago', function() {
-    before(function(done) {
-        facebookContentService = new FacebookContentService({lastCrawlDate: Math.round(Date.now()/1000), fbPage:'52193296770'});
-        done();
-    });
-
-    it('should fetch content from Facebook', function(done) {
-        var data = facebookContentService.fetch();
-        should.not.exist(data);
-        // facebookContentService.should.have.property('lastCrawlDate');
-        // // Stop stream to ensure a single fetch
-        // facebookContentService.setCrawlDate("2013");
-        // (facebookContentService.should.have.property('lastCrawlDate')).to.equal("2013");
-        done();
-    });
-});
