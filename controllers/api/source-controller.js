@@ -10,7 +10,7 @@ app.post('/api/source', function(req, res) {
     data += chunk;
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
-      if (err) res.send(500, err);
+      if (err) parseError(res, err);
       else res.send(200, source);
     });
   });
@@ -42,10 +42,20 @@ app.put('/api/source/:_id', function(req, res, next) {
     data += chunk;
   }).on('end', function() {
     data = JSON.parse(data);
-    Source.update({_id: req.params._id}, _.omit(data, ['_id', 'events']), function(err, numberAffected) {
-      if (err) res.send(500, err);
-      else if (!numberAffected) res.send(404);
-      else res.send(200);
+    // Find source to update
+    Source.findById(req.params._id, function(err, source) {
+      if (err) return parseError(res, err);
+      if (!source) return res.send(404);
+      // Update the actual values
+      _.each(_.omit(data, ['_id', 'events']), function(val, key) {
+        source[key] = val;
+      });
+      // Save source
+      source.save(function(err, numberAffected) {
+        if (err) parseError(res, err);
+        else if (!numberAffected) res.send(404);
+        else res.send(200);
+      });
     });
   });
 });
@@ -86,5 +96,16 @@ app.delete('/api/source/_all', function(req, res) {
     });
   });
 });
+
+function parseError(res, err) {
+  var status = 500;
+  switch (err.message) {
+    case 'only_one_twitter_allowed':
+    case 'source_type_change_not_allowed':
+      status = 422;
+      break;
+  }
+  res.send(status, err.message);
+};
 
 module.exports = app;
