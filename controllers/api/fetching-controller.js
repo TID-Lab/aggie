@@ -18,7 +18,7 @@ app.put('/api/fetching/:op', function(req, res) {
       app.emit('stop');
       return res.send(200);
     default:
-      return res.send(404);
+      return res.send(404, err.message);
   }
 });
 

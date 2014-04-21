@@ -1,6 +1,9 @@
 var childProcess = require('./child-process');
 var path = require('path');
 
+// Extend global error class
+require('./error');
+
 // Start express server
 var express = require('express');
 var app = express();

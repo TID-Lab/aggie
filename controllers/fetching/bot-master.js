@@ -85,7 +85,7 @@ BotMaster.prototype._addFetchingListeners = function(emitter) {
 BotMaster.prototype.sourceToBot = function(sourceId, callback) {
   Source.findById(sourceId, function(err, source) {
     if (err) return callback(err);
-    if (!source) return callback(new Error('Source not found'));
+    if (!source) return callback(new Error.NotFound('source_not_found'));
     var bot_data = _.pick(source, ['resource_id', 'url', 'keywords', 'enabled']);
     bot_data.sourceId = source._id.toString();
     bot_data.sourceType = source.type;

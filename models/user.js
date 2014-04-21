@@ -3,7 +3,6 @@ var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
-require('../controllers/http-error');
 
 var SALT_WORK_FACTOR = 10;
 var PASSWORD_MIN_LENGTH = 6;
@@ -20,8 +19,8 @@ userSchema.pre('save', function(next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
-  if (!email.isValidAddress(user.email)) return next(new Error.HTTP('email_invalid', 422));
-  if (user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.HTTP('password_too_short', 422));
+  if (!email.isValidAddress(user.email)) return next(new Error.Validation('email_invalid'));
+  if (user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
 
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return next(err);

@@ -19,14 +19,11 @@ module.exports = function(app, auth) {
   function authEmail(req, res, next) {
     User.findOne({email: req.body.email}, function(err, user) {
       if (err) return next(err);
-      if (!user.email) {
-        next(new Error.HTTP(404));
-      } else {
-        sendEmail(user, req, function(err) {
-          if (err) next(new Error('Could not send email. Contact your administrator.'));
-          else res.send(200);
-        });
-      }
+      if (!user.email) return next(new Error.NotFound('email_not_found'));
+      sendEmail(user, req, function(err) {
+        if (err) next(new Error('could_not_send_email'));
+        else res.send(200);
+      });
     });
   };
 
@@ -69,17 +66,14 @@ module.exports = function(app, auth) {
 
   // Generate a new session for the user identified by the token.
   function tokenLogin(req, res, next) {
-    if (!req.body.token) return next(new Error.HTTP(404));
+    if (!req.body.token) return next(new Error.NotFound('token_not_found'));
     var username = decodeToken(req.body.token);
-    if (username) {
-      User.findOne({username: username}, function(err, user) {
-        if (err) return next(new Error('Invalid login token'));
-        req.user = user;
-        next();
-      });
-    } else {
-      next(new Error('Invalid login token'));
-    }
+    if (!username) return next(new Error.NotFound('user_not_found'));
+    User.findOne({username: username}, function(err, user) {
+      if (err) return next(err);
+      req.user = user;
+      next();
+    });
   };
 
   // Reset user password
