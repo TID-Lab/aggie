@@ -1,23 +1,5 @@
-var http = require('http');
+// Add a default status code to all error instances
+Error.prototype.status = 500;
+
+// Add extra error sub-classes
 require('./errors/validation');
-
-function httpStatus(err) {
-  var status = 500;
-  if (err instanceof Error.Validation) {
-    status = 422;
-  }
-  return status;
-};
-
-function send(res, err) {
-  if (typeof err === 'number') {
-    res.send(err, http.STATUS_CODES[err]);
-  } else {
-    res.send(httpStatus(err) || 500, err.message || err);
-  }
-};
-
-module.exports = {
-  httpStatus: httpStatus,
-  send: send
-};

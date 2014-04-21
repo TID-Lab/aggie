@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var Source = require('../../models/source');
 var _ = require('underscore');
-var error = require('../error');
 
 // Create a new Source
 app.post('/api/source', function(req, res) {
@@ -11,7 +10,7 @@ app.post('/api/source', function(req, res) {
     data += chunk;
   }).on('end', function() {
     Source.create(JSON.parse(data), function(err, source) {
-      if (err) error.send(res, err);
+      if (err) res.send(err.status, err.message);
       else res.send(200, source);
     });
   });
@@ -21,7 +20,7 @@ app.post('/api/source', function(req, res) {
 app.get('/api/source', function(req, res) {
   // Find all, exclude `events` field
   Source.find({}, '-events', function(err, sources) {
-    if (err) error.send(res, err);
+    if (err) res.send(err.status, err.message);
     else res.send(200, sources);
   });
 });
@@ -29,8 +28,8 @@ app.get('/api/source', function(req, res) {
 // Get a Source by _id
 app.get('/api/source/:_id', function(req, res) {
   Source.findByIdWithLatestEvents(req.params._id, function(err, source) {
-    if (err) error.send(res, err);
-    else if (!source) error.send(res, 404);
+    if (err) res.send(err.status, err.message);
+    else if (!source) res.send(404);
     else res.send(200, source);
   });
 });
@@ -45,16 +44,16 @@ app.put('/api/source/:_id', function(req, res, next) {
     data = JSON.parse(data);
     // Find source to update
     Source.findById(req.params._id, function(err, source) {
-      if (err) return error.send(res, err);
-      if (!source) return error.send(res, 404);
+      if (err) return res.send(err.status, err.message);
+      if (!source) return res.send(404);
       // Update the actual values
       _.each(_.omit(data, ['_id', 'events']), function(val, key) {
         source[key] = val;
       });
       // Save source
       source.save(function(err, numberAffected) {
-        if (err) error.send(res, err);
-        else if (!numberAffected) error.send(res, 404);
+        if (err) res.send(err.status, err.message);
+        else if (!numberAffected) res.send(404);
         else res.send(200);
       });
     });
@@ -64,8 +63,8 @@ app.put('/api/source/:_id', function(req, res, next) {
 // Reset unread error count
 app.put('/api/source/_events/:_id', function(req, res) {
   Source.resetUnreadErrorCount(req.params._id, function(err, source, numberAffected) {
-    if (err) error.send(res, err);
-    else if (!source) error.send(res, 404);
+    if (err) res.send(err.status, err.message);
+    else if (!source) res.send(404);
     else res.send(200, source);
   });
 });
@@ -74,10 +73,10 @@ app.put('/api/source/_events/:_id', function(req, res) {
 app.delete('/api/source/:_id', function(req, res, next) {
   if (req.params._id === '_all') return next();
   Source.findById(req.params._id, function(err, source) {
-    if (err) return error.send(res, err);
-    if (!source) return error.send(res, 404);
+    if (err) return res.send(err.status, err.message);
+    if (!source) return res.send(404);
     source.remove(function(err) {
-      if (err) return error.send(res, err);
+      if (err) return res.send(err.status, err.message);
       res.send(200);
     });
   });
@@ -86,12 +85,12 @@ app.delete('/api/source/:_id', function(req, res, next) {
 // Delete all Sources
 app.delete('/api/source/_all', function(req, res) {
   Source.find(function(err, sources) {
-    if (err) return error.send(res, err);
+    if (err) return res.send(err.status, err.message);
     if (sources.length === 0) return res.send(200);
     var remaining = sources.length;
     sources.forEach(function(source) {
       source.remove(function(err) {
-        if (err) return error.send(res, err);
+        if (err) return res.send(err.status, err.message);
         if (--remaining === 0) return res.send(200);
       });
     });

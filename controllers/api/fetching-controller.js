@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var error = require('../error');
 
 app.get('/api/fetching', function(req, res) {
   app.once('status', function(status) {
@@ -19,7 +18,7 @@ app.put('/api/fetching/:op', function(req, res) {
       app.emit('stop');
       return res.send(200);
     default:
-      return error.send(res, 404);
+      return res.send(404, err.message);
   }
 });
 
