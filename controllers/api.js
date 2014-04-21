@@ -1,24 +1,29 @@
 var childProcess = require('./child-process');
+var path = require('path');
 
 // Start express server
 var express = require('express');
 var app = express();
 
+// Add single-page app router
+app.use(require('express-spa-router')(app, {
+  ignore: ['api', 'explorer']
+}));
+
 // Enable user authentication
 var auth = require('./api/authentication');
 app.use(auth);
+require('./api/reset-password')(app, auth);
 
 // Ensure that all API calls are authenticated
 app.all('/api/*', auth.ensureAuthenticated);
 
-app.use(require('./api/reset-password'));
-
 // Add all API controllers
 var fetchingController = require('./api/fetching-controller');
 app.use(fetchingController);
-app.use(require('./api/report-controller'));
-app.use(require('./api/source-controller'));
-app.use(require('./api/user-controller'));
+require('./api/report-controller')(app);
+require('./api/source-controller')(app);
+require('./api/user-controller')(app);
 
 // Create event proxy between fetching controller and bot master
 fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
@@ -26,8 +31,9 @@ fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
   emitterModule: 'fetching'
 }));
 
+// Load single-page app statically from root path
+app.use('/', express.static(path.join(__dirname, '../public/angular')));
 // The API explorer is a client-side thing so it's loaded as static.
-var path = require('path');
 app.use('/explorer', express.static(path.join(__dirname, '../public/explorer')));
 
 // Listen for API in a different port

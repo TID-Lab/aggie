@@ -2,7 +2,7 @@ require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var userController = require('../controllers/api/user-controller');
+var userController = require('../controllers/api/user-controller')();
 
 describe('User controller', function() {
   before(function(done) {
