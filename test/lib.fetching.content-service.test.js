@@ -38,13 +38,4 @@ describe('Content service', function() {
     
   });
 
-   it('should fetch content from a facebook service', function(done) {
-    fbContentService.start();
-    fbContentService.on('report', function(report_data) {
-      // Stop stream to ensure a single fetch
-      fbContentService.stop();
-      done();
-    });
-  });
-
 });
