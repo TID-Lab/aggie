@@ -1,6 +1,9 @@
 var childProcess = require('./child-process');
 var path = require('path');
 
+// Extend global error class
+require('./error');
+
 // Start express server
 var express = require('express');
 var app = express();
@@ -10,7 +13,15 @@ app.use(require('express-spa-router')(app, {
   ignore: ['api', 'explorer']
 }));
 
-// Add all controllers
+// Enable user authentication
+var auth = require('./api/authentication');
+app.use(auth);
+require('./api/reset-password')(app, auth);
+
+// Ensure that all API calls are authenticated
+app.all('/api/*', auth.ensureAuthenticated);
+
+// Add all API controllers
 var fetchingController = require('./api/fetching-controller');
 app.use(fetchingController);
 require('./api/report-controller')(app);
