@@ -12,12 +12,16 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "connect-mongo": "~0.4.0",
+    "email": "~0.2.6",
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
     "fbgraph": "~0.2.9",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
     "nodemailer": "~0.6.3",
+    "passport": "~0.2.0",
+    "passport-local": "~1.0.0",
     "twit": "~1.1.12",
     "underscore": "~1.6.0"
   },
