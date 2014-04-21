@@ -5,7 +5,9 @@ Error.prototype.status = 500;
 
 // Decode errors from MongoDB
 Error.decode = function(err) {
-  if (err.code) {
+  if (!err) {
+    return err;
+  } else if (err.code) {
     switch (err.code) {
       // Duplicate key error
       case 11000:
