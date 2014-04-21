@@ -1,6 +1,7 @@
 var database = require('../controllers/database');
 var mongoose = require('mongoose');
 var _ = require('underscore');
+require('../controllers/error');
 
 var sourceSchema = new mongoose.Schema({
   type: String,
@@ -10,6 +11,18 @@ var sourceSchema = new mongoose.Schema({
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
   unreadErrorCount: {type: Number, default: 0}
+});
+
+sourceSchema.pre('save', function(next) {
+  // Do not allow changing type
+  if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
+  // Only allow a single Twitter source
+  if (this.isNew && this.type === 'twitter') {
+    Source.findOne({type: 'twitter'}, function(err, source) {
+      if (source) return next(new Error.Validation('only_one_twitter_allowed'));
+      else next();
+    });
+  } else next();
 });
 
 sourceSchema.post('save', function() {

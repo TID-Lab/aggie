@@ -4,6 +4,9 @@
 
 var childProcess = require('./child-process');
 
+// Extend global error class
+require('./error');
+
 // Initialize Bot Master and add event proxies
 var botMaster = require('./fetching/bot-master');
 botMaster.addListeners('source', childProcess.setupEventProxy({
