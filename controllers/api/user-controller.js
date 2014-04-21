@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var User = require('../../models/user');
+var error = require('../error');
 
 // Create a new User
 app.post('/api/user', function(req, res) {
@@ -9,7 +10,7 @@ app.post('/api/user', function(req, res) {
     data += chunk;
   }).on('end', function() {
     User.create(JSON.parse(data), function(err, user) {
-      if (err) res.send(500, err);
+      if (err) error.send(res, err);
       else res.send(200, user);
     });
   });
@@ -18,8 +19,8 @@ app.post('/api/user', function(req, res) {
 // Get a list of all Users
 app.get('/api/user', function(req, res) {
   User.find(function(err, users) {
-    if (err) res.send(500, err);
-    else if (users.length === 0) res.send(404);
+    if (err) error.send(res, err);
+    else if (users.length === 0) error.send(res, 404);
     else res.send(200, users);
   });
 });
@@ -27,8 +28,8 @@ app.get('/api/user', function(req, res) {
 // Get a User by id
 app.get('/api/user/:id', function(req, res) {
   User.findOne({id: req.params.id}, function(err, user) {
-    if (err) res.send(500, err);
-    else if (!user) res.send(404);
+    if (err) error.send(res, err);
+    else if (!user) error.send(res, 404);
     else res.send(200, user);
   });
 });
@@ -42,14 +43,14 @@ app.put('/api/user/:id', function(req, res) {
     data = JSON.parse(data);
 
     User.findOne({id: req.params.id}, function(err, user) {
-      if (err) return res.send(500, err);
-      if (!user) return res.send(404);
+      if (err) return error.send(res, err);
+      if (!user) return error.send(res, 404);
 
       for (var attr in data) {
         user[attr] = data[attr];
       }
       user.save(function(err) {
-        if (err) res.send(500, err);
+        if (err) error.send(res, err);
         else res.send(200, user);
       });
     });
@@ -59,11 +60,11 @@ app.put('/api/user/:id', function(req, res) {
 // Delete a User
 app.delete('/api/user/:id', function(req, res) {
   User.findOne({id: req.params.id}, function(err, user) {
-    if (err) return res.send(500, err);
-    if (!user) return res.send(404);
+    if (err) return error.send(res, err);
+    if (!user) return error.send(res, 404);
 
     user.remove(function(err) {
-      if (err) res.send(500, err);
+      if (err) error.send(res, err);
       else res.send(200);
     });
   });
