@@ -1,33 +1,28 @@
 var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
+var email = require('email');
+
+var SALT_WORK_FACTOR = 10;
+var PASSWORD_MIN_LENGTH = 6;
 
 var userSchema = new mongoose.Schema({
-  provider: {
-    type: String,
-    default: 'local'
-  },
-  id: {
-    type: String,
-    unique: true
-  },
-  displayName: String,
-  email: String,
-  password: String
+  provider: {type: String, default: 'local'},
+  username: {type: String, required: true, unique: true},
+  email: {type: String, required: true, unique: true},
+  password: {type: String, required: true}
 });
 
-/**
- * Hash the password for security.
- * "Pre" is a Mongoose middleware that executes before each user.save() call.
- */
-
+// Hash the password for security
 userSchema.pre('save', function(next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
+  if (!email.isValidAddress(user.email)) return next(new Error.Validation('email_invalid'));
+  if (user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
 
-  bcrypt.genSalt(5, function(err, salt) {
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return next(err);
 
     bcrypt.hash(user.password, salt, null, function(err, hash) {
@@ -38,23 +33,15 @@ userSchema.pre('save', function(next) {
   });
 });
 
-/**
- * Validate user's password.
- * Used by Passport-Local Strategy for password validation.
- */
-
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
+// Password verification
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if (err) return cb(err);
-    cb(null, isMatch);
+    if (err) return callback(err);
+    callback(null, isMatch);
   });
 };
 
-/**
- * Get URL to a user's gravatar.
- * Used in Navbar and Account Management page.
- */
-
+// Get URL to a user's gravatar
 userSchema.methods.gravatar = function(size, defaults) {
   if (!size) size = 200;
   if (!defaults) defaults = 'retro';

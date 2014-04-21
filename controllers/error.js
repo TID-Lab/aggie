@@ -2,4 +2,5 @@
 Error.prototype.status = 500;
 
 // Add extra error sub-classes
+require('./errors/not-found');
 require('./errors/validation');

@@ -4,17 +4,13 @@ var _ = require('underscore');
 
 module.exports = function(app) {
   app = app || express();
+  app.use(express.bodyParser());
 
   // Create a new Source
   app.post('/api/source', function(req, res) {
-    var data = '';
-    req.on('data', function(chunk) {
-      data += chunk;
-    }).on('end', function() {
-      Source.create(JSON.parse(data), function(err, source) {
-        if (err) res.send(err.status, err.message);
-        else res.send(200, source);
-      });
+    Source.create(req.body, function(err, source) {
+      if (err) res.send(err.status, err.message);
+      else res.send(200, source);
     });
   });
 
@@ -39,25 +35,19 @@ module.exports = function(app) {
   // Update a Source
   app.put('/api/source/:_id', function(req, res, next) {
     if (req.params._id === '_events') return next();
-    var data = '';
-    req.on('data', function(chunk) {
-      data += chunk;
-    }).on('end', function() {
-      data = JSON.parse(data);
-      // Find source to update
-      Source.findById(req.params._id, function(err, source) {
-        if (err) return res.send(err.status, err.message);
-        if (!source) return res.send(404);
-        // Update the actual values
-        _.each(_.omit(data, ['_id', 'events']), function(val, key) {
-          source[key] = val;
-        });
-        // Save source
-        source.save(function(err, numberAffected) {
-          if (err) res.send(err.status, err.message);
-          else if (!numberAffected) res.send(404);
-          else res.send(200);
-        });
+    // Find source to update
+    Source.findById(req.params._id, function(err, source) {
+      if (err) return res.send(err.status, err.message);
+      if (!source) return res.send(404);
+      // Update the actual values
+      _.each(_.omit(req.body, ['_id', 'events']), function(val, key) {
+        source[key] = val;
+      });
+      // Save source
+      source.save(function(err, numberAffected) {
+        if (err) res.send(err.status, err.message);
+        else if (!numberAffected) res.send(404);
+        else res.send(200);
       });
     });
   });
