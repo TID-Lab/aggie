@@ -2,14 +2,14 @@ require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var sourceController = require('../controllers/api/source-controller');
+var sourceController = require('../controllers/api/source-controller')();
 var Source = require('../models/source');
 
 describe('Source controller', function() {
   before(function(done) {
     source = {
-      type: 'dummy',
-      keywords: 't'
+      type: 'twitter',
+      keywords: 'test'
     };
     done();
   });
@@ -26,6 +26,12 @@ describe('Source controller', function() {
           source._id = res.body._id;
           done();
         });
+    });
+    it('should not allow the creation of multiple twitter sources', function(done) {
+      request(sourceController)
+        .post('/api/source')
+        .send({type: 'twitter', keywords: 'test2'})
+        .expect(422, 'only_one_twitter_allowed', done);
     });
   });
 
@@ -77,6 +83,12 @@ describe('Source controller', function() {
           compare.call(this, res.body, source);
           done();
         });
+    });
+    it('should not allow updating source type', function(done) {
+      request(sourceController)
+        .put('/api/source/' + source._id)
+        .send({type: 'dummy'})
+        .expect(422, 'source_type_change_not_allowed', done);
     });
   });
 

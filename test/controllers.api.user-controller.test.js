@@ -2,14 +2,13 @@ require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var userController = require('../controllers/api/user-controller');
+var userController = require('../controllers/api/user-controller')();
 
 describe('User controller', function() {
   before(function(done) {
     user = {
       provider: 'test',
-      id: 'test-user',
-      displayName: 'Test User',
+      username: 'test-user',
       email: 'test@example.com',
       password: 'letmein'
     };
@@ -31,10 +30,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('GET /api/user/:id', function() {
+  describe('GET /api/user/:username', function() {
     it('should return user', function(done) {
       request(userController)
-        .get('/api/user/' + user.id)
+        .get('/api/user/' + user.username)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -44,11 +43,11 @@ describe('User controller', function() {
     });
   });
 
-  describe('PUT /api/user/:id', function() {
+  describe('PUT /api/user/:username', function() {
     it('should update user', function(done) {
-      user.displayName = 'Updated test user';
+      user.email = 'updated@example.com';
       request(userController)
-        .put('/api/user/' + user.id)
+        .put('/api/user/' + user.username)
         .send(user)
         .expect(200)
         .end(function(err, res) {
@@ -74,14 +73,14 @@ describe('User controller', function() {
     });
   });
 
-  describe('DELETE /api/user/:id', function() {
+  describe('DELETE /api/user/:username', function() {
     it('should delete user', function(done) {
       request(userController)
-        .del('/api/user/' + user.id)
+        .del('/api/user/' + user.username)
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/user/' + user.id)
+            .get('/api/user/' + user.username)
             .expect(404, done);
         });
     });

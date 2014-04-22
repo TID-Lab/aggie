@@ -32,11 +32,14 @@ describe('Fetching controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          botMaster.bots.forEach(function(bot) {
-            expect(bot).to.have.property('enabled');
-            expect(bot.enabled).to.be.true;
-          });
-          done();
+          // Allow time for bots to be fully started
+          setTimeout(function() {
+            botMaster.bots.forEach(function(bot) {
+              expect(bot).to.have.property('enabled');
+              expect(bot.enabled).to.be.true;
+            });
+            done();
+          }, 100);
         });
     });
   });

@@ -1,14 +1,24 @@
+process.env.NODE_ENV = 'test';
+
 var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie-test';
 var database = require('../controllers/database');
 var Report = require('../models/report');
+var User = require('../models/user');
 
 // Change database before starting any test
 before(function(done) {
   database.mongoose.disconnect(function() {
-    database.mongoose.connect(dbConnectURL);
-    // Enable full-text indexing for Reports
-    Report.ensureIndexes(function() {
-      done();
+    database.mongoose.connect(dbConnectURL, function() {
+      // Enable database-level text search
+      database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
+        if (err) return done(err);
+        // Create admin user for testing
+        User.create({provider: 'test', email: 'admin@example.com', username: 'admin', password: 'letmein'});
+        // Enable full-text indexing for Reports
+        Report.ensureIndexes(function() {
+          done();
+        });
+      });
     });
   });
 });

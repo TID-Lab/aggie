@@ -23,5 +23,4 @@ commands:
 
 1. `mongo aggie --eval 'db.adminCommand({setParameter: 1, textSearchEnabled: true});'`
 1. `mongo aggie --eval 'db.reports.ensureIndex({"content": "text"});'`
-1. `mongo aggie-test --eval 'db.adminCommand({setParameter: 1, textSearchEnabled: true});'`
-1. For the _aggie-test_ database, the `ensureIndex` command is run automatically when running tests
+1. These commands are automatically run for the _aggie-test_ database when running tests.
