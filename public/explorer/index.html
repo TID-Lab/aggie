@@ -43,7 +43,7 @@
       <a href="/logout">Logout</a>
     </li>
     <li>
-      <form action="/api/0.2/source" method="post">
+      <form action="/api/v1/source" method="post">
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
         Create Twitter source with keywords (e.g. banana,apple):
@@ -52,7 +52,7 @@
       </form>
     </li>
     <li>
-      <form action="/api/0.2/report" method="get">
+      <form action="/api/v1/report" method="get">
         Search for Report data:
         <input type="text" name="keywords" />
         <input type="submit">
@@ -60,7 +60,7 @@
     </li>
     <li>
       Create new user:
-      <form action="/api/0.2/user" method="post">
+      <form action="/api/v1/user" method="post">
         Email
         <input type="text" name="email" />
         Username
@@ -71,28 +71,28 @@
       </form>
     </li>
     <li>
-      <a href="/api/0.2/user">List users</a>
+      <a href="/api/v1/user">List users</a>
     </li>
     <li>
-      <a href="/api/0.2/source">List sources</a>
+      <a href="/api/v1/source">List sources</a>
     </li>
     <li>
-      <a href="/api/0.2/report">List reports</a>
+      <a href="/api/v1/report">List reports</a>
     </li>
     <li>
-      <a href="/api/0.2/source/_all" data-method="delete">Delete all sources</a>
+      <a href="/api/v1/source/_all" data-method="delete">Delete all sources</a>
     </li>
     <li>
-      <a href="/api/0.2/report/_all" data-method="delete">Delete all reports</a>
+      <a href="/api/v1/report/_all" data-method="delete">Delete all reports</a>
     </li>
     <li>
-      <a href="/api/0.2/fetching">Check fetching status</a>
+      <a href="/api/v1/fetching">Check fetching status</a>
     </li>
     <li>
-      <a href="/api/0.2/fetching/on" data-method="put">Enable fetching</a>
+      <a href="/api/v1/fetching/on" data-method="put">Enable fetching</a>
     </li>
     <li>
-      <a href="/api/0.2/fetching/off" data-method="put">Disable fetching</a>
+      <a href="/api/v1/fetching/off" data-method="put">Disable fetching</a>
     </li>
   </ul>
   <h2>Response</h2>

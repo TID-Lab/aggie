@@ -1,4 +1,3 @@
-API_VERSION = '0.2';
 process.env.NODE_ENV = 'test';
 
 var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie-test';

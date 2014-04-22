@@ -32,11 +32,11 @@ var RequestHandler = Toolbox.Base.extend({
             clearSources = false;
           }
           // Get source with events
-          var $sourceLink = $('<a href="/api/0.2/source/' + source._id + '" data-method="get">Get events for ' + source.type + ': "' + source.keywords + '"</a>');
+          var $sourceLink = $('<a href="/api/v1/source/' + source._id + '" data-method="get">Get events for ' + source.type + ': "' + source.keywords + '"</a>');
           $('ul#requests').append($('<li>').addClass('source').html($sourceLink));
           new BasicRequestHandler($sourceLink);
           // Clear unread error count
-          $sourceLink = $('<a href="/api/0.2/source/_events/' + source._id + '" data-method="put">Clear unread error count for ' +  source.type + ': "' + source.keywords + '"</a>');
+          $sourceLink = $('<a href="/api/v1/source/_events/' + source._id + '" data-method="put">Clear unread error count for ' +  source.type + ': "' + source.keywords + '"</a>');
           $('ul#requests').append($('<li>').addClass('source').html($sourceLink));
           new BasicRequestHandler($sourceLink);
         }

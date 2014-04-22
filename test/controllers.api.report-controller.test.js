@@ -2,7 +2,7 @@ require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var reportController = require('../lib/api/' + API_VERSION + '/report-controller')();
+var reportController = require('../lib/api/v1/report-controller')();
 var botMaster = require('../lib/fetching/bot-master');
 var reportWriter = require('../lib/fetching/report-writer');
 var Source = require('../models/source');
@@ -31,10 +31,10 @@ describe('Report controller', function() {
     }, 100);
   });
 
-  describe('GET /api/' + API_VERSION + '/report', function() {
+  describe('GET /api/v1/report', function() {
     it('should get a list of all reports', function(done) {
       request(reportController)
-        .get('/api/' + API_VERSION + '/report')
+        .get('/api/v1/report')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -45,7 +45,7 @@ describe('Report controller', function() {
 
     it('should query for reports', function(done) {
       request(reportController)
-        .get('/api/' + API_VERSION + '/report?keywords=lorem')
+        .get('/api/v1/report?keywords=lorem')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -57,15 +57,15 @@ describe('Report controller', function() {
     });
   });
 
-  describe('DELETE /api/' + API_VERSION + '/report/_all', function() {
+  describe('DELETE /api/v1/report/_all', function() {
     it('should delete all reports', function(done) {
       request(reportController)
-        .del('/api/' + API_VERSION + '/report/_all')
+        .del('/api/v1/report/_all')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           request(reportController)
-            .get('/api/' + API_VERSION + '/report')
+            .get('/api/v1/report')
             .expect(200, [], done);
         });
     });
