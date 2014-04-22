@@ -1,8 +1,8 @@
 require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var fetchingController = require('../controllers/api/fetching-controller');
-var botMaster = require('../controllers/fetching/bot-master');
+var fetchingController = require('../lib/api/' + API_VERSION + '/fetching-controller');
+var botMaster = require('../lib/fetching/bot-master');
 var Source = require('../models/source');
 
 describe('Fetching controller', function() {
@@ -17,18 +17,18 @@ describe('Fetching controller', function() {
     done();
   });
 
-  describe('GET /api/fetching', function() {
+  describe('GET /api/' + API_VERSION + '/fetching', function() {
     it('should return fetching status as disabled', function(done) {
       request(fetchingController)
-        .get('/api/fetching')
+        .get('/api/' + API_VERSION + '/fetching')
         .expect(200, {enabled: false}, done);
     });
   });
 
-  describe('PUT /api/fetching/on', function() {
+  describe('PUT /api/' + API_VERSION + '/fetching/on', function() {
     it('should enable all bots', function(done) {
       request(fetchingController)
-        .put('/api/fetching/on')
+        .put('/api/' + API_VERSION + '/fetching/on')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -44,18 +44,18 @@ describe('Fetching controller', function() {
     });
   });
 
-  describe('GET /api/fetching', function() {
+  describe('GET /api/' + API_VERSION + '/fetching', function() {
     it('should return fetching status as enabled', function(done) {
       request(fetchingController)
-        .get('/api/fetching')
+        .get('/api/' + API_VERSION + '/fetching')
         .expect(200, {enabled: true}, done);
     });
   });
 
-  describe('PUT /api/fetching/off', function() {
+  describe('PUT /api/' + API_VERSION + '/fetching/off', function() {
     it('should disable all bots', function(done) {
       request(fetchingController)
-        .put('/api/fetching/off')
+        .put('/api/' + API_VERSION + '/fetching/off')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -71,10 +71,10 @@ describe('Fetching controller', function() {
     });
   });
 
-  describe('GET /api/fetching', function() {
+  describe('GET /api/' + API_VERSION + '/fetching', function() {
     it('should return fetching status as disabled', function(done) {
       request(fetchingController)
-        .get('/api/fetching')
+        .get('/api/' + API_VERSION + '/fetching')
         .expect(200, {enabled: false}, done);
     });
   });

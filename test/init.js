@@ -1,7 +1,8 @@
+API_VERSION = '0.2';
 process.env.NODE_ENV = 'test';
 
 var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie-test';
-var database = require('../controllers/database');
+var database = require('../lib/database');
 var Report = require('../models/report');
 var User = require('../models/user');
 

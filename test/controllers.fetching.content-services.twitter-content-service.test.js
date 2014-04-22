@@ -1,6 +1,6 @@
 require('./init');
 var expect = require('chai').expect;
-var TwitterContentService = require('../controllers/fetching/content-services/twitter-content-service');
+var TwitterContentService = require('../lib/fetching/content-services/twitter-content-service');
 
 describe('Twitter content service', function() {
   before(function(done) {

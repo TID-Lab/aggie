@@ -1,5 +1,5 @@
-var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var database = require('../lib/database');
+var mongoose = database.mongoose;
 
 var schema = new mongoose.Schema({
   type: String, // The object type being queried

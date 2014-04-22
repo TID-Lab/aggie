@@ -1,12 +1,12 @@
 var expect = require('chai').expect;
-var processManager = require('../controllers/process-manager');
+var processManager = require('../lib/process-manager');
 var Source = require('../models/source');
-var botMaster = require('../controllers/fetching/bot-master');
+var botMaster = require('../lib/fetching/bot-master');
 var request = require('supertest');
 
 describe('Process manager', function() {
   before(function(done) {
-    processManager.fork('/controllers/api');
+    processManager.fork('/lib/api');
     // Let API server start listening
     setTimeout(function() {
       done();
@@ -16,7 +16,7 @@ describe('Process manager', function() {
   it('should fork a process', function(done) {
     expect(processManager.children).to.be.an.instanceOf(Array);
     var children = processManager.children.length;
-    var child = processManager.fork('/controllers/fetching');
+    var child = processManager.fork('/lib/fetching');
     expect(child).to.have.property('pid');
     expect(child.pid).to.be.above(process.pid);
     expect(processManager.children).to.have.length(children + 1);
@@ -48,14 +48,14 @@ describe('Process manager', function() {
       done();
     });
     // "API" module to send
-    var api = processManager.fork('/controllers/api');
+    var api = processManager.fork('/lib/api');
     process.nextTick(function() {
       api.send('ping');
     });
     // Register "Fetching" as a listener of "API" for the "pong" event
     processManager.registerRoute({
       events: ['pong'],
-      emitter: '/controllers/api',
+      emitter: '/lib/api',
       emitterModule: 'api',
       listenerModule: 'fetching',
       event: 'register'
@@ -63,11 +63,11 @@ describe('Process manager', function() {
   });
 
   it('should simulate a full inter-process messaging workflow', function(done) {
-    processManager.fork('/controllers/api');
-    processManager.fork('/controllers/fetching');
+    processManager.fork('/lib/api');
+    processManager.fork('/lib/fetching');
     var getReports = function(callback) {
       request('http://localhost:3000')
-        .get('/api/report')
+        .get('/api/' + API_VERSION + '/report')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -78,7 +78,7 @@ describe('Process manager', function() {
     };
     var createSource = function(data, callback) {
       request('http://localhost:3000')
-        .post('/api/source')
+        .post('/api/' + API_VERSION + '/source')
         .send(data)
         .expect(200)
         .end(function(err, res) {
@@ -90,7 +90,7 @@ describe('Process manager', function() {
     };
     var toggleFetching = function(state, callback) {
       request('http://localhost:3000')
-        .put('/api/fetching/' + state)
+        .put('/api/' + API_VERSION + '/fetching/' + state)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
