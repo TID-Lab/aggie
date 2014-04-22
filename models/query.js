@@ -17,7 +17,8 @@ Query.getQuery = function(queryData, callback) {
   if (queryData instanceof mongoose.Model) queryData = queryData.toObject();
   Query.findOne(queryData, function(err, query) {
     if (query === null) query = new Query(queryData);
-    callback(err, query);
+    Query.emit('query', query.toJSON());
+    if (callback) callback(err, query);
   });
 };
 
