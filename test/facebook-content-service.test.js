@@ -5,7 +5,7 @@ var ContentService = require('../controllers/fetching/content-service');
 
 describe('Facebook content service', function() {
     before(function(done) {
-        facebookContentService = new FacebookContentService({lastCrawlDate: undefined, fbPage:'52193296770'});
+        facebookContentService = new FacebookContentService({fbPage:'52193296770'});
         done();
     });
 
