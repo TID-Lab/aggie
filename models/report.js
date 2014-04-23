@@ -23,6 +23,7 @@ schema.plugin(textSearch);
 schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
+  if (this.isNew) this._wasNew = true;
   var report = this;
   report.storedAt = Date.now();
   if (!report._source) return next();
@@ -35,12 +36,29 @@ schema.pre('save', function(next) {
   });
 });
 
+schema.post('save', function() {
+  if (this._wasNew) schema.emit('report', {_id: this._id.toString()});
+  else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+});
+
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
-  Report.textSearch(query.keywords, function(err, reports) {
+
+  query.filter = {};
+
+  // Return only newer results
+  if (query.lastSearchedAt) {
+    query.filter.storedAt = query.filter.storedAt || {};
+    query.filter.storedAt.$gte = query.lastSearchedAt;
+  }
+
+  // Re-set search timestamp
+  query.lastSearchedAt = new Date;
+
+  Report.textSearch(query.keywords, _.pick(query, 'filter'), function(err, reports) {
     if (err) return callback(err);
     callback(null, _.pluck(reports.results, 'obj'));
   });

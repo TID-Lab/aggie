@@ -27,10 +27,16 @@ app.use(fetchingController);
 require('./api/report-controller')(app);
 require('./api/source-controller')(app);
 require('./api/user-controller')(app);
+var streamer = require('./api/streamer');
 
 // Create event proxy between fetching controller and bot master
 fetchingController.addListeners('botMaster', childProcess.setupEventProxy({
   emitter: '/controllers/fetching/bot-master',
+  emitterModule: 'fetching'
+}));
+// Create event proxy between reports and streamer
+streamer.addListeners('report', childProcess.setupEventProxy({
+  emitter: '/models/report',
   emitterModule: 'fetching'
 }));
 
