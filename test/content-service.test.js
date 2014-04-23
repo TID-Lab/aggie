@@ -7,7 +7,7 @@ var FacebookDummyContentService = require('../controllers/fetching/content-servi
 describe('Content service', function() {
   before(function(done) {
     contentService = contentServiceFactory.create({source: 'dummy', filter: 't'});
-    fbContentService = contentServiceFactory.create({test: true, source: 'facebook-dummy', fbPage: 'dummy'});
+    fbContentService = contentServiceFactory.create({source: 'facebook-dummy', fbPage: 'dummy'});
     done();
   });
 
