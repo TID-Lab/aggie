@@ -7,7 +7,7 @@ var data = {
         comments: [{
             can_remove: false,
             can_post: false,
-            count: 1,
+            count: 2,
             comment_list: [{
                 fromid: 100004436493211,
                 time: 1391020582,
@@ -17,12 +17,7 @@ var data = {
                 likes: 1,
                 user_likes: false,
                 post_fbid: '10151868942601771'
-            }]
-        }, {
-            can_remove: false,
-            can_post: false,
-            count: 1,
-            comment_list: [{
+            }, {
                 fromid: 100004436493211,
                 time: 1391020582,
                 text: 'Comment 2',
@@ -51,7 +46,6 @@ util.inherits(FacebookDummyContentService, ContentService);
 
 FacebookDummyContentService.prototype.start = function() {
     var self = this;
-    this._isStreaming = true;
     for (var i in data.data) {
         // Emit new data every 500ms
         setTimeout(this.fetch, 500, this, data.data[i]);
@@ -59,16 +53,10 @@ FacebookDummyContentService.prototype.start = function() {
 };
 
 FacebookDummyContentService.prototype.fetch = function(self, data) {
-    if (self._isStreaming) {
-        self.emit('report', data);
-        self.emit('report', data.comments[0].comment_list[0]);
-    }
+    self.emit('report', data);
+    self.emit('report', data.comments[0].comment_list[0]);
+
 };
 
-
-// Stop the stream
-FacebookDummyContentService.prototype.stop = function() {
-    this._isStreaming = false;
-};
 
 module.exports = FacebookDummyContentService;
