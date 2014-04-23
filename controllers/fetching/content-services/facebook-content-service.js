@@ -1,8 +1,14 @@
 var config = require('../../../config/secrets').facebook;
 var ContentService = require('../content-service');
-// var FBTest = require('./facebook-dummy-content-service');
 var graph = require('fbgraph');
 var util = require('util');
+
+/*
+ * TODO
+ * URL for comment - I guess I have to manually build it (do we need it?)
+ * Error checking
+ * Testing 
+ */
 
 /* 
 Facebook Content Service constructor
@@ -11,21 +17,8 @@ Facebook Content Service constructor
 var FacebookContentService = function(options) {
 
     graph.setAccessToken(config.accessToken);
-    // if (options.test) {
-    //     var fbTest = new FBTest();
-    //     fbTest.start();
-    //     a.on('report', function(report_data) {
-    //         this.emit('report', this._parse(report_data));
-    //     });
-    // }
-
     this.lastCrawlDate = options.lastCrawlDate || Math.round(Date.now() / 1000);
 
-
-    // TODO TOM: You don't need to check the type here I think. Source should be responsible for validating the URL.
-    // Also returning a string with an error message doesn't make much sense.
-    // You could have a guard clause like if (!options.fbPage) throw "Incorrect ...";
-    // Once #1120 is done you can refactor.
     if (!options.fbPage) {
         return "Incorrect page for POST";
     } else {
@@ -50,7 +43,6 @@ FacebookContentService.prototype.fetch = function() {
         commentsQuery: commentsQuery
     };
     graph.fql(query, function(err, res) {
-        // TODO: TOM: Will need a better way to handle errors. Stay tuned. See issue #1120.
         if (err) {
             console.error(err);
         }
@@ -83,7 +75,7 @@ FacebookContentService.prototype._parse = function(data, isPost) {
         content: (isPost) ? data.message : data.text,
         id: (isPost) ? data.post_id : data.id,
         author: (isPost) ? data.actor_id : data.fromid,
-        url: (isPost) ? data.permalink : 'todourlforcomment'
+        url: (isPost) ? data.permalink : 'commenturl'
     };
     return report_data;
 };
