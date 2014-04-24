@@ -142,8 +142,8 @@ BotMaster.prototype.getBot = function(sourceId) {
 BotMaster.prototype.add = function(bot) {
   var self = this;
   this.bots.push(bot);
-  bot.on('reports', function(reports_data) {
-    self.emit('bot:reports', bot);
+  bot.on('report', function(report_data) {
+    self.emit('bot:report', bot);
   });
   bot.on('empty', function() {
     self.emit('bot:empty', bot);

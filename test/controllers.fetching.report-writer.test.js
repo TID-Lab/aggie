@@ -21,7 +21,7 @@ describe('Report writer', function() {
     });
 
     it('should fetch reports from available bots', function(done) {
-      bot.once('reports', function() {
+      bot.once('report', function() {
         reportQueue.enqueue(this);
         var report_data = reportWriter.fetch();
         expect(report_data).to.have.property('content');
@@ -31,7 +31,7 @@ describe('Report writer', function() {
     });
 
     it('should write reports to database', function(done) {
-      bot.once('reports', function() {
+      bot.once('report', function() {
         reportQueue.enqueue(this);
         var report_data = reportWriter.fetch();
         reportWriter.write(report_data, function(err, report) {

@@ -54,7 +54,7 @@ TwitterContentService.prototype.addListeners = function() {
   var self = this;
   this.stream.on('tweet', function(tweet) {
     var report_data = self.parse(tweet);
-    self.emit('reports', [report_data]);
+    self.emit('report', report_data);
   });
   this.stream.on('limit', function(message) {
     self.emit('warning', new Error('Twitter sent rate limitation: ' + JSON.stringify(message.limit)));
