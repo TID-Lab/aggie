@@ -76,11 +76,7 @@ TwitterContentService.prototype.parse = function(data) {
     fetchedAt: Date.now(),
     content: data.text,
     author: data.user.screen_name,
-    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str,
-    _source: {
-      type: 'twitter',
-      keywords: this.keywords
-    }
+    url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
   };
   return report_data;
 };

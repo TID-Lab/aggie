@@ -24,6 +24,9 @@ Bot.prototype.start = function() {
       if (self.isEmpty())
         self.emit('notEmpty');
 
+      // Need to add _source foreign key reference here b/c ContentService doesn't know about Source.
+      report_data._source = self.sourceId;
+
       var drops = self.queue.drops;
       self.queue.add(report_data);
       if (self.queue.drops > drops)
