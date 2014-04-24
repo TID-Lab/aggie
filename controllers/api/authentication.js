@@ -33,7 +33,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
     user.comparePassword(password, function(err, isMatch) {
       if (err) return done(err);
       if (isMatch) return done(null, user);
-      return done(null, false, {message: 'Invalid password'})
+      return done(null, false, {message: 'Invalid password'});
     });
   });
 }));
@@ -104,7 +104,7 @@ app.get('/logout', function(req, res) {
 function ensureAuthenticated(req, res, next) {
   if (config.adminParty || req.isAuthenticated()) return next();
   res.send(403);
-};
+}
 
 module.exports = app;
 module.exports.session = session;
