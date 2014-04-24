@@ -29,6 +29,8 @@ Bot.prototype.start = function() {
 
       var drops = self.queue.drops;
       self.queue.add(report_data);
+
+      // If the last report was dropped, we may need to log this.
       if (self.queue.drops > drops)
         self.logDrops();
 
