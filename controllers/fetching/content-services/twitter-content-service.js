@@ -53,8 +53,7 @@ TwitterContentService.prototype.addListeners = function() {
   }
   var self = this;
   this.stream.on('tweet', function(tweet) {
-    var report_data = self.parse(tweet);
-    self.emit('report', report_data);
+    self.emit('report', self._parse(tweet));
   });
   this.stream.on('limit', function(message) {
     self.emit('warning', new Error('Twitter sent rate limitation: ' + JSON.stringify(message.limit)));
@@ -70,15 +69,14 @@ TwitterContentService.prototype.addListeners = function() {
   });
 };
 
-TwitterContentService.prototype.parse = function(data) {
-  var report_data = {
+TwitterContentService.prototype._parse = function(data) {
+  return {
     authoredAt: data.created_at,
     fetchedAt: Date.now(),
     content: data.text,
     author: data.user.screen_name,
     url: 'https://twitter.com/' + data.user.screen_name + '/status/' + data.id_str
   };
-  return report_data;
 };
 
 module.exports = TwitterContentService;
