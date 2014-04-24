@@ -21,8 +21,7 @@ Bot.prototype.start = function() {
   var self = this;
   this.contentService.on('report', function(report_data) {
     if (self.enabled) {
-      if (self.isEmpty())
-        self.emit('notEmpty');
+      if (self.isEmpty()) self.emit('notEmpty');
 
       // Need to add _source foreign key reference here b/c ContentService doesn't know about Source.
       report_data._source = self.sourceId;
@@ -31,8 +30,7 @@ Bot.prototype.start = function() {
       self.queue.add(report_data);
 
       // If the last report was dropped, we may need to log this.
-      if (self.queue.drops > drops)
-        self.logDrops();
+      if (self.queue.drops > drops) self.logDrops();
 
       self.emit('report', report_data);
     }
