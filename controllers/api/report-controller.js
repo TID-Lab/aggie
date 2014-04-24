@@ -11,14 +11,11 @@ module.exports = function(app) {
     // Parse query string
     var queryData = parseQueryData(req.query);
     if (queryData) {
-      // Get query object
-      Query.getQuery(queryData, function(err, query) {
-        if (err) return res.send(err.status, err.message);
-        // Query for reports using fti
-        Report.queryReports(query, function(err, reports) {
-          if (err) res.send(err.status, err.message);
-          else res.send(200, reports);
-        });
+      var query = new Query(queryData);
+      // Query for reports using fti
+      Report.queryReports(query, function(err, reports) {
+        if (err) res.send(err.status, err.message);
+        else res.send(200, reports);
       });
     } else {
       // Return all reports

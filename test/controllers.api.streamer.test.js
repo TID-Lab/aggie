@@ -26,7 +26,6 @@ describe('Streamer', function() {
   it('should run queries and emit results', function(done) {
     var remaining = streamer.queries.length;
     streamer.on('reports', function(query, reports) {
-      expect(query).to.be.an.instanceof(Query);
       expect(reports).to.be.an.instanceof(Array);
       expect(reports).to.not.be.empty;
       expect(reports[0]).to.be.an.instanceof(Report);
@@ -49,7 +48,6 @@ describe('Streamer', function() {
       Report.create({content: 'Three three'});
     });
     streamer.once('reports', function(query, reports) {
-      expect(query).to.be.an.instanceof(Query);
       expect(reports).to.be.an.instanceof(Array);
       expect(reports).to.not.be.empty;
       expect(reports[0]).to.be.an.instanceof(Report);

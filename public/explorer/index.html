@@ -11,6 +11,7 @@
   <script type="text/javascript" src="basic_request_handler.js"></script>
   <script type="text/javascript" src="form_request_handler.js"></script>
   <script type="text/javascript" src="request_definition_loader.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h1>Aggie API Explorer</h1>
@@ -52,7 +53,7 @@
       </form>
     </li>
     <li>
-      <form action="/api/report" method="get">
+      <form id="query" action="/api/report" method="get">
         Search for Report data:
         <input type="text" name="keywords" />
         <input type="submit">
@@ -97,6 +98,10 @@
   </ul>
   <h2>Response</h2>
   <div id="status"></div>
+  <div id="stream-wrapper">
+    <h2>Stream</h2>
+    <div id="stream"></div>
+  </div>
   <pre id="response">
 [No request sent yet.]
   </pre>

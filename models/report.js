@@ -44,9 +44,11 @@ schema.post('save', function() {
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
+var QUERY_LIMIT = 20;
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
 
+  query.limit = query.limit || QUERY_LIMIT;
   query.filter = {};
 
   // Return only newer results
@@ -58,7 +60,7 @@ Report.queryReports = function(query, callback) {
   // Re-set search timestamp
   query.lastSearchedAt = new Date;
 
-  Report.textSearch(query.keywords, _.pick(query, 'filter'), function(err, reports) {
+  Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
     if (err) return callback(err);
     callback(null, _.pluck(reports.results, 'obj'));
   });

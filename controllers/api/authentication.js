@@ -47,10 +47,11 @@ app.use(express.methodOverride());
 var key = 'connect.sid';
 var stubKey = 'aggie.auth';
 var stubCookie = {path: '/', httpOnly: true, maxAge: 864e9};
+var store = new MongoStore(config.mongodb);
 var session = express.session({
   key: key,
   secret: config.secret,
-  store: new MongoStore(config.mongodb),
+  store: store,
   cookie: stubCookie
 });
 session.key = key;
@@ -108,6 +109,9 @@ function ensureAuthenticated(req, res, next) {
 
 module.exports = app;
 module.exports.session = session;
+module.exports.key = key;
+module.exports.secret = config.secret;
+module.exports.store = store;
 module.exports.stubKey = stubKey;
 module.exports.stubCookie = stubCookie;
 module.exports.ensureAuthenticated = ensureAuthenticated;
