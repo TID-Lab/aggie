@@ -41,7 +41,7 @@ DummyContentService.prototype.fetch = function(self, data) {
   var pattern = new RegExp(self.keywords, 'im');
   if (self._isStreaming && pattern.test(data.text)) {
     var report = self.parse(data);
-    self.emit('reports', [report]);
+    self.emit('report', report);
   }
 };
 

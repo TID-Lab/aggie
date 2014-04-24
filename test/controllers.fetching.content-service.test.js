@@ -17,11 +17,9 @@ describe('Content service', function() {
 
   it('should fetch content from a specific service', function(done) {
     contentService.start();
-    contentService.on('reports', function(reports_data) {
-      expect(reports_data).to.be.an.instanceof(Array);
-      expect(reports_data).to.have.length(1);
-      expect(reports_data[0]).to.have.property('content');
-      expect(reports_data[0].content.toLowerCase()).to.contain('t');
+    contentService.on('report', function(report_data) {
+      expect(report_data).to.have.property('content');
+      expect(report_data.content.toLowerCase()).to.contain('t');
       // Stop stream to ensure a single fetch
       contentService.stop();
       done();
