@@ -25,7 +25,7 @@ module.exports = function(app, auth) {
         else res.send(200);
       });
     });
-  };
+  }
 
   // Generate an email object with a login token.
   function sendEmail(user, req, callback) {
@@ -37,7 +37,7 @@ module.exports = function(app, auth) {
       token: token,
       host: req.headers.host
     }, callback);
-  };
+  }
 
   // Encode user token
   function encodeToken(user) {
@@ -46,7 +46,7 @@ module.exports = function(app, auth) {
     var encryptedHash = cipher.update(JSON.stringify(hash), 'utf8', 'base64');
     var token = encryptedHash + cipher.final('base64');
     return token;
-  };
+  }
 
   // Decode user token
   function decodeToken(token) {
@@ -62,7 +62,7 @@ module.exports = function(app, auth) {
         return hash.username;
       }
     }
-  };
+  }
 
   // Generate a new session for the user identified by the token.
   function tokenLogin(req, res, next) {
@@ -74,7 +74,7 @@ module.exports = function(app, auth) {
       req.user = user;
       next();
     });
-  };
+  }
 
   // Reset user password
   function resetPassword(req, res, next) {
@@ -94,7 +94,7 @@ module.exports = function(app, auth) {
         });
       });
     });
-  };
+  }
 
   return app;
 };

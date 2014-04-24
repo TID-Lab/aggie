@@ -19,16 +19,20 @@ Bot.prototype.start = function() {
   if (this.enabled) return;
   this.enabled = true;
   var self = this;
-  this.contentService.on('reports', function(reports_data) {
+  this.contentService.on('report', function(report_data) {
     if (self.enabled) {
       if (self.isEmpty()) self.emit('notEmpty');
-      reports_data.forEach(function(report_data) {
-        var drops = self.queue.drops;
-        self.queue.add(report_data);
-        // Monitor dropped reports
-        if (self.queue.drops > drops) self.logDrops();
-      });
-      self.emit('reports', reports_data);
+
+      // Need to add _source foreign key reference here b/c ContentService doesn't know about Source.
+      report_data._source = self.sourceId;
+
+      var drops = self.queue.drops;
+      self.queue.add(report_data);
+
+      // If the last report was dropped, we may need to log this.
+      if (self.queue.drops > drops) self.logDrops();
+
+      self.emit('report', report_data);
     }
   });
   this.contentService.on('warning', function(warning) {
@@ -55,7 +59,7 @@ Bot.prototype.logDrops = function() {
 
 Bot.prototype.stop = function() {
   this.enabled = false;
-  this.contentService.removeAllListeners('reports');
+  this.contentService.removeAllListeners('report');
   this.contentService.removeAllListeners('warning');
   this.contentService.removeAllListeners('error');
   this.removeAllListeners('error');
