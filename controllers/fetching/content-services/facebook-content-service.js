@@ -27,6 +27,7 @@ var FacebookContentService = function(options) {
   }
 
   this.sourceType = 'facebook';
+  this.botType = 'pull';
   ContentService.call(this, options);
 
 };
@@ -43,9 +44,10 @@ FacebookContentService.prototype.fetch = function() {
     postsQuery: postsQuery,
     commentsQuery: commentsQuery
   };
+  
   graph.fql(query, function(err, res) {
     if (err) {
-      console.error(err);
+      self.emit('error', new Error('Facebook sent error: ' + JSON.stringify(err)));
     }
 
     var posts = res.data[0].fql_result_set;
@@ -70,13 +72,15 @@ FacebookContentService.prototype._returnValidReportLine = function(entry, isPost
 
 FacebookContentService.prototype._parse = function(data, isPost) {
   var report_data = {
-    fetchedAt: Date.now(),
     authoredAt: (isPost) ? data.updated_time : data.time,
-    createdAt: (isPost) ? data.updated_time : data.time,
+    fetchedAt: Date.now(),
     content: (isPost) ? data.message : data.text,
-    id: (isPost) ? data.post_id : data.id,
     author: (isPost) ? data.actor_id : data.fromid,
-    url: (isPost) ? data.permalink : 'commenturl'
+    url: (isPost) ? data.permalink : 'commenturl',
+    _source: {
+      type: 'facebook',
+      fbPage: this.fbPage
+    }
   };
   return report_data;
 };
