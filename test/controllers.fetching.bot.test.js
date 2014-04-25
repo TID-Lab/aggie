@@ -1,7 +1,7 @@
 require('./init');
 var expect = require('chai').expect;
-var botFactory = require('../controllers/fetching/bot-factory');
-var ContentService = require('../controllers/fetching/content-service');
+var botFactory = require('../lib/fetching/bot-factory');
+var ContentService = require('../lib/fetching/content-service');
 
 describe('Bot', function() {
   before(function(done) {

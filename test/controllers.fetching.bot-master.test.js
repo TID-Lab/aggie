@@ -3,8 +3,8 @@ var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
-var botMaster = require('../controllers/fetching/bot-master');
-var Bot = require('../controllers/fetching/bot');
+var botMaster = require('../lib/fetching/bot-master');
+var Bot = require('../lib/fetching/bot');
 var Source = require('../models/source');
 
 describe('Bot master', function() {

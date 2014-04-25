@@ -1,5 +1,5 @@
-var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var database = require('../lib/database');
+var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
 var Source = require('./source');
 var Query = require('./query');

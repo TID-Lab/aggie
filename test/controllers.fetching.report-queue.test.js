@@ -1,10 +1,10 @@
 require('./init');
 var expect = require('chai').expect;
-var reportQueue = require('../controllers/fetching/report-queue');
-var reportWriter = require('../controllers/fetching/report-writer');
-var botFactory = require('../controllers/fetching/bot-factory');
-var botMaster = require('../controllers/fetching/bot-master');
-var CircularQueue = require('../controllers/fetching/circular-queue');
+var reportQueue = require('../lib/fetching/report-queue');
+var reportWriter = require('../lib/fetching/report-writer');
+var botFactory = require('../lib/fetching/bot-factory');
+var botMaster = require('../lib/fetching/bot-master');
+var CircularQueue = require('../lib/fetching/circular-queue');
 var Report = require('../models/report');
 var Source = require('../models/source');
 
