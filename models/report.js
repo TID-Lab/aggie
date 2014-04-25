@@ -23,16 +23,8 @@ schema.plugin(textSearch);
 schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
-  var report = this;
-  report.storedAt = Date.now();
-  if (!report._source) return next();
-  // Find actual source object and store it as a sub-document
-  Source.findOne(report._source, function(err, source) {
-    report._source = undefined;
-    if (err || !source) return next(err);
-    report._source = source._id;
-    next();
-  });
+  this.storedAt = Date.now();
+  next();
 });
 
 var Report = mongoose.model('Report', schema);

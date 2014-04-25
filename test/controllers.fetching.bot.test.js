@@ -24,7 +24,7 @@ describe('Bot', function() {
   it('should fetch report data', function(done) {
     var reports = [];
     var remaining = 4;
-    bot.on('reports', function() {
+    bot.on('report', function() {
       var data = bot.fetchNext();
       expect(data).to.have.property('content');
       expect(data.content.toLowerCase()).to.contain('t');
