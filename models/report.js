@@ -32,7 +32,28 @@ var Report = mongoose.model('Report', schema);
 // Query reports based on passed query data
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
-  Report.textSearch(query.keywords, function(err, reports) {
+
+  query.filter = {};
+
+  // Determine status filter
+  if (query.status) {
+    query.filter.status = {};
+    if (query.status === 'assigned') query.filter.status.$exists = true;
+    else if (query.status === 'unassigned') query.filter.status.$exists = false;
+    else query.filter.status = query.status;
+  }
+
+  // Determine inclusive date filters
+  if (query.after || query.before) {
+    query.filter.storedAt = {};
+    if (query.after) query.filter.storedAt.$gte = query.after;
+    if (query.before) query.filter.storedAt.$lte = query.before;
+  }
+
+  // Convert sourceId to _source ID for Report compatibility
+  if (query.sourceId) query.filter._source = query.sourceId;
+
+  Report.textSearch(query.keywords, _.pick(query, 'filter'), function(err, reports) {
     if (err) return callback(err);
     callback(null, _.pluck(reports.results, 'obj'));
   });
