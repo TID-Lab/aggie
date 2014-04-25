@@ -1,6 +1,6 @@
-var processManager = require('./controllers/process-manager');
-processManager.fork('/controllers/api');
-processManager.fork('/controllers/fetching');
-processManager.fork('/controllers/streaming');
+var processManager = require('./lib/process-manager');
+processManager.fork('/lib/api');
+processManager.fork('/lib/fetching');
+processManager.fork('/lib/streaming');
 
 module.exports = processManager;
