@@ -24,16 +24,8 @@ schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
   if (this.isNew) this._wasNew = true;
-  var report = this;
-  report.storedAt = Date.now();
-  if (!report._source) return next();
-  // Find actual source object and store it as a sub-document
-  Source.findOne(report._source, function(err, source) {
-    report._source = undefined;
-    if (err || !source) return next(err);
-    report._source = source._id;
-    next();
-  });
+  this.storedAt = Date.now();
+  next();
 });
 
 schema.post('save', function() {
@@ -59,7 +51,7 @@ Report.queryReports = function(query, callback) {
   }
 
   // Re-set search timestamp
-  query.since = new Date;
+  query.since = new Date();
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided

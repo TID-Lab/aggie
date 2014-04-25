@@ -49,7 +49,7 @@ module.exports = function(app) {
     if (_.has(queryString, 'keywords')) {
       return {type: 'Report', keywords: queryString.keywords};
     }
-  };
+  }
 
   return app;
 };

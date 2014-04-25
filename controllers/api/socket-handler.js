@@ -85,4 +85,4 @@ module.exports = function(app, server, auth) {
   }
 
   return app;
-}
+};
