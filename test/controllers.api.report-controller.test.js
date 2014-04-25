@@ -11,24 +11,18 @@ describe('Report controller', function() {
   // Create a source for streaming data
   before(function(done) {
     botMaster.addListeners('source', Source.schema);
+    // Wait until all reports have been processed
+    reportWriter.once('done', done);
     process.nextTick(function() {
-      Source.create({type: 'dummy', keywords: 'Lorem ipsum'});
+      Source.create({type: 'dummy', keywords: 'e'});
       process.nextTick(function() {
         botMaster.start();
-        done();
+        // Stream data for 500ms
+        setTimeout(function() {
+          botMaster.stop();
+        }, 500);
       });
     });
-  });
-
-  before(function(done) {
-    // Wait until all reports have been processed
-    reportWriter.once('done', function() {
-      done();
-    });
-    // Stream data for 100ms
-    setTimeout(function() {
-      botMaster.stop();
-    }, 100);
   });
 
   describe('GET /api/v1/report', function() {
@@ -52,6 +46,46 @@ describe('Report controller', function() {
           expect(res.body).to.be.an.instanceof(Array);
           expect(res.body[0]).to.have.property('content');
           expect(res.body[0].content.toLowerCase()).to.contain('lorem');
+          done();
+        });
+    });
+
+    it('should query and filter reports', function(done) {
+      request(reportController)
+        .get('/api/v1/report?keywords=one&status=unassigned&before=' + Date.now())
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.not.be.empty;
+          expect(res.body[0]).to.have.property('content');
+          expect(res.body[0].content.toLowerCase()).to.contain('one');
+          done();
+        });
+    });
+
+    it('should query and filter reports with no results', function(done) {
+      request(reportController)
+        .get('/api/v1/report?keywords=one&status=assigned&after=' + Date.now())
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.be.empty;
+          done();
+        });
+    });
+
+    it('should query and filter by date range', function(done) {
+      request(reportController)
+        .get('/api/v1/report?keywords=one&after=' + (Date.now() - 864e5) + '&before=' + Date.now())
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.not.be.empty;
+          expect(res.body[0]).to.have.property('content');
+          expect(res.body[0].content.toLowerCase()).to.contain('one');
           done();
         });
     });
