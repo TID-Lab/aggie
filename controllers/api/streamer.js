@@ -21,22 +21,6 @@ Streamer.prototype.addListeners = function(type, emitter) {
   }
 };
 
-Streamer.prototype._addReportListeners = function(emitter) {
-  var self = this;
-
-  // Clean-up old listeners
-  emitter.removeAllListeners('report');
-
-  // Listens to new reports being written to the database
-  emitter.on('report', function(id) {
-    var isIdle = self.status === 'idle';
-    // Override current status to make sure queries get re-run
-    self.status = 'pending';
-    // Start querying if idle
-    if (isIdle) self.query();
-  });
-};
-
 // Track query, avoid duplicates
 Streamer.prototype.addQuery = function(query) {
   if (query instanceof Query) query = query.normalize();
@@ -76,6 +60,22 @@ Streamer.prototype.query = function() {
         }
       }
     });
+  });
+};
+
+Streamer.prototype._addReportListeners = function(emitter) {
+  var self = this;
+
+  // Clean-up old listeners
+  emitter.removeAllListeners('report');
+
+  // Listens to new reports being written to the database
+  emitter.on('report', function(id) {
+    var wasIdle = self.status === 'idle';
+    // Override current status to make sure queries get re-run
+    self.status = 'pending';
+    // Start querying if idle
+    if (wasIdle) self.query();
   });
 };
 
