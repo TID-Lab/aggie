@@ -55,4 +55,4 @@ function parseQueryData(queryString) {
   if (_.has(queryString, 'keywords')) {
     return _.extend({type: 'Report'}, _.pick(queryString, ['keywords', 'status', 'after', 'before', 'sourceId']));
   }
-};
+}
