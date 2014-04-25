@@ -1,6 +1,6 @@
 require('./init');
 var expect = require('chai').expect;
-var streamer = require('../controllers/api/streamer');
+var streamer = require('../lib/api/streamer');
 var Query = require('../models/query');
 var Report = require('../models/report');
 

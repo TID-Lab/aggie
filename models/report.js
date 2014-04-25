@@ -1,5 +1,5 @@
-var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var database = require('../lib/database');
+var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
 var Source = require('./source');
 var Query = require('./query');
@@ -43,6 +43,24 @@ Report.queryReports = function(query, callback) {
 
   query.limit = query.limit || QUERY_LIMIT;
   query.filter = {};
+
+  // Determine status filter
+  if (query.status) {
+    query.filter.status = {};
+    if (query.status === 'assigned') query.filter.status.$exists = true;
+    else if (query.status === 'unassigned') query.filter.status.$exists = false;
+    else query.filter.status = query.status;
+  }
+
+  // Determine inclusive date filters
+  if (query.after || query.before) {
+    query.filter.storedAt = {};
+    if (query.after) query.filter.storedAt.$gte = query.after;
+    if (query.before) query.filter.storedAt.$lte = query.before;
+  }
+
+  // Convert sourceId to _source ID for Report compatibility
+  if (query.sourceId) query.filter._source = query.sourceId;
 
   // Return only newer results
   if (query.since) {

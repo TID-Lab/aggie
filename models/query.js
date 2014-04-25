@@ -1,19 +1,20 @@
-var database = require('../controllers/database');
-var mongoose = require('mongoose');
+var database = require('../lib/database');
+var mongoose = database.mongoose;
 var _ = require('underscore');
 
 var schema = new mongoose.Schema({
   type: String, // The object type being queried
   keywords: String,
-  pertinence: String, // The Report pertinence being sought
+  status: String, // The Report pertinence being sought
   after: Date, // Lower date bound
   before: Date, // Upper date bound
-  since: Date // The time this Query was last executed
+  since: Date, // The time this Query was last executed
+  sourceId: String
 });
 
 // Normalize query for comparison
 schema.methods.normalize = function() {
-  var query = _.pick(this.toJSON(), ['type', 'keywords', 'pertinence', 'after', 'before']);
+  var query = _.pick(this.toJSON(), ['type', 'keywords', 'status', 'after', 'before', 'sourceId']);
   if (query.keywords) {
     // Make all keywords lowercase, then sort them alphabetically
     query.keywords = query.keywords.replace(/(,|\s)+/g, ' ').split(' ').map(function(w) {

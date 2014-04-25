@@ -44,24 +44,35 @@
       <a href="/logout">Logout</a>
     </li>
     <li>
-      <form action="/api/source" method="post">
+      <form action="/api/v1/source" method="post">
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
         Create Twitter source with keywords (e.g. banana,apple):
-        <input type="text" name="keywords" />
+        <input type="text" name="keywords" placeholder="Keyword" />
         <input type="submit">
       </form>
     </li>
     <li>
-      <form id="query" action="/api/report" method="get">
+      <form id="query" action="/api/v1/report" method="get">
         Search for Report data:
-        <input type="text" name="keywords" />
+        <input type="text" name="keywords" placeholder="Keywords" />
+        Status:
+        <select name="status">
+          <option value=""></option>
+          <option value="relevant">Relevant</option>
+          <option value="irrelevant">Irrelevant</option>
+          <option value="assigned">Assigned</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+        <input type="text" name="after" placeholder="After (date)" />
+        <input type="text" name="before" placeholder="Before (date)" />
+        <input type="text" name="sourceId" placeholder="Source ID" />
         <input type="submit">
       </form>
     </li>
     <li>
       Create new user:
-      <form action="/api/user" method="post">
+      <form action="/api/v1/user" method="post">
         Email
         <input type="text" name="email" />
         Username
@@ -72,28 +83,28 @@
       </form>
     </li>
     <li>
-      <a href="/api/user">List users</a>
+      <a href="/api/v1/user">List users</a>
     </li>
     <li>
-      <a href="/api/source">List sources</a>
+      <a href="/api/v1/source">List sources</a>
     </li>
     <li>
-      <a href="/api/report">List reports</a>
+      <a href="/api/v1/report">List reports</a>
     </li>
     <li>
-      <a href="/api/source/_all" data-method="delete">Delete all sources</a>
+      <a href="/api/v1/source/_all" data-method="delete">Delete all sources</a>
     </li>
     <li>
-      <a href="/api/report/_all" data-method="delete">Delete all reports</a>
+      <a href="/api/v1/report/_all" data-method="delete">Delete all reports</a>
     </li>
     <li>
-      <a href="/api/fetching">Check fetching status</a>
+      <a href="/api/v1/fetching">Check fetching status</a>
     </li>
     <li>
-      <a href="/api/fetching/on" data-method="put">Enable fetching</a>
+      <a href="/api/v1/fetching/on" data-method="put">Enable fetching</a>
     </li>
     <li>
-      <a href="/api/fetching/off" data-method="put">Disable fetching</a>
+      <a href="/api/v1/fetching/off" data-method="put">Disable fetching</a>
     </li>
   </ul>
   <h2>Response</h2>

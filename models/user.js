@@ -1,4 +1,4 @@
-var database = require('../controllers/database');
+var database = require('../lib/database');
 var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');

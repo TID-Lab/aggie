@@ -1,7 +1,7 @@
 require('./init');
 var expect = require('chai').expect;
-var server = require('../controllers/api/socket-handler')();
-var streamer = require('../controllers/api/streamer');
+var server = require('../lib/api/socket-handler')();
+var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Report = require('../models/report');
 
