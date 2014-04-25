@@ -47,18 +47,19 @@ var Report = mongoose.model('Report', schema);
 var QUERY_LIMIT = 20;
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
+  if (query instanceof Query) query = query.normalize();
 
   query.limit = query.limit || QUERY_LIMIT;
   query.filter = {};
 
   // Return only newer results
-  if (query.lastSearchedAt) {
+  if (query.since) {
     query.filter.storedAt = query.filter.storedAt || {};
-    query.filter.storedAt.$gte = query.lastSearchedAt;
+    query.filter.storedAt.$gte = query.since;
   }
 
   // Re-set search timestamp
-  query.lastSearchedAt = new Date;
+  query.since = new Date;
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided

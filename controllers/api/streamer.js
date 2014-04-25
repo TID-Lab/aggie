@@ -39,8 +39,9 @@ Streamer.prototype._addReportListeners = function(emitter) {
 
 // Track query, avoid duplicates
 Streamer.prototype.addQuery = function(query) {
-  var found = _.findWhere(this.queries, query.hash());
-  if (!found) this.queries.push(query.hash());
+  if (query instanceof Query) query = query.normalize();
+  var found = _.findWhere(this.queries, query);
+  if (!found) this.queries.push(query);
 };
 
 // Remove query from list
@@ -50,10 +51,14 @@ Streamer.prototype.removeQuery = function(query) {
 
 // Run all queries and emit the results
 Streamer.prototype.query = function() {
-  var self = this;
   var remaining = this.queries.length;
+  if (!remaining) {
+    this.status = 'idle';
+    return;
+  }
   var allEmpty = true;
   this.status = 'querying';
+  var self = this;
   this.queries.forEach(function(query) {
     // Query database
     Report.queryReports(query, function(err, reports) {
@@ -67,9 +72,7 @@ Streamer.prototype.query = function() {
         if (allEmpty && self.status === 'querying') self.status = 'idle';
         // If not idle, queue next query batch
         if (self.status !== 'idle') {
-          setTimeout(function() {
-            self.query();
-          }, QUERY_INTERVAL);
+          setTimeout(self.query(), QUERY_INTERVAL);
         }
       }
     });

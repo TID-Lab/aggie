@@ -114,4 +114,5 @@ module.exports.secret = config.secret;
 module.exports.store = store;
 module.exports.stubKey = stubKey;
 module.exports.stubCookie = stubCookie;
+module.exports.adminParty = config.adminParty;
 module.exports.ensureAuthenticated = ensureAuthenticated;
