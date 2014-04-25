@@ -19,14 +19,6 @@ describe('Query attributes', function() {
     expect(hash).to.equal('{"type":"Report","keywords":"one three two zero"}');
   });
 
-  it('should convert a hash into a query', function() {
-    var hash = '{"type":"Report","keywords":"one three zero two"}';
-    var unhashed = Query.unhash(hash);
-    expect(unhashed).to.have.property('keywords');
-    expect(unhashed.keywords).to.equal('one three zero two');
-    expect(Query.compare(unhashed, query)).to.be.true;
-  });
-
   it('should compare queries', function() {
     var compare = Query.compare({type: 'Report', keywords: 'three two zero one'}, query);
     expect(compare).to.be.true;

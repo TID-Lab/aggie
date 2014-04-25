@@ -6,6 +6,7 @@ var Report = require('../models/report');
 
 describe('Streamer', function() {
   before(function(done) {
+    streamer.queries = [];
     Report.create({content: '1 one'});
     Report.create({content: '2 two'});
     Report.create({content: 'One one'});

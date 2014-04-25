@@ -31,17 +31,6 @@ Query.hash = function(query) {
   return JSON.stringify(query.normalize());
 };
 
-Query.unhash = function(hash) {
-  if (typeof hash === 'string') {
-    try {
-      return JSON.parse(hash);
-    } catch(e) {
-      return {};
-    }
-  }
-  return hash;
-};
-
 Query.compare = function(query1, query2) {
   return Query.hash(query1) === Query.hash(query2);
 };

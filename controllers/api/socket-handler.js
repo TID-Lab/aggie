@@ -6,6 +6,7 @@ var authentication = require('./authentication');
 var _ = require('underscore');
 var streamer = require('./streamer');
 var Query = require('../../models/query');
+var SocketQueryGroup = require('./socket-query-group');
 
 module.exports = function(app, server, auth) {
   app = app || express();
@@ -42,47 +43,56 @@ module.exports = function(app, server, auth) {
   var queries = {};
   io.sockets.on('connection', function(socket) {
     var clientQuery, queryHash;
+
     // Listen for query events from client
     socket.on('query', function(queryData) {
-      // Remove client from all other queries to avoid multiple streams
-      removeClient(socket.id);
+      // Remove client from prior query to avoid multiple streams
+      removeClient(queryHash, socket.id);
+      // Instantiate and normalize client query
       clientQuery = (new Query(queryData)).normalize();
-      if (clientQuery !== {}) {
-        queryHash = Query.hash(clientQuery);
-        // Keep a list of clients listening to each query
-        if (_.has(queries, queryHash)) {
-          queries[queryHash] = _.union(queries[queryHash], [socket.id]);
-        } else {
-          queries[queryHash] = [socket.id];
-          // Track query in streamer
-          streamer.addQuery(clientQuery);
-        }
-      }
+      // Track query and add client as listener
+      queryHash = addClient(clientQuery, socket.id);
     });
 
     // Remove client from query list
     socket.on('disconnect', function() {
-      removeClient(socket.id);
+      removeClient(queryHash, socket.id);
     });
 
     // Send reports back to client for matching queries
     streamer.on('reports', function(query, reports) {
       // Determine if current client query matches the reports
-      if (Query.compare(query, clientQuery) && _.contains(queries[queryHash], socket.id)) socket.emit('reports', reports);
+      if (Query.compare(query, clientQuery) && queries[queryHash].has(socket.id)) {
+        socket.emit('reports', reports);
+      }
     });
   });
 
-  // Remove a client from listening to queries
-  function removeClient(id) {
-    _.each(queries, function(clients, hash) {
-      queries[hash] = _.without(clients, id);
-      // No more clients, destroy query
-      if (!queries[hash].length) {
-        delete queries[hash];
-        streamer.removeQuery(Query.unhash(hash));
-      }
-    });
+  // Add a client as a listener to a query
+  function addClient(query, id) {
+    if (!query || query === {}) return;
+    var hash = Query.hash(query);
+    // Store a list of clients listening to each query
+    if (!_.has(queries, hash)) {
+      queries[hash] = new SocketQueryGroup(query, id);
+      // Track query in streamer
+      streamer.addQuery(query);
+    } else {
+      queries[hash].add(id);
+    }
+    return hash;
   }
 
-  return app;
+  // Remove a client from listening to queries
+  function removeClient(hash, id) {
+    if (!hash || !_.has(queries, hash)) return;
+    queries[hash].remove(socket.id);
+    // Destroy query if no clients are listening
+    if (queries[hash].isEmpty()) {
+      delete queries[hash];
+      streamer.removeQuery(queries[hash].query);
+    }
+  }
+
+  return server;
 };
