@@ -60,10 +60,18 @@ Report.queryReports = function(query, callback) {
   // Re-set search timestamp
   query.lastSearchedAt = new Date;
 
-  Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
-    if (err) return callback(err);
-    callback(null, _.pluck(reports.results, 'obj'));
-  });
+  if (!query.keywords) {
+    // Just use filters when no keywords are provided
+    Report.find(query.filter, function(err, reports) {
+      if (err) return callback(err);
+      callback(null, reports);
+    });
+  } else {
+    Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
+      if (err) return callback(err);
+      callback(null, _.pluck(reports.results, 'obj'));
+    });
+  }
 };
 
 module.exports = Report;

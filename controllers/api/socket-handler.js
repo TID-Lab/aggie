@@ -38,22 +38,22 @@ module.exports = function(app, server, auth) {
 
   var queries = [];
   io.sockets.on('connection', function(socket) {
+    var clientQuery;
 
     // Listen for query events from client
     socket.on('query', function(queryData) {
       // Remove client from all other queries to avoid multiple streams
       removeClient(socket.id);
       if (!queryData.keywords) return;
-      // Track query in streamer
-      var query = new Query(queryData);
-      streamer.addQuery(query);
+      clientQuery = new Query(queryData);
       // Keep a list of clients listening to each query
-      var found = _.findWhere(queries, queryData);
+      var found = _.findWhere(queries, clientQuery.hash());
       if (found) {
         found.clients = _.union(found.clients, [socket.id]);
       } else {
-        queryData.clients = [socket.id];
-        queries.push(queryData);
+        queries.push(_.extend(clientQuery.hash(), {clients: [socket.id]}));
+        // Track query in streamer
+        streamer.addQuery(clientQuery);
       }
     });
 
@@ -64,9 +64,8 @@ module.exports = function(app, server, auth) {
 
     // Send reports back to client for matching queries
     streamer.on('reports', function(query, reports) {
-      // Determine which tracked query matches the reports
-      var matching = _.findWhere(queries, query);
-      if (matching && _.contains(matching.clients, socket.id)) socket.emit('reports', reports);
+      // Determine if current client query matches the reports
+      if (query === clientQuery.hash() && _.contains(clientQuery.clients, socket.id)) socket.emit('reports', reports);
     });
   });
 
@@ -76,6 +75,7 @@ module.exports = function(app, server, auth) {
       query.clients = _.without(query.clients, id);
       // No more clients, destroy query
       if (!query.clients.length) {
+        delete query.clients;
         streamer.removeQuery(query);
         queries = _.without(queries, query);
       }

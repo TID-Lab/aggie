@@ -39,12 +39,13 @@ Streamer.prototype._addReportListeners = function(emitter) {
 
 // Track query, avoid duplicates
 Streamer.prototype.addQuery = function(query) {
-  var found = _.findWhere(this.queries, _.omit(query.toJSON(), '_id'));
-  if (!found) this.queries.push(query);
+  var found = _.findWhere(this.queries, query.hash());
+  if (!found) this.queries.push(query.hash());
 };
 
+// Remove query from list
 Streamer.prototype.removeQuery = function(query) {
-  this.queries = _.without(this.queries, _.omit(query, '_id'));
+  this.queries = _.without(this.queries, query);
 };
 
 // Run all queries and emit the results
@@ -59,7 +60,7 @@ Streamer.prototype.query = function() {
       if (err) self.emit('error', err);
       if (reports.length) {
         allEmpty = false;
-        self.emit('reports', _.omit(query.toJSON(), ['_id', 'filter', 'limit', 'lastSearchedAt']), reports);
+        self.emit('reports', query, reports);
       }
       if (--remaining === 0) {
         // If no new reports were saved while querying, mark as idle
