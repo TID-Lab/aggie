@@ -11,13 +11,18 @@ body {
     float: left;
     width:350px;
 }
+.navbar {
+    padding-bottom: 0px;
+}
 .navbar,
 .navbar-header,
 .navbar-nav {
     font-size: 18px;
     font-weight: bold;
     font-family: Lato, Arial, sans-serif;
+    text-transform:capitalize;
     background-color: #009900;
+    margin-bottom:0px;
 }
 .navbar-nav > li {
     float: left;
@@ -29,31 +34,41 @@ body {
 
 .navbar-nav > li > a {
     line-height: 21px;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 15px;
     background-color: #009900;
     color: #ffffff;
 }
 .nav > li > a {
     display: block;
-    padding: 10px 15px;
+    padding: 10px 20px;
     position: relative;
+    //vertical-align: text-bottom;
+    //bottom: 0;
 }
 
-.navbar-inverse .navbar-nav > li > a:focus,
-.navbar-inverse .navbar-nav > li > a:hover,
 .navbar-nav > li > a:focus,
 .navbar-nav > li > a:hover {
     font-size: 19px;
     font-weight: bold;
-    background-color: #ffff66;
-    opacity: 0.7;
+    background-color: #b8e62e;
+    //opacity: 0.7;
     color: #000000;
 }
 .navbar-right {
-    font-size: 15px;
+    font-size: 13px;
+    padding: 5px 5px;
 }
 .navbar-right > li > a:hover,
 .navbar-right > li > a:focus {
-    font-size: 16px;
+    font-size: 14px;
+    padding: 5px 5px;
+}
+.navbar-padding {
+    line-height: 19px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    background-color: #ffff94;
+    color: #ffffff;
+    position: relative;
 }
