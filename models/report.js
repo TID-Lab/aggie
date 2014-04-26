@@ -23,16 +23,25 @@ schema.plugin(textSearch);
 schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
+  if (this.isNew) this._wasNew = true;
   this.storedAt = Date.now();
   next();
+});
+
+schema.post('save', function() {
+  if (this._wasNew) schema.emit('report', {_id: this._id.toString()});
+  else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
 });
 
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
+var QUERY_LIMIT = 20;
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
+  if (query instanceof Query) query = query.normalize();
 
+  query.limit = query.limit || QUERY_LIMIT;
   query.filter = {};
 
   // Determine status filter
@@ -53,10 +62,27 @@ Report.queryReports = function(query, callback) {
   // Convert sourceId to _source ID for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
 
-  Report.textSearch(query.keywords, _.pick(query, 'filter'), function(err, reports) {
-    if (err) return callback(err);
-    callback(null, _.pluck(reports.results, 'obj'));
-  });
+  // Return only newer results
+  if (query.since) {
+    query.filter.storedAt = query.filter.storedAt || {};
+    query.filter.storedAt.$gte = query.since;
+  }
+
+  // Re-set search timestamp
+  query.since = new Date();
+
+  if (!query.keywords) {
+    // Just use filters when no keywords are provided
+    Report.find(query.filter, function(err, reports) {
+      if (err) return callback(err);
+      callback(null, reports);
+    });
+  } else {
+    Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
+      if (err) return callback(err);
+      callback(null, _.pluck(reports.results, 'obj'));
+    });
+  }
 };
 
 module.exports = Report;
