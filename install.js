@@ -36,10 +36,18 @@ function createAdminUser(callback) {
       // Create new admin user
       User.create(userData, function(err, user) {
         if (err) console.error(err);
-        else console.log('admin user created with password ' + userData.password);
+        else console.log('"admin" user created with password "' + config.adminPassword + '"');
         callback();
       });
-    } else callback();
+    } else {
+      if (config.email.from) user.email = config.email.from;
+      if (config.adminPassword) user.password = config.adminPassword;
+      user.save(function(err) {
+        if (err) console.error(err);
+        else console.log('"admin" user updated with password "' + config.adminPassword + '"');
+        callback();
+      });
+    }
   });
 };
 tasks.push(createAdminUser);
