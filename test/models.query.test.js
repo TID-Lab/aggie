@@ -4,37 +4,23 @@ var Query = require('../models/query');
 
 var queryData, queryId;
 describe('Query attributes', function() {
-  before(function(done) {
-    queryData = {
-      type: 'Report',
-      keywords: 'test'
-    };
-    done();
+  before(function() {
+    query = new Query({type: 'Report', keywords: 'zero one two three'});
   });
 
-  it('should instantiate a new query', function(done) {
-    Query.getQuery(queryData, function(err, query) {
-      if (err) return done(err);
-      query.save(function(err, query, numberAffected) {
-        if (err) return done(err);
-        queryId = query._id;
-        expect(query).to.be.an.instanceof(Query);
-        expect(numberAffected).to.equal(1);
-        done();
-      });
-    });
+  it('should normalize query and sort keywords', function() {
+    var normalized = query.normalize();
+    expect(normalized).to.have.property('keywords');
+    expect(normalized.keywords).to.equal('one three two zero');
   });
 
-  it('should get an existing query', function(done) {
-    Query.getQuery(queryData, function(err, query) {
-      if (err) return done(err);
-      query.save(function(err, query, numberAffected) {
-        if (err) return done(err);
-        expect(query).to.be.an.instanceof(Query);
-        expect(numberAffected).to.equal(0);
-        expect(query._id).to.contain(queryId);
-        done();
-      });
-    });
+  it('should hash a query into a string', function() {
+    var hash = Query.hash({type: 'Report', keywords: 'three two zero one'});
+    expect(hash).to.equal('{"type":"Report","keywords":"one three two zero"}');
+  });
+
+  it('should compare queries', function() {
+    var compare = Query.compare({type: 'Report', keywords: 'three two zero one'}, query);
+    expect(compare).to.be.true;
   });
 });

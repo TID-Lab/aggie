@@ -7,16 +7,19 @@ var tasks = [];
 
 // Enable full-text indexing for Reports
 function enableIndexing(callback) {
-  // Enable database-level text search
-  database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
-    if (err) console.error(err);
-    else console.log('Text search has been enabled for MongoDB.');
-    Report.ensureIndexes(function(err) {
+  // Wait for database connection
+  setTimeout(function() {
+    // Enable database-level text search
+    database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
       if (err) console.error(err);
-      else console.log('Full-text indexing is enabled for Reports.')
-      callback();
+      else console.log('Text search has been enabled for MongoDB.');
+      Report.ensureIndexes(function(err) {
+        if (err) console.error(err);
+        else console.log('Full-text indexing is enabled for Reports.')
+        callback();
+      });
     });
-  });
+  }, 1000);
 };
 tasks.push(enableIndexing);
 
