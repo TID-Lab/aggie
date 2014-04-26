@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app ng-init="the_title='Aggie'">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="Superhero_files/bootstrap.css" media="screen">
-    <link rel="stylesheet" href="Superhero_files/bootswatch.css">
-    <link rel="stylesheet" href="css/aggie.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
-      <script src="../bower_components/respond/dest/respond.min.js"></script>
-    <![endif]-->
+        <title ng-bind="the_title"></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="Superhero_files/bootstrap.css" media="screen">
+        <link rel="stylesheet" href="Superhero_files/bootswatch.css">
+        <link rel="stylesheet" href="css/aggie.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+          <script src="../bower_components/respond/dest/respond.min.js"></script>
+        <![endif]-->
   </head>
   <body>
-              <div class="navbar">
+              <div class="navbar" ng-model="the_title">
                 <div class="navbar-header">
                 &nbsp;
                 </div>
                 <ul class="nav navbar-nav navbar-left">
-                  <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">reports</a></li>
-                  <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">incidents</a></li>
-                  <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">sources</a></li>
-                  <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">analysis</a></li>
+                  <li><a href="#" ng-click="the_title = 'Aggie - Reports'">reports</a></li>
+                  <li><a ng-href="#" ng-click="someController.someFunction()">incidents</a></li>
+                  <li><a ng-href="#" ng-click="someController.someFunction()">sources</a></li>
+                  <li><a ng-href="#" ng-click="someController.someFunction()">analysis</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                   <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">user name</a></li>
