@@ -73,3 +73,40 @@ body {
     color: #ffffff;
     position: relative;
 }
+.toolbar {
+    line-height: 22px;
+    padding-bottom: 10px;
+    padding-left: 60px;
+    padding-top: 0px;
+    background-color: #ffffff;
+    color: #00000000;
+    position: relative;
+}
+}
+.form-control {
+    display: inline-block;
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 5, 0.075) inset;
+    color: #1a2530;
+    display: block;
+    font-size: 15px;
+    height: 39px;
+    line-height: 1.42857;
+    padding: 8px 16px;
+    padding-top:5px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+input[type="search"] {
+    color: #1a2530;
+    background:transparent url(/img/search.png) no-repeat scroll left center;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    margin:0;
+    width: 300px;
+    max-width:500px;
+    padding-top:5px;
+    padding-left:16px;
+}

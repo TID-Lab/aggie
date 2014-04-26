@@ -31,8 +31,27 @@
                   <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">logout</a></li>
                 </ul>
               </div>
-              <div class="navbar-padding">
-              &nbsp;
+              <div class="navbar-padding">&nbsp;</div>
+              <div class="toolbar" ng-app="datePicker">
+                  <form name="toolbar_form" id="toolbar_form_id" class="form-control input-sm" ng-controller="DatePickerCtrl">
+                      <input type="search" placeholder="Enter keywords" id="inputSmall"/>
+                      <input type="button" value="Filter by Status" id="inputSmall"/>
+                      <input type="button" value="Filter by Source" id="inputSmall"/>
+                      Filter from: 
+                      <p class="input-group">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                      </p>
+                      To:
+                      <p class="input-group">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                      </p>
+                  </form>
               </div>
 
       <footer>
@@ -56,6 +75,7 @@
     <script src="UI_bootstrap/ui-bootstrap-custom-0.10.0.js"></script>
     <script src="UI_bootstrap/ui-bootstrap-custom-tpls-0.10.0.js"></script>
     <script src="signup_modal/signup_modal.js"></script>
+    <script src="date_picker/date_picker.js"></script>
   
 
 </body></html>
