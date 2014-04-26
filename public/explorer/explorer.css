@@ -32,3 +32,10 @@ ul#requests li {
   font-family: Lucidatypewriter, monospace;
   font-size: 12px;
 }
+
+#stream-wrapper {
+  float: right;
+  width: 400px;
+  position: relative;
+  top: -44px;
+}

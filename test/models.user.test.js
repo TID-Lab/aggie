@@ -6,6 +6,7 @@ var User = require('../models/user');
 describe('User attributes', function() {
   before(function(done) {
     user = new User({
+      username: 'test',
       email: 'janedoe@gmail.com',
       password: 'password'
     });

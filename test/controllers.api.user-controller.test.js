@@ -2,24 +2,23 @@ require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var userController = require('../controllers/api/user-controller');
+var userController = require('../lib/api/v1/user-controller')();
 
 describe('User controller', function() {
   before(function(done) {
     user = {
       provider: 'test',
-      id: 'test-user',
-      displayName: 'Test User',
+      username: 'test-user',
       email: 'test@example.com',
       password: 'letmein'
     };
     done();
   });
 
-  describe('POST /api/user', function() {
+  describe('POST /api/v1/user', function() {
     it('should create a new user', function(done) {
       request(userController)
-        .post('/api/user')
+        .post('/api/v1/user')
         .send(user)
         .expect(200)
         .end(function(err, res) {
@@ -31,10 +30,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('GET /api/user/:id', function() {
+  describe('GET /api/v1/user/:username', function() {
     it('should return user', function(done) {
       request(userController)
-        .get('/api/user/' + user.id)
+        .get('/api/v1/user/' + user.username)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -44,11 +43,11 @@ describe('User controller', function() {
     });
   });
 
-  describe('PUT /api/user/:id', function() {
+  describe('PUT /api/v1/user/:username', function() {
     it('should update user', function(done) {
-      user.displayName = 'Updated test user';
+      user.email = 'updated@example.com';
       request(userController)
-        .put('/api/user/' + user.id)
+        .put('/api/v1/user/' + user.username)
         .send(user)
         .expect(200)
         .end(function(err, res) {
@@ -59,10 +58,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('GET /api/user', function() {
+  describe('GET /api/v1/user', function() {
     it('should get a list of all users', function(done) {
       request(userController)
-        .get('/api/user')
+        .get('/api/v1/user')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -74,14 +73,14 @@ describe('User controller', function() {
     });
   });
 
-  describe('DELETE /api/user/:id', function() {
+  describe('DELETE /api/v1/user/:username', function() {
     it('should delete user', function(done) {
       request(userController)
-        .del('/api/user/' + user.id)
+        .del('/api/v1/user/' + user.username)
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/user/' + user.id)
+            .get('/api/v1/user/' + user.username)
             .expect(404, done);
         });
     });

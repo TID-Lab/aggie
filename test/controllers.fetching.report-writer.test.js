@@ -1,10 +1,10 @@
 require('./init');
 var expect = require('chai').expect;
 var _ = require('underscore');
-var reportWriter = require('../controllers/fetching/report-writer');
-var reportQueue = require('../controllers/fetching/report-queue');
-var botFactory = require('../controllers/fetching/bot-factory');
-var botMaster = require('../controllers/fetching/bot-master');
+var reportWriter = require('../lib/fetching/report-writer');
+var reportQueue = require('../lib/fetching/report-queue');
+var botFactory = require('../lib/fetching/bot-factory');
+var botMaster = require('../lib/fetching/bot-master');
 var Report = require('../models/report');
 var Source = require('../models/source');
 
@@ -21,7 +21,7 @@ describe('Report writer', function() {
     });
 
     it('should fetch reports from available bots', function(done) {
-      bot.once('reports', function() {
+      bot.once('report', function() {
         reportQueue.enqueue(this);
         var report_data = reportWriter.fetch();
         expect(report_data).to.have.property('content');
@@ -31,7 +31,7 @@ describe('Report writer', function() {
     });
 
     it('should write reports to database', function(done) {
-      bot.once('reports', function() {
+      bot.once('report', function() {
         reportQueue.enqueue(this);
         var report_data = reportWriter.fetch();
         reportWriter.write(report_data, function(err, report) {
