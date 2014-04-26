@@ -1,0 +1,40 @@
+body {
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.42857143;
+  color: #ffffff;
+  background-color: #ffffff;
+}
+
+.navbar {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  background-color: #009900;
+  color: #ffffff;
+}
+.navbar-inverse .navbar-text {
+  color: #ffffcc;
+}
+.nav .navbar-nav .button {
+  alignment: center;
+  text-color: #ffffff;
+  color: #009900;
+  background-color: #009900;
+  text-align: center;
+  border: none;
+}
+.navbar .button:hover,
+.navbar .button:focus {
+  alignment: center;
+  color: #ffff00;
+  background-color: #ffffb2;
+  text-align: center;
+  border: none;
+  opacity: 0.5;
+}
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #ebebeb;
+  background-color: #c85e17;
+}
+
