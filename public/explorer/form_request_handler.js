@@ -14,7 +14,7 @@ var FormRequestHandler = RequestHandler.extend({
       // Start streaming search data
       if (form.attr('id') === 'query') {
         // Establish socket connection
-        var socket = io.connect('http://localhost');
+        var socket = io.connect('/');
         // Listen to new reports
         socket.on('reports', function (reports) {
           // Add each new report to display
