@@ -4,124 +4,131 @@ body {
   line-height: 1.42857143;
   color: #ffffff;
   background-color: #ffffff;
-  padding-top:0px;
+  padding-top: 0px;
 }
 
 .navbar-header {
-    display: inline-block;
-    float: left;
-    width:200px;
+  display: inline-block;
+  float: left;
+  width: 200px;
 }
+
 .navbar {
-    padding-bottom: 0px;
+  padding-bottom: 0px;
 }
+
 .navbar,
 .navbar-header,
 .navbar-nav {
-    font-size: 18px;
-    font-weight: bold;
-    font-family: Lato, Arial, sans-serif;
-    text-transform:capitalize;
-    background-color: #009900;
-    margin-bottom:0px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: Lato, Arial, sans-serif;
+  text-transform: capitalize;
+  background-color: #009900;
+  margin-bottom: 0px;
 }
+
 .navbar-nav > li {
-    float: left;
+  float: left;
 }
 .nav > li {
-    display: block;
-    position: relative;
+  display: block;
+  position: relative;
 }
 
 .navbar-nav > li > a {
-    line-height: 21px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    background-color: #009900;
-    color: #ffffff;
+  line-height: 21px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  background-color: #009900;
+  color: #ffffff;
 }
+
 .nav > li > a {
-    display: block;
-    padding: 10px 20px;
-    position: relative;
-    //vertical-align: text-bottom;
-    //bottom: 0;
+  display: block;
+  padding: 10px 20px;
+  position: relative;
 }
 
 .navbar-nav > li > a:focus,
 .navbar-nav > li > a:hover {
-    font-size: 19px;
-    font-weight: bold;
-    background-color: #b8e62e;
-    //opacity: 0.7;
-    color: #000000;
+  font-size: 19px;
+  font-weight: bold;
+  background-color: #b8e62e;
+  color: #000000;
 }
+
 .navbar-right {
-    font-size: 13px;
-    padding: 5px 5px;
+  font-size: 13px;
+  padding: 5px 5px;
 }
+
 .navbar-right > li > a:hover,
 .navbar-right > li > a:focus {
-    font-size: 14px;
-    padding: 5px 5px;
+  font-size: 14px;
+  padding: 5px 5px;
 }
+
 .navbar-padding {
-    line-height: 19px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    background-color: #ffff94;
-    color: #ffffff;
-    position: relative;
+  line-height: 19px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  background-color: #ffff94;
+  color: #ffffff;
+  position: relative;
 }
+
 .toolbar {
-    line-height: 22px;
-    padding-bottom: 10px;
-    padding-left: 60px;
-    padding-top: 0px;
-    background-color: #ffffff;
-    color: #00000000;
-    position: relative;
+  line-height: 22px;
+  padding-bottom: 10px;
+  padding-left: 60px;
+  padding-top: 0px;
+  background-color: #ffffff;
+  color: #00000000;
+  position: relative;
 }
-}
+
 .form-control {
-    display: inline-block;
-    background-color: #FFFFFF;
-    background-image: none;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0;
-    box-shadow: 0 1px 1px rgba(0, 0, 5, 0.075) inset;
-    color: #1a2530;
-    display: block;
-    font-size: 15px;
-    height: 39px;
-    line-height: 1.42857;
-    padding: 8px 16px;
-    padding-top:5px;
-    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-    width: 100%;
+  display: inline-block;
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 5, 0.075) inset;
+  color: #1a2530;
+  display: block;
+  font-size: 15px;
+  height: 39px;
+  line-height: 1.42857;
+  padding: 8px 16px;
+  padding-top: 5px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
 }
+
 input[type="search"] {
-    color: #1a2530;
-    background:transparent url(/img/search.png) no-repeat scroll left center;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    margin:0;
-    width: 300px;
-    max-width:500px;
-    padding-top:5px;
-    padding-left:16px;
+  color: #1a2530;
+  background: transparent url(/img/search.png) no-repeat scroll left center;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  margin: 0;
+  width: 300px;
+  max-width: 500px;
+  padding-top: 5px;
+  padding-left: 16px;
 }
+
 .up {
-   height:0;
-   width:0;
-   border-top:100px solid black;
-   border-left:100px solid transparent;
-   transform:rotate(-45deg);   
-  }
+  height: 0;
+  width: 0;
+  border-top: 100px solid black;
+  border-left: 100px solid transparent;
+  transform: rotate(-45deg);   
+}
 
 .down {
-   height:0;
-   width:0;
-   border-bottom:100px solid black;
-   border-right:100px solid transparent;
-   transform:rotate(-45deg); 
-  }
+   height: 0;
+   width: 0;
+   border-bottom: 100px solid black;
+   border-right: 100px solid transparent;
+   transform: rotate(-45deg); 
+}
