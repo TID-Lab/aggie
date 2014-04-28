@@ -12,7 +12,7 @@ This is the future of Aggie.
 1. Copy `config/secrets.json.example` to `config/secrets.json` and fill in values appropriately.
 1. Start Mongo DB.
 1. To run tests, run `gulp`.
-1. To start server, run `npm start`.
+1. To start server, run `npm start`. # Run this in mongo first: db.addUser('admin', 'letmein');
 
 ## To enable full-text search in MongoDB
 

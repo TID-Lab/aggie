@@ -10,7 +10,7 @@ body {
 .navbar-header {
     display: inline-block;
     float: left;
-    width:350px;
+    width:200px;
 }
 .navbar {
     padding-bottom: 0px;
@@ -110,3 +110,18 @@ input[type="search"] {
     padding-top:5px;
     padding-left:16px;
 }
+.up {
+   height:0;
+   width:0;
+   border-top:100px solid black;
+   border-left:100px solid transparent;
+   transform:rotate(-45deg);   
+  }
+
+.down {
+   height:0;
+   width:0;
+   border-bottom:100px solid black;
+   border-right:100px solid transparent;
+   transform:rotate(-45deg); 
+  }
