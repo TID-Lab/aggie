@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app ng-init="the_title='Aggie'">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+        <title ng-bind="the_title"></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="third_party/Superhero_files/bootstrap.css" media="screen">
+        <link rel="stylesheet" href="third_party/Superhero_files/bootswatch.css">
+        <link rel="stylesheet" href="common/css/aggie.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+          <script src="../bower_components/respond/dest/respond.min.js"></script>
+        <![endif]-->
+  </head>
+  <body>
+    <div class="navbar" ng-model="the_title">
+      <div class="navbar-header">
+        &nbsp;
+      </div>
+      <ul class="nav navbar-nav navbar-left">
+        <li><a href="#" ng-click="the_title = 'Aggie - Reports'">reports</a></li>
+        <li><a ng-href="#" ng-click="someController.someFunction()">incidents</a></li>
+        <li><a ng-href="#" ng-click="someController.someFunction()">sources</a></li>
+        <li><a ng-href="#" ng-click="someController.someFunction()">analysis</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">user name</a></li>
+        <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">settings</a></li>
+        <li><a ng-href="javascript: return false;" ng-click="someController.someFunction()">logout</a></li>
+      </ul>
+    </div>
+    <div class="navbar-padding">&nbsp;</div>
+    <div class="toolbar" ng-app="datePicker">
+        <form name="toolbar_form" id="toolbar_form_id" class="form-control input-sm" ng-controller="DatePickerCtrl">
+          <input type="search" placeholder="Enter keywords" id="inputSmall"/>
+          <input type="button" value="Filter by Status" id="inputSmall"/>
+          <input type="button" value="Filter by Source" id="inputSmall"/>
+          Filter from: 
+          <p class="input-group">
+          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+          To:
+          <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </form>
+      </div>
+
+      <footer>
+        <div class="row">
+          <div class="col-lg-12">
+          Footer
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+
+    <script src="third_party/Superhero_files/jquery-1.js"></script>
+    <script src="third_party/Superhero_files/bootstrap.js"></script>
+    <script src="third_party/Superhero_files/bootswatch.js"></script>
+    <script src="third_party/Angular/angular.js"></script>
+    <script src="third_party/Angular/angular-resource.js"></script>
+    <script src="third_party/UI_bootstrap/ui-bootstrap-custom-0.10.0.js"></script>
+    <script src="third_party/UI_bootstrap/ui-bootstrap-custom-tpls-0.10.0.js"></script>
+    <script src="third_party/date_picker/DatePicker.js"></script>
+  
+
+</body></html>
