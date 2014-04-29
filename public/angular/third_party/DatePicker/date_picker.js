@@ -2,7 +2,8 @@ var DatePicker = angular.module('datePicker', ['ui.bootstrap']);
 
 var DatePickerCtrl = function ($scope) {
   $scope.today = function() {
-    $scope.dt = new Date();
+    $scope.dt_from = new Date();
+    $scope.dt_to = new Date();
   };
   $scope.today();
 
@@ -12,7 +13,8 @@ var DatePickerCtrl = function ($scope) {
   };
 
   $scope.clear = function () {
-    $scope.dt = null;
+    $scope.dt_from = null;
+    $scope.dt_to = null;
   };
 
   // Disable weekend selection
@@ -25,11 +27,11 @@ var DatePickerCtrl = function ($scope) {
   };
   $scope.toggleMin();
 
-  $scope.open = function($event) {
+  $scope.open = function($event,opened) {
     $event.preventDefault();
     $event.stopPropagation();
 
-    $scope.opened = true;
+    $scope[opened] = true;
   };
 
   $scope.dateOptions = {

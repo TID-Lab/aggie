@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="third_party/Superhero_files/bootstrap.css" media="screen">
         <link rel="stylesheet" href="third_party/Superhero_files/bootswatch.css">
-        <link rel="stylesheet" href="common/css/aggie.css">
+        <link rel="stylesheet" href="css/aggie.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
@@ -39,16 +39,16 @@
           <input type="button" value="Filter by Source" id="inputSmall"/>
           Filter from: 
           <p class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_from" is-open="opened" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
             <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button class="btn btn-default" ng-click="open($event,'opened_from')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </p>
           To:
           <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_to" is-open="opened" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
             <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button class="btn btn-default" ng-click="open($event,'opened_to')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </p>
         </form>
@@ -72,7 +72,7 @@
     <script src="third_party/Angular/angular-resource.js"></script>
     <script src="third_party/UI_bootstrap/ui-bootstrap-custom-0.10.0.js"></script>
     <script src="third_party/UI_bootstrap/ui-bootstrap-custom-tpls-0.10.0.js"></script>
-    <script src="third_party/date_picker/DatePicker.js"></script>
+    <script src="third_party/DatePicker/date_picker.js"></script>
   
 
 </body></html>
