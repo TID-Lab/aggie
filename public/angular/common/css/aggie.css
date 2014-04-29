@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'glyphicons-halflings-regular';
+  font-style: normal;
+  font-weight: 400;
+  src: local('glyphicons-halflings-regular'), local('glyphicons-halflings-regular'), url(third_party/Fonts/glyphicons-halflings-regular.woff) format('woff');
+}
+
 body {
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
