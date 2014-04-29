@@ -122,5 +122,20 @@
       new RequestDefinitionLoader('#requests');
     });
   </script>
+  <script type="text/javascript">
+    // Establish socket connection
+    var socket = io.connect('/');
+    // Display fetching status updates
+    socket.on('fetchingStatusUpdate', function(status) {
+      $('#stream').prepend($('<pre>' + JSON.stringify(status, undefined, 2) + '</pre>'));
+    });
+    // Listen to new reports
+    socket.on('reports', function (reports) {
+      // Add each new report to display
+      reports.forEach(function(report) {
+        $('#stream').prepend($('<pre>' + JSON.stringify(report, undefined, 2) + '</pre>'));
+      });
+    });
+  </script>
 </body>
 </html>
