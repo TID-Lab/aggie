@@ -39,14 +39,14 @@
           <input type="button" value="Filter by Source" id="inputSmall"/>
           Filter from: 
           <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_from" is-open="opened" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_from" is-open="opened_from" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
             <span class="input-group-btn">
               <button class="btn btn-default" ng-click="open($event,'opened_from')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </p>
           To:
           <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_to" is-open="opened" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt_to" is-open="opened_to" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
             <span class="input-group-btn">
               <button class="btn btn-default" ng-click="open($event,'opened_to')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
