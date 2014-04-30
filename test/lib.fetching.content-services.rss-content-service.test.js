@@ -9,12 +9,16 @@ describe('RSS content service', function() {
   });
 
   it('should fetch content from RSS', function(done) {
-    rssContentService.start();
+    rssContentService.fetch();
     rssContentService.on('report', function(report_data) {
-      console.log(report_data);
       expect(report_data).to.have.property('content');
-      // Stop stream to ensure a single fetch
-      rssContentService.stop();
+      expect(report_data).to.have.property('url');
+      expect(report_data.url).to.contain('news.gatech.edu');
+    });
+    rssContentService.on('error', function(err) {
+      done(err);
+    });
+    rssContentService.on('end', function() {
       done();
     });
   });
