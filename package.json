@@ -17,15 +17,18 @@
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
     "fbgraph": "~0.2.9",
+    "feedparser": "~0.16.6",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
     "nodemailer": "~0.6.3",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
+    "passport.socketio": "~3.0.1",
+    "request": "~2.34.0",
+    "resanitize": "~0.3.0",
     "socket.io": "~0.9.16",
     "twit": "~1.1.12",
-    "underscore": "~1.6.0",
-    "passport.socketio": "~3.0.1"
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",
