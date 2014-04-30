@@ -7,7 +7,7 @@ var contentServiceFactory = require('../lib/fetching/content-service-factory');
 describe('Pull bot', function() {
   before(function(done) {
     var contentService = contentServiceFactory.create({sourceType: 'dummy-pull'});
-    pullBot = new PullBot({contentService: contentService});
+    pullBot = new PullBot({contentService: contentService, interval: 100});
     done();
   });
 
