@@ -11,17 +11,7 @@ var FormRequestHandler = RequestHandler.extend({
         data: method == 'get' ? form.serialize() : form.serializeHash()
       });
 
-      // Start streaming search data
-      if (form.attr('id') === 'query') {
-        // Establish socket connection
-        var socket = io.connect('/');
-        // Listen to new reports
-        socket.on('reports', function (reports) {
-          // Add each new report to display
-          reports.forEach(function(report) {
-            $('#stream').prepend($('<pre>' + JSON.stringify(report, undefined, 2) + '</pre>'));
-          });
-        });
+      if (socket && form.attr('id') === 'query') {
         // Send query to get reports back
         socket.emit('query', form.serializeHash());
       }
