@@ -4,6 +4,8 @@ var server = require('../lib/api/socket-handler')();
 var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Report = require('../models/report');
+var fetchingController = require('../lib/api/v1/fetching-controller');
+var request = require('supertest');
 
 var client;
 
@@ -42,6 +44,20 @@ describe('Socket handler', function() {
     Report.create({content: 'This is another TEST'});
     Report.create({content: 'Testing this'});
     Report.create({content: 'one two three'});
+  });
+
+  it('should receive updates from the global fetching status', function(done) {
+    client.once('fetchingStatusUpdate', function(status) {
+      expect(status).to.have.property('fetching');
+      expect(status.fetching).to.be.true;
+      done();
+    });
+    request(fetchingController)
+      .put('/api/v1/fetching/on')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+      });
   });
 
   // Disconnect socket
