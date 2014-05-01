@@ -12,6 +12,7 @@
   <script type="text/javascript" src="form_request_handler.js"></script>
   <script type="text/javascript" src="request_definition_loader.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="socket_handler.js"></script>
 </head>
 <body>
   <h1>Aggie API Explorer</h1>
@@ -120,21 +121,6 @@
   <script type="text/javascript">
     $(document).ready(function(){
       new RequestDefinitionLoader('#requests');
-    });
-  </script>
-  <script type="text/javascript">
-    // Establish socket connection
-    var socket = io.connect('/');
-    // Display fetching status updates
-    socket.on('fetchingStatusUpdate', function(status) {
-      $('#stream').prepend($('<pre>' + JSON.stringify(status, undefined, 2) + '</pre>'));
-    });
-    // Listen to new reports
-    socket.on('reports', function (reports) {
-      // Add each new report to display
-      reports.forEach(function(report) {
-        $('#stream').prepend($('<pre>' + JSON.stringify(report, undefined, 2) + '</pre>'));
-      });
     });
   </script>
 </body>
