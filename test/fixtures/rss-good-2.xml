@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?><rss version="2.0" xml:base="http://www.news.gatech.edu/campus-and-community" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:og="http://ogp.me/ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:sioc="http://rdfs.org/sioc/ns#" xmlns:sioct="http://rdfs.org/sioc/types#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <channel>
+    <title>The Latest Georgia Tech News</title>
+    <link>http://www.news.gatech.edu/campus-and-community</link>
+    <description></description>
+    <language>en</language>
+    <item>
+      <title>37 Graduate Students Earn NSF Graduate Research Fellowships</title>
+      <link>http://www.news.gatech.edu/2014/04/29/37-graduate-students-earn-nsf-graduate-research-fellowships</link>
+      <description>  &lt;span class=&quot;date-display-single&quot; property=&quot;dc:date&quot; datatype=&quot;xsd:dateTime&quot; content=&quot;2014-04-29T00:00:00-04:00&quot;&gt;April 29, 2014&lt;/span&gt;  Atlanta, GA  &lt;p&gt;Fellows earn funding for three years of study in their field.&lt;/p&gt;</description>
+      <pubDate>Tue, 29 Apr 2014 20:18:12 +0000</pubDate>
+      <dc:creator>Jupiter</dc:creator>
+      <guid isPermaLink="false">124751 at http://www.news.gatech.edu</guid>
+      <comments>http://www.news.gatech.edu/2014/04/29/37-graduate-students-earn-nsf-graduate-research-fellowships#comments</comments>
+    </item>
+    <item>
+      <title>As Strong as its Weakest Link: Experiments Determine Real-world Limits of Graphene</title>
+      <link>http://www.news.gatech.edu/2014/04/29/strong-its-weakest-link-experiments-determine-real-world-limits-graphene</link>
+      <description>  &lt;span class=&quot;date-display-single&quot; property=&quot;dc:date&quot; datatype=&quot;xsd:dateTime&quot; content=&quot;2014-04-29T00:00:00-04:00&quot;&gt;April 29, 2014&lt;/span&gt;  Atlanta, GA  &lt;p&gt;Researchers have measured the fracture toughness of imperfect graphene for the first time and found it to be somewhat brittle. While it&#039;s still very useful, graphene is really only as strong as its weakest link, which they determined to be &quot;substantially lower&quot; than the intrinsic strength of graphene.&lt;/p&gt;</description>
+      <pubDate>Tue, 29 Apr 2014 13:37:53 +0000</pubDate>
+      <dc:creator>Jupiter</dc:creator>
+      <guid isPermaLink="false">124511 at http://www.news.gatech.edu</guid>
+      <comments>http://www.news.gatech.edu/2014/04/29/strong-its-weakest-link-experiments-determine-real-world-limits-graphene#comments</comments>
+    </item>
+    <item>
+      <title>Lipton Elected to American Academy of Arts and Sciences</title>
+      <link>http://www.news.gatech.edu/2014/04/28/lipton-elected-american-academy-arts-and-sciences</link>
+      <description>  CoC professor joins short list of Georgia Tech notables as fellow of exclusive association  &lt;span class=&quot;date-display-single&quot; property=&quot;dc:date&quot; datatype=&quot;xsd:dateTime&quot; content=&quot;2014-04-29T00:00:00-04:00&quot;&gt;April 29, 2014&lt;/span&gt;  Atlanta, GA  &lt;p&gt;CoC professor joins short list of Georgia Tech notables as fellow of exclusive association&lt;/p&gt;</description>
+      <pubDate>Mon, 28 Apr 2014 20:09:27 +0000</pubDate>
+      <dc:creator>Jupiter</dc:creator>
+      <guid isPermaLink="false">125211 at http://www.news.gatech.edu</guid>
+      <comments>http://www.news.gatech.edu/2014/04/28/lipton-elected-american-academy-arts-and-sciences#comments</comments>
+    </item>
+  </channel>
+</rss>
