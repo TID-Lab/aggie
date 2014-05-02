@@ -30,6 +30,7 @@ schema.methods.enable = function(callback) {
   callback = callback || function() {};
   if (!this.enabled) {
     this.enabled = true;
+    this.lastEnabledAt = new Date();
     this.save(function(err, trend) {
       if (err) return callback(err);
       if (!trend) return callback(new Error.NotFound());
