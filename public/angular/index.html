@@ -1,91 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<html lang="en" ng-app="Aggie">
+  <head>
     <meta charset="utf-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.css" media="screen">
-    <link rel="stylesheet" href="css/bootswatch.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
-      <script src="../bower_components/respond/dest/respond.min.js"></script>
-    <![endif]-->
+    <title>Aggie</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
   </head>
   <body>
-            <div style="display: none;" id="source-button" class="btn btn-primary btn-xs">&lt; &gt;</div></div>
-
-            <div class="bs-component">
-              <div class="navbar navbar-inverse">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#">Aggie</a>
-                </div>
-                <div class="navbar-collapse collapse navbar-inverse-collapse">
-                  <ul class="nav navbar-nav">
-                    <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Dropdown header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                  <form class="navbar-form navbar-left">
-                    <input class="form-control col-lg-8" placeholder="Search" type="text">
-                  </form>
-                  <ul class="nav navbar-nav navbar-right">
-                    <div ng-app="signupModal" id="signup_modal_id">
-                        <button ng-click="open()" class="btn btn-default">Test Modal</button>
-                    </div>
-                    <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-      <footer>
-        <div class="row">
-          <div class="col-lg-12">
-          Footer
-          </div>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Aggie</a>
         </div>
-
-      </footer>
-
-
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <ul class="nav navbar-nav">
+            <li><a ui-sref="reports">Reports</a></li>
+            <li><a ui-sref="incidents">Incidents</a></li>
+            <li><a ui-sref="sources">Sources</a></li>
+            <li><a ui-sref="analysis">Analysis</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="user">
+              <a ui-sref="user">
+              <i class="fa fa-user fa-fw"></i>
+              Tom Smyth</a>
+            </li>
+            <li>
+              <a ui-sref="settings">
+                <i class="fa fa-gear fa-fw"></i>
+                Settings
+              </a>
+            </li>
+            <li>
+              <a href="logout">
+                <i class="fa fa-sign-out fa-fw"></i>
+                Log out
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-
-
-    <script src="Superhero_files/jquery-1.js"></script>
-    <script src="Superhero_files/bootstrap.js"></script>
-    <script src="Superhero_files/bootswatch.js"></script>
-    <script src="Angular/angular.js"></script>
-    <script src="Angular/angular-resource.js"></script>
-    <script src="UI_bootstrap/ui-bootstrap-custom-0.10.0.js"></script>
-    <script src="UI_bootstrap/ui-bootstrap-custom-tpls-0.10.0.js"></script>
-    <script src="js/signup_modal.js"></script>
-  
-
-</body></html>
+    <div class="navbar navbar-stats">
+      <div class="container">
+        <p class="navbar-text">Stats go here.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div ui-view></div>
+      <script src="js/angular.min.js"></script>
+      <script src="js/angular-ui-router.min.js"></script>
+      <script src="js/ui-bootstrap.min.js"></script>
+      <script src="js/app.js"></script>
+    </div>
+  </body>
+</html>

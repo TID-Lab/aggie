@@ -21,6 +21,7 @@ node_modules
 Thumbs.db
 
 public/css/styles.css
+public/angular/css/app.css
 config/secrets.js
 config/secrets.json
 
