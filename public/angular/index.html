@@ -1,26 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="Aggie">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aggie</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
   </head>
   <body>
     <div class="navbar navbar-default">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Aggie</a>
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Aggie</a>
+        </div>
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <ul class="nav navbar-nav">
+            <li ui-sref-active="active"><a ui-sref="reports">Reports</a></li>
+            <li ui-sref-active="active"><a ui-sref="incidents">Incidents</a></li>
+            <li ui-sref-active="active"><a ui-sref="sources">Sources</a></li>
+            <li ui-sref-active="active"><a ui-sref="analysis">Analysis</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li ui-sref-active="active" class="user">
+              <a ui-sref="user">
+              <i class="fa fa-user fa-fw"></i>
+              Tom Smyth</a>
+            </li>
+            <li ui-sref-active="active">
+              <a ui-sref="settings">
+                <i class="fa fa-gear fa-fw"></i>
+                Settings
+              </a>
+            </li>
+            <li>
+              <a href="logout">
+                <i class="fa fa-sign-out fa-fw"></i>
+                Log out
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="navbar-collapse collapse navbar-responsive-collapse">
-        <ul class="nav navbar-nav">
-          <li><a ui-sref="reports">Reports</a></li>
-          <li><a ui-sref="incidents">Incidents</a></li>
-          <li><a ui-sref="sources">Sources</a></li>
-          <li><a ui-sref="analysis">Analysis</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a ui-sref="username"><strong>User Name</strong></a></li>
-          <li><a ui-sref="settings">Settings</a></li>
-          <li><a href="logout">Logout</a></li>
-        </ul>
+    </div>
+    <div class="navbar navbar-stats">
+      <div class="container">
+        <p class="navbar-text">Stats go here.</p>
       </div>
     </div>
     <div class="container">
