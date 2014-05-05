@@ -25,7 +25,8 @@
     "socket.io": "~0.9.16",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
-    "passport.socketio": "~3.0.1"
+    "passport.socketio": "~3.0.1",
+    "node-sass": "~0.8.6"
   },
   "devDependencies": {
     "chai": "~1.9.0",

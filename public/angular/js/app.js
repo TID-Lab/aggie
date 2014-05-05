@@ -1,9 +1,15 @@
 var aggie = angular.module('Aggie', ['ui.router']);
+
 aggie.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
   function($stateProvider, $urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode(true);
+
     $urlRouterProvider.otherwise('/');
-    $stateProvider.state('reports', {
+
+    $stateProvider.state('home', {
+      url: '/',
+      templateUrl: 'templates/home.html',
+    }).state('reports', {
       url: '/reports',
       templateUrl: 'templates/reports.html',
       controller: function($scope) {
@@ -27,6 +33,9 @@ aggie.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
     }).state('settings', {
       url: '/settings',
       templateUrl: 'templates/settings.html'
+    }).state('user', {
+      url: '/user',
+      templateUrl: 'templates/user.html'
     });
   }
 ]);

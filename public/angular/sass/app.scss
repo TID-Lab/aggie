@@ -1,0 +1,26 @@
+$navbar-green: #009446;
+$navbar-yellow: #eaef92;
+
+body {
+  background-color: #fff;
+  color: #333;
+}
+
+.navbar-default {
+  background-color: $navbar-green;
+  margin-bottom: 0;
+  .navbar-nav > li > a {
+    &:hover,
+    &:focus {
+      background-color: darken($navbar-green, 10%);
+    }
+  }
+}
+
+.navbar-stats {
+  background-color: $navbar-yellow;
+}
+
+.nav li.user {
+  font-weight: bold;
+}
