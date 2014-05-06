@@ -1,41 +1,17 @@
-var aggie = angular.module('Aggie', ['ui.router']);
+angular.module('Aggie', ['routes']).
+  config(['$urlRouterProvider', '$locationProvider',
+    function($urlRouterProvider, $locationProvider) {
+      $locationProvider.html5Mode(true);
+      $urlRouterProvider.otherwise('/home');
+    }
+  ]).run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
+    var needsAuth = function () {
+      ['/login'].indexOf($location.path()) == -1;
+    };
 
-aggie.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
-  function($stateProvider, $urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
-
-    $urlRouterProvider.otherwise('/');
-
-    $stateProvider.state('home', {
-      url: '/',
-      templateUrl: '/templates/home.html',
-    }).state('reports', {
-      url: '/reports',
-      templateUrl: '/templates/reports.html',
-      controller: function($scope) {
-        $scope.items = ['A', 'List', 'Of', 'Reports'];
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
+      if (needsAuth() && !AuthService.isLoggedIn()) {
+        $location.path('/login');
       }
-    }).state('incidents', {
-      url: '/incidents',
-      templateUrl: '/templates/incidents.html',
-      controller: function($scope){
-        $scope.things = ['A', 'List', 'Of', 'Incidents'];
-      }
-    }).state('sources', {
-      url: '/sources',
-      templateUrl: '/templates/sources.html',
-      controller: function($scope){
-        $scope.things = ['A', 'List', 'Of', 'Sources'];
-      }
-    }).state('analysis', {
-      url: '/analysis',
-      templateUrl: '/templates/analysis.html'
-    }).state('settings', {
-      url: '/settings',
-      templateUrl: '/templates/settings.html'
-    }).state('user', {
-      url: '/user',
-      templateUrl: '/templates/user.html'
     });
-  }
-]);
+  }]);
