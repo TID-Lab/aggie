@@ -46,6 +46,21 @@ describe('Trend controller', function() {
     });
   });
 
+  describe('GET /api/v1/trend', function() {
+    it('should get a list of all trends', function(done) {
+      request(trendController)
+        .get('/api/v1/trend')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.not.be.empty;
+          compare(_.findWhere(res.body, {_id: trend._id}), trend);
+          done();
+        });
+    });
+  });
+
   describe('PUT /api/v1/trend/:_id/:op', function() {
     it('should disable trend', function(done) {
       request(trendController)
@@ -61,21 +76,6 @@ describe('Trend controller', function() {
       request(trendController)
         .put('/api/v1/trend/' + trend._id + '/toggle')
         .expect(403, done);
-    });
-  });
-
-  describe('GET /api/v1/trend', function() {
-    it('should get a list of all trends', function(done) {
-      request(trendController)
-        .get('/api/v1/trend')
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.not.be.empty;
-          compare(_.findWhere(res.body, {_id: trend._id}), trend);
-          done();
-        });
     });
   });
 

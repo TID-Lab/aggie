@@ -4,6 +4,7 @@ require('../lib/error');
 
 var schema = new mongoose.Schema({
   _query: {type: String, ref: 'Query', required: true},
+  timebox: {type: Number, default: 300},
   createdAt: {type: Date, default: new Date()},
   counts: {type: Array, default: []},
   enabled: {type: Boolean, default: true},

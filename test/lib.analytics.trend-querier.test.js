@@ -10,7 +10,7 @@ describe('Trend querier', function() {
   before(function(done) {
     Query.create({type: 'Report', keywords: 'test'}, function(err, query) {
       if (err) return done(err);
-      Trend.create({_query: query._id}, function(err, trend) {
+      Trend.create({_query: query._id, timebox: 300}, function(err, trend) {
         if (err) return done(err);
         trendQuerier = new TrendQuerier({trend: trend});
         done();
@@ -45,7 +45,6 @@ describe('Trend querier', function() {
     setTimeout(function() {
       trendQuerier.runQuery(function(err, counts) {
         if (err) return done(err);
-        console.log(counts);
         expect(counts).to.be.an.instanceof(Array);
         expect(counts).to.have.length(1);
         expect(counts[0]).to.have.property('counts');

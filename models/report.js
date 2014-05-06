@@ -9,7 +9,6 @@ var schema = new mongoose.Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: Date,
-  timebox: Date,
   content: String,
   author: String,
   status: String,
@@ -25,36 +24,8 @@ schema.index({content: 'text'});
 schema.pre('save', function(next) {
   if (this.isNew) this._wasNew = true;
   this.storedAt = new Date();
-  this.timebox = getTimebox();
   next();
 });
-
-// Calculate 5-minute timebox
-function getTimebox(date) {
-  if (!date) date = Date.now();
-  else if (typeof date === 'date') date = date.getTime();
-
-  var seconds = Math.floor(date / 100000);
-  var timebox;
-  switch (seconds % 10) {
-    case 1:
-    case 2:
-      timebox = (seconds - (seconds % 10)) * 100000;
-      break;
-    case 4:
-    case 5:
-      timebox = (seconds - (seconds % 10)) * 100000 + 300000;
-      break;
-    case 7:
-    case 8:
-      timebox = (seconds - (seconds % 10)) * 100000 + 600000;
-      break;
-    default:
-      timebox = seconds * 100000;
-      break;
-  }
-  return new Date(timebox);
-}
 
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report', {_id: this._id.toString()});
@@ -113,23 +84,38 @@ Report.queryReports = function(query, callback) {
   }
 };
 
+Report.getTimebox = function(report, box) {
+  var date = report.storedAt.getTime();
+  box *= 1000; // Convert to ms
+  var timebox = Math.floor(date / box) * box;
+  report.timebox = new Date(timebox);
+};
+
 // Analyze trends for a given keyword
 // @see http://docs.mongodb.org/manual/tutorial/text-search-in-aggregation
-Report.analyzeTrend = function(query, callback) {
+Report.analyzeTrend = function(query, timebox, callback) {
   if (!query.keywords) return callback(new Error('Query needs a keyword to analyze'));
 
-  var pipeline = [
-    {$match: {$text: {$search: query.keywords}}},
-    {$match: {storedAt: {$gte: query.since || new Date(0)}}},
-    {$group: {_id: "$timebox", counts: {$sum: 1}}}
-  ];
+  var options = {
+    filter: {storedAt: {$gte: query.since || new Date(0)}},
+    limit: 0,
+    lean: true
+  };
 
   // Re-set search timestamp
   query.since = new Date();
 
-  Report.aggregate(pipeline, function(err, trends) {
-    if (err) callback(err);
-    else callback(null, trends);
+  Report.textSearch(query.keywords, options, function(err, reports) {
+    if (err) return callback(err);
+    var trends = _.chain(reports.results).pluck('obj').map(function(report) {
+      // Calculate timebox
+      Report.getTimebox(report, timebox);
+      return report;
+    }).countBy('timebox').map(function(counts, box) {
+      // Count matching reports per timebox
+      return {timebox: box, counts: counts};
+    }).value();
+    callback(null, trends);
   });
 };
 

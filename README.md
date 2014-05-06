@@ -14,5 +14,5 @@ This is the future of Aggie.
 1. Run `npm install` from the project directory (This installs all dependencies, adds indexing support to MongoDB, and creates an admin user.)
 1. Run `sudo npm install -g gulp mocha` (This installs gulp and mocha globally so they can be run from command line for testing.)
 1. To run tests, run `npm test`.
-1. To monitor code while developing, run `gulp`.
+1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To start server, run `npm start`.
