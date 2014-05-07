@@ -4,6 +4,7 @@ var TrendQuerier = require('../lib/analytics/trend-querier');
 var Trend = require('../models/trend');
 var Query = require('../models/query');
 var Report = require('../models/report');
+var timekeeper = require('timekeeper');
 
 var trendQuerier;
 describe('Trend querier', function() {
@@ -52,6 +53,40 @@ describe('Trend querier', function() {
         done();
       });
     }, 100);
+  });
+
+  it('should group analytics by 5-minute timeboxes', function(done) {
+    // Create one report now
+    Report.create({content: 'test'});
+
+    process.nextTick(function() {
+      // Create two reports 5 minutes in the future
+      timekeeper.travel(new Date(Date.now() + 300000));
+      Report.create({content: 'test'});
+      Report.create({content: 'test'});
+
+      process.nextTick(function() {
+        // Create three reports 10 minutes in the future
+        timekeeper.travel(new Date(Date.now() + 600000));
+        Report.create({content: 'test'});
+        Report.create({content: 'test'});
+        Report.create({content: 'test'});
+
+        setTimeout(function() {
+          // Run trend analytics
+          trendQuerier.runQuery(function(err, counts) {
+            if (err) return done(err);
+            expect(counts).to.be.an.instanceof(Array);
+            expect(counts).to.have.length(3);
+            expect(counts[0].counts).to.equal(1);
+            expect(counts[1].counts).to.equal(2);
+            expect(counts[2].counts).to.equal(3);
+            timekeeper.reset();
+            done();
+          });
+        }, 100);
+      });
+    });
   });
 
   // Clean up

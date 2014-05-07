@@ -92,7 +92,6 @@ Report.getTimebox = function(report, box) {
 };
 
 // Analyze trends for a given keyword
-// @see http://docs.mongodb.org/manual/tutorial/text-search-in-aggregation
 Report.analyzeTrend = function(query, timebox, callback) {
   if (!query.keywords) return callback(new Error('Query needs a keyword to analyze'));
 
