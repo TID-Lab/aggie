@@ -3,9 +3,8 @@ angular.module('Aggie')
     '$scope',
     '$location',
     '$http',
-    'Session', // temporary
     'AuthService',
-    function($scope, $location, $http, Session, AuthService) {
+    function($scope, $location, $http, AuthService) {
       $scope.alerts = [];
 
       var passwordsMatch = function() {
@@ -15,8 +14,7 @@ angular.module('Aggie')
 
       $scope.resetPassword = function() {
         if (passwordsMatch()) {
-          Session.username = 'admin'; // temporary
-          var username = AuthService.currentUser();
+          var username = $rootScope.currentUser.username;
           var params = {  password: $scope.user.password }
           $http.put('/api/v1/user/' + username, params)
             .success(function(user) {
