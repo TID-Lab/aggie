@@ -6,6 +6,8 @@ angular.module('Aggie')
     'Session', // temporary
     'AuthService',
     function($scope, $location, $http, Session, AuthService) {
+      $scope.alerts = [];
+
       var passwordsMatch = function() {
         return $scope.user.password ==
           $scope.user.password_confirmation;
@@ -15,16 +17,15 @@ angular.module('Aggie')
         if (passwordsMatch()) {
           Session.username = 'admin'; // temporary
           var username = AuthService.currentUser();
-          $http.put('/api/v1/user/' + username)
+          var params = {  password: $scope.user.password }
+          $http.put('/api/v1/user/' + username, params)
             .success(function(user) {
-              console.log(user);
-              $scope.message = 'Successfully updated password';
               $location.path('/');
-            }).error(function(response, mesg) {
-              $scope.message = 'Failed to update password';
+            }).error(function(message, respStatus) {
+              $scope.alerts.push(message);
             });
         } else {
-          $scope.message = 'Passwords do not match';
+          $scope.alerts.push('Passwords do not match');
         }
       };
     }
