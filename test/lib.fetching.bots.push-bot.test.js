@@ -3,11 +3,13 @@ var expect = require('chai').expect;
 var PushBot = require('../lib/fetching/bots/push-bot');
 var Bot = require('../lib/fetching/bot');
 var contentServiceFactory = require('../lib/fetching/content-service-factory');
+var Source = require('../models/source');
 
 describe('Push bot', function() {
   before(function(done) {
-    var contentService = contentServiceFactory.create({sourceType: 'dummy', keywords: 't'});
-    pushBot = new PushBot({contentService: contentService});
+    var source = new Source({type: 'dummy', keywords: 't'});
+    var contentService = contentServiceFactory.create({source: source});
+    pushBot = new PushBot({source: source, contentService: contentService});
     done();
   });
 

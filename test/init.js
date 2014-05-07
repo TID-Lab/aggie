@@ -4,15 +4,8 @@ var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie
 var database = require('../lib/database');
 var Report = require('../models/report');
 var User = require('../models/user');
-var express = require('express');
-var path = require('path');
 
 before(function(done) {
-  // Expose fixtures statically on http://localhost:3001
-  var app = express();
-  app.use('/', express.static(path.join(__dirname, './fixtures')));
-  app.listen(3001);
-
   // Change database before starting any test
   database.mongoose.disconnect(function() {
     database.mongoose.connect(dbConnectURL, function() {

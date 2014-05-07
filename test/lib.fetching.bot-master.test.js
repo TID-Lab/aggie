@@ -37,7 +37,7 @@ describe('Bot master', function() {
   });
 
   it('should return bot instance from a source ID', function(done) {
-    var sourceId = botMaster.bots[1].sourceId;
+    var sourceId = botMaster.bots[1].source._id;
     var keywords = botMaster.bots[1].contentService.keywords;
     var bot = botMaster.getBot(sourceId);
     expect(bot).to.be.an.instanceof(Bot);
@@ -71,7 +71,7 @@ describe('Bot master', function() {
 
   it('should kill a single bot', function(done) {
     var length = botMaster.bots.length;
-    var sourceId = botMaster.bots[1].sourceId;
+    var sourceId = botMaster.bots[1].source._id;
     var bot = botMaster.getBot(sourceId);
     botMaster.kill(bot);
     expect(botMaster.bots).to.have.length(length - 1);
@@ -81,7 +81,7 @@ describe('Bot master', function() {
   });
 
   it('should reload a bot', function(done) {
-    var sourceId = botMaster.bots[0].sourceId;
+    var sourceId = botMaster.bots[0].source._id;
     var bot = botMaster.getBot(sourceId);
     Source.findById(sourceId, function(err, source) {
       if (err) return done(err);
