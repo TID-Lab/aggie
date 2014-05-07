@@ -4,6 +4,7 @@ require('../lib/error');
 
 var schema = new mongoose.Schema({
   _query: {type: String, ref: 'Query', required: true},
+  timebox: {type: Number, default: 300},
   createdAt: {type: Date, default: new Date()},
   counts: {type: Array, default: []},
   enabled: {type: Boolean, default: true},
@@ -30,10 +31,13 @@ schema.methods.toggle = function(status, callback) {
   callback = callback || function() {};
 
   if (status === true || status === 'enable') {
+    // If changing from disabled to enabled, record date
+    if (!this.enabled) this.lastEnabledAt = new Date();
     this.enabled = true;
   } else if (status === false || status === 'disable') {
     this.enabled = false;
   } else if (status === undefined) {
+    if (!this.enabled) this.lastEnabledAt = new Date();
     this.enabled = !this.enabled;
   } else {
     return callback(new Error.Validation('invalid_status'));
