@@ -1,38 +1,38 @@
 require('./init');
 var expect = require('chai').expect;
-var TrendQuerier = require('../lib/analytics/trend-querier');
+var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
 var Query = require('../models/query');
 var Report = require('../models/report');
 var timekeeper = require('timekeeper');
 
-var trendQuerier;
-describe('Trend querier', function() {
+var trendQueryer;
+describe('Trend queryer', function() {
   before(function(done) {
     Query.create({type: 'Report', keywords: 'test'}, function(err, query) {
       if (err) return done(err);
       Trend.create({_query: query._id, timebox: 300}, function(err, trend) {
         if (err) return done(err);
-        trendQuerier = new TrendQuerier({trend: trend});
+        trendQueryer = new TrendQueryer({trend: trend});
         done();
       });
     });
   });
 
   it('should track query object', function(done) {
-    expect(trendQuerier).to.have.property('trend');
-    expect(trendQuerier.trend).to.be.an.instanceof(Trend);
+    expect(trendQueryer).to.have.property('trend');
+    expect(trendQueryer.trend).to.be.an.instanceof(Trend);
     done();
   });
 
   it('should get query associated with trend', function(done) {
-    trendQuerier.getQuery(function(err, query) {
+    trendQueryer.getQuery(function(err, query) {
       if (err) return done(err);
       expect(query).to.be.an.instanceof(Query);
       expect(query.keywords).to.contain('test');
-      expect(trendQuerier).to.have.property('query');
-      expect(trendQuerier.query).to.be.an.instanceof(Query);
-      expect(trendQuerier.query).to.equal(query);
+      expect(trendQueryer).to.have.property('query');
+      expect(trendQueryer.query).to.be.an.instanceof(Query);
+      expect(trendQueryer.query).to.equal(query);
       done();
     });
   });
@@ -44,7 +44,7 @@ describe('Trend querier', function() {
     Report.create({content: 'this should also be tested'});
     Report.create({content: 'but this one should not'});
     setTimeout(function() {
-      trendQuerier.runQuery(function(err, counts) {
+      trendQueryer.runQuery(function(err, counts) {
         if (err) return done(err);
         expect(counts).to.be.an.instanceof(Array);
         expect(counts).to.have.length(1);
@@ -74,7 +74,7 @@ describe('Trend querier', function() {
 
         setTimeout(function() {
           // Run trend analytics
-          trendQuerier.runQuery(function(err, counts) {
+          trendQueryer.runQuery(function(err, counts) {
             if (err) return done(err);
             expect(counts).to.be.an.instanceof(Array);
             expect(counts).to.have.length(3);
