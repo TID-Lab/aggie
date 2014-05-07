@@ -28,14 +28,12 @@
     return this.role === role;
   }
 
-  // Export the User class for **Node.js**, with backwards-compatibility for
-  // the old `require()` API. If we're in the browser, add `User` as a global
-  // object via a string identifier, for Closure Compiler "advanced" mode.
+  // Export the User class for node.js
+  // If we're in the browser, add `User` as a global object
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
       exports = module.exports = User;
     }
-    exports.User = User;
   } else {
     this.User = User;
   }
