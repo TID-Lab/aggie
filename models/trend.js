@@ -25,32 +25,28 @@ schema.pre('remove', function(next) {
   next();
 });
 
-// Enable trend
-schema.methods.enable = function(callback) {
+// Toggle trend enabled status
+schema.methods.toggle = function(status, callback) {
   callback = callback || function() {};
-  if (!this.enabled) {
-    this.enabled = true;
-    this.save(function(err, trend) {
-      if (err) return callback(err);
-      if (!trend) return callback(new Error.NotFound());
-      schema.emit('enable', {_id: trend._id.toString()});
-      callback();
-    });
-  }
-};
 
-// Disable trend
-schema.methods.disable = function(callback) {
-  callback = callback || function() {};
-  if (this.enabled) {
+  if (status === true || status === 'enable') {
+    this.enabled = true;
+  } else if (status === false || status === 'disable') {
     this.enabled = false;
-    this.save(function(err, trend) {
-      if (err) return callback(err);
-      if (!trend) return callback(new Error.NotFound());
-      schema.emit('disable', {_id: trend._id.toString()});
-      callback();
-    });
+  } else if (status === undefined) {
+    this.enabled = !this.enabled;
+  } else {
+    return callback(new Error.Validation('invalid_status'));
   }
+
+  var event = this.enabled ? 'enable' : 'disable';
+
+  this.save(function(err, trend) {
+    if (err) return callback(err);
+    if (!trend) return callback(new Error.NotFound());
+    schema.emit(event, {_id: trend._id.toString()});
+    callback();
+  });
 };
 
 module.exports = mongoose.model('Trend', schema);

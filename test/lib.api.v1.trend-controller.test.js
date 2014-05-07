@@ -25,8 +25,7 @@ describe('Trend controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.have.property('_id');
-          // Store resulting object
-          trend = _.extend(trend, _.omit(res.body, ['__v', 'counts']));
+          trend._id = res.body._id;
           compare.call(this, res.body, trend);
           done();
         });
@@ -48,31 +47,49 @@ describe('Trend controller', function() {
 
   describe('PUT /api/v1/trend/:_id/:op', function() {
     it('should disable trend', function(done) {
+      Trend.schema.on('disable', function(trendId) {
+        expect(trendId._id).to.equal(trend._id);
+        done();
+      });
       request(trendController)
         .put('/api/v1/trend/' + trend._id + '/disable')
-        .expect(200, done);
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+        });
     });
     it('should enable trend', function(done) {
+      Trend.schema.on('enable', function(trendId) {
+        expect(trendId._id).to.equal(trend._id);
+        done();
+      });
       request(trendController)
         .put('/api/v1/trend/' + trend._id + '/enable')
-        .expect(200, done);
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+        });
     });
     it('should fail when sending something else', function(done) {
       request(trendController)
         .put('/api/v1/trend/' + trend._id + '/toggle')
-        .expect(403, done);
+        .expect(422, done);
     });
   });
 
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
+      // Add an additional 3 trends
+      Trend.create({_query: '123456'});
+      Trend.create({_query: '123456'});
+      Trend.create({_query: '123456'});
       request(trendController)
         .get('/api/v1/trend')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.not.be.empty;
+          expect(res.body).to.have.length(4);
           compare(_.findWhere(res.body, {_id: trend._id}), trend);
           done();
         });
