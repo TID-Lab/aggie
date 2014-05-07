@@ -42,12 +42,18 @@ angular.module('routes', ['ui.router']).
 
     $stateProvider.state('analysis', {
       url: '/analysis',
-      templateUrl: 'templates/analysis.html',
+      templateUrl: 'templates/analysis.html'
     })
 
     $stateProvider.state('settings', {
       url: '/settings',
-      templateUrl: 'templates/settings.html',
+      templateUrl: 'templates/settings.html'
+    });
+
+    $stateProvider.state('password_reset', {
+      url: '/password_reset/:resetToken',
+      templateUrl: '/templates/password_reset.html',
+      controller: 'PasswordResetController'
     });
   }
 ]);
