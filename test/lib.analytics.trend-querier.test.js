@@ -53,4 +53,15 @@ describe('Trend querier', function() {
       });
     }, 100);
   });
+
+  // Clean up
+  after(function(done) {
+    Trend.remove(function(err) {
+      if (err) return done(err);
+      Report.remove(function(err) {
+        if (err) return done(err);
+        done();
+      });
+    });
+  });
 });
