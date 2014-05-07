@@ -10,7 +10,7 @@ angular.module('Aggie', ['routes']).
     };
 
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-      if (needsAuth() && !AuthService.isLoggedIn()) {
+      if (needsAuth() && !AuthService.isAuthenticated()) {
         $location.path('/login');
       }
     });

@@ -22,6 +22,7 @@ Thumbs.db
 
 public/css/styles.css
 public/angular/css/app.css
+public/angular/js/app.js.min
 config/secrets.js
 config/secrets.json
 

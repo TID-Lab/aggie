@@ -3,36 +3,46 @@ angular.module('routes', ['ui.router']).
     $stateProvider.state('home', {
       url: '/',
       templateUrl: 'templates/home.html'
-    }).state('login', {
+    });
+
+    $stateProvider.state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html'
-    }).state('logout', {
-      url: '/logout',
-      templateUrl: 'templates/logout.html'
-    }).state('reports', {
+      templateUrl: 'templates/login.html',
+      controller: 'LoginController'
+    });
+
+    $stateProvider.state('reports', {
       url: '/reports',
       templateUrl: 'templates/reports.html',
       controller: function($scope) {
         $scope.items = ['A', 'List', 'Of', 'Reports'];
       }
-    }).state('incidents', {
+    });
+
+    $stateProvider.state('incidents', {
       url: '/incidents',
       templateUrl: 'templates/incidents.html',
       controller: function($scope) {
         $scope.items = ['A', 'List', 'Of', 'Incidents'];
       }
-    }).state('sources', {
+    });
+
+    $stateProvider.state('sources', {
       url: '/sources',
       templateUrl: 'templates/sources.html',
       controller: function($scope) {
         $scope.items = ['A', 'List', 'Of', 'Sources'];
       }
-    }).state('analysis', {
+    });
+
+    $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: 'templates/analysis.html',
-    }).state('settings', {
+    })
+
+    $stateProvider.state('settings', {
       url: '/settings',
       templateUrl: 'templates/settings.html',
-    })
+    });
   }
 ]);

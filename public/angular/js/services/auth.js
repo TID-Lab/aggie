@@ -1,14 +1,18 @@
-angular.module('Aggie').service('AuthService', ['$http', 'Session', function($http, Session) {
-  this.login = function(credentials) {
-    return $http.post('/login', credentials).
-      then(function (res) {
-        Session.create(res.id, res.userid);
-      });
-  }
+angular.module('Aggie')
+  .factory('AuthService', ['$http', 'Session', function AuthService($http, Session) {
+    return {
+      login: function(credentials, callback) {
+        $http.post('/login', credentials)
+          .then(function (res) {
+            Session.create(res.data._id, res.data.username);
+            return callback();
+          }, function(err) {
+            return callback(err);
+          });
+      },
 
-  this.isLoggedIn = function(name) {
-    return !!Session.userId
-  };
-
-  return this;
-}]);
+      isAuthenticated: function() {
+        return !!Session.id;
+      }
+    }
+  }]);

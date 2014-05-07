@@ -34,7 +34,8 @@
     "supertest": "~0.9.0",
     "gulp": "~3.5.5",
     "gulp-mocha": "~0.4.1",
-    "gulp-jshint": "~1.5.0"
+    "gulp-jshint": "~1.5.0",
+    "gulp-concat": "2.2.0"
   },
   "subdomain": "aggie",
   "engines": {
