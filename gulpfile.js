@@ -9,7 +9,7 @@ var paths = {
   angular: {
     js: ['public/angular/js/angular.js',
     'public/angular/js/angular-ui-router.js',
-    'public/angular/js/ui-bootstrap.min.js', 'public/angular/js/app.js',
+    'public/angular/js/ui-bootstrap.js', 'public/angular/js/app.js',
     'public/angular/js/routes.js', 'public/angular/js/controllers/*.js',
     'public/angular/js/services/*.js']
   }
