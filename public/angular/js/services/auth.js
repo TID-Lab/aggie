@@ -1,18 +1,36 @@
 angular.module('Aggie')
-  .factory('AuthService', ['$http', 'Session', function AuthService($http, Session) {
-    return {
-      login: function(credentials, callback) {
-        $http.post('/login', credentials)
-          .then(function (res) {
-            Session.create(res.data._id, res.data.username);
-            return callback();
-          }, function(err) {
-            return callback(err);
-          });
-      },
+  .factory('AuthService', [
+    '$rootScope',
+    '$http',
+    function AuthService($rootScope, $http) {
+      return {
+        login: function(credentials, callback) {
+          var cb = callback || angular.noop;
+          $http.post('/login', credentials)
+            .then(function (res) {
+              $rootScope.currentUser = res.data;
+              return cb();
+            }, function(err) {
+              return cb(err);
+            });
+        },
 
-      isAuthenticated: function() {
-        return !!Session.id;
+        currentUser: function() {
+          $http.get('/session').then(function(res) {
+            $rootScope.currentUser = res.data;
+          });
+        },
+
+        logout: function(callback) {
+          var cb = callback || angular.noop;
+          $http.get('/logout').then(function(res) {
+            $rootScope.currentUser = null;
+            return cb();
+          }, function(err) {
+            return cb(err.data);
+          });
+        }
       }
     }
-  }]);
+  ]
+);

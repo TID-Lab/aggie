@@ -10,49 +10,7 @@
     <link href="/css/app.css" rel="stylesheet">
   </head>
   <body ng-controller="ApplicationController">
-    <div class="navbar navbar-default">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" ui-sref="home">Aggie</a>
-        </div>
-        <div class="navbar-collapse collapse navbar-responsive-collapse">
-          <ul class="nav navbar-nav">
-            <li ui-sref-active="active"><a ui-sref="reports">Reports</a></li>
-            <li ui-sref-active="active"><a ui-sref="incidents">Incidents</a></li>
-            <li ui-sref-active="active"><a ui-sref="sources">Sources</a></li>
-            <li ui-sref-active="active"><a ui-sref="analysis">Analysis</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li ui-sref-active="active" class="user">
-              <a ui-sref="user">
-              <i class="fa fa-user fa-fw"></i>
-              Tom Smyth</a>
-            </li>
-            <li ui-sref-active="active">
-              <a ui-sref="settings">
-                <i class="fa fa-gear fa-fw"></i>
-                Settings
-              </a>
-            </li>
-            <li>
-              <a href="/login" ng-hide="isAuthenticated()">
-                <i class="fa fa-sign-in fa-fw"></i>
-                Log in
-              </a>
-              <a href ng-click="logout()" ng-show="isAuthenticated()">
-                <i class="fa fa-sign-out fa-fw"></i>
-                Log out
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="navbar navbar-stats">
-      <div class="container">
-        <p class="navbar-text">Stats go here.</p>
-      </div>
-    </div>
+    <ng-include src="'/templates/navbar.html'"></ng-include>
     <div class="container">
       <div ui-view></div>
       <script src="/js/app.min.js"></script>

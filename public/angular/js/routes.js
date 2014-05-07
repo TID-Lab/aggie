@@ -5,6 +5,11 @@ angular.module('routes', ['ui.router']).
       templateUrl: 'templates/home.html'
     });
 
+    $stateProvider.state('profile', {
+      url: '/profile',
+      templateUrl: '/templates/profile.html'
+    });
+
     $stateProvider.state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',

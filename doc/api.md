@@ -15,7 +15,11 @@ password | String | Password
   "data": {
     "_id": "12345abcdef",
     "username": "admin",
-    "provider": "aggie"
+    "provider": "aggie",
+    "email": "Aggie <aggie@example.com>"
   }
 }
 ```
+
+## Get current user
+`GET /session`
