@@ -37,12 +37,13 @@ util.inherits(FacebookContentService, ContentService);
 
 FacebookContentService.prototype.fetch = function() {
   var self = this;
-  var postsQuery = "SELECT post_id, updated_time, actor_id, permalink, message FROM stream WHERE (source_id=" + this.fbPage + " AND updated_time<" + this.lastCrawlDate + ") ORDER BY updated_time";
-  var commentsQuery = "SELECT id, fromid, time, text FROM comment WHERE (post_id IN (SELECT post_id FROM #postsQuery) AND time<" + this.lastCrawlDate + ") ORDER BY time";
 
   var query = {
-    postsQuery: postsQuery,
-    commentsQuery: commentsQuery
+    postsQuery: "SELECT post_id, updated_time, created_time, actor_id, permalink, message " +
+    "FROM stream WHERE (source_id=" + this.fbPage + " AND updated_time>" + this.lastCrawlDate +
+    "AND created_time>"+ this.lastCrawlDate +") ORDER BY updated_time",
+    commentsQuery: "SELECT id, fromid, time, text FROM comment WHERE" +
+    "(post_id IN (SELECT post_id FROM #postsQuery) AND time>" + this.lastCrawlDate + ") ORDER BY time",
   };
   
   graph.fql(query, function(err, res) {
@@ -50,39 +51,35 @@ FacebookContentService.prototype.fetch = function() {
       self.emit('error', new Error('Facebook sent error: ' + JSON.stringify(err)));
     }
 
-    var posts = res.data[0].fql_result_set;
-    if (posts) {
-      posts.forEach(function(entry) {
-        self._returnValidReportLine(entry, true);
-      });
-    }
+    res.data[0].fql_result_set.forEach(function(entry) {
+      self._handleFqlResult(entry, {type: 'post'});
+    });
 
-    var comments = res.data[1].fql_result_set;
-    if (comments) {
-      comments.forEach(function(entry) {
-        self._returnValidReportLine(entry, false);
-      });
-    }
+    res.data[1].fql_result_set.forEach(function(entry) {
+      self._handleFqlResult(entry, {type: 'comment'});
+    });
+
   });
 };
 
-FacebookContentService.prototype._returnValidReportLine = function(entry, isPost) {
+FacebookContentService.prototype._handleFqlResult = function(entry, isPost) {
   this.emit('report', this._parse(entry, isPost));
 };
 
+FacebookContentService.prototype._buildCommentUrl = function(id) {
+
+    return 'http://facebook.com/posts/' + id.substring(0, 17) + '?comment_id=' + id.substring(18, 38);
+};
+
+
 FacebookContentService.prototype._parse = function(data, isPost) {
-  var report_data = {
-    authoredAt: (isPost) ? data.updated_time : data.time,
+  return {
+    authoredAt: (isPost == 'post') ? data.updated_time : data.time,
     fetchedAt: Date.now(),
-    content: (isPost) ? data.message : data.text,
-    author: (isPost) ? data.actor_id : data.fromid,
-    url: (isPost) ? data.permalink : 'commenturl',
-    _source: {
-      type: 'facebook',
-      fbPage: this.fbPage
-    }
+    content: (isPost == 'post') ? data.message : data.text,
+    author: (isPost == 'post') ? data.actor_id : data.fromid,
+    url: (isPost == 'post') ? data.permalink : this._buildCommentUrl(data.id),
   };
-  return report_data;
 };
 
 module.exports = FacebookContentService;
