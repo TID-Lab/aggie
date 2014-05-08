@@ -24,6 +24,7 @@ describe('Source controller', function() {
           if (err) return done(err);
           expect(res.body).to.have.property('_id');
           source._id = res.body._id;
+          compare.call(this, res.body, source);
           done();
         });
     });
