@@ -1,6 +1,7 @@
 <h1>Log in</h1>
 
 <alert type="danger" ng-repeat="alert in alerts" close="closeAlert($index)">{{alert}}</alert>
+<alert type="info" ng-repeat="notice in notices" close="closeNotice($index)">{{notice}}</alert>
 
 <div class="well bs-component">
   <form class="form-horizontal" ng-submit="login(form)">
@@ -20,6 +21,11 @@
       <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
           <button type="submit" class="btn btn-primary">Log in</button>
+          <br/><br/>
+          <div ng-controller="PasswordResetModalController">
+            Forgot password?
+            <a href="#" ng-click="open()">Reset Password</a>
+          </div>
         </div>
       </div>
     </fieldset>

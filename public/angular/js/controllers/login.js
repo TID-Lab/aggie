@@ -25,5 +25,9 @@ angular.module('Aggie')
       $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
       };
+
+      $scope.closeNotice = function(index) {
+        $scope.notices.splice(index, 1);
+      };
     }
   ]);
