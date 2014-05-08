@@ -9,10 +9,7 @@ var Query = require('../models/query');
 var trend;
 describe('Trend controller', function() {
   before(function(done) {
-    var query = new Query({type: 'Report', keywords: 'test'});
-    trend = {
-      _query: query._id.toString()
-    };
+    trend = {keywords: 'test'};
     done();
   });
 
@@ -25,7 +22,9 @@ describe('Trend controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('_query');
           trend._id = res.body._id;
+          trend._query = res.body._query;
           compare.call(this, res.body, trend);
           done();
         });
@@ -48,19 +47,21 @@ describe('Trend controller', function() {
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
-      Trend.create({_query: '123456'});
-      Trend.create({_query: '123456'});
-      Trend.create({_query: '123456'});
-      request(trendController)
-        .get('/api/v1/trend')
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.have.length(4);
-          compare(_.findWhere(res.body, {_id: trend._id}), trend);
-          done();
-        });
+      Trend.create({keywords: '123'});
+      Trend.create({keywords: '456'});
+      Trend.create({keywords: '789'});
+      setTimeout(function() {
+        request(trendController)
+          .get('/api/v1/trend')
+          .expect(200)
+          .end(function(err, res) {
+            if (err) return done(err);
+            expect(res.body).to.be.an.instanceof(Array);
+            expect(res.body).to.have.length(4);
+            compare(_.findWhere(res.body, {_id: trend._id}), trend);
+            done();
+          });
+      }, 100);
     });
   });
 

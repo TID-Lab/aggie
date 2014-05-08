@@ -10,13 +10,10 @@ var _ = require('underscore');
 var trendQueryer;
 describe('Trend queryer', function() {
   before(function(done) {
-    Query.create({type: 'Report', keywords: 'test'}, function(err, query) {
+    Trend.create({keywords: 'test'}, function(err, trend) {
       if (err) return done(err);
-      Trend.create({_query: query._id, timebox: 300}, function(err, trend) {
-        if (err) return done(err);
-        trendQueryer = new TrendQueryer({trend: trend});
-        done();
-      });
+      trendQueryer = new TrendQueryer({trend: trend});
+      done();
     });
   });
 
@@ -27,15 +24,13 @@ describe('Trend queryer', function() {
   });
 
   it('should get query associated with trend', function(done) {
-    trendQueryer.getQuery(function(err, query) {
-      if (err) return done(err);
-      expect(query).to.be.an.instanceof(Query);
-      expect(query.keywords).to.contain('test');
-      expect(trendQueryer).to.have.property('query');
-      expect(trendQueryer.query).to.be.an.instanceof(Query);
-      expect(trendQueryer.query).to.equal(query);
-      done();
-    });
+    var query = trendQueryer.getQuery();
+    expect(query).to.be.an.instanceof(Query);
+    expect(query.keywords).to.contain('test');
+    expect(trendQueryer).to.have.property('query');
+    expect(trendQueryer.query).to.be.an.instanceof(Query);
+    expect(trendQueryer.query).to.equal(query);
+    done();
   });
 
   it('should run query associated with trend', function(done) {

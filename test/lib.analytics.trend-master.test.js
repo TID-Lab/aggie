@@ -3,7 +3,6 @@ var expect = require('chai').expect;
 var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
-var Query = require('../models/query');
 var Report = require('../models/report');
 var _ = require('underscore');
 
@@ -11,19 +10,13 @@ describe('Trend master', function() {
   before(function(done) {
     trendMaster.addListeners('trend', Trend.schema);
     trendMaster.addListeners('report', Report.schema);
-    one = new Query({keywords: 'one'});
-    one.save();
-    two = new Query({keywords: 'two'});
-    two.save();
-    three = new Query({keywords: 'three'});
-    three.save();
     done();
   });
 
   it('should track all trends', function(done) {
-    Trend.create({_query: one._id.toString()});
-    Trend.create({_query: two._id.toString()});
-    Trend.create({_query: three._id.toString()});
+    Trend.create({keywords: 'one'});
+    Trend.create({keywords: 'two'});
+    Trend.create({keywords: 'three'});
     setTimeout(function() {
       expect(trendMaster).to.have.property('trends');
       expect(trendMaster.trends).to.be.an.instanceof(Array);
@@ -84,26 +77,30 @@ describe('Trend master', function() {
   });
 
   it('should trigger a trend to run a query', function(done) {
-    Report.create({content: 'one'});
-    Report.create({content: 'one'});
-    Report.create({content: 'one'});
-    var trendId = _.findWhere(trendMaster.trends, {_query: one._id.toString()})._id;
-    trendMaster.query(trendId, function(err, trends, trend) {
-      if (err) return done(err);
-      expect(trends).to.be.an.instanceof(Array);
-      expect(trends).to.have.length(1);
-      expect(trends[0]).to.have.keys(['keywords', 'timebox', 'counts']);
-      expect(trends[0].keywords).to.contain('one');
-      expect(trends[0].counts).to.equal(3);
-      done();
-    });
+    Trend.create({keywords: 'four'});
+    Report.create({content: 'four'});
+    Report.create({content: 'four'});
+    Report.create({content: 'four'});
+    Report.create({content: 'four'});
+    setTimeout(function() {
+      var trendId = _.findWhere(trendMaster.trends, {keywords: 'four'})._id;
+      trendMaster.query(trendId, function(err, trends, trend) {
+        if (err) return done(err);
+        expect(trends).to.be.an.instanceof(Array);
+        expect(trends).to.have.length(1);
+        expect(trends[0]).to.have.keys(['keywords', 'timebox', 'counts']);
+        expect(trends[0].keywords).to.contain('four');
+        expect(trends[0].counts).to.equal(4);
+        done();
+      });
+    }, 500);
   });
 
   it('should run all queries at specified intervals', function(done) {
     trendMaster.queryAll(100);
     trendMaster.on('error', done);
     var remaining = 9;
-    trendMaster.on('data', function(trends) {
+    trendMaster.on('trends', function(trends) {
       if (--remaining === 0) done();
     });
     Report.create({content: 'one'});
@@ -126,7 +123,7 @@ describe('Trend master', function() {
       if (err) return done(err);
       trend.remove(function(err, trend) {
         if (err) return done(err);
-        expect(trendMaster.trends).to.have.length(2);
+        expect(trendMaster.trends).to.have.length(3);
         done();
       });
     });
