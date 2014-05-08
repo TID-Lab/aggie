@@ -13,6 +13,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "connect-mongo": "~0.4.0",
+    "connect-roles": "~3.0.3",
     "email": "~0.2.6",
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
@@ -26,15 +27,15 @@
     "socket.io": "~0.9.16",
     "timekeeper": "0.0.4",
     "twit": "~1.1.12",
-    "underscore": "~1.6.0",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",
-    "mocha": "~1.17.1",
-    "supertest": "~0.9.0",
     "gulp": "~3.5.5",
+    "gulp-jshint": "~1.5.0",
     "gulp-mocha": "~0.4.1",
-    "gulp-jshint": "~1.5.0"
+    "mocha": "~1.17.1",
+    "supertest": "~0.9.0"
   },
   "subdomain": "aggie",
   "engines": {
