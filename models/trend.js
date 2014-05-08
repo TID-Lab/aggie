@@ -12,13 +12,14 @@ var schema = new mongoose.Schema({
 });
 
 schema.pre('save', function(next) {
+  if (this.isNew) this._wasNew = true;
   // Do not allow changing query
   if (!this.isNew && this.isModified('_query')) return next(new Error.Validation('query_change_not_allowed'));
   next();
 });
 
 schema.post('save', function() {
-  schema.emit('save', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('save', {_id: this._id.toString()});
 });
 
 schema.pre('remove', function(next) {

@@ -112,7 +112,7 @@ Report.analyzeTrend = function(query, timebox, callback) {
       return report;
     }).countBy('timebox').map(function(counts, box) {
       // Count matching reports per timebox
-      return {timebox: box, counts: counts};
+      return {keywords: query.keywords, timebox: box, counts: counts};
     }).value();
     callback(null, trends);
   });

@@ -5,6 +5,7 @@ var Trend = require('../models/trend');
 var Query = require('../models/query');
 var Report = require('../models/report');
 var timekeeper = require('timekeeper');
+var _ = require('underscore');
 
 var trendQueryer;
 describe('Trend queryer', function() {
@@ -78,6 +79,7 @@ describe('Trend queryer', function() {
             if (err) return done(err);
             expect(counts).to.be.an.instanceof(Array);
             expect(counts).to.have.length(3);
+            counts = _.sortBy(counts, 'timebox');
             expect(counts[0].counts).to.equal(1);
             expect(counts[1].counts).to.equal(2);
             expect(counts[2].counts).to.equal(3);
