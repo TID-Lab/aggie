@@ -31,7 +31,8 @@ function createAdminUser(callback) {
         provider: 'aggie',
         email: config.email.from,
         username: 'admin',
-        password: config.adminPassword
+        password: config.adminPassword,
+        role: 'admin'
       };
       // Create new admin user
       User.create(userData, function(err, user) {
@@ -42,6 +43,7 @@ function createAdminUser(callback) {
     } else {
       if (config.email.from) user.email = config.email.from;
       if (config.adminPassword) user.password = config.adminPassword;
+      user.role = 'admin';
       user.save(function(err) {
         if (err) console.error(err);
         else console.log('"admin" user updated with password "' + config.adminPassword + '"');
