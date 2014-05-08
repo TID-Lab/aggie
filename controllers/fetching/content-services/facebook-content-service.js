@@ -5,15 +5,13 @@ var util = require('util');
 
 /*
 * TODO
-* URL for comment - I guess I have to manually build it (do we need it?)
-* Error checking
 * Testing 
 */
 
 /* 
-Facebook Content Service constructor
-@param options - (lastCrawlDate - Date(optional), resultsPerFetch: String(optional),  fbPage:String(required))
-*/
+ * Facebook Content Service constructor
+ * @param options - (lastCrawlDate - Date(optional),  fbPage:String(required))
+ */
 var FacebookContentService = function(options) {
 
   graph.setAccessToken(config.accessToken);
@@ -34,7 +32,9 @@ var FacebookContentService = function(options) {
 
 util.inherits(FacebookContentService, ContentService);
 
-
+/*
+ * Fetch from the Facebook Content Service
+ */
 FacebookContentService.prototype.fetch = function() {
   var self = this;
 
@@ -48,7 +48,19 @@ FacebookContentService.prototype.fetch = function() {
   
   graph.fql(query, function(err, res) {
     if (err) {
-      self.emit('error', new Error('Facebook sent error: ' + JSON.stringify(err)));
+
+        // Internal http request (FBGraph uses request.js internally)
+        if (err.message === 'Error processing https request') {
+          self.emit('error', new Error(err.exception));
+        }
+        // 1 API Unknown 2 API Service warnings
+        else if (err.error.type === 0 || err.error.type === 1) {
+           self.emit('warning', new Warning('Facebook error: #{'+err.error.code+'} - #{'+err.error.type+'}: #{'+err.error.message+'}. Will try again.'));
+        }
+        // Catch any other errors
+        else {
+          self.emit('error', new Error('Facebook error: #{'+err.error.code+'} (#{'+err.error.error_subcode+'}) - #{'+err.error.type+'}: #{'+err.error.message+'}'));
+        }
     }
 
     res.data[0].fql_result_set.forEach(function(entry) {
@@ -58,20 +70,26 @@ FacebookContentService.prototype.fetch = function() {
     res.data[1].fql_result_set.forEach(function(entry) {
       self._handleFqlResult(entry, {type: 'comment'});
     });
-
   });
 };
 
+/*
+ * Handle each line returned by the FQL query
+ */
 FacebookContentService.prototype._handleFqlResult = function(entry, isPost) {
   this.emit('report', this._parse(entry, isPost));
 };
 
+/*
+ * Builder function for making a comment url for posts
+ */
 FacebookContentService.prototype._buildCommentUrl = function(id) {
-
     return 'http://facebook.com/posts/' + id.substring(0, 17) + '?comment_id=' + id.substring(18, 38);
 };
 
-
+/*
+ * Parse each fql result into our data format
+ */
 FacebookContentService.prototype._parse = function(data, isPost) {
   return {
     authoredAt: (isPost == 'post') ? data.updated_time : data.time,
