@@ -44,6 +44,7 @@ FacebookContentService.prototype.fetch = function() {
     "AND created_time>"+ this.lastCrawlDate +") ORDER BY updated_time",
     commentsQuery: "SELECT id, fromid, time, text FROM comment WHERE" +
     "(post_id IN (SELECT post_id FROM #postsQuery) AND time>" + this.lastCrawlDate + ") ORDER BY time",
+    usernameQuery: "SELECT name from user WHERE(id=#postsQuery.actor_id OR #commentsQuery.fromid)"
   };
   
   graph.fql(query, function(err, res) {
