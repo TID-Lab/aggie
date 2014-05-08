@@ -18,9 +18,7 @@ describe('Facebook content service', function() {
         facebookContentService.fetch();
         facebookContentService.on('report', function(report_data) {
             expect(report_data).to.have.property('fetchedAt');
-            expect(report_data).to.have.property('createdAt');
             expect(report_data).to.have.property('authoredAt');
-            expect(report_data).to.have.property('id');
             expect(report_data).to.have.property('author');
             expect(report_data).to.have.property('url');
             // console.log('------------------');
