@@ -9,7 +9,6 @@ var schema = new mongoose.Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: Date,
-  timebox: Number,
   content: String,
   author: String,
   status: String,
@@ -24,7 +23,7 @@ schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
   if (this.isNew) this._wasNew = true;
-  this.storedAt = Date.now();
+  this.storedAt = new Date();
   next();
 });
 
@@ -83,6 +82,40 @@ Report.queryReports = function(query, callback) {
       callback(null, _.pluck(reports.results, 'obj'));
     });
   }
+};
+
+Report.getTimebox = function(report, box) {
+  var date = report.storedAt.getTime();
+  box *= 1000; // Convert to ms
+  var timebox = Math.floor(date / box) * box;
+  report.timebox = new Date(timebox);
+};
+
+// Analyze trends for a given keyword
+Report.analyzeTrend = function(query, timebox, callback) {
+  if (!query.keywords) return callback(new Error('Query needs a keyword to analyze'));
+
+  var options = {
+    filter: {storedAt: {$gte: query.since || new Date(0)}},
+    limit: 0,
+    lean: true
+  };
+
+  // Re-set search timestamp
+  query.since = new Date();
+
+  Report.textSearch(query.keywords, options, function(err, reports) {
+    if (err) return callback(err);
+    var trends = _.chain(reports.results).pluck('obj').map(function(report) {
+      // Calculate timebox
+      Report.getTimebox(report, timebox);
+      return report;
+    }).countBy('timebox').map(function(counts, box) {
+      // Count matching reports per timebox
+      return {timebox: box, counts: counts};
+    }).value();
+    callback(null, trends);
+  });
 };
 
 module.exports = Report;
