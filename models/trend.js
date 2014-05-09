@@ -65,7 +65,7 @@ Trend.findPageById = function(_id, page, callback) {
   }
   var limit = 48;
   var skip = page * limit;
-  Trend.findOne({_id: _id}, {counts: {$slice: [-skip, limit]}}, function(err, trend) {
+  Trend.findOne({_id: _id}, {counts: {$slice: [skip, limit]}}, function(err, trend) {
     if (err) return callback(err);
     callback(null, trend);
   });
@@ -84,7 +84,7 @@ Trend.addTrend = function(_id, trend, callback) {
         callback(null, _.findWhere(result.counts, {timebox: trend.timebox}));
       } else {
         // If no prior trend found, add it to the array
-        Trend.findByIdAndUpdate(_id, {$push: {counts: trend}},
+        Trend.findByIdAndUpdate(_id, {$push: {counts: {$each: [trend], $sort: {timebox: -1}}}},
           function(err, result) {
             if (err) return callback(err);
             if (!result) return callback(new Error.NotFound());
