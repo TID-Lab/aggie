@@ -1,0 +1,47 @@
+<div class="navbar navbar-default" ng-controller="NavbarController">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">Aggie</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+      <ul class="nav navbar-nav" ng-show="currentUser">
+        <li ui-sref-active="active"><a ui-sref="reports">Reports</a></li>
+        <li ui-sref-active="active"><a ui-sref="incidents">Incidents</a></li>
+        <li ui-sref-active="active"><a ui-sref="sources">Sources</a></li>
+        <li ui-sref-active="active"><a ui-sref="analysis">Analysis</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
+        <li ui-sref-active="active" class="user">
+          <a ui-sref="profile">
+          <i class="fa fa-user fa-fw"></i>
+          {{currentUser.username}}</a>
+        </li>
+        <li ui-sref-active="active">
+          <a ui-sref="settings">
+            <i class="fa fa-gear fa-fw"></i>
+            Settings
+          </a>
+        </li>
+        <li>
+          <a href ng-click="logout()">
+            <i class="fa fa-sign-out fa-fw"></i>
+            Log out
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-hide="currentUser">
+        <li>
+          <a href="/login">
+            <i class="fa fa-sign-in fa-fw"></i>
+            Log in
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="navbar navbar-stats">
+  <div class="container">
+    <p class="navbar-text">Stats go here.</p>
+  </div>
+</div>
