@@ -20,7 +20,7 @@ angular.module('Aggie').controller('PasswordResetController', [
       var params = {
         token: $stateParams.token,
         password: $scope.user.password
-      }
+      };
 
       $http.put('/reset-password', params).success(function() {
         flash.setNotice('Your password has been successfully reset.');
