@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var should = require('chai').should();
-var FacebookContentService = require('../controllers/fetching/content-services/facebook-content-service');
-var ContentService = require('../controllers/fetching/content-service');
+var FacebookContentService = require('../lib/fetching/content-services/facebook-content-service');
+var ContentService = require('../lib/fetching/content-service');
 
 describe('Facebook content service', function() {
     before(function(done) {
