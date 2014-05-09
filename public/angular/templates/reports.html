@@ -1,1 +1,51 @@
-<h1>Reports</h1>
+<div>
+  <div class="pull-right">
+    <ul class="pager">
+      {{ startReport }} - {{ endReport }} of {{ totalItems }}
+      <li ng-class="{disabled: currentPage == 0}">
+        <a href ng-click="prevPage()"><</a>
+      </li>
+      <li ng-class="{disabled: endReport == totalItems }">
+        <a href ng-click="nextPage()">></a>
+      </li>
+    </ul>
+  </div>
+  <table class="table table-borderd">
+    <col width="15%"/>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Source</th>
+        <th>Author</th>
+        <th>Content</th>
+        <th>Incident</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="r in reports">
+        <td>
+          <div class="row">
+            <div class="col-sm-5">
+              {{ r.storedAt | interval }}
+            </div>
+            <div class="col-sm-6">
+              {{ r.storedAt | date:'HH:mm' }}<br/>
+              {{ r.storedAt | date:"dd MMM '''yy" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-8">
+            {{ r | delay }}
+            </div>
+          </div>
+        </td>
+        <td>{{r.url}}</td>
+        <td>{{r.author}}</td>
+        <td>{{r.content}}</td>
+        <td>{{r.incident}}</td>
+        <td>{{r.status}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
