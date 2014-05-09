@@ -15,9 +15,11 @@ angular.module('Aggie')
             });
         },
 
-        currentUser: function() {
+        getCurrentUser: function() {
           $http.get('/session').then(function(res) {
-            $rootScope.currentUser = res.data;
+            if (res.data.username) {
+              $rootScope.currentUser = res.data;
+            }
           });
         },
 

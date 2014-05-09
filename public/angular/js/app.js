@@ -7,9 +7,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource']).
   ]).run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
 
     $rootScope.$watch('currentUser', function(currentUser) {
-      if (!currentUser && (['/', '/login', '/logout'].indexOf($location.path()) == -1 )) {
-        AuthService.currentUser();
-      }
+      if (!currentUser) { AuthService.getCurrentUser() }
     });
 
     var needsAuth = function () {
