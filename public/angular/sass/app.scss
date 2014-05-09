@@ -1,0 +1,74 @@
+$navbar-green: #009446;
+$navbar-yellow: #eaef92;
+
+body {
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  color: #333;
+}
+
+.navbar-brand {
+  text-transform: uppercase;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
+  line-height: 19px;
+}
+
+.navbar {
+  font-size: 14px;
+}
+
+.navbar-default {
+  background-color: $navbar-green;
+  margin-bottom: 0;
+  .navbar-nav > li {
+    > a:hover,
+    > a:focus,
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      background-color: darken($navbar-green, 10%);
+    }
+  }
+}
+
+.navbar-stats {
+  background-color: $navbar-yellow;
+}
+
+.nav li.user {
+  font-weight: bold;
+}
+
+.well {
+  background-color: #e3e6e3;
+}
+
+label {
+  font-size: 14px;
+}
+
+.form-control {
+  box-shadow: none;
+}
+
+.modal {
+  overflow-y: auto;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: darken(#e3e6e3, 10%);
+}
+
+.modal-content {
+  background-color: #e3e6e3;
+}
+
+.close {
+  color: #333;
+  &:hover,
+  &:focus {
+    color: #000;
+  }
+}

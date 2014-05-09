@@ -14,11 +14,11 @@ describe('Report queue', function() {
     before(function(done) {
       botMaster.kill();
       reportQueue.clear();
-      one = botFactory.create({sourceType: 'dummy', keywords: '1', interval: 0});
+      one = botFactory.create({source: new Source({type: 'dummy', keywords: '1'}), interval: 0});
       one.start();
-      two = botFactory.create({sourceType: 'dummy', keywords: '2', interval: 0});
+      two = botFactory.create({source: new Source({type: 'dummy', keywords: '2'}), interval: 0});
       two.start();
-      three = botFactory.create({sourceType: 'dummy', keywords: '3', interval: 0});
+      three = botFactory.create({source: new Source({type: 'dummy', keywords: '3'}), interval: 0});
       three.start();
       // Stream data for 100ms
       setTimeout(function() {

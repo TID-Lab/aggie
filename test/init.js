@@ -5,8 +5,8 @@ var database = require('../lib/database');
 var Report = require('../models/report');
 var User = require('../models/user');
 
-// Change database before starting any test
 before(function(done) {
+  // Change database before starting any test
   database.mongoose.disconnect(function() {
     database.mongoose.connect(dbConnectURL, function() {
       // Enable database-level text search

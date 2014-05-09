@@ -17,6 +17,15 @@ This is the future of Aggie.
 1. To monitor code while developing, run `gulp`.
 1. To start server, run `npm start`.
 
+## Angular application installation
+1. Edit /etc/hosts to contain "127.0.0.1 aggie"
+1. Install any updated dependencies using `npm install`
+
+## Running the Angular application
+1. Start the server using `npm start`
+1. Concatenate Angular app into a single `app.min.js` file by running `gulp angular` (or, if you will be editing any files, run `gulp angular.watch`).
+1. Navigate to "aggie:3000" in your browser.
+
 ## To enable full-text search in MongoDB
 
 MongoDB 2.6+ has full-text search enabled by default. For 2.4 use the following
