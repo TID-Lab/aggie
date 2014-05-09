@@ -6,7 +6,7 @@ if (!process.argv[2]) {
   process.exit();
 }
 
-var transport = nodemailer.createTransport.apply(this, config.transport);
+var transport = nodemailer.createTransport(config.transport.method, config.transport.options);
 
 var mailOptions = {
   from: config.from,
