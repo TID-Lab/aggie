@@ -9,7 +9,7 @@ describe('RSS content service', function() {
     // Override fetch stream so that we can test local files
     RSSContentService.prototype._fetchStream = function(callback) {
       var stream =  fs.createReadStream(path.join(__dirname, this.url));
-      callback(null, stream);
+      callback(stream);
     };
     rssContentService = new RSSContentService({url: './fixtures/rss-good-1.xml'});
     done();
@@ -17,8 +17,7 @@ describe('RSS content service', function() {
 
   it('should fetch content from RSS', function(done) {
     var reports = [];
-    rssContentService.fetch(function(err, lastPostDate) {
-      if (err) return done(err);
+    rssContentService.fetch(function(lastPostDate) {
       expect(lastPostDate).to.be.an.instanceof(Date);
       expect(reports).to.have.length(2);
       rssContentService.removeAllListeners('report');
@@ -30,13 +29,15 @@ describe('RSS content service', function() {
       expect(report_data.url).to.contain('news.gatech.edu');
       reports.push(report_data);
     });
+    rssContentService.on('error', function(err) {
+      return done(err);
+    });
   });
 
   it('should fetch more content and avoid duplicates', function(done) {
     var reports = [];
     rssContentService.url = './fixtures/rss-good-2.xml';
-    rssContentService.fetch(function(err, lastPostDate) {
-      if (err) return done(err);
+    rssContentService.fetch(function(lastPostDate) {
       expect(lastPostDate).to.be.an.instanceof(Date);
       expect(lastPostDate.toString()).to.equal('Tue Apr 29 2014 16:18:12 GMT-0400 (EDT)');
       expect(reports).to.have.length(2);
@@ -49,13 +50,15 @@ describe('RSS content service', function() {
       expect(report_data.url).to.contain('news.gatech.edu');
       reports.push(report_data);
     });
+    rssContentService.on('error', function(err) {
+      return done(err);
+    });
   });
 
   it('should emit warnings for missing data', function(done) {
     var bad = new RSSContentService({url: './fixtures/rss-bad.xml'});
     var warnings = [];
-    bad.fetch(function(err, lastPostDate) {
-      if (err) return done(err);
+    bad.fetch(function(lastPostDate) {
       expect(warnings).to.be.an.instanceof(Array);
       expect(warnings).to.have.length(2);
     });
@@ -76,10 +79,7 @@ describe('RSS content service', function() {
 
   it('should emit errors for malformed data', function(done) {
     var ugly = new RSSContentService({url: './fixtures/rss-ugly.xml'});
-    ugly.fetch(function(err) {
-      expect(err).to.be.an.instanceof(Error);
-      expect(err.message).to.contain('Not a feed');
-    });
+    ugly.fetch();
     ugly.on('report', function(report_data) {
       done(new Error('No report data should be emitted'));
     });
