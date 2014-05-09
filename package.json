@@ -6,7 +6,7 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "postinstall": "node install.js",
+    "postinstall": "node install.js && gulp angular",
     "start": "node app.js",
     "test": "mocha"
   },
