@@ -6,7 +6,7 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "postinstall": "node install.js",
+    "postinstall": "node install.js && gulp angular",
     "start": "node app.js",
     "test": "mocha"
   },
@@ -29,15 +29,19 @@
     "resanitize": "~0.3.0",
     "socket.io": "~0.9.16",
     "twit": "~1.1.12",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "passport.socketio": "~3.0.1",
+    "node-sass": "~0.8.6"
   },
   "devDependencies": {
     "chai": "~1.9.0",
+    "mocha": "~1.17.1",
+    "supertest": "~0.9.0",
     "gulp": "~3.5.5",
     "gulp-jshint": "~1.5.0",
     "gulp-mocha": "~0.4.1",
-    "mocha": "~1.17.1",
-    "supertest": "~0.9.0"
+    "gulp-jshint": "~1.5.0",
+    "gulp-concat": "2.2.0"
   },
   "subdomain": "aggie",
   "engines": {
