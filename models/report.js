@@ -87,8 +87,7 @@ Report.queryReports = function(query, callback) {
 Report.getTimebox = function(report, box) {
   var date = report.storedAt.getTime();
   box *= 1000; // Convert to ms
-  var timebox = Math.floor(date / box) * box;
-  report.timebox = new Date(timebox);
+  report.timebox = Math.floor(date / box) * box;
 };
 
 // Analyze trends for a given keyword
@@ -112,7 +111,7 @@ Report.analyzeTrend = function(query, timebox, callback) {
       return report;
     }).countBy('timebox').map(function(counts, box) {
       // Count matching reports per timebox
-      return {keywords: query.keywords, timebox: box, counts: counts};
+      return {timebox: box, counts: counts};
     }).value();
     callback(null, trends);
   });

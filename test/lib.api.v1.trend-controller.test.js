@@ -47,9 +47,9 @@ describe('Trend controller', function() {
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
-      Trend.create({keywords: '123'});
-      Trend.create({keywords: '456'});
-      Trend.create({keywords: '789'});
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '123'})});
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '456'})});
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '789'})});
       setTimeout(function() {
         request(trendController)
           .get('/api/v1/trend')

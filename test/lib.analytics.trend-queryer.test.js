@@ -10,7 +10,7 @@ var _ = require('underscore');
 var trendQueryer;
 describe('Trend queryer', function() {
   before(function(done) {
-    Trend.create({keywords: 'test'}, function(err, trend) {
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'test'})}, function(err, trend) {
       if (err) return done(err);
       trendQueryer = new TrendQueryer({trend: trend});
       done();
@@ -24,12 +24,9 @@ describe('Trend queryer', function() {
   });
 
   it('should get query associated with trend', function(done) {
-    var query = trendQueryer.getQuery();
-    expect(query).to.be.an.instanceof(Query);
-    expect(query.keywords).to.contain('test');
     expect(trendQueryer).to.have.property('query');
     expect(trendQueryer.query).to.be.an.instanceof(Query);
-    expect(trendQueryer.query).to.equal(query);
+    expect(trendQueryer.query.keywords).to.contain('test');
     done();
   });
 
@@ -44,44 +41,51 @@ describe('Trend queryer', function() {
         if (err) return done(err);
         expect(counts).to.be.an.instanceof(Array);
         expect(counts).to.have.length(1);
-        expect(counts[0]).to.have.property('counts');
+        expect(counts[0]).to.have.keys(['timebox', 'counts']);
         expect(counts[0].counts).to.equal(3);
-        done();
+        Trend.remove(function() {
+          done();
+        });
       });
     }, 100);
   });
 
   it('should group analytics by 5-minute timeboxes', function(done) {
-    // Create one report now
-    Report.create({content: 'test'});
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'qwerty'})}, function(err, trend) {
+      if (err) return done(err);
+      trendQueryer = new TrendQueryer({trend: trend});
 
-    process.nextTick(function() {
-      // Create two reports 5 minutes in the future
-      timekeeper.travel(new Date(Date.now() + 300000));
-      Report.create({content: 'test'});
-      Report.create({content: 'test'});
+      // Create one report now
+      Report.create({content: 'qwerty'});
 
       process.nextTick(function() {
-        // Create three reports 10 minutes in the future
-        timekeeper.travel(new Date(Date.now() + 600000));
-        Report.create({content: 'test'});
-        Report.create({content: 'test'});
-        Report.create({content: 'test'});
+        // Create two reports 5 minutes in the future
+        timekeeper.travel(new Date(Date.now() + 300000));
+        Report.create({content: 'qwerty'});
+        Report.create({content: 'qwerty'});
 
-        setTimeout(function() {
-          // Run trend analytics
-          trendQueryer.runQuery(function(err, counts) {
-            if (err) return done(err);
-            expect(counts).to.be.an.instanceof(Array);
-            expect(counts).to.have.length(3);
-            counts = _.sortBy(counts, 'timebox');
-            expect(counts[0].counts).to.equal(1);
-            expect(counts[1].counts).to.equal(2);
-            expect(counts[2].counts).to.equal(3);
-            timekeeper.reset();
-            done();
-          });
-        }, 100);
+        process.nextTick(function() {
+          // Create three reports 10 minutes in the future
+          timekeeper.travel(new Date(Date.now() + 600000));
+          Report.create({content: 'qwerty'});
+          Report.create({content: 'qwerty'});
+          Report.create({content: 'qwerty'});
+
+          setTimeout(function() {
+            // Run trend analytics
+            trendQueryer.runQuery(function(err, counts) {
+              if (err) return done(err);
+              expect(counts).to.be.an.instanceof(Array);
+              expect(counts).to.have.length(3);
+              counts = _.sortBy(counts, 'timebox');
+              expect(counts[0].counts).to.equal(1);
+              expect(counts[1].counts).to.equal(2);
+              expect(counts[2].counts).to.equal(3);
+              timekeeper.reset();
+              done();
+            });
+          }, 100);
+        });
       });
     });
   });

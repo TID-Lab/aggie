@@ -5,8 +5,7 @@ var _ = require('underscore');
 require('../lib/error');
 
 var schema = new mongoose.Schema({
-  _query: {type: String},
-  keywords: {type: String, required: true},
+  _query: {type: String, required: true},
   timebox: {type: Number, default: 300},
   createdAt: {type: Date, default: new Date()},
   counts: {type: Array, default: []},
@@ -15,19 +14,10 @@ var schema = new mongoose.Schema({
 });
 
 schema.pre('save', function(next) {
-  var trend = this;
   if (this.isNew) this._wasNew = true;
   // Do not allow changing query
   if (!this.isNew && this.isModified('_query')) return next(new Error.Validation('query_change_not_allowed'));
-  // Determine query
-  var query = new Query({type: 'Trend', keywords: this.keywords});
-  var queryHash = Query.hash(query);
-  Trend.findOne({_query: queryHash}, function(err, found) {
-    if (err) return next(err);
-    if (found) trend = found;
-    else trend._query = queryHash;
-    next();
-  });
+  next();
 });
 
 schema.post('save', function() {
@@ -38,17 +28,6 @@ schema.pre('remove', function(next) {
   schema.emit('remove', {_id: this._id.toString()});
   next();
 });
-
-schema.methods.addTrends = function(trends) {
-  var self = this;
-  trends.forEach(function(trend) {
-    var count = _.findWhere(self.counts, {timebox: trend.timebox});
-    if (count) count.counts += trend.counts;
-    else self.counts.push(trend);
-  });
-  // TODO Save not working
-  this.save();
-};
 
 // Toggle trend enabled status
 schema.methods.toggle = function(status, callback) {
@@ -78,4 +57,42 @@ schema.methods.toggle = function(status, callback) {
 };
 
 var Trend = mongoose.model('Trend', schema);
+
+Trend.findPageById = function(_id, page, callback) {
+  if (typeof page === 'function') {
+    callback = page;
+    page = 0;
+  }
+  var limit = 48;
+  var skip = page * limit;
+  Trend.findOne({_id: _id}, {counts: {$slice: [-skip, limit]}}, function(err, trend) {
+    if (err) return callback(err);
+    callback(null, trend);
+  });
+};
+
+// Add new trend analytics to Trend model
+Trend.addTrend = function(_id, trend, callback) {
+  // Find corresponding trend and increment the counts
+  Trend.findOneAndUpdate(
+    {_id: _id, 'counts.timebox': trend.timebox},
+    {$inc: {'counts.$.counts': trend.counts}},
+    function(err, result) {
+      if (err) return callback(err);
+      if (result) {
+        // Return updated trend
+        callback(null, _.findWhere(result.counts, {timebox: trend.timebox}));
+      } else {
+        // If no prior trend found, add it to the array
+        Trend.findByIdAndUpdate(_id, {$push: {counts: trend}},
+          function(err, result) {
+            if (err) return callback(err);
+            if (!result) return callback(new Error.NotFound());
+            // Return updated trend
+            callback(null, _.findWhere(result.counts, {timebox: trend.timebox}));
+          });
+      }
+    });
+};
+
 module.exports = Trend;

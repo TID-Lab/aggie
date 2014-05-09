@@ -4,6 +4,7 @@ var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
 var Report = require('../models/report');
+var Query = require('../models/query');
 var _ = require('underscore');
 
 describe('Trend master', function() {
@@ -14,9 +15,9 @@ describe('Trend master', function() {
   });
 
   it('should track all trends', function(done) {
-    Trend.create({keywords: 'one'});
-    Trend.create({keywords: 'two'});
-    Trend.create({keywords: 'three'});
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'one'})});
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'two'})});
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'three'})});
     setTimeout(function() {
       expect(trendMaster).to.have.property('trends');
       expect(trendMaster.trends).to.be.an.instanceof(Array);
@@ -77,19 +78,18 @@ describe('Trend master', function() {
   });
 
   it('should trigger a trend to run a query', function(done) {
-    Trend.create({keywords: 'four'});
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'four'})});
     Report.create({content: 'four'});
     Report.create({content: 'four'});
     Report.create({content: 'four'});
     Report.create({content: 'four'});
     setTimeout(function() {
-      var trendId = _.findWhere(trendMaster.trends, {keywords: 'four'})._id;
+      var trendId = _.findWhere(trendMaster.trends, {_query: '{"type":"Trend","keywords":"four"}'})._id;
       trendMaster.query(trendId, function(err, trends, trend) {
         if (err) return done(err);
         expect(trends).to.be.an.instanceof(Array);
         expect(trends).to.have.length(1);
-        expect(trends[0]).to.have.keys(['keywords', 'timebox', 'counts']);
-        expect(trends[0].keywords).to.contain('four');
+        expect(trends[0]).to.have.keys(['timebox', 'counts']);
         expect(trends[0].counts).to.equal(4);
         done();
       });
@@ -100,8 +100,11 @@ describe('Trend master', function() {
     trendMaster.queryAll(100);
     trendMaster.on('error', done);
     var remaining = 9;
-    trendMaster.on('trends', function(trends) {
-      if (--remaining === 0) done();
+    trendMaster.on('trend', function(trend) {
+      if (--remaining === 0) {
+        trendMaster.disable();
+        done();
+      }
     });
     Report.create({content: 'one'});
     Report.create({content: 'two'});
@@ -110,12 +113,12 @@ describe('Trend master', function() {
       Report.create({content: 'one'});
       Report.create({content: 'two'});
       Report.create({content: 'three'});
-    }, 100);
+    }, 200);
     setTimeout(function() {
       Report.create({content: 'one'});
       Report.create({content: 'two'});
       Report.create({content: 'three'});
-    }, 200);
+    }, 300);
   });
 
   it('should remove a trend when deleting it', function(done) {
@@ -131,6 +134,8 @@ describe('Trend master', function() {
 
   // Clean up
   after(function(done) {
+    trendMaster.trends = [];
+    trendMaster.disable();
     Trend.remove(function(err) {
       if (err) return done(err);
       Report.remove(function(err) {
