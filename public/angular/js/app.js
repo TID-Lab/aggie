@@ -1,4 +1,4 @@
-angular.module('Aggie', ['routes', 'ui.bootstrap', 'ngResource']).
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource']).
   config(['$urlRouterProvider', '$locationProvider',
     function($urlRouterProvider, $locationProvider) {
       $locationProvider.html5Mode(true);

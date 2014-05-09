@@ -1,11 +1,10 @@
-angular.module('Aggie')
-
-.controller('PasswordResetModalController', [
+angular.module('Aggie').controller('PasswordResetModalController', [
   '$rootScope',
   '$scope',
+  '$location',
   '$modal',
   '$http',
-  function($rootScope, $scope, $modal, $http) {
+  function($rootScope, $scope, $location, $modal, $http) {
     $rootScope.notices = [];
 
     $scope.open = function() {
@@ -19,6 +18,7 @@ angular.module('Aggie')
           .success(function(response) {
             $rootScope.notices.push('An email has been sent to ' +
               email + ' with instructions for resetting your password' );
+            $location.path('/');
           })
           .error(function(mesg, status) {
             if (status == 404) {

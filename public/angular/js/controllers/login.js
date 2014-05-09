@@ -4,10 +4,8 @@ angular.module('Aggie')
     '$rootScope',
     'AuthService',
     '$location',
-    function($scope, $rootScope, AuthService, $location) {
-      $scope.alerts = [];
-      $scope.user = {};
-
+    'FlashService',
+    function($scope, $rootScope, AuthService, $location, flash) {
       $scope.login = function(form) {
         AuthService.login({
             'username': $scope.user.username,
@@ -15,19 +13,12 @@ angular.module('Aggie')
           },
           function(err) {
             if (!err) {
+              flash.setNotice('You have been successfully logged in.');
               $location.path('/');
             } else {
-              $scope.alerts.push(err.data);
+              flash.setAlertNow(err.data);
             }
         });
-      };
-
-      $scope.closeAlert = function(index) {
-        $scope.alerts.splice(index, 1);
-      };
-
-      $scope.closeNotice = function(index) {
-        $scope.notices.splice(index, 1);
       };
     }
   ]);
