@@ -3,10 +3,12 @@ var expect = require('chai').expect;
 var contentServiceFactory = require('../lib/fetching/content-service-factory');
 var ContentService = require('../lib/fetching/content-service');
 var DummyContentService = require('../lib/fetching/content-services/dummy-content-service');
+var Source = require('../models/source');
 
 describe('Content service', function() {
   before(function(done) {
-    contentService = contentServiceFactory.create({sourceType: 'dummy', keywords: 't'});
+    var source = new Source({type: 'dummy', keywords: 't'});
+    contentService = contentServiceFactory.create({source: source});
     done();
   });
 

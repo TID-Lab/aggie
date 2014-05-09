@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?><rss version="2.0" xml:base="http://www.news.gatech.edu/campus-and-community" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:og="http://ogp.me/ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:sioc="http://rdfs.org/sioc/ns#" xmlns:sioct="http://rdfs.org/sioc/types#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <channel>
+    <title>The Latest Georgia Tech News</title>
+    <link>http://www.news.gatech.edu/campus-and-community</link>
+    <description></description>
+    <language>en</language>
+    <item>
+      <title>Lipton Elected to American Academy of Arts and Sciences</title>
+      <link>http://www.news.gatech.edu/2014/04/28/lipton-elected-american-academy-arts-and-sciences</link>
+      <description>  CoC professor joins short list of Georgia Tech notables as fellow of exclusive association  &lt;span class=&quot;date-display-single&quot; property=&quot;dc:date&quot; datatype=&quot;xsd:dateTime&quot; content=&quot;2014-04-29T00:00:00-04:00&quot;&gt;April 29, 2014&lt;/span&gt;  Atlanta, GA  &lt;p&gt;CoC professor joins short list of Georgia Tech notables as fellow of exclusive association&lt;/p&gt;</description>
+      <pubDate>Mon, 28 Apr 2014 20:09:27 +0000</pubDate>
+      <dc:creator>Jupiter</dc:creator>
+      <guid isPermaLink="false">125211 at http://www.news.gatech.edu</guid>
+      <comments>http://www.news.gatech.edu/2014/04/28/lipton-elected-american-academy-arts-and-sciences#comments</comments>
+    </item>
+    <item>
+      <title>A River Runs Through It</title>
+      <link>http://www.news.gatech.edu/2014/04/24/river-runs-through-it</link>
+      <description>  &lt;span class=&quot;date-display-single&quot; property=&quot;dc:date&quot; datatype=&quot;xsd:dateTime&quot; content=&quot;2014-04-29T00:00:00-04:00&quot;&gt;April 29, 2014&lt;/span&gt;  Atlanta, GA  &lt;p&gt;Georgia Tech is renowned for transforming real-world challenges into teachable moments. Such was the case with the planning for the Engineered Biosystems Building (EBB) – a project that in turn led to the development of the 2013 Stormwater Master Plan.&lt;/p&gt;</description>
+      <pubDate>Thu, 24 Apr 2014 16:58:09 +0000</pubDate>
+      <dc:creator>Jupiter</dc:creator>
+      <guid isPermaLink="false">124581 at http://www.news.gatech.edu</guid>
+      <comments>http://www.news.gatech.edu/2014/04/24/river-runs-through-it#comments</comments>
+    </item>
+  </channel>
+</rss>
