@@ -26,12 +26,18 @@ gulp.task('lint', function() {
 
 gulp.task('angular', function() {
   gulp.src(paths.angular.js)
-  .pipe(concat('app.min.js'))
-  .pipe(gulp.dest('public/angular/js'));
+    .pipe(concat('app.min.js'))
+    .pipe(gulp.dest('public/angular/js'));
 });
 
 gulp.task('angular.watch', function() {
   gulp.watch(paths.angular.js, ['angular']);
+});
+
+gulp.task('angular.lint', function() {
+  gulp.src(paths.angular.js)
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('test', function() {
