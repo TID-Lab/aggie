@@ -20,9 +20,7 @@ angular.module('Aggie').config([
     $stateProvider.state('reports', {
       url: '/reports',
       templateUrl: '/templates/reports.html',
-      controller: function($scope) {
-        $scope.items = ['A', 'List', 'Of', 'Reports'];
-      }
+      controller: 'ReportsController'
     });
 
     $stateProvider.state('incidents', {
