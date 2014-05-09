@@ -3,11 +3,13 @@ var expect = require('chai').expect;
 var PullBot = require('../lib/fetching/bots/pull-bot');
 var Bot = require('../lib/fetching/bot');
 var contentServiceFactory = require('../lib/fetching/content-service-factory');
+var Source = require('../models/source');
 
 describe('Pull bot', function() {
   before(function(done) {
-    var contentService = contentServiceFactory.create({sourceType: 'dummy-pull'});
-    pullBot = new PullBot({contentService: contentService, interval: 100});
+    var source = new Source({type: 'dummy-pull'});
+    var contentService = contentServiceFactory.create({source: source});
+    pullBot = new PullBot({source: source, contentService: contentService, interval: 100});
     done();
   });
 

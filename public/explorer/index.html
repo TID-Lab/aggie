@@ -56,6 +56,15 @@
       </form>
     </li>
     <li>
+      <form action="/api/v1/source" method="post">
+        <input type="hidden" name="type" value="rss" />
+        <input type="hidden" name="enabled" value="true" />
+        Create RSS source with a URL:
+        <input type="text" name="url" placeholder="Feed URL" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
       <form id="query" action="/api/v1/report" method="get">
         Search for Report data:
         <input type="text" name="keywords" placeholder="Keywords" />
