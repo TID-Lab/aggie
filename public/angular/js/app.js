@@ -1,41 +1,24 @@
-var aggie = angular.module('Aggie', ['ui.router']);
+angular.module('Aggie', ['routes', 'ui.bootstrap', 'ngResource']).
+  config(['$urlRouterProvider', '$locationProvider',
+    function($urlRouterProvider, $locationProvider) {
+      $locationProvider.html5Mode(true);
+      $urlRouterProvider.otherwise('/');
+    }
+  ]).run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
 
-aggie.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
-  function($stateProvider, $urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
-
-    $urlRouterProvider.otherwise('/');
-
-    $stateProvider.state('home', {
-      url: '/',
-      templateUrl: '/templates/home.html',
-    }).state('reports', {
-      url: '/reports',
-      templateUrl: '/templates/reports.html',
-      controller: function($scope) {
-        $scope.items = ['A', 'List', 'Of', 'Reports'];
+    $rootScope.$watch('currentUser', function(currentUser) {
+      if (!currentUser && (['/', '/login', '/logout'].indexOf($location.path()) == -1 )) {
+        AuthService.currentUser();
       }
-    }).state('incidents', {
-      url: '/incidents',
-      templateUrl: '/templates/incidents.html',
-      controller: function($scope){
-        $scope.things = ['A', 'List', 'Of', 'Incidents'];
-      }
-    }).state('sources', {
-      url: '/sources',
-      templateUrl: '/templates/sources.html',
-      controller: function($scope){
-        $scope.things = ['A', 'List', 'Of', 'Sources'];
-      }
-    }).state('analysis', {
-      url: '/analysis',
-      templateUrl: '/templates/analysis.html'
-    }).state('settings', {
-      url: '/settings',
-      templateUrl: '/templates/settings.html'
-    }).state('user', {
-      url: '/user',
-      templateUrl: '/templates/user.html'
     });
-  }
-]);
+
+    var needsAuth = function () {
+      return [].indexOf($location.path()) != -1;
+    };
+
+    $rootScope.$on('$stateChangeStart', function (event, next, current) {
+      if (needsAuth() && !$rootScope.currentUser) {
+        $location.path('/login');
+      }
+    });
+  }]);
