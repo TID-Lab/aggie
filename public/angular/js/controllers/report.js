@@ -3,7 +3,8 @@ angular.module('Aggie')
 .controller('ReportsController', [
   '$scope',
   'Report',
-  function($scope, Report) {
+  'Source',
+  function($scope, Report, Source) {
     $scope.currentPage = 0;
     $scope.perPage = 25;
     $scope.startReport = 1;
@@ -13,6 +14,9 @@ angular.module('Aggie')
 
     var fetchPage = function() {
       Report.query({page: $scope.currentPage}, function(data) {
+        for (var d in data) {
+          data[d].source = Source.get({id: data[d]._source});
+        }
         $scope.reports = data;
       });
     };

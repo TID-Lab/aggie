@@ -1,11 +1,21 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
+$link-blue: #1c75bc;
+
+@import 'tables';
 
 body {
   background-color: #fff;
   font-size: 16px;
   line-height: 1;
   color: #333;
+}
+
+a {
+  color: $link-blue;
+  &:hover {
+    color: lighten($link-blue, 10%);
+  }
 }
 
 .navbar-brand {
@@ -73,10 +83,21 @@ label {
   }
 }
 
-.relevant {
-  background-color: #87cefa;
+.btn {
+  &:focus, &:active:focus {
+    outline: none;
+  }
 }
 
 .relevant {
   background-color: #87cefa;
+}
+
+table, .table {
+  a {
+    color: $link-blue;
+    &:hover {
+      color: lighten($link-blue, 10%);
+    }
+  }
 }

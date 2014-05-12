@@ -19,10 +19,8 @@ var paths = {
   js: ['lib/**/*.js', 'models/*.js'],
   test: ['test/*.test.js'],
   angular: {
-    js: ['public/angular/js/angular.js',
-    'public/angular/js/angular-ui-router.js',
-    'public/angular/js/angular-resource.js',
-    'public/angular/js/ui-bootstrap.js',
+    js: ['public/angular/js/vendor/angular.js',
+    'public/angular/js/vendor/*',
     'public/angular/js/app.js',
     'public/angular/js/routes.js',
     'public/angular/js/filters/*.js',
@@ -52,7 +50,7 @@ gulp.task('angular', function() {
     .pipe(gulp.dest('public/angular/js'));
 });
 
-gulp.task('angular.watch', function() {
+gulp.task('angular.watch', ['angular'], function() {
   gulp.watch(paths.angular.js, ['angular']);
 });
 
