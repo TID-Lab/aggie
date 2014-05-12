@@ -43,7 +43,10 @@ schema.methods.toggle = function(status, callback) {
     if (!this.enabled) this.lastEnabledAt = new Date();
     this.enabled = !this.enabled;
   } else {
-    return callback(new Error.Validation('invalid_status'));
+    process.nextTick(function() {
+      callback(new Error.Validation('invalid_status'));
+    });
+    return;
   }
 
   var event = this.enabled ? 'enable' : 'disable';
