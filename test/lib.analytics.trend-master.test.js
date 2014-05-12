@@ -121,12 +121,38 @@ describe('Trend master', function() {
     }, 300);
   });
 
+  it('should capture a new trend while queries are queued', function(done) {
+    trendMaster.enable();
+    trendMaster.queryAll(100);
+    trendMaster.on('error', done);
+    var remaining = 5;
+    var trends = [];
+    trendMaster.on('trend', function(trend) {
+      trends.push(trend);
+      if (remaining === 3) {
+        // Create a new trend while queries are running
+        Trend.create({_query: Query.hash({type: 'Trend', keywords: 'five'})});
+      }
+      if (--remaining === 0) {
+        // Five trends need to run
+        expect(trends).to.have.length(5);
+        trendMaster.disable();
+        done();
+      }
+    });
+    Report.create({content: 'one'});
+    Report.create({content: 'two'});
+    Report.create({content: 'three'});
+    Report.create({content: 'four'});
+    Report.create({content: 'five'});
+  });
+
   it('should remove a trend when deleting it', function(done) {
     Trend.findById(trendMaster.trends[0]._id, function(err, trend) {
       if (err) return done(err);
       trend.remove(function(err, trend) {
         if (err) return done(err);
-        expect(trendMaster.trends).to.have.length(3);
+        expect(trendMaster.trends).to.have.length(4);
         done();
       });
     });
