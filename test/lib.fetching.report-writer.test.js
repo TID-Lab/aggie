@@ -15,7 +15,7 @@ describe('Report writer', function() {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      bot = botFactory.create({sourceType: 'dummy', keywords: 'Lorem ipsum'});
+      bot = botFactory.create({source: new Source({type: 'dummy', keywords: 'Lorem ipsum'})});
       bot.start();
       done();
     });

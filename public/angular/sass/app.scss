@@ -51,3 +51,24 @@ label {
 .form-control {
   box-shadow: none;
 }
+
+.modal {
+  overflow-y: auto;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: darken(#e3e6e3, 10%);
+}
+
+.modal-content {
+  background-color: #e3e6e3;
+}
+
+.close {
+  color: #333;
+  &:hover,
+  &:focus {
+    color: #000;
+  }
+}

@@ -43,6 +43,12 @@ gulp.task('angular.watch', function() {
   gulp.watch(paths.angular.js, ['angular']);
 });
 
+gulp.task('angular.lint', function() {
+  gulp.src(paths.angular.js)
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
+});
+
 gulp.task('test', function() {
   // Prefer cli argument, default to all test files
   gulp.src(testFile || paths.test)
