@@ -3,6 +3,7 @@ var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
+var _ = require('underscore');
 
 var SALT_WORK_FACTOR = 10;
 var PASSWORD_MIN_LENGTH = 6;
@@ -11,7 +12,8 @@ var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
-  password: {type: String, required: true}
+  password: {type: String, required: true},
+  role: {type: String, default: 'viewer'}
 });
 
 // Hash the password for security
@@ -54,4 +56,11 @@ userSchema.methods.gravatar = function(size, defaults) {
   return 'https://gravatar.com/avatar/' + md5.digest('hex').toString() + '?s=' + size + '&d=' + defaults;
 };
 
-module.exports = mongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema);
+
+// Mixin shared user methods
+var Shared = require('../shared/user');
+for (var static in Shared) User[static] = Shared[static];
+for (var proto in Shared.prototype) userSchema.methods[proto] = Shared[proto];
+
+module.exports = User;

@@ -9,7 +9,6 @@ var schema = new mongoose.Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: Date,
-  timebox: Number,
   content: String,
   author: String,
   status: String,
@@ -24,7 +23,7 @@ schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
   if (this.isNew) this._wasNew = true;
-  this.storedAt = Date.now();
+  this.storedAt = new Date();
   next();
 });
 

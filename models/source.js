@@ -10,7 +10,8 @@ var sourceSchema = new mongoose.Schema({
   keywords: String,
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
-  unreadErrorCount: {type: Number, default: 0}
+  unreadErrorCount: {type: Number, default: 0},
+  lastReportDate: Date
 });
 
 sourceSchema.pre('save', function(next) {
