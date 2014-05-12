@@ -14,9 +14,6 @@ angular.module('Aggie')
 
     var fetchPage = function() {
       Report.query({page: $scope.currentPage}, function(data) {
-        for (var d in data) {
-          data[d].source = Source.get({id: data[d]._source});
-        }
         $scope.reports = data;
       });
     };

@@ -1,14 +1,25 @@
 <div>
-  <div class="pull-right">
-    <ul class="pager">
-      {{ startReport }} - {{ endReport }} of {{ totalItems }}
-      <li>
-        <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
-      </li>
-      <li>
-        <button ng-class="{disabled: endReport == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
-      </li>
-    </ul>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" ng-model="search" class="form-control" placeholder="Enter keywords"><a href=""></a>
+        </input>
+      </div>
+    </div>
+    <div class="pull-right">
+      <ul class="pager">
+        {{ startReport }} - {{ endReport }} of {{ totalItems }}
+        <li>
+          <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: endReport == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
+    </div>
   </div>
   <table class="table">
     <thead>
@@ -33,7 +44,7 @@
           </div>
           <div class="created">{{ r | delay }}</div>
         </td>
-        <td class="compact">{{ r.source.type }}</td>
+        <td class="compact">Twitter</td>
         <td class="compact">{{ r.author }}</td>
         <td class="expand">{{ r.content }}</td>
         <td class="compact">{{ r.incident }}</td>
