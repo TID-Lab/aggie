@@ -11,11 +11,16 @@ angular.module('Aggie')
     $scope.perPage = 25;
     $scope.startReport = 1;
     $scope.endReport = $scope.perPage;
-    // update with api endpoint for total records
     $scope.totalItems = 0;
+    $scope.keywords = '';
     $scope.sources = {};
     $scope.reports = {};
     $scope.originalReports = {};
+    $scope.searchResults = [];
+
+    $scope.isSearching = function() {
+      return $scope.searchResults.length > 0;
+    };
 
     Source.query(function(data) {
       data.forEach(function(item) {
@@ -23,41 +28,62 @@ angular.module('Aggie')
       });
     });
 
-    var fetchPage = function() {
+    $scope.fetchPage = function() {
+      if ($scope.isSearching()) {
+        var results = $scope.searchResults,
+          start,
+          end;
+        $scope.totalItems = results.length;
+        start = $scope.startReport() - 1,
+        end = $scope.endReport();
+        console.log('fetchPage', $scope.totalItems, start, end);
+        return $scope.setReports(results.slice(start, end));
+      }
+
       Report.query({page: $scope.currentPage}, function(data) {
         $scope.totalItems = data.total;
-        var reports = {};
-        data.results.forEach(function(item) {
-          reports[item._id] = item;
-        });
-        $scope.reports = reports;
-        $scope.originalReports = angular.copy($scope.reports);
+        $scope.setReports(data.results);
       });
     };
 
-    fetchPage();
+    $scope.fetchPage();
+
+    $scope.setReports = function(items) {
+      $scope.reports = items.filter(function(reports, item) {
+        reports[item._id] = item;
+        return reports;
+      }, {});
+      $scope.originalReports = angular.copy($scope.reports);
+    };
+
+    $scope.search = function() {
+      if ($scope.keywords == '') {
+        $scope.searchResults = [];
+        return $scope.fetchPage();
+      }
+      Report.query({keywords: $scope.keywords}, function(data) {
+        $scope.searchResults = data.results;
+        $scope.currentPage = 0;
+        $scope.fetchPage();
+      });
+    };
 
     $scope.nextPage = function() {
       if ($scope.currentPage + 1 < $scope.lastPage()) {
         $scope.currentPage += 1;
-        fetchPage();
+        $scope.fetchPage();
       }
     };
 
     $scope.prevPage = function() {
       if ($scope.currentPage > 0) {
         $scope.currentPage -= 1;
-        fetchPage();
+        $scope.fetchPage();
       }
     };
 
     $scope.lastPage = function() {
       return Math.ceil($scope.totalItems / $scope.perPage);
-    };
-
-    $scope.setReportIndices = function() {
-      $scope.startReport = startReport();
-      $scope.endReport = endReport();
     };
 
     $scope.startReport = function() {
@@ -71,7 +97,7 @@ angular.module('Aggie')
         perPage = $scope.perPage,
         totalItems = $scope.totalItems,
         lastPage = $scope.lastPage();
-      if (page === 0) { return perPage; }
+      if (page === 0) { return Math.min(perPage, totalItems); }
       return page + 1 < lastPage ? page * perPage + perPage : totalItems;
     };
 
