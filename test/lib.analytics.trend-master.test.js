@@ -23,7 +23,7 @@ describe('Trend master', function() {
       expect(trendMaster.trends).to.be.an.instanceof(Array);
       expect(trendMaster.trends).to.have.length(3);
       done();
-    }, 100);
+    }, 200);
   });
 
   it('should instantiate a new trend queryer for each trend', function(done) {
@@ -78,22 +78,26 @@ describe('Trend master', function() {
   });
 
   it('should trigger a trend to run a query', function(done) {
+    trendMaster.disable();
     Trend.create({_query: Query.hash({type: 'Trend', keywords: 'four'})});
-    Report.create({content: 'four'});
-    Report.create({content: 'four'});
-    Report.create({content: 'four'});
-    Report.create({content: 'four'});
     setTimeout(function() {
-      var trendId = _.findWhere(trendMaster.trends, {_query: '{"type":"Trend","keywords":"four"}'})._id;
-      trendMaster.query(trendId, function(err, trends, trend) {
-        if (err) return done(err);
-        expect(trends).to.be.an.instanceof(Array);
-        expect(trends).to.have.length(1);
-        expect(trends[0]).to.have.keys(['timebox', 'counts']);
-        expect(trends[0].counts).to.equal(4);
-        done();
-      });
-    }, 500);
+      Report.create({content: 'four'});
+      Report.create({content: 'four'});
+      Report.create({content: 'four'});
+      Report.create({content: 'four'});
+      setTimeout(function() {
+        var trendId = _.findWhere(trendMaster.trends, {_query: '{"type":"Trend","keywords":"four"}'})._id;
+        trendMaster.enable();
+        trendMaster.query(trendId, function(err, trends, trend) {
+          if (err) return done(err);
+          expect(trends).to.be.an.instanceof(Array);
+          expect(trends).to.have.length(1);
+          expect(trends[0]).to.have.keys(['timebox', 'counts']);
+          expect(trends[0].counts).to.equal(4);
+          done();
+        });
+      }, 500);
+    }, 1000);
   });
 
   it('should run all queries at specified intervals', function(done) {
@@ -123,16 +127,12 @@ describe('Trend master', function() {
 
   it('should capture a new trend while queries are queued', function(done) {
     trendMaster.enable();
-    trendMaster.queryAll(100);
+    trendMaster.queryAll(200);
     trendMaster.on('error', done);
     var remaining = 5;
     var trends = [];
     trendMaster.on('trend', function(trend) {
       trends.push(trend);
-      if (remaining === 3) {
-        // Create a new trend while queries are running
-        Trend.create({_query: Query.hash({type: 'Trend', keywords: 'five'})});
-      }
       if (--remaining === 0) {
         // Five trends need to run
         expect(trends).to.have.length(5);
@@ -140,11 +140,20 @@ describe('Trend master', function() {
         done();
       }
     });
+    // Create a new trend while queries are running
+    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'five'})}, function(err, trend) {
+      if (err) return done(err);
+    });
     Report.create({content: 'one'});
     Report.create({content: 'two'});
     Report.create({content: 'three'});
     Report.create({content: 'four'});
-    Report.create({content: 'five'});
+    // Create a report for the new trend to capture
+    setTimeout(function() {
+      Report.create({content: 'five'}, function(err, report) {
+        if (err) return done(err);
+      });
+    }, 200);
   });
 
   it('should remove a trend when deleting it', function(done) {
