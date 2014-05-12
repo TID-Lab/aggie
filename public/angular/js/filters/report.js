@@ -18,6 +18,6 @@ angular.module('Aggie')
   return function(time) {
     var now = new Date().getTime();
     var then = new Date(time).getTime();
-    return human(now - then) + ' ago';
+    return human(now - then);
   };
 });

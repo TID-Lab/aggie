@@ -2,16 +2,15 @@
   <div class="pull-right">
     <ul class="pager">
       {{ startReport }} - {{ endReport }} of {{ totalItems }}
-      <li ng-class="{disabled: currentPage == 0}">
-        <a href ng-click="prevPage()"><</a>
+      <li>
+        <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
       </li>
-      <li ng-class="{disabled: endReport == totalItems }">
-        <a href ng-click="nextPage()">></a>
+      <li>
+        <button ng-class="{disabled: endReport == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
       </li>
     </ul>
   </div>
-  <table class="table table-borderd">
-    <col width="15%"/>
+  <table class="table">
     <thead>
       <tr>
         <th>Time</th>
@@ -23,28 +22,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="r in reports">
-        <td>
-          <div class="row">
-            <div class="col-sm-5">
-              {{ r.storedAt | interval }}
-            </div>
-            <div class="col-sm-6">
-              {{ r.storedAt | date:'HH:mm' }}<br/>
-              {{ r.storedAt | date:"dd MMM '''yy" }}
-            </div>
+      <tr ng-repeat="r in reports" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+        <td class="compact">
+          <div class="interval">
+            <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
           </div>
-          <div class="row">
-            <div class="col-sm-8">
-            {{ r | delay }}
-            </div>
+          <div class="date-and-time">
+            <span class="time">{{ r.storedAt | date:'HH:mm' }}</span>
+            <span class="date">{{ r.storedAt | date:"dd MMM '''yy" }}</span>
           </div>
+          <div class="created">{{ r | delay }}</div>
         </td>
-        <td>{{r.url}}</td>
-        <td>{{r.author}}</td>
-        <td>{{r.content}}</td>
-        <td>{{r.incident}}</td>
-        <td>{{r.status}}</td>
+        <td class="compact">{{ r.source.type }}</td>
+        <td class="compact">{{ r.author }}</td>
+        <td class="expand">{{ r.content }}</td>
+        <td class="compact">{{ r.incident }}</td>
+        <td class="compact">{{ r.status }}</td>
       </tr>
     </tbody>
   </table>
