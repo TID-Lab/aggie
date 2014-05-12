@@ -28,6 +28,7 @@
     "request": "~2.34.0",
     "resanitize": "~0.3.0",
     "socket.io": "~0.9.16",
+    "timekeeper": "0.0.4",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
     "passport.socketio": "~3.0.1",

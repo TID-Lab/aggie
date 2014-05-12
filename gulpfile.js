@@ -3,6 +3,15 @@ var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var concat = require('gulp-concat');
 
+// Use --file=[filename] to run continuous tests on a file during development.
+// Gulp will automatically run the tests on that file whenever the code changes
+var testFile;
+process.argv.forEach(function(arg) {
+  if (arg.substr(0, 6) == '--file') {
+    testFile = arg.split('=')[1];
+  }
+});
+
 var paths = {
   js: ['lib/**/*.js', 'models/*.js'],
   test: ['test/*.test.js'],
@@ -41,15 +50,16 @@ gulp.task('angular.lint', function() {
 });
 
 gulp.task('test', function() {
-  gulp.src(paths.test)
+  // Prefer cli argument, default to all test files
+  gulp.src(testFile || paths.test)
     .pipe(mocha({reporter: 'spec'}))
     .on('error', function() {});
 });
 
 gulp.task('watch', function() {
   gulp.watch(paths.js, ['lint', 'test']);
-  gulp.watch(paths.test, ['test']);
-  gulp.patch(paths.angular.js, ['angular'])
+  gulp.watch(paths.test, ['lint', 'test']);
+  gulp.watch(paths.angular.js, ['angular']);
 });
 
 gulp.task('default', ['lint', 'test', 'watch']);

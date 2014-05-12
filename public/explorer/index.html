@@ -83,6 +83,13 @@
       </form>
     </li>
     <li>
+      <form action="/api/v1/trend" method="post">
+        Analyze Trend data:
+        <input type="text" name="keywords" placeholder="Keywords" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
       Create new user:
       <form action="/api/v1/user" method="post">
         Email
@@ -111,10 +118,16 @@
       <a href="/api/v1/report">List reports</a>
     </li>
     <li>
+      <a href="/api/v1/trend">List trends</a>
+    </li>
+    <li>
       <a href="/api/v1/source/_all" data-method="delete">Delete all sources</a>
     </li>
     <li>
       <a href="/api/v1/report/_all" data-method="delete">Delete all reports</a>
+    </li>
+    <li>
+      <a href="/api/v1/trend/_all" data-method="delete">Delete all trends</a>
     </li>
     <li>
       <a href="/api/v1/fetching">Check fetching status</a>
