@@ -13,7 +13,8 @@ var schema = new mongoose.Schema({
   author: String,
   status: String,
   url: String,
-  _source: {type: String, ref: 'Source'}
+  _source: {type: String, ref: 'Source'},
+  _sourceType: String
 });
 
 // Give the report schema text search capabilities
@@ -34,13 +35,23 @@ schema.post('save', function() {
 
 var Report = mongoose.model('Report', schema);
 
+// Find reports using pagination
+Report.findPage = function(page, callback) {
+  if (typeof page === 'function') {
+    callback = page;
+    page = 0;
+  }
+  if (page < 0) page = 0;
+  var limit = 25;
+  Report.find({}, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, callback);
+};
+
 // Query reports based on passed query data
-var QUERY_LIMIT = 20;
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
   if (query instanceof Query) query = query.normalize();
 
-  query.limit = query.limit || QUERY_LIMIT;
+  query.limit = 25;
   query.filter = {};
 
   // Determine status filter
@@ -58,8 +69,9 @@ Report.queryReports = function(query, callback) {
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
 
-  // Convert sourceId to _source ID for Report compatibility
+  // Convert sourceId and sourceType for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
+  if (query.sourceType) query.filter._sourceType = query.sourceType;
 
   // Return only newer results
   if (query.since) {
