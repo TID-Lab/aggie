@@ -3,6 +3,7 @@ var processManager = require('../lib/process-manager');
 var Source = require('../models/source');
 var botMaster = require('../lib/fetching/bot-master');
 var request = require('supertest');
+var Report = require('../models/report');
 
 describe('Process manager', function() {
   before(function(done) {
@@ -97,20 +98,23 @@ describe('Process manager', function() {
           callback();
         });
     };
-    getReports(function(reports) {
-      expect(reports).to.be.an.instanceof(Array);
-      var length = reports.length;
-      createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
-        toggleFetching('on', function() {
-          setTimeout(function() {
-            toggleFetching('off', function() {
-              getReports(function(reports) {
-                expect(reports).to.be.an.instanceof(Array);
-                expect(reports).to.have.length.greaterThan(length);
-                done();
+    Report.remove(function(err) {
+      if (err) return done(err);
+      getReports(function(reports) {
+        expect(reports).to.be.an.instanceof(Array);
+        var length = reports.length;
+        createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
+          toggleFetching('on', function() {
+            setTimeout(function() {
+              toggleFetching('off', function() {
+                getReports(function(reports) {
+                  expect(reports).to.be.an.instanceof(Array);
+                  expect(reports).to.have.length.greaterThan(length);
+                  done();
+                });
               });
-            });
-          }, 500);
+            }, 500);
+          });
         });
       });
     });
