@@ -66,6 +66,7 @@ Trend.findPageById = function(_id, page, callback) {
     callback = page;
     page = 0;
   }
+  if (page < 0) page = 0;
   var limit = 48;
   var skip = page * limit;
   Trend.findOne({_id: _id}, {counts: {$slice: [skip, limit]}}, function(err, trend) {

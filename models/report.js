@@ -47,12 +47,11 @@ Report.findPage = function(page, callback) {
 };
 
 // Query reports based on passed query data
-var QUERY_LIMIT = 20;
 Report.queryReports = function(query, callback) {
   if (typeof query === 'function') return Report.find(query);
   if (query instanceof Query) query = query.normalize();
 
-  query.limit = query.limit || QUERY_LIMIT;
+  query.limit = 25;
   query.filter = {};
 
   // Determine status filter
