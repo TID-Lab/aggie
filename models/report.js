@@ -13,7 +13,8 @@ var schema = new mongoose.Schema({
   author: String,
   status: String,
   url: String,
-  _source: {type: String, ref: 'Source'}
+  _source: {type: String, ref: 'Source'},
+  _sourceType: String
 });
 
 // Give the report schema text search capabilities
@@ -69,8 +70,9 @@ Report.queryReports = function(query, callback) {
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
 
-  // Convert sourceId to _source ID for Report compatibility
+  // Convert sourceId and sourceType for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
+  if (query.sourceType) query.filter._sourceType = query.sourceType;
 
   // Return only newer results
   if (query.since) {
