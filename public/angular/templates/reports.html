@@ -47,8 +47,8 @@
         <td class="compact">Twitter</td>
         <td class="compact">{{ r.author }}</td>
         <td class="expand">{{ r.content }}</td>
-        <td class="compact">{{ r.incident }}</td>
-        <td class="compact">{{ r.status }}</td>
+        <td class="compact">{{ r.incident ? r.incident : 'Unassigned' }}</td>
+        <td class="compact">{{ r.status ? r.status : 'Unassigned' }}</td>
       </tr>
     </tbody>
   </table>
