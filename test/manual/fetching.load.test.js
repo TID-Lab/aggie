@@ -36,11 +36,14 @@ describe('Fetching load test', function() {
     done();
   });
 
-  it('should delete all sources', function(done) {
-    this.timeout(100 * args.sources * 2);
+  it('should delete all reports and sources', function(done) {
+    this.timeout(args.sources * args.reports * 2);
     request.del('http://localhost:3000/api/v1/source/_all', function(err, res, body) {
       if (err) return done(err);
-      setTimeout(done, 100 * args.sources);
+      request.del('http://localhost:3000/api/v1/report/_all', function(err, res, body) {
+        if (err) return done(err);
+        done();
+      });
     });
   });
 
@@ -73,11 +76,14 @@ describe('Fetching load test', function() {
     });
   });
 
-  it('should delete all sources', function(done) {
-    this.timeout(100 * args.sources * 2);
+  it('should delete all reports and sources', function(done) {
+    this.timeout(args.sources * args.reports * 2);
     request.del('http://localhost:3000/api/v1/source/_all', function(err, res, body) {
       if (err) return done(err);
-      setTimeout(done, 100 * args.sources);
+      request.del('http://localhost:3000/api/v1/report/_all', function(err, res, body) {
+        if (err) return done(err);
+        done();
+      });
     });
   });
 });
