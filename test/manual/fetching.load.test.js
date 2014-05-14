@@ -1,4 +1,3 @@
-require('../init');
 var request = require('request');
 var _ = require('underscore');
 
@@ -37,7 +36,15 @@ describe('Fetching load test', function() {
     done();
   });
 
-  it('should create sources', function(done) {
+  it('should delete all sources', function(done) {
+    this.timeout(100 * args.sources * 2);
+    request.del('http://localhost:3000/api/v1/source/_all', function(err, res, body) {
+      if (err) return done(err);
+      setTimeout(done, 100 * args.sources);
+    });
+  });
+
+  it('should create new sources', function(done) {
     this.timeout(100 * args.sources * 2);
     var options = {
       max: args.reports,
