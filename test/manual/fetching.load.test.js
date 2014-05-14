@@ -72,4 +72,12 @@ describe('Fetching load test', function() {
       done();
     });
   });
+
+  it('should delete all sources', function(done) {
+    this.timeout(100 * args.sources * 2);
+    request.del('http://localhost:3000/api/v1/source/_all', function(err, res, body) {
+      if (err) return done(err);
+      setTimeout(done, 100 * args.sources);
+    });
+  });
 });
