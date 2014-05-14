@@ -70,7 +70,7 @@
         <input type="text" name="keywords" placeholder="Keywords" />
         Status:
         <select name="status">
-          <option value=""></option>
+          <option value="">- Status -</option>
           <option value="relevant">Relevant</option>
           <option value="irrelevant">Irrelevant</option>
           <option value="assigned">Assigned</option>
@@ -78,6 +78,11 @@
         </select>
         <input type="text" name="after" placeholder="After (date)" />
         <input type="text" name="before" placeholder="Before (date)" />
+        <select name="sourceType">
+          <option value="">- Source Type -</option>
+          <option value="twitter">Twitter</option>
+          <option value="rss">RSS</option>
+        </select>
         <input type="text" name="sourceId" placeholder="Source ID" />
         <input type="submit">
       </form>
@@ -86,6 +91,12 @@
       <form action="/api/v1/trend" method="post">
         Analyze Trend data:
         <input type="text" name="keywords" placeholder="Keywords" />
+        <select name="sourceType">
+          <option value="">- Source Type -</option>
+          <option value="twitter">Twitter</option>
+          <option value="rss">RSS</option>
+        </select>
+        <input type="text" name="sourceId" placeholder="Source ID" />
         <input type="submit">
       </form>
     </li>

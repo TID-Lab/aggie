@@ -9,12 +9,13 @@ var schema = new mongoose.Schema({
   after: Date, // Lower date bound
   before: Date, // Upper date bound
   since: Date, // The time this Query was last executed
-  sourceId: String
+  sourceId: String,
+  sourceType: String
 });
 
 // Normalize query for comparison
 schema.methods.normalize = function() {
-  var query = _.pick(this.toJSON(), ['type', 'keywords', 'status', 'after', 'before', 'sourceId']);
+  var query = _.pick(this.toJSON(), ['type', 'keywords', 'status', 'after', 'before', 'sourceType', 'sourceId']);
   if (query.keywords) {
     // Make all keywords lowercase, then sort them alphabetically
     query.keywords = query.keywords.replace(/(,|\s)+/g, ' ').split(' ').map(function(w) {
