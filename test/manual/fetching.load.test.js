@@ -1,10 +1,12 @@
 require('../init');
 var request = require('request');
-var processManager = require('../../lib/process-manager');
-var io = require('../../node_modules/socket.io/node_modules/socket.io-client');
 var _ = require('underscore');
 
 ////////////////////////////////////////////////////////////////////////////////
+// Notes:
+// * Aggie needs to be running for these tests to work.
+// * The test uses a dummy-bot that will output all dropped reports to STDOUT.
+//
 // Usage:
 // $ `mocha test/manual/fetching.load.test.js [options]`
 //
@@ -14,8 +16,6 @@ var _ = require('underscore');
 // --reports=n    [total number of reports per source]
 // --interval=n   [number of milliseconds between reports on each source]
 // --buffer=n     [size of buffer for each source]
-//
-// The test uses a dummy-bot that will output all dropped reports to STDOUT
 ////////////////////////////////////////////////////////////////////////////////
 
 var args = {
@@ -35,13 +35,6 @@ describe('Fetching load test', function() {
       }
     });
     done();
-  });
-
-  it('should start Aggie', function(done) {
-    processManager.fork('/lib/api');
-    processManager.fork('/lib/fetching');
-    processManager.fork('/lib/analytics');
-    setTimeout(done, 1500);
   });
 
   it('should create sources', function(done) {
