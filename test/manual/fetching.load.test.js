@@ -1,152 +1,75 @@
 require('../init');
-var Source = require('../../models/source');
-var Report = require('../../models/report');
-var EventEmitter = require('events').EventEmitter;
-var fetching = new EventEmitter();
-var reportQueue = require('../../lib/fetching/report-queue');
-var Bot = require('../../lib/fetching/bot');
+var request = require('request');
+var processManager = require('../../lib/process-manager');
+var io = require('../../node_modules/socket.io/node_modules/socket.io-client');
 var _ = require('underscore');
 
-describe('Fetching module', function() {
+////////////////////////////////////////////////////////////////////////////////
+// Usage:
+// $ `mocha test/manual/fetching.load.test.js [options]`
+//
+// Use the following command-line arguments:
+//
+// --sources=n    [number of sources]
+// --reports=n    [total number of reports per source]
+// --interval=n   [number of milliseconds between reports on each source]
+// --buffer=n     [size of buffer for each source]
+//
+// The test uses a dummy-bot that will output all dropped reports to STDOUT
+////////////////////////////////////////////////////////////////////////////////
+
+var args = {
+  sources: 1, // number of sources
+  reports: 1000, // total number of reports
+  interval: 10, // 100 reports per second
+  buffer: 50 // buffer size for each Source
+};
+
+describe('Fetching load test', function() {
+  // Get command line arguments
   before(function(done) {
-    // Initialize Bot Master
-    botMaster = require('../../lib/fetching/bot-master');
-    botMaster.addListeners('source', Source.schema);
-    botMaster.addListeners('fetching', fetching);
-    // Initialize Report Writer
-    reportWriter = require('../../lib/fetching/report-writer');
+    _.each(process.argv, function(arg) {
+      arg = arg.split('=');
+      if (_.contains(['--sources', '--reports', '--interval', '--buffer'], arg[0])) {
+        args[arg[0].replace('--', '')] = arg[1];
+      }
+    });
     done();
   });
 
-  beforeEach(function() {
-    // Start with a clean Bot Master
-    botMaster.bots = [];
+  it('should start Aggie', function(done) {
+    processManager.fork('/lib/api');
+    processManager.fork('/lib/fetching');
+    processManager.fork('/lib/analytics');
+    setTimeout(done, 1500);
   });
 
-  afterEach(function(done) {
-    fetching.emit('stop');
-    botMaster.removeAllListeners('bot:report');
-    // Log drops to console
-    console.log('bots', botMaster.bots.length);
-    botMaster.bots.forEach(function(bot) {
-      if (bot.queue.drops) console.log('drops', bot.source._id, bot.queue.drops);
+  it('should create sources', function(done) {
+    this.timeout(100 * args.sources * 2);
+    var options = {
+      max: args.reports,
+      interval: args.interval,
+      queueCapacity: args.buffer
+    };
+    var remaining = args.sources;
+    _.times(args.sources, function(i) {
+      request.post('http://localhost:3000/api/v1/source', {form: {type: 'dummy-fast', keywords: JSON.stringify(options)}}, function(err, res, body) {
+        if (err) return done(err);
+        if (--remaining === 0) setTimeout(done, 100 * args.sources);
+      });
     });
-    // Remove sources
-    Source.remove(function(err) {
-      if (err) return done(err);
+  });
+
+  it('should start fetching data', function(done) {
+    this.timeout(args.interval * args.reports * 2);
+    request.put('http://localhost:3000/api/v1/fetching/on', function() {
+      setTimeout(done, args.interval * args.reports);
+    });
+  });
+
+  it('should stop fetching data', function(done) {
+    request.put('http://localhost:3000/api/v1/fetching/off', function() {
       done();
     });
   });
-
-  it('1000 per second - 1 source - buffer size 1', function(done) {
-    var sources = 1;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * 2);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
-  it('1000 per second - 2 sources - buffer size 1', function(done) {
-    var sources = 2;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * sources);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
-  it('1000 per second - 4 sources - buffer size 1', function(done) {
-    var sources = 4;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * sources);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
-  it('1000 per second - 8 sources - buffer size 1', function(done) {
-    var sources = 8;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * sources);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
-  it('1000 per second - 16 sources - buffer size 1', function(done) {
-    var sources = 16;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * sources);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
-  it('1000 per second - 32 sources - buffer size 1', function(done) {
-    var sources = 32;
-    var options = {
-      max: 1000,
-      interval: 1,
-      bufferLength: 1
-    }
-    this.timeout(options.max * options.interval * sources);
-    createSources(sources, options, function() {
-      setTimeout(function() { fetching.emit('start'); }, sources * 100);
-    });
-    var remaining = options.max * sources;
-    botMaster.on('bot:report', function(bot) {
-      if (--remaining === 0) done();
-    });
-  });
-
 });
-
-function createSources(num, options, callback) {
-  var remaining = num;
-  _.times(num, function() {
-    Source.create({type: 'dummy-fast', keywords: JSON.stringify(options)}, function() {
-      if (--remaining === 0) callback();
-    });
-  });
-};
