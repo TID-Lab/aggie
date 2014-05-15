@@ -25,7 +25,8 @@ var paths = {
     'public/angular/js/routes.js',
     'public/angular/js/filters/*.js',
     'public/angular/js/controllers/*.js',
-    'public/angular/js/services/*.js']
+    'public/angular/js/services/*.js',
+    'public/angular/js/directives/*.js']
   }
 };
 

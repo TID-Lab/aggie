@@ -19,13 +19,13 @@ angular.module('Aggie').config([
 
     $stateProvider.state('reports', {
       url: '/reports',
-      templateUrl: '/templates/reports.html',
+      templateUrl: '/templates/reports/index.html',
       controller: 'ReportsController'
     });
 
     $stateProvider.state('report', {
       url: '/reports/:id',
-      templateUrl: '/templates/show_report.html',
+      templateUrl: '/templates/reports/show.html',
       controller: 'ShowReportController'
     });
 
