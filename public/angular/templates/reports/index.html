@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-lg-3">
+    <div class="col-md-6">
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
@@ -9,7 +9,7 @@
         </input>
       </div>
     </div>
-    <div class="pull-right">
+    <div class="col-md-6 col pull-right">
       <ul class="pager">
         {{ startReport }} - {{ endReport }} of {{ totalItems }}
         <li>
@@ -21,35 +21,44 @@
       </ul>
     </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Source</th>
-        <th>Author</th>
-        <th>Content</th>
-        <th>Incident</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="r in reports" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
-        <td class="compact">
-          <div class="interval">
-            <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
-          </div>
-          <div class="date-and-time">
-            <span class="time">{{ r.storedAt | date:'HH:mm' }}</span>
-            <span class="date">{{ r.storedAt | date:"dd MMM '''yy" }}</span>
-          </div>
-          <div class="created">{{ r | delay }}</div>
-        </td>
-        <td class="compact">Twitter</td>
-        <td class="compact">{{ r.author }}</td>
-        <td class="expand">{{ r.content }}</td>
-        <td class="compact">{{ r.incident ? r.incident : 'Unassigned' }}</td>
-        <td class="compact">{{ r.status ? r.status : 'Unassigned' }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Source</th>
+      <th>Author</th>
+      <th>Content</th>
+      <th>Incident</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+      <td class="compact">
+        <div class="interval">
+          {{r.storedAt}}
+          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ r.storedAt | date:'HH:mm' }}</span>
+          <span class="date">{{ r.storedAt | date:"dd MMM ''''yy" }}</span>
+        </div>
+        <div class="created">{{ r | delay }}</div>
+      </td>
+      <td class="compact source" ng-class="sources[r._source].type + '-source'"><div class="icon-left">{{sources[r._source].keywords}}</div></td>
+      <td class="compact author">{{ r.author }}</td>
+      <td class="content">{{ r.content }}</td>
+      <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>
+      <td class="status toggle" ng-click="rotateStatus(r)">
+          <div class="toggle-switch" ng-hide="isUnassigned(r)">
+            <div class="toggle-item" ng-class="{ selected: isRelevant(r) }">Rel</div>
+            <div class="toggle-item" ng-class="{ selected: isIrrelevant(r) }">Irr</div>
+          </div>
+          <div class="toggle-off" ng-show="isUnassigned(r)">Unassigned</div>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

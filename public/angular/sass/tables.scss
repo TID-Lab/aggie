@@ -9,8 +9,12 @@
   }
   > tbody {
     > tr {
+      transition: background 0.25s ease-in-out;
       > td {
-        border: solid 2px #e4e4e4;
+        border: solid 1px #e4e4e4;
+        &.status,&.incident {
+          vertical-align: middle;
+        }
       }
     }
   }
@@ -52,5 +56,35 @@
   color: #666;
   .date, .time {
     display: block;
+  }
+}
+
+.source {
+  .icon-left {
+    padding-left: 39px;
+    min-height: 33px;
+  }
+}
+.twitter-source .icon-left {
+  background: url('/images/twitter.png') no-repeat 0 50%;
+}
+
+.source,
+.author,
+.content {
+  font-weight: bold;
+}
+
+
+.content {
+  max-width: 400px;
+}
+
+table, .table {
+  a {
+    color: $link-blue;
+    &:hover {
+      color: lighten($link-blue, 10%);
+    }
   }
 }

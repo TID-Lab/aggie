@@ -93,11 +93,36 @@ label {
   background-color: #87cefa;
 }
 
-table, .table {
-  a {
-    color: $link-blue;
-    &:hover {
-      color: lighten($link-blue, 10%);
+
+.toggle {
+  text-align: center;
+  cursor: pointer;
+  font-size: 10px;
+  &:hover {
+    background-color: rgba(#000, 0.02);
+  }
+  .toggle-switch {
+    font-size: 0;
+  }
+  .toggle-item {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #808285;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    line-height: 26px;
+    border: solid 1px #d1d3d4;
+    width: 29px;
+    height: 26px;
+    background-color: #d1d3d4;
+    &.selected {
+      background-color: #92c8dc;
     }
   }
+}
+
+.pager {
+  text-align: right;
+  margin: 0;
 }
