@@ -36,20 +36,30 @@ schema.post('save', function() {
 var Report = mongoose.model('Report', schema);
 
 // Find reports using pagination
-Report.findPage = function(page, callback) {
+Report.findPage = function(filters, page, callback) {
+  if (typeof filters === 'function') {
+    callback = filters;
+    filters = {};
+    page = 0;
+  }
   if (typeof page === 'function') {
     callback = page;
     page = 0;
   }
   if (page < 0) page = 0;
   var limit = 25;
-  Report.find({}, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, callback);
+  Report.find(filters, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, callback);
 };
 
 // Query reports based on passed query data
-Report.queryReports = function(query, callback) {
-  if (typeof query === 'function') return Report.find(query);
+Report.queryReports = function(query, page, callback) {
+  if (typeof query === 'function') return Report.findPage(query);
   if (query instanceof Query) query = query.normalize();
+  if (typeof page === 'function') {
+    callback = page;
+    page = 0;
+  }
+  if (page < 0) page = 0;
 
   query.limit = 25;
   query.filter = {};
@@ -84,7 +94,7 @@ Report.queryReports = function(query, callback) {
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided
-    Report.find(query.filter, function(err, reports) {
+    Report.findPage(query.filter, page, function(err, reports) {
       if (err) return callback(err);
       callback(null, reports);
     });
