@@ -12,7 +12,7 @@ angular.module('Aggie')
     $scope.startReport = 1;
     $scope.endReport = $scope.perPage;
     // update with api endpoint for total records
-    $scope.totalItems = 309;
+    $scope.totalItems = 0;
     $scope.sources = {};
     $scope.reports = {};
     $scope.originalReports = {};
@@ -23,20 +23,24 @@ angular.module('Aggie')
       });
     });
 
-    var fetchPage = (function() {
+    var fetchPage = function() {
       Report.query({page: $scope.currentPage}, function(data) {
-        data.forEach(function(item) {
-          $scope.reports[item._id] = item;
+        $scope.totalItems = data.total;
+        var reports = {};
+        data.results.forEach(function(item) {
+          reports[item._id] = item;
         });
+        $scope.reports = reports;
         $scope.originalReports = angular.copy($scope.reports);
       });
-    })();
+    };
+
+    fetchPage();
 
     $scope.nextPage = function() {
-      if ($scope.currentPage + 1 < lastPage()) {
+      if ($scope.currentPage + 1 < $scope.lastPage()) {
         $scope.currentPage += 1;
         fetchPage();
-        setReportIndices();
       }
     };
 
@@ -44,32 +48,31 @@ angular.module('Aggie')
       if ($scope.currentPage > 0) {
         $scope.currentPage -= 1;
         fetchPage();
-        setReportIndices();
       }
     };
 
-    var lastPage = function() {
+    $scope.lastPage = function() {
       return Math.ceil($scope.totalItems / $scope.perPage);
     };
 
-    var setReportIndices = function() {
+    $scope.setReportIndices = function() {
       $scope.startReport = startReport();
       $scope.endReport = endReport();
     };
 
-    var startReport = function() {
-      var page = $scope.currentPage
-      return page > 0
-        ? page * $scope.perPage + 1
-        : 1;
+    $scope.startReport = function() {
+      var page = $scope.currentPage,
+        perPage = $scope.perPage;
+      return page > 0 ? page * perPage + 1 : 1;
     };
 
-    var endReport = function() {
-      var page = $scope.currentPage
-      if (page == 0) return $scope.perPage;
-      return page + 1 < lastPage()
-        ? page * $scope.perPage + $scope.perPage
-        : $scope.totalItems;
+    $scope.endReport = function() {
+      var page = $scope.currentPage,
+        perPage = $scope.perPage,
+        totalItems = $scope.totalItems,
+        lastPage = $scope.lastPage();
+      if (page === 0) { return perPage; }
+      return page + 1 < lastPage ? page * perPage + perPage : totalItems;
     };
 
     $scope.rotateStatus = function(report) {
@@ -89,19 +92,18 @@ angular.module('Aggie')
 
     $scope.isIrrelevant = function(report) {
       return report.status == 'irrelevant';
-    }
+    };
 
     $scope.isUnassigned = function(report) {
       return !this.isRelevant(report) && !this.isIrrelevant(report);
-    }
+    };
 
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
-        flash.setAlertNow('Sorry, but that report couldn't be saved for some reason");
+        flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
         angular.copy($scope.originalReports[report._id], report);
       });
-    }
+    };
   }
 ]);
-
