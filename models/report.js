@@ -50,7 +50,15 @@ Report.findPage = function(filters, page, callback) {
   }
   if (page < 0) page = 0;
   var limit = 25;
-  Report.find(filters, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, callback);
+  Report.count(filters, function(err, count) {
+    if (err) return callback(err);
+    var result = {total: count};
+    Report.find(filters, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, function(err, reports) {
+      if (err) return callback(err);
+      result.results = reports;
+      callback(null, result);
+    });
+  });
 };
 
 // Query reports based on passed query data
@@ -103,7 +111,11 @@ Report.queryReports = function(query, page, callback) {
   } else {
     Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
       if (err) return callback(err);
-      callback(null, _.pluck(reports.results, 'obj'));
+      var result = {
+        total: reports.stats.n ? reports.stats.nscannedObjects : 0,
+        results: _.pluck(reports.results, 'obj')
+      };
+      callback(null, result);
     });
   }
 };
