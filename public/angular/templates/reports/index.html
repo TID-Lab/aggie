@@ -31,7 +31,6 @@
     <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
       <td class="compact">
         <div class="interval">
-          {{r.storedAt}}
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
         </div>
         <div class="date-and-time">
