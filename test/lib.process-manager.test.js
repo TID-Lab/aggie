@@ -101,15 +101,20 @@ describe('Process manager', function() {
     Report.remove(function(err) {
       if (err) return done(err);
       getReports(function(reports) {
-        expect(reports).to.be.an.instanceof(Array);
-        var length = reports.length;
+        expect(reports).to.contain.property('total');
+        expect(reports).to.contain.property('results');
+        expect(reports.results).to.be.an.instanceof(Array);
+        var length = reports.total;
         createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
           toggleFetching('on', function() {
             setTimeout(function() {
               toggleFetching('off', function() {
                 getReports(function(reports) {
-                  expect(reports).to.be.an.instanceof(Array);
-                  expect(reports).to.have.length.greaterThan(length);
+                  expect(reports).to.contain.property('total');
+                  expect(reports).to.contain.property('results');
+                  expect(reports.total).to.be.greaterThan(length);
+                  expect(reports.results).to.be.an.instanceof(Array);
+                  expect(reports.results).to.have.length.greaterThan(length);
                   done();
                 });
               });

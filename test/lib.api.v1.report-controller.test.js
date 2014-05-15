@@ -32,7 +32,9 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
+          expect(res.body).to.contain.property('total');
+          expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.be.an.instanceof(Array);
           done();
         });
     });
@@ -43,9 +45,12 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body[0]).to.have.property('content');
-          expect(res.body[0].content.toLowerCase()).to.contain('lorem');
+          expect(res.body).to.contain.property('total');
+          expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.not.be.empty;
+          expect(res.body.results[0]).to.have.property('content');
+          expect(res.body.results[0].content.toLowerCase()).to.contain('lorem');
           done();
         });
     });
@@ -56,10 +61,12 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.not.be.empty;
-          expect(res.body[0]).to.have.property('content');
-          expect(res.body[0].content.toLowerCase()).to.contain('one');
+          expect(res.body).to.contain.property('total');
+          expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.not.be.empty;
+          expect(res.body.results[0]).to.have.property('content');
+          expect(res.body.results[0].content.toLowerCase()).to.contain('one');
           done();
         });
     });
@@ -70,8 +77,11 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.be.empty;
+          expect(res.body).to.contain.property('total');
+          expect(res.body.total).to.equal(0);
+          expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.be.empty;
           done();
         });
     });
@@ -82,10 +92,13 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.not.be.empty;
-          expect(res.body[0]).to.have.property('content');
-          expect(res.body[0].content.toLowerCase()).to.contain('one');
+          expect(res.body).to.contain.property('total');
+          expect(res.body.total).to.not.equal(0);
+          expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.not.be.empty;
+          expect(res.body.results[0]).to.have.property('content');
+          expect(res.body.results[0].content.toLowerCase()).to.contain('one');
           done();
         });
     });
@@ -100,7 +113,7 @@ describe('Report controller', function() {
           if (err) return done(err);
           request(reportController)
             .get('/api/v1/report')
-            .expect(200, [], done);
+            .expect(200, {total: 0, results: []}, done);
         });
     });
   });
