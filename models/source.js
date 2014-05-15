@@ -17,6 +17,14 @@ var sourceSchema = new mongoose.Schema({
 sourceSchema.pre('save', function(next) {
   // Do not allow changing type
   if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
+  // Notify when changing error count
+  if (!this.isNew && this.isModified('unreadErrorCount')) {
+    if (this.unreadErrorCount) {
+      sourceSchema.emit('sourceErrorCountUpdated', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
+    } else {
+      sourceSchema.emit('sourceErrorCountCleared', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
+    }
+  }
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
     Source.findOne({type: 'twitter'}, function(err, source) {
