@@ -141,3 +141,12 @@ label {
 .input-group-btn:last-child > .btn {
   margin-left: 0;
 }
+
+.breadcrumb {
+  padding-left: 0;
+  background-color: #fff;
+  > .active {
+    color: #999;
+  }
+}
+

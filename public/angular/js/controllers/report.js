@@ -130,5 +130,11 @@ angular.module('Aggie')
         angular.copy($scope.originalReports[report._id], report);
       });
     };
+
+    $scope.viewReport = function(event, report) {
+      if (angular.element(event.target)[0].tagName == 'TD') {
+        $state.go('report', { id: report._id });
+      }
+    };
   }
 ]);

@@ -43,7 +43,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
