@@ -1,26 +1,23 @@
 angular.module('Aggie')
 
 .controller('ReportsController', [
+  '$state',
   '$scope',
   '$rootScope',
+  '$stateParams',
   'Report',
   'Source',
   'FlashService',
-  function($scope, $rootScope, Report, Source, flash) {
+  function($state, $scope, $rootScope, $stateParams, Report, Source, flash) {
     $scope.currentPage = 0;
     $scope.perPage = 25;
-    $scope.startReport = 1;
-    $scope.endReport = $scope.perPage;
     $scope.totalItems = 0;
-    $scope.keywords = '';
+    $scope.keywords = $stateParams.keywords || '';
+    $scope.currentKeywords = $scope.keywords;
     $scope.sources = {};
     $scope.reports = {};
     $scope.originalReports = {};
     $scope.searchResults = [];
-
-    $scope.isSearching = function() {
-      return $scope.searchResults.length > 0;
-    };
 
     Source.query(function(data) {
       data.forEach(function(item) {
@@ -29,61 +26,26 @@ angular.module('Aggie')
     });
 
     $scope.fetchPage = function() {
-      if ($scope.isSearching()) {
-        var results = $scope.searchResults,
-          start,
-          end;
-        $scope.totalItems = results.length;
-        start = $scope.startReport() - 1,
+      $scope.currentKeywords = $scope.keywords;
+      if ($scope.keywords.length) {
+        Report.query({keywords: $scope.keywords}, function(data) {
+          $scope.searchResults = data.results;
+          $scope.totalItems = data.total;
+          $scope.currentPage = 0;
+          $scope.updatePage();
+        });
+      } else {
+        Report.query({page: $scope.currentPage}, function(data) {
+          $scope.totalItems = data.total;
+          $scope.setReports(data.results);
+        });
+      }
+    };
+
+    $scope.updatePage = function() {
+      var start = $scope.startReport() - 1,
         end = $scope.endReport();
-        console.log('fetchPage', $scope.totalItems, start, end);
-        return $scope.setReports(results.slice(start, end));
-      }
-
-      Report.query({page: $scope.currentPage}, function(data) {
-        $scope.totalItems = data.total;
-        $scope.setReports(data.results);
-      });
-    };
-
-    $scope.fetchPage();
-
-    $scope.setReports = function(items) {
-      $scope.reports = items.filter(function(reports, item) {
-        reports[item._id] = item;
-        return reports;
-      }, {});
-      $scope.originalReports = angular.copy($scope.reports);
-    };
-
-    $scope.search = function() {
-      if ($scope.keywords == '') {
-        $scope.searchResults = [];
-        return $scope.fetchPage();
-      }
-      Report.query({keywords: $scope.keywords}, function(data) {
-        $scope.searchResults = data.results;
-        $scope.currentPage = 0;
-        $scope.fetchPage();
-      });
-    };
-
-    $scope.nextPage = function() {
-      if ($scope.currentPage + 1 < $scope.lastPage()) {
-        $scope.currentPage += 1;
-        $scope.fetchPage();
-      }
-    };
-
-    $scope.prevPage = function() {
-      if ($scope.currentPage > 0) {
-        $scope.currentPage -= 1;
-        $scope.fetchPage();
-      }
-    };
-
-    $scope.lastPage = function() {
-      return Math.ceil($scope.totalItems / $scope.perPage);
+      $scope.setReports($scope.searchResults.slice(start, end));
     };
 
     $scope.startReport = function() {
@@ -100,6 +62,43 @@ angular.module('Aggie')
       if (page === 0) { return Math.min(perPage, totalItems); }
       return page + 1 < lastPage ? page * perPage + perPage : totalItems;
     };
+
+    $scope.lastPage = function() {
+      return Math.ceil($scope.totalItems / $scope.perPage);
+    };
+
+    $scope.setReports = function(items) {
+      $scope.reports = items.filter(function(reports, item) {
+        reports[item._id] = item;
+        return reports;
+      }, {});
+      $scope.originalReports = angular.copy($scope.reports);
+    };
+
+    $scope.fetchPage();
+
+    $scope.search = function() {
+      if ($scope.keywords == '') {
+        $scope.searchResults = [];
+        return $scope.fetchPage();
+      }
+      $state.go('reports', {keywords: $scope.keywords});
+    };
+
+    $scope.nextPage = function() {
+      if ($scope.currentPage + 1 < $scope.lastPage()) {
+        $scope.currentPage += 1;
+        $scope.updatePage();
+      }
+    };
+
+    $scope.prevPage = function() {
+      if ($scope.currentPage > 0) {
+        $scope.currentPage -= 1;
+        $scope.updatePage();
+      }
+    };
+
 
     $scope.rotateStatus = function(report) {
       if (report.status == 'relevant') {
