@@ -23,8 +23,10 @@ schema.plugin(textSearch);
 schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
-  if (this.isNew) this._wasNew = true;
-  this.storedAt = new Date();
+  if (this.isNew) {
+    this._wasNew = true;
+    this.storedAt = new Date();
+  }
   next();
 });
 
