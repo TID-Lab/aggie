@@ -14,7 +14,7 @@ describe('Report controller', function() {
     // Wait until all reports have been processed
     reportWriter.once('done', done);
     process.nextTick(function() {
-      Source.create({type: 'dummy', keywords: 'e'});
+      Source.create({nickname: 'test', type: 'dummy', keywords: 'e'});
       process.nextTick(function() {
         botMaster.start();
         // Stream data for 500ms

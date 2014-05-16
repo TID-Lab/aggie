@@ -1,10 +1,12 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 require('../lib/error');
 
 var sourceSchema = new mongoose.Schema({
   type: String,
+  nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
   url: String,
   keywords: String,

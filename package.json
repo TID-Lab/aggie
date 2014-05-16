@@ -24,6 +24,7 @@
     "interval-to-human": "~0.1.1",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
+    "mongoose-validator": "~0.2.2",
     "node-sass": "~0.8.6",
     "nodemailer": "~0.6.3",
     "passport": "~0.2.0",
