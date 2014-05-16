@@ -105,7 +105,7 @@ describe('Process manager', function() {
         expect(reports).to.contain.property('results');
         expect(reports.results).to.be.an.instanceof(Array);
         var length = reports.total;
-        createSource({type: 'dummy', keywords: 'Lorem ipsum'}, function() {
+        createSource({nickname: 'lorem', type: 'dummy', keywords: 'Lorem ipsum'}, function() {
           toggleFetching('on', function() {
             setTimeout(function() {
               toggleFetching('off', function() {

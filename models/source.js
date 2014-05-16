@@ -1,10 +1,12 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 require('../lib/error');
 
 var sourceSchema = new mongoose.Schema({
   type: String,
+  nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
   url: String,
   keywords: String,
@@ -27,11 +29,11 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
-  sourceSchema.emit('save', {_id: this._id.toString()});
+  sourceSchema.emit('source:save', {_id: this._id.toString()});
 });
 
 sourceSchema.pre('remove', function(next) {
-  sourceSchema.emit('remove', {_id: this._id.toString()});
+  sourceSchema.emit('source:remove', {_id: this._id.toString()});
   next();
 });
 
@@ -40,7 +42,7 @@ sourceSchema.methods.enable = function() {
   if (!this.enabled) {
     this.enabled = true;
     this.save(function(err, source) {
-      sourceSchema.emit('enable', {_id: source._id.toString()});
+      sourceSchema.emit('source:enable', {_id: source._id.toString()});
     });
   }
 };
@@ -50,7 +52,7 @@ sourceSchema.methods.disable = function() {
   if (this.enabled) {
     this.enabled = false;
     this.save(function(err, source) {
-      sourceSchema.emit('disable', {_id: source._id.toString()});
+      sourceSchema.emit('source:disable', {_id: source._id.toString()});
     });
   }
 };

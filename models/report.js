@@ -23,13 +23,15 @@ schema.plugin(textSearch);
 schema.index({content: 'text'});
 
 schema.pre('save', function(next) {
-  if (this.isNew) this._wasNew = true;
-  this.storedAt = new Date();
+  if (this.isNew) {
+    this._wasNew = true;
+    this.storedAt = new Date();
+  }
   next();
 });
 
 schema.post('save', function() {
-  if (this._wasNew) schema.emit('report', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
 });
 
