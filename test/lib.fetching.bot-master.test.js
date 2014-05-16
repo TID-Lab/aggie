@@ -12,9 +12,9 @@ describe('Bot master', function() {
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
     process.nextTick(function() {
-      Source.create({type: 'dummy', keywords: 'one'});
-      Source.create({type: 'dummy', keywords: 'two'});
-      Source.create({type: 'dummy', keywords: 'three'});
+      Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
+      Source.create({nickname: 'two', type: 'dummy', keywords: 'two'});
+      Source.create({nickname: 'three', type: 'dummy', keywords: 'three'});
       setTimeout(function() {
         done();
       }, 500);
@@ -31,7 +31,7 @@ describe('Bot master', function() {
 
   it('should avoid duplicate bots', function(done) {
     expect(botMaster.bots).to.have.length(3);
-    Source.create({type: 'dummy', keywords: 'one'});
+    Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
     expect(botMaster.bots).to.have.length(3);
     done();
   });

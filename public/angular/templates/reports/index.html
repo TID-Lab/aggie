@@ -1,0 +1,56 @@
+<div>
+  <div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6 col pull-right">
+      <ul class="pager">
+        {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
+        <li>
+          <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: endReport == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Source</th>
+      <th>Author</th>
+      <th>Content</th>
+      <th>Incident</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+      <td class="compact">
+        <div class="interval">
+          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ r.storedAt | date:'HH:mm' }}</span>
+          <span class="date">{{ r.storedAt | date:"dd MMM ''''yy" }}</span>
+        </div>
+        <div class="created">{{ r | delay }}</div>
+      </td>
+      <td class="compact source" ng-class="sources[r._source].type + '-source'"><div class="icon-left">{{sources[r._source].keywords}}</div></td>
+      <td class="compact author">{{ r.author }}</td>
+      <td class="content">{{ r.content }}</td>
+      <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>
+      <td class="status toggle" ng-click="rotateStatus(r)">
+          <div class="toggle-switch" ng-hide="isUnassigned(r)">
+            <div class="toggle-item" ng-class="{ selected: isRelevant(r) }">Rel</div>
+            <div class="toggle-item" ng-class="{ selected: isIrrelevant(r) }">Irr</div>
+          </div>
+          <div class="toggle-off" ng-show="isUnassigned(r)">Unassigned</div>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

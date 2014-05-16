@@ -1,0 +1,40 @@
+<h2>Report</h2>
+
+<table aggie-table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th class="compact">Time</th>
+      <td>{{ report.storedAt }}</td>
+    </tr>
+    <tr>
+      <th>Source</th>
+      <td>{{ source.type }}</td>
+    </tr>
+    <tr>
+      <th>URL</th>
+      <td><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
+    </tr>
+    <tr>
+      <th>Author</th>
+      <td>{{ report.author}}</td>
+    </tr>
+    <tr>
+      <th>Content</th>
+      <td>{{ report.content}}</td>
+    </tr>
+    <tr>
+      <th>Incident</th>
+      <td>{{ report.incident ? report.incident : 'Unassigned' }}</td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{ report.status ? report.status : 'Unassigned' }}</td>
+    </tr>
+  </tbody>
+</table>
