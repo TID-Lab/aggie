@@ -56,7 +56,7 @@ describe('Fetching load test', function() {
     };
     var remaining = args.sources;
     _.times(args.sources, function(i) {
-      request.post('http://localhost:3000/api/v1/source', {form: {type: 'dummy-fast', keywords: JSON.stringify(options)}}, function(err, res, body) {
+      request.post('http://localhost:3000/api/v1/source', {form: {nickname: 'dummy-fast', type: 'dummy-fast', keywords: JSON.stringify(options)}}, function(err, res, body) {
         if (err) return done(err);
         if (--remaining === 0) setTimeout(done, 100 * args.sources);
       });
