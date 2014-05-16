@@ -13,7 +13,7 @@
     </form>
   </div>
   <div class="col-md-8 col pull-right">
-    <ul class="pager">
+    <ul class="pager" ng-show="totalItems > 0">
       {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
       <li>
         <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
@@ -25,7 +25,13 @@
   </div>
 </div>
 
-<table class="table">
+<div class="bs-component" ng-hide="totalItems > 0">
+  <div class="alert alert-warning">
+    <h4>Sorry, but we couldn't find any results for '{{currentKeywords}}'</h4>
+  </div>
+</div>
+
+<table class="table" ng-show="totalItems > 0">
   <thead>
     <tr>
       <th>Time</th>

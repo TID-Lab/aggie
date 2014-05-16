@@ -18,7 +18,7 @@ angular.module('Aggie').config([
     });
 
     $stateProvider.state('reports', {
-      url: '/reports',
+      url: '/reports?keywords',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsController'
     });
