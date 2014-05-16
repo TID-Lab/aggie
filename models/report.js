@@ -31,7 +31,7 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  if (this._wasNew) schema.emit('report', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
 });
 

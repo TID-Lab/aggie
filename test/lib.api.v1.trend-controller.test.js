@@ -67,7 +67,7 @@ describe('Trend controller', function() {
 
   describe('PUT /api/v1/trend/:_id/:op', function() {
     it('should disable trend', function(done) {
-      Trend.schema.on('disable', function(trendId) {
+      Trend.schema.on('trend:disable', function(trendId) {
         expect(trendId._id).to.equal(trend._id);
         done();
       });
@@ -79,7 +79,7 @@ describe('Trend controller', function() {
         });
     });
     it('should enable trend', function(done) {
-      Trend.schema.on('enable', function(trendId) {
+      Trend.schema.on('trend:enable', function(trendId) {
         expect(trendId._id).to.equal(trend._id);
         done();
       });
