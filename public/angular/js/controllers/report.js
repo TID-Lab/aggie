@@ -1,21 +1,23 @@
 angular.module('Aggie')
 
 .controller('ReportsController', [
+  '$state',
   '$scope',
   '$rootScope',
+  '$stateParams',
   'Report',
   'Source',
   'FlashService',
-  function($scope, $rootScope, Report, Source, flash) {
+  function($state, $scope, $rootScope, $stateParams, Report, Source, flash) {
     $scope.currentPage = 0;
     $scope.perPage = 25;
-    $scope.startReport = 1;
-    $scope.endReport = $scope.perPage;
-    // update with api endpoint for total records
     $scope.totalItems = 0;
+    $scope.keywords = $stateParams.keywords || '';
+    $scope.currentKeywords = $scope.keywords;
     $scope.sources = {};
     $scope.reports = {};
     $scope.originalReports = {};
+    $scope.searchResults = [];
 
     Source.query(function(data) {
       data.forEach(function(item) {
@@ -23,41 +25,27 @@ angular.module('Aggie')
       });
     });
 
-    var fetchPage = function() {
-      Report.query({page: $scope.currentPage}, function(data) {
-        $scope.totalItems = data.total;
-        var reports = {};
-        data.results.forEach(function(item) {
-          reports[item._id] = item;
+    $scope.fetchPage = function() {
+      $scope.currentKeywords = $scope.keywords;
+      if ($scope.keywords.length) {
+        Report.query({keywords: $scope.keywords}, function(data) {
+          $scope.searchResults = data.results;
+          $scope.totalItems = data.total;
+          $scope.currentPage = 0;
+          $scope.updatePage();
         });
-        $scope.reports = reports;
-        $scope.originalReports = angular.copy($scope.reports);
-      });
-    };
-
-    fetchPage();
-
-    $scope.nextPage = function() {
-      if ($scope.currentPage + 1 < $scope.lastPage()) {
-        $scope.currentPage += 1;
-        fetchPage();
+      } else {
+        Report.query({page: $scope.currentPage}, function(data) {
+          $scope.totalItems = data.total;
+          $scope.setReports(data.results);
+        });
       }
     };
 
-    $scope.prevPage = function() {
-      if ($scope.currentPage > 0) {
-        $scope.currentPage -= 1;
-        fetchPage();
-      }
-    };
-
-    $scope.lastPage = function() {
-      return Math.ceil($scope.totalItems / $scope.perPage);
-    };
-
-    $scope.setReportIndices = function() {
-      $scope.startReport = startReport();
-      $scope.endReport = endReport();
+    $scope.updatePage = function() {
+      var start = $scope.startReport() - 1,
+        end = $scope.endReport();
+      $scope.setReports($scope.searchResults.slice(start, end));
     };
 
     $scope.startReport = function() {
@@ -71,9 +59,46 @@ angular.module('Aggie')
         perPage = $scope.perPage,
         totalItems = $scope.totalItems,
         lastPage = $scope.lastPage();
-      if (page === 0) { return perPage; }
+      if (page === 0) { return Math.min(perPage, totalItems); }
       return page + 1 < lastPage ? page * perPage + perPage : totalItems;
     };
+
+    $scope.lastPage = function() {
+      return Math.ceil($scope.totalItems / $scope.perPage);
+    };
+
+    $scope.setReports = function(items) {
+      $scope.reports = items.filter(function(reports, item) {
+        reports[item._id] = item;
+        return reports;
+      }, {});
+      $scope.originalReports = angular.copy($scope.reports);
+    };
+
+    $scope.fetchPage();
+
+    $scope.search = function() {
+      if ($scope.keywords == '') {
+        $scope.searchResults = [];
+        return $scope.fetchPage();
+      }
+      $state.go('reports', {keywords: $scope.keywords});
+    };
+
+    $scope.nextPage = function() {
+      if ($scope.currentPage + 1 < $scope.lastPage()) {
+        $scope.currentPage += 1;
+        $scope.updatePage();
+      }
+    };
+
+    $scope.prevPage = function() {
+      if ($scope.currentPage > 0) {
+        $scope.currentPage -= 1;
+        $scope.updatePage();
+      }
+    };
+
 
     $scope.rotateStatus = function(report) {
       if (report.status == 'relevant') {

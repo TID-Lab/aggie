@@ -126,3 +126,18 @@ label {
   text-align: right;
   margin: 0;
 }
+
+.form-control {
+  background-color: #f3f6f9;
+}
+.input-group-addon {
+  background-color: #f3f6f9;
+  color: #000;
+}
+.btn-default {
+  background-color: #5BC0DE;
+}
+
+.input-group-btn:last-child > .btn {
+  margin-left: 0;
+}

@@ -1,22 +1,37 @@
-<div>
-  <div class="row">
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6 col pull-right">
-      <ul class="pager">
-        {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
-        <li>
-          <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
-        </li>
-        <li>
-          <button ng-class="{disabled: endReport == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
-        </li>
-      </ul>
-    </div>
+<div class="row table-filters">
+  <div class="col-md-4">
+    <form>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" ng-model="keywords" class="form-control" placeholder="Enter keywords">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-info" href ng-click="search()">Go</button>
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-8 col pull-right">
+    <ul class="pager" ng-show="totalItems > 0">
+      {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
+      <li>
+        <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
+      </li>
+      <li>
+        <button ng-class="{disabled: endReport() == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
+      </li>
+    </ul>
   </div>
 </div>
 
-<table class="table">
+<div class="bs-component" ng-hide="totalItems > 0">
+  <div class="alert alert-warning">
+    <h4>Sorry, but we couldn't find any results for '{{currentKeywords}}'</h4>
+  </div>
+</div>
+
+<table class="table" ng-show="totalItems > 0">
   <thead>
     <tr>
       <th>Time</th>
