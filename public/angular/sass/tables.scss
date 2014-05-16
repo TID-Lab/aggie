@@ -1,0 +1,90 @@
+.table, table {
+  > thead {
+    > tr {
+      > th {
+        font-weight: normal;
+        border: none;
+      }
+    }
+  }
+  > tbody {
+    > tr {
+      transition: background 0.25s ease-in-out;
+      > td {
+        border: solid 1px #e4e4e4;
+        &.status,&.incident {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  .compact {
+    white-space: nowrap;
+  }
+  .expand {
+    max-width: 100%;
+  }
+}
+
+.relevant {
+  background-color: #edf6f9
+}
+.irrelevant {
+  background-color: #f1f2f2;
+}
+
+.interval {
+  font-size: 10px;
+  display: inline-block;
+  vertical-align: top;
+  font-weight: bold;
+  margin-right: 10px;
+  .interval-amount,
+  .interval-relative {
+    display: block;
+    line-height: 1;
+  }
+  .interval-amount {
+    font-size: 14px;
+  }
+}
+
+.date-and-time {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 10px;
+  color: #666;
+  .date, .time {
+    display: block;
+  }
+}
+
+.source {
+  .icon-left {
+    padding-left: 39px;
+    min-height: 33px;
+  }
+}
+.twitter-source .icon-left {
+  background: url('/images/twitter.png') no-repeat 0 50%;
+}
+
+.source,
+.author,
+.content {
+  font-weight: bold;
+}
+
+
+.content {
+  max-width: 400px;
+}
+
+table, .table {
+  a {
+    color: $link-blue;
+    &:hover {
+      color: lighten($link-blue, 10%);
+    }
+  }
+}

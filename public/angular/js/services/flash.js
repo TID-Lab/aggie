@@ -19,18 +19,22 @@ angular.module('Aggie').factory('FlashService', [
 
       setAlert: function(message) {
         flash.alert = message;
+        flash.notice = null;
       },
 
       setNotice: function(message) {
         flash.notice = message;
+        flash.alert = null;
      },
 
       setAlertNow: function(message) {
         currentFlash.alert = message;
+        currentFlash.notice = null;
       },
 
       setNoticeNow: function(message) {
         currentFlash.notice = message;
+        currentFlash.alert = null;
       }
     };
   }

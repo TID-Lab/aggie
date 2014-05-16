@@ -1,11 +1,21 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
+$link-blue: #1c75bc;
+
+@import 'tables';
 
 body {
   background-color: #fff;
   font-size: 16px;
   line-height: 1;
   color: #333;
+}
+
+a {
+  color: $link-blue;
+  &:hover {
+    color: lighten($link-blue, 10%);
+  }
 }
 
 .navbar-brand {
@@ -71,4 +81,48 @@ label {
   &:focus {
     color: #000;
   }
+}
+
+.btn {
+  &:focus, &:active:focus {
+    outline: none;
+  }
+}
+
+.relevant {
+  background-color: #87cefa;
+}
+
+
+.toggle {
+  text-align: center;
+  cursor: pointer;
+  font-size: 10px;
+  &:hover {
+    background-color: rgba(#000, 0.02);
+  }
+  .toggle-switch {
+    font-size: 0;
+  }
+  .toggle-item {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #808285;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    line-height: 26px;
+    border: solid 1px #d1d3d4;
+    width: 29px;
+    height: 26px;
+    background-color: #d1d3d4;
+    &.selected {
+      background-color: #92c8dc;
+    }
+  }
+}
+
+.pager {
+  text-align: right;
+  margin: 0;
 }
