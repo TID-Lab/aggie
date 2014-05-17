@@ -1,0 +1,47 @@
+<div class="bs-component">
+  <ul class="breadcrumb">
+    <li><a ui-sref="sources">Sources</a></li>
+    <li class="active">{{ source.type }}</li>
+  </ul>
+</div>
+
+<table class="table detail-table">
+  <tbody>
+    <tr>
+      <td class="detail-key">Source</td>
+      <td class="detail-value">{{ source.type }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Target</td>
+      <td class="detail-value">
+        <span ng-switch="source.type">
+          <span ng-when="twitter">{{source.keywords}}</span>
+          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="detail-key">Enabled</td>
+      <td class="detail-value">{{ source.enabled}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="table" ng-show="source.events.length > 0">
+  <caption>Notices</caption>
+  <thead>
+    <tr>
+      <td>Datetime</td>
+      <td>Level</td>
+      <td>Message</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="e in source.events.slice(0, 19)">
+      <td>{{ e.datetime }}</td>
+      <td>{{ e.level }}</td>
+      <td>{{ e.message }}</td>
+    </tr>
+  </tbody>
+</table>

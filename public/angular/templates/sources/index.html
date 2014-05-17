@@ -21,9 +21,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="s in sources">
+    <tr ng-repeat="s in sources"  class="item" ng-click="viewSource($event, s)">
       <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.nickname }}</div></td>
       <td class="compact content">{{ target(s) }}</td>
+        <span ng-switch="source.type">
+          <span ng-when="twitter">{{source.keywords}}</span>
+          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
+        </span>
+      </td>
       <td class="compact content">{{ s.lastReportDate }}</td>
       <td class="compact content zeroErrors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
       <td class="compact status">

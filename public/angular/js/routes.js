@@ -22,7 +22,7 @@ angular.module('Aggie')
     $stateProvider.state('reports', {
       url: '/reports?keywords&page&before&after&sourceType&status',
       templateUrl: '/templates/reports/index.html',
-      controller: 'ReportsController',
+      controller: 'ReportsIndexController',
       resolve: {
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
@@ -44,7 +44,7 @@ angular.module('Aggie')
     $stateProvider.state('report', {
       url: '/reports/:id',
       templateUrl: '/templates/reports/show.html',
-      controller: 'ShowReportController'
+      controller: 'ReportsShowController'
     });
 
     $stateProvider.state('incidents', {
@@ -58,10 +58,21 @@ angular.module('Aggie')
     $stateProvider.state('sources', {
       url: '/sources',
       templateUrl: '/templates/sources/index.html',
-      controller: 'SourcesController',
+      controller: 'SourcesIndexController',
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('source', {
+      url: '/sources/:id',
+      templateUrl: '/templates/sources/show.html',
+      controller: 'SourcesShowController',
+      resolve: {
+        source: ['Source', '$stateParams', function(Source, params) {
+          return Source.get({id: params.id}).$promise;
         }]
       }
     });
