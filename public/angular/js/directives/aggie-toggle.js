@@ -5,12 +5,14 @@ angular.module('Aggie')
     restrict: 'E',
     replace: false,
     template: '<div class="toggle-item" ng-repeat="(status, label) in options" ng-click="toggleStatus(status)" ng-class="{ selected: isStatus(status) }">{{label}}</div>',
+
     scope: {
       toggle: '=',
       options: '=',
       allowBlank: '&',
       onChange: '&onChange'
     },
+
     controller: [
       '$scope',
       '$timeout',
@@ -28,13 +30,21 @@ angular.module('Aggie')
         };
 
         $scope.currentStatus = function() {
-          return ($scope.toggle || '').toString();
+          var toggle = $scope.toggle;
+          if (toggle == undefined) { toggle = '' }
+          return toggle.toString();
         }
 
         $scope.isStatus = function(status) {
           return $scope.currentStatus() === status;
         };
       }
-    ]
+    ],
+
+    link: function($scope, $el) {
+      $el.click(function(e) {
+        e.stopPropagation();
+      });
+    }
   };
 });

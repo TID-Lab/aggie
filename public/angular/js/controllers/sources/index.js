@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.controller('SourcesController', [
+.controller('SourcesIndexController', [
   '$scope',
   '$rootScope',
   'FlashService',
@@ -8,7 +8,7 @@ angular.module('Aggie')
   'Source',
   function($scope, $rootScope, flash, sources, Source) {
     $scope.sources = sources;
-    
+
     $scope.saveSource = function(source) {
       Source.save({ id: source._id }, source, function() {
       }, function() {
@@ -28,21 +28,16 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(source) {
-      var sources = ['twitter', 'facebook', 'rss', 'elmo'];
-      if (sources.indexOf(source.type) !== -1) {
-        return source.type + '-source';
-      } else {
-        return 'unknown-source';
-      }
-    };
-
-    $scope.sourceClass = function(source) {
       var sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
       if (sourceTypes.indexOf(source.type) !== -1) {
         return source.type + '-source';
       } else {
         return 'unknown-source';
       }
+    };
+
+    $scope.viewSource = function(event, source) {
+      $rootScope.$state.go('source', { id: source._id });
     };
   }
 ]);

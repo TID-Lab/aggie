@@ -43,15 +43,18 @@ require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
-require('./controllers/report');
-require('./controllers/show_report');
-require('./controllers/source');
+require('./controllers/reports/index');
+require('./controllers/reports/show');
+require('./controllers/sources/index');
+require('./controllers/sources/show');
 
 // Routes
 require('./routes');
 
 // Filters
-require('./filters/report');
+require('./filters/delay');
+require('./filters/interval');
+require('./filters/source');
 
 // Directives
 require('./directives/aggie-table');

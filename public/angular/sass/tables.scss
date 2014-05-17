@@ -15,7 +15,8 @@
       }
       > td {
         border: solid 1px #e4e4e4;
-        &.status,&.incident {
+        &.status,
+        &.incident {
           vertical-align: middle;
         }
       }
@@ -25,7 +26,7 @@
     white-space: nowrap;
   }
   .expand {
-    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -39,22 +40,29 @@
   }
 }
 
-tr {
-  background-color: #fff;
-  &:hover {
-    background-color: #f6f7f7;
+tbody {
+  tr.item {
+    background-color: #fff;
+    &:hover {
+      background-color: #f6f7f7;
+    }
   }
-}
-.relevant {
-  background-color: #ecf6f8;
-  &:hover {
-    background-color: darken(#ecf6f8, 5%);
+  .relevant {
+    background-color: #ecf6f8;
+    &:hover {
+      background-color: darken(#ecf6f8, 5%);
+    }
   }
-}
-.irrelevant {
-  background-color: #f1f2f2;
-  &:hover {
-    background-color: darken(#f1f2f2, 5%);
+  .irrelevant {
+    background-color: #f1f2f2;
+    &:hover {
+      background-color: darken(#f1f2f2, 5%);
+    }
+  }
+  tr.unread {
+    td {
+      font-weight: bold;
+    }
   }
 }
 
@@ -86,6 +94,7 @@ tr {
 
 .source {
   .icon-left {
+    display: inline-block;
     padding-left: 39px;
     min-height: 33px;
   }

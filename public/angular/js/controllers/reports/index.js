@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.controller('ReportsController', [
+.controller('ReportsIndexController', [
   '$state',
   '$scope',
   '$rootScope',
@@ -59,7 +59,7 @@ angular.module('Aggie')
     var search = function(page) {
       if (!$scope.keywords.length) { $scope.keywords = null }
       $state.go('reports', {
-        keywords: $scope.keywords,
+        keywords: $scope.keywords || null,
         after: $scope.startDate,
         before: $scope.endDate,
         sourceType: $scope.sourceType,

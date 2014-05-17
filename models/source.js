@@ -4,6 +4,8 @@ var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 require('../lib/error');
 
+var EVENTS_TO_RETURN = 50;
+
 var sourceSchema = new mongoose.Schema({
   type: String,
   nickname: {type: String, required: true, validate: validate('max', 20)},
@@ -76,7 +78,7 @@ Source.findByIdWithLatestEvents = function(_id, callback) {
     if (err) return callback(err);
     if (!source) return callback(null, null);
     if (source.events) {
-      source.events = _.chain(source.events).sortBy('datetime').last(source.unreadErrorCount).value();
+      source.events = _.chain(source.events).sortBy('datetime').last(EVENTS_TO_RETURN).value();
     }
     callback(null, source);
   });
