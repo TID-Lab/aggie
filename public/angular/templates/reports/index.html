@@ -13,25 +13,25 @@
     </form>
   </div>
   <div class="col-md-8 col pull-right">
-    <ul class="pager" ng-show="totalItems > 0">
-      {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
+    <ul class="pager" ng-show="pagination.total > 0">
+      {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}
       <li>
-        <button ng-class="{disabled: currentPage == 1}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
+        <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
       </li>
       <li>
-        <button ng-class="{disabled: endReport() == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>
+        <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
       </li>
     </ul>
   </div>
 </div>
 
-<div class="bs-component" ng-hide="totalItems > 0">
+<div class="bs-component" ng-hide="pagination.total > 0">
   <div class="alert alert-warning">
     <h4>Sorry, but we couldn't find any results for '{{currentKeywords}}'</h4>
   </div>
 </div>
 
-<table class="table" ng-show="totalItems > 0">
+<table class="table" ng-show="pagination.total > 0">
   <thead>
     <tr>
       <th>Time</th>

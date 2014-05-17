@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "browserify": "~4.1.2",
     "connect-mongo": "~0.4.0",
     "connect-roles": "~3.0.3",
     "email": "~0.2.6",
@@ -21,6 +20,9 @@
     "fbgraph": "~0.2.9",
     "feedparser": "~0.16.6",
     "glob": "~3.2.9",
+    "gulp-browserify": "0.5.0",
+    "gulp-watchify": "0.2.0",
+    "gulp-rename": "1.2.0",
     "interval-to-human": "~0.1.1",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",

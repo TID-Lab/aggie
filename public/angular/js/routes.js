@@ -1,4 +1,6 @@
-angular.module('Aggie').config([
+angular.module('Aggie')
+
+.config([
   '$stateProvider',
   function($stateProvider) {
     $stateProvider.state('home', {
@@ -23,7 +25,8 @@ angular.module('Aggie').config([
       controller: 'ReportsController',
       resolve: {
         reports: ['Report', '$stateParams', function(Report, params) {
-          return Report.query({ page: params.page - 1 }).$promise;
+          var page = params.page || 1;
+          return Report.query({ page: page - 1, keywords: params.keywords }).$promise;
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
@@ -56,7 +59,7 @@ angular.module('Aggie').config([
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html'
-    })
+    });
 
     $stateProvider.state('settings', {
       url: '/settings',

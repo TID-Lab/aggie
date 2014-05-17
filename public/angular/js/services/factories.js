@@ -1,6 +1,8 @@
 angular.module('Aggie')
 
 .factory('Report', function($resource) {
+  var searchResults = [];
+
   return $resource("/api/v1/report/:id", { id: '@_id' }, {
     'query': { isArray: false },
     'save': { method: 'PUT' }
@@ -9,4 +11,4 @@ angular.module('Aggie')
 
 .factory('Source', function($resource) {
   return $resource("/api/v1/source/:id");
-})
+});

@@ -5,100 +5,69 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   '$stateParams',
-  'Report',
-  'Source',
   'FlashService',
   'reports',
   'sources',
-  function($state, $scope, $rootScope, $stateParams, Report, Source, flash, reports, sources) {
-    $scope.currentPage = parseInt($stateParams.page) || 1;
-    $scope.perPage = 25;
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
 
-    var filterById = function(memo, item) {
+    $scope.pagination = {
+      page: parseInt($stateParams.page) || 1,
+      total: reports.total,
+      perPage: 25,
+      start: 0,
+      end: 0
+    };
+
+    var groupById = function(memo, item) {
       memo[item._id] = item;
       return memo;
     };
 
-    $scope.totalItems = reports.total;
-    $scope.sources = sources.filter(filterById, {});
-    $scope.reports = reports.results.filter(filterById, {});
+    var paginate = function(items) {
+      var page = $scope.pagination.page,
+        perPage = $scope.pagination.perPage,
+        total = $scope.pagination.total,
+        start = (page - 1) * perPage,
+        end = (page * perPage) - 1;
+
+      $scope.pagination.start = start + 1;
+      $scope.pagination.end = Math.min(end + 1, total);
+
+      if ($scope.keywords.length) {
+        return items.slice(start, end);
+      } else {
+        return items;
+      }
+    }
+
+    $scope.sources = sources.reduce(groupById, {});
+    $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
 
-    /*
-    $scope.fetchPage = function() {
-      $scope.currentKeywords = $scope.keywords;
-      if ($scope.keywords.length) {
-        Report.query({keywords: $scope.keywords}, function(data) {
-          $scope.searchResults = data.results;
-          $scope.totalItems = data.total;
-          $scope.currentPage = 0;
-          $scope.updatePage();
-        });
-      } else {
-        Report.query({page: $scope.currentPage}, function(data) {
-          $scope.totalItems = data.total;
-          $scope.setReports(data.results);
-        });
-      }
-    };
-
-    $scope.updatePage = function() {
-      var start = $scope.startReport() - 1,
-        end = $scope.endReport();
-      $scope.setReports($scope.searchResults.slice(start, end));
-    };
-    */
-
-    $scope.startReport = function() {
-      var page = $scope.currentPage,
-        perPage = $scope.perPage;
-      return page > 1 ? (page - 1) * perPage + 1 : 1;
-    };
-
-    $scope.endReport = function() {
-      var page = $scope.currentPage,
-        perPage = $scope.perPage,
-        totalItems = $scope.totalItems,
-        lastPage = $scope.lastPage();
-      if (page === 1) { return Math.min(perPage, totalItems); }
-      return page < lastPage ? (page - 1) * perPage + perPage : totalItems;
-    };
-
-    $scope.lastPage = function() {
-      return Math.ceil($scope.totalItems / $scope.perPage);
-    };
-
-    /*
-    $scope.setReports = function(items) {
-      $scope.reports = items.filter(function(reports, item) {
-        reports[item._id] = item;
-        return reports;
-      }, {});
-      $scope.originalReports = angular.copy($scope.reports);
-    };
-
-    $scope.fetchPage();
-
     $scope.search = function() {
-      if ($scope.keywords == '') {
-        $scope.searchResults = [];
-        return $scope.fetchPage();
-      }
-      $state.go('reports', {keywords: $scope.keywords});
+      if (!$scope.keywords.length) { $scope.keywords = null }
+      $state.go('reports', { keywords: $scope.keywords, page: null });
     };
-    */
+
+    $scope.isFirstPage = function() {
+      return $scope.pagination.page == 1;
+    };
+
+    $scope.isLastPage = function() {
+      return $scope.pagination.end == $scope.pagination.total;
+    };
 
     $scope.nextPage = function() {
-      if ($scope.currentPage < $scope.lastPage()) {
-        $state.go('reports', { page: $scope.currentPage + 1 });
+      if (!$scope.isLastPage()) {
+        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage + 1 });
       }
     };
 
     $scope.prevPage = function() {
-      if ($scope.currentPage > 1) {
-        $state.go('reports', { page: $scope.currentPage - 1 });
+      if (!$scope.isFirstPage()) {
+        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage - 1 });
       }
     };
 
