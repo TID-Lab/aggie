@@ -1,5 +1,5 @@
 <div class="row table-filters">
-  <div class="col-md-4">
+    <div class="col-md-3">
     <form>
       <div class="input-group">
         <span class="input-group-addon">
@@ -12,8 +12,14 @@
       </div>
     </form>
   </div>
-  <div class="col-md-8 col pull-right">
-    <ul class="pager" ng-show="pagination.total > 0">
+  <div class="col-md-6">
+    <label for="start">Filter from:</label>
+    <input id="start" ng-model="startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+    <label for="end">Filter to:</label>
+    <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+  </div>
+  <div class="col-md-3 col pull-right">
+    <ul class="pager">
       {{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}
       <li>
         <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>

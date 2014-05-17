@@ -11,6 +11,8 @@ angular.module('Aggie')
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
+    $scope.startDate = $stateParams.after || '';
+    $scope.endDate = $stateParams.before || '';
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -50,7 +52,11 @@ angular.module('Aggie')
 
     $scope.search = function() {
       if (!$scope.keywords.length) { $scope.keywords = null }
-      $state.go('reports', { keywords: $scope.keywords, page: null });
+      $state.go('reports', {
+        keywords: $scope.keywords,
+        after: $scope.startDate,
+        before: $scope.endDate,
+        page: null });
     };
 
     $scope.isFirstPage = function() {
@@ -63,13 +69,22 @@ angular.module('Aggie')
 
     $scope.nextPage = function() {
       if (!$scope.isLastPage()) {
-        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage + 1 });
+        $state.go('reports', {
+          keywords: $scope.keywords,
+          after: $scope.startDate,
+          before: $scope.endDate,
+          page: $scope.currentPage + 1
+        });
       }
     };
 
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
-        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage - 1 });
+        $state.go('reports', {
+          keywords: $scope.keywords,
+          after: $scope.startDate,
+          before: $scope.endDate,
+          page: $scope.currentPage - 1 });
       }
     };
 
