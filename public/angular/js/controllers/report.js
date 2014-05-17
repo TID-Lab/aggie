@@ -57,6 +57,7 @@ angular.module('Aggie')
     $scope.originalReports = angular.copy($scope.reports);
 
     var search = function(page) {
+      if (!$scope.keywords.length) { $scope.keywords = null }
       $state.go('reports', {
         keywords: $scope.keywords,
         after: $scope.startDate,
@@ -82,7 +83,7 @@ angular.module('Aggie')
 
     $scope.nextPage = function() {
       if (!$scope.isLastPage()) {
-        search($scope.currentPage + 1);
+       search($scope.currentPage + 1);
       }
     };
 
@@ -92,19 +93,9 @@ angular.module('Aggie')
       };
     };
 
-    $scope.rotateStatus = function(report) {
-      if (report.status == 'relevant') {
-        report.status = 'irrelevant';
-      } else if (report.status == 'irrelevant') {
-        report.status = '';
-      } else {
-        report.status = 'relevant';
-      }
-      this.saveReport(report);
-    };
-
     $scope.toggleStatus = function(report, status) {
       report.status = (report.status == status ? '' : status)
+      $scope.saveReport(report);
     }
 
     $scope.isRelevant = function(report) {
