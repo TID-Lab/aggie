@@ -16,7 +16,7 @@
     <ul class="pager" ng-show="totalItems > 0">
       {{ startReport() }} - {{ endReport() }} of {{ totalItems }}
       <li>
-        <button ng-class="{disabled: currentPage == 0}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
+        <button ng-class="{disabled: currentPage == 1}" ng-click="prevPage()" class="btn btn-info">&lsaquo;</button>
       </li>
       <li>
         <button ng-class="{disabled: endReport() == totalItems }" ng-click="nextPage()" class="btn btn-info">&rsaquo;</button>

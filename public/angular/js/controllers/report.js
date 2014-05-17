@@ -8,23 +8,25 @@ angular.module('Aggie')
   'Report',
   'Source',
   'FlashService',
-  function($state, $scope, $rootScope, $stateParams, Report, Source, flash) {
-    $scope.currentPage = 0;
+  'reports',
+  'sources',
+  function($state, $scope, $rootScope, $stateParams, Report, Source, flash, reports, sources) {
+    $scope.currentPage = parseInt($stateParams.page) || 1;
     $scope.perPage = 25;
-    $scope.totalItems = 0;
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
-    $scope.sources = {};
-    $scope.reports = {};
-    $scope.originalReports = {};
-    $scope.searchResults = [];
 
-    Source.query(function(data) {
-      data.forEach(function(item) {
-        $scope.sources[item._id] = item;
-      });
-    });
+    var filterById = function(memo, item) {
+      memo[item._id] = item;
+      return memo;
+    };
 
+    $scope.totalItems = reports.total;
+    $scope.sources = sources.filter(filterById, {});
+    $scope.reports = reports.results.filter(filterById, {});
+    $scope.originalReports = angular.copy($scope.reports);
+
+    /*
     $scope.fetchPage = function() {
       $scope.currentKeywords = $scope.keywords;
       if ($scope.keywords.length) {
@@ -47,11 +49,12 @@ angular.module('Aggie')
         end = $scope.endReport();
       $scope.setReports($scope.searchResults.slice(start, end));
     };
+    */
 
     $scope.startReport = function() {
       var page = $scope.currentPage,
         perPage = $scope.perPage;
-      return page > 0 ? page * perPage + 1 : 1;
+      return page > 1 ? (page - 1) * perPage + 1 : 1;
     };
 
     $scope.endReport = function() {
@@ -59,14 +62,15 @@ angular.module('Aggie')
         perPage = $scope.perPage,
         totalItems = $scope.totalItems,
         lastPage = $scope.lastPage();
-      if (page === 0) { return Math.min(perPage, totalItems); }
-      return page + 1 < lastPage ? page * perPage + perPage : totalItems;
+      if (page === 1) { return Math.min(perPage, totalItems); }
+      return page < lastPage ? (page - 1) * perPage + perPage : totalItems;
     };
 
     $scope.lastPage = function() {
       return Math.ceil($scope.totalItems / $scope.perPage);
     };
 
+    /*
     $scope.setReports = function(items) {
       $scope.reports = items.filter(function(reports, item) {
         reports[item._id] = item;
@@ -84,21 +88,19 @@ angular.module('Aggie')
       }
       $state.go('reports', {keywords: $scope.keywords});
     };
+    */
 
     $scope.nextPage = function() {
-      if ($scope.currentPage + 1 < $scope.lastPage()) {
-        $scope.currentPage += 1;
-        $scope.updatePage();
+      if ($scope.currentPage < $scope.lastPage()) {
+        $state.go('reports', { page: $scope.currentPage + 1 });
       }
     };
 
     $scope.prevPage = function() {
-      if ($scope.currentPage > 0) {
-        $scope.currentPage -= 1;
-        $scope.updatePage();
+      if ($scope.currentPage > 1) {
+        $state.go('reports', { page: $scope.currentPage - 1 });
       }
     };
-
 
     $scope.rotateStatus = function(report) {
       if (report.status == 'relevant') {

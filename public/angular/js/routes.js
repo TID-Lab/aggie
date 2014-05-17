@@ -18,9 +18,17 @@ angular.module('Aggie').config([
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords',
+      url: '/reports?keywords&page',
       templateUrl: '/templates/reports/index.html',
-      controller: 'ReportsController'
+      controller: 'ReportsController',
+      resolve: {
+        reports: ['Report', '$stateParams', function(Report, params) {
+          return Report.query({ page: params.page - 1 }).$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('report', {
