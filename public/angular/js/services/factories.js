@@ -10,5 +10,7 @@ angular.module('Aggie')
 })
 
 .factory('Source', function($resource) {
-  return $resource("/api/v1/source/:id");
+  return $resource("/api/v1/source/:id", {id: '@_id'}, {
+    'save': { method: 'PUT' }
+  });
 });

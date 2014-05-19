@@ -57,9 +57,12 @@ angular.module('Aggie')
 
     $stateProvider.state('sources', {
       url: '/sources',
-      templateUrl: '/templates/sources.html',
-      controller: function($scope) {
-        $scope.items = ['A', 'List', 'Of', 'Sources'];
+      templateUrl: '/templates/sources/index.html',
+      controller: 'SourcesController',
+      resolve: {
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }]
       }
     });
 
