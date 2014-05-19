@@ -57,7 +57,6 @@ angular.module('Aggie')
     $scope.originalReports = angular.copy($scope.reports);
 
     var search = function(page) {
-      if (!$scope.keywords.length) { $scope.keywords = null }
       $state.go('reports', {
         keywords: $scope.keywords,
         after: $scope.startDate,
