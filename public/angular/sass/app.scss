@@ -142,6 +142,18 @@ label {
   margin-left: 0;
 }
 
+input {
+  &, &[type="date"] {
+    border: solid 1px #ddd;
+    line-height: 1;
+    padding: 8px;
+    &:active, &:focus {
+      outline: none;
+      border-color: #5bc0de;
+    }
+  }
+}
+
 .breadcrumb {
   padding-left: 0;
   background-color: #fff;
@@ -149,7 +161,6 @@ label {
     color: #999;
   }
 }
-
 
 input[type="date"] {
   width: 160px;
