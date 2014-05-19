@@ -20,7 +20,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceType',
+      url: '/reports?keywords&page&before&after&sourceType&status',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsController',
       resolve: {
@@ -31,7 +31,8 @@ angular.module('Aggie')
             keywords: params.keywords,
             after: params.after,
             before: params.before,
-            sourceType: params.sourceType
+            sourceType: params.sourceType,
+            status: params.status
           }).$promise;
         }],
         sources: ['Source', function(Source) {

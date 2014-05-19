@@ -13,6 +13,11 @@
     </form>
   </div>
   <div class="col-md-2">
+    <select ng-model="status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
+      <option value="">Filter by Status</option>
+    </select>
+  </div>
+  <div class="col-md-2">
     <select ng-model="sourceType" ng-options="value.type as value.type for (key, value) in sources" ng-change="search()" class="form-control">
       <option value="">Filter by Source</option>
     </select>

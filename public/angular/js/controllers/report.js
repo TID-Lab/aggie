@@ -8,12 +8,14 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources) {
+  'Report',
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
     $scope.startDate = $stateParams.after || '';
     $scope.endDate = $stateParams.before || '';
     $scope.sourceType = $stateParams.sourceType || '';
+    $scope.status = $stateParams.status || '';
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -47,6 +49,9 @@ angular.module('Aggie')
       }
     }
 
+    $scope.statuses = [
+      'relevant', 'irrelevant', 'unassigned', 'assigned'
+    ];
     $scope.sources = sources.reduce(groupById, {});
     $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
@@ -57,7 +62,9 @@ angular.module('Aggie')
         after: $scope.startDate,
         before: $scope.endDate,
         sourceType: $scope.sourceType,
-        page: page});
+        page: page,
+        status: $scope.status
+      });
     };
 
     $scope.search = function() {
