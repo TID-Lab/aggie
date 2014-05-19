@@ -8,9 +8,14 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources) {
+  'Report',
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
+    $scope.startDate = $stateParams.after || '';
+    $scope.endDate = $stateParams.before || '';
+    $scope.sourceType = $stateParams.sourceType || '';
+    $scope.status = $stateParams.status || '';
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -44,13 +49,27 @@ angular.module('Aggie')
       }
     }
 
+    $scope.statuses = [
+      'relevant', 'irrelevant', 'unassigned', 'assigned'
+    ];
     $scope.sources = sources.reduce(groupById, {});
     $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
 
+    var search = function(page) {
+      $state.go('reports', {
+        keywords: $scope.keywords,
+        after: $scope.startDate,
+        before: $scope.endDate,
+        sourceType: $scope.sourceType,
+        page: page,
+        status: $scope.status
+      });
+    };
+
     $scope.search = function() {
       if (!$scope.keywords.length) { $scope.keywords = null }
-      $state.go('reports', { keywords: $scope.keywords, page: null });
+      search(null);
     };
 
     $scope.isFirstPage = function() {
@@ -63,14 +82,14 @@ angular.module('Aggie')
 
     $scope.nextPage = function() {
       if (!$scope.isLastPage()) {
-        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage + 1 });
+        search($scope.currentPage + 1);
       }
     };
 
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
-        $state.go('reports', { keywords: $scope.keywords, page: $scope.currentPage - 1 });
-      }
+        search($scope.currentPage - 1);
+      };
     };
 
     $scope.rotateStatus = function(report) {

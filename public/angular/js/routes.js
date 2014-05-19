@@ -20,13 +20,20 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page',
+      url: '/reports?keywords&page&before&after&sourceType&status',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsController',
       resolve: {
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
-          return Report.query({ page: page - 1, keywords: params.keywords }).$promise;
+          return Report.query({
+            page: page - 1,
+            keywords: params.keywords,
+            after: params.after,
+            before: params.before,
+            sourceType: params.sourceType,
+            status: params.status
+          }).$promise;
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
