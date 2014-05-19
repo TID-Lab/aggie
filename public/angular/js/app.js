@@ -37,8 +37,12 @@ require('./services/flash');
 
 //Controllers
 require('./controllers/application');
+require('./controllers/login');
 require('./controllers/navbar');
+require('./controllers/password_reset');
+require('./controllers/password_reset_modal');
 require('./controllers/report');
+require('./controllers/show_report');
 
 // Routes
 require('./routes');
