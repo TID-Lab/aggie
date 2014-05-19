@@ -13,6 +13,7 @@ angular.module('Aggie')
     $scope.currentKeywords = $scope.keywords;
     $scope.startDate = $stateParams.after || '';
     $scope.endDate = $stateParams.before || '';
+    $scope.sourceType = $stateParams.sourceType || '';
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -50,13 +51,18 @@ angular.module('Aggie')
     $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
 
-    $scope.search = function() {
-      if (!$scope.keywords.length) { $scope.keywords = null }
+    var search = function(page) {
       $state.go('reports', {
         keywords: $scope.keywords,
         after: $scope.startDate,
         before: $scope.endDate,
-        page: null });
+        sourceType: $scope.sourceType,
+        page: page});
+    };
+
+    $scope.search = function() {
+      if (!$scope.keywords.length) { $scope.keywords = null }
+      search(null);
     };
 
     $scope.isFirstPage = function() {
@@ -69,23 +75,14 @@ angular.module('Aggie')
 
     $scope.nextPage = function() {
       if (!$scope.isLastPage()) {
-        $state.go('reports', {
-          keywords: $scope.keywords,
-          after: $scope.startDate,
-          before: $scope.endDate,
-          page: $scope.currentPage + 1
-        });
+        search($scope.currentPage + 1);
       }
     };
 
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
-        $state.go('reports', {
-          keywords: $scope.keywords,
-          after: $scope.startDate,
-          before: $scope.endDate,
-          page: $scope.currentPage - 1 });
-      }
+        search($scope.currentPage - 1);
+      };
     };
 
     $scope.rotateStatus = function(report) {
