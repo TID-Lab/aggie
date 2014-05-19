@@ -15,6 +15,7 @@ angular.module('Aggie')
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
       total: reports.total,
+      visibleTotal: reports.total,
       perPage: 25,
       start: 0,
       end: 0
@@ -36,6 +37,7 @@ angular.module('Aggie')
       $scope.pagination.end = Math.min(end + 1, total);
 
       if ($scope.keywords.length) {
+        $scope.pagination.visibleTotal = items.length;
         return items.slice(start, end);
       } else {
         return items;
@@ -56,7 +58,7 @@ angular.module('Aggie')
     };
 
     $scope.isLastPage = function() {
-      return $scope.pagination.end == $scope.pagination.total;
+      return $scope.pagination.end >= $scope.pagination.visibleTotal;
     };
 
     $scope.nextPage = function() {
@@ -107,5 +109,13 @@ angular.module('Aggie')
         $state.go('report', { id: report._id });
       }
     };
+
+    $scope.paginationTotalLabel = function() {
+      if ($scope.pagination.total > $scope.pagination.visibleTotal) {
+        return $scope.pagination.visibleTotal + '+';
+      } else {
+        return $scope.pagination.visibleTotal;
+      }
+    }
   }
 ]);

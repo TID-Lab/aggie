@@ -112,7 +112,7 @@ Report.queryReports = function(query, page, callback) {
     Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
       if (err) return callback(err);
       var result = {
-        total: reports.stats.n ? Math.min(reports.stats.nscannedObjects, query.limit) : 0,
+        total: reports.stats.n ? reports.stats.nscannedObjects : 0,
         results: _.pluck(reports.results, 'obj')
       };
       callback(null, result);

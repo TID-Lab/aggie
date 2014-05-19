@@ -14,7 +14,7 @@
   </div>
   <div class="col-md-8 col pull-right">
     <ul class="pager" ng-show="pagination.total > 0">
-      {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}
+      {{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}
       <li>
         <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
       </li>
