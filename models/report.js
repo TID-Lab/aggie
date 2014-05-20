@@ -14,7 +14,8 @@ var schema = new mongoose.Schema({
   status: String,
   url: String,
   _source: {type: String, ref: 'Source'},
-  _sourceType: String
+  _sourceType: String,
+  _incident: {type: String, ref: 'Incident'},
 });
 
 // Give the report schema text search capabilities
@@ -32,7 +33,10 @@ schema.pre('save', function(next) {
 
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+  else {
+    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+  }
 });
 
 var Report = mongoose.model('Report', schema);
