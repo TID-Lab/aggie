@@ -12,9 +12,6 @@
       transition: background 0.25s ease-in-out;
       &.item {
         cursor: pointer;
-        &:hover {
-          background-color: rgba(#abc, 0.1);
-        }
       }
       > td {
         border: solid 1px #e4e4e4;
@@ -42,11 +39,23 @@
   }
 }
 
+tr {
+  background-color: #fff;
+  &:hover {
+    background-color: #f6f7f7;
+  }
+}
 .relevant {
-  background-color: #edf6f9
+  background-color: #ecf6f8;
+  &:hover {
+    background-color: darken(#ecf6f8, 5%);
+  }
 }
 .irrelevant {
   background-color: #f1f2f2;
+  &:hover {
+    background-color: darken(#f1f2f2, 5%);
+  }
 }
 
 .interval {

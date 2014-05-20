@@ -93,19 +93,11 @@ label {
   }
 }
 
-.relevant {
-  background-color: #87cefa;
-}
-
-
 .toggle {
   text-align: center;
-  cursor: pointer;
   font-size: 10px;
-  &:hover {
-    background-color: rgba(#000, 0.02);
-  }
   .toggle-switch {
+    display: inline-block;
     font-size: 0;
   }
   .toggle-item {
@@ -122,6 +114,12 @@ label {
     background-color: #d1d3d4;
     &.selected {
       background-color: #92c8dc;
+    }
+  }
+  .toggle-off {
+    color: transparent;
+    &.selected {
+      color: #333;
     }
   }
 }
