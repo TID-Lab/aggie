@@ -106,5 +106,52 @@ table, .table {
 }
 
 .table-filters {
+  width: 100%;
   margin-bottom: 10px;
+  font-size: 12px;
+  display: table;
+  label {
+    font-weight: bold;
+  }
+  .filter {
+    width: 100%;
+    vertical-align: top;
+    display: table-cell;
+    padding: 0 8px;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+  .btn {
+    line-height: 1;
+    height: 25px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .status-filter,
+  .source-type-filter {
+    select {
+      width: auto;
+    }
+  }
+  .date-filter {
+    label {
+      margin-right: 4px;
+    }
+    input {
+      width: auto;
+      line-height: 1;
+      height: 25px;
+    }
+  }
+  .date-filter,
+  .pagination {
+    white-space: nowrap;
+    .pager-label {
+      margin-right: 4px;
+    }
+  }
 }

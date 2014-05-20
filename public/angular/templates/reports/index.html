@@ -1,6 +1,6 @@
-<div class="row table-filters">
-  <div class="col-md-3">
-    <form>
+<form>
+  <div class="table-filters">
+    <div class="filter search">
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
@@ -10,36 +10,38 @@
           <button type="submit" class="btn btn-info" href ng-click="search()">Go</button>
         </span>
       </div>
-    </form>
+    </div>
+    <div class="filter status-filter">
+      <select ng-model="status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
+        <option value="">Filter by Status</option>
+      </select>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="sourceType" ng-options="value.type as value.type for (key, value) in sources" ng-change="search()" class="form-control">
+        <option value="">Filter by Source</option>
+      </select>
+    </div>
+    <div class="filter date-filter">
+      <label for="start">Filter From:</label>
+      <input id="start" ng-model="startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+    </div>
+    <div class="filter date-filter">
+      <label for="end">To:</label>
+      <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+    </div>
+    <div class="filter pagination">
+      <ul class="pager">
+        <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}</li>
+        <li>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="col-md-2">
-    <select ng-model="status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
-      <option value="">Filter by Status</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <select ng-model="sourceType" ng-options="value.type as value.type for (key, value) in sources" ng-change="search()" class="form-control">
-      <option value="">Filter by Source</option>
-    </select>
-  </div>
-  <div class="col-sm-5">
-    <label for="start">Filter from:</label>
-    <input id="start" ng-model="startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
-    <label for="end">Filter to:</label>
-    <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
-  </div>
-  <div class="col pull-right">
-    <ul class="pager">
-      {{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}
-      <li>
-        <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-      </li>
-      <li>
-        <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-      </li>
-    </ul>
-  </div>
-</div>
+</form>
 
 <div class="bs-component" ng-hide="pagination.total > 0">
   <div class="alert alert-warning">

@@ -59,7 +59,11 @@ label {
 }
 
 .form-control {
+  font-size: 12px;
+  height: 25px;
   box-shadow: none;
+  background-color: #f3f6f9;
+  padding: 4px 8px;
 }
 
 .modal {
@@ -127,10 +131,14 @@ label {
   margin: 0;
 }
 
-.form-control {
-  background-color: #f3f6f9;
+.input-group-btn .btn {
+  line-height: 1;
+  height: 25px;
+  padding: 4px 8px;
 }
+
 .input-group-addon {
+  padding: 4px 8px;
   background-color: #f3f6f9;
   color: #000;
 }
@@ -149,8 +157,6 @@ label {
     color: #999;
   }
 }
-
-
 input[type="date"] {
   width: 160px;
 }
