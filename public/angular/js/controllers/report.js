@@ -103,6 +103,10 @@ angular.module('Aggie')
       this.saveReport(report);
     };
 
+    $scope.toggleStatus = function(report, status) {
+      report.status = (report.status == status ? '' : status)
+    }
+
     $scope.isRelevant = function(report) {
       return report.status == 'relevant';
     };
