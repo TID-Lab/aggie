@@ -72,7 +72,7 @@ describe('Incident controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.have.properties(['total', 'results']);
+          expect(res.body).to.have.keys(['total', 'results']);
           expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.not.be.empty;
           compare(_.findWhere(res.body.results, {_id: incident._id}), incident);
@@ -102,7 +102,7 @@ describe('Incident controller', function() {
         .end(function(err, res) {
           request(incidentController)
             .get('/api/v1/incident')
-            .expect(200, [], done);
+            .expect(200, {total: 0, results: []}, done);
         });
     });
   });

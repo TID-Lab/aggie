@@ -17,14 +17,14 @@ var schema = new mongoose.Schema({
 
 schema.pre('save', function(next) {
   this.updatedAt = new Date();
-  if (!_.contains(this.status, ['new', 'working', 'alert', 'closed'])) {
+  if (!_.contains(['new', 'working', 'alert', 'closed'], this.status)) {
     return next(new Error.Validation('status_error'));
   }
   next();
 });
 
 schema.post('save', function() {
-  scema.emit('incident:save', {_id: this._id.toString()});
+  schema.emit('incident:save', {_id: this._id.toString()});
 });
 
 var Incident = mongoose.model('Incident', schema);
