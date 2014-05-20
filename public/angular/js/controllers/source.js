@@ -2,17 +2,13 @@ angular.module('Aggie')
 
 .controller('SourcesController', [
   '$scope',
+  '$rootScope',
   'FlashService',
   'sources',
   'Source',
-  function($scope, flash, sources, Source) {
+  function($scope, $rootScope, flash, sources, Source) {
     $scope.sources = sources;
-
-    $scope.toggleEnabled = function(source) {
-      source.enabled = !source.enabled;
-      this.saveSource(source);
-    };
-
+    
     $scope.saveSource = function(source) {
       Source.save({ id: source._id }, source, function() {
       }, function() {
@@ -22,10 +18,10 @@ angular.module('Aggie')
     };
 
     $scope.refresh = function() {
-      Source.query().$promise.then(function(data) {
-        $scope.sources = data;
+      Source.query(function(sources) {
+        $scope.sources = sources;
       });
-    }
+    };
 
     $scope.target = function(source) {
       return source.type == 'twitter' ? source.keywords : source.url;

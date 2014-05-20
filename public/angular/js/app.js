@@ -13,7 +13,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   }
 ])
 
-.run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
+.run(['$rootScope', '$location', 'AuthService', '$state', function ($rootScope, $location, AuthService, $state) {
+  $rootScope.$state = $state;
+
   $rootScope.$watch('currentUser', function(currentUser) {
     if (!currentUser) { AuthService.getCurrentUser() }
   });
@@ -53,3 +55,4 @@ require('./filters/report');
 
 // Directives
 require('./directives/aggie-table');
+require('./directives/aggie-toggle');

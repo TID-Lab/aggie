@@ -76,11 +76,8 @@
       <td class="compact author">{{ r.author }}</td>
       <td class="content">{{ r.content }}</td>
       <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>
-      <td class="status toggle">
-          <div class="toggle-switch">
-            <div class="toggle-item" ng-class="{ selected: isRelevant(r) }" ng-click="toggleStatus(r, 'relevant')">Rel</div>
-            <div class="toggle-item" ng-class="{ selected: isIrrelevant(r) }" ng-click="toggleStatus(r, 'irrelevant')">Irr</div>
-          </div>
+      <td class="status">
+        <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
       </div>
       </td>
     </tr>

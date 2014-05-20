@@ -1,4 +1,7 @@
-<div class="row table-filters">
+<div class="table-filters">
+  <div class="filter">
+    <a href class="btn btn-primary" ng-click="refresh()">Refresh Source list</a>
+  </div>
 </div>
 
 <div class="bs-component" ng-hide="sources.length > 0">
@@ -7,7 +10,6 @@
   </div>
 </div>
 
-<a href="#" ng-click="refresh()">Refresh Source list</a>
 <table class="table" ng-show="sources.length > 0">
   <col width="5%"/>
   <col width="5%"/>
@@ -29,11 +31,8 @@
       <td class="compact content">{{ target(s) }}</td>
       <td class="compact content">{{ s.lastReportDate }}</td>
       <td class="compact content zeroErrors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status toggle" ng-click="toggleEnabled(s)">
-        <div class="toggle-switch">
-          <div class="toggle-item" ng-class="{ selected: s.enabled }">True</div>
-          <div class="toggle-item" ng-class="{ selected: !s.enabled }">False</div>
-        </div>
+      <td class="compact status">
+        <aggie-toggle toggle="s.enabled" options="{ true: 'En', false: 'Dis' }" on-change="saveSource(s)">
       </td>
     </tr>
   </tbody>

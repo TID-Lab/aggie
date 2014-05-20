@@ -93,28 +93,25 @@ label {
   }
 }
 
-.toggle {
-  text-align: center;
+.toggle-switch {
+  display: inline-block;
+  font-size: 0;
+}
+.toggle-item {
   font-size: 10px;
-  .toggle-switch {
-    display: inline-block;
-    font-size: 0;
-  }
-  .toggle-item {
-    font-size: 10px;
-    text-transform: uppercase;
-    color: #808285;
-    font-weight: bold;
-    display: inline-block;
-    text-align: center;
-    line-height: 26px;
-    border: solid 1px #d1d3d4;
-    width: 29px;
-    height: 26px;
-    background-color: #d1d3d4;
-    &.selected {
-      background-color: #92c8dc;
-    }
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #808285;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  line-height: 26px;
+  border: solid 1px #d1d3d4;
+  width: 29px;
+  height: 26px;
+  background-color: #d1d3d4;
+  &.selected {
+    background-color: #92c8dc;
   }
 }
 
