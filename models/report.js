@@ -41,30 +41,6 @@ schema.post('save', function() {
 
 var Report = mongoose.model('Report', schema);
 
-// Find reports using pagination
-Report.findPage = function(filters, page, callback) {
-  if (typeof filters === 'function') {
-    callback = filters;
-    filters = {};
-    page = 0;
-  }
-  if (typeof page === 'function') {
-    callback = page;
-    page = 0;
-  }
-  if (page < 0) page = 0;
-  var limit = 25;
-  Report.count(filters, function(err, count) {
-    if (err) return callback(err);
-    var result = {total: count};
-    Report.find(filters, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, function(err, reports) {
-      if (err) return callback(err);
-      result.results = reports;
-      callback(null, result);
-    });
-  });
-};
-
 // Query reports based on passed query data
 Report.queryReports = function(query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);

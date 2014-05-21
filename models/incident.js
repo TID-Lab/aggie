@@ -17,7 +17,7 @@ var schema = new mongoose.Schema({
 
 schema.pre('save', function(next) {
   this.updatedAt = new Date();
-  if (!_.contains(['new', 'working', 'alert', 'closed'], this.status)) {
+  if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
   next();
@@ -29,26 +29,9 @@ schema.post('save', function() {
 
 var Incident = mongoose.model('Incident', schema);
 
-Incident.findPage = function(filters, page, callback) {
-  if (typeof filters === 'function') {
-    callback = filters;
-    page = 0;
-    filters = {};
-  } else if (typeof page === 'function') {
-    callback = page;
-    page = 0;
-  }
-  if (page < 0) page = 0;
-  var limit = 25;
-  Incident.count(filters, function(err, count) {
-    if (err) return callback(err);
-    var result = {total: count};
-    Incident.find(filters, null, {limit: limit, skip: page * limit, sort: '-updatedAt'}, function(err, incidents) {
-      if (err) return callback(err);
-      result.results = incidents;
-      callback(null, result);
-    });
-  });
-};
+// Mixin shared incident methods
+var Shared = require('../shared/incident');
+for (var static in Shared) Incident[static] = Shared[static];
+for (var proto in Shared.prototype) schema.methods[proto] = Shared[proto];
 
 module.exports = Incident;
