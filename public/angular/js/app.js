@@ -35,7 +35,7 @@ require('./services/auth');
 require('./services/factories');
 require('./services/flash');
 
-//Controllers
+// Controllers
 require('./controllers/application');
 require('./controllers/login');
 require('./controllers/navbar');
