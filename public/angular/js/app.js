@@ -13,7 +13,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   }
 ])
 
-.run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
+.run(['$rootScope', '$location', 'AuthService', '$state', function ($rootScope, $location, AuthService, $state) {
+  $rootScope.$state = $state;
+
   $rootScope.$watch('currentUser', function(currentUser) {
     if (!currentUser) { AuthService.getCurrentUser() }
   });
@@ -43,6 +45,7 @@ require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
 require('./controllers/report');
 require('./controllers/show_report');
+require('./controllers/source');
 
 // Routes
 require('./routes');
@@ -52,3 +55,4 @@ require('./filters/report');
 
 // Directives
 require('./directives/aggie-table');
+require('./directives/aggie-toggle');

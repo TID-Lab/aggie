@@ -82,22 +82,15 @@ angular.module('Aggie')
     };
 
     $scope.nextPage = function() {
-      search($scope.currentPage + 1);
+      if (!$scope.isLastPage()) {
+       search($scope.currentPage + 1);
+      }
     };
 
     $scope.prevPage = function() {
-      search($scope.currentPage - 1);
-    };
-
-    $scope.rotateStatus = function(report) {
-      if (report.status == 'relevant') {
-        report.status = 'irrelevant';
-      } else if (report.status == 'irrelevant') {
-        report.status = '';
-      } else {
-        report.status = 'relevant';
-      }
-      this.saveReport(report);
+      if (!$scope.isFirstPage()) {
+        search($scope.currentPage - 1);
+      };
     };
 
     $scope.isRelevant = function(report) {
@@ -133,5 +126,15 @@ angular.module('Aggie')
         return $scope.pagination.visibleTotal;
       }
     }
+
+    $scope.sourceClass = function(report) {
+      var source = $scope.sources[report._source],
+        sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
+      if (source && sourceTypes.indexOf(source.type) !== -1) {
+        return source.type + '-source';
+      } else {
+        return 'unknown-source';
+      }
+    };
   }
 ]);
