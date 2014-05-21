@@ -21,11 +21,7 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
   // Notify when changing error count
   if (!this.isNew && this.isModified('unreadErrorCount')) {
-    if (this.unreadErrorCount) {
-      sourceSchema.emit('sourceErrorCountUpdated', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
-    } else {
-      sourceSchema.emit('sourceErrorCountCleared', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
-    }
+    sourceSchema.emit(this.unreadErrorCount ? 'sourceErrorCountUpdated' : 'sourceErrorCountCleared', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
   }
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
