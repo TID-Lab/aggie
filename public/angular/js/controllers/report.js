@@ -57,6 +57,7 @@ angular.module('Aggie')
     $scope.originalReports = angular.copy($scope.reports);
 
     var search = function(page) {
+      if (!$scope.keywords.length) { $scope.keywords = null }
       $state.go('reports', {
         keywords: $scope.keywords,
         after: $scope.startDate,
@@ -81,15 +82,11 @@ angular.module('Aggie')
     };
 
     $scope.nextPage = function() {
-      if (!$scope.isLastPage()) {
-        search($scope.currentPage + 1);
-      }
+      search($scope.currentPage + 1);
     };
 
     $scope.prevPage = function() {
-      if (!$scope.isFirstPage()) {
-        search($scope.currentPage - 1);
-      };
+      search($scope.currentPage - 1);
     };
 
     $scope.rotateStatus = function(report) {

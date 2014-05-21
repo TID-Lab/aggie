@@ -28,7 +28,7 @@
     <label for="end">Filter to:</label>
     <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
   </div>
-  <div class="col pull-right">
+  <div class="col-md-3 col pull-right">
     <ul class="pager">
       {{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}
       <li>
