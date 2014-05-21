@@ -15,7 +15,6 @@
     <tr>
       <th>Name</th>
       <th>Target</th>
-      <th>Last Report Date</th>
       <th>Unread Error Count</th>
       <th>Enabled</th>
     </tr>
@@ -24,7 +23,6 @@
     <tr ng-repeat="s in sources">
       <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.nickname }}</div></td>
       <td class="compact content">{{ target(s) }}</td>
-      <td class="compact content">{{ s.lastReportDate }}</td>
       <td class="compact content zeroErrors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
       <td class="compact status">
         <aggie-toggle toggle="s.enabled" options="{ true: 'En', false: 'Dis' }" on-change="saveSource(s)">
