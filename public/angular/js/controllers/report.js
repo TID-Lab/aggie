@@ -130,5 +130,15 @@ angular.module('Aggie')
         return $scope.pagination.visibleTotal;
       }
     }
+
+    $scope.sourceClass = function(report) {
+      var source = $scope.sources[report._source],
+        sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
+      if (source && sourceTypes.indexOf(source.type) !== -1) {
+        return source.type + '-source';
+      } else {
+        return 'unknown-source';
+      }
+    };
   }
 ]);

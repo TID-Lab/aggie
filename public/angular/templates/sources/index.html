@@ -11,14 +11,9 @@
 </div>
 
 <table class="table" ng-show="sources.length > 0">
-  <col width="5%"/>
-  <col width="5%"/>
-  <col width="5%"/>
-  <col width="5%"/>
-  <col width="5%"/>
   <thead>
     <tr>
-      <th>Type</th>
+      <th>Name</th>
       <th>Target</th>
       <th>Last Report Date</th>
       <th>Unread Error Count</th>
@@ -27,7 +22,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="s in sources">
-      <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.type }}</div></td>
+      <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.nickname }}</div></td>
       <td class="compact content">{{ target(s) }}</td>
       <td class="compact content">{{ s.lastReportDate }}</td>
       <td class="compact content zeroErrors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>

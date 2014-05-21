@@ -61,7 +61,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
+    <tr ng-repeat="r in reports | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -72,7 +72,7 @@
         </div>
         <div class="created">{{ r | delay }}</div>
       </td>
-      <td class="compact source" ng-class="sources[r._source].type + '-source'"><div class="icon-left">{{sources[r._source].keywords}}</div></td>
+      <td class="compact source" ng-class="sourceClass(r)"><div class="icon-left">{{sources[r._source].nickname}}</div></td>
       <td class="compact author">{{ r.author }}</td>
       <td class="content">{{ r.content }}</td>
       <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>

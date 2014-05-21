@@ -28,7 +28,21 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(source) {
-      return source.type + '-source';
+      var sources = ['twitter', 'facebook', 'rss', 'elmo'];
+      if (sources.indexOf(source.type) !== -1) {
+        return source.type + '-source';
+      } else {
+        return 'unknown-source';
+      }
+    };
+
+    $scope.sourceClass = function(source) {
+      var sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
+      if (sourceTypes.indexOf(source.type) !== -1) {
+        return source.type + '-source';
+      } else {
+        return 'unknown-source';
+      }
     };
   }
 ]);

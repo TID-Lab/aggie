@@ -90,8 +90,42 @@ tr {
     min-height: 33px;
   }
 }
+
+.unknown-source {
+  .icon-left {
+    position: relative;
+    &:before {
+      position: absolute;
+      left: 0;
+      width: 33px;
+      height: 33px;
+      line-height: 33px;
+      text-align: center;
+      background-color: #ddd;
+      color: #bbb;
+      font-size: 20px;
+      content: '?'
+    }
+  }
+}
+
 .twitter-source .icon-left {
-  background: url('/images/twitter.png') no-repeat 0 50%;
+  background: transparent url('/images/twitter.png') no-repeat 0 50%;
+  &:before {
+    display: none;
+  }
+}
+
+.elmo-source .icon-left {
+  background: url('/images/elmo.png') no-repeat 0 50%;
+}
+
+.facebook-source .icon-left {
+  background: url('/images/facebook.png') no-repeat 0 50%;
+}
+
+.rss-source .icon-left {
+  background: url('/images/rss.png') no-repeat 0 50%;
 }
 
 .source,

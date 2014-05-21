@@ -16,8 +16,7 @@ angular.module('Aggie')
       '$timeout',
       function($scope, $timeout) {
         $scope.toggleStatus = function(status) {
-          console.log('toggleStatus', status, $scope.isStatus(status));
-          var originalStatus = $scope.toggle.toString();
+          var originalStatus = $scope.currentStatus();
           if ($scope.allowBlank) {
             $scope.toggle = $scope.isStatus(status) ? '' : status
           } else {
@@ -28,8 +27,12 @@ angular.module('Aggie')
           }
         };
 
+        $scope.currentStatus = function() {
+          return ($scope.toggle || '').toString();
+        }
+
         $scope.isStatus = function(status) {
-          return $scope.toggle.toString() === status;
+          return $scope.currentStatus() === status;
         };
       }
     ]
