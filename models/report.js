@@ -96,6 +96,7 @@ Report.queryReports = function(query, page, callback) {
   // Convert sourceId and sourceType for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
   if (query.sourceType) query.filter._sourceType = query.sourceType;
+  if (query.incidentId) query.filter._incident = query.incidentId;
 
   // Return only newer results
   if (query.since) {

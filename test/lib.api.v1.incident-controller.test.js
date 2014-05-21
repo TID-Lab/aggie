@@ -79,6 +79,32 @@ describe('Incident controller', function() {
           done();
         });
     });
+    it('should get a filtered list of incidents', function(done) {
+      request(incidentController)
+        .get('/api/v1/incident?status=working')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.keys(['total', 'results']);
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.not.be.empty;
+          compare(_.findWhere(res.body.results, {_id: incident._id}), incident);
+          done();
+        });
+    });
+    it('should get an empty list of incidents', function(done) {
+      request(incidentController)
+        .get('/api/v1/incident?status=alert')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.keys(['total', 'results']);
+          expect(res.body.total).to.equal(0);
+          expect(res.body.results).to.be.an.instanceof(Array);
+          expect(res.body.results).to.be.empty;
+          done();
+        });
+    });
   });
 
   describe('DELETE /api/v1/incident/:_id', function() {
