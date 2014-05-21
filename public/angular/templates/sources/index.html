@@ -1,6 +1,7 @@
 <div class="table-filters">
   <div class="filter">
     <a href class="btn btn-primary" ng-click="refresh()">Refresh Source list</a>
+    <a ng-controller="SourceFormModalController" type="button" class="btn btn-primary" href="#" ng-click="open()">Create new source</a>
   </div>
 </div>
 
@@ -10,8 +11,6 @@
   </div>
 </div>
 
-<input type="button" class="btn btn-primary" href="#" ng-click="refresh()" value="Refresh source list"></input>
-<input ng-controller="SourceFormModalController" type="button" class="btn btn-primary" href="#" ng-click="open()" value="Create new source"></input>
 <table class="table" ng-show="sources.length > 0">
   <thead>
     <tr>

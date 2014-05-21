@@ -17,7 +17,7 @@ angular.module('Aggie')
       modalInstance.result.then(function(source) {
         Source.create({ source: source }, function(response) {
           flash.setNotice('Source was successfully created.');
-          $location.path('/sources');
+          $scope.refresh();
         }, function() {
             flash.setAlertNow('Source failed to be created. Please contact support.');
         });
