@@ -8,12 +8,22 @@
 <table class="table detail-table">
   <tbody>
     <tr>
-      <td class="detail-key">Time</td>
-      <td class="detail-value">{{ report.storedAt }}</td>
+      <td class="detail-key">Authored Time</td>
+      <td class="detail-value">{{ report.authoredAt | date:"HH:mm on dd MMM ''''yy" }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Fetched Time</td>
+      <td class="detail-value">{{ report.fetchedAt | date:"HH:mm on dd MMM ''''yy" }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Stored Time</td>
+      <td class="detail-value">{{ report.storedAt | date:"HH:mm on dd MMM ''''yy" }}</td>
     </tr>
     <tr>
       <td class="detail-key">Source</td>
-      <td class="detail-value">{{ source.type }}</td>
+      <td class="detail-value">
+        <span ng-show="source">{{ source.nickname + ' (' + source.type + ')' }}</span>
+      </td>
     </tr>
     <tr>
       <td class="detail-key">URL</td>
