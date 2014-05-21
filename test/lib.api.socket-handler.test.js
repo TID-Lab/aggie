@@ -33,14 +33,11 @@ describe('Socket handler', function() {
 
   it('should receive new reports that match the query', function(done) {
     client.once('reports', function(reports) {
-      expect(reports).to.contain.property('total');
-      expect(reports.total).to.equal(3);
-      expect(reports).to.contain.property('results');
-      expect(reports.results).to.be.an.instanceof(Array);
-      expect(reports.results).to.have.length(3);
-      expect(reports.results[0].content.toLowerCase()).to.contain('test');
-      expect(reports.results[1].content.toLowerCase()).to.contain('test');
-      expect(reports.results[2].content.toLowerCase()).to.contain('test');
+      expect(reports).to.be.an.instanceof(Array);
+      expect(reports).to.have.length(3);
+      expect(reports[0].content.toLowerCase()).to.contain('test');
+      expect(reports[1].content.toLowerCase()).to.contain('test');
+      expect(reports[2].content.toLowerCase()).to.contain('test');
       done();
     });
     Report.create({content: 'This is a test'});

@@ -1,22 +1,54 @@
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource']).
-  config(['$urlRouterProvider', '$locationProvider',
-    function($urlRouterProvider, $locationProvider) {
-      $locationProvider.html5Mode(true);
-      $urlRouterProvider.otherwise('/');
+require('./angular', { expose: 'angular' });
+require('./angular-ui-router');
+require('./ui-bootstrap');
+require('./ui-bootstrap-templates');
+require('./angular-resource');
+
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
+
+.config(['$urlRouterProvider', '$locationProvider',
+  function($urlRouterProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
+    $urlRouterProvider.otherwise('/');
+  }
+])
+
+.run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
+  $rootScope.$watch('currentUser', function(currentUser) {
+    if (!currentUser) { AuthService.getCurrentUser() }
+  });
+
+  var needsAuth = function () {
+    return [].indexOf($location.path()) != -1;
+  };
+
+  $rootScope.$on('$stateChangeStart', function (event, next, current) {
+    if (needsAuth() && !$rootScope.currentUser) {
+      $location.path('/login');
     }
-  ]).run(['$rootScope', '$location', 'AuthService', function ($rootScope, $location, AuthService) {
+  });
+}]);
 
-    $rootScope.$watch('currentUser', function(currentUser) {
-      if (!currentUser) { AuthService.getCurrentUser() }
-    });
 
-    var needsAuth = function () {
-      return [].indexOf($location.path()) != -1;
-    };
+// Services
+require('./services/auth');
+require('./services/factories');
+require('./services/flash');
 
-    $rootScope.$on('$stateChangeStart', function (event, next, current) {
-      if (needsAuth() && !$rootScope.currentUser) {
-        $location.path('/login');
-      }
-    });
-  }]);
+// Controllers
+require('./controllers/application');
+require('./controllers/login');
+require('./controllers/navbar');
+require('./controllers/password_reset');
+require('./controllers/password_reset_modal');
+require('./controllers/report');
+require('./controllers/show_report');
+
+// Routes
+require('./routes');
+
+// Filters
+require('./filters/report');
+
+// Directives
+require('./directives/aggie-table');

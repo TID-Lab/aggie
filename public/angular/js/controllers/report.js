@@ -1,78 +1,92 @@
 angular.module('Aggie')
 
 .controller('ReportsController', [
+  '$state',
   '$scope',
   '$rootScope',
-  'Report',
-  'Source',
+  '$stateParams',
   'FlashService',
-  function($scope, $rootScope, Report, Source, flash) {
-    $scope.currentPage = 0;
-    $scope.perPage = 25;
-    $scope.startReport = 1;
-    $scope.endReport = $scope.perPage;
-    // update with api endpoint for total records
-    $scope.totalItems = 0;
-    $scope.sources = {};
-    $scope.reports = {};
-    $scope.originalReports = {};
+  'reports',
+  'sources',
+  'Report',
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report) {
+    $scope.keywords = $stateParams.keywords || '';
+    $scope.currentKeywords = $scope.keywords;
+    $scope.startDate = $stateParams.after || '';
+    $scope.endDate = $stateParams.before || '';
+    $scope.sourceType = $stateParams.sourceType || '';
+    $scope.status = $stateParams.status || '';
 
-    Source.query(function(data) {
-      data.forEach(function(item) {
-        $scope.sources[item._id] = item;
-      });
-    });
+    $scope.pagination = {
+      page: parseInt($stateParams.page) || 1,
+      total: reports.total,
+      visibleTotal: reports.total,
+      perPage: 25,
+      start: 0,
+      end: 0
+    };
 
-    var fetchPage = function() {
-      Report.query({page: $scope.currentPage}, function(data) {
-        $scope.totalItems = data.total;
-        var reports = {};
-        data.results.forEach(function(item) {
-          reports[item._id] = item;
-        });
-        $scope.reports = reports;
-        $scope.originalReports = angular.copy($scope.reports);
+    var groupById = function(memo, item) {
+      memo[item._id] = item;
+      return memo;
+    };
+
+    var paginate = function(items) {
+      var page = $scope.pagination.page,
+        perPage = $scope.pagination.perPage,
+        total = $scope.pagination.total,
+        start = (page - 1) * perPage,
+        end = (page * perPage) - 1;
+
+      $scope.pagination.start = start + 1;
+      $scope.pagination.end = Math.min(end + 1, total);
+
+      if ($scope.keywords.length) {
+        $scope.pagination.visibleTotal = items.length;
+        return items.slice(start, end);
+      } else {
+        return items;
+      }
+    }
+
+    $scope.statuses = [
+      'relevant', 'irrelevant', 'unassigned', 'assigned'
+    ];
+    $scope.sources = sources.reduce(groupById, {});
+    $scope.reports = paginate(reports.results).reduce(groupById, {});
+    $scope.originalReports = angular.copy($scope.reports);
+
+    var search = function(page) {
+      if (!$scope.keywords.length) { $scope.keywords = null }
+      $state.go('reports', {
+        keywords: $scope.keywords,
+        after: $scope.startDate,
+        before: $scope.endDate,
+        sourceType: $scope.sourceType,
+        page: page,
+        status: $scope.status
       });
     };
 
-    fetchPage();
+    $scope.search = function() {
+      if (!$scope.keywords.length) { $scope.keywords = null }
+      search(null);
+    };
+
+    $scope.isFirstPage = function() {
+      return $scope.pagination.page == 1;
+    };
+
+    $scope.isLastPage = function() {
+      return $scope.pagination.end >= $scope.pagination.visibleTotal;
+    };
 
     $scope.nextPage = function() {
-      if ($scope.currentPage + 1 < $scope.lastPage()) {
-        $scope.currentPage += 1;
-        fetchPage();
-      }
+      search($scope.currentPage + 1);
     };
 
     $scope.prevPage = function() {
-      if ($scope.currentPage > 0) {
-        $scope.currentPage -= 1;
-        fetchPage();
-      }
-    };
-
-    $scope.lastPage = function() {
-      return Math.ceil($scope.totalItems / $scope.perPage);
-    };
-
-    $scope.setReportIndices = function() {
-      $scope.startReport = startReport();
-      $scope.endReport = endReport();
-    };
-
-    $scope.startReport = function() {
-      var page = $scope.currentPage,
-        perPage = $scope.perPage;
-      return page > 0 ? page * perPage + 1 : 1;
-    };
-
-    $scope.endReport = function() {
-      var page = $scope.currentPage,
-        perPage = $scope.perPage,
-        totalItems = $scope.totalItems,
-        lastPage = $scope.lastPage();
-      if (page === 0) { return perPage; }
-      return page + 1 < lastPage ? page * perPage + perPage : totalItems;
+      search($scope.currentPage - 1);
     };
 
     $scope.rotateStatus = function(report) {
@@ -105,5 +119,19 @@ angular.module('Aggie')
         angular.copy($scope.originalReports[report._id], report);
       });
     };
+
+    $scope.viewReport = function(event, report) {
+      if (angular.element(event.target)[0].tagName == 'TD') {
+        $state.go('report', { id: report._id });
+      }
+    };
+
+    $scope.paginationTotalLabel = function() {
+      if ($scope.pagination.total > $scope.pagination.visibleTotal) {
+        return $scope.pagination.visibleTotal + '+';
+      } else {
+        return $scope.pagination.visibleTotal;
+      }
+    }
   }
 ]);

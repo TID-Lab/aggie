@@ -32,6 +32,6 @@ angular.module('Aggie').controller('PasswordResetController', [
 
     $scope.cancel = function() {
       $location.path('/login');
-    }
+    };
   }
 ]);

@@ -71,7 +71,7 @@ Report.queryReports = function(query, page, callback) {
   }
   if (page < 0) page = 0;
 
-  query.limit = 25;
+  query.limit = 100;
   query.filter = {};
 
   // Determine status filter

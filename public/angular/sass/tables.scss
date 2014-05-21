@@ -10,6 +10,12 @@
   > tbody {
     > tr {
       transition: background 0.25s ease-in-out;
+      &.item {
+        cursor: pointer;
+        &:hover {
+          background-color: rgba(#abc, 0.1);
+        }
+      }
       > td {
         border: solid 1px #e4e4e4;
         &.status,&.incident {
@@ -23,6 +29,16 @@
   }
   .expand {
     max-width: 100%;
+  }
+}
+
+.detail-table {
+  width: auto;
+  .detail-key {
+    min-width: 100px;
+  }
+  .detail-value {
+    min-width: 200px;
   }
 }
 
@@ -87,4 +103,8 @@ table, .table {
       color: lighten($link-blue, 10%);
     }
   }
+}
+
+.table-filters {
+  margin-bottom: 10px;
 }

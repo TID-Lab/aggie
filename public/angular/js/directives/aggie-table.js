@@ -7,5 +7,5 @@ angular.module('Aggie')
     link: function(scope, el) {
       el.addClass('table');
     }
-  }
+  };
 });

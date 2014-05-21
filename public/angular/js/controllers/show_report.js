@@ -6,11 +6,11 @@ angular.module('Aggie')
   'Report',
   'Source',
   function($scope, $stateParams, Report, Source) {
-    Report.get({id: $stateParams.id}, function(r) {
-      $scope.report = r;
-      Source.get({id: r._source}, function(s) {
-        $scope.source = s;
+    Report.get({id: $stateParams.id}, function(report) {
+      $scope.report = report;
+      Source.get({id: report._source}, function(source) {
+        $scope.source = source;
       });
     });
   }
-])
+]);
