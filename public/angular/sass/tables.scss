@@ -12,9 +12,6 @@
       transition: background 0.25s ease-in-out;
       &.item {
         cursor: pointer;
-        &:hover {
-          background-color: rgba(#abc, 0.1);
-        }
       }
       > td {
         border: solid 1px #e4e4e4;
@@ -42,11 +39,23 @@
   }
 }
 
+tr {
+  background-color: #fff;
+  &:hover {
+    background-color: #f6f7f7;
+  }
+}
 .relevant {
-  background-color: #edf6f9
+  background-color: #ecf6f8;
+  &:hover {
+    background-color: darken(#ecf6f8, 5%);
+  }
 }
 .irrelevant {
   background-color: #f1f2f2;
+  &:hover {
+    background-color: darken(#f1f2f2, 5%);
+  }
 }
 
 .interval {
@@ -81,8 +90,42 @@
     min-height: 33px;
   }
 }
+
+.unknown-source {
+  .icon-left {
+    position: relative;
+    &:before {
+      position: absolute;
+      left: 0;
+      width: 33px;
+      height: 33px;
+      line-height: 33px;
+      text-align: center;
+      background-color: #ddd;
+      color: #bbb;
+      font-size: 20px;
+      content: '?'
+    }
+  }
+}
+
 .twitter-source .icon-left {
-  background: url('/images/twitter.png') no-repeat 0 50%;
+  background: transparent url('/images/twitter.png') no-repeat 0 50%;
+  &:before {
+    display: none;
+  }
+}
+
+.elmo-source .icon-left {
+  background: url('/images/elmo.png') no-repeat 0 50%;
+}
+
+.facebook-source .icon-left {
+  background: url('/images/facebook.png') no-repeat 0 50%;
+}
+
+.rss-source .icon-left {
+  background: url('/images/rss.png') no-repeat 0 50%;
 }
 
 .source,
@@ -106,5 +149,52 @@ table, .table {
 }
 
 .table-filters {
+  width: 100%;
   margin-bottom: 10px;
+  font-size: 12px;
+  display: table;
+  label {
+    font-weight: bold;
+  }
+  .filter {
+    width: 100%;
+    vertical-align: top;
+    display: table-cell;
+    padding: 0 8px;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+  .btn {
+    line-height: 15px;
+    height: 25px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .status-filter,
+  .source-type-filter {
+    select {
+      width: auto;
+    }
+  }
+  .date-filter {
+    label {
+      margin-right: 4px;
+    }
+    input {
+      width: auto;
+      line-height: 1;
+      height: 25px;
+    }
+  }
+  .date-filter,
+  .pagination {
+    white-space: nowrap;
+    .pager-label {
+      margin-right: 4px;
+    }
+  }
 }
