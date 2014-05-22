@@ -33,4 +33,18 @@ angular.module('Aggie')
       return Fetching.toggle({ op: enabled == 'true' ? 'on' : 'off' }, {})
     }
   }
+})
+
+.factory('Socket', function ($rootScope) {
+  var socket = io.connect('/');
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    }
+  };
 });
