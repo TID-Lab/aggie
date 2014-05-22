@@ -5,14 +5,14 @@ angular.module('Aggie')
   '$rootScope',
   'Fetching',
   function($scope, $rootScope, Fetching) {
-    $scope.fetchStatus = false;
+    $rootScope.fetchStatus = false;
 
     Fetching.get(function(enabled) {
-      $scope.fetchStatus = enabled;
+      $rootScope.fetchStatus = enabled;
     });
 
     $scope.toggleFetching = function() {
-      Fetching.set($scope.fetchStatus);
+      Fetching.set($rootScope.fetchStatus);
     };
   }
 ]);

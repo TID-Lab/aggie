@@ -15,5 +15,9 @@ angular.module('Aggie')
       $rootScope.sourceWithErrors = source;
     });
 
+    Socket.on('fetchingStatusUpdate', function(data) {
+      $rootScope.fetchStatus = data.fetching;
+    });
+
   }
 ]);
