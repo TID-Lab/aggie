@@ -29,7 +29,14 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
       $location.path('/login');
     }
   });
-}]);
+}])
+
+.value('sourceTypes', {
+  'twitter': 'Twitter',
+  'facebook': 'Facebook',
+  'rss': 'RSS',
+  'elmo': 'Elmo'
+});
 
 
 // Services
@@ -45,9 +52,9 @@ require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
+require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
-require('./controllers/sources/form_modal');
 
 // Routes
 require('./routes');
@@ -59,3 +66,4 @@ require('./filters/delay');
 // Directives
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
+require('./directives/ng-focus');

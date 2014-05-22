@@ -18,8 +18,8 @@ angular.module('Aggie')
         Source.create({ source: source }, function(response) {
           flash.setNotice('Source was successfully created.');
           $scope.refresh();
-        }, function() {
-            flash.setAlertNow('Source failed to be created. Please contact support.');
+        }, function(err) {
+          flash.setAlertNow('Source failed to be created. Please contact support.');
         });
       });
     };
@@ -29,11 +29,21 @@ angular.module('Aggie')
 .controller('CreateSourceModalInstanceController', [
   '$scope',
   '$modalInstance',
-  function($scope, $modalInstance) {
-    $scope.sourceTypes = ['twitter', 'facebook', 'RSS', 'ELMO'];
+  'sourceTypes',
+  function($scope, $modalInstance, sourceTypes) {
+    $scope.sourceTypes = sourceTypes;
     $scope.source = {};
+    $scope._showErrors = false
 
-    $scope.okay = function() {
+    $scope.showErrors = function() {
+      return $scope._showErrors;
+    }
+
+    $scope.save = function(form) {
+      if (form.$invalid) {
+        $scope._showErrors = true;
+        return;
+      }
       $modalInstance.close($scope.source);
     };
 

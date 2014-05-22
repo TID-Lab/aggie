@@ -7,49 +7,48 @@
     <div class="well bs-component">
       <form name="form" class="form-horizontal">
         <fieldset>
-          <div class="form-group">
+          <div class="form-group" ng-class="{ 'has-error': showErrors() && form.nickname.$invalid }">
             <label for="nickname" class="col-lg-3 control-label">Nickname</label>
             <div class="col-lg-6">
-              <input type="text" ng-model="source.nickname"
-                class="form-control" id="nickname"
-                name="nickname" placeholder="Enter nickname" required>
+              <div class="input-group">
+                <input type="text" ng-model="source.nickname" class="form-control" id="nickname" name="nickname" placeholder="Enter nickname" required maxlength="20" ng-focus>
+                <span class="input-group-addon"><span ng-show="source.nickname.length && form.nickname.$focused">{{20 - source.nickname.length}}</span></span>
+              </div>
+              <div class="help-block">
+                <span ng-show="showErrors() && form.nickname.$error.required">Nickname is required.</span>
+              </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-class="{ 'has-error': showErrors() && form.type.$invalid }">
             <label for="type" class="col-lg-3 control-label">Type</label>
             <div class="col-lg-6">
-              <select name="type" ng-model="source.type" ng-options="s for s in sourceTypes" required>
+              <select name="type" class="form-control" ng-model="source.type" ng-options="value as label for (value, label) in sourceTypes" required>
                 <option value="">Choose source type</option>
               </select>
+              <div class="help-block" ng-show="showErrors() && form.type.$invalid">
+                <span ng-show="form.type.$error.required">Type is required.</span>
+              </div>
             </div>
           </div>
-          <div class="form-group" ng-show="source.type == 'twitter'">
+          <div class="form-group" ng-show="source.type == 'twitter'" ng-class="{ 'has-error': showErrors() && form.keywords.$invalid }">
             <label for="keywords" class="col-lg-3 control-label">Keywords</label>
             <div class="col-lg-6">
               <input type="text" ng-model="source.keywords"
                 class="form-control" id="keywords"
-                name="keywords" placeholder="Enter keywords" required>
+                name="keywords" placeholder="Enter keywords" ng-required="source.type == 'twitter'">
+              <div class="help-block" ng-show="showErrors()">
+                <span ng-show="form.keywords.$error.required">Keywords are required for twitter sources.</span>
+              </div>
             </div>
           </div>
-          <div class="form-group" ng-show="source.type != 'twitter'">
+          <div class="form-group" ng-class="{ 'has-error': showErrors() && form.url.$invalid }" ng-show="source.type != 'twitter'">
             <label for="url" class="col-lg-3 control-label">URL</label>
             <div class="col-lg-6">
-              <input type="text" ng-model="source.url"
-                class="form-control" id="url"
-                name="url" placeholder="Enter url" required>
+              <input type="text" ng-model="source.url" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'">
+              <div class="help-block" ng-show="showErrors() && form.url.$invalid">
+                <span ng-show="form.url.$error.required">URL is required.</span>
+              </div>
             </div>
-          </div>
-          <div ng-show="form.nickname.$invalid">Invalid:
-            <span ng-show="form.nickname.$error.required">Nickname required.</span>
-          </div>
-          <div ng-show="form.keywords.$invalid && source.type == 'twitter'">Invalid:
-            <span ng-show="form.keywords.$error.required">Keywords required.</span>
-          </div>
-          <div ng-show="form.url.$invalid && source.type != 'twitter'">Invalid:
-            <span ng-show="form.url.$error.required">URL required.</span>
-          </div>
-          <div ng-show="form.type.$invalid">Invalid:
-            <span ng-show="form.type.$error.required">Type required.</span>
           </div>
         </fieldset>
       </form>
@@ -57,6 +56,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="close()">Close</button>
-    <button type="button" class="btn btn-primary" ng-click="okay()">Submit</button>
+    <button type="button" class="btn btn-primary" ng-click="save(form)">Submit</button>
   </div>
 </div>
