@@ -4,7 +4,7 @@ var request = require('supertest');
 var _ = require('underscore');
 var trendController = require('../lib/api/v1/trend-controller')();
 var Trend = require('../models/trend');
-var Query = require('../models/query');
+var Query = require('../lib/query/query');
 
 var trend;
 describe('Trend controller', function() {

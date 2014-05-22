@@ -2,7 +2,7 @@ require('./init');
 var expect = require('chai').expect;
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
-var Query = require('../models/query');
+var Query = require('../lib/query/query');
 var Report = require('../models/report');
 var timekeeper = require('timekeeper');
 var _ = require('underscore');

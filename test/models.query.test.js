@@ -1,6 +1,6 @@
 require('./init');
 var expect = require('chai').expect;
-var Query = require('../models/query');
+var Query = require('../lib/query/query');
 
 var queryData, queryId;
 describe('Query attributes', function() {

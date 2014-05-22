@@ -11,9 +11,13 @@ var FormRequestHandler = RequestHandler.extend({
         data: method == 'get' ? form.serialize() : form.serializeHash()
       });
 
-      if (socket && form.attr('id') === 'query') {
-        // Send query to get reports back
-        socket.emit('query', form.serializeHash());
+      // Send query to get data back
+      if (socket) {
+        if (form.attr('id') === 'reportQuery') {
+          socket.emit('reportQuery', form.serializeHash());
+        } else if (form.attr('id') === 'incidentQuery') {
+          socket.emit('incidentQuery', form.serializeHash());
+        }
       }
       e.preventDefault();
     });
