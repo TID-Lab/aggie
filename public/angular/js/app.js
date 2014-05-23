@@ -55,6 +55,7 @@ require('./routes');
 require('./filters/delay');
 require('./filters/interval');
 require('./filters/source');
+require('./filters/aggie-date');
 
 // Directives
 require('./directives/aggie-table');

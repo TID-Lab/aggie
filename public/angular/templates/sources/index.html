@@ -13,16 +13,16 @@
 <table aggie-table ng-show="sources.length > 0">
   <thead>
     <tr>
-      <th class="expand">Name</th>
-      <th class="compact">Target</th>
+      <th class="compact">Name</th>
+      <th class="expand">Target</th>
       <th class="compact">Unread Error Count</th>
       <th class="compact">Enabled</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="s in sources"  class="item" ng-click="viewSource($event, s)">
-      <td class="expand source" ng-class="sourceClass(s)"><div class="icon-left">{{ s | sourceName }}</div></td>
-      <td class="compact content">{{ target(s) }}</td>
+      <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s | sourceName }}</div></td>
+      <td class="expand content">{{ target(s) }}</td>
         <span ng-switch="source.type">
           <span ng-when="twitter">{{source.keywords}}</span>
           <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
