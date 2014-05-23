@@ -41,5 +41,15 @@
 <div class="navbar navbar-stats">
   <div class="container">
     <p class="navbar-text">Stats go here.</p>
+    <div class="source-errors" ng-show="sourceWithErrors.unreadErrorCount > 0">
+      Source Errors
+      <a href ui-sref='{{ "/sources/" + sourceWithErrors._id }}'>
+        {{ sourceWithErrors.unreadErrorCount }}
+      </a>
+    </div>
+    <div ng-controller="FetchingController" class="compact status fetching">
+      <label>Fetching</label>
+      <aggie-toggle allowBlank="false" toggle="fetchStatus" options="{ true: 'On', false: 'Off' }" on-change="toggleFetching()">
+    </div>
   </div>
 </div>

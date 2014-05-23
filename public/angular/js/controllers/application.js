@@ -6,7 +6,14 @@ angular.module('Aggie')
   '$location',
   'AuthService',
   'FlashService',
-  function($scope, $rootScope, $location, AuthService, flash) {
+  'Source',
+  'Socket',
+  function($scope, $rootScope, $location, AuthService, flash, Source, Socket) {
     $scope.flash = flash;
+
+    Socket.on('sourceErrorCountUpdated', function(source) {
+      $rootScope.sourceWithErrors = source;
+    });
+
   }
 ]);
