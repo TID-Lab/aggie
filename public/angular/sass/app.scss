@@ -43,7 +43,17 @@ a {
 }
 
 .navbar-stats {
+  min-height: 34px;
   background-color: $navbar-yellow;
+  .navbar-text {
+    line-height: 26px;
+  }
+}
+
+.navbar-text {
+  line-height: 1;
+  margin: 0;
+  padding: 8px;
 }
 
 .nav li.user {
@@ -171,6 +181,22 @@ input[type="date"] {
 
 .multipleErrors {
   color: red;
+}
+
+.navbar-stats .container {
+  position: relative;
+}
+
+.fetching {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 8px;
+  height: 26px;
+}
+
+label + aggie-toggle {
+  margin-left: 4px;
 }
 
 .alert {

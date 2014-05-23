@@ -9,7 +9,7 @@ angular.module('Aggie')
     scope: {
       toggle: '=',
       options: '=',
-      allowBlank: '&',
+      allowBlank: '@',
       onChange: '&onChange'
     },
 
@@ -19,7 +19,7 @@ angular.module('Aggie')
       function($scope, $timeout) {
         $scope.toggleStatus = function(status) {
           var originalStatus = $scope.currentStatus();
-          if ($scope.allowBlank) {
+          if ($scope.allowBlank == 'true') {
             $scope.toggle = $scope.isStatus(status) ? '' : status
           } else {
             $scope.toggle = status;
