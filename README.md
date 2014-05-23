@@ -1,6 +1,6 @@
 # Aggie
 
-This is the future of Aggie.
+Aggie is a web application for using social media to track incidents around real-time events such as elections or natural disasters.
 
 ## Development Installation
 
