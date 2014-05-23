@@ -55,6 +55,7 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/fetch');
 
 // Routes
 require('./routes');
