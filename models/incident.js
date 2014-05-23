@@ -9,6 +9,7 @@ var schema = new mongoose.Schema({
   latitude: Number,
   longitude: Number,
   updatedAt: Date,
+  storedAt: Date,
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
   verified: {type: Boolean, default: false, required: true},
@@ -16,6 +17,7 @@ var schema = new mongoose.Schema({
 });
 
 schema.pre('save', function(next) {
+  if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
   if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
@@ -28,6 +30,30 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
+
+// Query incidents based on passed query data
+Incident.queryIncidents = function(query, page, callback) {
+  if (typeof query === 'function') return Incident.findPage(query);
+  if (typeof page === 'function') {
+    callback = page;
+    page = 0;
+  }
+  if (page < 0) page = 0;
+
+  var filter = {};
+
+  // Return only newer results
+  if (query.since) {
+    filter.storedAt = filter.storedAt || {};
+    filter.storedAt.$gte = query.since;
+  }
+
+  // Re-set search timestamp
+  query.since = new Date();
+
+  // Just use filters when no keywords are provided
+  Incident.findPage(filter, page, {limit: 100}, callback);
+};
 
 // Mixin shared incident methods
 var Shared = require('../shared/incident');

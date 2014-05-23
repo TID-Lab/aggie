@@ -11,14 +11,14 @@ var IncidentQuery = function(options) {
   this.assignedTo = options.assignedTo;
   this.status = options.status;
   this.verified = options.verified;
-  this.event = 'incident';
+  this.event = 'incidents';
 };
 
 _.extend(IncidentQuery, Query);
 util.inherits(IncidentQuery, Query);
 
 IncidentQuery.prototype.runQuery = function(callback) {
-  Incident.queryReports(this, callback);
+  Incident.queryIncidents(this, callback);
 };
 
 // Normalize query for comparison
