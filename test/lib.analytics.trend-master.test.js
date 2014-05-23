@@ -4,7 +4,7 @@ var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
 var Report = require('../models/report');
-var Query = require('../models/query/report-query');
+var ReportQuery = require('../models/query/report-query');
 var _ = require('underscore');
 
 describe('Trend master', function() {
@@ -15,9 +15,9 @@ describe('Trend master', function() {
   });
 
   it('should track all trends', function(done) {
-    Trend.create({_query: Query.hash(new Query({keywords: 'one'}))});
-    Trend.create({_query: Query.hash(new Query({keywords: 'two'}))});
-    Trend.create({_query: Query.hash(new Query({keywords: 'three'}))});
+    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'one'}))});
+    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'two'}))});
+    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'three'}))});
     setTimeout(function() {
       expect(trendMaster).to.have.property('trends');
       expect(trendMaster.trends).to.be.an.instanceof(Array);
@@ -79,7 +79,7 @@ describe('Trend master', function() {
 
   it('should trigger a trend to run a query', function(done) {
     trendMaster.disable();
-    Trend.create({_query: Query.hash(new Query({keywords: 'four'}))});
+    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'four'}))});
     setTimeout(function() {
       Report.create({content: 'four'});
       Report.create({content: 'four'});
@@ -141,7 +141,7 @@ describe('Trend master', function() {
       }
     });
     // Create a new trend while queries are running
-    Trend.create({_query: Query.hash(new Query({keywords: 'five'}))}, function(err, trend) {
+    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'five'}))}, function(err, trend) {
       if (err) return done(err);
     });
     Report.create({content: 'one'});

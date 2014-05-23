@@ -69,7 +69,7 @@ Report.queryReports = function(query, page, callback) {
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
 
-  // Convert sourceId and sourceType for Report compatibility
+  // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
   if (query.sourceType) query.filter._sourceType = query.sourceType;
   if (query.incidentId) query.filter._incident = query.incidentId;

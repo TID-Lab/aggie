@@ -17,7 +17,7 @@ var ReportQuery = function(options) {
 _.extend(ReportQuery, Query);
 util.inherits(ReportQuery, Query);
 
-ReportQuery.prototype.runQuery = function(callback) {
+ReportQuery.prototype.run = function(callback) {
   Report.queryReports(this, function(err, results) {
     callback(err, results);
   });

@@ -8,8 +8,8 @@ var Query = function(attributes) {
 };
 
 // Query database
-Query.prototype.runQuery = function(callback) {
-  throw new Error('runQuery method needs to be implemented');
+Query.prototype.run = function(callback) {
+  throw new Error('run method needs to be implemented');
 };
 
 // Normalize query for comparison
