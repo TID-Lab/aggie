@@ -9,13 +9,65 @@ angular.module('Aggie')
   'reports',
   'sources',
   'Report',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report) {
+  'Socket',
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report, Socket) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
     $scope.startDate = $stateParams.after || '';
     $scope.endDate = $stateParams.before || '';
     $scope.sourceType = $stateParams.sourceType || '';
     $scope.status = $stateParams.status || '';
+
+    var search = function(page) {
+      $state.go('reports', searchParams(page));
+    };
+
+    var searchParams = function(page) {
+      return {
+        keywords: $scope.keywords,
+        after: $scope.startDate,
+        before: $scope.endDate,
+        sourceType: $scope.sourceType,
+        page: page,
+        status: $scope.status
+      };
+    };
+
+    $scope.newReports = [];
+    $scope.newReportsCount = 0;
+    var newReportAvailable = function(report) {
+      $scope.newReportAvailable = true;
+      $scope.newReportsCount += 1;
+      if ($scope.newReportsCount > 25) {
+        $scope.newReportsCount = 25;
+        $scope.newReports.splice(0, 1, report);
+      } else {
+        $scope.newReports.unshift(report);
+      }
+    };
+
+    Socket.emit('query', searchParams(null));
+    Socket.on('reports', function(report) {
+      newReportAvailable(report.results[0]);
+    });
+
+    $scope.displayNewReports = function() {
+      if ($scope.newReportsCount > 24) {
+        $scope.reportsArray = $scope.newReports;
+        $scope.reports = paginate($scope.newReports).
+          reduce(groupById, {});
+      } else {
+        var args = [0, $scope.newReports.length].
+          concat($scope.newReports);
+        Array.prototype.splice.apply($scope.reportsArray, args);
+        $scope.reports = paginate($scope.reportsArray).
+          reduce(groupById, {});
+        $scope.originalReports = angular.copy($scope.reports);
+      }
+      $scope.newReportAvailable = false;
+      $scope.newReportsCount = 0;
+      $scope.newReports = [];
+    };
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -53,6 +105,7 @@ angular.module('Aggie')
       'relevant', 'irrelevant', 'unassigned', 'assigned'
     ];
     $scope.sources = sources.reduce(groupById, {});
+    $scope.reportsArray = reports.results;
     $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
 
