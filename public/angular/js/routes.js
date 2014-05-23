@@ -69,7 +69,7 @@ angular.module('Aggie')
       controller: 'SourcesShowController',
       resolve: {
         source: ['Source', '$stateParams', function(Source, params) {
-          return Source.get({id: params.id}).$promise;
+          return Source.get({ id: params.id }).$promise;
         }]
       }
     });
