@@ -14,10 +14,5 @@ angular.module('Aggie')
     Socket.on('sourceErrorCountUpdated', function(source) {
       $rootScope.sourceWithErrors = source;
     });
-
-    Socket.on('fetchingStatusUpdate', function(data) {
-      $rootScope.fetchStatus = data.fetching;
-    });
-
   }
 ]);

@@ -30,7 +30,7 @@ angular.module('Aggie')
       }, failure);
     },
     set: function(enabled) {
-      return Fetching.toggle({ op: enabled == 'true' ? 'on' : 'off' }, {})
+      return Fetching.toggle({ op: enabled ? 'on' : 'off' }, {})
     }
   }
 })
