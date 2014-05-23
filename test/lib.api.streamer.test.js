@@ -1,7 +1,7 @@
 require('./init');
 var expect = require('chai').expect;
 var streamer = require('../lib/api/streamer');
-var Query = require('../lib/query/query');
+var ReportQuery = require('../models/query/report-query');
 var Report = require('../models/report');
 
 describe('Streamer', function() {
@@ -15,8 +15,8 @@ describe('Streamer', function() {
   });
 
   it('should track Query objects', function(done) {
-    var queryOne = new Query({type: 'Report', keywords: 'one'});
-    var queryTwo = new Query({type: 'Report', keywords: 'two'});
+    var queryOne = new ReportQuery({keywords: 'one'});
+    var queryTwo = new ReportQuery({keywords: 'two'});
     streamer.addQuery(queryOne);
     streamer.addQuery(queryTwo);
     expect(streamer.queries).to.be.an.instanceof(Array);
@@ -27,12 +27,10 @@ describe('Streamer', function() {
   it('should run queries and emit results', function(done) {
     var remaining = streamer.queries.length;
     streamer.on('reports', function(query, reports) {
-      expect(reports).to.contain.property('total');
-      expect(reports).to.contain.property('results');
-      expect(reports.results).to.be.an.instanceof(Array);
-      expect(reports.results).to.not.be.empty;
-      expect(reports.results[0]).to.be.an.instanceof(Report);
-      expect(reports.results[0].content).to.match(/(one|two)/);
+      expect(reports).to.be.an.instanceof(Array);
+      expect(reports).to.not.be.empty;
+      expect(reports[0]).to.be.an.instanceof(Report);
+      expect(reports[0].content).to.match(/(one|two)/);
       if (--remaining === 0) {
         streamer.removeAllListeners('reports');
         done();
@@ -43,7 +41,7 @@ describe('Streamer', function() {
 
   it('should listen to new reports and re-start query', function(done) {
     streamer.queries = [];
-    var queryThree = new Query({type: 'Report', keywords: 'three'});
+    var queryThree = new ReportQuery({keywords: 'three'});
     streamer.addQuery(queryThree);
     streamer.addListeners('report', Report.schema);
     process.nextTick(function() {
@@ -51,12 +49,10 @@ describe('Streamer', function() {
       Report.create({content: 'Three three'});
     });
     streamer.once('reports', function(query, reports) {
-      expect(reports).to.contain.property('total');
-      expect(reports).to.contain.property('results');
-      expect(reports.results).to.be.an.instanceof(Array);
-      expect(reports.results).to.not.be.empty;
-      expect(reports.results[0]).to.be.an.instanceof(Report);
-      expect(reports.results[0].content).to.contain('three');
+      expect(reports).to.be.an.instanceof(Array);
+      expect(reports).to.not.be.empty;
+      expect(reports[0]).to.be.an.instanceof(Report);
+      expect(reports[0].content).to.contain('three');
       done();
     });
   });

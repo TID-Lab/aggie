@@ -44,7 +44,6 @@ var Report = mongoose.model('Report', schema);
 // Query reports based on passed query data
 Report.queryReports = function(query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);
-  if (query instanceof Query) query = query.normalize();
   if (typeof page === 'function') {
     callback = page;
     page = 0;

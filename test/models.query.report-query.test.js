@@ -1,11 +1,11 @@
 require('./init');
 var expect = require('chai').expect;
-var Query = require('../lib/query/query');
+var ReportQuery = require('../models/query/report-query');
 
 var queryData, queryId;
 describe('Query attributes', function() {
   before(function() {
-    query = new Query({type: 'Report', keywords: 'zero one two three'});
+    query = new ReportQuery({keywords: 'zero one two three'});
   });
 
   it('should normalize query and sort keywords', function() {
@@ -15,12 +15,14 @@ describe('Query attributes', function() {
   });
 
   it('should hash a query into a string', function() {
-    var hash = Query.hash({type: 'Report', keywords: 'three two zero one'});
-    expect(hash).to.equal('{"type":"Report","keywords":"one three two zero"}');
+    var otherQuery = new ReportQuery({keywords: 'three two zero one'});
+    var hash = ReportQuery.hash(otherQuery);
+    expect(hash).to.equal('{"keywords":"one three two zero"}');
   });
 
   it('should compare queries', function() {
-    var compare = Query.compare({type: 'Report', keywords: 'three two zero one'}, query);
+    var otherQuery = new ReportQuery({keywords: 'three two zero one'});
+    var compare = ReportQuery.compare(otherQuery, query);
     expect(compare).to.be.true;
   });
 });

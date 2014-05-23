@@ -4,7 +4,7 @@ var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
 var Report = require('../models/report');
-var Query = require('../lib/query/report-query');
+var Query = require('../models/query/report-query');
 var _ = require('underscore');
 
 describe('Trend master', function() {

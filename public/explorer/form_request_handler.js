@@ -14,7 +14,7 @@ var FormRequestHandler = RequestHandler.extend({
       // Send query to get data back
       if (socket) {
         if (form.attr('id') === 'reportQuery') {
-          socket.emit('reportQuery', form.serializeHash());
+          socket.emit('query', form.serializeHash());
         } else if (form.attr('id') === 'incidentQuery') {
           socket.emit('incidentQuery', form.serializeHash());
         }

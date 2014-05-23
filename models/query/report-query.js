@@ -1,5 +1,5 @@
-var Report = require('../../models/report');
-var Query = require('./query');
+var Report = require('../report');
+var Query = require('../query');
 var util = require('util');
 var _ = require('underscore');
 
@@ -11,14 +11,16 @@ var ReportQuery = function(options) {
   this.sourceId = options.sourceId;
   this.sourceType = options.sourceType;
   this.incidentId = options.incidentId;
-  this.resultEvent = 'reports';
+  this.event = 'reports';
 };
 
 _.extend(ReportQuery, Query);
 util.inherits(ReportQuery, Query);
 
 ReportQuery.prototype.runQuery = function(callback) {
-  Report.queryReports(this, callback);
+  Report.queryReports(this, function(err, results) {
+    callback(err, results);
+  });
 };
 
 // Normalize query for comparison

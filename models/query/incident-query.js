@@ -1,5 +1,5 @@
-var Incident = require('../../models/incident');
-var Query = require('./query');
+var Incident = require('../incident');
+var Query = require('../query');
 var util = require('util');
 var _ = require('underscore');
 
@@ -11,7 +11,7 @@ var IncidentQuery = function(options) {
   this.assignedTo = options.assignedTo;
   this.status = options.status;
   this.verified = options.verified;
-  this.resultEvent = 'incident';
+  this.event = 'incident';
 };
 
 _.extend(IncidentQuery, Query);

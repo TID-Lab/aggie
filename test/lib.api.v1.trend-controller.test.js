@@ -4,7 +4,8 @@ var request = require('supertest');
 var _ = require('underscore');
 var trendController = require('../lib/api/v1/trend-controller')();
 var Trend = require('../models/trend');
-var Query = require('../lib/query/query');
+var Query = require('../models/query');
+var ReportQuery = require('../models/query/report-query');
 
 var trend;
 describe('Trend controller', function() {
@@ -47,9 +48,9 @@ describe('Trend controller', function() {
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
-      Trend.create({_query: Query.hash({type: 'Trend', keywords: '123'})});
-      Trend.create({_query: Query.hash({type: 'Trend', keywords: '456'})});
-      Trend.create({_query: Query.hash({type: 'Trend', keywords: '789'})});
+      Trend.create({_query: Query.hash(new ReportQuery({keywords: '123'}))});
+      Trend.create({_query: Query.hash(new ReportQuery({keywords: '456'}))});
+      Trend.create({_query: Query.hash(new ReportQuery({keywords: '789'}))});
       setTimeout(function() {
         request(trendController)
           .get('/api/v1/trend')
