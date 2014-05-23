@@ -4,15 +4,34 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   'Fetching',
-  function($scope, $rootScope, Fetching) {
-    $rootScope.fetchStatus = false;
+  'Socket',
+  function($scope, $rootScope, Fetching, Socket) {
+    $scope.fetchStatus == null;
 
-    Fetching.get(function(enabled) {
-      $rootScope.fetchStatus = enabled;
+    var parseStatus = function(status) {
+      if (typeof status == 'string') {
+        return status === 'true';
+      } else {
+        return !!status;
+      }
+    }
+
+    Fetching.get(function(fetchStatus) {
+      $scope.fetchStatus = parseStatus(fetchStatus);
     });
 
-    $scope.toggleFetching = function() {
-      Fetching.set($rootScope.fetchStatus);
-    };
+    Socket.on('fetchingStatusUpdate', function(data) {
+      var oldStatus = parseStatus($scope.fetchStatus),
+        newStatus = parseStatus(data.fetching);
+      if (newStatus === oldStatus) { return }
+      $scope.fetchStatus = newStatus;
+    });
+
+    $scope.$watch('fetchStatus', function(newStatus, oldStatus) {
+      newStatus = parseStatus(newStatus);
+      oldStatus = parseStatus(oldStatus);
+      if (newStatus === oldStatus) { return }
+      Fetching.set(newStatus);
+    });
   }
 ]);
