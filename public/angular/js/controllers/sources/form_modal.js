@@ -8,38 +8,72 @@ angular.module('Aggie')
   'Source',
   'FlashService',
   function($rootScope, $scope, $location, $modal, Source, flash) {
-    $scope.open = function() {
+    $scope.create = function() {
       var modalInstance = $modal.open({
-        controller: 'CreateSourceModalInstanceController',
-        templateUrl: 'templates/sources/create_modal.html',
+        controller: 'SourceFormModalInstanceController',
+        templateUrl: 'templates/sources/modal.html',
         resolve: {
           sources: ['Source', function(Source) {
             return Source.query().$promise;
-          }]
+          }],
+          locals: function() {
+            return {
+              action: 'create',
+              source: {}
+            };
+          }
         }
       });
 
       modalInstance.result.then(function(source) {
         Source.create({ source: source }, function(response) {
           flash.setNotice('Source was successfully created.');
-          $scope.refresh();
+          $rootScope.$state.go('source', { id: response._id }, { reload: true });
         }, function(err) {
           flash.setAlertNow('Source failed to be created. Please contact support.');
+        });
+      });
+    };
+
+    $scope.edit = function() {
+      var modalInstance = $modal.open({
+        controller: 'SourceFormModalInstanceController',
+        templateUrl: '/templates/sources/modal.html',
+        resolve: {
+          sources: ['Source', function(Source) {
+            return Source.query().$promise;
+          }],
+          locals: function() {
+            return {
+              action: 'edit',
+              source: $scope.source
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function(source) {
+        Source.update({ id: source._id }, source, function(response) {
+          flash.setNotice('Source was successfully updated.');
+          $rootScope.$state.go('source', { id: source._id }, { reload: true });
+        }, function() {
+            flash.setAlertNow('Source failed to be updated.');
         });
       });
     };
   }
 ])
 
-.controller('CreateSourceModalInstanceController', [
+.controller('SourceFormModalInstanceController', [
   '$scope',
   '$modalInstance',
   'sourceTypes',
   'sources',
-  function($scope, $modalInstance, sourceTypes, sources) {
+  'locals',
+  function($scope, $modalInstance, sourceTypes, sources, locals) {
     $scope.sources = sources;
     $scope.sourceTypes = sourceTypes;
-    $scope.source = {};
+    $scope.source = angular.copy(locals.source);
     $scope._showErrors = false
 
     $scope.sourceClass = function(source) {
@@ -50,11 +84,11 @@ angular.module('Aggie')
       }
     };
 
-    $scope.validSourceType = function(newSource) {
-      if (newSource.type != 'twitter') { return true }
+    $scope.validSourceType = function(formSource) {
+      if (formSource.type != 'twitter') { return true }
       var valid = true;
       $scope.sources.forEach(function(source) {
-        valid = valid && source.type != 'twitter';
+        valid = valid && (source._id == formSource._id || source.type != 'twitter')
       });
       return valid;
     };
@@ -62,8 +96,7 @@ angular.module('Aggie')
     $scope.$watch('source.type', function(newType, oldType) {
       if (newType == 'twitter') {
         $scope.source.nickname = 'Twitter Source';
-      }
-      if (oldType == 'twitter') {
+      } else if (oldType == 'twitter') {
         $scope.source.nickname = '';
       }
     });
