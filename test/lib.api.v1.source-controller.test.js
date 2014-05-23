@@ -8,6 +8,7 @@ var Source = require('../models/source');
 describe('Source controller', function() {
   before(function(done) {
     source = {
+      nickname: 'test',
       type: 'twitter',
       keywords: 'test'
     };
@@ -31,7 +32,7 @@ describe('Source controller', function() {
     it('should not allow the creation of multiple twitter sources', function(done) {
       request(sourceController)
         .post('/api/v1/source')
-        .send({type: 'twitter', keywords: 'test2'})
+        .send({nickname: 'test', type: 'twitter', keywords: 'test2'})
         .expect(422, 'only_one_twitter_allowed', done);
     });
   });

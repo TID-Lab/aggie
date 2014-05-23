@@ -11,9 +11,9 @@ describe('Fetching controller', function() {
     botMaster.addListeners('source', Source.schema);
     botMaster.addListeners('fetching', fetchingController);
     fetchingController.addListeners('botMaster', botMaster);
-    Source.create({type: 'dummy', keywords: 'one'});
-    Source.create({type: 'dummy', keywords: 'two'});
-    Source.create({type: 'dummy', keywords: 'three'});
+    Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
+    Source.create({nickname: 'two', type: 'dummy', keywords: 'two'});
+    Source.create({nickname: 'three', type: 'dummy', keywords: 'three'});
     done();
   });
 
