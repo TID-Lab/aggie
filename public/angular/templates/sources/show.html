@@ -40,7 +40,8 @@
 </div>
 
 <div ng-show="source.events.length > 0">
-  <table class="table events">
+  <table class="table events" ng-show="source.events.length > 0">
+    <caption>Notices</caption>
     <thead>
       <tr>
         <td class="compact">Time</td>
@@ -51,7 +52,7 @@
     <tbody>
       <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
         <td class="time compact">{{ e.datetime | aggieDate:'timestamp' }}</td>
-        <td class="type compact">{{ e.type }}</td>
+        <td class="type compact">{{ e.level }}</td>
         <td class="expand">{{ e.message }}</td>
       </tr>
     </tbody>

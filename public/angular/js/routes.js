@@ -49,10 +49,7 @@ angular.module('Aggie')
 
     $stateProvider.state('incidents', {
       url: '/incidents',
-      templateUrl: '/templates/incidents.html',
-      controller: function($scope) {
-        $scope.items = ['A', 'List', 'Of', 'Incidents'];
-      }
+      templateUrl: '/templates/incidents.html'
     });
 
     $stateProvider.state('sources', {

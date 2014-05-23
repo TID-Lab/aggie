@@ -59,8 +59,6 @@ label {
 }
 
 .form-control {
-  font-size: 12px;
-  height: 25px;
   box-shadow: none;
   background-color: #f3f6f9;
   padding: 4px 8px;
@@ -131,6 +129,9 @@ label {
   padding: 4px 8px;
   background-color: #f3f6f9;
   color: #000;
+  .read-only & {
+    background-color: #ebebeb;
+  }
 }
 .btn-default {
   background-color: #5BC0DE;
@@ -178,6 +179,22 @@ input[type="date"] {
   }
 }
 
+.help-block {
+  color: #999;
+  margin: 5px 0 0 0;
+  line-height: 1.5em;
+}
+
+.modal-header {
+  .close {
+    z-index: 1000;
+    float: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+}
+
 .events .time {
   width: 10%;
 }
@@ -185,3 +202,5 @@ input[type="date"] {
 .events .type {
   width: 15%;
 }
+
+
