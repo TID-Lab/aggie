@@ -1,6 +1,6 @@
-<div class="row table-filters">
-  <div class="col-md-3">
-    <form>
+<form>
+  <div class="table-filters">
+    <div class="filter search">
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
@@ -10,36 +10,38 @@
           <button type="submit" class="btn btn-info" href ng-click="search()">Go</button>
         </span>
       </div>
-    </form>
+    </div>
+    <div class="filter status-filter">
+      <select ng-model="status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
+        <option value="">Filter by Status</option>
+      </select>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="sourceType" ng-options="value.type as (value.nickname + ' (' + value.type + ')') for (key, value) in sources" ng-change="search()" class="form-control">
+        <option value="">Filter by Source</option>
+      </select>
+    </div>
+    <div class="filter date-filter">
+      <label for="start">Filter From:</label>
+      <input id="start" ng-model="startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+    </div>
+    <div class="filter date-filter">
+      <label for="end">To:</label>
+      <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+    </div>
+    <div class="filter pagination">
+      <ul class="pager">
+        <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}</li>
+        <li>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="col-md-2">
-    <select ng-model="status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
-      <option value="">Filter by Status</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <select ng-model="sourceType" ng-options="value.type as value.type for (key, value) in sources" ng-change="search()" class="form-control">
-      <option value="">Filter by Source</option>
-    </select>
-  </div>
-  <div class="col-sm-5">
-    <label for="start">Filter from:</label>
-    <input id="start" ng-model="startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
-    <label for="end">Filter to:</label>
-    <input id="end" ng-model="endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
-  </div>
-  <div class="col pull-right">
-    <ul class="pager">
-      {{ pagination.start }} - {{ pagination.end }} of {{ paginationTotalLabel() }}
-      <li>
-        <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-      </li>
-      <li>
-        <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-      </li>
-    </ul>
-  </div>
-</div>
+</form>
 
 <div class="bs-component" ng-hide="pagination.total > 0">
   <div class="alert alert-warning">
@@ -59,7 +61,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in reports | orderBy:'+storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
+    <tr ng-repeat="r in reports | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -70,16 +72,12 @@
         </div>
         <div class="created">{{ r | delay }}</div>
       </td>
-      <td class="compact source" ng-class="sources[r._source].type + '-source'"><div class="icon-left">{{sources[r._source].keywords}}</div></td>
+      <td class="compact source" ng-class="sourceClass(r)"><div class="icon-left">{{sources[r._source].nickname}}</div></td>
       <td class="compact author">{{ r.author }}</td>
       <td class="content">{{ r.content }}</td>
       <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>
-      <td class="status toggle" ng-click="rotateStatus(r)">
-          <div class="toggle-switch" ng-hide="isUnassigned(r)">
-            <div class="toggle-item" ng-class="{ selected: isRelevant(r) }">Rel</div>
-            <div class="toggle-item" ng-class="{ selected: isIrrelevant(r) }">Irr</div>
-          </div>
-          <div class="toggle-off" ng-show="isUnassigned(r)">Unassigned</div>
+      <td class="status">
+        <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
       </div>
       </td>
     </tr>

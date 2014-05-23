@@ -5,6 +5,7 @@ var socket = io.connect('/');
 socket.on('fetchingStatusUpdate', prependData('fetchingStatusUpdate'));
 socket.on('reportStatusChanged', prependData('reportStatusChanged'));
 socket.on('reportIncidentChanged', prependData('reportIncidentChanged'));
+socket.on('sourceErrorCountUpdated', prependData('sourceErrorCountUpdated'));
 socket.on('reports', prependData('reports'));
 socket.on('incidents', prependData('incidents'));
 socket.on('trend', prependData('trend'));

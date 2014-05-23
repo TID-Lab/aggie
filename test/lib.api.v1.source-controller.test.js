@@ -114,9 +114,8 @@ describe('Source controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.have.property('events');
-          expect(res.body.events).to.be.an.instanceof(Array);
-          expect(res.body.events).to.be.empty;
+          expect(res.body).to.have.property('unreadErrorCount');
+          expect(res.body.unreadErrorCount).to.equal(0);
           done();
         });
     });

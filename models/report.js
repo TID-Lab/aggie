@@ -15,7 +15,8 @@ var schema = new mongoose.Schema({
   url: String,
   _source: {type: String, ref: 'Source'},
   _sourceType: String,
-  _incident: {type: String, ref: 'Incident'},
+  _sourceNickname: String,
+  _incident: {type: String, ref: 'Incident'}
 });
 
 // Give the report schema text search capabilities

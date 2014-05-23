@@ -1,0 +1,59 @@
+<div class="bs-component">
+  <ul class="breadcrumb">
+    <li><a ui-sref="sources">Sources</a></li>
+    <li class="active">{{ source.nickname }}</li>
+  </ul>
+</div>
+
+<table class="table detail-table">
+  <tbody>
+    <tr>
+      <td class="detail-key">Source</td>
+      <td class="detail-value">{{ source.nickname }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Type</td>
+      <td class="detail-value">{{source.type}}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Target</td>
+      <td class="detail-value">
+        <span ng-switch="source.type">
+          <span ng-when="twitter">{{source.keywords}}</span>
+          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="detail-key">Enabled</td>
+      <td class="detail-value">{{ source.enabled}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h5>Events</h5>
+<div class="bs-component" ng-hide="source.events.length > 0">
+  <div class="alert alert-info">
+    <h4>There are no events to display.</h4>
+  </div>
+</div>
+
+<div ng-show="source.events.length > 0">
+  <table class="table events">
+    <thead>
+      <tr>
+        <td class="compact">Time</td>
+        <td class="compact">Level</td>
+        <td class="expand">Message</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
+        <td class="time compact">{{ e.datetime | aggieDate:'timestamp' }}</td>
+        <td class="type compact">{{ e.type }}</td>
+        <td class="expand">{{ e.message }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

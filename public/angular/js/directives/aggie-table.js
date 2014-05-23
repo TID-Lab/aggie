@@ -1,11 +1,13 @@
 angular.module('Aggie')
 
-.directive('aggieTable', function() {
-  return {
-    restrict: 'EAC',
-    transclude: true,
-    link: function(scope, el) {
-      el.addClass('table');
-    }
-  };
-});
+.directive('aggieTable', [
+  '$timeout',
+  function($timeout) {
+    return {
+      restrict: 'A',
+      link: function($scope, $el, $attrs) {
+        $el.addClass('table');
+      }
+    };
+  }
+]);

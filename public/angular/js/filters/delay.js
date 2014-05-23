@@ -17,11 +17,3 @@ angular.module('Aggie')
     return '';
   };
 })
-
-.filter('interval', function() {
-  return function(time) {
-    var now = new Date().getTime();
-    var then = new Date(time).getTime();
-    return abbreviatedHuman(now - then);
-  };
-});

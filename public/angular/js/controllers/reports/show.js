@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.controller('ShowReportController', [
+.controller('ReportsShowController', [
   '$scope',
   '$stateParams',
   'Report',
