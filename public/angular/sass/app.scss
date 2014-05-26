@@ -48,12 +48,15 @@ a {
   .navbar-text {
     line-height: 26px;
   }
+  .container {
+    position: relative;
+  }
 }
 
 .navbar-text {
   line-height: 1;
   margin: 0;
-  padding: 8px;
+  padding: 8px 0;
 }
 
 .nav li.user {
@@ -183,15 +186,11 @@ input[type="date"] {
   color: red;
 }
 
-.navbar-stats .container {
-  position: relative;
-}
-
 .fetching {
   position: absolute;
-  right: 0;
+  right: 15px;
   top: 0;
-  padding: 8px;
+  padding: 8px 0;
   height: 26px;
 }
 

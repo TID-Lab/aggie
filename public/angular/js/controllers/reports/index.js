@@ -47,8 +47,11 @@ angular.module('Aggie')
     };
 
     Socket.emit('query', searchParams(null));
-    Socket.on('reports', function(report) {
-      newReportAvailable(report.results[0]);
+
+    Socket.on('reports', function(reports) {
+      reports.forEach(function(report) {
+        newReportAvailable(report);
+      });
     });
 
     $scope.displayNewReports = function() {
@@ -108,18 +111,6 @@ angular.module('Aggie')
     $scope.reportsArray = reports.results;
     $scope.reports = paginate(reports.results).reduce(groupById, {});
     $scope.originalReports = angular.copy($scope.reports);
-
-    var search = function(page) {
-      if (!$scope.keywords.length) { $scope.keywords = null }
-      $state.go('reports', {
-        keywords: $scope.keywords || null,
-        after: $scope.startDate,
-        before: $scope.endDate,
-        sourceType: $scope.sourceType,
-        page: page,
-        status: $scope.status
-      });
-    };
 
     $scope.search = function() {
       if (!$scope.keywords.length) { $scope.keywords = null }

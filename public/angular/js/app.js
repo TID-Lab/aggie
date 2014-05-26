@@ -38,11 +38,13 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   'elmo': 'Elmo'
 });
 
-
 // Services
 require('./services/auth');
-require('./services/factories');
+require('./services/fetching');
 require('./services/flash');
+require('./services/report');
+require('./services/socket');
+require('./services/source');
 
 // Controllers
 require('./controllers/application');
@@ -55,7 +57,7 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
-require('./controllers/fetch');
+require('./controllers/fetching');
 
 // Routes
 require('./routes');
