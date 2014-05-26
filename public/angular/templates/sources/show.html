@@ -41,11 +41,8 @@
 
 
 <h5>Events</h5>
-<div class="bs-component" ng-hide="source.events.length > 0">
-  <div class="alert alert-info">
-    <h4>There are no events to display.</h4>
-  </div>
-</div>
+
+<p ng-hide="source.events.length > 0">There are no events to display.</p>
 
 <div ng-show="source.events.length > 0">
   <table class="table events" ng-show="source.events.length > 0">

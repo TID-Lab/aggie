@@ -3,19 +3,20 @@
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
       <div class="source" ng-class="sourceClass(source)">
-        <div class="icon-left">Create Source</div>
+        <div class="icon-left">{{ source._id ? 'Edit' : 'Create' }} Source</div>
     </h4>
   </div>
   <div class="modal-body">
     <div class="well bs-component">
       <form name="form" class="form-horizontal">
         <fieldset>
-          <div class="form-group">
+          <div class="form-group" ng-class="{ 'read-only': source._id }">
             <label for="type" class="col-lg-3 control-label">Type</label>
             <div class="col-lg-6">
-              <select name="type" class="form-control" ng-model="source.type" ng-options="value as label for (value, label) in sourceTypes" required>
+              <select name="type" class="form-control" ng-model="source.type" ng-options="value as label for (value, label) in sourceTypes" required ng-hide="source._id">
                 <option value="">Choose source type</option>
               </select>
+              <input type="text" class="form-control" ng-model="source.type" ng-show="source._id" readonly>
               <div class="has-error" ng-show="showErrors()">
                 <div class="help-block" ng-show="form.type.$error.required">Type is required.</div>
               </div>
@@ -55,7 +56,10 @@
             <label for="url" class="col-lg-3 control-label">URL</label>
             <div class="col-lg-6">
               <div class="input-group">
-                <input type="url" ng-model="source.url" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                <div ng-switch="source.type">
+                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/facebook.com\/.+/" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                  <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                </div>
                 <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
               </div>
               <div class="help-block" ng-switch="source.type">
