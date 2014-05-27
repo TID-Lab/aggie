@@ -34,8 +34,8 @@ describe('Query attributes', function() {
 
   it('should compare queries', function() {
     var otherQuery = new IncidentQuery({title: 'qUiCk BrOwN'});
-    var compare = IncidentQuery.compare(otherQuery, query);
-    expect(compare).to.be.true;
+    var similar = IncidentQuery.compare(otherQuery, query);
+    expect(similar).to.be.true;
   });
 
   it('should query by title substring', function(done) {

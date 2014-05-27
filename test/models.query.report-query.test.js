@@ -22,7 +22,7 @@ describe('Query attributes', function() {
 
   it('should compare queries', function() {
     var otherQuery = new ReportQuery({keywords: 'three two zero one'});
-    var compare = ReportQuery.compare(otherQuery, query);
-    expect(compare).to.be.true;
+    var similar = ReportQuery.compare(otherQuery, query);
+    expect(similar).to.be.true;
   });
 });
