@@ -42,6 +42,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 require('./services/auth');
 require('./services/fetching');
 require('./services/flash');
+require('./services/queue');
 require('./services/report');
 require('./services/socket');
 require('./services/source');

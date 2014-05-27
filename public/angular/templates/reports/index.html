@@ -1,4 +1,4 @@
-<alert type="info" ng-show="newReportAvailable" close="newReportAvailable = false"><a href ng-click="displayNewReports()">{{ newReportsCount }} new reports available.</a></alert>
+<alert type="info" ng-hide="newReports.isEmpty()" close="newReports.isEmpty()"><a href ng-click="displayNewReports()">{{ newReports.total > 25 ? '25+' : newReports.total }} new reports available.</a></alert>
 <form>
   <div class="table-filters">
     <div class="filter search">
@@ -59,7 +59,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in reports | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
+    <tr ng-repeat="r in reports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }" ng-click="viewReport($event, r)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>

@@ -8,15 +8,22 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
+  'sourceTypes',
   'Report',
   'Socket',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, Report, Socket) {
+  'Queue',
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, sourceTypes, Report, Socket, Queue) {
     $scope.keywords = $stateParams.keywords || '';
     $scope.currentKeywords = $scope.keywords;
     $scope.startDate = $stateParams.after || '';
     $scope.endDate = $stateParams.before || '';
     $scope.sourceType = $stateParams.sourceType || '';
     $scope.status = $stateParams.status || '';
+    $scope.reportsArray = reports.results;
+    $scope.reports = new Queue(25);
+    $scope.newReports = new Queue(25);
+    $scope.originalReports = angular.copy($scope.reports);
+    $scope.sourceTypes = sourceTypes;
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -27,8 +34,29 @@ angular.module('Aggie')
       end: 0
     };
 
+    var init = function() {
+      var reports = paginate(removeDuplicates($scope.reportsArray)).reverse();
+      $scope.reports.addMany(reports);
+    };
+
+    var removeDuplicates = function(reports) {
+      var ids = [];
+      return reports.filter(function(report) {
+        if (ids.indexOf(report._id) !== -1) {
+          return false;
+        }
+        ids.push(report._id);
+        return true;
+      });
+    };
+
+    $scope.sources = sources.reduce(function(memo, item) {
+      memo[item._id] = item;
+      return memo;
+    });
+
     var search = function(page) {
-      $state.go('reports', searchParams(page));
+      $state.go('reports', searchParams(page), { reload: true });
     };
 
     var searchParams = function(page) {
@@ -42,46 +70,16 @@ angular.module('Aggie')
       };
     };
 
-    $scope.newReports = [];
-    $scope.newReportsCount = 0;
-    var newReportAvailable = function(report) {
-      $scope.newReportAvailable = true;
-      $scope.newReportsCount += 1;
-      if ($scope.newReportsCount > $scope.pagination.perPage) {
-        $scope.newReportsCount = $scope.pagination.perPage;
-        $scope.newReports.splice(0, 1, report);
-      } else {
-        $scope.newReports.unshift(report);
-      }
-    };
-
     Socket.emit('query', searchParams(null));
 
     Socket.on('reports', function(reports) {
-      reports.forEach(function(report) {
-        newReportAvailable(report);
-      });
+      if ($scope.pagination.page > 1) { return }
+      $scope.newReports.addMany(reports);
     });
 
     $scope.displayNewReports = function() {
-      if ($scope.newReportsCount == $scope.pagination.perPage) {
-        $scope.reportsArray = $scope.newReports;
-        $scope.reports = paginate($scope.newReports);
-      } else {
-        var args = [0, $scope.newReports.length].
-          concat($scope.newReports);
-        Array.prototype.splice.apply($scope.reportsArray, args);
-        $scope.reports = paginate($scope.reportsArray);
-        $scope.originalReports = angular.copy($scope.reports);
-      }
-      $scope.newReportAvailable = false;
-      $scope.newReportsCount = 0;
-      $scope.newReports = [];
-    };
-
-    var groupById = function(memo, item) {
-      memo[item._id] = item;
-      return memo;
+      $scope.reports.addMany($scope.newReports.elements.reverse());
+      $scope.newReports.clear();
     };
 
     var paginate = function(items) {
@@ -101,14 +99,6 @@ angular.module('Aggie')
         return items;
       }
     }
-
-    $scope.statuses = [
-      'relevant', 'irrelevant', 'unassigned', 'assigned'
-    ];
-    $scope.sources = sources.reduce(groupById, {});
-    $scope.reportsArray = reports.results;
-    $scope.reports = paginate(reports.results);
-    $scope.originalReports = angular.copy($scope.reports);
 
     $scope.search = function() {
       if (!$scope.keywords.length) { $scope.keywords = null }
@@ -175,13 +165,14 @@ angular.module('Aggie')
     }
 
     $scope.sourceClass = function(report) {
-      var source = $scope.sources[report._source],
-        sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
-      if (source && sourceTypes.indexOf(source.type) !== -1) {
+      var source = $scope.sources[report._source];
+      if (source && $scope.sourceTypes[source.type] !== -1) {
         return source.type + '-source';
       } else {
         return 'unknown-source';
       }
     };
+
+    init();
   }
 ]);
