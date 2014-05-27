@@ -94,4 +94,15 @@ Source.resetUnreadErrorCount = function(_id, callback) {
   });
 };
 
+// Determine total number of errors
+Source.countAllErrors = function(callback) {
+  Source.find({}, 'unreadErrorCount', function(err, sources) {
+    if (err) return callback(err);
+    var total = _.reduce(sources, function(count, source) {
+      return count + source.unreadErrorCount;
+    }, 0);
+    callback(null, total);
+  });
+};
+
 module.exports = Source;
