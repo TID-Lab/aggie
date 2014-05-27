@@ -1,6 +1,6 @@
 {
   "name": "aggie",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/TID-Lab/aggie.git"
@@ -19,8 +19,15 @@
     "express-spa-router": "0.0.6",
     "fbgraph": "~0.2.9",
     "feedparser": "~0.16.6",
+    "glob": "~3.2.9",
+    "gulp-browserify": "0.5.0",
+    "gulp-watchify": "0.2.0",
+    "gulp-rename": "1.2.0",
+    "interval-to-human": "~0.1.1",
     "mongoose": "~3.8.7",
     "mongoose-text-search": "0.0.2",
+    "mongoose-validator": "~0.2.2",
+    "node-sass": "~0.8.6",
     "nodemailer": "~0.6.3",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
@@ -28,20 +35,19 @@
     "request": "~2.34.0",
     "resanitize": "~0.3.0",
     "socket.io": "~0.9.16",
+    "timekeeper": "0.0.4",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
-    "passport.socketio": "~3.0.1",
-    "node-sass": "~0.8.6"
+    "vinyl-source-stream": "~0.1.1"
   },
   "devDependencies": {
     "chai": "~1.9.0",
-    "mocha": "~1.17.1",
-    "supertest": "~0.9.0",
     "gulp": "~3.5.5",
+    "gulp-concat": "2.2.0",
     "gulp-jshint": "~1.5.0",
     "gulp-mocha": "~0.4.1",
-    "gulp-jshint": "~1.5.0",
-    "gulp-concat": "2.2.0"
+    "mocha": "~1.17.1",
+    "supertest": "~0.9.0"
   },
   "subdomain": "aggie",
   "engines": {

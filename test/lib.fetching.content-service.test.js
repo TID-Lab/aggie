@@ -7,7 +7,7 @@ var Source = require('../models/source');
 
 describe('Content service', function() {
   before(function(done) {
-    var source = new Source({type: 'dummy', keywords: 't'});
+    var source = new Source({nickname: 't', type: 'dummy', keywords: 't'});
     contentService = contentServiceFactory.create({source: source});
 
     done();

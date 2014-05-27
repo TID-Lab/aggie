@@ -9,10 +9,7 @@ var Query = require('../models/query');
 var trend;
 describe('Trend controller', function() {
   before(function(done) {
-    var query = new Query({type: 'Report', keywords: 'test'});
-    trend = {
-      _query: query._id.toString()
-    };
+    trend = {keywords: 'test'};
     done();
   });
 
@@ -25,7 +22,9 @@ describe('Trend controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('_query');
           trend._id = res.body._id;
+          trend._query = res.body._query;
           compare.call(this, res.body, trend);
           done();
         });
@@ -45,9 +44,30 @@ describe('Trend controller', function() {
     });
   });
 
+  describe('GET /api/v1/trend', function() {
+    it('should get a list of all trends', function(done) {
+      // Add an additional 3 trends
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '123'})});
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '456'})});
+      Trend.create({_query: Query.hash({type: 'Trend', keywords: '789'})});
+      setTimeout(function() {
+        request(trendController)
+          .get('/api/v1/trend')
+          .expect(200)
+          .end(function(err, res) {
+            if (err) return done(err);
+            expect(res.body).to.be.an.instanceof(Array);
+            expect(res.body).to.have.length(4);
+            compare(_.findWhere(res.body, {_id: trend._id}), trend);
+            done();
+          });
+      }, 100);
+    });
+  });
+
   describe('PUT /api/v1/trend/:_id/:op', function() {
     it('should disable trend', function(done) {
-      Trend.schema.on('disable', function(trendId) {
+      Trend.schema.on('trend:disable', function(trendId) {
         expect(trendId._id).to.equal(trend._id);
         done();
       });
@@ -59,7 +79,7 @@ describe('Trend controller', function() {
         });
     });
     it('should enable trend', function(done) {
-      Trend.schema.on('enable', function(trendId) {
+      Trend.schema.on('trend:enable', function(trendId) {
         expect(trendId._id).to.equal(trend._id);
         done();
       });
@@ -74,25 +94,6 @@ describe('Trend controller', function() {
       request(trendController)
         .put('/api/v1/trend/' + trend._id + '/toggle')
         .expect(422, done);
-    });
-  });
-
-  describe('GET /api/v1/trend', function() {
-    it('should get a list of all trends', function(done) {
-      // Add an additional 3 trends
-      Trend.create({_query: '123456'});
-      Trend.create({_query: '123456'});
-      Trend.create({_query: '123456'});
-      request(trendController)
-        .get('/api/v1/trend')
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.have.length(4);
-          compare(_.findWhere(res.body, {_id: trend._id}), trend);
-          done();
-        });
     });
   });
 

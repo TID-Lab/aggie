@@ -8,6 +8,7 @@ var Source = require('../models/source');
 describe('Source controller', function() {
   before(function(done) {
     source = {
+      nickname: 'test',
       type: 'twitter',
       keywords: 'test'
     };
@@ -31,7 +32,7 @@ describe('Source controller', function() {
     it('should not allow the creation of multiple twitter sources', function(done) {
       request(sourceController)
         .post('/api/v1/source')
-        .send({type: 'twitter', keywords: 'test2'})
+        .send({nickname: 'test', type: 'twitter', keywords: 'test2'})
         .expect(422, 'only_one_twitter_allowed', done);
     });
   });
@@ -61,7 +62,6 @@ describe('Source controller', function() {
               expect(res.body).to.have.property('events');
               expect(res.body).to.have.property('unreadErrorCount')
               expect(res.body.events).to.be.an.instanceof(Array);
-              expect(res.body.events).to.have.length(1);
               expect(res.body.unreadErrorCount).to.equal(1);
               source.events = res.body.events;
               source.unreadErrorCount = res.body.unreadErrorCount;
@@ -114,8 +114,7 @@ describe('Source controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.have.property('events');
-          expect(res.body.events).to.be.an.instanceof(Array);
-          expect(res.body.events).to.be.empty;
+          expect(res.body.unreadErrorCount).to.equal(0);
           done();
         });
     });
