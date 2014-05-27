@@ -69,7 +69,9 @@
         </div>
         <div class="created">{{ r | delay }}</div>
       </td>
-      <td class="compact source" ng-class="sourceClass(r)"><div class="icon-left">{{sources[r._source].nickname}}</div></td>
+      <td class="compact source" ng-class="sourceClass(r)">
+        <div class="icon-left">{{sources[r._source].nickname || '[Deleted]'}}</div>
+      </td>
       <td class="compact author">{{ r.author }}</td>
       <td class="content">{{ r.content }}</td>
       <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>

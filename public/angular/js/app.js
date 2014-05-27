@@ -34,8 +34,8 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 .value('sourceTypes', {
   'twitter': 'Twitter',
   'facebook': 'Facebook',
-  'rss': 'RSS',
-  'elmo': 'Elmo'
+  // 'rss': 'RSS',
+  // 'elmo': 'Elmo'
 });
 
 // Services
@@ -48,6 +48,7 @@ require('./services/source');
 
 // Controllers
 require('./controllers/application');
+require('./controllers/fetching');
 require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
@@ -57,7 +58,6 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
-require('./controllers/fetching');
 
 // Routes
 require('./routes');
@@ -66,10 +66,10 @@ require('./routes');
 require('./filters/interval');
 require('./filters/delay');
 require('./filters/interval');
-require('./filters/source');
 require('./filters/aggie-date');
 
 // Directives
+require('./directives/aggie-confirm');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/ng-focus');
