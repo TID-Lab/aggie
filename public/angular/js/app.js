@@ -33,8 +33,8 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 
 .value('sourceTypes', {
   'twitter': 'Twitter',
-  'facebook': 'Facebook',
-  // 'rss': 'RSS',
+  // 'facebook': 'Facebook',
+  'rss': 'RSS',
   // 'elmo': 'Elmo'
 });
 

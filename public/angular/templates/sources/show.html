@@ -16,7 +16,7 @@
 <table class="table detail-table">
   <tbody>
     <tr>
-      <td class="detail-key">Source</td>
+      <td class="detail-key">Name</td>
       <td class="detail-value">{{ source.nickname }}</td>
     </tr>
     <tr>
@@ -56,8 +56,8 @@
     </thead>
     <tbody>
       <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
-        <td class="time compact">{{ e.datetime | aggieDate:'timestamp' }}</td>
-        <td class="type compact">{{ e.level }}</td>
+        <td class="time compact">{{ e.datetime | aggieDate:'datetime' }}</td>
+        <td class="type compact">{{ e.type }}</td>
         <td class="expand">{{ e.message }}</td>
       </tr>
     </tbody>

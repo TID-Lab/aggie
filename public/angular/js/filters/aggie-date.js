@@ -4,8 +4,8 @@ angular.module('Aggie')
   return function(data, type) {
     var formats = {
       date: 'HH:mm',
-      time: "dd MM ''''yy",
-      datetime: "HH:mm on dd MM ''''yy",
+      time: "dd MMM ''''yy",
+      datetime: "HH:mm on dd MMM ''''yy",
       timestamp: 'yyyy-MM-ddTHH:mm:ssZ'
     };
 
