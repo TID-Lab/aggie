@@ -57,14 +57,12 @@ angular.module('Aggie')
     $scope.displayNewReports = function() {
       if ($scope.newReportsCount > 24) {
         $scope.reportsArray = $scope.newReports;
-        $scope.reports = paginate($scope.newReports).
-          reduce(groupById, {});
+        $scope.reports = paginate($scope.newReports);
       } else {
         var args = [0, $scope.newReports.length].
           concat($scope.newReports);
         Array.prototype.splice.apply($scope.reportsArray, args);
-        $scope.reports = paginate($scope.reportsArray).
-          reduce(groupById, {});
+        $scope.reports = paginate($scope.reportsArray);
         $scope.originalReports = angular.copy($scope.reports);
       }
       $scope.newReportAvailable = false;
@@ -109,7 +107,7 @@ angular.module('Aggie')
     ];
     $scope.sources = sources.reduce(groupById, {});
     $scope.reportsArray = reports.results;
-    $scope.reports = paginate(reports.results).reduce(groupById, {});
+    $scope.reports = paginate(reports.results);
     $scope.originalReports = angular.copy($scope.reports);
 
     $scope.search = function() {

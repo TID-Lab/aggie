@@ -18,7 +18,7 @@
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="sourceType" ng-options="value.type as (value.nickname + ' (' + value.type + ')') for (key, value) in sources" ng-change="search()" class="form-control">
+      <select ng-model="sourceType" ng-options="value.type as value.nickname for (key, value) in sources" ng-change="search()" class="form-control">
         <option value="">Filter by Source</option>
       </select>
     </div>
