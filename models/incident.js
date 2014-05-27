@@ -44,7 +44,7 @@ Incident.queryIncidents = function(query, page, callback) {
 
   // Create filter object
   Incident.filterAttributes.forEach(function(attr) {
-    if (query[attr]) filter[attr] = query[attr];
+    if (!_.isUndefined(query[attr])) filter[attr] = query[attr];
   });
 
   // Return only newer results

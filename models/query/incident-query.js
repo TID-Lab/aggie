@@ -21,7 +21,9 @@ IncidentQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 IncidentQuery.prototype.normalize = function() {
-  return _.pick(this, ['title', 'locationName', 'assignedTo', 'status', 'verified']);
+  var query = _.pick(this, ['title', 'locationName', 'assignedTo', 'status', 'verified']);
+  if (query.title) query.title = query.title.toLowerCase();
+  return query;
 };
 
 module.exports = IncidentQuery;
