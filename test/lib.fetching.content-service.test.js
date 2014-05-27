@@ -20,15 +20,15 @@ describe('Content service', function() {
   });
 
   it('should instantiate correct facebook content service', function() {
-    expect(fbContentService).to.be.instanceOf(ContentService);
-    expect(fbContentService).to.be.instanceOf(FacebookDummyContentService);
+    expect(contentService).to.be.instanceOf(ContentService);
+    expect(contentService).to.be.instanceOf(DummyContentService);
    
   });
 
 
   it('should fetch content from a specific service', function(done) {
     contentService.start();
-    contentService.on('report', function(report_data) {
+    contentService.once('report', function(report_data) {
       expect(report_data).to.have.property('content');
       expect(report_data.content.toLowerCase()).to.contain('t');
       // Stop stream to ensure a single fetch
