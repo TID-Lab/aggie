@@ -18,6 +18,15 @@ angular.module('Aggie')
     $scope.sourceType = $stateParams.sourceType || '';
     $scope.status = $stateParams.status || '';
 
+    $scope.pagination = {
+      page: parseInt($stateParams.page) || 1,
+      total: reports.total,
+      visibleTotal: reports.total,
+      perPage: 25,
+      start: 0,
+      end: 0
+    };
+
     var search = function(page) {
       $state.go('reports', searchParams(page));
     };
@@ -38,8 +47,8 @@ angular.module('Aggie')
     var newReportAvailable = function(report) {
       $scope.newReportAvailable = true;
       $scope.newReportsCount += 1;
-      if ($scope.newReportsCount > 25) {
-        $scope.newReportsCount = 25;
+      if ($scope.newReportsCount > $scope.pagination.perPage) {
+        $scope.newReportsCount = $scope.pagination.perPage;
         $scope.newReports.splice(0, 1, report);
       } else {
         $scope.newReports.unshift(report);
@@ -55,7 +64,7 @@ angular.module('Aggie')
     });
 
     $scope.displayNewReports = function() {
-      if ($scope.newReportsCount > 24) {
+      if ($scope.newReportsCount == $scope.pagination.perPage) {
         $scope.reportsArray = $scope.newReports;
         $scope.reports = paginate($scope.newReports);
       } else {
@@ -68,15 +77,6 @@ angular.module('Aggie')
       $scope.newReportAvailable = false;
       $scope.newReportsCount = 0;
       $scope.newReports = [];
-    };
-
-    $scope.pagination = {
-      page: parseInt($stateParams.page) || 1,
-      total: reports.total,
-      visibleTotal: reports.total,
-      perPage: 25,
-      start: 0,
-      end: 0
     };
 
     var groupById = function(memo, item) {

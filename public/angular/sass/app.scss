@@ -176,6 +176,7 @@ input {
 }
 
 .breadcrumb {
+  font-size: 19px;
   padding-left: 0;
   background-color: #fff;
   > .active {
@@ -187,7 +188,7 @@ input[type="date"] {
   width: 160px;
 }
 
-.zeroErrors {
+.zero-errors {
   color: green;
 }
 

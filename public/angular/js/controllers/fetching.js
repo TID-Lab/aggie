@@ -6,7 +6,8 @@ angular.module('Aggie')
   'Fetching',
   'Socket',
   function($scope, $rootScope, Fetching, Socket) {
-    $scope.fetchStatus == null;
+    Fetching.set(false);
+    $scope.fetchStatus == false;
 
     var parseStatus = function(status) {
       if (typeof status == 'string') {
@@ -16,23 +17,22 @@ angular.module('Aggie')
       }
     }
 
+    Socket.on('fetchingStatusUpdate', function(data) {
+      var oldStatus = parseStatus($scope.fetchStatus),
+        newStatus = parseStatus(data.fetching);
+      if (newStatus === oldStatus) { return }
+      $scope.fetchStatus = newStatus;
+    });
+
+    $scope.$watch('fetchStatus', function(newStatus, oldStatus) {
+      newStatus = parseStatus(newStatus);
+      oldStatus = parseStatus(oldStatus);
+      if (newStatus === oldStatus) { return }
+      Fetching.set(newStatus);
+    });
+
     Fetching.get(function(fetchStatus) {
       $scope.fetchStatus = parseStatus(fetchStatus);
-
-      Socket.on('fetchingStatusUpdate', function(data) {
-        var oldStatus = parseStatus($scope.fetchStatus),
-          newStatus = parseStatus(data.fetching);
-        if (newStatus === oldStatus) { return }
-        $scope.fetchStatus = newStatus;
-      });
-
-      $scope.$watch('fetchStatus', function(newStatus, oldStatus) {
-        newStatus = parseStatus(newStatus);
-        oldStatus = parseStatus(oldStatus);
-        if (newStatus === oldStatus) { return }
-        console.log('Set', newStatus);
-        Fetching.set(newStatus);
-      });
     });
 
   }
