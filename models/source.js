@@ -10,7 +10,7 @@ var sourceSchema = new mongoose.Schema({
   type: String,
   nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
-  url: String,
+  url: {type: String, validate: validate({passIfEmpty: true}, 'isUrl')},
   keywords: String,
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
