@@ -82,6 +82,17 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('users', {
+      url: '/users',
+      templateUrl: '/templates/users/index.html',
+      controller: 'UsersIndexController',
+      resolve: {
+        users: ['User', function(User) {
+          return User.query().$promise;
+        }]
+      }
+    });
+
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html'
