@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td class="detail-key">Type</td>
-      <td class="detail-value">{{source.type}}</td>
+      <td class="detail-value">{{sourceTypes[source.type]}}</td>
     </tr>
     <tr>
       <td class="detail-key">Target</td>
@@ -34,7 +34,7 @@
     </tr>
     <tr>
       <td class="detail-key">Enabled</td>
-      <td class="detail-value">{{ source.enabled}}</td>
+      <td class="detail-value">{{ source.enabled ? 'Yes' : 'No' }}</td>
     </tr>
   </tbody>
 </table>
