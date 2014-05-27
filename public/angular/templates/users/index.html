@@ -19,11 +19,11 @@
   <tbody>
     <tr ng-repeat="u in users" ng-click="viewUser(u)">
       <td class="compact content">{{ u.provider }}</td>
-      <td class="compact content">{{ u.username }}</td>
-      <td class="compact content">{{ u.email }}</td>
+      <td class="content">{{ u.username }}</td>
+      <td class="content">{{ u.email }}</td>
       <td class="content content">{{ u.role }}</td>
-      <td class="content content">
-        <a href class="btn btn-info">Edit</a>
+      <td ng-controller="UserFormModalController" class="compact content">
+        <a href class="btn btn-info" ng-click="edit(u)">Edit</a>
       </td>
     </tr>
   </tbody>

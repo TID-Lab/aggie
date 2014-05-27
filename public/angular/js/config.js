@@ -14,6 +14,13 @@ angular.module('Aggie')
   'assigned': 'Assigned'
 })
 
+.value('userRoles', {
+  'viewer': 'Viewer',
+  'monitor': 'Monitor',
+  'manager': 'Manager',
+  'admin': 'Admin'
+})
+
 .value('paginationOptions', {
   perPage: 25
 });

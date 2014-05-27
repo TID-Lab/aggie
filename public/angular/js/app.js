@@ -61,12 +61,12 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/users/form_modal');
 require('./controllers/users/index');
 
 // Filters
 require('./filters/aggie-date');
 require('./filters/delay');
-require('./filters/interval');
 require('./filters/interval');
 require('./filters/max-count');
 
@@ -75,3 +75,4 @@ require('./directives/aggie-confirm');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/ng-focus');
+require('./directives/ng-password-match');
