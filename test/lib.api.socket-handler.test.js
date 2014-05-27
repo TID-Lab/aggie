@@ -49,12 +49,12 @@ describe('Socket handler', function() {
   });
 
   it('should establish connections with an incident query', function(done) {
-    client.emit('incidentQuery', {title: 'test'});
+    client.emit('incidentQuery', {title: 'quick brown'});
     setTimeout(function() {
       expect(streamer.queries).to.be.an.instanceof(Array);
       expect(streamer.queries).to.not.be.empty;
       expect(streamer.queries[1]).to.have.property('title');
-      expect(streamer.queries[1].title).to.equal('test');
+      expect(streamer.queries[1].title).to.equal('quick brown');
       done();
     }, 100);
   });
@@ -62,15 +62,13 @@ describe('Socket handler', function() {
   it('should receive new incidents that match the query', function(done) {
     client.once('incidents', function(incidents) {
       expect(incidents).to.be.an.instanceof(Array);
-      expect(incidents).to.have.length(2);
+      expect(incidents).to.have.length(1);
       expect(incidents[0]).to.have.property('title');
-      expect(incidents[0].title).to.equal('test');
-      expect(incidents[1]).to.have.property('title');
-      expect(incidents[1].title).to.equal('test');
+      expect(incidents[0].title).to.equal('The quick brown fox');
       done();
     });
-    Incident.create({title: 'test'});
-    Incident.create({title: 'test'});
+    Incident.create({title: 'The slow white fox'});
+    Incident.create({title: 'The quick brown fox'});
   });
 
   it('should receive updates from the global fetching status', function(done) {

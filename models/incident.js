@@ -42,11 +42,19 @@ Incident.queryIncidents = function(query, page, callback) {
 
   var filter = {};
 
+  // Create filter object
+  Incident.filterAttributes.forEach(function(attr) {
+    if (query[attr]) filter[attr] = query[attr];
+  });
+
   // Return only newer results
   if (query.since) {
     filter.storedAt = filter.storedAt || {};
     filter.storedAt.$gte = query.since;
   }
+
+  // Search for substrings
+  if (query.title) filter.title = new RegExp(query.title, 'i');
 
   // Re-set search timestamp
   query.since = new Date();
