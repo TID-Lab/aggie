@@ -7,9 +7,10 @@
           <i class="fa fa-search"></i>
         </span>
         <input type="text" ng-model="keywords" class="form-control" placeholder="Enter keywords">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-info" href ng-click="search()">Go</button>
-        </span>
+        <a href class="input-group-addon" ng-click="clearSearch()">×</a>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+        </div>
       </div>
     </div>
     <div class="filter status-filter">

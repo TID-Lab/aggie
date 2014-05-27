@@ -115,6 +115,11 @@ angular.module('Aggie')
       search(null);
     };
 
+    $scope.clearSearch = function() {
+      $scope.keywords = null;
+      search(null);
+    };
+
     $scope.isFirstPage = function() {
       return $scope.pagination.page == 1;
     };

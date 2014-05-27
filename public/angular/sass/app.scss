@@ -142,10 +142,20 @@ label {
   padding: 4px 8px;
   background-color: #f3f6f9;
   color: #000;
+  vertical-align:top;
   .read-only & {
     background-color: #ebebeb;
   }
 }
+
+a.input-group-addon {
+  &:hover {
+    color: #000;
+    background-color: rgba(#000, 0.1);
+    text-decoration: none;
+  }
+}
+
 .btn-default {
   background-color: #5BC0DE;
 }
