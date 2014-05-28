@@ -4,6 +4,7 @@ angular.module('Aggie')
   '$state',
   '$scope',
   '$rootScope',
+  '$timeout',
   '$stateParams',
   'FlashService',
   'reports',
@@ -14,7 +15,7 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, sourceTypes, statusOptions, Report, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, statusOptions, Report, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -169,6 +170,10 @@ angular.module('Aggie')
         return 'unknown-source';
       }
     };
+
+    (fireDigestEveryThirtySeconds = function() {
+      $timeout(fireDigestEveryThirtySeconds, 30 * 1000);
+    })();
 
     init();
   }

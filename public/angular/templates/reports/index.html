@@ -65,8 +65,8 @@
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
         </div>
         <div class="date-and-time">
-          <span class="time">{{ r.storedAt | date:'HH:mm' }}</span>
-          <span class="date">{{ r.storedAt | date:"dd MMM ''''yy" }}</span>
+          <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
         </div>
         <div class="created">{{ r | delay }}</div>
       </td>

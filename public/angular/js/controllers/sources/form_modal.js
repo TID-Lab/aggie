@@ -95,7 +95,7 @@ angular.module('Aggie')
 
     $scope.$watch('source.type', function(newType, oldType) {
       if (newType == 'twitter') {
-        $scope.source.nickname = 'Twitter Source';
+        $scope.source.nickname = 'Twitter Search';
       } else if (oldType == 'twitter') {
         $scope.source.nickname = '';
       }
