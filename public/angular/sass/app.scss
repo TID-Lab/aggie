@@ -89,6 +89,10 @@ label {
   overflow-y: auto;
 }
 
+.modal-body {
+  font-size: 14px;
+}
+
 .modal-header,
 .modal-footer {
   background-color: darken(#e3e6e3, 10%);

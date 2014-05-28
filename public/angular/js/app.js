@@ -23,13 +23,16 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   $rootScope.$on('$stateChangeSuccess', function(e, toState) {
     if (!publicRoute(toState) && !$rootScope.currentUser) {
       e.preventDefault();
-      AuthService.getCurrentUser().then(function() {
+      res = AuthService.getCurrentUser().then(function() {
         if ($rootScope.currentUser) {
           $urlRouter.sync();
         } else {
           flash.setAlert('You must be logged in before accessing that page.');
           $state.go('login');
         }
+      }).catch(function(error) {
+        flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
+        $state.go('login');
       });
     }
   });
