@@ -6,8 +6,7 @@ angular.module('Aggie')
   'Fetching',
   'Socket',
   function($scope, $rootScope, Fetching, Socket) {
-    Fetching.set(false);
-    $scope.fetchStatus == false;
+    $scope.fetchStatus = null;
 
     var parseStatus = function(status) {
       if (typeof status == 'string') {
@@ -15,7 +14,7 @@ angular.module('Aggie')
       } else {
         return !!status;
       }
-    }
+    };
 
     Socket.on('fetchingStatusUpdate', function(data) {
       var oldStatus = parseStatus($scope.fetchStatus),
@@ -34,6 +33,5 @@ angular.module('Aggie')
     Fetching.get(function(fetchStatus) {
       $scope.fetchStatus = parseStatus(fetchStatus);
     });
-
   }
 ]);

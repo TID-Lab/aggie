@@ -47,7 +47,7 @@
 
 <p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any results.</p>
 
-<table class="table" ng-show="pagination.total > 0">
+<table aggie-table ng-show="pagination.total > 0">
   <thead>
     <tr>
       <th>Time</th>
@@ -74,9 +74,9 @@
         <div class="icon-left">{{sourcesById[r._source].nickname || '[Deleted]'}}</div>
       </td>
       <td class="compact author">{{ r.author }}</td>
-      <td class="content">{{ r.content }}</td>
-      <td class="incident toggle">{{ r.incident ? r.incident : 'Unassigned' }}</td>
-      <td class="status">
+      <td class="expand content">{{ r.content }}</td>
+      <td class="compact incident">{{ r.incident ? r.incident : 'Unassigned' }}</td>
+      <td class="compact status">
         <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
       </div>
       </td>

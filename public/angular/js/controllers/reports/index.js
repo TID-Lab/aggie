@@ -41,7 +41,6 @@ angular.module('Aggie')
 
       if ($scope.isFirstPage()) {
         Socket.emit('query', searchParams());
-        console.debug('Emitting query', searchParams());
         Socket.on('reports', $scope.handleNewReports);
       }
     };
@@ -49,9 +48,7 @@ angular.module('Aggie')
     var removeDuplicates = function(reports) {
       var keys = Object.keys($scope.reportsById);
       return reports.filter(function(report) {
-        var unique = keys.indexOf(report._id) === -1;
-        if (!unique) { console.debug('Ignoring duplicate report with id ' + report._id) }
-        return unique;
+        return keys.indexOf(report._id) === -1;
       });
     };
 
@@ -61,7 +58,6 @@ angular.module('Aggie')
     };
 
     $scope.search = function(params) {
-      console.debug('Search', searchParams(params));
       $state.go('reports', searchParams(params), { reload: true });
     };
 
@@ -75,13 +71,11 @@ angular.module('Aggie')
     };
 
     $scope.handleNewReports = function(reports) {
-      console.debug(reports.length + ' new reports received');
       $scope.newReports.addMany(removeDuplicates(reports));
     };
 
     $scope.displayNewReports = function() {
       $scope.visibleReports.addMany($scope.newReports.toArray());
-      console.debug("Adding " + $scope.newReports.count + " new reports to table");
       $scope.newReports = new Queue(paginationOptions.perPage);
     };
 
