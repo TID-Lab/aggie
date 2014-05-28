@@ -33,7 +33,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
       });
     }
   });
-}])
+}]);
 
 // Configuration
 require('./config');

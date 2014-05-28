@@ -5,7 +5,7 @@
   </ul>
 </div>
 
-<p ng-hide="users.length > 0 ">Sorry, but we couldn't find any results.</p>
+<p ng-hide="users.length > 0 ">Sorry, but we couldn't find any users.</p>
 
 <table class="table" ng-show="users.length > 0">
   <thead>
@@ -23,7 +23,7 @@
       <td class="compact content">{{ u.email }}</td>
       <td class="content content">{{ u.role }}</td>
       <td class="content content">
-        <a href>Edit</a>
+        <a href class="btn btn-info">Edit</a>
       </td>
     </tr>
   </tbody>
