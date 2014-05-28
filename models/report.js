@@ -114,7 +114,7 @@ Report.queryReports = function(query, page, callback) {
       if (err) return callback(err);
       var result = {
         total: reports.stats.n ? reports.stats.nscannedObjects : 0,
-        results: _.pluck(reports.results, 'obj')
+        results: _.chain(reports.results).pluck('obj').sortBy('storedAt').value().reverse()
       };
       callback(null, result);
     });
