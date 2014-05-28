@@ -100,8 +100,9 @@ Source.countAllErrors = function(callback) {
     {$group: {_id: null, unreadErrorCount: {$sum: "$unreadErrorCount"}}}
   ];
   Source.aggregate(pipeline, function(err, total) {
-    if (err) return callback(err);
-    callback(null, total[0].unreadErrorCount);
+    if (err) callback(err);
+    else if (total.length === 0) callback(null, 0);
+    else callback(null, total[0].unreadErrorCount);
   });
 };
 
