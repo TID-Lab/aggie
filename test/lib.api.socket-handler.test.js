@@ -17,7 +17,16 @@ describe('Socket handler', function() {
       transports: ['websocket'],
       'force new connection': true
     });
-    client.on('connect', done);
+    done();
+  });
+
+  it('should establish a socket connection', function(done) {
+    client.on('sourceErrorCountUpdated', function(data) {
+      expect(data).to.have.property('unreadErrorCount');
+      expect(data.unreadErrorCount).to.equal(0);
+      done();
+    });
+    client.on('connect');
   });
 
   it('should establish connections with a query', function(done) {

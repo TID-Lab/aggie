@@ -23,7 +23,7 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
   // Notify when changing error count
   if (!this.isNew && this.isModified('unreadErrorCount')) {
-    sourceSchema.emit(this.unreadErrorCount ? 'sourceErrorCountUpdated' : 'sourceErrorCountCleared', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
+    sourceSchema.emit('sourceErrorCountUpdated');
   }
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
@@ -91,6 +91,18 @@ Source.resetUnreadErrorCount = function(_id, callback) {
     if (!source) return callback(null, null);
     source.unreadErrorCount = 0;
     source.save(callback);
+  });
+};
+
+// Determine total number of errors
+Source.countAllErrors = function(callback) {
+  var pipeline = [
+    {$group: {_id: null, unreadErrorCount: {$sum: "$unreadErrorCount"}}}
+  ];
+  Source.aggregate(pipeline, function(err, total) {
+    if (err) callback(err);
+    else if (total.length === 0) callback(null, 0);
+    else callback(null, total[0].unreadErrorCount);
   });
 };
 
