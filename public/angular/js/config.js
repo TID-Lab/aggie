@@ -7,6 +7,13 @@ angular.module('Aggie')
   // 'elmo': 'Elmo'
 })
 
+.value('statusOptions', {
+  'relevant': 'Relevant',
+  'irrelevant': 'Irrelevant',
+  'unassigned': 'Unassigned',
+  'assigned': 'Assigned'
+})
+
 .value('paginationOptions', {
   perPage: 25
 });

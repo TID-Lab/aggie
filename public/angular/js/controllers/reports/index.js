@@ -9,11 +9,12 @@ angular.module('Aggie')
   'reports',
   'sources',
   'sourceTypes',
+  'statusOptions',
   'Report',
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, sourceTypes, Report, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, sourceTypes, statusOptions, Report, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -22,6 +23,7 @@ angular.module('Aggie')
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.sourceTypes = sourceTypes;
+    $scope.statusOptions = statusOptions;
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -58,7 +60,9 @@ angular.module('Aggie')
     };
 
     $scope.search = function(params) {
-      $state.go('reports', searchParams(params), { reload: true });
+      $scope.$evalAsync(function() {
+        $state.go('reports', searchParams(params), { reload: true });
+      });
     };
 
     var searchParams = function(newParams) {

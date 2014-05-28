@@ -1,4 +1,4 @@
-<alert type="info" ng-hide="newReports.isEmpty()" close="newReports.isEmpty()"><a href ng-click="displayNewReports()">{{ newReports.total | maxCount:pagination.perPage }} new reports available.</a></alert>
+<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total | maxCount:pagination.perPage }} new reports available.</a></alert>
 <form>
   <div class="table-filters">
     <div class="filter search">
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="filter status-filter">
-      <select ng-model="searchParams.status" ng-options="s for s in statuses" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.status" ng-options="key as value for (key, value) in statusOptions" ng-change="search()" class="form-control">
         <option value="">Filter by Status</option>
       </select>
     </div>
@@ -24,12 +24,12 @@
       </select>
     </div>
     <div class="filter date-filter">
-      <label for="start">Filter From:</label>
-      <input id="start" ng-model="searchParams.startDate" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+      <label for="start">From:</label>
+      <input id="start" ng-model="searchParams.after" name="start" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
     </div>
     <div class="filter date-filter">
       <label for="end">To:</label>
-      <input id="end" ng-model="searchParams.endDate" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
+      <input id="end" ng-model="searchParams.before" name="end" type="date" ng-change="search()" placeholder="mm/dd/yyy"></input>
     </div>
     <div class="filter pagination">
       <ul class="pager">
