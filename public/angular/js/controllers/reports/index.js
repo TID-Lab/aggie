@@ -20,7 +20,10 @@ angular.module('Aggie')
     $scope.sourceType = $stateParams.sourceType || '';
     $scope.status = $stateParams.status || '';
     $scope.reportsArray = reports.results;
+    $scope.sources = sources;
+    $scope.sourcesById = {};
     $scope.reports = new Queue(25);
+    $scope.reportsById = {};
     $scope.newReports = new Queue(25);
     $scope.originalReports = angular.copy($scope.reports);
     $scope.sourceTypes = sourceTypes;
@@ -35,25 +38,28 @@ angular.module('Aggie')
     };
 
     var init = function() {
-      var reports = paginate(removeDuplicates($scope.reportsArray)).reverse();
+      Socket.emit('query', searchParams(null));
+      console.debug('Emitting query', searchParams(null));
+      $scope.sourcesById = $scope.sources.reduce(groupById, {});
+      var reports = paginate($scope.reportsArray).reverse();
+      $scope.reportsById = reports.reduce(groupById, {});
       $scope.reports.addMany(reports);
+      Socket.on('reports', $scope.handleNewReports);
     };
 
     var removeDuplicates = function(reports) {
-      var ids = [];
+      var keys = Object.keys($scope.reportsById);
       return reports.filter(function(report) {
-        if (ids.indexOf(report._id) !== -1) {
-          return false;
-        }
-        ids.push(report._id);
-        return true;
+        var unique = keys.indexOf(report._id) === -1;
+        if (!unique) { console.debug('Ignoring duplicate report with id ' + report._id) }
+        return unique;
       });
     };
 
-    $scope.sources = sources.reduce(function(memo, item) {
+    var groupById = function(memo, item) {
       memo[item._id] = item;
       return memo;
-    });
+    };
 
     var search = function(page) {
       $state.go('reports', searchParams(page), { reload: true });
@@ -70,12 +76,14 @@ angular.module('Aggie')
       };
     };
 
-    Socket.emit('query', searchParams(null));
-
-    Socket.on('reports', function(reports) {
-      if ($scope.pagination.page > 1) { return }
-      $scope.newReports.addMany(reports);
-    });
+    $scope.handleNewReports = function(reports) {
+      console.debug(reports.length + ' new reports received');
+      if ($scope.pagination.page > 1) {
+        console.debug("Ignoring reports since we're not on the first page");
+        return;
+      }
+      $scope.newReports.addMany(removeDuplicates(reports));
+    };
 
     $scope.displayNewReports = function() {
       $scope.reports.addMany($scope.newReports.elements.reverse());
