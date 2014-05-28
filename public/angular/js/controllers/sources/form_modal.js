@@ -26,7 +26,7 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(source) {
-        Source.create({ source: source }, function(response) {
+        Source.create(source, function(response) {
           flash.setNotice('Source was successfully created.');
           $rootScope.$state.go('source', { id: response._id }, { reload: true });
         }, function(err) {

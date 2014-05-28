@@ -48,10 +48,12 @@ angular.module('Aggie')
     };
 
     var removeDuplicates = function(reports) {
-      var keys = Object.keys($scope.reportsById);
-      return reports.filter(function(report) {
-        return keys.indexOf(report._id) === -1;
-      });
+      return reports.reduce(function(memo, report) {
+        if (!(report._id in $scope.reportsById)) {
+          memo.push(report);
+        }
+        return memo;
+      }, []);
     };
 
     var groupById = function(memo, item) {
@@ -74,15 +76,6 @@ angular.module('Aggie')
       return params;
     };
 
-    $scope.handleNewReports = function(reports) {
-      $scope.newReports.addMany(removeDuplicates(reports));
-    };
-
-    $scope.displayNewReports = function() {
-      $scope.visibleReports.addMany($scope.newReports.toArray());
-      $scope.newReports = new Queue(paginationOptions.perPage);
-    };
-
     var paginate = function(items) {
       var page = $scope.pagination.page,
         perPage = $scope.pagination.perPage,
@@ -100,6 +93,24 @@ angular.module('Aggie')
         return items;
       }
     }
+
+    $scope.handleNewReports = function(reports) {
+      var uniqueReports = removeDuplicates(reports);
+      $scope.pagination.total += uniqueReports.length;
+      $scope.pagination.visibleTotal += uniqueReports.length;
+      if ($scope.searchParams.keywords) {
+        $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100)
+      }
+      $scope.newReports.addMany(uniqueReports);
+    };
+
+    $scope.displayNewReports = function() {
+      var reports = $scope.newReports.toArray();
+      $scope.reports.concat(reports);
+      reports.reduce(groupById, $scope.reportsById);
+      $scope.visibleReports.addMany(reports);
+      $scope.newReports = new Queue(paginationOptions.perPage);
+    };
 
     $scope.clearSearch = function() {
       $scope.search({ page: null, keywords: null });
