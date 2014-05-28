@@ -28,7 +28,7 @@ angular.module('Aggie')
 
   CircularQueue.prototype.addMany = function(elements) {
     var queue = this;
-    elements.forEach(function(element) {
+    elements.reverse().forEach(function(element) {
       queue.add(element);
     });
   };
