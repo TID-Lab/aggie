@@ -7,6 +7,27 @@ angular.module('Aggie')
   'User',
   'FlashService',
   function($rootScope, $scope, $modal, User, flash) {
+    $scope.create = function() {
+      var modalInstance = $modal.open({
+        controller: 'UserFormModalInstanceController',
+        templateUrl: 'templates/users/modal.html',
+        resolve: {
+          user: function() {
+            return {};
+          }
+        }
+      });
+
+      modalInstance.result.then(function(user) {
+        User.create(user, function(response) {
+          flash.setNoticeNow('User was successfully created.');
+          $scope.users.push(response);
+        }, function(err) {
+          flash.setAlertNow('User failed to be created. Please contact support.');
+        });
+      });
+    };
+
     $scope.edit = function(user) {
       var modalInstance = $modal.open({
         controller: 'UserFormModalInstanceController',
@@ -49,16 +70,12 @@ angular.module('Aggie')
     $scope.userRoles = userRoles;
     $scope.user = angular.copy(user);
     $scope.user.oldUserName = user.username;
-    $scope._showErrors = false;
+    $scope.showErrors = false;
     $scope.showPassword = false;
-
-    $scope.showErrors = function() {
-      return $scope._showErrors;
-    };
 
     $scope.save = function(form) {
       if (form.$invalid) {
-        $scope._showErrors = true;
+        $scope.showErrors = true;
         return;
       }
       $modalInstance.close($scope.user);

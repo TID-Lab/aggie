@@ -14,7 +14,7 @@
             <label for="username" class="col-lg-3 control-label">Username</label>
             <div class="col-lg-6">
               <input id="username" name="username" type="text" class="form-control" ng-model="user.username" required>
-              <div class="has-error" ng-show="showErrors()">
+              <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.username.$error.required">Username is required.</div>
               </div>
             </div>
@@ -23,7 +23,7 @@
             <label for="email" class="col-lg-3 control-label">Email</label>
             <div class="col-lg-6">
               <input id="email" name="email" type="text" class="form-control" ng-model="user.email" required>
-              <div class="has-error" ng-show="showErrors()">
+              <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.email.$error.required">Email is required.</div>
               </div>
             </div>
@@ -34,31 +34,27 @@
               <select id="role" name="role" class="form-control" required>
                 <option ng-model="user.role" value="admin">Admin</option>
               </select>
-              <div class="has-error" ng-show="showErrors()">
+              <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.role.$error.required">Role is required.</div>
               </div>
             </div>
           </div>
-          <div ng-show="currentUser._id == user._id">
-            <div class="form-group" ng-show="!showPassword">
-              <button class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword">Change password</button>
+          <div class="form-group" ng-show="!showPassword && user._id">
+            <button class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword">Change password</button>
+          </div>
+          <div ng-show="showPassword || !user._id">
+            <div class="form-group" ng-show="showPassword">
+              <label for="password" class="col-lg-3 control-label">Password</label>
+              <div class="col-lg-6">
+                <input id="password" name="password" type="password" class="form-control" ng-model="user.password">
+              </div>
             </div>
-            <div ng-switch on="showPassword">
-              <div ng-switch-when="true">
-                <div class="form-group">
-                  <label for="password" class="col-lg-3 control-label">New password</label>
-                  <div class="col-lg-6">
-                    <input id="password" name="password" type="password" class="form-control" ng-model="user.password">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="passwordConfirmation" class="col-lg-3 control-label">Password Confirmation</label>
-                  <div class="col-lg-6">
-                    <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
-                    <div class="has-error" ng-show="form.passwordConfirmation.$focused">
-                      <div class="help-block" ng-show="form.passwordConfirmation.$invalid">Passwords don't match.</div>
-                    </div>
-                  </div>
+            <div class="form-group">
+              <label for="passwordConfirmation" class="col-lg-3 control-label">Password Confirmation</label>
+              <div class="col-lg-6">
+                <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
+                <div class="has-error" ng-show="showErrors || form.passwordConfirmation.$focused">
+                  <div class="help-block" ng-show="form.passwordConfirmation.$invalid">Passwords don't match.</div>
                 </div>
               </div>
             </div>
