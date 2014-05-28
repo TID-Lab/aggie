@@ -29,23 +29,24 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
       $location.path('/login');
     }
   });
-}])
+}]);
 
-.value('sourceTypes', {
-  'twitter': 'Twitter',
-  'facebook': 'Facebook',
-  'rss': 'RSS',
-  'elmo': 'Elmo'
-});
-
+// Configuration
+require('./config');
+require('./routes');
 
 // Services
 require('./services/auth');
-require('./services/factories');
+require('./services/fetching');
 require('./services/flash');
+require('./services/queue');
+require('./services/report');
+require('./services/socket');
+require('./services/source');
 
 // Controllers
 require('./controllers/application');
+require('./controllers/fetching');
 require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
@@ -56,17 +57,15 @@ require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
 
-// Routes
-require('./routes');
-
 // Filters
-require('./filters/interval');
+require('./filters/aggie-date');
 require('./filters/delay');
 require('./filters/interval');
-require('./filters/source');
-require('./filters/aggie-date');
+require('./filters/interval');
+require('./filters/max-count');
 
 // Directives
+require('./directives/aggie-confirm');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/ng-focus');

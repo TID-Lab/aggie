@@ -5,7 +5,12 @@ angular.module('Aggie')
   function($stateProvider) {
     $stateProvider.state('home', {
       url: '/',
-      templateUrl: '/templates/home.html'
+      controller: [
+        '$state',
+        function($state) {
+          $state.go('reports');
+        }
+      ]
     });
 
     $stateProvider.state('profile', {
@@ -69,7 +74,7 @@ angular.module('Aggie')
       controller: 'SourcesShowController',
       resolve: {
         source: ['Source', '$stateParams', function(Source, params) {
-          return Source.get({id: params.id}).$promise;
+          return Source.get({ id: params.id }).$promise;
         }]
       }
     });

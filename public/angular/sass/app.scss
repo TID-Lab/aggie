@@ -6,7 +6,7 @@ $link-blue: #1c75bc;
 
 body {
   background-color: #fff;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1;
   color: #333;
 }
@@ -43,7 +43,20 @@ a {
 }
 
 .navbar-stats {
+  min-height: 34px;
   background-color: $navbar-yellow;
+  .navbar-text {
+    line-height: 26px;
+  }
+  .container {
+    position: relative;
+  }
+}
+
+.navbar-text {
+  line-height: 1;
+  margin: 0;
+  padding: 8px 0;
 }
 
 .nav li.user {
@@ -133,6 +146,15 @@ label {
     background-color: #ebebeb;
   }
 }
+
+a.input-group-addon {
+  &:hover {
+    color: #000;
+    background-color: rgba(#000, 0.1);
+    text-decoration: none;
+  }
+}
+
 .btn-default {
   background-color: #5BC0DE;
 }
@@ -154,6 +176,7 @@ input {
 }
 
 .breadcrumb {
+  font-size: 19px;
   padding-left: 0;
   background-color: #fff;
   > .active {
@@ -165,7 +188,7 @@ input[type="date"] {
   width: 160px;
 }
 
-.zeroErrors {
+.zero-errors {
   color: green;
 }
 
@@ -173,7 +196,20 @@ input[type="date"] {
   color: red;
 }
 
+.fetching {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  padding: 8px 0;
+  height: 26px;
+}
+
+label + aggie-toggle {
+  margin-left: 4px;
+}
+
 .alert {
+  font-size: 16px;
   h4 {
     margin-bottom: 0;
   }
@@ -201,6 +237,18 @@ input[type="date"] {
 
 .events .type {
   width: 15%;
+}
+
+.source-errors {
+  position: absolute;
+  right: 140px;
+  top: 0;
+  padding: 14px;
+  height: 26px;
+}
+
+.source-errors a {
+  color: red;
 }
 
 
