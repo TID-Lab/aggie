@@ -6,7 +6,14 @@ angular.module('Aggie')
   '$location',
   'AuthService',
   'FlashService',
-  function($scope, $rootScope, $location, AuthService, flash) {
+  'Socket',
+  function($scope, $rootScope, $location, AuthService, flash, Socket) {
+    $scope.unreadErrorCount = '0';
+
+    Socket.on('sourceErrorCountUpdated', function(response) {
+      $scope.unreadErrorCount = response.unreadErrorCount;
+    });
+
     $scope.logout = function() {
       AuthService.logout(function(err) {
         if (!err) {
