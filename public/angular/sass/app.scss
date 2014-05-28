@@ -251,4 +251,19 @@ label + aggie-toggle {
   color: red;
 }
 
+a.list-group-item {
+  background-color: #fff;
+  color: #555;
+  &:hover {
+    background-color: #f6f7f7;
+  }
+}
 
+.panel-info {
+  box-shadow: none;
+  & > .panel-heading {
+    color: #31708F;
+    background-color: #D9EDF7;
+    border-color: #BCE8F1;
+  }
+}

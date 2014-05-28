@@ -29,7 +29,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
       $location.path('/login');
     }
   });
-}])
+}]);
 
 // Configuration
 require('./config');

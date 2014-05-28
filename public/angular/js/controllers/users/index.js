@@ -7,4 +7,4 @@ angular.module('Aggie')
   function($scope, $rootScope, users) {
     $scope.users = users;
   }
-])
+]);
