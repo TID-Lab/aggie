@@ -11,6 +11,7 @@ angular.module('Aggie')
         });
       });
     },
+
     emit: function (eventName, data, callback) {
       socket.emit(eventName, data, function () {
         var args = arguments;
@@ -20,6 +21,8 @@ angular.module('Aggie')
           }
         });
       })
-    }
+    },
+
+    off: socket.removeListener
   };
 });

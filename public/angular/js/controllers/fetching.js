@@ -8,6 +8,22 @@ angular.module('Aggie')
   function($scope, $rootScope, Fetching, Socket) {
     $scope.fetchStatus = null;
 
+    var stopWatchingFetchStatus;
+
+    var init = function() {
+      if ($rootScope.currentUser) {
+        Fetching.get(setFetchStatus);
+        Socket.on('fetchingStatusUpdate', fetchingStatusUpdate);
+        stopWatchingFetchStatus = $scope.$watch('fetchStatus', fetchStatusChanged);
+      } else {
+        Socket.off('fetchingStatusUpdate');
+        if (stopWatchingFetchStatus) {
+          stopWatchingFetchStatus();
+          stopWatchingFetchStatus = null;
+        }
+      }
+    };
+
     var parseStatus = function(status) {
       if (typeof status == 'string') {
         return status === 'true';
@@ -16,22 +32,26 @@ angular.module('Aggie')
       }
     };
 
-    Socket.on('fetchingStatusUpdate', function(data) {
+    var fetchingStatusUpdate = function(data) {
       var oldStatus = parseStatus($scope.fetchStatus),
         newStatus = parseStatus(data.fetching);
       if (newStatus === oldStatus) { return }
       $scope.fetchStatus = newStatus;
-    });
+    };
 
-    $scope.$watch('fetchStatus', function(newStatus, oldStatus) {
+    var fetchStatusChanged = function(newStatus, oldStatus) {
       newStatus = parseStatus(newStatus);
       oldStatus = parseStatus(oldStatus);
       if (newStatus === oldStatus) { return }
       Fetching.set(newStatus);
-    });
+    };
 
-    Fetching.get(function(fetchStatus) {
+    var setFetchStatus = function(fetchStatus) {
       $scope.fetchStatus = parseStatus(fetchStatus);
-    });
+    };
+
+    $rootScope.$watch('currentUser', init);
+
+    init();
   }
 ]);
