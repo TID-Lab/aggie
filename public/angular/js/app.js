@@ -13,20 +13,24 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   }
 ])
 
-.run(['$rootScope', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $location, AuthService, $state, flash) {
+.run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
   $rootScope.$state = $state;
 
-  $rootScope.$watch('currentUser', function(currentUser) {
-    if (!currentUser) { AuthService.getCurrentUser() }
-  });
+  var publicRoute = function(state) {
+    return !!(state.data && state.data.public === true)
+  };
 
-  $rootScope.$on('$stateChangeStart', function (e, toState, fromState) {
-    var public = false;
-    if (toState.data && toState.data.public === true) { public = true }
-    if (!public && !$rootScope.currentUser) {
-      flash.setAlert('You must be logged in before accessing that page.');
-      $state.go('login');
+  $rootScope.$on('$stateChangeSuccess', function(e, toState) {
+    if (!publicRoute(toState) && !$rootScope.currentUser) {
       e.preventDefault();
+      AuthService.getCurrentUser().then(function() {
+        if ($rootScope.currentUser) {
+          $urlRouter.sync();
+        } else {
+          flash.setAlert('You must be logged in before accessing that page.');
+          $state.go('login');
+        }
+      });
     }
   });
 }]);
