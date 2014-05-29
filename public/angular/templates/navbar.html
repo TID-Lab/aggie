@@ -1,8 +1,8 @@
-<div ng-controller="NavbarController">
+<div class="navbar-wrapper" ng-controller="NavbarController">
   <div class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" ui-sref="home">Aggie</a>
+        <a href="/" class="navbar-brand">Aggie</a>
       </div>
       <ul class="nav navbar-nav" ng-show="currentUser">
         <li ui-sref-active="active"><a ui-sref="reports">Reports</a></li>
@@ -30,8 +30,8 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-hide="currentUser">
-        <li>
-          <a ui-sref="login">
+        <li ui-sref-active="active">
+          <a href ui-sref="login">
             <i class="fa fa-sign-in fa-fw"></i>
             Log in
           </a>
