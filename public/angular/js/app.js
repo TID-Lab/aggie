@@ -9,24 +9,24 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/404');
   }
 ])
 
-.run(['$rootScope', '$location', 'AuthService', '$state', function ($rootScope, $location, AuthService, $state) {
+.run(['$rootScope', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $location, AuthService, $state, flash) {
   $rootScope.$state = $state;
 
   $rootScope.$watch('currentUser', function(currentUser) {
     if (!currentUser) { AuthService.getCurrentUser() }
   });
 
-  var needsAuth = function () {
-    return [].indexOf($location.path()) != -1;
-  };
-
-  $rootScope.$on('$stateChangeStart', function (event, next, current) {
-    if (needsAuth() && !$rootScope.currentUser) {
-      $location.path('/login');
+  $rootScope.$on('$stateChangeStart', function (e, toState, fromState) {
+    var public = false;
+    if (toState.data && toState.data.public === true) { public = true }
+    if (!public && !$rootScope.currentUser) {
+      flash.setAlert('You must be logged in before accessing that page.');
+      $state.go('login');
+      e.preventDefault();
     }
   });
 }]);

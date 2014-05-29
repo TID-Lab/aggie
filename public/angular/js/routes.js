@@ -5,12 +5,12 @@ angular.module('Aggie')
   function($stateProvider) {
     $stateProvider.state('home', {
       url: '/',
-      controller: [
-        '$state',
-        function($state) {
-          $state.go('reports');
-        }
-      ]
+      onEnter: function($state) {
+        $state.go('reports');
+      },
+      data: {
+        public: true
+      }
     });
 
     $stateProvider.state('profile', {
@@ -21,7 +21,10 @@ angular.module('Aggie')
     $stateProvider.state('login', {
       url: '/login',
       templateUrl: '/templates/login.html',
-      controller: 'LoginController'
+      controller: 'LoginController',
+      data: {
+        public: true
+      }
     });
 
     $stateProvider.state('reports', {
@@ -92,7 +95,18 @@ angular.module('Aggie')
     $stateProvider.state('password_reset', {
       url: '/password_reset/:token',
       templateUrl: '/templates/password_reset.html',
-      controller: 'PasswordResetController'
+      controller: 'PasswordResetController',
+      data: {
+        public: true
+      }
+    });
+
+    $stateProvider.state('404', {
+      url: '/404',
+      templateUrl: '/templates/404.html',
+      data: {
+        public: true
+      }
     });
   }
 ]);

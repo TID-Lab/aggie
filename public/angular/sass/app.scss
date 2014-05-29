@@ -18,6 +18,10 @@ a {
   }
 }
 
+.navbar-wrapper {
+  margin-bottom: 21px;
+}
+
 .navbar-brand {
   text-transform: uppercase;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
@@ -61,6 +65,10 @@ a {
 
 .nav li.user {
   font-weight: bold;
+}
+
+.jumbotron {
+  background-color: #e3e6e3;
 }
 
 .well {
