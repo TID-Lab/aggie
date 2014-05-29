@@ -40,3 +40,11 @@ Contact mikeb@cc.gatech.edu for more information.
 1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To start server, run `npm start`.
 1. Navigate to `localhost:3000` in your browser.
+
+## Deployment
+
+Internally, we use [forever](https://github.com/nodejitsu/forever) to keep Aggie
+running. Since this is a multi-process application, the forever monitor will
+sometimes hang up when restarting the Aggie process after deploying a new
+version of the code. In this case, killing the forever process before deploying
+seems to fix it.
