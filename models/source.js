@@ -35,7 +35,7 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
-  sourceSchema.emit('source:save', {_id: this._id.toString()});
+  if (!this._silent) sourceSchema.emit('source:save', {_id: this._id.toString()});
 });
 
 sourceSchema.pre('remove', function(next) {
@@ -68,6 +68,7 @@ sourceSchema.methods.logEvent = function(level, message, callback) {
   this.events.push({datetime: Date.now(), type: level, message: message});
   if (level == 'error') this.disable();
   this.unreadErrorCount++;
+  this._silent = true;
   this.save(callback);
 };
 
@@ -91,6 +92,7 @@ Source.resetUnreadErrorCount = function(_id, callback) {
     if (err) return callback(err);
     if (!source) return callback(null, null);
     source.unreadErrorCount = 0;
+    source._silent = true;
     source.save(callback);
   });
 };
