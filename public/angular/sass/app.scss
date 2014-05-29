@@ -1,11 +1,21 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
+$link-blue: #1c75bc;
+
+@import 'tables';
 
 body {
   background-color: #fff;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1;
   color: #333;
+}
+
+a {
+  color: $link-blue;
+  &:hover {
+    color: lighten($link-blue, 10%);
+  }
 }
 
 .navbar-brand {
@@ -33,7 +43,20 @@ body {
 }
 
 .navbar-stats {
+  min-height: 34px;
   background-color: $navbar-yellow;
+  .navbar-text {
+    line-height: 26px;
+  }
+  .container {
+    position: relative;
+  }
+}
+
+.navbar-text {
+  line-height: 1;
+  margin: 0;
+  padding: 8px 0;
 }
 
 .nav li.user {
@@ -50,6 +73,8 @@ label {
 
 .form-control {
   box-shadow: none;
+  background-color: #f3f6f9;
+  padding: 4px 8px;
 }
 
 .modal {
@@ -72,3 +97,158 @@ label {
     color: #000;
   }
 }
+
+.btn {
+  &:focus, &:active:focus {
+    outline: none;
+  }
+}
+
+.toggle-switch {
+  display: inline-block;
+  font-size: 0;
+}
+
+.toggle-item {
+  font-size: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #808285;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  line-height: 26px;
+  border: solid 1px #d1d3d4;
+  width: 29px;
+  height: 26px;
+  background-color: #d1d3d4;
+  &.selected {
+    background-color: #92c8dc;
+  }
+}
+
+.pager {
+  text-align: right;
+  margin: 0;
+}
+
+.input-group-btn .btn {
+  line-height: 1;
+  height: 25px;
+  padding: 4px 8px;
+}
+
+.input-group-addon {
+  padding: 4px 8px;
+  background-color: #f3f6f9;
+  color: #000;
+  .read-only & {
+    background-color: #ebebeb;
+  }
+}
+
+a.input-group-addon {
+  &:hover {
+    color: #000;
+    background-color: rgba(#000, 0.1);
+    text-decoration: none;
+  }
+}
+
+.btn-default {
+  background-color: #5BC0DE;
+}
+
+.input-group-btn:last-child > .btn {
+  margin-left: 0;
+}
+
+input {
+  &, &[type="date"] {
+    border: solid 1px #ddd;
+    line-height: 1;
+    padding: 8px;
+    &:active, &:focus {
+      outline: none;
+      border-color: #5bc0de;
+    }
+  }
+}
+
+.breadcrumb {
+  font-size: 19px;
+  padding-left: 0;
+  background-color: #fff;
+  > .active {
+    color: #999;
+  }
+}
+
+input[type="date"] {
+  width: 160px;
+}
+
+.zero-errors {
+  color: green;
+}
+
+.multipleErrors {
+  color: red;
+}
+
+.fetching {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  padding: 8px 0;
+  height: 26px;
+}
+
+label + aggie-toggle {
+  margin-left: 4px;
+}
+
+.alert {
+  font-size: 16px;
+  h4 {
+    margin-bottom: 0;
+  }
+}
+
+.help-block {
+  color: #999;
+  margin: 5px 0 0 0;
+  line-height: 1.5em;
+}
+
+.modal-header {
+  .close {
+    z-index: 1000;
+    float: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+}
+
+.events .time {
+  width: 10%;
+}
+
+.events .type {
+  width: 15%;
+}
+
+.source-errors {
+  position: absolute;
+  right: 140px;
+  top: 0;
+  padding: 14px;
+  height: 26px;
+}
+
+.source-errors a {
+  color: red;
+}
+
+

@@ -32,7 +32,7 @@ angular.module('Aggie')
             return cb(err.data);
           });
         }
-      }
+      };
     }
   ]
 );

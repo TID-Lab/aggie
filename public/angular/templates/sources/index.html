@@ -1,0 +1,34 @@
+<div class="table-filters">
+  <div class="filter">
+    <button class="btn btn-info" ng-click="refresh()">Refresh Source list</button>
+    <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create new source</a>
+  </div>
+</div>
+
+<p ng-hide="sources.length > 0">Sorry, but we couldn't find any sources.</p>
+
+<table aggie-table ng-show="sources.length > 0">
+  <thead>
+    <tr>
+      <th class="compact">Name</th>
+      <th class="expand">Target</th>
+      <th class="compact">Unread Error Count</th>
+      <th class="compact">Enabled</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item" ng-click="viewSource($event, s)">
+      <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.nickname }}</div></td>
+      <td class="expand content">{{ target(s) }}</td>
+        <span ng-switch="source.type">
+          <span ng-when="twitter">{{source.keywords}}</span>
+          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
+        </span>
+      </td>
+      <td class="compact content zero-errors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+      <td class="compact status">
+        <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
+      </td>
+    </tr>
+  </tbody>
+</table>

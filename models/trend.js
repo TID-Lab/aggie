@@ -21,11 +21,11 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  if (this._wasNew) schema.emit('save', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('trend:save', {_id: this._id.toString()});
 });
 
 schema.pre('remove', function(next) {
-  schema.emit('remove', {_id: this._id.toString()});
+  schema.emit('trend:remove', {_id: this._id.toString()});
   next();
 });
 
@@ -54,7 +54,7 @@ schema.methods.toggle = function(status, callback) {
   this.save(function(err, trend) {
     if (err) return callback(err);
     if (!trend) return callback(new Error.NotFound());
-    schema.emit(event, {_id: trend._id.toString()});
+    schema.emit('trend:' + event, {_id: trend._id.toString()});
     callback();
   });
 };
