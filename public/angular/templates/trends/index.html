@@ -1,0 +1,27 @@
+<p ng-hide="trends.length > 0 ">Sorry, but we couldn't find any results.</p>
+
+<table aggie-table ng-show="trends.length > 0">
+  <thead>
+    <tr>
+      <th>Query</th>
+      <th>Created</th>
+      <th>Last Enabled</th>
+      <th>Count</th>
+      <th>Enabled</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="t in trends">
+      <td class="compact content">{{ t._query }}</td>
+      <td class="compact content">{{ t.createdAt | human }} ago</td>
+      <td class="compact content">{{ t.lastEnabledAt | human }} ago</td>
+      <td class="compact content text-center">
+        <aggie-sparkline data="{{t.displayCounts}}">
+        </aggie-sparkline>
+      </td>
+      <td class="compact status">
+        <aggie-toggle toggle="t.enabled" options="{ true: 'On', false: 'Off' }" on-change="toggleEnabled(t)">
+      </td>
+    </tr>
+  </tbody>
+</table>

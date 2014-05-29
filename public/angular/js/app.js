@@ -4,6 +4,7 @@ require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
 require('./angular-translate');
+require('./jquery.sparkline');
 
 angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate'])
 
@@ -60,6 +61,7 @@ require('./services/socket');
 require('./services/source');
 require('./services/user');
 require('./services/incident');
+require('./services/trend');
 
 // Controllers
 require('./controllers/application');
@@ -79,6 +81,7 @@ require('./controllers/users/index');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/form_modal');
+require('./controllers/trends/index');
 
 // Routes
 require('./routes');
@@ -93,5 +96,6 @@ require('./filters/max-count');
 require('./directives/aggie-confirm');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
+require('./directives/aggie-sparkline');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');

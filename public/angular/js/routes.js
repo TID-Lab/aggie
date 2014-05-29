@@ -131,6 +131,17 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('trends', {
+      url: '/trends',
+      templateUrl: '/templates/trends/index.html',
+      controller: 'TrendsIndexController',
+      resolve: {
+        trends: ['Trend', function(Trend) {
+          return Trend.query().$promise;
+        }]
+      }
+    });
+
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html'
