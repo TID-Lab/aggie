@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
 var Query = require('../models/query');
+var ReportQuery = require('../models/query/report-query');
 var Report = require('../models/report');
 var timekeeper = require('timekeeper');
 var _ = require('underscore');
@@ -10,7 +11,7 @@ var _ = require('underscore');
 var trendQueryer;
 describe('Trend queryer', function() {
   before(function(done) {
-    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'test'})}, function(err, trend) {
+    Trend.create({_query: Query.hash(new ReportQuery({keywords: 'test'}))}, function(err, trend) {
       if (err) return done(err);
       trendQueryer = new TrendQueryer({trend: trend});
       done();
@@ -51,7 +52,7 @@ describe('Trend queryer', function() {
   });
 
   it('should group analytics by 5-minute timeboxes', function(done) {
-    Trend.create({_query: Query.hash({type: 'Trend', keywords: 'qwerty'})}, function(err, trend) {
+    Trend.create({_query: Query.hash(new ReportQuery({keywords: 'qwerty'}))}, function(err, trend) {
       if (err) return done(err);
       trendQueryer = new TrendQueryer({trend: trend});
 

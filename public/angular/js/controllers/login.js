@@ -1,11 +1,12 @@
 angular.module('Aggie')
   .controller('LoginController', [
     '$scope',
+    '$state',
     '$rootScope',
     'AuthService',
     '$location',
     'FlashService',
-    function($scope, $rootScope, AuthService, $location, flash) {
+    function($scope, $state, $rootScope, AuthService, $location, flash) {
       $scope.login = function(form) {
         AuthService.login({
             'username': $scope.user.username,
@@ -14,7 +15,7 @@ angular.module('Aggie')
           function(err) {
             if (!err) {
               flash.setNotice('You have been successfully logged in.');
-              $location.path('/');
+              $state.go('reports');
             } else {
               flash.setAlertNow(err.data);
             }

@@ -16,11 +16,13 @@ angular.module('Aggie')
         },
 
         getCurrentUser: function() {
-          $http.get('/session').then(function(res) {
+          var promise = $http.get('/session');
+          promise.then(function(res) {
             if (res.data.username) {
               $rootScope.currentUser = res.data;
             }
           });
+          return promise;
         },
 
         logout: function(callback) {

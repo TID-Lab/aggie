@@ -19,6 +19,10 @@ angular.module('Aggie')
 
 .filter('interval', function() {
   return function(time) {
-    return abbreviatedHuman(timeDiff(time));
+    var diff = timeDiff(time);
+    if (diff < 60000) {
+      return '0 m';
+    }
+    return abbreviatedHuman(diff);
   };
 });

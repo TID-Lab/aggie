@@ -1,0 +1,18 @@
+angular.module('Aggie')
+
+.factory('Fetching', function($resource) {
+  var Fetching = $resource("/api/v1/fetching/:op", {}, {
+    'toggle': { method: 'PUT' },
+  });
+
+  return {
+    get: function(success, failure) {
+      return Fetching.get({}, function(data) {
+        success(data.enabled);
+      }, failure);
+    },
+    set: function(enabled) {
+      return Fetching.toggle({ op: enabled ? 'on' : 'off' }, {})
+    }
+  }
+});

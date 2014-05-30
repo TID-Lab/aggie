@@ -119,11 +119,3 @@ describe('Report controller', function() {
   });
 
 });
-
-var compare = function(a, b) {
-  for (var attr in a) {
-    if (b[attr]) {
-      expect(a[attr]).to.equal(b[attr]);
-    }
-  }
-}
