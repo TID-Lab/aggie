@@ -48,6 +48,7 @@ require('./services/report');
 require('./services/socket');
 require('./services/source');
 require('./services/user');
+require('./services/incident');
 
 // Controllers
 require('./controllers/application');
@@ -62,6 +63,10 @@ require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
 require('./controllers/users/index');
+require('./controllers/incidents/index');
+
+// Routes
+require('./routes');
 
 // Filters
 require('./filters/aggie-date');

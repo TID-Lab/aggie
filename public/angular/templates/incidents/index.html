@@ -1,0 +1,93 @@
+<form>
+  <div class="table-filters">
+    <div class="filter search">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" ng-model="searchParams.title" class="form-control" placeholder="Enter title">
+        <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.title">×</a>
+      </div>
+    </div>
+    <div class="filter search">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" ng-model="searchParams.locationName" class="form-control" placeholder="Enter location">
+        <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.locationName">×</a>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+        </div>
+      </div>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="searchParams.assignedTo" ng-options="user for user in users" ng-change="search()" class="form-control">
+        <option value="">Filter by User</option>
+      </select>
+    </div>
+    <div class="filter status-filter">
+      <select ng-model="searchParams.status" ng-options="key as value for (key, value) in statusOptions" ng-change="search()" class="form-control">
+        <option value="">Filter by Status</option>
+      </select>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="searchParams.verified" ng-options="key as value for (key, value) in veracityOptions" ng-change="search()" class="form-control">
+        <option value="">Filter by Veracity</option>
+      </select>
+    </div>
+    <div class="filter pagination">
+      <ul class="pager">
+        <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
+        <li>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</form>
+
+<div class="bs-component" ng-hide="pagination.total > 0">
+  <div class="alert alert-warning">
+    <h4>Sorry, but we couldn't find any incidents.</h4>
+  </div>
+</div>
+
+<table class="table" ng-show="pagination.total > 0">
+  <thead>
+    <tr>
+      <th>Created</th>
+      <th>Title</th>
+      <th>Location</th>
+      <th>Assigned To</th>
+      <th>Notes</th>
+      <th>Status</th>
+      <th>Verified</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="i in incidents | orderBy:'-storedAt'" ng-class="['item', incidentClass(i)]">
+      <td class="compact">
+        <div class="interval">
+          <span class="interval-amount">{{ i.storedAt | interval }}</span>
+          <span class="interval-relative">ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ i.storedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ i.storedAt | aggieDate:'date' }}</span>
+        </div>
+        <div class="created">{{ i | delay }}</div>
+      </td>
+      <td class="compact content">{{ i.title }}</td>
+      <td class="compact content">{{ i.locationName }}</td>
+      <td class="compact content">{{ i.assignedTo }}</td>
+      <td class="expand content">{{ i.notes }}</td>
+      <td class="compact content">{{ i.status }}</td>
+      <td class="compact content">{{ i.verified }} </td>
+    </tr>
+  </tbody>
+</table>
+
