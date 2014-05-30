@@ -10,7 +10,7 @@ var sourceSchema = new mongoose.Schema({
   type: String,
   nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
-  url: String,
+  url: {type: String, validate: validate({passIfEmpty: true}, 'isUrl')},
   keywords: String,
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
@@ -23,7 +23,7 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
   // Notify when changing error count
   if (!this.isNew && this.isModified('unreadErrorCount')) {
-    sourceSchema.emit(this.unreadErrorCount ? 'sourceErrorCountUpdated' : 'sourceErrorCountCleared', _.pick(this.toJSON(), ['_id', 'unreadErrorCount']));
+    sourceSchema.emit('sourceErrorCountUpdated');
   }
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
@@ -35,7 +35,7 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
-  sourceSchema.emit('source:save', {_id: this._id.toString()});
+  if (!this._silent) sourceSchema.emit('source:save', {_id: this._id.toString()});
 });
 
 sourceSchema.pre('remove', function(next) {
@@ -66,7 +66,9 @@ sourceSchema.methods.disable = function() {
 // Log events in source
 sourceSchema.methods.logEvent = function(level, message, callback) {
   this.events.push({datetime: Date.now(), type: level, message: message});
+  if (level == 'error') this.disable();
   this.unreadErrorCount++;
+  this._silent = true;
   this.save(callback);
 };
 
@@ -90,7 +92,20 @@ Source.resetUnreadErrorCount = function(_id, callback) {
     if (err) return callback(err);
     if (!source) return callback(null, null);
     source.unreadErrorCount = 0;
+    source._silent = true;
     source.save(callback);
+  });
+};
+
+// Determine total number of errors
+Source.countAllErrors = function(callback) {
+  var pipeline = [
+    {$group: {_id: null, unreadErrorCount: {$sum: "$unreadErrorCount"}}}
+  ];
+  Source.aggregate(pipeline, function(err, total) {
+    if (err) callback(err);
+    else if (total.length === 0) callback(null, 0);
+    else callback(null, total[0].unreadErrorCount);
   });
 };
 

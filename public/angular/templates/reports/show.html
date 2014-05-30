@@ -9,20 +9,20 @@
   <tbody>
     <tr>
       <td class="detail-key">Authored Time</td>
-      <td class="detail-value">{{ report.authoredAt | date:"HH:mm on dd MMM ''''yy" }}</td>
+      <td class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
     </tr>
     <tr>
       <td class="detail-key">Fetched Time</td>
-      <td class="detail-value">{{ report.fetchedAt | date:"HH:mm on dd MMM ''''yy" }}</td>
+      <td class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
     </tr>
     <tr>
       <td class="detail-key">Stored Time</td>
-      <td class="detail-value">{{ report.storedAt | date:"HH:mm on dd MMM ''''yy" }}</td>
+      <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
     </tr>
     <tr>
       <td class="detail-key">Source</td>
       <td class="detail-value">
-        <span ng-show="source">{{ source.nickname + ' (' + source.type + ')' }}</span>
+        <span ng-show="source">{{ source.nickname }}</span>
       </td>
     </tr>
     <tr>

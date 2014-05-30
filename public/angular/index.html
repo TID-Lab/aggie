@@ -13,9 +13,9 @@
   <body ng-controller="ApplicationController">
     <ng-include src="'/templates/navbar.html'"></ng-include>
     <div class="container">
-      <alert type="danger" ng-show="flash.getAlert()" close="flash.setAlertNow('')">{{flash.getAlert()}}</alert>
-      <alert type="info" ng-show="flash.getNotice()" close="flash.setNoticeNow('')">{{flash.getNotice()}}</alert>
+      <ng-include src="'/templates/alerts.html'"></ng-include>
       <div ui-view></div>
+      <script src="/socket.io/socket.io.js"></script>
       <script src="/js/app.min.js"></script>
     </div>
   </body>

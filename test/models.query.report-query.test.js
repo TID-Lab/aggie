@@ -2,7 +2,6 @@ require('./init');
 var expect = require('chai').expect;
 var ReportQuery = require('../models/query/report-query');
 
-var queryData, queryId;
 describe('Query attributes', function() {
   before(function() {
     query = new ReportQuery({keywords: 'zero one two three'});

@@ -1,6 +1,6 @@
 require('./init');
 var expect = require('chai').expect;
-var server = require('../lib/api/socket-handler')();
+var socketHandler = require('../lib/api/socket-handler')();
 var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Report = require('../models/report');
@@ -14,12 +14,21 @@ describe('Socket handler', function() {
   before(function(done) {
     streamer.addListeners('report', Report.schema);
     streamer.addListeners('incident', Incident.schema);
-    server.listen(3000);
+    socketHandler.server.listen(3000);
     client = io.connect('http://localhost:3000', {
       transports: ['websocket'],
       'force new connection': true
     });
-    client.on('connect', done);
+    done();
+  });
+
+  it('should establish a socket connection', function(done) {
+    client.on('sourceErrorCountUpdated', function(data) {
+      expect(data).to.have.property('unreadErrorCount');
+      expect(data.unreadErrorCount).to.equal(0);
+      done();
+    });
+    client.on('connect');
   });
 
   it('should establish connections with a query', function(done) {
@@ -97,6 +106,6 @@ describe('Socket handler', function() {
 
   // Close server connection
   after(function(done) {
-    server.close(done);
+    socketHandler.server.close(done);
   });
 });

@@ -62,7 +62,6 @@ describe('Source controller', function() {
               expect(res.body).to.have.property('events');
               expect(res.body).to.have.property('unreadErrorCount')
               expect(res.body.events).to.be.an.instanceof(Array);
-              expect(res.body.events).to.have.length(1);
               expect(res.body.unreadErrorCount).to.equal(1);
               source.events = res.body.events;
               source.unreadErrorCount = res.body.unreadErrorCount;

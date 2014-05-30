@@ -1,0 +1,84 @@
+<div ng-controller="SourceFormModalController">
+  <div class="modal-header">
+    <button class="close" ng-click="close()" aria-hidden="true">×</button>
+    <h4 class="modal-title">
+      <div class="source" ng-class="sourceClass(source)">
+        <div class="icon-left">{{ source._id ? 'Edit' : 'Create' }} Source</div>
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="well bs-component">
+      <form name="form" class="form-horizontal">
+        <fieldset>
+          <div class="form-group" ng-class="{ 'read-only': source._id }">
+            <label for="type" class="col-lg-3 control-label">Type</label>
+            <div class="col-lg-6">
+              <select name="type" class="form-control" ng-model="source.type" ng-options="value as label for (value, label) in sourceTypes" required ng-hide="source._id">
+                <option value="">Choose source type</option>
+              </select>
+              <input type="text" class="form-control" ng-model="source.type" ng-show="source._id" readonly>
+              <div class="has-error" ng-show="showErrors()">
+                <div class="help-block" ng-show="form.type.$error.required">Type is required.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-danger col-lg-8 col-lg-offset-2" ng-hide="validSourceType(source)">
+            Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.
+          </div>
+
+          <div class="form-group" ng-show="source.type && validSourceType(source)" ng-class="{ 'read-only': source.type == 'twitter' }">
+            <label for="nickname" class="col-lg-3 control-label">Nickname</label>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <input type="text" ng-model="source.nickname" ng-readonly="source.type == 'twitter'" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" required maxlength="20" ng-focus>
+                <span class="input-group-addon"><span ng-show="source.nickname.length && form.nickname.$focused">{{20 - source.nickname.length}}</span></span>
+              </div>
+              <div class="help-block" ng-hide="source.type == 'twitter'">A short name for this source.</div>
+              <div class="has-error" ng-show="showErrors() && form.nickname.$invalid">
+                <div class="help-block" ng-show="form.nickname.$error.required">Nickname is required.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" ng-show="source.type == 'twitter' && validSourceType(source)">
+            <label for="keywords" class="col-lg-3 control-label">Keywords</label>
+            <div class="col-lg-6">
+              <input type="text" ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords" ng-required="source.type == 'twitter'">
+              <div class="help-block">Separated by commas, e.g. <strong>apple, paw paw, banana</strong></div>
+              <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
+                <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required for twitter sources.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" ng-show="source.type && source.type != 'twitter' && validSourceType(source)">
+            <label for="url" class="col-lg-3 control-label">URL</label>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div ng-switch="source.type">
+                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/facebook.com\/.+/" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                  <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                </div>
+                <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
+              </div>
+              <div class="help-block" ng-switch="source.type">
+                <span ng-switch-when="rss">The URL of the RSS feed, e.g. <strong>http://example.com/rss.xml</strong></span>
+                <span ng-switch-when="facebook">The URL of the Facebook page or group, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong></span>
+                <span ng-switch-when="elmo">The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong></span>
+              </div>
+              <div class="has-error" ng-show="showErrors() && form.url.$invalid">
+                <div class="help-block" ng-show="form.url.$error.required">URL is required.</div>
+                <div class="help-block" ng-show="form.url.$dirty && !form.url.$error.required">URL is invalid.</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+    <button type="button" class="btn btn-primary" ng-click="save(form)">Submit</button>
+  </div>
+</div>
