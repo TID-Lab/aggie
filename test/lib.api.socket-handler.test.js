@@ -4,6 +4,7 @@ var socketHandler = require('../lib/api/socket-handler')();
 var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Report = require('../models/report');
+var Incident = require('../models/incident');
 var fetchingController = require('../lib/api/v1/fetching-controller');
 var request = require('supertest');
 
@@ -12,6 +13,7 @@ var client;
 describe('Socket handler', function() {
   before(function(done) {
     streamer.addListeners('report', Report.schema);
+    streamer.addListeners('incident', Incident.schema);
     socketHandler.server.listen(3000);
     client = io.connect('http://localhost:3000', {
       transports: ['websocket'],
@@ -53,6 +55,29 @@ describe('Socket handler', function() {
     Report.create({content: 'This is another TEST'});
     Report.create({content: 'Testing this'});
     Report.create({content: 'one two three'});
+  });
+
+  it('should establish connections with an incident query', function(done) {
+    client.emit('incidentQuery', {title: 'quick brown'});
+    setTimeout(function() {
+      expect(streamer.queries).to.be.an.instanceof(Array);
+      expect(streamer.queries).to.not.be.empty;
+      expect(streamer.queries[1]).to.have.property('title');
+      expect(streamer.queries[1].title).to.equal('quick brown');
+      done();
+    }, 100);
+  });
+
+  it('should receive new incidents that match the query', function(done) {
+    client.once('incidents', function(incidents) {
+      expect(incidents).to.be.an.instanceof(Array);
+      expect(incidents).to.have.length(1);
+      expect(incidents[0]).to.have.property('title');
+      expect(incidents[0].title).to.equal('The quick brown fox');
+      done();
+    });
+    Incident.create({title: 'The slow white fox'});
+    Incident.create({title: 'The quick brown fox'});
   });
 
   it('should receive updates from the global fetching status', function(done) {

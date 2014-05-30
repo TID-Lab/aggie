@@ -37,7 +37,7 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, user);
+          compareUser.call(this, res.body, user);
           done();
         });
     });
@@ -52,7 +52,7 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, user);
+          compareUser.call(this, res.body, user);
           done();
         });
     });
@@ -67,7 +67,7 @@ describe('User controller', function() {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
           expect(res.body).to.not.be.empty;
-          compare(_.findWhere(res.body, {_id: user._id}), user);
+          compareUser(_.findWhere(res.body, {_id: user._id}), user);
           done();
         });
     });
@@ -88,7 +88,7 @@ describe('User controller', function() {
 
 });
 
-var compare = function(a, b) {
+var compareUser = function(a, b) {
   for (var attr in a) {
     if (attr === 'password') {
       expect(a[attr]).to.not.equal(b[attr]);
