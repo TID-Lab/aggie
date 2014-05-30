@@ -8,7 +8,8 @@ angular.module('Aggie')
   function($scope, $rootScope, Fetching, Socket) {
     $scope.fetchStatus = null;
 
-    var stopWatchingFetchStatus;
+    var serverFetchStatus = null,
+      stopWatchingFetchStatus;
 
     var init = function() {
       if ($rootScope.currentUser) {
@@ -36,14 +37,17 @@ angular.module('Aggie')
       var oldStatus = parseStatus($scope.fetchStatus),
         newStatus = parseStatus(data.fetching);
       if (newStatus === oldStatus) { return }
+      serverFetchStatus = newStatus;
       $scope.fetchStatus = newStatus;
     };
 
     var fetchStatusChanged = function(newStatus, oldStatus) {
       newStatus = parseStatus(newStatus);
       oldStatus = parseStatus(oldStatus);
-      if (newStatus === oldStatus) { return }
-      Fetching.set(newStatus);
+      if (newStatus === oldStatus || newStatus == serverFetchStatus) { return }
+      Fetching.set(newStatus, function() {
+        serverFetchStatus = newStatus;
+      });
     };
 
     var setFetchStatus = function(fetchStatus) {
