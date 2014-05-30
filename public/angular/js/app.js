@@ -64,6 +64,7 @@ require('./controllers/sources/index');
 require('./controllers/sources/show');
 require('./controllers/users/index');
 require('./controllers/incidents/index');
+require('./controllers/incidents/form_modal');
 
 // Routes
 require('./routes');

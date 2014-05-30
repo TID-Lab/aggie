@@ -1,0 +1,76 @@
+<div ng-controller="IncidentFormModalController">
+  <div class="modal-header">
+    <button class="close" ng-click="close()" aria-hidden="true">×</button>
+    <h4 class="modal-title">
+      <div class="icon-left" ng-show="incident._id == null">Create Incident</div>
+      <div class="icon-left" ng-show="incident._id != null">Edit Incident</div>
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="well bs-component">
+      <form name="form" class="form-horizontal">
+        <fieldset>
+          <div class="form-group">
+            <label for="Title" class="col-lg-3 control-label">Title</label>
+            <div class="col-lg-6">
+              <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" required>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.title.$error.required">Title is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="location" class="col-lg-3 control-label">Location</label>
+            <div class="col-lg-6">
+              <input id="location" name="location" type="text" class="form-control" ng-model="incident.locationName" required>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.location.$error.required">Location is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="user" class="col-lg-3 control-label">Assign To</label>
+            <div class="col-lg-6">
+              <select id="user" name="user" ng-model="incident.assignedTo" ng-options="user for user in users" class="form-control" required>
+                <option value="">Select User</option>
+              </select>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.user.$error.required">User is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="status" class="col-lg-3 control-label">Status</label>
+            <div class="col-lg-6">
+              <select id="status" name="status" ng-model="incident.status" ng-options="key as value for (key, value) in status" class="form-control" required>
+                <option value="">Select Status</option>
+              </select>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.status.$error.required">Status is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="veractiy" class="col-lg-3 control-label">Verified</label>
+            <div class="col-lg-6">
+              <input type="checkbox" id="veractiy" name="veracity" ng-model="incident.verified" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="notes" class="col-lg-3 control-label">Notes</label>
+            <div class="col-lg-6">
+              <textarea id="notes" name="notes" rows=5 class="form-control" ng-model="incident.notes" required>></textarea>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.notes.$error.required">Notes field is required.</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="close()">Close</button>
+    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
+  </div>
+</div>
