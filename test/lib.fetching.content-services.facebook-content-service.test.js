@@ -21,7 +21,6 @@ describe('Facebook content service', function() {
       expect(report_data).to.have.property('fetchedAt');
       expect(report_data).to.have.property('authoredAt');
       expect(report_data).to.have.property('author');
-      expect(report_data.author).to.equal('251841205227');
       expect(report_data).to.have.property('url');
       done();
     });
