@@ -8,6 +8,7 @@
 <div class="table-filters">
   <div class="filter">
     <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit()">Edit incident</button>
+    <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete()">Delete incident</button>
   </div>
 </div>
 

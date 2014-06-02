@@ -10,7 +10,9 @@ angular.module('Aggie')
   'sourceTypes',
   'Queue',
   'paginationOptions',
-  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions) {
+  'Incident',
+  'FlashService',
+  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, Incident, flash) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.sources = sources;
@@ -84,6 +86,15 @@ angular.module('Aggie')
       } else {
         return 'unknown-source';
       }
+    };
+
+    $scope.delete = function() {
+      Incident.delete({id: $scope.incident._id}, function(){
+        flash.setNotice('Incident was successfully deleted.');
+         $rootScope.$state.go('incidents');
+      }, function() {
+        flash.setAlertNow('Incident failed to be deleted.');
+      });
     };
 
     init();
