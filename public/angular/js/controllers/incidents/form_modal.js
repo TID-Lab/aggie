@@ -31,6 +31,30 @@ angular.module('Aggie')
         });
       });
     };
+
+    $scope.edit = function() {
+      var modalInstance = $modal.open({
+        controller: 'IncidentFormModalInstanceController',
+        templateUrl: '/templates/incidents/modal.html',
+        resolve: {
+          users: ['User', function(User) {
+            return User.query().$promise;
+          }],
+          incident: function() {
+            return $scope.incident;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(incident) {
+        Incident.update({ id: incident._id }, incident, function(response) {
+          flash.setNotice('Incident was successfully updated.');
+          $rootScope.$state.go('incident', { id: incident._id }, { reload: true });
+        }, function() {
+            flash.setAlertNow('Incident failed to be updated.');
+        });
+      });
+    };
   }
 ])
 
