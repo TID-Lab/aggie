@@ -77,6 +77,27 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('incident', {
+      url: '/incidents/:id?page',
+      templateUrl: '/templates/incidents/show.html',
+      controller: 'IncidentsShowController',
+      resolve: {
+        incident: ['Incident', '$stateParams', function(Incident, params) {
+          return Incident.get({ id: params.id }).$promise;
+        }],
+        reports: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          return Report.query({
+            incidentId: params.id,
+            page: page - 1
+          }).$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }]
+      }
+    });
+
     $stateProvider.state('sources', {
       url: '/sources',
       templateUrl: '/templates/sources/index.html',

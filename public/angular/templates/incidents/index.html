@@ -75,7 +75,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in incidents | orderBy:'-storedAt'" ng-class="['item', incidentClass(i)]">
+    <tr ng-repeat="i in incidents | orderBy:'-storedAt'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.storedAt | interval }}</span>
@@ -96,4 +96,3 @@
     </tr>
   </tbody>
 </table>
-

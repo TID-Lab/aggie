@@ -1,0 +1,60 @@
+<div class="bs-component">
+  <ul class="breadcrumb">
+    <li><a ui-sref="incidents">Incidents</a></li>
+    <li class="active">{{ incident.title }}</li>
+  </ul>
+</div>
+
+<div class="table-filters">
+  <div class="filter">
+  </div>
+</div>
+
+<br/><br/>
+<table class="table detail-table">
+  <tbody>
+    <tr>
+      <td class="detail-key">Location</td>
+      <td class="detail-value">{{ incident.locationName }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Assigned To</td>
+      <td class="detail-value">{{ incident.assignedTo }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Status</td>
+      <td class="detail-value">{{ incident.status }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Verified</td>
+      <td class="detail-value">{{ incident.verified }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Notes</td>
+      <td class="detail-value">{{ incident.notes }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Reports</h4>
+
+<p ng-hide="pagination.total > 0">There are no reports to display.</p>
+
+<div ng-show="pagination.total > 0">
+  <form>
+    <div class="table-filters">
+      <div class="filter pagination">
+        <ul class="pager">
+          <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
+          <li>
+            <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+          </li>
+          <li>
+            <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div ng-include="'/templates/reports/table.html'"></div>
+</div>
