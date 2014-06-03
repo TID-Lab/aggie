@@ -154,6 +154,18 @@ table, .table {
     &:hover {
       color: lighten($link-blue, 10%);
     }
+    &.btn {
+      color: #fff;
+      background-color: #5BC0DE;
+      text-decoration: none;
+      line-height: 15px;
+      height: 25px;
+      padding: 4px 8px;
+      font-size: 12px;
+      &:hover {
+        background-color: #39B3D7;
+      }
+    }
   }
 }
 
@@ -210,4 +222,9 @@ table, .table {
       margin-right: 4px;
     }
   }
+}
+
+.actions {
+  width: 10%;
+  text-align: center;
 }
