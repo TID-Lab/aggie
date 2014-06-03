@@ -5,12 +5,18 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   'FlashService',
+  'sourceTypes',
+  'sources',
+  'incidents',
   'trends',
   'Trend',
   'Socket',
-  function($state, $scope, $rootScope, flash, trends, Trend, Socket) {
+  function($state, $scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, Socket) {
     $scope.trend = {};
     $scope.trends = trends;
+    $scope.sources = sources;
+    $scope.sourceTypes = sourceTypes;
+    $scope.incidents = incidents.results;
 
     var updateTrendCount = function(trend) {
       angular.forEach($scope.trends, function(t) {
@@ -31,6 +37,15 @@ angular.module('Aggie')
     });
 
     Socket.on('trend', updateTrendCount);
+
+    $scope.createTrend = function(trend) {
+      Trend.create(trend, function(t) {
+        flash.setNoticeNow('Trend was successfully created.');
+        $rootScope.$state.go('trends', {}, { reload: true });
+      }, function(err) {
+        flash.setAlertNow('Trend failed to be created.');
+      });
+    };
   }
 ]);
 

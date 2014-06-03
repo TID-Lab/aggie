@@ -136,6 +136,12 @@ angular.module('Aggie')
       templateUrl: '/templates/trends/index.html',
       controller: 'TrendsIndexController',
       resolve: {
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }],
         trends: ['Trend', function(Trend) {
           return Trend.query().$promise;
         }]
