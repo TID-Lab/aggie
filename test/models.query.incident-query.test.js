@@ -5,7 +5,7 @@ var IncidentQuery = require('../models/query/incident-query');
 var _ = require('underscore');
 
 var query;
-describe('Query attributes', function() {
+describe('Incident query attributes', function() {
   before(function(done) {
     query = new IncidentQuery({
       title: 'Quick Brown'

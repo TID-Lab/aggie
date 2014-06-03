@@ -21,7 +21,7 @@ IncidentQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 IncidentQuery.prototype.normalize = function() {
-  var query = _.pick(this, ['title', 'locationName', 'assignedTo', 'status', 'verified']);
+  var query = _.pick(this, _.without(Incident.filterAttributes, 'updatedAt'));
   if (query.title) query.title = query.title.toLowerCase();
   return query;
 };
