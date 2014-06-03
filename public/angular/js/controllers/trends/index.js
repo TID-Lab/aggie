@@ -46,6 +46,15 @@ angular.module('Aggie')
         flash.setAlertNow('Trend failed to be created.');
       });
     };
+
+    $scope.deleteTrend = function(trend) {
+      Trend.delete({id: trend._id}, function(){
+        flash.setNotice('Trend was successfully deleted.');
+         $rootScope.$state.go('trends', {}, { reload: true });
+      }, function() {
+        flash.setAlertNow('Trend failed to be deleted.');
+      });
+    };
   }
 ]);
 
