@@ -16,13 +16,26 @@ describe('Facebook content service', function() {
         callback && callback(null, self.lastReportDate * 1000);
       });
     };
-    facebookContentService = new FacebookContentService({url: 'http://www.facebook.com/georgiatech'});
+    facebookContentService = new FacebookContentService({});
     done();
   });
 
   it('should instantiate correct facebook content service', function() {
     expect(facebookContentService).to.be.instanceOf(ContentService);
     expect(facebookContentService).to.be.instanceOf(FacebookContentService);
+  });
+
+  it('should fetch empty content', function(done) {
+    facebookContentService.fetch('./fixtures/facebook-0.json');
+    facebookContentService.once('report', function(report_data) {
+      done(new Error('Should not emit reports'));
+    });
+    facebookContentService.once('error', function(err) {
+      done(err);
+    });
+    setTimeout(function() {
+      done();
+    }, 100);
   });
 
   it('should fetch mock content from Facebook', function(done) {
@@ -34,14 +47,10 @@ describe('Facebook content service', function() {
       expect(report_data).to.have.property('author');
       expect(report_data).to.have.property('url');
       if (--remaining === 0) {
-        facebookContentService.removeAllListeners('report');
-        facebookContentService.removeAllListeners('error');
         done();
       }
     });
-    facebookContentService.on('error', function(err) {
-      facebookContentService.removeAllListeners('report');
-      facebookContentService.removeAllListeners('error');
+    facebookContentService.once('error', function(err) {
       done(err);
     });
   });
@@ -57,17 +66,13 @@ describe('Facebook content service', function() {
       if (--remaining === 0) {
         // Wait so that we can catch duplicate reports
         setTimeout(function() {
-          facebookContentService.removeAllListeners('report');
-          facebookContentService.removeAllListeners('error');
           done();
         }, 100);
       } else if (remaining < 0) {
         return done(new Error('Duplicate report'));
       }
     });
-    facebookContentService.on('error', function(err) {
-      facebookContentService.removeAllListeners('report');
-      facebookContentService.removeAllListeners('error');
+    facebookContentService.once('error', function(err) {
       done(err);
     });
   });
@@ -88,29 +93,42 @@ describe('Facebook content service', function() {
         expect(report_data).to.have.property('url');
         done();
       });
-      facebookContentService.on('error', function(err) {
-        facebookContentService.removeAllListeners('report');
-        facebookContentService.removeAllListeners('error');
+      facebookContentService.once('error', function(err) {
         done(err);
       });
     });
   });
 
   describe('Errors', function() {
-    it('should emit an invalid group error', function(done) {
+    it('should emit a missing URL error', function(done) {
+      var facebookContentService = new FacebookContentService({url: ''});
+      facebookContentService.fetch();
+      facebookContentService.once('report', function(report_data) {
+        done(new Error('Should not emit reports'));
+      });
+      facebookContentService.once('error', function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.contain('Missing Facebook URL');
+        done();
+      });
+    });
+
+    it('should emit an invalid URL error', function(done) {
       var facebookContentService = new FacebookContentService({url: 'georgiatech'});
       facebookContentService.fetch();
       facebookContentService.once('report', function(report_data) {
         done(new Error('Should not emit reports'));
       });
-      facebookContentService.on('error', function(err) {
+      facebookContentService.once('error', function(err) {
         expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.contain('Invalid group');
-        facebookContentService.removeAllListeners('report');
-        facebookContentService.removeAllListeners('error');
+        expect(err.message).to.contain('Invalid Facebook URL');
         done();
       });
     });
+  });
+
+  afterEach(function() {
+    facebookContentService.removeAllListeners();
   });
 });
 
