@@ -9,22 +9,13 @@ describe('Content service', function() {
   before(function(done) {
     var source = new Source({nickname: 't', type: 'dummy', keywords: 't'});
     contentService = contentServiceFactory.create({source: source});
-
     done();
   });
 
   it('should instantiate correct content service', function() {
     expect(contentService).to.be.instanceOf(ContentService);
     expect(contentService).to.be.instanceOf(DummyContentService);
-   
   });
-
-  it('should instantiate correct facebook content service', function() {
-    expect(contentService).to.be.instanceOf(ContentService);
-    expect(contentService).to.be.instanceOf(DummyContentService);
-   
-  });
-
 
   it('should fetch content from a specific service', function(done) {
     contentService.start();
@@ -35,7 +26,6 @@ describe('Content service', function() {
       contentService.stop();
       done();
     });
-    
   });
 
 });
