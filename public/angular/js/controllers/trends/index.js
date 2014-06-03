@@ -10,8 +10,9 @@ angular.module('Aggie')
   'incidents',
   'trends',
   'Trend',
+  'TrendFetching',
   'Socket',
-  function($state, $scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, Socket) {
+  function($state, $scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket) {
     $scope.trend = {};
     $scope.trends = trends;
     $scope.sources = sources;
@@ -54,6 +55,11 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Trend failed to be deleted.');
       });
+    };
+
+    $scope.toggleEnabled = function(trend) {
+      var enabled = trend.enabled == "true";
+      TrendFetching.set(trend._id, enabled);
     };
   }
 ]);

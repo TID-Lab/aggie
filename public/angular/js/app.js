@@ -62,6 +62,7 @@ require('./services/source');
 require('./services/user');
 require('./services/incident');
 require('./services/trend');
+require('./services/trend_fetching');
 
 // Controllers
 require('./controllers/application');
