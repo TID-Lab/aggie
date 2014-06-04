@@ -10,17 +10,20 @@ angular.module('Aggie')
   'reports',
   'sources',
   'sourceTypes',
+  'incidents',
   'statusOptions',
   'Report',
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, statusOptions, Report, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
     $scope.sources = sources;
     $scope.sourcesById = {};
+    $scope.incidents = incidents.results;
+    $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.sourceTypes = sourceTypes;
@@ -38,6 +41,7 @@ angular.module('Aggie')
     var init = function() {
       $scope.reportsById = $scope.reports.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
+      $scope.incidentsById = $scope.incidents.reduce(groupById, {});
 
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);

@@ -8,13 +8,15 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="vendor/select2/select2.css" rel="stylesheet">
+    <link href="vendor/select2/select2-bootstrap.css" rel="stylesheet">
   </head>
   <body ng-controller="ApplicationController">
     <ng-include src="'/templates/navbar.html'"></ng-include>
     <div class="container">
       <ng-include src="'/templates/alerts.html'"></ng-include>
       <div ui-view></div>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script src="/js/app.min.js"></script>
     </div>

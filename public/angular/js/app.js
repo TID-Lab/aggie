@@ -5,8 +5,10 @@ require('./ui-bootstrap-templates');
 require('./angular-resource');
 require('./angular-translate');
 require('./jquery.sparkline');
+require('../vendor/select2/select2');
+require('../vendor/select2/ui-select2');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -82,6 +84,7 @@ require('./controllers/users/index');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/form_modal');
+require('./controllers/incidents/report_incident_modal');
 require('./controllers/trends/index');
 
 // Routes

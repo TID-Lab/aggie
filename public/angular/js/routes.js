@@ -45,6 +45,9 @@ angular.module('Aggie')
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
         }]
       }
     });
