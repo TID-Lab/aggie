@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .value('sourceTypes', {
   'twitter': 'Twitter',
-  // 'facebook': 'Facebook',
+  'facebook': 'Facebook',
   'rss': 'RSS',
   // 'elmo': 'Elmo'
 })
