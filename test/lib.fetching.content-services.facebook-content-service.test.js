@@ -10,9 +10,9 @@ describe('Facebook content service', function() {
     _fetch = FacebookContentService.prototype.fetch;
     FacebookContentService.prototype.fetch = function(fixture, callback) {
       var self = this;
-      var data = require(fixture).data;
+      var data = require(fixture);
       process.nextTick(function() {
-        self._handleResults(data);
+        self._handleResults(data.posts, data.authors);
         callback && callback(null, self.lastReportDate * 1000);
       });
     };
@@ -27,9 +27,7 @@ describe('Facebook content service', function() {
 
   it('should fetch empty content', function(done) {
     facebookContentService.fetch('./fixtures/facebook-0.json');
-    facebookContentService.once('report', function(report_data) {
-      done(new Error('Should not emit reports'));
-    });
+    expectToNotEmitReport(facebookContentService, done);
     facebookContentService.once('error', function(err) {
       done(err);
     });
@@ -44,10 +42,33 @@ describe('Facebook content service', function() {
     facebookContentService.on('report', function(report_data) {
       expect(report_data).to.have.property('fetchedAt');
       expect(report_data).to.have.property('authoredAt');
+      expect(report_data).to.have.property('content');
       expect(report_data).to.have.property('author');
       expect(report_data).to.have.property('url');
+      switch (remaining) {
+        case 3:
+          expect(report_data.content).to.contain('The ACC Champion');
+          expect(report_data.author).to.equal('Georgia Tech');
+          expect(report_data.url).to.not.contain('comment');
+          break;
+        case 2:
+          expect(report_data.content).to.contain('Bioengineers at');
+          expect(report_data.author).to.equal('Georgia Tech');
+          expect(report_data.url).to.not.contain('comment');
+          break;
+        case 1:
+          expect(report_data.content).to.contain('Amazing');
+          expect(report_data.author).to.equal('Test User 1');
+          expect(report_data.url).to.contain('comment');
+          break;
+      }
       if (--remaining === 0) {
-        done();
+        // Wait so that we can catch unexpected reports
+        setTimeout(function() {
+          done();
+        }, 100);
+      } else if (remaining < 0) {
+        return done(new Error('Unexpected report'));
       }
     });
     facebookContentService.once('error', function(err) {
@@ -57,12 +78,30 @@ describe('Facebook content service', function() {
 
   it('should query for new data without duplicates', function(done) {
     facebookContentService.fetch('./fixtures/facebook-2.json');
-    var remaining = 2;
+    var remaining = 3;
     facebookContentService.on('report', function(report_data) {
       expect(report_data).to.have.property('fetchedAt');
       expect(report_data).to.have.property('authoredAt');
+      expect(report_data).to.have.property('content');
       expect(report_data).to.have.property('author');
       expect(report_data).to.have.property('url');
+      switch (remaining) {
+        case 3:
+          expect(report_data.content).to.contain('Go jackets');
+          expect(report_data.author).to.equal('Test User 1');
+          expect(report_data.url).to.contain('comment');
+          break;
+        case 2:
+          expect(report_data.content).to.contain('we can do that');
+          expect(report_data.author).to.equal('Test User 2');
+          expect(report_data.url).to.contain('comment');
+          break;
+        case 1:
+          expect(report_data.content).to.contain('GA Tech ranked');
+          expect(report_data.author).to.equal('Test User 3');
+          expect(report_data.url).to.not.contain('comment');
+          break;
+      }
       if (--remaining === 0) {
         // Wait so that we can catch duplicate reports
         setTimeout(function() {
@@ -89,13 +128,26 @@ describe('Facebook content service', function() {
       facebookContentService.once('report', function(report_data) {
         expect(report_data).to.have.property('fetchedAt');
         expect(report_data).to.have.property('authoredAt');
+        expect(report_data).to.have.property('content');
         expect(report_data).to.have.property('author');
         expect(report_data).to.have.property('url');
+        expect(report_data.url).to.contain('www.facebook.com/georgiatech');
         done();
       });
       facebookContentService.once('error', function(err) {
         done(err);
       });
+    });
+
+    it('should re-fetch to get an empty content list', function(done) {
+      facebookContentService.fetch();
+      expectToNotEmitReport(facebookContentService, done);
+      facebookContentService.once('error', function(err) {
+        done(err);
+      });
+      setTimeout(function() {
+        done();
+      }, 100);
     });
   });
 
@@ -103,27 +155,15 @@ describe('Facebook content service', function() {
     it('should emit a missing URL error', function(done) {
       var facebookContentService = new FacebookContentService({url: ''});
       facebookContentService.fetch();
-      facebookContentService.once('report', function(report_data) {
-        done(new Error('Should not emit reports'));
-      });
-      facebookContentService.once('error', function(err) {
-        expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.contain('Missing Facebook URL');
-        done();
-      });
+      expectToNotEmitReport(facebookContentService, done);
+      expectToEmitError(facebookContentService, 'Missing Facebook URL', done);
     });
 
     it('should emit an invalid URL error', function(done) {
       var facebookContentService = new FacebookContentService({url: 'georgiatech'});
       facebookContentService.fetch();
-      facebookContentService.once('report', function(report_data) {
-        done(new Error('Should not emit reports'));
-      });
-      facebookContentService.once('error', function(err) {
-        expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.contain('Invalid Facebook URL');
-        done();
-      });
+      expectToNotEmitReport(facebookContentService, done);
+      expectToEmitError(facebookContentService, 'Invalid Facebook URL', done);
     });
   });
 
@@ -132,3 +172,16 @@ describe('Facebook content service', function() {
   });
 });
 
+function expectToNotEmitReport(listener, done) {
+  listener.once('report', function(report_data) {
+    done(new Error('Should not emit reports'));
+  });
+}
+
+function expectToEmitError(listener, message, done) {
+  listener.once('error', function(err) {
+    expect(err).to.be.an.instanceof(Error);
+    expect(err.message).to.contain(message);
+    done();
+  });
+}
