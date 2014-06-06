@@ -53,7 +53,7 @@
       <td class="compact content">{{ t.createdAt | human }} ago</td>
       <td class="compact content">{{ t.lastEnabledAt | human }} ago</td>
       <td class="compact content text-center">
-        <aggie-sparkline data="{{t.displayCounts}}">
+        <aggie-sparkline data="{{t.displayCounts}}" callback="showReport(sparkEvent, t)">
         </aggie-sparkline>
       </td>
       <td class="compact text-center status">

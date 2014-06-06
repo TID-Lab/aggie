@@ -1,7 +1,6 @@
 angular.module('Aggie')
 
 .controller('TrendsIndexController', [
-  '$state',
   '$scope',
   '$rootScope',
   'FlashService',
@@ -12,32 +11,42 @@ angular.module('Aggie')
   'Trend',
   'TrendFetching',
   'Socket',
-  function($state, $scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket) {
+  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket) {
     $scope.trend = {};
     $scope.trends = trends;
     $scope.sources = sources;
     $scope.sourceTypes = sourceTypes;
     $scope.incidents = incidents.results;
 
-    var updateTrendCount = function(trend) {
+    var updateTrends = function(trend) {
       angular.forEach($scope.trends, function(t) {
-        if (t._id == trend._id) {
-          if (!t.counts || trend.counts.length > t.counts.length) {
-            t.displayCounts = trend.counts.map(function(c) {
+        updateTrendCount(t, trend);
+      });
+    };
+
+    var needsCountUpdate = function(oldTrend, newTrend) {
+      return !oldTrend.counts ||
+        newTrend.counts.length > oldTrend.counts.length;
+    };
+
+    var updateTrendCount = function(oldTrend, newTrend) {
+        if (oldTrend._id == newTrend._id) {
+          if (needsCountUpdate(oldTrend, newTrend)) {
+            oldTrend.counts = newTrend.counts.reverse();
+            oldTrend.displayCounts = newTrend.counts.map(function(c) {
               return c.counts;
-            }).reverse().join();
+            }).join();
           }
         }
-      });
     };
 
     angular.forEach($scope.trends, function(trend) {
       Trend.get({id: trend._id}, function(t) {
-        updateTrendCount(t);
+        updateTrendCount(trend, t);
       });
     });
 
-    Socket.on('trend', updateTrendCount);
+    Socket.on('trend', updateTrends);
 
     $scope.createTrend = function(trend) {
       Trend.create(trend, function(t) {
@@ -61,6 +70,19 @@ angular.module('Aggie')
       var enabled = trend.enabled == "true";
       TrendFetching.set(trend._id, enabled);
     };
+
+    $scope.showReport = function(sparkEvent, trend) {
+      var bar = sparkEvent.sparklines[0].getCurrentRegionFields()[0];
+      var count = trend.counts[bar.offset];
+      var startTime = new Date(parseInt(count.timebox));
+      var endTime = angular.copy(startTime);
+      endTime.setMinutes(endTime.getMinutes() + 5);
+      var query = angular.fromJson(trend._query);
+      $rootScope.$state.go('reports', {
+        keywords: query.keywords,
+        before: endTime.toISOString(),
+        after: startTime.toISOString(),
+      });
+    };
   }
 ]);
-

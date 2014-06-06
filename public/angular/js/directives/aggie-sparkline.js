@@ -4,7 +4,8 @@ angular.module('Aggie')
   return {
     restrict:"E",
     scope:{
-      data:"@"
+      data:"@",
+      callback: '&'
     },
     compile: function(tElement, tAttrs, transclude){
       tElement.replaceWith("<span>" + tAttrs.data + "</span>");
@@ -12,10 +13,14 @@ angular.module('Aggie')
         attrs.$observe("data", function(newValue){
           element.html(newValue);
           element.sparkline('html', {
-            defaultPixelsPerValue: 5,
-            width: '200px',
+            tooltipContainer: element,
+            barWidth: 12,
+            barSpacing: 3,
             height: '100px',
-            type: 'line'
+            type: 'bar'
+          });
+          element.bind('sparklineClick', function(e) {
+            scope.callback({ sparkEvent: e });
           });
         });
       };
