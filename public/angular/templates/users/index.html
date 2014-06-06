@@ -16,7 +16,6 @@
 <table class="table" ng-show="users.length > 0">
   <thead>
     <tr>
-      <th>Provider</th>
       <th>Username</th>
       <th>Email</th>
       <th>Role</th>
@@ -24,7 +23,6 @@
   </thead>
   <tbody>
     <tr ng-repeat="u in users" ng-click="viewUser(u)">
-      <td class="compact content">{{ u.provider }}</td>
       <td class="compact content">{{ u.username }}</td>
       <td class="compact content">{{ u.email }}</td>
       <td class="compact content">{{ u.role }}</td>

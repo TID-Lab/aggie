@@ -20,7 +20,7 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(user) {
         User.create(user, function(response) {
-          flash.setNoticeNow('User was successfully created.');
+          flash.setNoticeNow('User was successfully created and an email has been sent to them with password instructions.');
           $scope.users.push(response);
         }, function(err) {
           flash.setAlertNow('User failed to be created. Please contact support.');
@@ -41,7 +41,7 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(user) {
         User.update({ username: user.oldUserName }, user, function(response) {
-          flash.setNoticeNow('User was successfully updated. If you updated your password an email has been sent with instructions for confirming this change.');
+          flash.setNoticeNow('User was successfully updated.');
           angular.forEach($scope.users, function(u, i) {
             if (u._id == user._id) {
               $scope.users[i] = user;
