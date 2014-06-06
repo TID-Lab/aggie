@@ -85,6 +85,7 @@ tbody {
   vertical-align: top;
   font-weight: bold;
   margin-right: 10px;
+  min-width: 31px;
   .interval-amount,
   .interval-relative {
     display: block;
@@ -167,17 +168,17 @@ table, .table {
     &:hover {
       color: lighten($link-blue, 10%);
     }
-    &.btn {
-      color: #fff;
-      background-color: #5BC0DE;
-      text-decoration: none;
-      line-height: 15px;
-      height: 25px;
-      padding: 4px 8px;
-      font-size: 12px;
-      &:hover {
-        background-color: #39B3D7;
-      }
+  }
+  .btn {
+    color: #fff;
+    background-color: #5BC0DE;
+    text-decoration: none;
+    line-height: 15px;
+    height: 25px;
+    padding: 4px 8px;
+    font-size: 12px;
+    &:hover {
+      background-color: #39B3D7;
     }
   }
 }

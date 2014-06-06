@@ -40,10 +40,10 @@
       <ul class="pager">
         <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
         <li>
-          <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="incidents({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
         </li>
         <li>
-          <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="incidents({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
         </li>
       </ul>
     </div>
@@ -56,26 +56,33 @@
   </div>
 </div>
 
-<div class="bs-component" ng-hide="pagination.total > 0">
-  <div class="alert alert-warning">
-    <h4>Sorry, but we couldn't find any incidents.</h4>
-  </div>
-</div>
+<p ng-hide="pagination.total > 0">Sorry, but we couldn't find any incidents.</p>
 
 <table class="table" ng-show="pagination.total > 0">
   <thead>
     <tr>
-      <th>Created</th>
-      <th>Title</th>
-      <th>Location</th>
-      <th>Assigned To</th>
-      <th>Notes</th>
-      <th>Status</th>
-      <th>Verified</th>
+      <th class="compact">Updated</th>
+      <th class="compact">Created</th>
+      <th class="compact">Title</th>
+      <th class="compact">Location</th>
+      <th class="compact">Assigned To</th>
+      <th class="compact">Status</th>
+      <th class="compact">Verified</th>
+      <th class="compact"></th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in incidents | orderBy:'-storedAt'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
+    <tr ng-repeat="i in incidents | orderBy:'+status'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
+      <td class="compact">
+        <div class="interval">
+          <span class="interval-amount">{{ i.updatedAt | interval }}</span>
+          <span class="interval-relative">ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
+        </div>
+      </td>
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.storedAt | interval }}</span>
@@ -90,9 +97,12 @@
       <td class="compact content">{{ i.title }}</td>
       <td class="compact content">{{ i.locationName }}</td>
       <td class="compact content">{{ i.assignedTo }}</td>
-      <td class="expand content">{{ i.notes }}</td>
-      <td class="compact content">{{ i.status }}</td>
-      <td class="compact content">{{ i.verified }} </td>
+      <td class="compact content">{{ statusOptions[i.status] }}</td>
+      <td class="compact content">{{ veracityOptions[i.verified] }} </td>
+      <td class="compact">
+        <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(i)">Edit incident</button>
+        <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete(i)">Delete incident</button>
+      </td>
     </tr>
   </tbody>
 </table>

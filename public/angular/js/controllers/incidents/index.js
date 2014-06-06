@@ -88,8 +88,12 @@ angular.module('Aggie')
       $scope.pagination.start = Math.min(start + 1, total);
       $scope.pagination.end = Math.min(end + 1, total);
 
-      $scope.pagination.visibleTotal = items.length;
-      return items.slice(start, end);
+      if ($scope.searchParams.title || $scope.searchParams.location) {
+        $scope.pagination.visibleTotal = items.length;
+        return items.slice(start, end);
+      } else {
+        return items;
+      }
     }
 
     $scope.handleNewIncidents = function(incidents) {
@@ -159,6 +163,15 @@ angular.module('Aggie')
 
     $scope.incidentClass = function(incident) {
       return incident.status + '-incident';
+    };
+
+    $scope.delete = function(incident) {
+      Incident.delete({id: incident._id}, function(){
+        flash.setNotice('Incident was successfully deleted.');
+        $rootScope.$state.go('incidents', {}, { reload: true });
+      }, function() {
+        flash.setAlertNow('Incident failed to be deleted.');
+      });
     };
 
     (fireDigestEveryThirtySeconds = function() {

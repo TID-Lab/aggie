@@ -56,7 +56,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents?title&locationName&assignedTo&status&verified',
+      url: '/incidents?page&title&locationName&assignedTo&status&verified',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {

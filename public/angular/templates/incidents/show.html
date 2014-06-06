@@ -7,7 +7,7 @@
 
 <div class="table-filters">
   <div class="filter">
-    <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit()">Edit incident</button>
+    <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(incident)">Edit incident</button>
     <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete()">Delete incident</button>
   </div>
 </div>
@@ -25,11 +25,11 @@
     </tr>
     <tr>
       <td class="detail-key">Status</td>
-      <td class="detail-value">{{ incident.status }}</td>
+      <td class="detail-value">{{ statusOptions[incident.status] }}</td>
     </tr>
     <tr>
       <td class="detail-key">Verified</td>
-      <td class="detail-value">{{ incident.verified }}</td>
+      <td class="detail-value">{{ veracityOptions[incident.verified] }}</td>
     </tr>
     <tr>
       <td class="detail-key">Notes</td>

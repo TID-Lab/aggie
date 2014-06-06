@@ -10,11 +10,15 @@ angular.module('Aggie')
   'sourceTypes',
   'Queue',
   'paginationOptions',
+  'incidentStatusOptions',
+  'veracityOptions',
   'Incident',
   'FlashService',
-  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, Incident, flash) {
+  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash) {
     $scope.incident = incident;
     $scope.reports = reports.results;
+    $scope.statusOptions = incidentStatusOptions;
+    $scope.veracityOptions = veracityOptions;
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.sourceTypes = sourceTypes;

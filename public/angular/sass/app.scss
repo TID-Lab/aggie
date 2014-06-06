@@ -46,6 +46,10 @@ a {
   }
 }
 
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0;
+}
+
 .navbar-stats {
   min-height: 34px;
   background-color: $navbar-yellow;
@@ -273,5 +277,16 @@ a.list-group-item {
     color: #31708F;
     background-color: #D9EDF7;
     border-color: #BCE8F1;
+  }
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"] {
+  &.form-control:focus {
+    border-color: #66AFE9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   }
 }

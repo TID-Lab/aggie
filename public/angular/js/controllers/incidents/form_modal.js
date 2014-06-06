@@ -16,14 +16,16 @@ angular.module('Aggie')
             return User.query().$promise;
           }],
           incident: function() {
-            return {};
+            return {
+              status: 'new'
+            };
           }
         }
       });
 
       modalInstance.result.then(function(incident) {
         Incident.create(incident, function(inc) {
-          flash.setNoticeNow('Incident was successfully created.');
+          flash.setNotice('Incident was successfully created.');
           $scope.incidents[inc._id] = inc;
           $rootScope.$state.go('incidents', {}, { reload: true });
         }, function(err) {
@@ -32,7 +34,7 @@ angular.module('Aggie')
       });
     };
 
-    $scope.edit = function() {
+    $scope.edit = function(incident) {
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
         templateUrl: '/templates/incidents/modal.html',
@@ -41,7 +43,7 @@ angular.module('Aggie')
             return User.query().$promise;
           }],
           incident: function() {
-            return $scope.incident;
+            return incident;
           }
         }
       });
