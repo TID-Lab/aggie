@@ -40,7 +40,7 @@ function createAdminUser(callback) {
         else console.log('"admin" user created with password "' + config.adminPassword + '"');
         callback();
       });
-    }
+    } else callback();
   });
 };
 tasks.push(createAdminUser);
