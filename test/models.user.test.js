@@ -22,8 +22,7 @@ describe('User attributes', function() {
   });
 
   it('should save a user', function(done) {
-    user.save();
-    done();
+    user.save(done);
   });
 
   it('should find our newly created user', function(done) {
