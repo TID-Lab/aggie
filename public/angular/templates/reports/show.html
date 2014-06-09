@@ -43,7 +43,7 @@
     </tr>
     <tr>
       <td class="detail-key">Status</td>
-      <td class="detail-value">{{ report.status ? report.status : 'Unassigned' }}</td>
+      <td class="detail-value">{{ report.status || 'unassigned' | translate }}</td>
     </tr>
   </tbody>
 </table>

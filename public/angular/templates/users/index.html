@@ -25,7 +25,7 @@
     <tr ng-repeat="u in users" ng-click="viewUser(u)">
       <td class="compact content">{{ u.username }}</td>
       <td class="compact content">{{ u.email }}</td>
-      <td class="compact content">{{ u.role }}</td>
+      <td class="compact content">{{ u.role | translate }}</td>
       <td ng-controller="UserFormModalController" class="actions compact">
         <a href class="btn btn-info" ng-click="edit(u)">Edit</a>
         <a href class="btn btn-info" aggie-confirm="Are you sure you want to delete this user?" on-confirm="delete(u)">Delete</a>

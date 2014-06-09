@@ -3,8 +3,9 @@ require('./angular-ui-router');
 require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
+require('./angular-translate');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -41,6 +42,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 // Configuration
 require('./config');
 require('./routes');
+require('./translations');
 
 // Services
 require('./services/auth');

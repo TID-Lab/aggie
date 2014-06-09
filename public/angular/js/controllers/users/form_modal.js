@@ -6,7 +6,8 @@ angular.module('Aggie')
   '$modal',
   'User',
   'FlashService',
-  function($rootScope, $scope, $modal, User, flash) {
+  '$translate',
+  function($rootScope, $scope, $modal, User, flash, $translate) {
     $scope.create = function() {
       var modalInstance = $modal.open({
         controller: 'UserFormModalInstanceController',
@@ -22,8 +23,12 @@ angular.module('Aggie')
         User.create(user, function(response) {
           flash.setNoticeNow('User was successfully created and an email has been sent to them with password instructions.');
           $scope.users.push(response);
-        }, function(err) {
-          flash.setAlertNow('User failed to be created. Please contact support.');
+        }, function(response) {
+          $translate(response.data).then(function(error) {
+            flash.setAlertNow(error);
+          }).catch(function() {
+            flash.setAlertNow('User failed to be created. Please contact support.');
+          });
         });
       });
     };
@@ -48,13 +53,11 @@ angular.module('Aggie')
             }
           });
         }, function(response) {
-            if (response.data == "password_too_short") {
-              flash.setAlertNow('User failed to be updated. Password is too short.');
-            } else if (response.data == 'email_not_unique') {
-              flash.setAlertNow('User failed to be updated. Email is not unique.');
-            } else {
-              flash.setAlertNow('User failed to be updated.');
-            }
+          $translate(response.data).then(function(error) {
+            flash.setAlertNow(error);
+          }).catch(function() {
+            flash.setAlertNow('Could not update user. Please contact support.');
+          });
         });
       });
     };

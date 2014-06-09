@@ -32,17 +32,17 @@
             <label for="role" class="col-lg-3 control-label">Role</label>
             <div class="col-lg-6">
               <select id="role" name="role" class="form-control" required>
-                <option ng-repeat="(userRole, userRoleLabel) in userRoles" ng-model="user.role" value="{{ userRole }}">{{ userRoleLabel }}</option>
+                <option ng-repeat="userRole in userRoles" ng-model="user.role" value="{{ userRole }}">{{ userRole | translate }}</option>
               </select>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.role.$error.required">Role is required.</div>
               </div>
             </div>
           </div>
-          <div class="form-group" ng-show="!showPassword && user._id == currentUser._id">
+          <div class="form-group" ng-show="!(showPassword || user.password || passwordConfirmation) && user._id == currentUser._id">
             <button type="button" class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword">Change password</button>
           </div>
-          <div ng-show="showPassword">
+          <div ng-show="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
             <div class="form-group">
               <label for="password" class="col-lg-3 control-label">Password</label>
               <div class="col-lg-6">
