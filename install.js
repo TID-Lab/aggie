@@ -25,11 +25,11 @@ tasks.push(enableIndexing);
 
 // Verify that an admin user exists
 function createAdminUser(callback) {
-  User.findOne({username: 'admin'}, function(err, user) {
+  User.findOne({role: 'admin'}, function(err, user) {
     if (!user) {
       var userData = {
         provider: 'aggie',
-        email: config.email.from,
+        email: config.fromEmail,
         username: 'admin',
         password: config.adminPassword,
         role: 'admin'
@@ -38,15 +38,6 @@ function createAdminUser(callback) {
       User.create(userData, function(err, user) {
         if (err) console.error(err);
         else console.log('"admin" user created with password "' + config.adminPassword + '"');
-        callback();
-      });
-    } else {
-      if (config.email.from) user.email = config.email.from;
-      if (config.adminPassword) user.password = config.adminPassword;
-      user.role = 'admin';
-      user.save(function(err) {
-        if (err) console.error(err);
-        else console.log('"admin" user updated with password "' + config.adminPassword + '"');
         callback();
       });
     }
