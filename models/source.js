@@ -25,13 +25,16 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('unreadErrorCount')) {
     sourceSchema.emit('sourceErrorCountUpdated');
   }
+
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
     Source.findOne({type: 'twitter'}, function(err, source) {
       if (source) return next(new Error.Validation('only_one_twitter_allowed'));
       else next();
     });
-  } else next();
+  } else {
+    process.nextTick(next);
+  }
 });
 
 sourceSchema.post('save', function() {

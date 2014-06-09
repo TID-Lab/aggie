@@ -4,6 +4,7 @@ var util = require('util');
 var _ = require('underscore');
 
 var ReportQuery = function(options) {
+  options = options || {};
   this.keywords = options.keywords;
   this.status = options.status;
   this.after = options.after;
