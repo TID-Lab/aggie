@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var socketHandler = require('../lib/api/socket-handler')();
 var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
+var Source = require('../models/source');
 var Report = require('../models/report');
 var Incident = require('../models/incident');
 var fetchingController = require('../lib/api/v1/fetching-controller');
@@ -14,6 +15,7 @@ describe('Socket handler', function() {
   before(function(done) {
     streamer.addListeners('report', Report.schema);
     streamer.addListeners('incident', Incident.schema);
+    socketHandler.addListeners('source', Source.schema);
     socketHandler.server.listen(3000);
     client = io.connect('http://localhost:3000', {
       transports: ['websocket'],
@@ -92,6 +94,16 @@ describe('Socket handler', function() {
       .end(function(err, res) {
         if (err) return done(err);
       });
+  });
+
+  it('should stream a list of sources when a source changes', function(done) {
+    client.once('sources', function(sources) {
+      expect(sources).to.be.an.instanceof(Array);
+      expect(sources).to.have.length(1);
+      expect(sources[0]).to.contain.keys(['_id', 'nickname', 'type', 'unreadErrorCount', 'enabled', '__v']);
+      done();
+    });
+    Source.create({nickname: 'test', type: 'dummy'});
   });
 
   // Disconnect socket
