@@ -32,7 +32,7 @@
             <label for="role" class="col-lg-3 control-label">Role</label>
             <div class="col-lg-6">
               <select id="role" name="role" class="form-control" required>
-                <option ng-model="user.role" value="admin">Admin</option>
+                <option ng-repeat="(userRole, userRoleLabel) in userRoles" ng-model="user.role" value="{{ userRole }}">{{ userRoleLabel }}</option>
               </select>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.role.$error.required">Role is required.</div>
