@@ -64,6 +64,19 @@ tbody {
       font-weight: bold;
     }
   }
+  tr.new-incident {
+    background-color: rgba(146, 200, 220, 0.4);
+  }
+  tr.working-incident {
+    background-color: rgba(0, 200, 70, 0.4);
+  }
+  tr.alert-incident {
+    background-color: rgba(234, 239, 146, 0.4);
+    // red? background-color: rgba(255, 0, 0, 0.3);
+  }
+  tr.closed-incident {
+    background-color: rgba(100, 100, 100, 0.4);
+  }
 }
 
 .interval {
@@ -72,6 +85,7 @@ tbody {
   vertical-align: top;
   font-weight: bold;
   margin-right: 10px;
+  min-width: 31px;
   .interval-amount,
   .interval-relative {
     display: block;
@@ -155,6 +169,18 @@ table, .table {
       color: lighten($link-blue, 10%);
     }
   }
+  .btn {
+    color: #fff;
+    background-color: #5BC0DE;
+    text-decoration: none;
+    line-height: 15px;
+    height: 25px;
+    padding: 4px 8px;
+    font-size: 12px;
+    &:hover {
+      background-color: #39B3D7;
+    }
+  }
 }
 
 .table-filters {
@@ -166,7 +192,6 @@ table, .table {
     font-weight: bold;
   }
   .filter {
-    width: 100%;
     vertical-align: top;
     display: table-cell;
     padding: 0 8px;
@@ -211,3 +236,4 @@ table, .table {
     }
   }
 }
+

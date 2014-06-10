@@ -14,6 +14,18 @@ angular.module('Aggie')
   'assigned': 'Assigned'
 })
 
+.value('incidentStatusOptions', {
+  'new': 'New',
+  'working': 'Working',
+  'alert': 'Alert',
+  'closed': 'Closed'
+})
+
+.value('veracityOptions', {
+  'true': 'Verified',
+  'false': 'Unverified'
+})
+
 .value('paginationOptions', {
   perPage: 25
 });

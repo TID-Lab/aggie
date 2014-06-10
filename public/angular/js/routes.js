@@ -56,8 +56,46 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents',
-      templateUrl: '/templates/incidents.html'
+      url: '/incidents?page&title&locationName&assignedTo&status&verified',
+      templateUrl: '/templates/incidents/index.html',
+      controller: 'IncidentsIndexController',
+      resolve: {
+        incidents: ['Incident', '$stateParams', function(Incident, params) {
+          var page = params.page || 1;
+          return Incident.query({
+            page: page - 1,
+            title: params.title,
+            locationName: params.locationName,
+            assignedTo: params.assignedTo,
+            status: params.status,
+            verified: params.verified
+          }).$promise;
+        }],
+        users: ['User', function(User) {
+          return User.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('incident', {
+      url: '/incidents/:id?page',
+      templateUrl: '/templates/incidents/show.html',
+      controller: 'IncidentsShowController',
+      resolve: {
+        incident: ['Incident', '$stateParams', function(Incident, params) {
+          return Incident.get({ id: params.id }).$promise;
+        }],
+        reports: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          return Report.query({
+            incidentId: params.id,
+            page: page - 1
+          }).$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('sources', {
@@ -78,6 +116,17 @@ angular.module('Aggie')
       resolve: {
         source: ['Source', '$stateParams', function(Source, params) {
           return Source.get({ id: params.id }).$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('users', {
+      url: '/users',
+      templateUrl: '/templates/users/index.html',
+      controller: 'UsersIndexController',
+      resolve: {
+        users: ['User', function(User) {
+          return User.query().$promise;
         }]
       }
     });

@@ -47,6 +47,8 @@ require('./services/queue');
 require('./services/report');
 require('./services/socket');
 require('./services/source');
+require('./services/user');
+require('./services/incident');
 
 // Controllers
 require('./controllers/application');
@@ -60,6 +62,13 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/users/index');
+require('./controllers/incidents/index');
+require('./controllers/incidents/show');
+require('./controllers/incidents/form_modal');
+
+// Routes
+require('./routes');
 
 // Filters
 require('./filters/aggie-date');
