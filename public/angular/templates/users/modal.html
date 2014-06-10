@@ -26,6 +26,7 @@
               <input id="email" name="email" type="email" class="form-control" ng-model="user.email" required>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.email.$error.required">Email is required.</div>
+                <div class="help-block" ng-show="form.email.$invalid">Email is invalid.</div>
               </div>
             </div>
           </div>
