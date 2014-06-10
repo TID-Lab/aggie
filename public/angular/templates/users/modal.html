@@ -39,22 +39,24 @@
               </div>
             </div>
           </div>
-          <div class="form-group" ng-show="!(showPassword || user.password || passwordConfirmation) && user._id == currentUser._id">
-            <button type="button" class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword">Change password</button>
-          </div>
-          <div ng-show="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
-            <div class="form-group">
-              <label for="password" class="col-lg-3 control-label">Password</label>
-              <div class="col-lg-6">
-                <input id="password" name="password" type="password" class="form-control" ng-model="user.password">
-              </div>
+          <div ng-show="user._id == currentUser._id">
+            <div class="form-group" ng-hide="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
+              <button type="button" class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword">Change password</button>
             </div>
-            <div class="form-group">
-              <label for="passwordConfirmation" class="col-lg-3 control-label">Password Confirmation</label>
-              <div class="col-lg-6">
-                <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
-                <div class="has-error" ng-show="showErrors || form.passwordConfirmation.$focused">
-                  <div class="help-block" ng-show="form.passwordConfirmation.$invalid">Passwords don't match.</div>
+            <div ng-show="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
+              <div class="form-group">
+                <label for="password" class="col-lg-3 control-label">Password</label>
+                <div class="col-lg-6">
+                  <input id="password" name="password" type="password" class="form-control" ng-model="user.password">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="passwordConfirmation" class="col-lg-3 control-label">Password Confirmation</label>
+                <div class="col-lg-6">
+                  <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
+                  <div class="has-error" ng-show="showErrors || form.passwordConfirmation.$focused">
+                    <div class="help-block" ng-show="form.passwordConfirmation.$invalid">Passwords don't match.</div>
+                  </div>
                 </div>
               </div>
             </div>
