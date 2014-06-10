@@ -29,7 +29,7 @@ angular.module('Aggie')
             flash.setNoticeNow('You have been successfully logged out.');
           } else {
             flash.setNotice('You have been successfully logged out.');
-            $location.path('/login');
+            $location.url('/login');
           }
         } else {
           console.log('Error', err);
