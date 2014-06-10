@@ -112,6 +112,15 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('choose_password', {
+      url: '/choose_password/:token',
+      templateUrl: '/templates/choose_password.html',
+      controller: 'ChoosePasswordController',
+      data: {
+        public: true
+      }
+    });
+
     $stateProvider.state('404', {
       url: '/404',
       templateUrl: '/templates/404.html',

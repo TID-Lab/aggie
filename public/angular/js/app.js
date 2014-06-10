@@ -62,6 +62,7 @@ require('./services/user');
 
 // Controllers
 require('./controllers/application');
+require('./controllers/choose_password');
 require('./controllers/fetching');
 require('./controllers/login');
 require('./controllers/navbar');
