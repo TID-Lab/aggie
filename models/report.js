@@ -85,10 +85,7 @@ Report.queryReports = function(query, page, callback) {
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided
-    Report.findPage(query.filter, page, function(err, reports) {
-      if (err) return callback(err);
-      callback(null, reports);
-    });
+    Report.findSortedPage(query.filter, page, callback);
   } else {
     Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
       if (err) return callback(err);
@@ -99,6 +96,13 @@ Report.queryReports = function(query, page, callback) {
       callback(null, result);
     });
   }
+};
+
+Report.findSortedPage = function(filter, page, callback) {
+  Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
+    if (err) return callback(err);
+    callback(null, reports);
+  });
 };
 
 module.exports = Report;
