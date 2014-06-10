@@ -4,7 +4,7 @@ angular.module('Aggie')
 
 .value('statusOptions', ['relevant', 'irrelevant', 'unassigned', 'assigned'])
 
-.value('userRoles', ['admin'])
+.value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
 
 .value('paginationOptions', {
   perPage: 25

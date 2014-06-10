@@ -14,7 +14,9 @@ angular.module('Aggie')
         templateUrl: 'templates/users/modal.html',
         resolve: {
           user: function() {
-            return {};
+            return {
+              role: 'viewer'
+            };
           }
         }
       });

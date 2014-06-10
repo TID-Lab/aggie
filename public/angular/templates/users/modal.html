@@ -33,9 +33,7 @@
           <div class="form-group" ng-hide="user._id == currentUser._id">
             <label for="role" class="col-lg-3 control-label">Role</label>
             <div class="col-lg-6">
-              <select id="role" name="role" class="form-control" required>
-                <option ng-repeat="userRole in userRoles" ng-model="user.role" value="{{ userRole }}">{{ userRole | translate }}</option>
-              </select>
+              <select id="role" name="role" ng-model="user.role" ng-options="role as role | translate for role in userRoles" class="form-control" required></select>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.role.$error.required">Role is required.</div>
               </div>
