@@ -10,6 +10,10 @@ var Source = require('../models/source');
 describe('Bot master', function() {
   before(function(done) {
     botMaster.kill();
+    Source.schema.removeAllListeners('source:save');
+    Source.schema.removeAllListeners('source:remove');
+    Source.schema.removeAllListeners('source:enable');
+    Source.schema.removeAllListeners('source:disable');
     botMaster.addListeners('source', Source.schema);
     process.nextTick(function() {
       Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
