@@ -6,13 +6,12 @@ var email = require('email');
 var _ = require('underscore');
 
 var SALT_WORK_FACTOR = 10;
-var PASSWORD_MIN_LENGTH = 6;
 
 var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
+  password: {type: String},
   role: {type: String, default: 'viewer'}
 });
 
@@ -20,20 +19,36 @@ var userSchema = new mongoose.Schema({
 userSchema.pre('save', function(next) {
   var user = this;
 
-  if (!user.isModified('password')) return next();
+  if (!user.email) return next(new Error.Validation('email_required'));
+  if (!user.username) return next(new Error.Validation('username_required'));
   if (!email.isValidAddress(user.email)) return next(new Error.Validation('email_invalid'));
-  if (user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
+  if (user.password && user.password.length < User.PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
 
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-    if (err) return next(err);
+  // Check for uniqueness in certain fields
+  User.checkUnique(user, function(unique, errors) {
+    if (!unique) return next(new Error.Validation(errors[0]));
 
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
+    // Re-hash password if necessary
+    if (user.isModified('password')) {
+      user.hashPassword(next);
+    } else {
+      process.nextTick(next);
+    }
   });
 });
+
+userSchema.methods.hashPassword = function(callback) {
+  var user = this;
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if (err) return callback(err);
+
+    bcrypt.hash(user.password, salt, null, function(err, hash) {
+      if (err) return callback(err);
+      user.password = hash;
+      callback();
+    });
+  });
+};
 
 // Password verification
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
@@ -57,6 +72,27 @@ userSchema.methods.gravatar = function(size, defaults) {
 };
 
 var User = mongoose.model('User', userSchema);
+
+User.checkUnique = function(user, callback) {
+  var errors = [];
+  var queries = [];
+  _.each(userSchema.tree, function(meta, field) {
+    var query = {$and: [{
+      _id: { $ne: user._id }
+    }]};
+    var filter = {};
+    filter[field] = user[field];
+    query.$and.push(filter);
+    if (meta.unique) queries.push(query);
+  });
+  var remaining = queries.length;
+  _.each(queries, function(query) {
+    User.count(query, function(err, count) {
+      if (count) errors.push(_.keys(_.last(query.$and))[0] + '_not_unique');
+      if (--remaining === 0) callback(!errors.length, errors);
+    });
+  });
+};
 
 // Mixin shared user methods
 var Shared = require('../shared/user');

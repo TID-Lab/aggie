@@ -32,15 +32,21 @@ schema.post('save', function() {
 var Incident = mongoose.model('Incident', schema);
 
 // Query incidents based on passed query data
-Incident.queryIncidents = function(query, page, callback) {
+Incident.queryIncidents = function(query, page, options, callback) {
   if (typeof query === 'function') return Incident.findPage(query);
   if (typeof page === 'function') {
     callback = page;
     page = 0;
+    options = {};
+  }
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
   }
   if (page < 0) page = 0;
 
   var filter = {};
+  options.limit = 100;
 
   // Create filter object
   Incident.filterAttributes.forEach(function(attr) {
@@ -55,12 +61,15 @@ Incident.queryIncidents = function(query, page, callback) {
 
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
+  else delete filter.title;
+  if (query.locationName) filter.locationName = new RegExp(query.locationName, 'i');
+  else delete filter.locationName;
 
   // Re-set search timestamp
   query.since = new Date();
 
   // Just use filters when no keywords are provided
-  Incident.findPage(filter, page, {limit: 100}, callback);
+  Incident.findPage(filter, page, options, callback);
 };
 
 // Mixin shared incident methods
