@@ -20,16 +20,8 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(user) {
-        User.create(user, function(response) {
-          flash.setNoticeNow('User was successfully created and an email has been sent to them with password instructions.');
-          $scope.users.push(response);
-        }, function(response) {
-          $translate(response.data).then(function(error) {
-            flash.setAlertNow(error);
-          }).catch(function() {
-            flash.setAlertNow('User failed to be created. Please contact support.');
-          });
-        });
+        $scope.users.push(user);
+        flash.setNoticeNow('User was successfully created and an email has been sent to them with password instructions.');
       });
     };
 
@@ -45,20 +37,11 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(user) {
-        User.update({ username: user.oldUserName }, user, function(response) {
-          delete user.password;
-          flash.setNoticeNow('User was successfully updated.');
-          angular.forEach($scope.users, function(u, i) {
-            if (u._id == user._id) {
-              $scope.users[i] = user;
-            }
-          });
-        }, function(response) {
-          $translate(response.data).then(function(error) {
-            flash.setAlertNow(error);
-          }).catch(function() {
-            flash.setAlertNow('Could not update user. Please contact support.');
-          });
+        flash.setNoticeNow('User was successfully updated.');
+        angular.forEach($scope.users, function(u, i) {
+          if (u._id == user._id) {
+            $scope.users[i] = user;
+          }
         });
       });
     };
@@ -70,19 +53,44 @@ angular.module('Aggie')
   '$modalInstance',
   'userRoles',
   'user',
-  function($scope, $modalInstance, userRoles, user) {
+  'User',
+  '$translate',
+  'FlashService',
+  function($scope, $modalInstance, userRoles, user, User, $translate, flash) {
     $scope.userRoles = userRoles;
     $scope.user = angular.copy(user);
     $scope.user.oldUserName = user.username;
     $scope.showErrors = false;
     $scope.showPassword = false;
+    $scope.message = '';
+
+    var handleSuccess = function(response) {
+      delete $scope.user.password;
+      $modalInstance.close(response);
+    };
+
+    var handleError = function(response) {
+      $translate(response.data).then(function(error) {
+        $scope.message = error;
+      }).catch(function() {
+        if ($scope.user._id) {
+          $scope.message = 'Could not update user. Please contact support.';
+        } else {
+          $scope.message = 'User failed to be created. Please contact support.';
+        }
+      });
+    };
 
     $scope.save = function(form) {
       if (form.$invalid) {
         $scope.showErrors = true;
         return;
       }
-      $modalInstance.close($scope.user);
+      if ($scope.user._id) {
+        User.update({ username: $scope.user.username }, $scope.user, handleSuccess, handleError);
+      } else {
+        User.create($scope.user, handleSuccess, handleError);
+      }
     };
 
     $scope.close = function() {

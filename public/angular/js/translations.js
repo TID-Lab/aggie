@@ -2,7 +2,8 @@ angular.module('Aggie').config([
   '$translateProvider',
   function($translateProvider) {
     $translateProvider.translations('en', {
-      'email_not_unique': 'That email is already in our database. Please choose another',
+      'username_not_unique': 'That username is already in our database. Please choose another.',
+      'email_not_unique': 'That email is already in our database. Please choose another.',
       'password_too_short': 'That password was too short. Please use a longer one.',
     }).translations('en', {
       'relevant': 'Relevant',
