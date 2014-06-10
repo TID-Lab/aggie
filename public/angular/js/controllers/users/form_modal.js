@@ -58,12 +58,14 @@ angular.module('Aggie')
   'User',
   '$translate',
   'FlashService',
-  function($scope, $modalInstance, userRoles, user, User, $translate, flash) {
+  'shared',
+  function($scope, $modalInstance, userRoles, user, User, $translate, flash, shared) {
     $scope.userRoles = userRoles;
     $scope.user = angular.copy(user);
     $scope.user.oldUserName = user.username;
     $scope.showErrors = false;
     $scope.showPassword = false;
+    $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
     $scope.message = '';
 
     var handleSuccess = function(response) {

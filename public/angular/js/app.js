@@ -14,6 +14,12 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   }
 ])
 
+.factory('shared', function() {
+  var shared = {};
+  shared.User = require('../../../shared/user');
+  return shared;
+})
+
 .run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
   $rootScope.$state = $state;
 
