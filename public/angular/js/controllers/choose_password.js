@@ -24,7 +24,7 @@ angular.module('Aggie').controller('ChoosePasswordController', [
 
       $http.put('/reset-password', params).success(function() {
         flash.setNotice('Your password has been set successfully.');
-        $state.go('login');
+        $state.go('reports');
       }).error(function(message, respStatus) {
         flash.setAlertNow(message);
       });
