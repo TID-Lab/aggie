@@ -46,6 +46,10 @@ a {
   }
 }
 
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0;
+}
+
 .navbar-stats {
   min-height: 34px;
   background-color: $navbar-yellow;
@@ -89,6 +93,10 @@ label {
   overflow-y: auto;
 }
 
+.modal-body {
+  font-size: 14px;
+}
+
 .modal-header,
 .modal-footer {
   background-color: darken(#e3e6e3, 10%);
@@ -96,6 +104,7 @@ label {
 
 .modal-content {
   background-color: #e3e6e3;
+  font-size: 14px;
 }
 
 .close {
@@ -259,4 +268,30 @@ label + aggie-toggle {
   color: red;
 }
 
+a.list-group-item {
+  background-color: #fff;
+  color: #555;
+  &:hover {
+    background-color: #f6f7f7;
+  }
+}
 
+.panel-info {
+  box-shadow: none;
+  & > .panel-heading {
+    color: #31708F;
+    background-color: #D9EDF7;
+    border-color: #BCE8F1;
+  }
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"] {
+  &.form-control:focus {
+    border-color: #66AFE9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  }
+}

@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td class="detail-key">Type</td>
-      <td class="detail-value">{{sourceTypes[source.type]}}</td>
+      <td class="detail-value">{{source.type | translate}}</td>
     </tr>
     <tr>
       <td class="detail-key">Target</td>
@@ -39,8 +39,7 @@
   </tbody>
 </table>
 
-
-<h4>Events</h4>
+<h4>Recent Events</h4>
 
 <p ng-hide="source.events.length > 0">There are no events to display.</p>
 

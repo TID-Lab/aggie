@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .value('sourceTypes', {
   'twitter': 'Twitter',
-  // 'facebook': 'Facebook',
+  'facebook': 'Facebook',
   'rss': 'RSS',
   // 'elmo': 'Elmo'
 })
@@ -12,6 +12,20 @@ angular.module('Aggie')
   'irrelevant': 'Irrelevant',
   'unassigned': 'Unassigned',
   'assigned': 'Assigned'
+})
+
+.value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
+
+.value('incidentStatusOptions', {
+  'new': 'New',
+  'working': 'Working',
+  'alert': 'Alert',
+  'closed': 'Closed'
+})
+
+.value('veracityOptions', {
+  'true': 'Verified',
+  'false': 'Unverified'
 })
 
 .value('paginationOptions', {

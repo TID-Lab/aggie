@@ -4,6 +4,7 @@ var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie
 var database = require('../lib/database');
 var Report = require('../models/report');
 var User = require('../models/user');
+var expect = require('chai').expect;
 
 before(function(done) {
   // Change database before starting any test
@@ -29,5 +30,14 @@ after(function(done) {
     database.mongoose.disconnect(function() {
       done();
     });
-  })
+  });
 });
+
+// Compare object attributes
+compare = function(a, b) {
+  for (var attr in a) {
+    if (b[attr]) {
+      expect(a[attr]).to.equal(b[attr]);
+    }
+  }
+};

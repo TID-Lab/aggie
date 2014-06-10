@@ -113,7 +113,7 @@ describe('Source controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.have.property('events');
+          expect(res.body).to.have.property('unreadErrorCount');
           expect(res.body.unreadErrorCount).to.equal(0);
           done();
         });
@@ -162,11 +162,3 @@ describe('Source controller', function() {
   });
 
 });
-
-var compare = function(a, b) {
-  for (var attr in a) {
-    if (b[attr]) {
-      expect(a[attr]).to.equal(b[attr]);
-    }
-  }
-}

@@ -57,7 +57,7 @@
             <div class="col-lg-6">
               <div class="input-group">
                 <div ng-switch="source.type">
-                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/facebook.com\/.+/" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\/.+/" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
                   <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
                 </div>
                 <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
@@ -78,7 +78,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="close()">Close</button>
-    <button type="button" class="btn btn-primary" ng-click="save(form)">Submit</button>
+    <button class="btn btn-default" ng-click="close()">Close</button>
+    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
   </div>
 </div>

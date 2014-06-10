@@ -14,7 +14,6 @@ angular.module('Aggie')
           },
           function(err) {
             if (!err) {
-              flash.setNotice('You have been successfully logged in.');
               $state.go('reports');
             } else {
               flash.setAlertNow(err.data);

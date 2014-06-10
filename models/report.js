@@ -15,7 +15,8 @@ var schema = new mongoose.Schema({
   url: String,
   _source: {type: String, ref: 'Source'},
   _sourceType: String,
-  _sourceNickname: String
+  _sourceNickname: String,
+  _incident: {type: String, ref: 'Incident'}
 });
 
 // Give the report schema text search capabilities
@@ -33,39 +34,17 @@ schema.pre('save', function(next) {
 
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  else if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+  else {
+    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+  }
 });
 
 var Report = mongoose.model('Report', schema);
 
-// Find reports using pagination
-Report.findPage = function(filters, page, callback) {
-  if (typeof filters === 'function') {
-    callback = filters;
-    filters = {};
-    page = 0;
-  }
-  if (typeof page === 'function') {
-    callback = page;
-    page = 0;
-  }
-  if (page < 0) page = 0;
-  var limit = 25;
-  Report.count(filters, function(err, count) {
-    if (err) return callback(err);
-    var result = {total: count};
-    Report.find(filters, null, {limit: limit, skip: page * limit, sort: '-storedAt'}, function(err, reports) {
-      if (err) return callback(err);
-      result.results = reports;
-      callback(null, result);
-    });
-  });
-};
-
 // Query reports based on passed query data
 Report.queryReports = function(query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);
-  if (query instanceof Query) query = query.normalize();
   if (typeof page === 'function') {
     callback = page;
     page = 0;
@@ -90,9 +69,10 @@ Report.queryReports = function(query, page, callback) {
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
 
-  // Convert sourceId and sourceType for Report compatibility
+  // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
   if (query.sourceType) query.filter._sourceType = query.sourceType;
+  if (query.incidentId) query.filter._incident = query.incidentId;
 
   // Return only newer results
   if (query.since) {
@@ -105,10 +85,7 @@ Report.queryReports = function(query, page, callback) {
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided
-    Report.findPage(query.filter, page, function(err, reports) {
-      if (err) return callback(err);
-      callback(null, reports);
-    });
+    Report.findSortedPage(query.filter, page, callback);
   } else {
     Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
       if (err) return callback(err);
@@ -119,6 +96,13 @@ Report.queryReports = function(query, page, callback) {
       callback(null, result);
     });
   }
+};
+
+Report.findSortedPage = function(filter, page, callback) {
+  Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
+    if (err) return callback(err);
+    callback(null, reports);
+  });
 };
 
 module.exports = Report;

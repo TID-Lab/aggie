@@ -1,7 +1,7 @@
 require('./init');
 var expect = require('chai').expect;
 var streamer = require('../lib/api/streamer');
-var Query = require('../models/query');
+var ReportQuery = require('../models/query/report-query');
 var Report = require('../models/report');
 
 describe('Streamer', function() {
@@ -15,8 +15,8 @@ describe('Streamer', function() {
   });
 
   it('should track Query objects', function(done) {
-    var queryOne = new Query({type: 'Report', keywords: 'one'});
-    var queryTwo = new Query({type: 'Report', keywords: 'two'});
+    var queryOne = new ReportQuery({keywords: 'one'});
+    var queryTwo = new ReportQuery({keywords: 'two'});
     streamer.addQuery(queryOne);
     streamer.addQuery(queryTwo);
     expect(streamer.queries).to.be.an.instanceof(Array);
@@ -41,7 +41,7 @@ describe('Streamer', function() {
 
   it('should listen to new reports and re-start query', function(done) {
     streamer.queries = [];
-    var queryThree = new Query({type: 'Report', keywords: 'three'});
+    var queryThree = new ReportQuery({keywords: 'three'});
     streamer.addQuery(queryThree);
     streamer.addListeners('report', Report.schema);
     process.nextTick(function() {

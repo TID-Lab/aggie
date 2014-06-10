@@ -6,6 +6,8 @@
     }
   };
 
+  User.PASSWORD_MIN_LENGTH = 6;
+
   User.permissions = {
     'view data': ['viewer', 'monitor', 'manager', 'admin'],
     'edit incidents': ['monitor', 'manager', 'admin'],
