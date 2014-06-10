@@ -1,12 +1,12 @@
 angular.module('Aggie').controller('PasswordResetController', [
   '$rootScope',
   '$scope',
-  '$location',
+  '$state',
   '$stateParams',
   '$http',
   'AuthService',
   'FlashService',
-  function($rootScope, $scope, $location, $stateParams, $http, AuthService, flash) {
+  function($rootScope, $scope, $state, $stateParams, $http, AuthService, flash) {
     $scope.passwordsMatch = function() {
       return $scope.user.password ==
         $scope.user.password_confirmation;
@@ -24,14 +24,14 @@ angular.module('Aggie').controller('PasswordResetController', [
 
       $http.put('/reset-password', params).success(function() {
         flash.setNotice('Your password has been successfully reset.');
-        $location.path('/');
+        $state.go('login');
       }).error(function(message, respStatus) {
         flash.setAlertNow(message);
       });
     };
 
     $scope.cancel = function() {
-      $location.path('/login');
+      $state.go('login');
     };
   }
 ]);
