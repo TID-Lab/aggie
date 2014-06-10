@@ -1,11 +1,11 @@
 angular.module('Aggie').controller('PasswordResetModalController', [
   '$rootScope',
   '$scope',
-  '$location',
+  '$state',
   '$modal',
   '$http',
   'FlashService',
-  function($rootScope, $scope, $location, $modal, $http, flash) {
+  function($rootScope, $scope, $state, $modal, $http, flash) {
     $scope.open = function() {
       var modalInstance = $modal.open({
         controller: 'PasswordResetModalInstanceController',
@@ -15,9 +15,8 @@ angular.module('Aggie').controller('PasswordResetModalController', [
       modalInstance.result.then(function(email) {
         $http.post('/reset-password', { email: email })
           .success(function(response) {
-            flash.setNotice('An email has been sent to ' +
+            flash.setNoticeNow('An email has been sent to ' +
               email + ' with instructions for resetting your password' );
-            $location.path('/');
           })
           .error(function(mesg, status) {
             if (status == 404) {

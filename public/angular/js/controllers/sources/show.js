@@ -7,10 +7,8 @@ angular.module('Aggie')
   'Source',
   'source',
   'FlashService',
-  'sourceTypes',
-  function($scope, $rootScope, $stateParams, Source, source, flash, sourceTypes) {
+  function($scope, $rootScope, $stateParams, Source, source, flash) {
     $scope.source = source;
-    $scope.sourceTypes = sourceTypes;
     Source.resetUnreadErrorCount({ id: source._id }, source);
 
     $scope.delete = function() {

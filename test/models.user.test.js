@@ -22,8 +22,7 @@ describe('User attributes', function() {
   });
 
   it('should save a user', function(done) {
-    user.save();
-    done();
+    user.save(done);
   });
 
   it('should find our newly created user', function(done) {
@@ -34,11 +33,20 @@ describe('User attributes', function() {
     });
   });
 
-  it('should not allow users with duplicate emails', function(done) {
-    user.save(function(err) {
-      if (err) {
-        err.code.should.equal(11000);
-      }
+  it('should not allow users with duplicate username', function(done) {
+    var dupe = new User({username: 'test', email: 'janedoe2@gmail.com', password: 'password'});
+    dupe.save(function(err) {
+      err.status.should.equal(422);
+      err.message.should.equal('username_not_unique');
+      done();
+    });
+  });
+
+  it('should not allow users with duplicate email', function(done) {
+    var dupe = new User({username: 'test2', email: 'janedoe@gmail.com', password: 'password'});
+    dupe.save(function(err) {
+      err.status.should.equal(422);
+      err.message.should.equal('email_not_unique');
       done();
     });
   });

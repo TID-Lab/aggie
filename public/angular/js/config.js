@@ -1,18 +1,10 @@
 angular.module('Aggie')
 
-.value('sourceTypes', {
-  'twitter': 'Twitter',
-  // 'facebook': 'Facebook',
-  'rss': 'RSS',
-  // 'elmo': 'Elmo'
-})
+.value('sourceTypes', ['twitter', 'rss'])
 
-.value('statusOptions', {
-  'relevant': 'Relevant',
-  'irrelevant': 'Irrelevant',
-  'unassigned': 'Unassigned',
-  'assigned': 'Assigned'
-})
+.value('statusOptions', ['relevant', 'irrelevant', 'unassigned', 'assigned'])
+
+.value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
 
 .value('incidentStatusOptions', {
   'new': 'New',

@@ -3,8 +3,9 @@ require('./angular-ui-router');
 require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
+require('./angular-translate');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -12,6 +13,12 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
     $urlRouterProvider.otherwise('/404');
   }
 ])
+
+.factory('shared', function() {
+  var shared = {};
+  shared.User = require('../../../shared/user');
+  return shared;
+})
 
 .run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
   $rootScope.$state = $state;
@@ -23,13 +30,16 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
   $rootScope.$on('$stateChangeSuccess', function(e, toState) {
     if (!publicRoute(toState) && !$rootScope.currentUser) {
       e.preventDefault();
-      AuthService.getCurrentUser().then(function() {
+      res = AuthService.getCurrentUser().then(function() {
         if ($rootScope.currentUser) {
           $urlRouter.sync();
         } else {
           flash.setAlert('You must be logged in before accessing that page.');
           $state.go('login');
         }
+      }).catch(function(error) {
+        flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
+        $state.go('login');
       });
     }
   });
@@ -38,6 +48,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource'])
 // Configuration
 require('./config');
 require('./routes');
+require('./translations');
 
 // Services
 require('./services/auth');
@@ -52,6 +63,7 @@ require('./services/incident');
 
 // Controllers
 require('./controllers/application');
+require('./controllers/choose_password');
 require('./controllers/fetching');
 require('./controllers/login');
 require('./controllers/navbar');
@@ -62,6 +74,7 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
@@ -74,7 +87,6 @@ require('./routes');
 require('./filters/aggie-date');
 require('./filters/delay');
 require('./filters/interval');
-require('./filters/interval');
 require('./filters/max-count');
 
 // Directives
@@ -82,3 +94,4 @@ require('./directives/aggie-confirm');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/ng-focus');
+require('./directives/ng-password-match');

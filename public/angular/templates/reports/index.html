@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="filter status-filter">
-      <select ng-model="searchParams.status" ng-options="key as value for (key, value) in statusOptions" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
         <option value="">Filter by Status</option>
       </select>
     </div>

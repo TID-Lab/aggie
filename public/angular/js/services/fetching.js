@@ -11,8 +11,8 @@ angular.module('Aggie')
         success(data.enabled);
       }, failure);
     },
-    set: function(enabled) {
-      return Fetching.toggle({ op: enabled ? 'on' : 'off' }, {})
+    set: function(enabled, success, failure) {
+      return Fetching.toggle({ op: enabled ? 'on' : 'off' }, {}, success, failure)
     }
   }
 });
