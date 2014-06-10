@@ -6,7 +6,6 @@ var email = require('email');
 var _ = require('underscore');
 
 var SALT_WORK_FACTOR = 10;
-var PASSWORD_MIN_LENGTH = 6;
 
 var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
@@ -23,7 +22,7 @@ userSchema.pre('save', function(next) {
   if (!user.email) return next(new Error.Validation('email_required'));
   if (!user.username) return next(new Error.Validation('username_required'));
   if (!email.isValidAddress(user.email)) return next(new Error.Validation('email_invalid'));
-  if (user.password && user.password.length < PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
+  if (user.password && user.password.length < User.PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
 
   // Check for uniqueness in certain fields
   User.checkUnique(user, function(unique, errors) {
