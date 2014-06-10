@@ -30,7 +30,7 @@ after(function(done) {
     database.mongoose.disconnect(function() {
       done();
     });
-  })
+  });
 });
 
 // Compare object attributes

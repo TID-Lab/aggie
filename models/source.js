@@ -23,19 +23,23 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
   // Notify when changing error count
   if (!this.isNew && this.isModified('unreadErrorCount')) {
-    sourceSchema.emit('sourceErrorCountUpdated');
+    this._sourceErrorCountUpdated = true;
   }
+
   // Only allow a single Twitter source
   if (this.isNew && this.type === 'twitter') {
     Source.findOne({type: 'twitter'}, function(err, source) {
       if (source) return next(new Error.Validation('only_one_twitter_allowed'));
       else next();
     });
-  } else next();
+  } else {
+    process.nextTick(next);
+  }
 });
 
 sourceSchema.post('save', function() {
   if (!this._silent) sourceSchema.emit('source:save', {_id: this._id.toString()});
+  if (this._sourceErrorCountUpdated) sourceSchema.emit('sourceErrorCountUpdated');
 });
 
 sourceSchema.pre('remove', function(next) {
@@ -91,6 +95,7 @@ Source.resetUnreadErrorCount = function(_id, callback) {
   Source.findById(_id, '-events', function(err, source) {
     if (err) return callback(err);
     if (!source) return callback(null, null);
+    if (source.unreadErrorCount === 0) return callback(null, source);
     source.unreadErrorCount = 0;
     source._silent = true;
     source.save(callback);
