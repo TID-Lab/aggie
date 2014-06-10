@@ -46,6 +46,7 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(user) {
         User.update({ username: user.oldUserName }, user, function(response) {
+          delete user.password;
           flash.setNoticeNow('User was successfully updated.');
           angular.forEach($scope.users, function(u, i) {
             if (u._id == user._id) {
