@@ -72,7 +72,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in incidents | orderBy:'+status'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
+    <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.updatedAt | interval }}</span>
@@ -100,8 +100,8 @@
       <td class="compact content">{{ statusOptions[i.status] }}</td>
       <td class="compact content">{{ veracityOptions[i.verified] }} </td>
       <td class="compact">
-        <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(i)">Edit incident</button>
-        <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete(i)">Delete incident</button>
+        <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(i)">Edit</button>
+        <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete(i)">Delete</button>
       </td>
     </tr>
   </tbody>
