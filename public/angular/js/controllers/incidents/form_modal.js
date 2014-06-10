@@ -3,10 +3,11 @@ angular.module('Aggie')
 .controller('IncidentFormModalController', [
   '$rootScope',
   '$scope',
+  '$state',
   '$modal',
   'Incident',
   'FlashService',
-  function($rootScope, $scope, $modal, Incident, flash) {
+  function($rootScope, $scope, $state, $modal, Incident, flash) {
     $scope.create = function() {
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
@@ -51,9 +52,13 @@ angular.module('Aggie')
       modalInstance.result.then(function(incident) {
         Incident.update({ id: incident._id }, incident, function(response) {
           flash.setNotice('Incident was successfully updated.');
-          $rootScope.$state.go('incident', { id: incident._id }, { reload: true });
+          if ($state.is('incidents')) {
+            $state.go('incidents', { page: 1, title: null }, { reload: true });
+          } else {
+            $state.go('incident', { id: incident._id }, { reload: true });
+          }
         }, function() {
-            flash.setAlertNow('Incident failed to be updated.');
+          flash.setAlertNow('Incident failed to be updated.');
         });
       });
     };
