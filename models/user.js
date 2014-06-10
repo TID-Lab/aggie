@@ -12,7 +12,7 @@ var userSchema = new mongoose.Schema({
   provider: {type: String, default: 'local'},
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
+  password: {type: String},
   role: {type: String, default: 'viewer'}
 });
 
