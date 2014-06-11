@@ -10,19 +10,20 @@
       <th>Query</th>
       <th>Created</th>
       <th>Last Enabled</th>
-      <th>Count</th>
+      <th>Reports</th>
       <th>Enabled</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="t in trends" ng-class="trendClass(t)">
-      <td class="compact content"><span ng-bind-html="t._query | queryKeyValue"></span></td>
+    <tr ng-repeat="t in trends | orderBy:'-lastEnabledAt'" ng-class="trendClass(t)">
+      <td class="compact content">
+        <div ng-repeat="(key, value) in parseKeywords(t)">{{key | translate}}: {{value | translate}}</div>
+      </td>
       <td class="compact content">{{ t.createdAt | human }} ago</td>
       <td class="compact content">{{ t.lastEnabledAt | human }} ago</td>
-      <td class="content expand text-center">
-        <aggie-sparkline data="0,{{t.displayCounts}}" callback="showReport(sparkEvent, t)">
-        </aggie-sparkline>
+      <td class="content expand">
+        <aggie-sparkline data="{{t.displayCounts}}" callback="showReport(sparkEvent, t)"></aggie-sparkline>
       </td>
       <td class="compact text-center status">
         <aggie-toggle toggle="t.enabled" options="{ true: 'On', false: 'Off' }" on-change="toggleEnabled(t)">

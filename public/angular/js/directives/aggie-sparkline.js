@@ -10,6 +10,7 @@ angular.module('Aggie')
     compile: function(tElement, tAttrs, transclude){
       tElement.replaceWith("<span>" + tAttrs.data + "</span>");
       return function(scope, element, attrs){
+        element.addClass('aggie-sparkline');
         attrs.$observe("data", function(newValue){
           element.html(newValue);
           element.sparkline('html', {
@@ -17,7 +18,10 @@ angular.module('Aggie')
             barWidth: 12,
             barSpacing: 3,
             height: '47px',
-            type: 'bar'
+            type: 'bar',
+            tooltipFormat: '{{value}} reports',
+            tooltipClassname: 'aggie-tooltip',
+            zeroAxis: false
           });
           element.bind('sparklineClick', function(e) {
             scope.callback({ sparkEvent: e });

@@ -263,3 +263,21 @@ table, .table {
 .table .middle {
   vertical-align: middle;
 }
+
+.aggie-sparkline {
+  cursor: pointer;
+}
+
+.aggie-tooltip {
+  color: #fff;
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  border-radius: 3px;
+  * {
+    margin: 10px;
+  }
+  box-sizing: border-box;
+}

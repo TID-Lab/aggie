@@ -11,7 +11,8 @@ angular.module('Aggie')
   'Trend',
   'TrendFetching',
   'Socket',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket) {
+  'dateFilter',
+  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, dateFilter) {
     $scope.trend = {};
     $scope.trends = trends;
     $scope.sources = sources;
@@ -30,14 +31,14 @@ angular.module('Aggie')
     };
 
     var updateTrendCount = function(oldTrend, newTrend) {
-        if (oldTrend._id == newTrend._id) {
-          if (needsCountUpdate(oldTrend, newTrend)) {
-            oldTrend.counts = newTrend.counts.reverse();
-            oldTrend.displayCounts = newTrend.counts.map(function(c) {
-              return c.counts;
-            }).join();
-          }
+      if (oldTrend._id == newTrend._id) {
+        if (needsCountUpdate(oldTrend, newTrend)) {
+          oldTrend.counts = newTrend.counts.reverse();
+          oldTrend.displayCounts = newTrend.counts.map(function(c) {
+            return c.counts;
+          }).join() || 0;
         }
+      }
     };
 
     angular.forEach($scope.trends, function(trend) {
@@ -47,6 +48,10 @@ angular.module('Aggie')
     });
 
     Socket.on('trend', updateTrends);
+
+    $scope.parseKeywords = function(trend) {
+      return angular.fromJson(trend._query);
+    };
 
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
@@ -71,8 +76,8 @@ angular.module('Aggie')
       var query = angular.fromJson(trend._query);
       $rootScope.$state.go('reports', {
         keywords: query.keywords,
-        before: endTime.toISOString(),
-        after: startTime.toISOString(),
+        before: dateFilter(endTime, 'yyyy-MM-dd'),
+        after: dateFilter(startTime, 'yyyy-MM-dd')
       });
     };
 
