@@ -18,6 +18,9 @@
         &.status,
         &.incident {
           vertical-align: middle;
+          .btn {
+            width: 100%;
+          }
         }
       }
     }
@@ -174,14 +177,23 @@ table, .table {
   }
   .btn {
     color: #fff;
-    background-color: #5BC0DE;
     text-decoration: none;
     line-height: 15px;
     height: 25px;
     padding: 4px 8px;
     font-size: 12px;
+  }
+  .btn-info {
+    background-color: #5BC0DE;
     &:hover {
       background-color: #39B3D7;
+    }
+  }
+  .btn-default {
+    background-color: #ebeced;
+    color: #808285;
+    &:hover {
+      background-color: #d1d3d4;
     }
   }
   tr.trend-disabled {

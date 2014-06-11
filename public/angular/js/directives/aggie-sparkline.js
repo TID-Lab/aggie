@@ -20,8 +20,7 @@ angular.module('Aggie')
             height: '47px',
             type: 'bar',
             tooltipFormat: '{{value}} reports',
-            tooltipClassname: 'aggie-tooltip',
-            zeroAxis: false
+            tooltipClassname: 'aggie-tooltip'
           });
           element.bind('sparklineClick', function(e) {
             scope.callback({ sparkEvent: e });
