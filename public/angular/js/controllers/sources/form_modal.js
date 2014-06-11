@@ -84,6 +84,20 @@ angular.module('Aggie')
       }
     };
 
+    $scope.$watch('source.type', function(sourceType) {
+      var url = $scope.source.url;
+      if (sourceType == 'facebook') {
+        if (!url || url == '') {
+          url = 'https://www.facebook.com/';
+        }
+      } else {
+        if (url && url.indexOf('facebook') !== -1) {
+          url = '';
+        }
+      }
+      $scope.source.url = url;
+    });
+
     $scope.validSourceType = function(formSource) {
       if (formSource.type != 'twitter') { return true }
       var valid = true;
