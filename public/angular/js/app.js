@@ -86,6 +86,7 @@ require('./controllers/incidents/show');
 require('./controllers/incidents/form_modal');
 require('./controllers/incidents/report_incident_modal');
 require('./controllers/trends/index');
+require('./controllers/trends/form_modal');
 
 // Routes
 require('./routes');
@@ -95,6 +96,7 @@ require('./filters/aggie-date');
 require('./filters/delay');
 require('./filters/interval');
 require('./filters/max-count');
+require('./filters/key-value');
 
 // Directives
 require('./directives/aggie-confirm');

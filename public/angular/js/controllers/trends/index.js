@@ -48,15 +48,6 @@ angular.module('Aggie')
 
     Socket.on('trend', updateTrends);
 
-    $scope.createTrend = function(trend) {
-      Trend.create(trend, function(t) {
-        flash.setNoticeNow('Trend was successfully created.');
-        $rootScope.$state.go('trends', {}, { reload: true });
-      }, function(err) {
-        flash.setAlertNow('Trend failed to be created.');
-      });
-    };
-
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
         flash.setNotice('Trend was successfully deleted.');
@@ -83,6 +74,16 @@ angular.module('Aggie')
         before: endTime.toISOString(),
         after: startTime.toISOString(),
       });
+    };
+
+    $scope.trendClass = function(trend) {
+      var enabled;
+      if (typeof(trend.enabled) == 'boolean') {
+        enabled = trend.enabled;
+      } else {
+        enabled = trend.enabled == 'true';
+      }
+      return enabled ? 'trend' : 'trend-disabled';
     };
   }
 ]);

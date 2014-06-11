@@ -16,7 +16,7 @@ angular.module('Aggie')
             tooltipContainer: element,
             barWidth: 12,
             barSpacing: 3,
-            height: '100px',
+            height: '47px',
             type: 'bar'
           });
           element.bind('sparklineClick', function(e) {

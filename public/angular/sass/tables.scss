@@ -184,6 +184,13 @@ table, .table {
       background-color: #39B3D7;
     }
   }
+  tr.trend-disabled {
+    background-color: rgba(100, 100, 100, 0.4);
+  }
+
+  tr.trend {
+    background-color: rgba(146, 200, 220, 0.4);
+  }
 }
 
 .table-filters {
@@ -252,6 +259,7 @@ table, .table {
   width: 10%;
   text-align: center;
 }
+
 .table .middle {
   vertical-align: middle;
 }
