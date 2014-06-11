@@ -6,6 +6,7 @@ angular.module('Aggie')
       date: 'HH:mm:ss',
       time: "dd MMM ''''yy",
       datetime: "HH:mm:ss on dd MMM ''''yy",
+      datepicker: "MM/dd/yyyy HH:mm:ss",
       timestamp: 'yyyy-MM-ddTHH:mm:ssZ'
     };
 

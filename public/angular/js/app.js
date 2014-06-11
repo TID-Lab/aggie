@@ -99,6 +99,7 @@ require('./filters/max-count');
 
 // Directives
 require('./directives/aggie-confirm');
+require('./directives/aggie-datepicker');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/aggie-sparkline');
