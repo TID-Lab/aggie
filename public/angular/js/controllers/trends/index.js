@@ -76,8 +76,8 @@ angular.module('Aggie')
       var query = angular.fromJson(trend._query);
       $rootScope.$state.go('reports', {
         keywords: query.keywords,
-        before: dateFilter(endTime, 'yyyy-MM-dd'),
-        after: dateFilter(startTime, 'yyyy-MM-dd')
+        before: endTime.toISOString(),
+        after: startTime.toISOString()
       });
     };
 
