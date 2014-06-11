@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="trend.sourceType" ng-options="key as value for (key, value) in sourceTypes" ng-change="search()" class="form-control">
+      <select ng-model="trend.sourceType" ng-options="type as type | translate for type in sourceTypes" ng-change="search()" class="form-control">
         <option value="">Source Type</option>
       </select>
     </div>
