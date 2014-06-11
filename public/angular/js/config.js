@@ -1,32 +1,14 @@
 angular.module('Aggie')
 
-.value('sourceTypes', {
-  'twitter': 'Twitter',
-  'facebook': 'Facebook',
-  'rss': 'RSS',
-  // 'elmo': 'Elmo'
-})
+.value('sourceTypes', ['twitter', 'facebook', 'rss'])
 
-.value('statusOptions', {
-  'relevant': 'Relevant',
-  'irrelevant': 'Irrelevant',
-  'unassigned': 'Unassigned',
-  'assigned': 'Assigned'
-})
+.value('statusOptions', ['relevant', 'irrelevant', 'unassigned', 'assigned'])
 
 .value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
 
-.value('incidentStatusOptions', {
-  'new': 'New',
-  'working': 'Working',
-  'alert': 'Alert',
-  'closed': 'Closed'
-})
+.value('incidentStatusOptions', ['new', 'working', 'alert', 'closed'])
 
-.value('veracityOptions', {
-  'true': 'Verified',
-  'false': 'Unverified'
-})
+.value('veracityOptions', ['true', 'false'])
 
 .value('paginationOptions', {
   perPage: 25

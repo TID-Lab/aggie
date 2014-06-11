@@ -20,18 +20,22 @@ angular.module('Aggie')
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
+
     $scope.users = users.map(function(u) {
-      var h = {};
-      h.value = u.username;
-      h.label = u.username;
-      return h;
+      return {
+        value: u.username,
+        label: u.username
+      };
     });
-    if ($rootScope.currentUser) {
-      var current = {};
-      current.label = 'Assigned to me';
-      current.value = $rootScope.currentUser.username;
-      $scope.users.unshift(current);
-    }
+
+    $rootScope.$watch('currentUser', function(user) {
+      if (!user) { return }
+      $scope.users.unshift({
+        label: 'Assigned to me',
+        value: user.username
+      });
+    });
+
     $scope.incidentsById = {};
     $scope.visibleIncidents = new Queue(paginationOptions.perPage);
     $scope.newIncidents = new Queue(paginationOptions.perPage);
