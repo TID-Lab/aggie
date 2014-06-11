@@ -1,4 +1,3 @@
-<p ng-hide="trends.length > 0 ">Sorry, but we couldn't find any results.</p>
 
 <form>
   <div class="table-filters">
@@ -27,14 +26,15 @@
       </select>
     </div>
     <div class="filter">
-      <div class="input-group">
-        <div class="input-group-btn">
-          <button type="submit" class="btn btn-info" ng-click="createTrend(trend)">Create Trend</button>
-        </div>
-      </div>
     </div>
   </div>
 </form>
+
+<div class="table-actions">
+  <button class="btn btn-info" ng-click="createTrend(trend)">Create Trend</button>
+</div>
+
+<p ng-hide="trends.length > 0 ">Sorry, but we couldn't find any results.</p>
 
 <table aggie-table ng-show="trends.length > 0">
   <thead>
