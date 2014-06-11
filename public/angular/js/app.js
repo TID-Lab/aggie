@@ -96,7 +96,6 @@ require('./filters/aggie-date');
 require('./filters/delay');
 require('./filters/interval');
 require('./filters/max-count');
-require('./filters/key-value');
 
 // Directives
 require('./directives/aggie-confirm');

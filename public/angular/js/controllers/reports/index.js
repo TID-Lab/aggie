@@ -55,6 +55,7 @@ angular.module('Aggie')
     var removeDuplicates = function(reports) {
       return reports.reduce(function(memo, report) {
         if (!(report._id in $scope.reportsById)) {
+          $scope.reportsById[report._id] = report;
           memo.push(report);
         }
         return memo;
@@ -112,7 +113,6 @@ angular.module('Aggie')
     $scope.displayNewReports = function() {
       var reports = $scope.newReports.toArray();
       $scope.reports.concat(reports);
-      reports.reduce(groupById, $scope.reportsById);
       $scope.visibleReports.addMany(reports);
       $scope.newReports = new Queue(paginationOptions.perPage);
     };
