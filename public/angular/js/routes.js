@@ -134,7 +134,13 @@ angular.module('Aggie')
       }
     });
 
-    $stateProvider.state('trends', {
+    $stateProvider.state('analysis', {
+      abstract: true,
+      url: '/analysis',
+      template: '<ui-view>'
+    });
+
+    $stateProvider.state('analysis.trends', {
       url: '/trends',
       templateUrl: '/templates/trends/index.html',
       controller: 'TrendsIndexController',
@@ -151,9 +157,9 @@ angular.module('Aggie')
       }
     });
 
-    $stateProvider.state('analysis', {
-      url: '/analysis',
-      templateUrl: '/templates/analysis.html'
+    $stateProvider.state('analysis.incidentsMap', {
+      url: '/incidents-map',
+      templateUrl: '/templates/incidents/map.html'
     });
 
     $stateProvider.state('settings', {

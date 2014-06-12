@@ -3,6 +3,7 @@ angular.module('Aggie')
 .controller('IncidentsShowController', [
   '$rootScope',
   '$scope',
+  '$state',
   '$stateParams',
   'incident',
   'reports',
@@ -15,7 +16,7 @@ angular.module('Aggie')
   'Incident',
   'FlashService',
   'Report',
-  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
+  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -112,7 +113,8 @@ angular.module('Aggie')
     $scope.unlinkReport = function(report) {
       report._incident = null;
       $scope.saveReport(report);
-      $rootScope.$state.go('incident', { id: $scope.incident._id }, { reload: true });
+      flash.setNotice('notice.report.unlinked');
+      $state.go('incident', { id: $scope.incident._id }, { reload: true });
     };
 
     init();

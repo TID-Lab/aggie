@@ -2,6 +2,8 @@ angular.module('Aggie')
 
 .filter('withLineBreaks', function() {
   return function(string) {
-    return string.replace('\n', '<br/>');
+    if (string) {
+      string.replace('\n', '<br/>');
+    }
   };
 })

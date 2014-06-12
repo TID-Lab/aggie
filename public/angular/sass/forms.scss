@@ -1,0 +1,83 @@
+select,
+textarea,
+input[type="text"],
+input[type="password"] {
+  &.form-control:focus {
+    border-color: $input-focus-outline;
+    outline: 0;
+  }
+}
+
+label {
+  font-size: 14px;
+}
+
+.form-control {
+  box-shadow: none;
+  background-color: #f3f6f9;
+  padding: 4px 8px;
+}
+
+.input-group {
+  .form-control:focus {
+    border-right: none;
+  }
+
+  .form-control:focus + .input-group-addon {
+    border: solid 1px $input-focus-outline;
+    border-left: none;
+  }
+}
+
+.input-group-btn .btn {
+  line-height: 1;
+  height: 25px;
+  padding: 4px 8px;
+}
+
+.input-group-addon {
+  padding: 4px 8px;
+  background-color: #f3f6f9;
+  color: #000;
+  .read-only & {
+    background-color: #ebebeb;
+  }
+}
+
+a.input-group-addon {
+  &:hover {
+    color: #000;
+    background-color: rgba(#000, 0.1);
+    text-decoration: none;
+  }
+}
+
+.input-group-btn:last-child > .btn {
+  margin-left: 0;
+}
+
+input {
+  &, &[type="date"] {
+    border: solid 1px #ddd;
+    line-height: 1;
+    padding: 8px;
+    &:active, &:focus {
+      outline: none;
+      border-color: #5bc0de;
+    }
+  }
+}
+
+input[type="date"] {
+  width: 160px;
+}
+
+label + aggie-toggle {
+  margin-left: 4px;
+}
+
+.help-block {
+  color: #999;
+  margin: 5px 0 0 0;
+  line-height: 1.5em;
+}

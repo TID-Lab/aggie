@@ -5,10 +5,10 @@
         <a href="/" class="navbar-brand">Aggie</a>
       </div>
       <ul class="nav navbar-nav" ng-show="currentUser">
-        <li ui-sref-active="active"><a ui-sref="reports">Reports</a></li>
-        <li ui-sref-active="active"><a ui-sref="incidents">Incidents</a></li>
-        <li ui-sref-active="active"><a ui-sref="sources">Sources</a></li>
-        <li ui-sref-active="active"><a ui-sref="analysis">Analysis</a></li>
+        <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
+        <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents">Incidents</a></li>
+        <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources">Sources</a></li>
+        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="analysis.trends">Analysis</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
         <li ui-sref-active="active" class="user">
@@ -41,7 +41,15 @@
   </div>
   <div class="navbar navbar-stats" ng-show="currentUser">
     <div class="container">
-      <p class="navbar-text">Stats go here.</p>
+      <div ui-view="subnav">
+      <ul class="nav navbar-nav">
+        <li ui-sref-active="active">
+          <a href ui-sref="analysis.trends">Trends</a>
+        </li>
+        <li ui-sref-active="active">
+          <a href ui-sref="analysis.incidentsMap">Incidents Map</a>
+        </li>
+      </ul>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
         <a href ui-sref="sources" ui-sref-opts="{ reload: true }">{{ unreadErrorCount }} Fetching Errors</a>
       </div>

@@ -11,6 +11,15 @@ angular.module('Aggie').config([
       'password_too_short': 'That password was too short. Please use a longer one.',
     })
 
+    // Notices
+    .translations('en', {
+      notice: {
+        report: {
+          unlinked: 'Report has been successfully unlinked'
+        }
+      }
+    })
+
     // Status options
     .translations('en', {
       'relevant': 'Relevant',
