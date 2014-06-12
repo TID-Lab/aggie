@@ -8,8 +8,6 @@
   <thead>
     <tr>
       <th>Query</th>
-      <th>Created</th>
-      <th>Last Enabled</th>
       <th>Reports</th>
       <th>Enabled</th>
       <th>Actions</th>
@@ -20,8 +18,6 @@
       <td class="compact content">
         <div ng-repeat="(key, value) in parseKeywords(t)">{{key | translate}}: {{value | translate}}</div>
       </td>
-      <td class="compact content">{{ t.createdAt | human }} ago</td>
-      <td class="compact content">{{ t.lastEnabledAt | human }} ago</td>
       <td class="content expand">
         <aggie-sparkline data="{{t.displayCounts}}" callback="showReport(sparkEvent, t)"></aggie-sparkline>
       </td>

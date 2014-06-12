@@ -12,8 +12,8 @@
           <div class="form-group">
             <label for="incident" class="col-lg-3 control-label">Incident</label>
             <div class="col-lg-6">
-              <select ui-select2 id="incident" name="incident" ng-model="report._incident" data-placeholder="Select Incident" class="form-control" required>
-                <option value=""></option>
+              <select ui-select2 id="incident" name="incident" ng-model="report._incident" data-placeholder="Select Incident" class="form-control">
+                <option value="">[No Incident]</option>
                 <option ng-repeat="incident in incidents" value="{{incident._id}}">{{incident.title}}</option>
               </select>
             </div>

@@ -14,7 +14,8 @@ angular.module('Aggie')
   'veracityOptions',
   'Incident',
   'FlashService',
-  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash) {
+  'Report',
+  function($rootScope, $scope, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -99,6 +100,19 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Incident failed to be deleted.');
       });
+    };
+
+    $scope.saveReport = function(report) {
+      Report.save({ id: report._id }, report, function() {
+      }, function() {
+        flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
+      });
+    };
+
+    $scope.unlinkReport = function(report) {
+      report._incident = null;
+      $scope.saveReport(report);
+      $rootScope.$state.go('incident', { id: $scope.incident._id }, { reload: true });
     };
 
     init();
