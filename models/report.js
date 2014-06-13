@@ -29,14 +29,18 @@ schema.pre('save', function(next) {
     this._wasNew = true;
     this.storedAt = new Date();
   } else {
-    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+    // Capture updates before saving report
+    if (this.isModified('status')) this._statusWasModified = true;
+    if (this.isModified('_incident')) this._incidentWasModified = true;
   }
   next();
 });
 
+// Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
+  if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
 });
 
 var Report = mongoose.model('Report', schema);
