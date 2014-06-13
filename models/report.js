@@ -104,4 +104,16 @@ Report.findSortedPage = function(filter, page, callback) {
   });
 };
 
+// Find earliest storedAt date for any report
+Report.findEarliest = function(callback) {
+  var pipeline = [
+    {$group: {_id: 0, earliest: {$min: '$storedAt'}}}
+  ];
+  Report.aggregate(pipeline, function(err, reports) {
+    if (err) return callback(err);
+    if (!reports || !reports.length) return callback(null, new Date());
+    callback(null, reports[0].earliest);
+  });
+};
+
 module.exports = Report;
