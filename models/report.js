@@ -28,16 +28,15 @@ schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
     this.storedAt = new Date();
+  } else {
+    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
   }
   next();
 });
 
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  else {
-    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
-  }
 });
 
 var Report = mongoose.model('Report', schema);
