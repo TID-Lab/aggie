@@ -135,9 +135,8 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('analysis', {
-      abstract: true,
       url: '/analysis',
-      template: '<ui-view>'
+      templateUrl: '/templates/analysis.html'
     });
 
     $stateProvider.state('analysis.trends', {

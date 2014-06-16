@@ -94,10 +94,10 @@ require('./routes');
 
 // Filters
 require('./filters/aggie-date');
+require('./filters/capitalize');
 require('./filters/delay');
 require('./filters/interval');
 require('./filters/max-count');
-require('./filters/capitalize');
 require('./filters/with-line-breaks');
 
 // Directives

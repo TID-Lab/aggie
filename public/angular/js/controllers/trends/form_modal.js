@@ -11,7 +11,7 @@ angular.module('Aggie')
     $scope.create = function() {
       var modalInstance = $modal.open({
         controller: 'TrendFormModalInstanceController',
-        templateUrl: 'templates/trends/modal.html',
+        templateUrl: '/templates/trends/modal.html',
         resolve: {
           sources: ['Source', function(Source) {
             return Source.query().$promise;
@@ -28,7 +28,7 @@ angular.module('Aggie')
       modalInstance.result.then(function(trend) {
         Trend.create(trend, function(response) {
           flash.setNotice('Trend was successfully created.');
-          $rootScope.$state.go('trends', {}, { reload: true });
+          $rootScope.$state.go('analysis.trends', {}, { reload: true });
         }, function(err) {
           flash.setAlertNow('Trend failed to be created. Please contact support.');
         });

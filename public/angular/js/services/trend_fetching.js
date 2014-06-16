@@ -6,8 +6,8 @@ angular.module('Aggie')
   });
 
   return {
-    set: function(trendId, enabled) {
-      return Fetching.toggle({ id: trendId, op: enabled ? 'enable' : 'disable' }, {})
+    set: function(trendId, enabled, success, failure) {
+      return Fetching.toggle({ id: trendId, op: enabled ? 'enable' : 'disable' }, {}, success, failure).$promise;
     }
   }
 });

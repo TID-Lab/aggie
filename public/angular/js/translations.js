@@ -63,7 +63,8 @@ angular.module('Aggie').config([
     // Trend query options
     .translations('en', {
       'keywords': 'Keywords',
-      'sourceType': 'Source Type'
+      'sourceType': 'Source Type',
+      'sourceId': 'Source'
     })
 
     .preferredLanguage('en');

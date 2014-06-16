@@ -14,10 +14,30 @@ angular.module('Aggie')
   'aggieDateFilter',
   function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
     $scope.trend = {};
+    $scope.query = {};
     $scope.trends = trends;
     $scope.sources = sources;
+    $scope.sourcesById = {};
     $scope.sourceTypes = sourceTypes;
     $scope.incidents = incidents.results;
+    $scope.incidentsById;
+
+    var init = function() {
+      $scope.sourcesById = $scope.sources.reduce(groupById, {});
+      $scope.incidentsById = $scope.incidents.reduce(groupById, {});
+      parseQueries();
+    };
+
+    var parseQueries = function() {
+      $scope.trends.forEach(function(trend) {
+        trend.query = angular.fromJson(trend._query);
+      });
+    };
+
+    var groupById = function(memo, item) {
+      memo[item._id] = item;
+      return memo;
+    };
 
     var updateTrends = function(trend) {
       angular.forEach($scope.trends, function(t) {
@@ -63,8 +83,15 @@ angular.module('Aggie')
     };
 
     $scope.toggleEnabled = function(trend) {
-      var enabled = trend.enabled == "true";
-      TrendFetching.set(trend._id, enabled);
+      TrendFetching.set(trend._id, trend.enabled).then(function() {
+        if (trend.enabled) {
+          trend.lastEnabledAt = new Date().toISOString();
+        }
+      });
+    };
+
+    $scope.label = function(trend) {
+      return typeof trend.enabled;
     };
 
     $scope.showReport = function(sparkEvent, trend) {
@@ -90,5 +117,7 @@ angular.module('Aggie')
       }
       return enabled ? 'trend' : 'trend-disabled';
     };
+
+    init();
   }
 ]);

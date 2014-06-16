@@ -41,15 +41,7 @@
   </div>
   <div class="navbar navbar-stats" ng-show="currentUser">
     <div class="container">
-      <div ui-view="subnav">
-      <ul class="nav navbar-nav">
-        <li ui-sref-active="active">
-          <a href ui-sref="analysis.trends">Trends</a>
-        </li>
-        <li ui-sref-active="active">
-          <a href ui-sref="analysis.incidentsMap">Incidents Map</a>
-        </li>
-      </ul>
+      <p class="navbar-text">Stats go here...</p>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
         <a href ui-sref="sources" ui-sref-opts="{ reload: true }">{{ unreadErrorCount }} Fetching Errors</a>
       </div>

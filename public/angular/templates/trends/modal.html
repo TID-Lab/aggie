@@ -12,9 +12,6 @@
             <div class="col-lg-6">
               <input type="text" ng-model="trend.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords">
               <div class="help-block">Separated by commas, e.g. <strong>apple, paw paw, banana</strong></div>
-              <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
-                <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required.</div>
-              </div>
             </div>
           </div>
           <div class="form-group">
