@@ -88,6 +88,7 @@ require('./controllers/incidents/form_modal');
 require('./controllers/incidents/report_incident_modal');
 require('./controllers/trends/index');
 require('./controllers/trends/form_modal');
+require('./controllers/datetime_modal');
 
 // Routes
 require('./routes');
