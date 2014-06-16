@@ -81,3 +81,21 @@ label + aggie-toggle {
   margin: 5px 0 0 0;
   line-height: 1.5em;
 }
+
+.form-horizontal {
+  &.filter-form {
+    .form-group {
+      display: table;
+      width: 100%;
+      label {
+        font-weight: bold;
+      }
+      > div {
+        display: table-cell;
+      }
+    }
+  }
+  .control-label {
+    margin-right: 10px;
+  }
+}

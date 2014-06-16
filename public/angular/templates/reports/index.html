@@ -24,12 +24,10 @@
       </select>
     </div>
     <div class="filter date-filter">
-      <label for="start">From:</label>
-      <input type="text" ng-model="searchParams.after" ng-controller="DatetimeModalController" ng-click="open()" select-date="search()" placeholder="mm/dd/yyyy HH:mm:ss" data-date-format="MM/DD/YYYY HH:mm:ss">
-    </div>
-    <div class="filter date-filter">
-      <label for="end">To:</label>
-      <input type="text" ng-model="searchParams.before" ng-controller="DatetimeModalController" ng-click="open()" select-date="search()" placeholder="mm/dd/yyyy HH:mm:ss" data-date-format="MM/DD/YYYY HH:mm:ss">
+      <button class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
+        <span ng-show="searchParams.after && searchParams.before">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-hide="searchParams.after && searchParams.before">Any time</span>
+      </button>
     </div>
     <div class="filter pagination">
       <ul class="pager">

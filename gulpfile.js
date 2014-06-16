@@ -32,7 +32,7 @@ gulp.task('lint', function() {
 gulp.task('angular', function() {
   gulp.src('public/angular/js/app.js')
     .pipe(plumber())
-    .pipe(browserify({ debug: true }))
+    .pipe(browserify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
 });
@@ -40,7 +40,7 @@ gulp.task('angular', function() {
 gulp.task('angular.watch', watchify(function(watchify) {
   gulp.src('public/angular/js/app.js')
     .pipe(plumber())
-    .pipe(watchify({ watching: true, debug: true }))
+    .pipe(watchify({ watching: true }))
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
 }));

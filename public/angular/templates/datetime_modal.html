@@ -5,16 +5,16 @@
   </div>
   <div class="modal-body">
     <div class="well bs-component">
-      <form name="form" class="form-horizontal">
+      <form name="form" class="form-horizontal filter-form">
         <fieldset>
-          <div class="row form-group">
-            <label for="type" class="col-lg-1 control-label">From:</label>
-            <div class="col-lg-4">
-              <input type="text" aggie-datepicker ng-model="datetimes.after" placeholder="mm/dd/yyyy HH:mm:ss" data-date-format="MM/DD/YYYY HH:mm:ss">
+          <div class="form-group">
+            <div>
+              <label for="type" class="control-label">From:</label>
+              <input type="text" name="after" aggie-datepicker ng-model="datetimes.after" placeholder="Start date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
-            <label for="type" class="col-lg-1 control-label">To:</label>
-            <div class="col-lg-4">
-              <input type="text" aggie-datepicker ng-model="datetimes.before" placeholder="mm/dd/yyyy HH:mm:ss" data-date-format="MM/DD/YYYY HH:mm:ss">
+            <div>
+              <label for="type" class="control-label">To:</label>
+              <input type="text" aggie-datepicker ng-model="datetimes.before" placeholder="End date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
           </div>
         </fieldset>
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()">Cancel</button>
-    <button class="btn btn-primary" ng-click="okay()">Submit</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
   </div>
 </div>

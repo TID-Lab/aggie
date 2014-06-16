@@ -240,3 +240,11 @@ a.list-group-item {
 li.collapse, li.collapsing {
   margin: 10px;
 }
+
+.btn-default {
+  background-color: #ebeced;
+  color: #808285;
+  &:hover {
+    background-color: #d1d3d4;
+  }
+}

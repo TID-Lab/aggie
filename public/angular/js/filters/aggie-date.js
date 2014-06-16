@@ -10,6 +10,8 @@ angular.module('Aggie')
       timestamp: 'yyyy-MM-ddTHH:mm:ssZ'
     };
 
-    return dateFilter(data, formats[type || 'datetime']);
+    var date = new Date(data);
+
+    return dateFilter(date, formats[type || 'datetime']);
   };
 }]);

@@ -36,8 +36,13 @@ angular.module('Aggie')
   'times',
   function($scope, $modalInstance, times) {
     $scope.datetimes = times;
+    $scope.showErrors = false;
 
-    $scope.okay = function() {
+    $scope.save = function(form) {
+      if (form.$invalid) {
+        $scope.showErrors = true;
+        return;
+      }
       $modalInstance.close($scope.datetimes);
     };
 
