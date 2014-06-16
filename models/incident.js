@@ -1,5 +1,6 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var Report = require('./report');
 var _ = require('underscore');
 require('../lib/error');
 
@@ -69,7 +70,18 @@ Incident.queryIncidents = function(query, page, options, callback) {
   query.since = new Date();
 
   // Just use filters when no keywords are provided
-  Incident.findPage(filter, page, options, callback);
+  Incident.findPage(filter, page, options, function(err, incidents) {
+    if (err) return callback(err);
+    if (!incidents.results.length) return callback(null, incidents);
+    var remaining = incidents.results.length;
+    _.each(incidents.results, function(incident, i) {
+      Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
+        if (err) return callback(err);
+        incidents.results[i] = _.extend(incident.toJSON(), {reportCount: reportCount});
+        if (--remaining === 0) callback(null, incidents);
+      });
+    });
+  });
 };
 
 // Mixin shared incident methods

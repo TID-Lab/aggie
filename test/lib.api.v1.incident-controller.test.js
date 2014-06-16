@@ -4,6 +4,7 @@ var request = require('supertest');
 var _ = require('underscore');
 var incidentController = require('../lib/api/v1/incident-controller')();
 var Incident = require('../models/incident');
+var Report = require('../models/report');
 
 var incident;
 describe('Incident controller', function() {
@@ -104,6 +105,23 @@ describe('Incident controller', function() {
           expect(res.body.results).to.be.empty;
           done();
         });
+    });
+    it('should count the number of reports per incident', function(done) {
+      Report.create({content: 'one', _incident: incident._id});
+      Report.create({content: 'two', _incident: incident._id});
+      setTimeout(function() {
+        request(incidentController)
+          .get('/api/v1/incident')
+          .expect(200)
+          .end(function(err, res) {
+            if (err) return done(err);
+            expect(res.body).to.have.keys(['total', 'results']);
+            expect(res.body.results).to.be.an.instanceof(Array);
+            expect(res.body.results[0]).to.contain.property('reportCount');
+            expect(res.body.results[0].reportCount).to.equal(2);
+            done();
+          });
+      }, 100);
     });
   });
 
