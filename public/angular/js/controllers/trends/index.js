@@ -21,6 +21,7 @@ angular.module('Aggie')
     $scope.sourceTypes = sourceTypes;
     $scope.incidents = incidents.results;
     $scope.incidentsById;
+    $scope.maxCount = 0;
 
     var init = function() {
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
@@ -50,13 +51,14 @@ angular.module('Aggie')
         newTrend.counts.length > oldTrend.counts.length;
     };
 
-    var updateTrendCount = function(oldTrend, newTrend) {
-      if (oldTrend._id == newTrend._id) {
-        if (needsCountUpdate(oldTrend, newTrend)) {
-          oldTrend.counts = newTrend.counts.reverse();
-          oldTrend.displayCounts = newTrend.counts.map(function(c) {
-            return c.counts;
-          }).join() || 0;
+    var updateTrendCount = function(trend, updatedTrend) {
+      if (trend._id == updatedTrend._id) {
+        if (needsCountUpdate(trend, updatedTrend)) {
+          trend.counts = updatedTrend.counts.reverse();
+          trend.displayCounts = updatedTrend.counts.map(function(item) {
+            $scope.maxCount = Math.max($scope.maxCount, item.counts);
+            return item.counts;
+          }, []);
         }
       }
     };
