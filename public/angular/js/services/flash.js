@@ -1,6 +1,7 @@
 angular.module('Aggie').factory('FlashService', [
   '$rootScope',
-  function($rootScope) {
+  '$translate',
+  function($rootScope, $translate) {
     var flash = {}, currentFlash = {};
 
     $rootScope.$on('$stateChangeSuccess', function() {
@@ -10,31 +11,27 @@ angular.module('Aggie').factory('FlashService', [
 
     return {
       getAlert: function() {
-        return currentFlash.alert;
+        return $translate.instant(currentFlash.alert);
       },
 
       getNotice: function() {
-        return currentFlash.notice;
+        return $translate.instant(currentFlash.notice);
       },
 
       setAlert: function(message) {
-        flash.alert = message;
-        flash.notice = null;
+        flash = { alert: message };
       },
 
       setNotice: function(message) {
-        flash.notice = message;
-        flash.alert = null;
+        flash = { notice: message };
      },
 
       setAlertNow: function(message) {
-        currentFlash.alert = message;
-        currentFlash.notice = null;
+        currentFlash = { alert: message };
       },
 
       setNoticeNow: function(message) {
-        currentFlash.notice = message;
-        currentFlash.alert = null;
+        currentFlash = { notice: message };
       }
     };
   }

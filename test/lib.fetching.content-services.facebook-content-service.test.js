@@ -131,7 +131,6 @@ describe('Facebook content service', function() {
         expect(report_data).to.have.property('content');
         expect(report_data).to.have.property('author');
         expect(report_data).to.have.property('url');
-        expect(report_data.url).to.contain('www.facebook.com/georgiatech');
         done();
       });
       facebookContentService.once('error', function(err) {

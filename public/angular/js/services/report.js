@@ -5,6 +5,7 @@ angular.module('Aggie')
 
   return $resource('/api/v1/report/:id', null, {
     'query': { isArray: false },
-    'save': { method: 'PUT' }
+    'save': { method: 'PUT' },
+    'update': { method: 'PUT' }
   });
 });

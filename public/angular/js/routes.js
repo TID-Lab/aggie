@@ -45,6 +45,9 @@ angular.module('Aggie')
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
         }]
       }
     });
@@ -134,6 +137,28 @@ angular.module('Aggie')
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html'
+    });
+
+    $stateProvider.state('analysis.trends', {
+      url: '/trends',
+      templateUrl: '/templates/trends/index.html',
+      controller: 'TrendsIndexController',
+      resolve: {
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }],
+        trends: ['Trend', function(Trend) {
+          return Trend.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('analysis.incidentsMap', {
+      url: '/incidents-map',
+      templateUrl: '/templates/incidents/map.html'
     });
 
     $stateProvider.state('settings', {

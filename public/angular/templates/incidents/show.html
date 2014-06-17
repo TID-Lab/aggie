@@ -25,15 +25,15 @@
     </tr>
     <tr>
       <td class="detail-key">Status</td>
-      <td class="detail-value">{{ statusOptions[incident.status] }}</td>
+      <td class="detail-value">{{ incident.status | capitalize }}</td>
     </tr>
     <tr>
       <td class="detail-key">Verified</td>
-      <td class="detail-value">{{ veracityOptions[incident.verified] }}</td>
+      <td class="detail-value">{{ incident.verified ? 'Verified' : 'Unverified' }}</td>
     </tr>
     <tr>
       <td class="detail-key">Notes</td>
-      <td class="detail-value">{{ incident.notes }}</td>
+      <td class="detail-value"><span ng-bind-html="incident.notes | withLineBreaks"></span></td>
     </tr>
   </tbody>
 </table>

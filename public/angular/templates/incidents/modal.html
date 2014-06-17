@@ -13,7 +13,10 @@
           <div class="form-group">
             <label for="Title" class="col-lg-3 control-label">Title</label>
             <div class="col-lg-6">
-              <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" required>
+              <div class="input-group">
+                <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" maxlength="32" required ng-focus>
+                <span class="input-group-addon"><span ng-show="incident.title.length && form.title.$focused">{{32 - incident.title.length}}</span></span>
+              </div>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.title.$error.required">Title is required.</div>
               </div>
@@ -22,7 +25,7 @@
           <div class="form-group">
             <label for="status" class="col-lg-3 control-label">Status</label>
             <div class="col-lg-6">
-              <select id="status" name="status" ng-model="incident.status" ng-options="key as value for (key, value) in status" class="form-control" required></select>
+              <select id="status" name="status" ng-model="incident.status" ng-options="value | capitalize for value in status" class="form-control" required></select>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.status.$error.required">Status is required.</div>
               </div>

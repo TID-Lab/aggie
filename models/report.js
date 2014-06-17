@@ -28,16 +28,19 @@ schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
     this.storedAt = new Date();
+  } else {
+    // Capture updates before saving report
+    if (this.isModified('status')) this._statusWasModified = true;
+    if (this.isModified('_incident')) this._incidentWasModified = true;
   }
   next();
 });
 
+// Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  else {
-    if (this.isModified('status')) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-    if (this.isModified('_incident')) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
-  }
+  if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
+  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
 });
 
 var Report = mongoose.model('Report', schema);
@@ -102,6 +105,18 @@ Report.findSortedPage = function(filter, page, callback) {
   Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
     if (err) return callback(err);
     callback(null, reports);
+  });
+};
+
+// Find earliest storedAt date for any report
+Report.findEarliest = function(callback) {
+  var pipeline = [
+    {$group: {_id: 0, earliest: {$min: '$storedAt'}}}
+  ];
+  Report.aggregate(pipeline, function(err, reports) {
+    if (err) return callback(err);
+    if (!reports || !reports.length) return callback(null, new Date());
+    callback(null, reports[0].earliest);
   });
 };
 

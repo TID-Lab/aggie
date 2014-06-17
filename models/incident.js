@@ -1,10 +1,11 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 require('../lib/error');
 
 var schema = new mongoose.Schema({
-  title: {type: String, required: true},
+  title: {type: String, required: true, validate: validate('max', 32)},
   locationName: String,
   latitude: Number,
   longitude: Number,

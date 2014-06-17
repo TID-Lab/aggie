@@ -1,11 +1,15 @@
 require('./angular', { expose: 'angular' });
 require('./angular-ui-router');
+require('./angular-sanitize');
 require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
 require('./angular-translate');
+require('./jquery.sparkline');
+require('../vendor/select2/select2');
+require('../vendor/select2/ui-select2');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -60,6 +64,8 @@ require('./services/socket');
 require('./services/source');
 require('./services/user');
 require('./services/incident');
+require('./services/trend');
+require('./services/trend_fetching');
 
 // Controllers
 require('./controllers/application');
@@ -79,19 +85,27 @@ require('./controllers/users/index');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/form_modal');
+require('./controllers/incidents/report_incident_modal');
+require('./controllers/trends/index');
+require('./controllers/trends/form_modal');
+require('./controllers/datetime_modal');
 
 // Routes
 require('./routes');
 
 // Filters
 require('./filters/aggie-date');
+require('./filters/capitalize');
 require('./filters/delay');
 require('./filters/interval');
 require('./filters/max-count');
+require('./filters/with-line-breaks');
 
 // Directives
 require('./directives/aggie-confirm');
+require('./directives/aggie-datepicker');
 require('./directives/aggie-table');
 require('./directives/aggie-toggle');
+require('./directives/aggie-sparkline');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
