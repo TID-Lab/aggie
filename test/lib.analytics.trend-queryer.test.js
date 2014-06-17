@@ -119,23 +119,32 @@ describe('Trend queryer', function() {
     Report.create({content: 'backfill'});
     Report.create({content: 'backfill'});
     Report.create({content: 'backfill'});
-    setTimeout(function() {
+    process.nextTick(function() {
       // Travel 10 minutes into the future
-      timekeeper.travel(new Date(Date.now() + 60000));
-      // Create a new trend
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: 'backfill'}))}, function(err, trend) {
-        if (err) return done(err);
-        trendQueryer = new TrendQueryer({trend: trend});
-        trendQueryer.backFill(function(err, counts) {
+      timekeeper.travel(new Date(Date.now() + 300000));
+      Report.create({content: 'backfill'});
+      Report.create({content: 'backfill'});
+      process.nextTick(function() {
+        // Travel 10 minutes into the future
+        timekeeper.travel(new Date(Date.now() + 600000));
+        // Create a new trend
+        Trend.create({_query: Query.hash(new ReportQuery({keywords: 'backfill'}))}, function(err, trend) {
           if (err) return done(err);
-          expect(counts).to.be.an.instanceof(Array);
-          expect(counts).to.have.length(1);
-          expect(counts[0]).to.have.keys(['timebox', 'counts']);
-          expect(counts[0].counts).to.equal(3);
-          done();
+          trendQueryer = new TrendQueryer({trend: trend});
+          trendQueryer.backFill(function(err, counts) {
+            if (err) return done(err);
+            counts = _.sortBy(counts, 'timebox');
+            expect(counts).to.be.an.instanceof(Array);
+            expect(counts).to.have.length(2);
+            expect(counts[0]).to.have.keys(['timebox', 'counts']);
+            expect(counts[0].counts).to.equal(3);
+            expect(counts[1]).to.have.keys(['timebox', 'counts']);
+            expect(counts[1].counts).to.equal(2);
+            done();
+          });
         });
       });
-    }, 500);
+    });
   });
 
   // Clean up
