@@ -83,11 +83,11 @@ Trend.findPaginatedCounts = function(filters, page, options, callback) {
   var limit = 48;
   var skip = (page - 1) * limit;
   options.counts = {$slice: [skip, limit]};
-  options.lean = true;
 
-  Trend.find(filters, null, options, function(err, trends) {
+  Trend.find(filters, options, function(err, trends) {
     if (err) return callback(err);
     trends = _.map(trends, function(trend) {
+      trend = trend.toJSON();
       trend.max = Math.max.apply(null, _.pluck(trend.counts, 'counts'));
       return trend;
     });
