@@ -272,6 +272,10 @@ table, .table {
   vertical-align: middle;
 }
 
+td.sparkline {
+  overflow-x: auto;
+}
+
 .aggie-sparkline {
   cursor: pointer;
 }

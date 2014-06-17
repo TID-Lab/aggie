@@ -3,7 +3,6 @@ angular.module('Aggie')
 .controller('TrendsIndexController', [
   '$scope',
   '$rootScope',
-  '$timeout',
   'FlashService',
   'sourceTypes',
   'sources',
@@ -13,23 +12,32 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'aggieDateFilter',
-  function($scope, $rootScope, $timeout, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
+  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
     $scope.trend = {};
     $scope.query = {};
-    $scope.trends = trends;
+    $scope.trends = [];
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.sourceTypes = sourceTypes;
     $scope.incidents = incidents.results;
     $scope.incidentsById;
-    $scope.maxCount = 0;
     $scope.startTime = null;
     $scope.endTime = null;
+
+    var config = {
+      interval: 1000 * 60 * 5,
+      perPage: 48
+    };
 
     var init = function() {
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
-      parseQueries();
+
+      processTrends(trends);
+
+      Socket.on('trend', function(trends) {
+        processTrends(trends);
+      });
     };
 
     var parseQueries = function() {
@@ -43,55 +51,52 @@ angular.module('Aggie')
       return memo;
     };
 
-    var updateTrends = function(updatedTrend) {
-      angular.forEach($scope.trends, function(trend) {
-        if (trend._id !== updatedTrend._id) { return }
-        updateTrendCount(trend, updatedTrend);
+    var processTrends = function(trends) {
+      var startTime = null,
+        endTime = null;
+
+      // Determine minimum startTime and maximum endTime
+      trends.forEach(function(trend) {
+        var counts = trend.counts.reverse();
+        if (!counts.length) { return }
+        startTime = Math.min(parseInt(counts[0].timebox), startTime || Infinity)
+        endTime = Math.max(parseInt(counts[counts.length - 1].timebox), endTime);
       });
-    };
 
-    var updateTrendCount = function(trend, updatedTrend) {
-      var interval = 1000 * 60 * 5,
-        startTime = $scope.startTime,
-        endTime = $scope.endTime,
-        maxCount = $scope.maxCount,
-        counts = updatedTrend.counts.reverse(),
-        countsByTimebox,
-        displayCounts = [];
+      // Adjust startTime so no more than N timeboxes will be shown.
+      startTime = Math.max(startTime, endTime - config.interval * config.perPage);
 
-      if (counts.length) {
-        countsByTimebox = counts.reduce(function(memo, item) {
+      trends.forEach(function(trend) {
+        var counts = [],
+          displayCounts = [],
+          countsByTimebox = {};
+
+        // Group counts by timebox for efficient lookup
+        trend.counts.reduce(function(memo, item) {
           memo[item.timebox] = item;
           return memo;
-        }, {});
+        }, countsByTimebox);
 
-        endTime = Math.max(endTime, parseInt(counts[counts.length - 1].timebox));
-        startTime = Math.max(parseInt(counts[0].timebox), endTime - (interval * 48));
-
-        for (var t = startTime; t <= endTime; t += interval) {
-          var item = countsByTimebox[t],
-            value = null;
-          if (item) { value = item.counts }
-          maxCount = Math.max(maxCount, value);
-          displayCounts.push(value);
+        // Fill in missing timebox data
+        for (var t = startTime; t <= endTime; t += config.interval) {
+          var item = countsByTimebox[t];
+          if (!item) {
+            item = { counts: null, timebox: t }
+            countsByTimebox[t] = item;
+          }
+          counts.push(item)
         }
-      }
 
+        trend.counts = counts;
+      });
+
+      // Let Angular know our secrets...
       $scope.startTime = startTime;
       $scope.endTime = endTime;
-      $scope.maxCount = maxCount;
+      $scope.trends = trends;
 
-      trend.counts = counts;
-      trend.displayCounts = displayCounts;
+      parseQueries();
     };
-
-    angular.forEach($scope.trends, function(trend) {
-      Trend.get({ id: trend._id }, function(updatedTrend) {
-        updateTrendCount(trend, updatedTrend);
-      });
-    });
-
-    Socket.on('trend', updateTrends);
 
     $scope.parseKeywords = function(trend) {
       return angular.fromJson(trend._query);
@@ -100,7 +105,7 @@ angular.module('Aggie')
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
         flash.setNotice('Trend was successfully deleted.');
-         $rootScope.$state.go('trends', {}, { reload: true });
+         $rootScope.$state.go('analysis.trends', {}, { reload: true });
       }, function() {
         flash.setAlertNow('Trend failed to be deleted.');
       });
@@ -122,11 +127,9 @@ angular.module('Aggie')
       var bar = sparkEvent.sparklines[0].getCurrentRegionFields()[0];
       var count = trend.counts[bar.offset];
       var startTime = new Date(parseInt(count.timebox));
-      var endTime = angular.copy(startTime);
-      endTime.setMinutes(endTime.getMinutes() + 5);
-      var query = angular.fromJson(trend._query);
+      var endTime = new Date(parseInt(count.timebox) + config.interval);
       $rootScope.$state.go('reports', {
-        keywords: query.keywords,
+        keywords: trend.query.keywords,
         before: aggieDateFilter(endTime, 'datepicker'),
         after: aggieDateFilter(startTime, 'datepicker')
       });
