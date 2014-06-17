@@ -22,6 +22,8 @@ angular.module('Aggie')
     $scope.incidents = incidents.results;
     $scope.incidentsById;
     $scope.maxCount = 0;
+    $scope.startTime = null;
+    $scope.endTime = null;
 
     var init = function() {
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
@@ -41,7 +43,8 @@ angular.module('Aggie')
     };
 
     var updateTrends = function(trend) {
-      angular.forEach($scope.trends, function(t) {
+      angular.forEach($scope.trends, function(updatedTrend) {
+        if (trend._id !== updatedTrend._id) { return }
         updateTrendCount(t, trend);
       });
     };
@@ -52,20 +55,43 @@ angular.module('Aggie')
     };
 
     var updateTrendCount = function(trend, updatedTrend) {
-      if (trend._id == updatedTrend._id) {
-        if (needsCountUpdate(trend, updatedTrend)) {
-          trend.counts = updatedTrend.counts.reverse();
-          trend.displayCounts = updatedTrend.counts.map(function(item) {
-            $scope.maxCount = Math.max($scope.maxCount, item.counts);
-            return item.counts;
-          }, []);
+      var interval = 1000 * 60 * 5,
+        startTime = $scope.startTime,
+        endTime = $scope.endTime,
+        maxCount = $scope.maxCount,
+        counts = updatedTrend.counts.reverse(),
+        countsByTimebox,
+        displayCounts = [];
+
+      if (counts.length) {
+        countsByTimebox = counts.reduce(function(memo, item) {
+          memo[item.timebox] = item;
+          return memo;
+        }, {});
+
+        endTime = Math.max(endTime, parseInt(counts[counts.length - 1].timebox));
+        startTime = Math.max(parseInt(counts[0].timebox), endTime - (interval * 45));
+
+        for (var t = startTime; t <= endTime; t += interval) {
+          var item = countsByTimebox[t],
+            value = null;
+          if (item) { value = item.counts }
+          maxCount = Math.max(maxCount, value);
+          displayCounts.push(value);
         }
       }
+
+      $scope.startTime = startTime;
+      $scope.endTime = endTime;
+      $scope.maxCount = maxCount;
+
+      trend.counts = counts;
+      trend.displayCounts = displayCounts;
     };
 
     angular.forEach($scope.trends, function(trend) {
-      Trend.get({id: trend._id}, function(t) {
-        updateTrendCount(trend, t);
+      Trend.get({ id: trend._id }, function(updatedTrend) {
+        updateTrendCount(trend, updatedTrend);
       });
     });
 
