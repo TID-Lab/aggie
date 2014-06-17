@@ -3,6 +3,7 @@ angular.module('Aggie')
 .controller('TrendsIndexController', [
   '$scope',
   '$rootScope',
+  '$timeout',
   'FlashService',
   'sourceTypes',
   'sources',
@@ -12,7 +13,7 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'aggieDateFilter',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
+  function($scope, $rootScope, $timeout, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = trends;
@@ -42,16 +43,11 @@ angular.module('Aggie')
       return memo;
     };
 
-    var updateTrends = function(trend) {
-      angular.forEach($scope.trends, function(updatedTrend) {
+    var updateTrends = function(updatedTrend) {
+      angular.forEach($scope.trends, function(trend) {
         if (trend._id !== updatedTrend._id) { return }
         updateTrendCount(trend, updatedTrend);
       });
-    };
-
-    var needsCountUpdate = function(oldTrend, newTrend) {
-      return !oldTrend.counts ||
-        newTrend.counts.length > oldTrend.counts.length;
     };
 
     var updateTrendCount = function(trend, updatedTrend) {
@@ -70,7 +66,7 @@ angular.module('Aggie')
         }, {});
 
         endTime = Math.max(endTime, parseInt(counts[counts.length - 1].timebox));
-        startTime = Math.max(parseInt(counts[0].timebox), endTime - (interval * 45));
+        startTime = Math.max(parseInt(counts[0].timebox), endTime - (interval * 48));
 
         for (var t = startTime; t <= endTime; t += interval) {
           var item = countsByTimebox[t],

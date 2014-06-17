@@ -18,8 +18,8 @@
       <td class="compact content">
         <div ng-show="t.query.keywords">Keywords: {{t.query.keywords | translate}}</div>
         <div ng-show="t.query.sourceType">Source Type: {{t.query.sourceType | translate}}</div>
-        <div ng-show="t.query.sourceId">Source: {{sourcesById[t.query.sourceId].nickname}}</div>
-        <div ng-show="t.query.incidentId">Incident: {{incidentsById[t.query.incidentId].title}}</div>
+        <div ng-show="t.query.sourceId">Source: {{sourcesById[t.query.sourceId].nickname || '[Deleted]'}}</div>
+        <div ng-show="t.query.incidentId">Incident: {{incidentsById[t.query.incidentId].title || '[Deleted]'}}</div>
       </td>
       <td class="content expand">
         <aggie-sparkline values="t.displayCounts" start-time="startTime" chart-range-max="maxCount" callback="showReport(sparkEvent, t)"></aggie-sparkline>
