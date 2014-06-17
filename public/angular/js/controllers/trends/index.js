@@ -45,7 +45,7 @@ angular.module('Aggie')
     var updateTrends = function(trend) {
       angular.forEach($scope.trends, function(updatedTrend) {
         if (trend._id !== updatedTrend._id) { return }
-        updateTrendCount(t, trend);
+        updateTrendCount(trend, updatedTrend);
       });
     };
 
