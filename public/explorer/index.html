@@ -67,6 +67,16 @@
       </form>
     </li>
     <li>
+      <form action="/api/v1/source" method="post">
+        <input type="hidden" name="type" value="elmo" />
+        <input type="hidden" name="enabled" value="true" />
+        Create ELMO source with a URL:
+        <input type="text" name="nickname" placeholder="Nickname" />
+        <input type="text" name="url" placeholder="ELMO URL" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
       <form id="reportQuery" action="/api/v1/report" method="get">
         Search for Report data:
         <input type="text" name="keywords" placeholder="Keywords" />

@@ -29,12 +29,10 @@ describe('ELMO content service', function() {
     elmoContentService.fetch('./fixtures/elmo-0.json');
     expectToNotEmitReport(elmoContentService, done);
     elmoContentService.once('error', done);
-    setTimeout(function() {
-      done();
-    }, 500);
+    setTimeout(done, 500);
   });
 
-  it('should fetch mock content from Facebook', function(done) {
+  it('should fetch mock content from ELMO', function(done) {
     elmoContentService.fetch('./fixtures/elmo-1.json');
     var remaining = 2;
     elmoContentService.on('report', function(report_data) {
@@ -54,11 +52,33 @@ describe('ELMO content service', function() {
       }
       if (--remaining === 0) {
         // Wait so that we can catch unexpected reports
-        setTimeout(function() {
-          done();
-        }, 100);
+        setTimeout(done, 100);
       } else if (remaining < 0) {
         return done(new Error('Unexpected report'));
+      }
+    });
+    elmoContentService.once('error', done);
+  });
+
+  it('should query for new data without duplicates', function(done) {
+    elmoContentService.fetch('./fixtures/elmo-2.json');
+    var remaining = 1;
+    elmoContentService.on('report', function(report_data) {
+      expect(report_data).to.have.property('fetchedAt');
+      expect(report_data).to.have.property('authoredAt');
+      expect(report_data).to.have.property('content');
+      expect(report_data).to.have.property('author');
+      switch (remaining) {
+        case 1:
+          expect(report_data.content).to.contain('[CodeFOO3: Affirmative] [CodeBAR3: Negative] [CodeBAZ3: Doubtful]');
+          expect(report_data.author).to.equal(3);
+          break;
+      }
+      if (--remaining === 0) {
+        // Wait so that we can catch duplicate reports
+        setTimeout(done, 100);
+      } else if (remaining < 0) {
+        return done(new Error('Duplicate report'));
       }
     });
     elmoContentService.once('error', done);
@@ -79,6 +99,32 @@ describe('ELMO content service', function() {
         done();
       });
       elmoContentService.on('error', done);
+    });
+
+    it('should re-fetch to get an empty content list', function(done) {
+      elmoContentService.fetch();
+      expectToNotEmitReport(elmoContentService, done);
+      elmoContentService.once('error', done);
+      setTimeout(done, 500);
+    });
+  });
+
+  describe('Errors', function() {
+    it('should emit a missing URL error', function(done) {
+      var elmoContentService = new ELMOContentService({});
+      elmoContentService.fetch();
+      expectToNotEmitReport(elmoContentService, done);
+      expectToEmitError(elmoContentService, 'Missing ELMO URL', done);
+    });
+
+    it('should emit an unauthorized token error', function(done) {
+      elmoContentService = new ELMOContentService({
+        url: 'https://secure1.sassafras.coop/api/v1/responses.json?form_id=19',
+        authToken: '123'
+      });
+      elmoContentService.fetch();
+      expectToNotEmitReport(elmoContentService, done);
+      expectToEmitError(elmoContentService, 'Unauthorized', done);
     });
   });
 
