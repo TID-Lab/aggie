@@ -65,14 +65,44 @@ schema.methods.toggle = function(status, callback) {
 
 var Trend = mongoose.model('Trend', schema);
 
+Trend.findPaginatedCounts = function(filters, page, options, callback) {
+  if (typeof filters === 'function') {
+    callback = filters;
+    options = {};
+    page = 1;
+    filters = {};
+  } else if (typeof page === 'function') {
+    callback = page;
+    options = {};
+    page = 1;
+  } else if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  if (page < 1) page = 1;
+  var limit = 48;
+  var skip = (page - 1) * limit;
+  options.counts = {$slice: [skip, limit]};
+  options.lean = true;
+
+  Trend.find(filters, null, options, function(err, trends) {
+    if (err) return callback(err);
+    trends = _.map(trends, function(trend) {
+      trend.max = Math.max.apply(null, _.pluck(trend.counts, 'counts'));
+      return trend;
+    });
+    callback(null, trends);
+  });
+};
+
 Trend.findPageById = function(_id, page, callback) {
   if (typeof page === 'function') {
     callback = page;
-    page = 0;
+    page = 1;
   }
-  if (page < 0) page = 0;
+  if (page < 1) page = 1;
   var limit = 48;
-  var skip = page * limit;
+  var skip = (page - 1) * limit;
   Trend.findOne({_id: _id}, {counts: {$slice: [skip, limit]}}, function(err, trend) {
     if (err) return callback(err);
     callback(null, trend);
