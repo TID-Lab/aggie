@@ -51,6 +51,27 @@ describe('Trend queryer', function() {
     }, 100);
   });
 
+  it('should run query without keywords', function(done) {
+    Trend.create({_query: Query.hash(new ReportQuery({sourceType: 'test', since: 1}))}, function(err, trend) {
+      if (err) return done(err);
+      trendQueryer = new TrendQueryer({trend: trend});
+      setTimeout(function() {
+        Report.create({content: 'foo', _sourceType: 'bar'});
+        Report.create({content: 'baz', _sourceType: 'test'});
+        setTimeout(function() {
+          trendQueryer.runQuery(function(err, counts) {
+            if (err) return done(err);
+            expect(counts).to.be.an.instanceof(Array);
+            expect(counts).to.have.length(1);
+            expect(counts[0]).to.have.keys(['timebox', 'counts']);
+            expect(counts[0].counts).to.equal(1);
+            done();
+          });
+        }, 100);
+      }, 100);
+    });
+  });
+
   it('should group analytics by 5-minute timeboxes', function(done) {
     Trend.create({_query: Query.hash(new ReportQuery({keywords: 'qwerty'}))}, function(err, trend) {
       setTimeout(function() {

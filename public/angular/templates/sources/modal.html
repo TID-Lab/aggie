@@ -13,7 +13,7 @@
           <div class="form-group" ng-class="{ 'read-only': source._id }">
             <label for="type" class="col-lg-3 control-label">Type</label>
             <div class="col-lg-6">
-              <select name="type" class="form-control" ng-model="source.type" ng-options="value as label for (value, label) in sourceTypes" required ng-hide="source._id">
+              <select name="type" class="form-control" ng-model="source.type" ng-options="type as type | translate for type in sourceTypes" required ng-hide="source._id">
                 <option value="">Choose source type</option>
               </select>
               <input type="text" class="form-control" ng-model="source.type" ng-show="source._id" readonly>

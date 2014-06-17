@@ -10,6 +10,7 @@ angular.module('Aggie')
       toggle: '=',
       options: '=',
       allowBlank: '@',
+      boolean: '@',
       onChange: '&onChange'
     },
 
@@ -20,23 +21,31 @@ angular.module('Aggie')
         $scope.toggleStatus = function(status) {
           var originalStatus = $scope.currentStatus();
           if ($scope.allowBlank == 'true') {
-            $scope.toggle = $scope.isStatus(status) ? '' : status
+            $scope.toggle = $scope.isStatus(status) ? '' : processStatus(status)
           } else {
-            $scope.toggle = status;
+            $scope.toggle = processStatus(status);
           }
           if ($scope.toggle !== originalStatus) {
             $timeout($scope.onChange);
           }
         };
 
+        var processStatus = function(status) {
+          if ($scope.boolean == undefined) {
+            return status;
+          } else {
+            return status == 'true';
+          }
+        };
+
         $scope.currentStatus = function() {
           var toggle = $scope.toggle;
           if (toggle == undefined) { toggle = '' }
-          return toggle.toString();
-        }
+          return processStatus(toggle.toString());
+        };
 
         $scope.isStatus = function(status) {
-          return $scope.currentStatus() === status;
+          return $scope.currentStatus() === processStatus(status);
         };
       }
     ],

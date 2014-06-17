@@ -6,6 +6,7 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var watchify = require('gulp-watchify');
+var plumber = require('gulp-plumber');
 
 // Use --file=[filename] to run continuous tests on a file during development.
 // Gulp will automatically run the tests on that file whenever the code changes
@@ -30,6 +31,7 @@ gulp.task('lint', function() {
 
 gulp.task('angular', function() {
   gulp.src('public/angular/js/app.js')
+    .pipe(plumber())
     .pipe(browserify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
@@ -37,6 +39,7 @@ gulp.task('angular', function() {
 
 gulp.task('angular.watch', watchify(function(watchify) {
   gulp.src('public/angular/js/app.js')
+    .pipe(plumber())
     .pipe(watchify({ watching: true }))
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));

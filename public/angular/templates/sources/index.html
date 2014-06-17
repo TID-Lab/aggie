@@ -1,7 +1,7 @@
 <div class="table-filters">
   <div class="filter">
     <button class="btn btn-info" ng-click="refresh()">Refresh Source list</button>
-    <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create new source</a>
+    <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create new source</button>
   </div>
 </div>
 
@@ -25,7 +25,7 @@
           <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
         </span>
       </td>
-      <td class="compact content zero-errors" ng-class="{ multipleErrors: s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+      <td class="compact content zero-errors" ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
       <td class="compact status">
         <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
       </td>

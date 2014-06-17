@@ -22,17 +22,17 @@
       </div>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.assignedTo" ng-options="user for user in users" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.assignedTo" ng-options="user.value as user.label for user in users" ng-change="search()" class="form-control">
         <option value="">Filter by User</option>
       </select>
     </div>
     <div class="filter status-filter">
-      <select ng-model="searchParams.status" ng-options="key as value for (key, value) in statusOptions" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
         <option value="">Filter by Status</option>
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.verified" ng-options="key as value for (key, value) in veracityOptions" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.verified" ng-options="option as 'veracity.' + option | translate for option in veracityOptions" ng-change="search()" class="form-control">
         <option value="">Filter by Veracity</option>
       </select>
     </div>
@@ -97,8 +97,8 @@
       <td class="compact content">{{ i.title }}</td>
       <td class="compact content">{{ i.locationName }}</td>
       <td class="compact content">{{ i.assignedTo }}</td>
-      <td class="compact content">{{ statusOptions[i.status] }}</td>
-      <td class="compact content">{{ veracityOptions[i.verified] }} </td>
+      <td class="compact content">{{ i.status | translate }}</td>
+      <td class="compact content">{{ 'veracity.' + i.verified | translate }} </td>
       <td class="compact">
         <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(i)">Edit</button>
         <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete(i)">Delete</button>

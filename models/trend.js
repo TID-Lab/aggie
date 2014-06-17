@@ -7,14 +7,18 @@ require('../lib/error');
 var schema = new mongoose.Schema({
   _query: {type: String, required: true},
   timebox: {type: Number, default: 300},
-  createdAt: {type: Date, default: new Date()},
+  createdAt: {type: Date},
   counts: {type: Array, default: []},
   enabled: {type: Boolean, default: true},
-  lastEnabledAt: {type: Date, default: new Date()}
+  lastEnabledAt: {type: Date}
 });
 
 schema.pre('save', function(next) {
-  if (this.isNew) this._wasNew = true;
+  if (this.isNew) {
+    this._wasNew = true;
+    this.createdAt = new Date();
+    this.lastEnabledAt = new Date();
+  }
   // Do not allow changing query
   if (!this.isNew && this.isModified('_query')) return next(new Error.Validation('query_change_not_allowed'));
   next();
