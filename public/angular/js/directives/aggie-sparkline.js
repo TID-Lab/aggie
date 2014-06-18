@@ -5,7 +5,7 @@ angular.module('Aggie')
     restrict: 'E',
     scope: {
       values: '=',
-      chartRangeMax: '=',
+      height: '=',
       callback: '&',
       startTime: '&'
     },
@@ -14,11 +14,15 @@ angular.module('Aggie')
       el.addClass('aggie-sparkline');
 
       var renderSparkline = function() {
-        el.sparkline(scope.values, {
+        var values = scope.values.map(function(item) {
+          return item.counts;
+        });
+
+        el.sparkline(values, {
           tooltipContainer: el,
           barWidth: '12px',
           barSpacing: '3px',
-          height: '47px',
+          height: scope.height + 'px',
           type: 'bar',
           tooltipFormatter: function(sparkline, options, fields) {
             var value = fields[0].value,
@@ -29,10 +33,9 @@ angular.module('Aggie')
             return '<div>' + reportText + ' (' + aggieDateFilter(date, 'datetime') + ')</div>';
           },
           chartRangeMin: 0,
-          chartRangeMax: scope.chartRangeMax,
           tooltipClassname: 'aggie-tooltip',
-          zeroColor: '#eee',
-          nullColor: '#fff'
+          zeroColor: 'rgba(#000, 0.1)',
+          nullColor: 'transparent'
         });
       };
 
