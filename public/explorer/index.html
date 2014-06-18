@@ -50,9 +50,29 @@
       <form action="/api/v1/source" method="post">
         <input type="hidden" name="type" value="twitter" />
         <input type="hidden" name="enabled" value="true" />
+        <input type="hidden" name="nickname" value="Twitter Search" />
         Create Twitter source with keywords (e.g. banana,apple):
-        <input type="text" name="nickname" placeholder="Nickname" />
         <input type="text" name="keywords" placeholder="Keywords" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <form action="/api/v1/source" method="post">
+        <input type="hidden" name="type" value="facebook" />
+        <input type="hidden" name="enabled" value="true" />
+        Create Facebook source (e.g. http://www.facebook.com/georgiatech):
+        <input type="text" name="nickname" placeholder="Nickname" />
+        <input type="text" name="url" placeholder="URL" />
+        <input type="submit">
+      </form>
+    </li>
+    <li>
+      <form action="/api/v1/source" method="post">
+        <input type="hidden" name="type" value="elmo" />
+        <input type="hidden" name="enabled" value="true" />
+        Create ELMO source (e.g. https://secure1.sassafras.coop/api/v1/responses.json?form_id=XXX):
+        <input type="text" name="nickname" placeholder="Nickname" />
+        <input type="text" name="url" placeholder="URL" />
         <input type="submit">
       </form>
     </li>
@@ -63,16 +83,6 @@
         Create RSS source with a URL:
         <input type="text" name="nickname" placeholder="Nickname" />
         <input type="text" name="url" placeholder="Feed URL" />
-        <input type="submit">
-      </form>
-    </li>
-    <li>
-      <form action="/api/v1/source" method="post">
-        <input type="hidden" name="type" value="elmo" />
-        <input type="hidden" name="enabled" value="true" />
-        Create ELMO source with a URL:
-        <input type="text" name="nickname" placeholder="Nickname" />
-        <input type="text" name="url" placeholder="ELMO URL" />
         <input type="submit">
       </form>
     </li>
@@ -93,6 +103,8 @@
         <select name="sourceType">
           <option value="">- Source Type -</option>
           <option value="twitter">Twitter</option>
+          <option value="facebook">Facebook</option>
+          <option value="elmo">ELMO</option>
           <option value="rss">RSS</option>
         </select>
         <input type="text" name="sourceId" placeholder="Source ID" />
@@ -107,6 +119,8 @@
         <select name="sourceType">
           <option value="">- Source Type -</option>
           <option value="twitter">Twitter</option>
+          <option value="facebook">Facebook</option>
+          <option value="elmo">ELMO</option>
           <option value="rss">RSS</option>
         </select>
         <input type="text" name="sourceId" placeholder="Source ID" />
