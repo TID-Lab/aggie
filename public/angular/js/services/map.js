@@ -33,6 +33,7 @@ angular.module('Aggie')
         title: l.locationName,
         id: l._id
       });
+      self.markers.push(m);
 
       // expand the bounding rectangle
       bounds.extend(p);
@@ -41,7 +42,7 @@ angular.module('Aggie')
       google.maps.event.addListener(m, 'click', function() { self.show_info_window(this); });
     });
 
-    if (self.params.locations.length == 0)
+    if (self.markers.length == 0)
       self.map.setCenter(new google.maps.LatLng(0, 0));
 
     // else use bounds determined above
