@@ -26,7 +26,12 @@
       </td>
       <td class="compact author">{{ r.author }}</td>
       <td class="expand content">{{ r.content }}</td>
-      <td class="compact incident">{{ r.incident ? r.incident : 'Unassigned' }}</td>
+      <td class="compact incident">
+        <button class="btn" ng-class="{ 'btn-info': r._incident, 'btn-default': !r._incident }" ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
+          {{ r._incident ? incidentsById[r._incident].title : 'Unassigned' }}
+        </button>
+        <button class="btn-info" ng-show="incident != null" ng-click="unlinkReport(r)">Unlink</button>
+      </td>
       <td class="compact status">
         <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
       </div>

@@ -1,0 +1,35 @@
+.modal {
+  overflow-y: auto;
+}
+
+.modal-header {
+  .close {
+    z-index: 1000;
+    float: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+}
+
+.modal-body {
+  font-size: 14px;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: darken(#e3e6e3, 10%);
+}
+
+.modal-content {
+  background-color: #e3e6e3;
+  font-size: 14px;
+}
+
+.close {
+  color: #333;
+  &:hover,
+  &:focus {
+    color: #000;
+  }
+}

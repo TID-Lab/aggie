@@ -1,8 +1,12 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
 $link-blue: #1c75bc;
+$input-focus-outline: #66afe9;
 
+@import 'forms';
+@import 'modals';
 @import 'tables';
+@import 'tabs';
 
 body {
   background-color: #fff;
@@ -59,6 +63,15 @@ a {
   .container {
     position: relative;
   }
+  .navbar-nav > li {
+    > a:hover,
+    > a:focus,
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      background-color: darken($navbar-yellow, 10%);
+    }
+  }
 }
 
 .navbar-text {
@@ -77,42 +90,6 @@ a {
 
 .well {
   background-color: #e3e6e3;
-}
-
-label {
-  font-size: 14px;
-}
-
-.form-control {
-  box-shadow: none;
-  background-color: #f3f6f9;
-  padding: 4px 8px;
-}
-
-.modal {
-  overflow-y: auto;
-}
-
-.modal-body {
-  font-size: 14px;
-}
-
-.modal-header,
-.modal-footer {
-  background-color: darken(#e3e6e3, 10%);
-}
-
-.modal-content {
-  background-color: #e3e6e3;
-  font-size: 14px;
-}
-
-.close {
-  color: #333;
-  &:hover,
-  &:focus {
-    color: #000;
-  }
 }
 
 .btn {
@@ -149,47 +126,10 @@ label {
   margin: 0;
 }
 
-.input-group-btn .btn {
-  line-height: 1;
-  height: 25px;
-  padding: 4px 8px;
-}
 
-.input-group-addon {
-  padding: 4px 8px;
-  background-color: #f3f6f9;
-  color: #000;
-  .read-only & {
-    background-color: #ebebeb;
-  }
-}
-
-a.input-group-addon {
-  &:hover {
-    color: #000;
-    background-color: rgba(#000, 0.1);
-    text-decoration: none;
-  }
-}
 
 .btn-default {
   background-color: #5BC0DE;
-}
-
-.input-group-btn:last-child > .btn {
-  margin-left: 0;
-}
-
-input {
-  &, &[type="date"] {
-    border: solid 1px #ddd;
-    line-height: 1;
-    padding: 8px;
-    &:active, &:focus {
-      outline: none;
-      border-color: #5bc0de;
-    }
-  }
 }
 
 .breadcrumb {
@@ -201,15 +141,11 @@ input {
   }
 }
 
-input[type="date"] {
-  width: 160px;
-}
-
 .zero-errors {
   color: green;
 }
 
-.multipleErrors {
+.multiple-errors {
   color: red;
 }
 
@@ -221,30 +157,10 @@ input[type="date"] {
   height: 26px;
 }
 
-label + aggie-toggle {
-  margin-left: 4px;
-}
-
 .alert {
   font-size: 16px;
   h4 {
     margin-bottom: 0;
-  }
-}
-
-.help-block {
-  color: #999;
-  margin: 5px 0 0 0;
-  line-height: 1.5em;
-}
-
-.modal-header {
-  .close {
-    z-index: 1000;
-    float: none;
-    position: absolute;
-    right: 15px;
-    top: 15px;
   }
 }
 
@@ -285,13 +201,50 @@ a.list-group-item {
   }
 }
 
-select,
-textarea,
-input[type="text"],
-input[type="password"] {
-  &.form-control:focus {
-    border-color: #66AFE9;
-    outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+.dropdown-menu {
+  background-color: #fff;
+  border: solid 1px rgba(#000, 0.15);
+}
+
+.datepicker,
+.bootstrap-datetimepicker-widget .datepicker {
+  td {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: none;
+  }
+}
+
+.picker-switch a:hover {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #428bca;
+}
+
+.timepicker-picker .table-condensed {
+  td {
+    border: none;
+  }
+  td a span.fa {
+    margin-top: -18px;
+    background-color: transparent;
+  }
+  td a.btn, td button.btn {
+    background-color: #428bca;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+}
+
+li.collapse, li.collapsing {
+  margin: 10px;
+}
+
+.btn-default {
+  background-color: #ebeced;
+  color: #808285;
+  &:hover {
+    background-color: #d1d3d4;
   }
 }

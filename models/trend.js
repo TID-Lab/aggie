@@ -7,14 +7,18 @@ require('../lib/error');
 var schema = new mongoose.Schema({
   _query: {type: String, required: true},
   timebox: {type: Number, default: 300},
-  createdAt: {type: Date, default: new Date()},
+  createdAt: {type: Date},
   counts: {type: Array, default: []},
   enabled: {type: Boolean, default: true},
-  lastEnabledAt: {type: Date, default: new Date()}
+  lastEnabledAt: {type: Date}
 });
 
 schema.pre('save', function(next) {
-  if (this.isNew) this._wasNew = true;
+  if (this.isNew) {
+    this._wasNew = true;
+    this.createdAt = new Date();
+    this.lastEnabledAt = new Date();
+  }
   // Do not allow changing query
   if (!this.isNew && this.isModified('_query')) return next(new Error.Validation('query_change_not_allowed'));
   next();
@@ -61,14 +65,44 @@ schema.methods.toggle = function(status, callback) {
 
 var Trend = mongoose.model('Trend', schema);
 
+Trend.findPaginatedCounts = function(filters, page, options, callback) {
+  if (typeof filters === 'function') {
+    callback = filters;
+    options = {};
+    page = 1;
+    filters = {};
+  } else if (typeof page === 'function') {
+    callback = page;
+    options = {};
+    page = 1;
+  } else if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  if (page < 1) page = 1;
+  var limit = 48;
+  var skip = (page - 1) * limit;
+  options.counts = {$slice: [skip, limit]};
+
+  Trend.find(filters, options, function(err, trends) {
+    if (err) return callback(err);
+    trends = _.map(trends, function(trend) {
+      trend = trend.toJSON();
+      trend.max = Math.max.apply(null, _.pluck(trend.counts, 'counts'));
+      return trend;
+    });
+    callback(null, trends);
+  });
+};
+
 Trend.findPageById = function(_id, page, callback) {
   if (typeof page === 'function') {
     callback = page;
-    page = 0;
+    page = 1;
   }
-  if (page < 0) page = 0;
+  if (page < 1) page = 1;
   var limit = 48;
-  var skip = page * limit;
+  var skip = (page - 1) * limit;
   Trend.findOne({_id: _id}, {counts: {$slice: [skip, limit]}}, function(err, trend) {
     if (err) return callback(err);
     callback(null, trend);
