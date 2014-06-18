@@ -66,6 +66,7 @@ require('./services/user');
 require('./services/incident');
 require('./services/trend');
 require('./services/trend_fetching');
+require('./services/map');
 
 // Controllers
 require('./controllers/application');
@@ -84,9 +85,11 @@ require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
+require('./controllers/incidents/map');
 require('./controllers/incidents/form_modal');
 require('./controllers/incidents/report_incident_modal');
 require('./controllers/trends/index');
+require('./controllers/analysis');
 require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
 
