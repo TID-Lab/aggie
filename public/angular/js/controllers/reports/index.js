@@ -50,6 +50,8 @@ angular.module('Aggie')
         Socket.emit('query', searchParams());
         Socket.on('reports', $scope.handleNewReports);
       }
+
+      Socket.on('reportStatusChanged', $scope.updateReportStatus);
     };
 
     var removeDuplicates = function(reports) {
@@ -108,6 +110,11 @@ angular.module('Aggie')
         $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100)
       }
       $scope.newReports.addMany(uniqueReports);
+    };
+
+    $scope.updateReportStatus = function(updatedReport) {
+      if (!(updatedReport._id in $scope.reportsById)) { return }
+      $scope.reportsById[updatedReport._id].status = updatedReport.status;
     };
 
     $scope.displayNewReports = function() {
