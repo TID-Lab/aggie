@@ -22,7 +22,8 @@
         <div ng-show="t.query.incidentId">Incident: {{incidentsById[t.query.incidentId].title || '[Deleted]'}}</div>
       </td>
       <td class="content expand sparkline">
-        <aggie-sparkline values="t.counts" start-time="startTime" height="t.max" callback="showReport(sparkEvent, t)"></aggie-sparkline>
+        {{t.max}}
+        <aggie-sparkline values="t.counts" start-time="startTime" height="t.max || 0" callback="showReport(sparkEvent, t)"></aggie-sparkline>
       </td>
       <td class="compact text-center status">
         <aggie-toggle toggle="t.enabled" boolean options="{ true: 'On', false: 'Off' }" on-change="toggleEnabled(t)">
