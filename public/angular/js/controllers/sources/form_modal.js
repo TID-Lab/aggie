@@ -77,7 +77,7 @@ angular.module('Aggie')
     $scope._showErrors = false
 
     $scope.sourceClass = function(source) {
-      if (source && source.type in sourceTypes) {
+      if (source && sourceTypes.indexOf(source.type) !== -1) {
         return source.type + '-source';
       } else {
         return 'unknown-source';
