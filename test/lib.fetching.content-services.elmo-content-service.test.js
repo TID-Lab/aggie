@@ -12,7 +12,7 @@ describe('ELMO content service', function() {
       var self = this;
       var data = require(fixture);
       process.nextTick(function() {
-        self._handleResults(data);
+        if (data.length) self._handleResults(data);
         callback && callback(null, self.lastReportDate);
       });
     };
@@ -26,14 +26,20 @@ describe('ELMO content service', function() {
   });
 
   it('should fetch empty content', function(done) {
-    elmoContentService.fetch('./fixtures/elmo-0.json');
+    elmoContentService.fetch('./fixtures/elmo-0.json', function(err, lastReportDate) {
+      expect(err).to.be.null;
+      expect(lastReportDate).to.be.null;
+    });
     expectToNotEmitReport(elmoContentService, done);
     elmoContentService.once('error', done);
     setTimeout(done, 500);
   });
 
   it('should fetch mock content from ELMO', function(done) {
-    elmoContentService.fetch('./fixtures/elmo-1.json');
+    elmoContentService.fetch('./fixtures/elmo-1.json', function(err, lastReportDate) {
+      expect(err).to.be.null;
+      expect(lastReportDate).to.equal(Date.parse('2014-06-17T15:00:00Z'));
+    });
     var remaining = 2;
     elmoContentService.on('report', function(report_data) {
       expect(report_data).to.have.property('fetchedAt');
@@ -61,7 +67,10 @@ describe('ELMO content service', function() {
   });
 
   it('should query for new data without duplicates', function(done) {
-    elmoContentService.fetch('./fixtures/elmo-2.json');
+    elmoContentService.fetch('./fixtures/elmo-2.json', function(err, lastReportDate) {
+      expect(err).to.be.null;
+      expect(lastReportDate).to.equal(Date.parse('2014-06-17T20:00:00Z'));
+    });
     var remaining = 1;
     elmoContentService.on('report', function(report_data) {
       expect(report_data).to.have.property('fetchedAt');
