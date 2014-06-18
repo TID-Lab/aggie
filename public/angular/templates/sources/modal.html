@@ -11,8 +11,8 @@
       <form name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group" ng-class="{ 'read-only': source._id }">
-            <label for="type" class="col-lg-3 control-label">Type</label>
-            <div class="col-lg-6">
+            <label for="type" class="col-lg-2 control-label">Type</label>
+            <div class="col-lg-8">
               <select name="type" class="form-control" ng-model="source.type" ng-options="type as type | translate for type in sourceTypes" required ng-hide="source._id">
                 <option value="">Choose source type</option>
               </select>
@@ -23,13 +23,13 @@
             </div>
           </div>
 
-          <div class="alert alert-danger col-lg-8 col-lg-offset-2" ng-hide="validSourceType(source)">
+          <div class="alert alert-danger col-lg-10 col-lg-offset-1" ng-hide="validSourceType(source)">
             Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.
           </div>
 
           <div class="form-group" ng-show="source.type && validSourceType(source)" ng-class="{ 'read-only': source.type == 'twitter' }">
-            <label for="nickname" class="col-lg-3 control-label">Nickname</label>
-            <div class="col-lg-6">
+            <label for="nickname" class="col-lg-2 control-label">Nickname</label>
+            <div class="col-lg-8">
               <div class="input-group">
                 <input type="text" ng-model="source.nickname" ng-readonly="source.type == 'twitter'" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" required maxlength="20" ng-focus>
                 <span class="input-group-addon"><span ng-show="source.nickname.length && form.nickname.$focused">{{20 - source.nickname.length}}</span></span>
@@ -42,7 +42,7 @@
           </div>
 
           <div class="form-group" ng-show="source.type == 'twitter' && validSourceType(source)">
-            <label for="keywords" class="col-lg-3 control-label">Keywords</label>
+            <label for="keywords" class="col-lg-2 control-label">Keywords</label>
             <div class="col-lg-6">
               <input type="text" ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords" ng-required="source.type == 'twitter'">
               <div class="help-block">Separated by commas, e.g. <strong>apple, paw paw, banana</strong></div>
@@ -53,12 +53,12 @@
           </div>
 
           <div class="form-group" ng-show="source.type && source.type != 'twitter' && validSourceType(source)">
-            <label for="url" class="col-lg-3 control-label">URL</label>
-            <div class="col-lg-6">
+            <label for="url" class="col-lg-2 control-label">URL</label>
+            <div class="col-lg-8">
               <div class="input-group">
                 <div ng-switch="source.type">
-                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\/.+/" class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
-                  <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="Enter url" ng-required="source.type != 'twitter'" ng-focus>
+                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\//" class="form-control" id="url" name="url" ng-required="source.type != 'twitter'" ng-focus>
+                  <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="Enter url" ng-init="sourceUrl(source)" ng-required="source.type != 'twitter'" ng-focus>
                 </div>
                 <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
               </div>

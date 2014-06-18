@@ -77,12 +77,26 @@ angular.module('Aggie')
     $scope._showErrors = false
 
     $scope.sourceClass = function(source) {
-      if (source && source.type in sourceTypes) {
+      if (source && sourceTypes.indexOf(source.type) !== -1) {
         return source.type + '-source';
       } else {
         return 'unknown-source';
       }
     };
+
+    $scope.$watch('source.type', function(sourceType) {
+      var url = $scope.source.url;
+      if (sourceType == 'facebook') {
+        if (!url || url == '') {
+          url = 'https://www.facebook.com/';
+        }
+      } else {
+        if (url && url.indexOf('facebook') !== -1) {
+          url = '';
+        }
+      }
+      $scope.source.url = url;
+    });
 
     $scope.validSourceType = function(formSource) {
       if (formSource.type != 'twitter') { return true }
