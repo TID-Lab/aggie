@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.value('sourceTypes', ['twitter', 'facebook', 'rss'])
+.value('sourceTypes', ['twitter', 'facebook', 'rss', 'elmo'])
 
 .value('statusOptions', ['relevant', 'irrelevant', 'unassigned', 'assigned'])
 

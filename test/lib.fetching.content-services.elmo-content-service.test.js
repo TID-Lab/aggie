@@ -101,7 +101,10 @@ describe('ELMO content service', function() {
     });
 
     it('should fetch real content from ELMO', function(done) {
-      elmoContentService.fetch();
+      elmoContentService.fetch(function(err, lastReportDate) {
+      expect(err).to.be.null;
+      expect(lastReportDate).to.exist;
+    });
       elmoContentService.once('report', function(report_data) {
         expect(report_data).to.have.keys(['authoredAt', 'fetchedAt', 'content', 'author']);
         expect(report_data.content).to.contain('[Code');
@@ -111,7 +114,10 @@ describe('ELMO content service', function() {
     });
 
     it('should re-fetch to get an empty content list', function(done) {
-      elmoContentService.fetch();
+      elmoContentService.fetch(function(err, lastReportDate) {
+        expect(err).to.be.null;
+        expect(lastReportDate).to.exist;
+      });
       expectToNotEmitReport(elmoContentService, done);
       elmoContentService.once('error', done);
       setTimeout(done, 500);
