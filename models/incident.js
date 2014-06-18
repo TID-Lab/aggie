@@ -15,7 +15,8 @@ var schema = new mongoose.Schema({
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
   verified: {type: Boolean, default: false, required: true},
-  notes: String
+  notes: String,
+  reportCount: Number
 });
 
 schema.pre('save', function(next) {
@@ -28,7 +29,7 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  schema.emit('incident:save', {_id: this._id.toString()});
+  if (!this._silent) schema.emit('incident:save', {_id: this._id.toString()});
 });
 
 var Incident = mongoose.model('Incident', schema);
@@ -73,15 +74,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
   // Just use filters when no keywords are provided
   Incident.findPage(filter, page, options, function(err, incidents) {
     if (err) return callback(err);
-    if (!incidents.results.length) return callback(null, incidents);
-    var remaining = incidents.results.length;
-    _.each(incidents.results, function(incident, i) {
-      Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
-        if (err) return callback(err);
-        incidents.results[i] = _.extend(incident.toJSON(), {reportCount: reportCount});
-        if (--remaining === 0) callback(null, incidents);
-      });
-    });
+    callback(null, incidents);
   });
 };
 
