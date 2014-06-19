@@ -15,12 +15,22 @@
     </div>
     <div class="filter status-filter">
       <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
-        <option value="">Filter by Status</option>
+        <option value="">Status</option>
+      </select>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
+        <option value="">Source Type</option>
       </select>
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceId" ng-options="value._id as value.nickname for (key, value) in sources" ng-change="search()" class="form-control">
-        <option value="">Filter by Source</option>
+        <option value="">Source</option>
+      </select>
+    </div>
+    <div class="filter incident-filter">
+      <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents" ng-change="search()" class="form-control">
+        <option value="">Incident</option>
       </select>
     </div>
     <div class="filter date-filter">
