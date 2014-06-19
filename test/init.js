@@ -41,3 +41,19 @@ compare = function(a, b) {
     }
   }
 };
+
+// Expect listener to not emit reports
+expectToNotEmitReport = function(listener, done) {
+  listener.once('report', function(report_data) {
+    done(new Error('Should not emit reports'));
+  });
+};
+
+// Expect listener to emit specific errors
+expectToEmitError = function(listener, message, done) {
+  listener.once('error', function(err) {
+    expect(err).to.be.an.instanceof(Error);
+    expect(err.message).to.contain(message);
+    done();
+  });
+};

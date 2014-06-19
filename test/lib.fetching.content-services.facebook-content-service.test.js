@@ -1,5 +1,5 @@
+require('./init');
 var expect = require('chai').expect;
-var should = require('chai').should();
 var FacebookContentService = require('../lib/fetching/content-services/facebook-content-service');
 var ContentService = require('../lib/fetching/content-service');
 
@@ -170,17 +170,3 @@ describe('Facebook content service', function() {
     facebookContentService.removeAllListeners();
   });
 });
-
-function expectToNotEmitReport(listener, done) {
-  listener.once('report', function(report_data) {
-    done(new Error('Should not emit reports'));
-  });
-}
-
-function expectToEmitError(listener, message, done) {
-  listener.once('error', function(err) {
-    expect(err).to.be.an.instanceof(Error);
-    expect(err.message).to.contain(message);
-    done();
-  });
-}
