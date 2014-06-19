@@ -48,11 +48,11 @@ describe('ELMO content service', function() {
       expect(report_data).to.have.property('author');
       switch (remaining) {
         case 2:
-          expect(report_data.content).to.contain('[CodeFOO: Certainly] [CodeBAR: Nope] [CodeBAZ: Perhaps]');
+          expect(report_data.content).to.contain('FOO: Certainly&nbsp;&nbsp;&nbsp;&nbsp; BAR: Nope&nbsp;&nbsp;&nbsp;&nbsp; BAZ: Perhaps');
           expect(report_data.author).to.equal(1);
           break;
         case 1:
-          expect(report_data.content).to.contain('[CodeFOO2: Yes] [CodeBAR2: No] [CodeBAZ2: Maybe]');
+          expect(report_data.content).to.contain('FOO2: Yes&nbsp;&nbsp;&nbsp;&nbsp; BAR2: No&nbsp;&nbsp;&nbsp;&nbsp; BAZ2: Maybe');
           expect(report_data.author).to.equal(2);
           break;
       }
@@ -79,7 +79,7 @@ describe('ELMO content service', function() {
       expect(report_data).to.have.property('author');
       switch (remaining) {
         case 1:
-          expect(report_data.content).to.contain('[CodeFOO3: Affirmative] [CodeBAR3: Negative] [CodeBAZ3: Doubtful]');
+          expect(report_data.content).to.contain('FOO3: Affirmative&nbsp;&nbsp;&nbsp;&nbsp; BAR3: Negative&nbsp;&nbsp;&nbsp;&nbsp; BAZ3: Doubtful');
           expect(report_data.author).to.equal(3);
           break;
       }
@@ -107,7 +107,6 @@ describe('ELMO content service', function() {
     });
       elmoContentService.once('report', function(report_data) {
         expect(report_data).to.have.keys(['authoredAt', 'fetchedAt', 'content', 'author']);
-        expect(report_data.content).to.contain('[Code');
         done();
       });
       elmoContentService.on('error', done);
