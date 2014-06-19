@@ -1,0 +1,13 @@
+[
+  {
+    "id": 2,
+    "submitter": 2,
+    "created_at": "2014-06-17T15:00:00Z",
+    "updated_at": "2014-06-17T15:00:00Z",
+    "answers": [
+      { "question": "Foo 2", "code": "FOO2", "answer": "Yes" },
+      { "question": "Bar 2", "code": "BAR2", "answer": "No" },
+      { "question": "Baz 2", "code": "BAZ2", "answer": "Maybe" }
+    ]
+  }
+]
