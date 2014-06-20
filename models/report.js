@@ -29,30 +29,31 @@ schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
     this.storedAt = new Date();
-  } else {
-    // Capture updates before saving report
-    if (this.isModified('status')) this._statusWasModified = true;
-    if (this.isModified('_incident')) this._incidentWasModified = true;
   }
-  next();
+  // Capture updates before saving report
+  if (this.isModified('status')) this._statusWasModified = true;
+  if (this.isModified('_incident')) {
+    this._incidentWasModified = true;
+    var self = this;
+    // Find the previously stored Incident ID
+    Report.findById(this._id, function(err, report) {
+      if (err) return next(err);
+      if (report) self._oldIncident = report._incident;
+      next();
+    });
+  } else {
+    process.nextTick(next);
+  }
 });
 
 // Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
-  // Update Incident report counts
-  if (this._incident) {
-    Incident.findById(this._incident, function(err, incident) {
-      if (err || !incident) return;
-      Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
-        if (err) return;
-        incident.reportCount = reportCount;
-        incident._silent = true;
-        incident.save();
-      });
-    });
+  if (this._incidentWasModified) {
+    schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+    if (this._incident) Incident.updateCounts(this._incident);
+    if (this._oldIncident) Incident.updateCounts(this._oldIncident);
   }
 });
 

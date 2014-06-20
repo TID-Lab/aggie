@@ -1,6 +1,5 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var Report = require('./report');
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 require('../lib/error');
@@ -33,6 +32,19 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
+
+// Update report counts for incident
+Incident.updateCounts = function(_id) {
+  Incident.findById(_id, function(err, incident) {
+    if (err || !incident) return;
+    mongoose.models.Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
+      if (err) return;
+      incident.reportCount = reportCount;
+      incident._silent = true;
+      incident.save();
+    });
+  });
+}
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {
