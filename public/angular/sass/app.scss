@@ -248,3 +248,12 @@ li.collapse, li.collapsing {
     background-color: #d1d3d4;
   }
 }
+
+#map-canvas {
+  width: 100%;
+  height: 450px;
+  .info_window {
+    overflow: auto;
+    font-size: 12px;
+  }
+}

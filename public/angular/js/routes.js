@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .config([
   '$stateProvider',
-  function($stateProvider) {
+  function($stateProvider, tz) {
     $stateProvider.state('home', {
       url: '/',
       onEnter: function($state) {
@@ -28,7 +28,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status',
+      url: '/reports?keywords&page&before&after&sourceId&status&sourceType&incidentId',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -40,6 +40,8 @@ angular.module('Aggie')
             after: params.after,
             before: params.before,
             sourceId: params.sourceId,
+            sourceType: params.sourceType,
+            incidentId: params.incidentId,
             status: params.status
           }).$promise;
         }],
@@ -158,7 +160,13 @@ angular.module('Aggie')
 
     $stateProvider.state('analysis.incidentsMap', {
       url: '/incidents-map',
-      templateUrl: '/templates/incidents/map.html'
+      templateUrl: '/templates/incidents/map.html',
+      controller: 'IncidentsMapController',
+      resolve: {
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('settings', {
