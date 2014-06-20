@@ -24,9 +24,12 @@
       </select>
     </div>
     <div class="filter date-filter">
-      <button class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
-        <span ng-show="searchParams.after && searchParams.before">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-        <span ng-hide="searchParams.after && searchParams.before">Any time</span>
+      <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
+        <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+        <span ng-switch-when="3">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-switch-when="2">After <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+        <span ng-switch-when="1">Before <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-switch-default>Any time</span>
       </button>
     </div>
     <div class="filter pagination">

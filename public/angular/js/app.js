@@ -24,6 +24,10 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   return shared;
 })
 
+.factory('tz', function() {
+  return require('timezone');
+})
+
 .run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
   $rootScope.$state = $state;
 

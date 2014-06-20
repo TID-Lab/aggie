@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .config([
   '$stateProvider',
-  function($stateProvider) {
+  function($stateProvider, tz) {
     $stateProvider.state('home', {
       url: '/',
       onEnter: function($state) {
