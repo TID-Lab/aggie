@@ -1,30 +1,32 @@
 angular.module('Aggie')
 
 .controller('DatetimeModalController', [
-  '$rootScope',
   '$scope',
   '$state',
   '$modal',
-  '$http',
-  function($rootScope, $scope, $state, $modal, $http) {
+  'tz',
+  function($scope, $state, $modal, tz) {
     $scope.open = function() {
       var modalInstance = $modal.open({
         controller: 'DatetimeModalInstanceController',
         templateUrl: 'templates/datetime_modal.html',
         resolve: {
           times: function() {
-            return {
-              before: $rootScope.$state.params.before,
-              after: $rootScope.$state.params.after
+            var before = $state.params.before,
+              after = $state.params.after;
+
+            if (!before && !after) {
+              before = tz(new Date(), '+1 day', '%F%00:00:00');
+              after = tz(new Date(), '%F%00:00:00');
             }
+
+            return { before: before, after: after };
           }
         }
       });
 
       modalInstance.result.then(function(times) {
-        $rootScope.$evalAsync(
-          $rootScope.$state.$current.locals['@'].
-            $scope.search(times));
+        $scope.search(times);
       });
     };
   }
@@ -34,8 +36,10 @@ angular.module('Aggie')
   '$scope',
   '$modalInstance',
   'times',
-  function($scope, $modalInstance, times) {
-    $scope.datetimes = times;
+  'aggieDateFilter',
+  'tz',
+  function($scope, $modalInstance, times, aggieDateFilter, tz) {
+    $scope.times = times;
     $scope.showErrors = false;
 
     $scope.save = function(form) {
@@ -43,7 +47,8 @@ angular.module('Aggie')
         $scope.showErrors = true;
         return;
       }
-      $modalInstance.close($scope.datetimes);
+
+      $modalInstance.close($scope.times);
     };
 
     $scope.close = function() {

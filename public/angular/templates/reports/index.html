@@ -15,18 +15,31 @@
     </div>
     <div class="filter status-filter">
       <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
-        <option value="">Filter by Status</option>
+        <option value="">Status</option>
+      </select>
+    </div>
+    <div class="filter source-type-filter">
+      <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
+        <option value="">Source Type</option>
       </select>
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceId" ng-options="value._id as value.nickname for (key, value) in sources" ng-change="search()" class="form-control">
-        <option value="">Filter by Source</option>
+        <option value="">Source</option>
+      </select>
+    </div>
+    <div class="filter incident-filter">
+      <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents" ng-change="search()" class="form-control">
+        <option value="">Incident</option>
       </select>
     </div>
     <div class="filter date-filter">
-      <button class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
-        <span ng-show="searchParams.after && searchParams.before">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-        <span ng-hide="searchParams.after && searchParams.before">Any time</span>
+      <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
+        <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+        <span ng-switch-when="3">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-switch-when="2">After <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+        <span ng-switch-when="1">Before <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-switch-default>Any time</span>
       </button>
     </div>
     <div class="filter pagination">

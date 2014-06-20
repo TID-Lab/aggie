@@ -5,16 +5,16 @@
   </div>
   <div class="modal-body">
     <div class="well bs-component">
-      <form name="form" class="form-horizontal filter-form">
+      <form name="form" class="form-horizontal filter-form datetime-form">
         <fieldset>
           <div class="form-group">
             <div>
               <label for="type" class="control-label">From:</label>
-              <input type="text" name="after" aggie-datepicker ng-model="datetimes.after" placeholder="Start date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
+              <input type="text" name="after" aggie-datepicker ng-model="times.after" placeholder="Start date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
             <div>
               <label for="type" class="control-label">To:</label>
-              <input type="text" aggie-datepicker ng-model="datetimes.before" placeholder="End date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
+              <input type="text" name="before" aggie-datepicker ng-model="times.before" placeholder="End date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
           </div>
         </fieldset>
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default" ng-click="close()">Cancel</button>
     <button class="btn btn-primary" ng-click="save(form)">Submit</button>
   </div>
 </div>
