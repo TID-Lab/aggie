@@ -209,6 +209,10 @@ table, .table {
   label {
     font-weight: bold;
   }
+  select {
+    width: auto;
+    max-width: 100px;
+  }
   .filter {
     vertical-align: top;
     display: table-cell;
@@ -223,12 +227,6 @@ table, .table {
   .form-control {
     font-size: 12px;
     height: 25px;
-  }
-  .status-filter,
-  .source-type-filter {
-    select {
-      width: auto;
-    }
   }
   .date-filter {
     label {

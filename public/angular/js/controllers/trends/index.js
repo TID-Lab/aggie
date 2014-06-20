@@ -11,8 +11,8 @@ angular.module('Aggie')
   'Trend',
   'TrendFetching',
   'Socket',
-  'aggieDateFilter',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, aggieDateFilter) {
+  'tz',
+  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = [];
@@ -130,8 +130,12 @@ angular.module('Aggie')
       var endTime = new Date(parseInt(count.timebox) + config.interval);
       $rootScope.$state.go('reports', {
         keywords: trend.query.keywords,
-        before: aggieDateFilter(endTime, 'datepicker'),
-        after: aggieDateFilter(startTime, 'datepicker')
+        before: tz(endTime, '%FT%T'),
+        after: tz(startTime, '%FT%T'),
+        incidentId: trend.query.incidentId,
+        sourceType: trend.query.sourceType,
+        sourceId: trend.query.sourceId,
+        status: trend.query.status
       });
     };
 
