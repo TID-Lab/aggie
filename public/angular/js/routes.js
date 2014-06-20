@@ -160,7 +160,13 @@ angular.module('Aggie')
 
     $stateProvider.state('analysis.incidentsMap', {
       url: '/incidents-map',
-      templateUrl: '/templates/incidents/map.html'
+      templateUrl: '/templates/incidents/map.html',
+      controller: 'IncidentsMapController',
+      resolve: {
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('settings', {
