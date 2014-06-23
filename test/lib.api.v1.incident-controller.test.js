@@ -9,6 +9,7 @@ var Report = require('../models/report');
 var incident;
 describe('Incident controller', function() {
   before(function(done) {
+    Incident.addListeners('reports', Report.schema);
     incident = {title: 'test'};
     done();
   });

@@ -3,7 +3,6 @@ var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
 var Source = require('./source');
 var Query = require('./query');
-var Incident = require('./incident');
 var _ = require('underscore');
 
 var schema = new mongoose.Schema({
@@ -50,11 +49,7 @@ schema.pre('save', function(next) {
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-  if (this._incidentWasModified) {
-    schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
-    if (this._incident) Incident.updateCounts(this._incident);
-    if (this._oldIncident) Incident.updateCounts(this._oldIncident);
-  }
+  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString(), _oldIncident: this._oldIncident ? this._oldIncident.toString() : null});
 });
 
 var Report = mongoose.model('Report', schema);

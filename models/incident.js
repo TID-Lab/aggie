@@ -33,6 +33,18 @@ schema.post('save', function() {
 
 var Incident = mongoose.model('Incident', schema);
 
+// Add event listeners from other models
+Incident.addListeners = function(type, emitter) {
+  switch (type) {
+    case 'reports':
+      emitter.on('report:incident', function(report) {
+        if (report._incident) Incident.updateCounts(report._incident);
+        if (report._oldIncident) Incident.updateCounts(report._oldIncident);
+      });
+      break;
+  }
+};
+
 // Update report counts for incident
 Incident.updateCounts = function(_id) {
   Incident.findById(_id, function(err, incident) {
@@ -44,7 +56,7 @@ Incident.updateCounts = function(_id) {
       incident.save();
     });
   });
-}
+};
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {
