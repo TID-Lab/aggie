@@ -15,7 +15,7 @@ var schema = new mongoose.Schema({
   status: {type: String, default: 'new', required: true},
   verified: {type: Boolean, default: false, required: true},
   notes: String,
-  reportCount: Number
+  reportCount: {type: Number, default: 0}
 });
 
 schema.pre('save', function(next) {
@@ -46,14 +46,14 @@ Incident.addListeners = function(type, emitter) {
 };
 
 // Update report counts for incident
-Incident.updateCounts = function(_id) {
+Incident.updateCounts = function(_id, callback) {
   Incident.findById(_id, function(err, incident) {
     if (err || !incident) return;
     mongoose.models.Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
       if (err) return;
       incident.reportCount = reportCount;
       incident._silent = true;
-      incident.save();
+      incident.save(callback);
     });
   });
 };
