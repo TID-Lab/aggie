@@ -4,42 +4,20 @@ var ELMOContentService = require('../lib/fetching/content-services/elmo-content-
 var ContentService = require('../lib/fetching/content-service');
 var _ = require('underscore');
 
-var elmoContentService, _fetch, __getNextPage;
+var elmoContentService, _fetchPage;
 describe('ELMO content service', function() {
   before(function(done) {
     // Override fetch so that we can test local files
-    _fetch = ELMOContentService.prototype.fetch;
-    ELMOContentService.prototype.fetch = function(fixture, headers, callback) {
-      if (typeof headers === 'function') {
-        callback = headers;
-        headers = {};
-      }
-      var self = this;
+    _fetchPage = ELMOContentService.prototype._fetchPage;
+    ELMOContentService.prototype._fetchPage = function(fixture, callback) {
+      callback = callback || function() {};
+      // Convert fake URL to path
+      fixture = fixture.replace(/http:\/\//ig, './fixtures/');
+      // Load fake data
       var data = require(fixture);
       process.nextTick(function() {
-        // Store data temporarily
-        self._data = _.union(self._data || [], data || []);
-        // Fetch next page if necessary
-        var nextPage = self._getNextPage({headers: headers});
-        if (data && nextPage) {
-          self.fetch(nextPage, callback);
-        } else {
-          if (self._data && self._data.length) {
-            self._handleResults(self._data);
-            delete self._data;
-          }
-          callback && callback(null, self.lastReportDate);
-        }
+        callback({headers: data.headers}, data.data);
       });
-    };
-    // Override _getNextPage so that we can test local pagination
-    __getNextPage = ELMOContentService.prototype._getNextPage;
-    ELMOContentService.prototype._getNextPage = function(res) {
-      // Determine if there is more data to fetch
-      if (res && res.headers && res.headers.link) {
-        var nextPage = new RegExp('[^\s]<(\./fixtures/.+?)>; rel="next"', 'i').exec(res.headers.link);
-        if (nextPage) return nextPage[1];
-      }
     };
     done();
   });
@@ -51,8 +29,8 @@ describe('ELMO content service', function() {
   });
 
   it('should fetch empty content', function(done) {
-    elmoContentService = new ELMOContentService({});
-    elmoContentService.fetch('./fixtures/elmo-0.json', function(err, lastReportDate) {
+    elmoContentService = new ELMOContentService({url: './fixtures/elmo-0.json'});
+    elmoContentService.fetch(function(err, lastReportDate) {
       expect(err).to.be.null;
       expect(lastReportDate).to.be.null;
     });
@@ -62,8 +40,8 @@ describe('ELMO content service', function() {
   });
 
   it('should fetch mock content from ELMO', function(done) {
-    elmoContentService = new ELMOContentService({});
-    elmoContentService.fetch('./fixtures/elmo-1.json', function(err, lastReportDate) {
+    elmoContentService = new ELMOContentService({url: './fixtures/elmo-1.json'});
+    elmoContentService.fetch(function(err, lastReportDate) {
       expect(err).to.be.null;
       expect(lastReportDate).to.equal(Date.parse('2014-06-17T15:00:00Z'));
     });
@@ -91,7 +69,8 @@ describe('ELMO content service', function() {
   });
 
   it('should query for new data without duplicates', function(done) {
-    elmoContentService.fetch('./fixtures/elmo-2.json', function(err, lastReportDate) {
+    elmoContentService.url = './fixtures/elmo-2.json';
+    elmoContentService.fetch(function(err, lastReportDate) {
       expect(err).to.be.null;
       expect(lastReportDate).to.equal(Date.parse('2014-06-17T20:00:00Z'));
     });
@@ -115,11 +94,8 @@ describe('ELMO content service', function() {
   });
 
   it('should query paginated content', function(done) {
-    var headers = {
-      link: '<./fixtures/elmo-3-2.json>; rel="last", <./fixtures/elmo-3-2.json>; rel="next"'
-    }
-    elmoContentService = new ELMOContentService({});
-    elmoContentService.fetch('./fixtures/elmo-3-1.json', headers, function(err, lastReportDate) {
+    elmoContentService = new ELMOContentService({url: './fixtures/elmo-3-1.json'});
+    elmoContentService.fetch(function(err, lastReportDate) {
       expect(err).to.be.null;
       expect(lastReportDate).to.equal(Date.parse('2014-06-17T15:00:00Z'));
     });
@@ -144,9 +120,8 @@ describe('ELMO content service', function() {
 
   describe('Online', function() {
     before(function() {
-      // Restore original `fetch()`
-      ELMOContentService.prototype.fetch = _fetch;
-      ELMOContentService.prototype._getNextPage = __getNextPage;
+      // Restore original `_fetchPage()`
+      ELMOContentService.prototype._fetchPage = _fetchPage;
       elmoContentService = new ELMOContentService({url: 'https://secure1.sassafras.coop/api/v1/responses.json?form_id=19'});
     });
 
