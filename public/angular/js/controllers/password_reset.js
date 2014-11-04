@@ -22,9 +22,16 @@ angular.module('Aggie').controller('PasswordResetController', [
         password: $scope.user.password
       };
 
-      $http.put('/reset-password', params).success(function() {
-        flash.setNotice('Your password has been successfully reset.');
-        $state.go('reports');
+      $http.put('/reset-password', params).success(function(userData) {
+        AuthService.login({username: userData.username, password: params.password}, function(err) {
+          if (err) {
+            flash.setAlertNow('An error has occurred when resetting your password');
+            $state.go('login')
+          } else {
+            flash.setNotice('Your password has been successfully reset.');
+            $state.go('reports');
+          }
+        });
       }).error(function(message, respStatus) {
         flash.setAlertNow(message);
       });
