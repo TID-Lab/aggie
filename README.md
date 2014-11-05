@@ -48,3 +48,23 @@ running. Since this is a multi-process application, the forever monitor will
 sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
+
+## Architecture
+
+Aggie consists of two largely separate frontend and backend apps. Some model code (in `/shared`) is shared between them.
+
+### Backend
+
+The backend is a Node.js/Express app responsible for fetching and analyzing data and servicing API requests. There are three main modules, each of which runs in its own process:
+
+* API module
+* Fetching module
+* Analytics module
+
+See README files in the `lib` subdirectories for more info on each module.
+
+The model layer (in `/models`) is shared among all three modules.
+
+### Frontend
+
+The frontend is a single-page Angular.js app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It is contained in `/public/angular`.

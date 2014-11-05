@@ -1,3 +1,6 @@
+// A report is a single post/comment/article or other chunk of data from a source.
+// This class is responsible for executing ReportQuerys.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');

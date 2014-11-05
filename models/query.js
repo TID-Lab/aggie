@@ -1,3 +1,6 @@
+// Represents a request for a subset of objects (reports, incidents, etc.; see subclasses).
+// For example, a query might be 'All reports with status = relevant and keyword foo'
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 

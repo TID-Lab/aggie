@@ -1,3 +1,5 @@
+// Incident functionality shared across client and server.
+
 (function() {
 
   var Incident = function(attributes) {

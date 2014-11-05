@@ -1,3 +1,5 @@
+// Represents a user of the system.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var bcrypt = require('bcrypt-nodejs');
