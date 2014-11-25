@@ -19,6 +19,8 @@ node_modules
 *.iml
 .DS_Store
 Thumbs.db
+.c9revisions
+.settings
 
 public/css/styles.css
 public/angular/css/app.css
