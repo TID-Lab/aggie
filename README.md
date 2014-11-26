@@ -30,7 +30,7 @@ Contact mikeb@cc.gatech.edu for more information.
 1. Checkout repo.
 1. Install node.js (v.0.10.*)
 1. Install Mongo DB (requires >= 2.6)
-1. Copy `config/secrets.json.example` to `config/secrets.json` and fill in values appropriately.
+1. Copy `config/secrets.json.example` to `config/secrets.js` and fill in values appropriately.
    1. email.from is the address from which application emails will come.
    1. email.transport is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com)
 1. Start Mongo DB.
