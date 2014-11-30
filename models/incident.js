@@ -19,7 +19,8 @@ var schema = new mongoose.Schema({
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
   verified: {type: Boolean, default: false, required: true},
-  notes: String
+  notes: String,
+  reportCount: {type: Number, default: 0}
 });
 
 schema.pre('save', function(next) {
@@ -32,10 +33,35 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  schema.emit('incident:save', {_id: this._id.toString()});
+  if (!this._silent) schema.emit('incident:save', {_id: this._id.toString()});
 });
 
 var Incident = mongoose.model('Incident', schema);
+
+// Add event listeners from other models
+Incident.addListeners = function(type, emitter) {
+  switch (type) {
+    case 'reports':
+      emitter.on('report:incident', function(report) {
+        if (report._incident) Incident.updateCounts(report._incident);
+        if (report._oldIncident) Incident.updateCounts(report._oldIncident);
+      });
+      break;
+  }
+};
+
+// Update report counts for incident
+Incident.updateCounts = function(_id, callback) {
+  Incident.findById(_id, function(err, incident) {
+    if (err || !incident) return;
+    mongoose.models.Report.count({_incident: incident._id.toString()}, function(err, reportCount) {
+      if (err) return;
+      incident.reportCount = reportCount;
+      incident._silent = true;
+      incident.save(callback);
+    });
+  });
+};
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {
@@ -75,7 +101,10 @@ Incident.queryIncidents = function(query, page, options, callback) {
   query.since = new Date();
 
   // Just use filters when no keywords are provided
-  Incident.findPage(filter, page, options, callback);
+  Incident.findPage(filter, page, options, function(err, incidents) {
+    if (err) return callback(err);
+    callback(null, incidents);
+  });
 };
 
 // Mixin shared incident methods

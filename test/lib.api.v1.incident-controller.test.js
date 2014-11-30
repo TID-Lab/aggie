@@ -4,10 +4,12 @@ var request = require('supertest');
 var _ = require('underscore');
 var incidentController = require('../lib/api/v1/incident-controller')();
 var Incident = require('../models/incident');
+var Report = require('../models/report');
 
-var incident;
+var incident, oneIncident, one, two;
 describe('Incident controller', function() {
   before(function(done) {
+    Incident.addListeners('reports', Report.schema);
     incident = {title: 'test'};
     done();
   });
@@ -105,6 +107,84 @@ describe('Incident controller', function() {
           done();
         });
     });
+    it('should count the number of reports per incident', function(done) {
+      one = new Report({content: 'one', _incident: incident._id});
+      two = new Report({content: 'two', _incident: incident._id});
+      one.save();
+      two.save();
+      setTimeout(function() {
+        request(incidentController)
+          .get('/api/v1/incident')
+          .expect(200)
+          .end(function(err, res) {
+            if (err) return done(err);
+            expect(res.body).to.have.keys(['total', 'results']);
+            expect(res.body.results).to.be.an.instanceof(Array);
+            expect(res.body.results[0]).to.contain.property('reportCount');
+            expect(res.body.results[0].reportCount).to.equal(2);
+            done();
+          });
+      }, 100);
+    });
+    it('should update the number of reports per incident when changing report incident', function(done) {
+      oneIncident = new Incident({title: 'one'});
+      oneIncident.save(function(err) {
+        if (err) return done(err);
+        one._incident = oneIncident._id;
+        one.save(function(err) {
+          if (err) return done(err);
+          setTimeout(function() {
+            request(incidentController)
+              .get('/api/v1/incident')
+              .expect(200)
+              .end(function(err, res) {
+                if (err) return done(err);
+                expect(res.body).to.have.keys(['total', 'results']);
+                expect(res.body.results).to.be.an.instanceof(Array);
+                _.each(res.body.results, function(result) {
+                  switch (result._id) {
+                    case incident._id:
+                    case oneIncident._id:
+                      expect(result).to.contain.property('reportCount');
+                      expect(result.reportCount).to.equal(1);
+                      break;
+                  }
+                });
+                done();
+              });
+          }, 100);
+        });
+      });
+    });
+    it('should update the number of reports per incident when removing from report', function(done) {
+      one._incident = null;
+      one.save(function(err) {
+        if (err) return done(err);
+        setTimeout(function() {
+          request(incidentController)
+            .get('/api/v1/incident')
+            .expect(200)
+            .end(function(err, res) {
+              if (err) return done(err);
+              expect(res.body).to.have.keys(['total', 'results']);
+              expect(res.body.results).to.be.an.instanceof(Array);
+              _.each(res.body.results, function(result) {
+                switch (result._id) {
+                  case incident._id:
+                    expect(result).to.contain.property('reportCount');
+                    expect(result.reportCount).to.equal(1);
+                    break;
+                  case oneIncident._id:
+                    expect(result).to.contain.property('reportCount');
+                    expect(result.reportCount).to.equal(0);
+                    break;
+                }
+              });
+              done();
+            });
+        }, 100);
+      });
+    });
   });
 
   describe('DELETE /api/v1/incident/:_id', function() {
@@ -132,5 +212,4 @@ describe('Incident controller', function() {
         });
     });
   });
-
 });

@@ -105,13 +105,13 @@ describe('Report writer', function() {
         expect(haveData).to.be.false;
 
         // Let all reports be processed
-        process.nextTick(function() {
+        setTimeout(function() {
           // Verify that reports were inserted into database
           Report.find(function(err, reports) {
             expect(reports.length).to.equal(queueCount + reportCount);
             done();
           });
-        });
+        }, 100);
       });
       // Start processing of all queued data
       reportWriter.process();
