@@ -43,7 +43,7 @@ schema.pre('save', function(next) {
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
 });
 
 var Report = mongoose.model('Report', schema);
