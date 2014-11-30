@@ -63,7 +63,10 @@ Report.queryReports = function(query, page, callback) {
   // Determine status filter
   if (query.status) {
     query.filter.status = {};
-    if (query.status === 'assigned') query.filter.status.$exists = true;
+    if (query.status === 'assigned') {
+      query.filter.status.$exists = true;
+      query.filter.status.$ne = '';
+    }
     else if (query.status === 'unassigned') query.filter.status.$exists = false;
     else query.filter.status = query.status;
   }
