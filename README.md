@@ -33,6 +33,9 @@ Contact mikeb@cc.gatech.edu for more information.
 1. Copy `config/secrets.json.example` to `config/secrets.js` and fill in values appropriately.
    1. email.from is the address from which application emails will come.
    1. email.transport is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com)
+   1. Set `config.adminParty=true` if you want to run tests.  
+   1. Set `config.log=true` if you want to see logs for debugging.
+   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 1. Start Mongo DB.
 1. Run `npm install` from the project directory (This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates angular application.)
 1. Run `sudo npm install -g gulp mocha` (This installs gulp and mocha globally so they can be run from command line for testing.)
