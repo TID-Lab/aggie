@@ -54,5 +54,9 @@ angular.module('Aggie')
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
     };
+
+    $scope.clear = function () {
+      $scope.times = [];
+    };
   }
 ]);
