@@ -4,10 +4,10 @@ angular.module('Aggie')
   return function(data, type) {
 
     var formats = {
-      time: 'HH:mm:ss',
-      date: "dd MMM ''''yy",
-      datetime: "HH:mm:ss on dd MMM ''''yy",
-      datepicker: "MM/dd/yyyy HH:mm:ss",
+      time: 'h:mm:ssa',
+      date: "yyyy-MM-dd",
+      datetime: "yyyy-MM-dd h:mm:ssa",
+      datepicker: "yyyy-MM-dd h:mma",
       timestamp: 'yyyy-MM-ddTHH:mm:ssZ'
     };
 
