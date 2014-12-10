@@ -17,7 +17,6 @@ var userSchema = new mongoose.Schema({
   role: {type: String, default: 'viewer'}
 });
 
-// Hash the password for security
 userSchema.pre('save', function(next) {
   var user = this;
 
@@ -37,6 +36,11 @@ userSchema.pre('save', function(next) {
       process.nextTick(next);
     }
   });
+});
+
+userSchema.post('save', function(user) {
+  // Nullify the password once save is done, for security.
+  user.password = null;
 });
 
 userSchema.methods.hashPassword = function(callback) {

@@ -69,7 +69,6 @@ angular.module('Aggie')
     $scope.message = '';
 
     var handleSuccess = function(response) {
-      delete $scope.user.password;
       $modalInstance.close(response);
     };
 
