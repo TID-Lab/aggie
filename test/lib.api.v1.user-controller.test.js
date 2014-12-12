@@ -30,10 +30,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('GET /api/v1/user/:username', function() {
+  describe('GET /api/v1/user/:_id', function() {
     it('should return user', function(done) {
       request(userController)
-        .get('/api/v1/user/' + user.username)
+        .get('/api/v1/user/' + user._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -43,11 +43,11 @@ describe('User controller', function() {
     });
   });
 
-  describe('PUT /api/v1/user/:username', function() {
+  describe('PUT /api/v1/user/:_id', function() {
     it('should update user', function(done) {
       user.email = 'updated@example.com';
       request(userController)
-        .put('/api/v1/user/' + user.username)
+        .put('/api/v1/user/' + user._id)
         .send(user)
         .expect(200)
         .end(function(err, res) {
@@ -73,14 +73,14 @@ describe('User controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/user/:username', function() {
+  describe('DELETE /api/v1/user/:_id', function() {
     it('should delete user', function(done) {
       request(userController)
-        .del('/api/v1/user/' + user.username)
+        .del('/api/v1/user/' + user._id)
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/v1/user/' + user.username)
+            .get('/api/v1/user/' + user._id)
             .expect(404, done);
         });
     });

@@ -1,3 +1,8 @@
+// An incident is an occurrence that is being monitored by the team.
+// It is generally associated with one or more reports.
+// Other metadata is stored with the incident to assist tracking.
+// This class is responsible for executing IncidentQuerys.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var validate = require('mongoose-validator').validate;

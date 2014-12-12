@@ -30,9 +30,12 @@ Contact mikeb@cc.gatech.edu for more information.
 1. Checkout repo.
 1. Install node.js (v.0.10.*)
 1. Install Mongo DB (requires >= 2.6)
-1. Copy `config/secrets.json.example` to `config/secrets.json` and fill in values appropriately.
+1. Copy `config/secrets.json.example` to `config/secrets.js` and fill in values appropriately.
    1. email.from is the address from which application emails will come.
    1. email.transport is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com)
+   1. Set `config.adminParty=true` if you want to run tests.  
+   1. Set `config.log=true` if you want to see logs for debugging.
+   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 1. Start Mongo DB.
 1. Run `npm install` from the project directory (This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates angular application.)
 1. Run `sudo npm install -g gulp mocha` (This installs gulp and mocha globally so they can be run from command line for testing.)
@@ -48,3 +51,23 @@ running. Since this is a multi-process application, the forever monitor will
 sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
+
+## Architecture
+
+Aggie consists of two largely separate frontend and backend apps. Some model code (in `/shared`) is shared between them.
+
+### Backend
+
+The backend is a Node.js/Express app responsible for fetching and analyzing data and servicing API requests. There are three main modules, each of which runs in its own process:
+
+* API module
+* Fetching module
+* Analytics module
+
+See README files in the `lib` subdirectories for more info on each module.
+
+The model layer (in `/models`) is shared among all three modules.
+
+### Frontend
+
+The frontend is a single-page Angular.js app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It is contained in `/public/angular`.

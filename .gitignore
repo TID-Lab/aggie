@@ -15,10 +15,14 @@ tmp
 
 npm-debug.log
 node_modules
+fiddle
 .idea
 *.iml
 .DS_Store
 Thumbs.db
+.c9revisions
+.settings
+run-tests.sh
 
 public/css/styles.css
 public/angular/css/app.css

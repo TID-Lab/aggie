@@ -69,7 +69,6 @@ angular.module('Aggie')
     $scope.message = '';
 
     var handleSuccess = function(response) {
-      delete $scope.user.password;
       $modalInstance.close(response);
     };
 
@@ -91,7 +90,7 @@ angular.module('Aggie')
         return;
       }
       if ($scope.user._id) {
-        User.update({ username: $scope.user.username }, $scope.user, handleSuccess, handleError);
+        User.update({ _id: $scope.user._id }, $scope.user, handleSuccess, handleError);
       } else {
         User.create($scope.user, handleSuccess, handleError);
       }

@@ -1,3 +1,5 @@
+// Subclass of Query. Represents a query of the report collection.
+
 var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
