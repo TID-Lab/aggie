@@ -40,7 +40,9 @@
     "timezone": "0.0.32",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
-    "vinyl-source-stream": "~0.1.1"
+    "vinyl-source-stream": "~0.1.1",
+    "nconf": "~0.7.1",
+    "string": "~3.0.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",
