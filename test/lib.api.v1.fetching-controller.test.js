@@ -10,11 +10,14 @@ describe('Fetching controller', function() {
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
     botMaster.addListeners('fetching', fetchingController);
-    fetchingController.addListeners('botMaster', botMaster);
     Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
     Source.create({nickname: 'two', type: 'dummy', keywords: 'two'});
     Source.create({nickname: 'three', type: 'dummy', keywords: 'three'});
-    done();
+    
+    var config = require('../config/secrets');
+    config.updateFetching(false, function(err){
+      done();
+    });
   });
 
   describe('GET /api/v1/fetching', function() {
