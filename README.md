@@ -31,7 +31,7 @@ Contact mikeb@cc.gatech.edu for more information.
 1. Install node.js (v.0.10.*)
 1. Install Mongo DB (requires >= 2.6)
 1. Copy `config/secrets.json.example` to `config/secrets.json` and fill in values appropriately.
-	 1. To obtain facebook token, do GET https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials. Obtain client_id and client_secret from https://developers.facebook.com/apps/ (create an app if necessary)
+   1. To obtain facebook token, do GET https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials. Obtain client_id and client_secret from https://developers.facebook.com/apps/ (create an app if necessary)
    1. `fromEmail` is the email address from which system emails come. Also used for the default admin user
    1. `email.from` is the address from which application emails will come
    1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com)
