@@ -36,7 +36,8 @@ angular.module('Aggie')
       processTrends(trends);
 
       Socket.on('trend', function(trends) {
-        processTrends(trends);
+        var trendsCopy = angular.copy(trends);
+        processTrends(trendsCopy);
       });
     };
 
@@ -148,6 +149,10 @@ angular.module('Aggie')
       }
       return enabled ? 'trend' : 'trend-disabled';
     };
+
+    $scope.$on('$destroy', function(){
+      Socket.off('trend');
+    });
 
     init();
   }
