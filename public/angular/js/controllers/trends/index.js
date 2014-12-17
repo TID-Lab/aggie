@@ -35,9 +35,12 @@ angular.module('Aggie')
 
       processTrends(trends);
 
-      Socket.on('trend', function(trends) {
-        processTrends(trends);
-      });
+      Socket.on('trend', onTrend);
+    };
+
+    var onTrend = function(trends) {
+      var trendsCopy = angular.copy(trends);
+      processTrends(trendsCopy);
     };
 
     var parseQueries = function() {
@@ -148,6 +151,10 @@ angular.module('Aggie')
       }
       return enabled ? 'trend' : 'trend-disabled';
     };
+
+    $scope.$on('$destroy', function(){
+      Socket.off('trend', onTrend);
+    });
 
     init();
   }
