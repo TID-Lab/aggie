@@ -3,7 +3,7 @@
 var database = require('./lib/database');
 var Report = require('./models/report');
 var User = require('./models/user');
-var config = require('./config/secrets');
+var config = require('./config/secrets').get();
 
 var tasks = [];
 
