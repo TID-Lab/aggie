@@ -59,7 +59,7 @@ describe('Facebook content service', function() {
         case 1:
           expect(report_data.content).to.contain('Amazing');
           expect(report_data.author).to.equal('Test User 1');
-          //expect(report_data.url).to.contain('comment');
+          expect(report_data.url).to.contain('comment');
           break;
       }
       
