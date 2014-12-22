@@ -38,14 +38,14 @@ describe('Report queue', function() {
 
     it('should get bots in order', function(done) {
       var bot = reportQueue.nextBot();
-      expect(bot.contentService.keywords).to.equal('1');
+      expect(bot.contentService._keywords).to.equal('1');
       var bot = reportQueue.nextBot();
-      expect(bot.contentService.keywords).to.equal('2');
+      expect(bot.contentService._keywords).to.equal('2');
       var bot = reportQueue.nextBot();
-      expect(bot.contentService.keywords).to.equal('3');
+      expect(bot.contentService._keywords).to.equal('3');
       // Wrap around
       var bot = reportQueue.nextBot();
-      expect(bot.contentService.keywords).to.equal('1');
+      expect(bot.contentService._keywords).to.equal('1');
       done();
     });
 
@@ -69,7 +69,7 @@ describe('Report queue', function() {
       reportQueue.dequeue(two);
       expect(reportQueue._bots).to.have.length(1);
       var bot = reportQueue.nextBot();
-      expect(bot.contentService.keywords).to.equal('3');
+      expect(bot.contentService._keywords).to.equal('3');
       done();
     });
   });

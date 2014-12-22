@@ -8,7 +8,7 @@ describe('RSS content service', function() {
   before(function(done) {
     // Override fetch stream so that we can test local files
     RSSContentService.prototype._fetchStream = function(callback) {
-      var stream =  fs.createReadStream(path.join(__dirname, this.url));
+      var stream =  fs.createReadStream(path.join(__dirname, this._url));
       callback(stream);
     };
     rssContentService = new RSSContentService({url: './fixtures/rss-good-1.xml'});
@@ -36,7 +36,7 @@ describe('RSS content service', function() {
 
   it('should fetch more content and avoid duplicates', function(done) {
     var reports = [];
-    rssContentService.url = './fixtures/rss-good-2.xml';
+    rssContentService._url = './fixtures/rss-good-2.xml';
     rssContentService.fetch(function(lastPostDate) {
       expect(lastPostDate).to.be.an.instanceof(Date);
       expect(lastPostDate.toString()).to.equal(new Date('Tue Apr 29 2014 20:18:12 GMT').toString());

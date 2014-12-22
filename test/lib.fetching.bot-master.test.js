@@ -42,10 +42,10 @@ describe('Bot master', function() {
 
   it('should return bot instance from a source ID', function(done) {
     var sourceId = botMaster.bots[1].source._id;
-    var keywords = botMaster.bots[1].contentService.keywords;
+    var keywords = botMaster.bots[1].contentService._keywords;
     var bot = botMaster.getBot(sourceId);
     expect(bot).to.be.an.instanceof(Bot);
-    expect(bot.contentService.keywords).to.equal(keywords);
+    expect(bot.contentService._keywords).to.equal(keywords);
     done();
   });
 
@@ -98,8 +98,8 @@ describe('Bot master', function() {
         setTimeout(function() {
           var bot = botMaster.getBot(sourceId);
           expect(bot).to.have.property('contentService');
-          expect(bot.contentService).to.have.property('keywords');
-          expect(bot.contentService.keywords).to.equal('four');
+          expect(bot.contentService).to.have.property('_keywords');
+          expect(bot.contentService._keywords).to.equal('four');
           done();
         }, 100);
       });
