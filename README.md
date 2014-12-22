@@ -37,9 +37,15 @@ Contact mikeb@cc.gatech.edu for more information.
    1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com)
    1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
    1. Set `config.adminParty=true` if you want to run tests
-   1. Set `config.log=true` if you want to see logs for debugging
    1. Set `adminPassword` to set default password for admin user during install phase
-   1. Set `fetching` value to enable/disable fetching for all sources at global level. This is also changed during runtime based on user choice
+   1. Set `fetching` value to enable/disable fetching for all sources at global level.    This is also changed during runtime based on user choice
+   1. Set various logging options in `logger` section
+   		* `console` section is for console logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
+   		* `file` section is for file logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
+   		* `SES` section is for email notifications. For various options, see [winston-amazon-ses](see https://www.npmjs.com/package/winston-amazon-ses). 
+   			* Set appropriate AWS key and secret values
+   			* Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
+   			* **DO NOT** set `level` to *debug*. Recommended value is *error*.
 1. Start Mongo DB.
 1. Run `npm install` from the project directory (This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates angular application.)
 1. Run `sudo npm install -g gulp mocha` (This installs gulp and mocha globally so they can be run from command line for testing.)
