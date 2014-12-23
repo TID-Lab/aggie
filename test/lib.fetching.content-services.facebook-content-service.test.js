@@ -1,223 +1,121 @@
 require('./init');
 var util = require('util');
+var fs = require('fs');
 var expect = require('chai').expect;
 var FacebookContentService = require('../lib/fetching/content-services/facebook-content-service');
 var ContentService = require('../lib/fetching/content-service');
 
-function loadFbServiceWithFixture(service, fixture) {
-  var facebookContentService = service;
-  if (!facebookContentService) {
-    var FixtureBasedFacebookContentService = function(options) {
-      FacebookContentService.call(this, options);
-    };
-    
-    util.inherits(FixtureBasedFacebookContentService, FacebookContentService);
-  
-    FixtureBasedFacebookContentService.prototype._loadData = function(options, cb) {
-      var self = this;
-      var data = require(options.fixture);
-      process.nextTick(function() {
-        self._handleResults(data.posts, data.authors);
-        return cb(null, self._lastReportDate * 1000);
-      });
-    };
-    
-    facebookContentService = new FixtureBasedFacebookContentService({url: 'http://dummy_url'});
-  }
-  
-  var options = {fixture: fixture};
-  facebookContentService.fetch(options);
-  
-  return facebookContentService;
-}
+// Stubs the _doRequest method of the content service to return the data in the given fixture file.
+// If service is null, creates a dummy FacebookContentService
+function stubWithFixture(fixtureFile, service) {
+  // Create service if not provided.
+  service = service || new FacebookContentService({url: 'http://example.com'});
 
-function loadFbServiceWithUrl(url) {
-  var facebookContentService = new FacebookContentService({url: url});
-  facebookContentService.fetch();
-  return facebookContentService;
+  // Make the stub function return the expected args (err, data).
+  fixtureFile = './fixtures/' + fixtureFile;
+  service._doRequest = function(queries, callback) { callback(null, require(fixtureFile)); };
+
+  return service;
 }
 
 describe('Facebook content service', function() {
-  
+
   it('should instantiate correct facebook content service', function() {
-    var facebookContentService = new FacebookContentService({});
-    expect(facebookContentService).to.be.instanceOf(ContentService);
-    expect(facebookContentService).to.be.instanceOf(FacebookContentService);
+    var service = new FacebookContentService({});
+    expect(service).to.be.instanceOf(ContentService);
+    expect(service).to.be.instanceOf(FacebookContentService);
   });
-  
+
   it('should fetch empty content', function(done) {
-    var facebookContentService = loadFbServiceWithFixture(null, './fixtures/facebook-0.json');
-    expectToNotEmitReport(facebookContentService, done);
-    facebookContentService.once('error', function(err) {
-      done(err);
-    });
-    setTimeout(function() {
-      done();
-    }, 100);
+    var service = stubWithFixture('facebook-0.json');
+    expectToNotEmitReport(service, done);
+    service.once('error', function(err) { done(err); });
+    setTimeout(done, 100);
   });
-  
+
   it('should fetch mock content from Facebook', function(done) {
-    var facebookContentService = loadFbServiceWithFixture(null, './fixtures/facebook-1.json');
-    var remaining = 3;
-    facebookContentService.on('report', function(report_data) {
-      expect(report_data).to.have.property('fetchedAt');
-      expect(report_data).to.have.property('authoredAt');
-      expect(report_data).to.have.property('content');
-      expect(report_data).to.have.property('author');
-      expect(report_data).to.have.property('url');
-      switch (remaining) {
-        case 3:
-          expect(report_data.content).to.contain('The ACC Champion');
-          expect(report_data.author).to.equal('Georgia Tech');
-          expect(report_data.url).to.not.contain('comment');
+    var service = stubWithFixture('facebook-1.json');
+    var fetched = 0;
+
+    service.once('error', function(err) { done(err); });
+
+    service.on('report', function(reportData) {
+      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData).to.have.property('authoredAt');
+      expect(reportData).to.have.property('content');
+      expect(reportData).to.have.property('author');
+      expect(reportData).to.have.property('url');
+      switch (++fetched) {
+        case 1:
+          expect(reportData.content).to.contain('The ACC Champion');
+          expect(reportData.author).to.equal('Georgia Tech');
+          expect(reportData.url).to.not.contain('comment');
           break;
         case 2:
-          expect(report_data.content).to.contain('Bioengineers at');
-          expect(report_data.author).to.equal('Georgia Tech');
-          expect(report_data.url).to.not.contain('comment');
+          expect(reportData.content).to.contain('Bioengineers at');
+          expect(reportData.author).to.equal('Georgia Tech');
+          expect(reportData.url).to.not.contain('comment');
           break;
-        case 1:
-          expect(report_data.content).to.contain('Amazing');
-          expect(report_data.author).to.equal('Test User 1');
-          expect(report_data.url).to.contain('comment');
+        case 3:
+          expect(reportData.content).to.contain('Amazing');
+          expect(reportData.author).to.equal('Test User 1');
+          expect(reportData.url).to.contain('comment');
           break;
+        case 4:
+          return done(new Error('Unexpected report'));
       }
-      if (--remaining === 0) {
-        // Wait so that we can catch unexpected reports
-        setTimeout(function() {
-          done();
-        }, 100);
-      } else if (remaining < 0) {
-        return done(new Error('Unexpected report'));
-      }
-    });
-    facebookContentService.once('error', function(err) {
-      done(err);
-    });
-  });
-  
-  it('should query for new data without duplicates', function(done) {
-    function onFixture1ReportCallback(cb) {
-      var remaining = 3;
-      return function(report_data) {
-        switch (remaining--) {
-          case 3:
-            expect(report_data.content).to.contain('The ACC Champion');
-            expect(report_data.author).to.equal('Georgia Tech');
-            expect(report_data.url).to.not.contain('comment');
-            break;
-          case 2:
-            expect(report_data.content).to.contain('Bioengineers at');
-            expect(report_data.author).to.equal('Georgia Tech');
-            expect(report_data.url).to.not.contain('comment');
-            break;
-          case 1:
-            expect(report_data.content).to.contain('Amazing');
-            expect(report_data.author).to.equal('Test User 1');
-            expect(report_data.url).to.contain('comment');
-            
-            setTimeout(function() {
-              cb();
-            }, 100);
-            break;
-        }
-      };
-    }
-    
-    function onFixture2ReportCallback(cb) {
-      var remaining = 3;
-      return function(report_data) {
-        switch (remaining--) {
-          case 3:
-            expect(report_data.content).to.contain('Go jackets');
-            expect(report_data.author).to.equal('Test User 1');
-            expect(report_data.url).to.contain('comment');
-            break;
-          case 2:
-            expect(report_data.content).to.contain('we can do that');
-            expect(report_data.author).to.equal('Test User 2');
-            expect(report_data.url).to.contain('comment');
-            break;
-          case 1:
-            expect(report_data.content).to.contain('GA Tech ranked');
-            expect(report_data.author).to.equal('Test User 3');
-            expect(report_data.url).to.not.contain('comment');
-            
-            setTimeout(function() {
-              cb();
-            }, 100);
-            break;
-        }
-      };
-    }
-    
-    var facebookContentService = loadFbServiceWithFixture(null, './fixtures/facebook-1.json');
-    facebookContentService.once('error', function(err) {
-      done(err);
-    });
-    
-    facebookContentService.on('report', onFixture1ReportCallback(function(err){
-      if (err) return done(err);
-      
-      facebookContentService.removeAllListeners('report');
-      process.nextTick(function() {
-        facebookContentService.on('report', onFixture2ReportCallback(function(err){
-          return done(err);
-        }));
-        loadFbServiceWithFixture(facebookContentService, './fixtures/facebook-2.json');
-      });
-    }));
-  });
-  
-  describe('Online', function() {
-    
-    it('should fetch real content from Facebook', function(done) {
-      var facebookContentService = loadFbServiceWithUrl('http://www.facebook.com/georgiatech');
-      facebookContentService.once('report', function(report_data) {
-        expect(report_data).to.have.property('fetchedAt');
-        expect(report_data).to.have.property('authoredAt');
-        expect(report_data).to.have.property('content');
-        expect(report_data).to.have.property('author');
-        expect(report_data).to.have.property('url');
-        done();
-      });
-      facebookContentService.once('error', function(err) {
-        done(err);
-      });
     });
 
-    it('should re-fetch to get an empty content list', function(done) {
-      var facebookContentService = loadFbServiceWithUrl('http://www.facebook.com/georgiatech');
-      facebookContentService.once('report', function(report_data) {
-        
-        process.nextTick(function() {
-          facebookContentService.fetch();
-          expectToNotEmitReport(facebookContentService, done);
-          facebookContentService.once('error', function(err) {
-            done(err);
-          });
-          setTimeout(function() {
-            done();
-          }, 100);
-        });
-      });
+    // Give enough time for extra report to appear.
+    setTimeout(function() { if (fetched == 3) done(); }, 100);
+
+    service.fetch({maxCount: 50}, function(){});
+  });
+
+  it('should get new comments from old posts', function(done) {
+
+    // Fetch first batch
+    var service = stubWithFixture('facebook-1.json');
+    service.fetch({maxCount: 50}, function(){});
+
+    // Stub for second batch
+    stubWithFixture('facebook-2.json', service);
+
+    service.once('error', function(err) { done(err); });
+
+    var fetched = 0;
+    service.on('report', function(reportData) {
+      switch (++fetched) {
+        case 1:
+          expect(reportData.content).to.contain('Totez cool');
+          expect(reportData.author).to.equal('Test User 2');
+          expect(reportData.url).to.contain('comment');
+          break;
+        case 2:
+          return done(new Error('Unexpected report'));
+      }
     });
+
+    // Give enough time for extra report to appear.
+    setTimeout(function() { if (fetched == 1) done(); }, 100);
+
+    service.fetch({maxCount: 50}, function(){});
   });
 
   describe('Errors', function() {
-    
+
     it('should emit a missing URL error', function(done) {
-      var facebookContentService = new FacebookContentService({url: ''});
-      facebookContentService.fetch();
-      expectToNotEmitReport(facebookContentService, done);
-      expectToEmitError(facebookContentService, 'Missing Facebook URL', done);
+      var service = new FacebookContentService({url: ''});
+      expectToNotEmitReport(service, done);
+      expectToEmitError(service, 'Missing Facebook URL', done);
+      service.fetch({maxCount: 50}, function(){});
     });
 
     it('should emit an invalid URL error', function(done) {
-      var facebookContentService = new FacebookContentService({url: 'georgiatech'});
-      facebookContentService.fetch();
-      expectToNotEmitReport(facebookContentService, done);
-      expectToEmitError(facebookContentService, 'Invalid Facebook URL', done);
+      var service = stubWithFixture('facebook-no-source-match.json');
+      expectToNotEmitReport(service, done);
+      expectToEmitError(service, 'Invalid Facebook URL', done);
+      service.fetch({maxCount: 50}, function(){});
     });
   });
 });

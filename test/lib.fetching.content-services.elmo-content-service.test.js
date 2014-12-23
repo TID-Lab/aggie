@@ -1,157 +1,101 @@
 require('./init');
 var util = require('util');
 var expect = require('chai').expect;
+var fs = require('fs');
 var ELMOContentService = require('../lib/fetching/content-services/elmo-content-service');
 var ContentService = require('../lib/fetching/content-service');
+var contentServiceFactory = require('../lib/fetching/content-service-factory');
 
-function loadElmoServiceWithFixture(service, fixture) {
-  var elmoContentService = service;
-  if (!elmoContentService) {
-    var FixtureBasedElmoContentService = function(options) {
-      ELMOContentService.call(this, options);
-    };
-    
-    util.inherits(FixtureBasedElmoContentService, ELMOContentService);
-    elmoContentService = new FixtureBasedElmoContentService({url: 'http://dummy_url'});
-  
-    FixtureBasedElmoContentService.prototype._loadData = function(options, cb) {
-      var self = this;
-      var data = require(options.fixture);
-      process.nextTick(function() {
-        if (data.length) self._handleResults(data);
-        return cb(null, self._lastReportDate);
-      });
-    };
-  }
-  
-  var options = {fixture: fixture};
-  elmoContentService.fetch(options);
-  
-  return elmoContentService;
+// Stubs the _httpRequest method of the content service to return the data in the given fixture file.
+// If service is null, creates an ElmoContentService
+function stubWithFixture(fixtureFile, service) {
+  // Create service if not provided.
+  service = service || new ELMOContentService({url: 'http://example.com'});
+
+  // Make the stub function return the expected args (err, res, body).
+  fixtureFile = 'test/fixtures/' + fixtureFile;
+  service._httpRequest = function(params, callback) { callback(null, {statusCode: 200}, fs.readFileSync(fixtureFile).toString()); };
+
+  return service;
 }
 
 describe('ELMO content service', function() {
-  
-  it('should instantiate correct ELMO content service', function() {
-    var elmoContentService = new ELMOContentService({});
-    expect(elmoContentService).to.be.instanceOf(ContentService);
-    expect(elmoContentService).to.be.instanceOf(ELMOContentService);
+
+  it('factory should instantiate correct ELMO content service', function() {
+    var service = contentServiceFactory.create({type: 'elmo'});
+    expect(service).to.be.instanceOf(ContentService);
+    expect(service).to.be.instanceOf(ELMOContentService);
   });
-  
+
   it('should fetch empty content', function(done) {
-    var elmoContentService = loadElmoServiceWithFixture(null, './fixtures/elmo-0.json');
-    expectToNotEmitReport(elmoContentService, done);
-    expect(elmoContentService._lastReportDate).to.be.null;
-    elmoContentService.once('error', function(err) {
+    var service = stubWithFixture('elmo-0.json');
+    expectToNotEmitReport(service, done);
+    expect(service._lastReportDate).to.be.undefined;
+    service.once('error', function(err) {
       done(err);
     });
-    
     setTimeout(done, 500);
   });
-  
+
   it('should fetch mock content from ELMO', function(done) {
-    var elmoContentService = loadElmoServiceWithFixture(null, './fixtures/elmo-1.json');
-    var remaining = 2;
-    elmoContentService.on('report', function(report_data) {
-      expect(report_data).to.have.property('fetchedAt');
-      expect(report_data).to.have.property('authoredAt');
-      expect(report_data).to.have.property('content');
-      expect(report_data).to.have.property('author');
-      switch (remaining) {
-        case 2:
-          expect(report_data.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
-          expect(report_data.author).to.equal(1);
-          break;
+    var service = stubWithFixture('elmo-1.json');
+
+    service.once('error', function(err) { done(err); });
+
+    var fetched = 0;
+    service.on('report', function(reportData) {
+      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData).to.have.property('authoredAt');
+      expect(reportData).to.have.property('content');
+      expect(reportData).to.have.property('author');
+      switch (++fetched) {
         case 1:
-          expect(report_data.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
-          expect(report_data.author).to.equal(2);
+          expect(reportData.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
+          expect(reportData.author).to.equal('Sue');
           break;
+        case 2:
+          expect(reportData.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
+          expect(reportData.author).to.equal('Joe');
+          expect(service._lastReportDate.getTime()).to.equal((new Date('2014-06-17T11:00:00Z')).getTime());
+          break;
+        case 3:
+          return done(new Error('Unexpected report'));
       }
-      if (--remaining === 0) {
-        // Wait so that we can catch unexpected reports
-        setTimeout(done, 100);
-        expect(elmoContentService._lastReportDate).to.equal(Date.parse('2014-06-17T15:00:00Z'));
-      } else if (remaining < 0) {
-        return done(new Error('Unexpected report'));
-      }
     });
-    elmoContentService.once('error', function(err) {
-      done(err);
-    });
+
+    // Give enough time for extra report to appear.
+    setTimeout(function() { if (fetched == 2) done(); }, 100);
+
+    // Run fetch
+    service.fetch({maxCount: 50}, function(){});
   });
-  
-  it('should query for new data without duplicates', function(done) {
-    
-    function onFixture1ReportCallback(cb) {
-      var remaining = 2;
-      return function(report_data) {
-        switch (remaining--) {
-          case 2:
-            expect(report_data.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
-            expect(report_data.author).to.equal(1);
-            break;
-          case 1:
-            expect(report_data.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
-            expect(report_data.author).to.equal(2);
-            
-            setTimeout(function() {
-              expect(elmoContentService._lastReportDate).to.equal(Date.parse('2014-06-17T15:00:00Z'));
-              cb();
-            }, 100);
-            break;
-        }
-      };
-    }
-    
-    function onFixture2ReportCallback(cb) {
-      return function(report_data) {
-        expect(report_data.content).to.contain('[FOO3: Affirmative] [BAR3: Negative] [BAZ3: Doubtful]');
-        expect(report_data.author).to.equal(3);
-        cb();
-      };
-    }
-    
-    var elmoContentService = loadElmoServiceWithFixture(null, './fixtures/elmo-1.json');
-    elmoContentService.once('error', function(err) {
-      done(err);
-    });
-    
-    elmoContentService.on('report', onFixture1ReportCallback(function(err){
-      if (err) return done(err);
-      
-      elmoContentService.removeAllListeners('report');
-      process.nextTick(function() {
-        elmoContentService.once('report', onFixture2ReportCallback(function(err){
-          return done(err);
-        }));
-        loadElmoServiceWithFixture(elmoContentService, './fixtures/elmo-2.json');
-      });
-    }));
-  });
-  
-  describe('Errors', function() {
-    
+
+  describe('errors', function() {
+
     it('should emit a missing URL error', function(done) {
-      var elmoContentService = new ELMOContentService({});
-      elmoContentService.fetch();
-      expectToNotEmitReport(elmoContentService, done);
-      expectToEmitError(elmoContentService, 'Missing ELMO URL', done);
+      var service = new ELMOContentService({});
+      expectToNotEmitReport(service, done);
+      expectToEmitError(service, 'Missing ELMO URL', done);
+      service.fetch({maxCount: 50}, function(){});
     });
 
     it('should emit an unauthorized token error', function(done) {
-      elmoContentService = new ELMOContentService({
-        url: 'https://example.com',
-        authToken: '123'
-      });
+      var service = new ELMOContentService({url: 'https://example.com', authToken: '123'});
 
       // Stub the content service to return 403
-      elmoContentService._httpRequest = function(params, callback) {
+      service._httpRequest = function(params, callback) {
         process.nextTick(function() { callback({message: 'Unauthorized'}); });
       };
+      expectToNotEmitReport(service, done);
+      expectToEmitError(service, 'Unauthorized', done);
+      service.fetch({maxCount: 50}, function(){});
+    });
 
-      elmoContentService.fetch();
-      expectToNotEmitReport(elmoContentService, done);
-      expectToEmitError(elmoContentService, 'Unauthorized', done);
+    it('should emit json parse error', function(done) {
+      var service = stubWithFixture('elmo-bad.json');
+      expectToNotEmitReport(service, done);
+      expectToEmitError(service, 'Parse error: Unexpected end of input', done);
+      service.fetch({maxCount: 50}, function(){});
     });
   });
 });

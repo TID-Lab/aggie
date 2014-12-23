@@ -8,7 +8,7 @@ var Source = require('../models/source');
 describe('Content service', function() {
   before(function(done) {
     var source = new Source({nickname: 't', type: 'dummy', keywords: 't'});
-    contentService = contentServiceFactory.create({source: source});
+    contentService = contentServiceFactory.create(source);
     done();
   });
 
@@ -19,13 +19,10 @@ describe('Content service', function() {
 
   it('should fetch content from a specific service', function(done) {
     contentService.start();
-    contentService.once('report', function(report_data) {
-      expect(report_data).to.have.property('content');
-      expect(report_data.content.toLowerCase()).to.contain('t');
-      // Stop stream to ensure a single fetch
+    contentService.once('report', function(reportData) {
+      expect(reportData).to.have.property('content');
       contentService.stop();
       done();
     });
   });
-
 });
