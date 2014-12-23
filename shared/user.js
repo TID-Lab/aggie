@@ -1,3 +1,5 @@
+// User functionality shared across client and server.
+
 (function() {
 
   var User = function(attributes) {

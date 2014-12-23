@@ -15,15 +15,17 @@ tmp
 
 npm-debug.log
 node_modules
+fiddle
 .idea
 *.iml
 .DS_Store
 Thumbs.db
+.c9revisions
+.settings
 
 public/css/styles.css
 public/angular/css/app.css
 public/angular/js/app.min.js
-config/secrets.js
 config/secrets.json
 
 buildAssets

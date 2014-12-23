@@ -35,9 +35,12 @@ angular.module('Aggie')
 
       processTrends(trends);
 
-      Socket.on('trend', function(trends) {
-        processTrends(trends);
-      });
+      Socket.on('trend', onTrend);
+    };
+
+    var onTrend = function(trends) {
+      var trendsCopy = angular.copy(trends);
+      processTrends(trendsCopy);
     };
 
     var parseQueries = function() {
@@ -53,7 +56,11 @@ angular.module('Aggie')
 
     var processTrends = function(trends) {
       var startTime = null,
-        endTime = null;
+        endTime = null,
+        globalMax = null,
+
+        // maximum height is either the screenheight / number of trends, or 50, whichever is higher
+        maxHeight = Math.max(Math.floor(window.screen.availHeight/trends.length), 50);
 
       // Determine minimum startTime and maximum endTime
       trends.forEach(function(trend) {
@@ -88,6 +95,14 @@ angular.module('Aggie')
         }
 
         trend.counts = counts;
+      });
+
+      // get the maximum max
+      globalMax = Math.max.apply(null, trends.map(function(t){return t.max;}));
+
+      // set height proportional to max trend bucket value in view per max height
+      trends.map(function (t) {
+        t.max = Math.floor((t.max / globalMax) * maxHeight);
       });
 
       // Let Angular know our secrets...
@@ -148,6 +163,10 @@ angular.module('Aggie')
       }
       return enabled ? 'trend' : 'trend-disabled';
     };
+
+    $scope.$on('$destroy', function(){
+      Socket.off('trend', onTrend);
+    });
 
     init();
   }

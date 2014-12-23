@@ -10,7 +10,7 @@ angular.module('Aggie')
     $scope.users = users;
 
     $scope.delete = function(user) {
-      User.delete({username: user.username}, function(){
+      User.delete({_id: user._id}, function(){
         flash.setNoticeNow('User was successfully deleted.');
         for (var i in $scope.users) {
           if (user._id == $scope.users[i]._id) {

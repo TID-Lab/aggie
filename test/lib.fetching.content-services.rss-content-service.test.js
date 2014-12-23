@@ -39,7 +39,7 @@ describe('RSS content service', function() {
     rssContentService.url = './fixtures/rss-good-2.xml';
     rssContentService.fetch(function(lastPostDate) {
       expect(lastPostDate).to.be.an.instanceof(Date);
-      expect(lastPostDate.toString()).to.equal('Tue Apr 29 2014 16:18:12 GMT-0400 (EDT)');
+      expect(lastPostDate.toString()).to.equal(new Date('Tue Apr 29 2014 20:18:12 GMT').toString());
       expect(reports).to.have.length(2);
       rssContentService.removeAllListeners('report');
       done();

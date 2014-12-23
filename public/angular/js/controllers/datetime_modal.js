@@ -34,11 +34,12 @@ angular.module('Aggie')
 
 .controller('DatetimeModalInstanceController', [
   '$scope',
+  '$state',
   '$modalInstance',
   'times',
   'aggieDateFilter',
   'tz',
-  function($scope, $modalInstance, times, aggieDateFilter, tz) {
+  function($scope, $state, $modalInstance, times, aggieDateFilter, tz) {
     $scope.times = times;
     $scope.showErrors = false;
 
@@ -53,6 +54,12 @@ angular.module('Aggie')
 
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
+    };
+
+    $scope.clear = function () {
+      $scope.times = {};
+      $state.params.before = null;
+      $state.params.after = null;
     };
   }
 ]);

@@ -12,7 +12,7 @@ describe('Facebook content service', function() {
       var self = this;
       var data = require(fixture);
       process.nextTick(function() {
-        self._handleResults(data.posts, data.authors);
+        self._handleResults(data.posts, data.authors, data.comments);
         callback && callback(null, self.lastReportDate * 1000);
       });
     };
@@ -62,6 +62,7 @@ describe('Facebook content service', function() {
           expect(report_data.url).to.contain('comment');
           break;
       }
+      
       if (--remaining === 0) {
         // Wait so that we can catch unexpected reports
         setTimeout(function() {
@@ -75,6 +76,7 @@ describe('Facebook content service', function() {
       done(err);
     });
   });
+
 
   it('should query for new data without duplicates', function(done) {
     facebookContentService.fetch('./fixtures/facebook-2.json');
@@ -115,6 +117,7 @@ describe('Facebook content service', function() {
       done(err);
     });
   });
+
 
   describe('Online', function() {
     before(function() {
