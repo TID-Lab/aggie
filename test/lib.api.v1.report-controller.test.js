@@ -34,6 +34,7 @@ describe('Report controller', function() {
           if (err) return done(err);
           expect(res.body).to.contain.property('total');
           expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.not.be.empty;
           expect(res.body.results).to.be.an.instanceof(Array);
           done();
         });
