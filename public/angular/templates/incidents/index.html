@@ -99,7 +99,7 @@
         {{ i.locationName }}
         <div class="coordinates" ng-show="i.latitude || i.longitude">({{ i.latitude }}, {{ i.longitude }})</div>
       </td>
-      <td class="compact content">{{ i.assignedTo }}</td>
+      <td class="compact content">{{ i.assignedTo }} ({{ filterRoleFirstLetter(i) }})</td>
       <td class="compact content">{{ i.status | translate }}</td>
       <td class="compact content">{{ 'veracity.' + i.verified | translate }} </td>
       <td class="compact">
