@@ -204,6 +204,13 @@ table, .table {
   }
 }
 
+table.incidents {
+  a {
+    text-decoration:none;
+    color: #000
+  }
+}
+
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
