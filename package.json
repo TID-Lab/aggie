@@ -18,6 +18,7 @@
     "angular-translate-handler-log": "^2.11.1",
     "angular-translate-loader-static-files": "^2.10.0",
     "async": "^0.9.0",
+    "angular-mocks": "^1.3.8",
     "bcrypt-nodejs": "0.0.3",
     "chance": "~0.7.1",
     "connect-mongo": "~0.4.0",
@@ -41,6 +42,7 @@
     "gulp-mocha": "^2.1.3",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
+    "gulp-watchify": "0.2.0",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
     "locale": "0.0.20",
@@ -74,18 +76,29 @@
     "winston-amazon-ses": "~0.1.4"
   },
   "devDependencies": {
+    "angular-mocks": "^1.3.8",
     "async": "^0.9.2",
+    "browserify-shim": "latest",
     "chai": "^3.3.0",
     "clarinet": "^0.11.0",
     "dateformat": "^1.0.11",
     "deep-keys": "^0.3.0",
     "gulp-jsoncombine": "^1.0.3",
+    "karma": "^0.12.28",
+    "karma-browserify": "^2.0.0",
+    "karma-mocha": "^0.1.10",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
+    "karma-phantomjs-launcher": "latest",
     "lodash": "^4.13.1",
     "merge-stream": "^1.0.0",
     "mocha": "^2.3.3",
+    "ng-html2js": "^2.0.0",
     "socket.io": "^0.9.17",
     "socket.io-client": "^0.9.16",
     "supertest": "^1.1.0"
+  },
+  "browserify-shim": {
+    "external": "global:External"
   },
   "subdomain": "aggie",
   "engines": {
