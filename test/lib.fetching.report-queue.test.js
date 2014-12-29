@@ -14,11 +14,11 @@ describe('Report queue', function() {
     before(function(done) {
       botMaster.kill();
       reportQueue.clear();
-      one = botFactory.create(new Source({nickname: '1', type: 'dummy', keywords: '1'}));
+      one = botFactory.create(new Source({nickname: '1', type: 'dummy', keywords: 'one'}));
       one.start();
-      two = botFactory.create(new Source({nickname: '2', type: 'dummy', keywords: '2'}));
+      two = botFactory.create(new Source({nickname: '2', type: 'dummy', keywords: 'two'}));
       two.start();
-      three = botFactory.create(new Source({nickname: '3', type: 'dummy', keywords: '3'}));
+      three = botFactory.create(new Source({nickname: '3', type: 'dummy', keywords: 'three'}));
       three.start();
       // Stream data for 100ms
       setTimeout(function() {
@@ -38,28 +38,25 @@ describe('Report queue', function() {
 
     it('should get bots in order', function(done) {
       var bot = reportQueue.nextBot();
-      expect(bot.contentService._keywords).to.equal('1');
-      var bot = reportQueue.nextBot();
-      expect(bot.contentService._keywords).to.equal('2');
-      var bot = reportQueue.nextBot();
-      expect(bot.contentService._keywords).to.equal('3');
+      expect(bot.source.nickname).to.equal('1');
+      bot = reportQueue.nextBot();
+      expect(bot.source.nickname).to.equal('2');
+      bot = reportQueue.nextBot();
+      expect(bot.source.nickname).to.equal('3');
       // Wrap around
-      var bot = reportQueue.nextBot();
-      expect(bot.contentService._keywords).to.equal('1');
+      bot = reportQueue.nextBot();
+      expect(bot.source.nickname).to.equal('1');
       done();
     });
 
     it('should fetch reports from each of the bots in turn', function(done) {
-      var report_data = reportQueue.nextReport();
-      expect(report_data.content).to.contain('2');
-      var report_data = reportQueue.nextReport();
-      expect(report_data.content).to.contain('3');
-      // Wrap around, last one
-      var report_data = reportQueue.nextReport();
-      expect(report_data.content).to.contain('1');
-      // nothing to be returned
-      var report_data = reportQueue.nextReport();
-      expect(report_data).to.be.undefined;
+      expect(reportQueue.nextReport().content).to.contain('two');
+      expect(reportQueue.nextReport().content).to.contain('three');
+      expect(reportQueue.nextReport().content).to.contain('one');
+      expect(reportQueue.nextReport().content).to.contain('two');
+      expect(reportQueue.nextReport().content).to.contain('three');
+      expect(reportQueue.nextReport().content).to.contain('one');
+      expect(reportQueue.nextReport()).to.be.undefined;
       done();
     });
 
@@ -69,7 +66,7 @@ describe('Report queue', function() {
       reportQueue.dequeue(two);
       expect(reportQueue._bots).to.have.length(1);
       var bot = reportQueue.nextBot();
-      expect(bot.contentService._keywords).to.equal('3');
+      expect(bot.contentService._keywords).to.equal('three');
       done();
     });
   });
