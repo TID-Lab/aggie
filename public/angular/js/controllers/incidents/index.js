@@ -29,7 +29,7 @@ angular.module('Aggie')
     });
 
     $rootScope.$watch('currentUser', function(user) {
-      if (!user) { return }
+      if (!user) { return; }
       $scope.users.unshift({
         label: 'Assigned to me',
         value: user.username
@@ -113,7 +113,7 @@ angular.module('Aggie')
       var uniqueIncidents = removeDuplicates(incidents);
       $scope.pagination.total += uniqueIncidents.length;
       $scope.pagination.visibleTotal += uniqueIncidents.length;
-      $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100)
+      $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100);
       $scope.newIncidents.addMany(uniqueIncidents);
     };
 
@@ -130,7 +130,7 @@ angular.module('Aggie')
     };
 
     $scope.isFirstPage = function() {
-      return $scope.pagination.page == 1;
+      return $scope.pagination.page === 1;
     };
 
     $scope.isLastPage = function() {
@@ -150,11 +150,11 @@ angular.module('Aggie')
     };
 
     $scope.isRelevant = function(incident) {
-      return incident.status == 'relevant';
+      return incident.status === 'relevant';
     };
 
     $scope.isIrrelevant = function(incident) {
-      return incident.status == 'irrelevant';
+      return incident.status === 'irrelevant';
     };
 
     $scope.isUnassigned = function(incident) {
@@ -169,7 +169,7 @@ angular.module('Aggie')
     };
 
     $scope.viewIncident = function(event, incident) {
-      if (angular.element(event.target)[0].tagName == 'TD') {
+      if (angular.element(event.target)[0].tagName === 'TD') {
         $state.go('incident', { id: incident._id });
       }
     };
@@ -185,6 +185,12 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Incident failed to be deleted.');
       });
+    };
+
+    $scope.filterRoleFirstLetter = function(incident) {
+      return users.filter(function(user) {
+        return user.username === incident.assignedTo;
+      })[0].role.charAt(0).toUpperCase();
     };
 
     (fireDigestEveryThirtySeconds = function() {
