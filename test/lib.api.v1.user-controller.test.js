@@ -1,60 +1,25 @@
 require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var _ = require('underscore');
 var userController = require('../lib/api/v1/user-controller')();
+var User = require('../models/user');
+var users;
 
 describe('User controller', function() {
-  before(function(done) {
-    user = {
-      provider: 'test',
-      username: 'test-user',
-      email: 'test@example.com',
-      password: 'letmein'
-    };
-    done();
+
+  // Clearing the db should eventually move to a global afterEach, but for now it's here else we'd break existing tests.
+  beforeEach(function(done){
+    User.remove({}, function(err){ done(err); });
   });
 
-  describe('POST /api/v1/user', function() {
-    it('should create a new user', function(done) {
-      request(userController)
-        .post('/api/v1/user')
-        .send(user)
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          expect(res.body).to.have.property('_id');
-          user._id = res.body._id;
-          done();
-        });
-    });
-  });
-
-  describe('GET /api/v1/user/:_id', function() {
-    it('should return user', function(done) {
-      request(userController)
-        .get('/api/v1/user/' + user._id)
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          compareUser.call(this, res.body, user);
-          done();
-        });
-    });
-  });
-
-  describe('PUT /api/v1/user/:_id', function() {
-    it('should update user', function(done) {
-      user.email = 'updated@example.com';
-      request(userController)
-        .put('/api/v1/user/' + user._id)
-        .send(user)
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          compareUser.call(this, res.body, user);
-          done();
-        });
+  // Create some users.
+  beforeEach(function(done) {
+    User.create([
+      {provider: 'test', email: 'foo@example.com', username: 'foo', password: 'letmein'},
+      {provider: 'test', email: 'bar@example.com', username: 'bar', password: 'letmein'}
+    ], function(err, u1, u2) {
+      users = [u1, u2];
+      done(err);
     });
   });
 
@@ -65,10 +30,58 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.not.be.empty;
-          compareUser(_.findWhere(res.body, {_id: user._id}), user);
+          expect(res.body.length).to.equal(2);
+          expect(res.body[0].username).to.equal('foo');
           done();
+        });
+    });
+  });
+
+  describe('GET /api/v1/user/:_id', function() {
+    it('should return user', function(done) {
+      request(userController)
+        .get('/api/v1/user/' + users[1]._id)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body.username).to.equal('bar');
+          expect(res.body).to.not.have.property('password');
+          done();
+        });
+    });
+  });
+
+  describe('POST /api/v1/user', function() {
+    it('should create a new user', function(done) {
+      request(userController)
+        .post('/api/v1/user')
+        .send({provider: 'test', email: 'baz@example.com', username: 'baz', password: 'letmein'})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body).to.have.property('_id');
+          expect(res.body.username).to.equal('baz');
+          User.where({username: 'baz'}).count(function(err, c) {
+            expect(c).to.equal(1);
+            done();
+          })
+        });
+    });
+  });
+
+  describe('PUT /api/v1/user/:_id', function() {
+    it('should update user', function(done) {
+      request(userController)
+        .put('/api/v1/user/' + users[0]._id)
+        .send({email: 'updated@example.com'})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body.email).to.equal('updated@example.com');
+          User.where({email: 'updated@example.com'}).count(function(err, c) {
+            expect(c).to.equal(1);
+            done();
+          })
         });
     });
   });
@@ -76,24 +89,19 @@ describe('User controller', function() {
   describe('DELETE /api/v1/user/:_id', function() {
     it('should delete user', function(done) {
       request(userController)
-        .del('/api/v1/user/' + user._id)
+        .del('/api/v1/user/' + users[0]._id)
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/v1/user/' + user._id)
-            .expect(404, done);
+            .get('/api/v1/user/' + users[0]._id)
+            .expect(404)
+            .end(function(err, res) {
+              request(userController)
+                .get('/api/v1/user/' + users[1]._id)
+                .expect(200, done);
+            });
         });
     });
   });
 
 });
-
-var compareUser = function(a, b) {
-  for (var attr in a) {
-    if (attr === 'password') {
-      expect(a[attr]).to.not.equal(b[attr]);
-    } else if (b[attr]) {
-      expect(a[attr]).to.equal(b[attr]);
-    }
-  }
-}

@@ -75,7 +75,7 @@ sourceSchema.methods.disable = function() {
 
 // Log events in source
 sourceSchema.methods.logEvent = function(level, message, callback) {
-  this.events.push({datetime: Date.now(), type: level, message: message});
+  this.events.push({datetime: new Date(), type: level, message: message});
   if (level == 'error') this.disable();
   this.unreadErrorCount++;
   this._silent = true;

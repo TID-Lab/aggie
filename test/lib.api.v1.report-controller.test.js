@@ -1,31 +1,39 @@
 require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var _ = require('underscore');
+var database = require('../lib/database');
 var reportController = require('../lib/api/v1/report-controller')();
-var botMaster = require('../lib/fetching/bot-master');
-var reportWriter = require('../lib/fetching/report-writer');
+var Report = require('../models/report');
 var Source = require('../models/source');
+var source;
 
 describe('Report controller', function() {
-  // Create a source for streaming data
-  before(function(done) {
-    botMaster.addListeners('source', Source.schema);
-    // Wait until all reports have been processed
-    reportWriter.once('done', done);
-    process.nextTick(function() {
-      Source.create({nickname: 'test', type: 'dummy', keywords: 'e'});
-      process.nextTick(function() {
-        botMaster.start();
-        // Stream data for 500ms
-        setTimeout(function() {
-          botMaster.stop();
-        }, 500);
+
+  // Clearing the db should eventually move to a global afterEach, but for now it's here else we'd break existing tests.
+  beforeEach(function(done){
+    Report.remove({}, function(){
+      Source.remove({}, function(){
+        Source.create({nickname: 'test', type: 'dummy', keywords: 'e'}, function(err, src){
+          source = src;
+          done();
+        });
       });
     });
   });
 
   describe('GET /api/v1/report', function() {
+
+    // Create some reports.
+    beforeEach(function(done){
+      var past = new Date(2000,1,1,12,0,0); // Feb 1
+      Report.create([
+        {authoredAt: new Date(), content: 'one', status: 'relevant', _source: source._id},
+        {authoredAt: new Date(), content: 'one', _source: source._id},
+        {authoredAt: new Date(), content: 'two', _source: source._id},
+        {storedAt: past, authoredAt: past, content: 'three', _source: source._id}
+      ], function() { done(); });
+    });
+
     it('should get a list of all reports', function(done) {
       request(reportController)
         .get('/api/v1/report')
@@ -34,6 +42,7 @@ describe('Report controller', function() {
           if (err) return done(err);
           expect(res.body).to.contain.property('total');
           expect(res.body).to.contain.property('results');
+          expect(res.body.results).to.not.be.empty;
           expect(res.body.results).to.be.an.instanceof(Array);
           done();
         });
@@ -41,70 +50,64 @@ describe('Report controller', function() {
 
     it('should query for reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=lorem')
+        .get('/api/v1/report?keywords=one')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.contain.property('total');
           expect(res.body).to.contain.property('results');
-          expect(res.body.results).to.be.an.instanceof(Array);
-          expect(res.body.results).to.not.be.empty;
-          expect(res.body.results[0]).to.have.property('content');
-          expect(res.body.results[0].content.toLowerCase()).to.contain('lorem');
+          expect(res.body.results.length).to.equal(2);
+          expect(res.body.results[0].content).to.equal('one');
           done();
         });
     });
 
     it('should query and filter reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&status=unassigned&before=' + Date.now())
+        .get('/api/v1/report?keywords=one&status=unassigned')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.contain.property('total');
-          expect(res.body).to.contain.property('results');
-          expect(res.body.results).to.be.an.instanceof(Array);
-          expect(res.body.results).to.not.be.empty;
-          expect(res.body.results[0]).to.have.property('content');
-          expect(res.body.results[0].content.toLowerCase()).to.contain('one');
+          expect(res.body.results.length).to.equal(1);
+          expect(res.body.results[0].content).to.equal('one');
           done();
         });
     });
 
     it('should query and filter reports with no results', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&status=assigned&after=' + Date.now())
+        .get('/api/v1/report?keywords=two&status=assigned')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.contain.property('total');
           expect(res.body.total).to.equal(0);
-          expect(res.body).to.contain.property('results');
-          expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.be.empty;
           done();
         });
     });
 
-    it('should query and filter by date range', function(done) {
+    it('should filter by date range', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&after=' + (Date.now() - 864e5) + '&before=' + Date.now())
+        .get('/api/v1/report?after=' + new Date(2000,0,31,12,0,0) + '&before=' + new Date(2000,1,2,12,0,0))
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body).to.contain.property('total');
-          expect(res.body.total).to.not.equal(0);
-          expect(res.body).to.contain.property('results');
-          expect(res.body.results).to.be.an.instanceof(Array);
-          expect(res.body.results).to.not.be.empty;
-          expect(res.body.results[0]).to.have.property('content');
-          expect(res.body.results[0].content.toLowerCase()).to.contain('one');
+          expect(res.body.results.length).to.equal(1);
+          expect(res.body.results[0].content.toLowerCase()).to.contain('three');
           done();
         });
     });
   });
 
   describe('DELETE /api/v1/report/_all', function() {
+
+    beforeEach(function(done) {
+      Report.create([
+        {authoredAt: new Date(), content: 'one', _source: source._id},
+        {authoredAt: new Date(), content: 'two', _source: source._id}
+      ], function() { done(); });
+    });
+
     it('should delete all reports', function(done) {
       request(reportController)
         .del('/api/v1/report/_all')

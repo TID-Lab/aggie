@@ -5,7 +5,7 @@ var ContentService = require('../lib/fetching/content-service');
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory.create({source: {type: 'dummy', keywords: 't', interval: 500}});
+    bot = botFactory.create({type: 'dummy', keywords: 't', interval: 500});
     done();
   });
 
@@ -27,7 +27,6 @@ describe('Bot', function() {
     bot.on('report', function() {
       var data = bot.fetchNext();
       expect(data).to.have.property('content');
-      expect(data.content.toLowerCase()).to.contain('t');
       reports.push(data);
       if (--remaining === 0) {
         expect(reports).to.have.length(4);

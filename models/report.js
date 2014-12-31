@@ -30,7 +30,10 @@ schema.index({content: 'text'});
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
-    this.storedAt = new Date();
+
+    // Set default storedAt.
+    if (!this.storedAt) this.storedAt = new Date();
+
   } else {
     // Capture updates before saving report
     if (this.isModified('status')) this._statusWasModified = true;

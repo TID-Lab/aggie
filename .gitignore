@@ -22,6 +22,7 @@ fiddle
 Thumbs.db
 .c9revisions
 .settings
+run-tests.sh
 
 public/css/styles.css
 public/angular/css/app.css
