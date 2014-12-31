@@ -15,8 +15,7 @@ describe('Report writer', function() {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      bot = botFactory.create({source: new Source({nickname: 'lorem', type: 'dummy', keywords: 'Lorem ipsum'})});
-      bot.start();
+      bot = botFactory.create(new Source({nickname: 'lorem', type: 'dummy'}));
       done();
     });
 
@@ -28,6 +27,7 @@ describe('Report writer', function() {
         expect(report_data.content).to.contain('Lorem ipsum');
         done();
       });
+      bot.start();
     });
 
     it('should write reports to database', function(done) {
@@ -46,6 +46,7 @@ describe('Report writer', function() {
           });
         });
       });
+      bot.start();
     });
   });
 

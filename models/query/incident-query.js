@@ -1,3 +1,5 @@
+// Subclass of Query. Represents a query of the incident collection.
+
 var Incident = require('../incident');
 var Query = require('../query');
 var util = require('util');

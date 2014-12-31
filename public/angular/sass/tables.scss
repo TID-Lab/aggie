@@ -80,6 +80,9 @@ tbody {
   tr.closed-incident {
     background-color: rgba(100, 100, 100, 0.4);
   }
+  tr td span.angular-with-newlines {
+    white-space: pre;
+  }
 }
 
 .interval {

@@ -4,93 +4,134 @@ var RSSContentService = require('../lib/fetching/content-services/rss-content-se
 var fs = require('fs');
 var path = require('path');
 
+// Stubs the _doRequest method of the content service to return the data in the given fixture file.
+// If service is null, creates a dummy FacebookContentService
+function stubWithFixture(fixtureFile, service) {
+  // Create service if not provided.
+  service = service || new RSSContentService({url: 'http://example.com'});
+
+  // Make the stub function return the expected args (err, data).
+  fixtureFile = 'test/fixtures/' + fixtureFile;
+  service._doRequest = function(callback) { callback(null, {statusCode: 200}, fs.createReadStream(fixtureFile)); };
+
+  return service;
+}
+
 describe('RSS content service', function() {
-  before(function(done) {
-    // Override fetch stream so that we can test local files
-    RSSContentService.prototype._fetchStream = function(callback) {
-      var stream =  fs.createReadStream(path.join(__dirname, this.url));
-      callback(stream);
-    };
-    rssContentService = new RSSContentService({url: './fixtures/rss-good-1.xml'});
-    done();
+
+  it('should fetch empty content', function(done) {
+    var service = stubWithFixture('rss-empty.json');
+    expectToNotEmitReport(service, done);
+    service.once('error', function(err) { done(err); });
+    setTimeout(done, 100);
   });
 
-  it('should fetch content from RSS', function(done) {
-    var reports = [];
-    rssContentService.fetch(function(lastPostDate) {
-      expect(lastPostDate).to.be.an.instanceof(Date);
-      expect(reports).to.have.length(2);
-      rssContentService.removeAllListeners('report');
-      done();
+  it('should fetch mock content from RSS', function(done) {
+    var service = stubWithFixture('rss-good-1.xml');
+    var fetched = 0;
+
+    service.once('error', function(err) { done(err); });
+
+    service.on('report', function(reportData) {
+      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData).to.have.property('authoredAt');
+      expect(reportData).to.have.property('content');
+      expect(reportData).to.have.property('author');
+      expect(reportData).to.have.property('url');
+      switch (++fetched) {
+        case 1:
+          expect(reportData.content).to.contain('River'); // Title should be concatted to content
+          expect(reportData.content).to.contain('Stormwater');
+          expect(reportData.author).to.equal('Jupiter');
+          expect(reportData.url).to.contain('river');
+          break;
+        case 2:
+          expect(reportData.content).to.contain('Elected');
+          expect(reportData.content).to.contain('CoC professor');
+          expect(reportData.author).to.equal('Jupiter');
+          expect(reportData.url).to.contain('lipton');
+          break;
+        case 3:
+          return done(new Error('Unexpected report'));
+      }
     });
-    rssContentService.on('report', function(report_data) {
-      expect(report_data).to.have.property('content');
-      expect(report_data).to.have.property('url');
-      expect(report_data.url).to.contain('news.gatech.edu');
-      reports.push(report_data);
-    });
-    rssContentService.on('error', function(err) {
-      return done(err);
-    });
+
+    // Give enough time for extra report to appear.
+    setTimeout(function() { if (fetched == 2) done(); }, 100);
+
+    service.fetch({maxCount: 50}, function(){});
   });
 
-  it('should fetch more content and avoid duplicates', function(done) {
-    var reports = [];
-    rssContentService.url = './fixtures/rss-good-2.xml';
-    rssContentService.fetch(function(lastPostDate) {
-      expect(lastPostDate).to.be.an.instanceof(Date);
-      expect(lastPostDate.toString()).to.equal('Tue Apr 29 2014 16:18:12 GMT-0400 (EDT)');
-      expect(reports).to.have.length(2);
-      rssContentService.removeAllListeners('report');
-      done();
-    });
-    rssContentService.on('report', function(report_data) {
-      expect(report_data).to.have.property('content');
-      expect(report_data).to.have.property('url');
-      expect(report_data.url).to.contain('news.gatech.edu');
-      reports.push(report_data);
-    });
-    rssContentService.on('error', function(err) {
-      return done(err);
+  it('should avoid duplicates', function(done) {
+    // Fetch first time.
+    var service = stubWithFixture('rss-good-1.xml');
+    service.fetch({maxCount: 50}, function(){
+
+      // Stub for second fetch, which has one overlapping item.
+      stubWithFixture('rss-good-2.xml', service);
+      var fetched = 0;
+
+      service.once('error', function(err) { done(err); });
+
+      service.on('report', function(reportData) {
+        switch (++fetched) {
+          case 1:
+            expect(reportData.content).to.contain('fracture toughness');
+            break;
+          case 2:
+            expect(reportData.content).to.contain('earn funding');
+            break;
+          case 3:
+            return done(new Error('Unexpected report'));
+        }
+      });
+
+      // Give enough time for extra report to appear.
+      setTimeout(function() { if (fetched == 2) done(); }, 100);
+
+      // Run second fetch.
+      service.fetch({maxCount: 50}, function(){});
     });
   });
 
   it('should emit warnings for missing data', function(done) {
-    var bad = new RSSContentService({url: './fixtures/rss-bad.xml'});
-    var warnings = [];
-    bad.fetch(function(lastPostDate) {
-      expect(warnings).to.be.an.instanceof(Array);
-      expect(warnings).to.have.length(2);
-    });
-    bad.on('report', function(report_data) {
+    var service = stubWithFixture('rss-bad.xml');
+
+    service.on('report', function() {
       done(new Error('No report data should be emitted'));
     });
-    bad.on('error', function(err) {
+
+    service.on('error', function() {
       done(new Error('No errors should be emitted'));
     });
-    var remaining = 2;
-    bad.on('warning', function(err) {
+
+    // Expect to get a warning.
+    service.on('warning', function(err) {
       expect(err).to.be.an.instanceof(Error);
       expect(err.message).to.contain('Parse warning');
-      warnings.push(err);
-      if (--remaining === 0) done();
+      done();
     });
+
+    service.fetch({maxCount: 50}, function(){});
   });
 
   it('should emit errors for malformed data', function(done) {
-    var ugly = new RSSContentService({url: './fixtures/rss-ugly.xml'});
-    ugly.fetch();
-    ugly.on('report', function(report_data) {
+    var service = stubWithFixture('rss-ugly.xml');
+
+    service.on('report', function() {
       done(new Error('No report data should be emitted'));
     });
-    ugly.on('warning', function(err) {
+
+    service.on('warning', function() {
       done(new Error('No warnings should be emitted'));
     });
-    ugly.on('error', function(err) {
+
+    service.on('error', function(err) {
       expect(err).to.be.an.instanceof(Error);
       expect(err.message).to.contain('Not a feed');
       done();
     });
-  });
 
+    service.fetch({maxCount: 50}, function(){});
+  });
 });

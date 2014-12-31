@@ -1,3 +1,7 @@
+// Represents a frequency analysis of reports matching a single query.
+// Stores the number of reports matching a single query for each five minute increment.
+// The actual querying is handled by the analytics module.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var Query = require('./query');

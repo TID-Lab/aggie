@@ -1,3 +1,6 @@
+// A report is a single post/comment/article or other chunk of data from a source.
+// This class is responsible for executing ReportQuerys.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
@@ -27,7 +30,10 @@ schema.index({content: 'text'});
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
-    this.storedAt = new Date();
+
+    // Set default storedAt.
+    if (!this.storedAt) this.storedAt = new Date();
+
   } else {
     // Capture updates before saving report
     if (this.isModified('status')) this._statusWasModified = true;
@@ -40,7 +46,7 @@ schema.pre('save', function(next) {
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
   if (this._statusWasModified) schema.emit('report:status', {_id: this._id.toString(), status: this.status});
-  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident.toString()});
+  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
 });
 
 var Report = mongoose.model('Report', schema);
@@ -60,7 +66,10 @@ Report.queryReports = function(query, page, callback) {
   // Determine status filter
   if (query.status) {
     query.filter.status = {};
-    if (query.status === 'assigned') query.filter.status.$exists = true;
+    if (query.status === 'assigned') {
+      query.filter.status.$exists = true;
+      query.filter.status.$ne = '';
+    }
     else if (query.status === 'unassigned') query.filter.status.$exists = false;
     else query.filter.status = query.status;
   }

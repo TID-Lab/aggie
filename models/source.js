@@ -1,3 +1,9 @@
+// Represents a single source of data, e.g. a single Facebook page or RSS feed.
+// Only one Twitter source should exist due to rate limiting. Only one is needed since OR queries can be used.
+// Sources keep track of any errors or warnings that are encountered during fetching.
+// They also track how many of these errors have been 'read' so that the user can be notified if new errors have occurred since they last checked.
+// The actual fetching is handled by the fetching module.
+
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var validate = require('mongoose-validator').validate;
@@ -69,7 +75,7 @@ sourceSchema.methods.disable = function() {
 
 // Log events in source
 sourceSchema.methods.logEvent = function(level, message, callback) {
-  this.events.push({datetime: Date.now(), type: level, message: message});
+  this.events.push({datetime: new Date(), type: level, message: message});
   if (level == 'error') this.disable();
   this.unreadErrorCount++;
   this._silent = true;
