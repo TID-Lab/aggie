@@ -13,6 +13,9 @@
         </div>
       </div>
     </div>
+    <div ng-hide="noFilters()">
+      <button type="submit" class="btn" ng-click="clearFilters()">Clear Filters</button>
+    </div>
     <div class="filter status-filter">
       <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
         <option value="">Status</option>
