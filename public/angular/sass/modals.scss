@@ -33,3 +33,19 @@
     color: #000;
   }
 }
+
+.modal-incident {
+  .well {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .modal-footer {
+    margin-top: 0px !important;
+    padding: 10px 20px 10px !important;
+  }
+  
+  .form-group:last-child {
+    margin-bottom: 0px !important;
+  }
+}
