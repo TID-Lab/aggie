@@ -52,6 +52,14 @@ angular.module('Aggie')
       }
 
       Socket.on('reportStatusChanged', $scope.updateReportStatus);
+
+      // make links clickable
+      $scope.reports.forEach(linkify);
+    };
+
+    var linkify = function (report) {
+      report.content = Autolinker.link(report.content);
+      return report;
     };
 
     var removeDuplicates = function(reports) {
@@ -119,6 +127,7 @@ angular.module('Aggie')
 
     $scope.displayNewReports = function() {
       var reports = $scope.newReports.toArray();
+      reports.forEach(linkify);
       $scope.reports.concat(reports);
       $scope.visibleReports.addMany(reports);
       $scope.newReports = new Queue(paginationOptions.perPage);
