@@ -2,6 +2,7 @@ angular.module('Aggie')
 
 .factory('Socket', function ($rootScope) {
   var socket = io.connect('/');
+
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function() {
@@ -23,6 +24,7 @@ angular.module('Aggie')
       })
     },
 
-    off: socket.removeListener
+    off: socket.removeListener.bind(socket),
+    removeAllListeners: socket.removeAllListeners.bind(socket)
   };
 });
