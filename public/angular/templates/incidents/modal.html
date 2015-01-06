@@ -44,7 +44,6 @@
             </div>
           </div>
           <div class="form-group">
-            <div>{{myForm.input.$error}}</div>
             <label for="latitude" class="col-lg-2 control-label">Latitude</label>
             <div class="col-lg-9">
               <input id="latitude" ng-required="incident.longitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-model="incident.latitude">
