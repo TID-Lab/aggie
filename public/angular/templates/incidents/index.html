@@ -14,7 +14,7 @@
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
-        <input type="text" ng-model="searchParams.locationName" class="form-control" placeholder="Enter location">
+        <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="Enter location">
         <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.locationName">×</a>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
@@ -97,7 +97,7 @@
       <td class="compact content">{{ i.title }}</td>
       <td class="compact content">
         {{ i.locationName }}
-        <div class="coordinates" ng-show="i.latitude || i.longitude">({{ i.latitude }}, {{ i.longitude }})</div>
+        <div class="map-marker pull-right" ng-show="i.latitude && i.longitude"></div>
       </td>
       <td class="compact content">{{ i.assignedTo }}</td>
       <td class="compact content">{{ i.status | translate }}</td>

@@ -40,19 +40,28 @@
           <div class="form-group">
             <label for="location" class="col-lg-2 control-label">Location</label>
             <div class="col-lg-9">
-              <input id="location" name="location" type="text" class="form-control" ng-model="incident.locationName">
+              <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
             </div>
           </div>
           <div class="form-group">
-            <label for="latitude" class="col-lg-2 control-label">latitude</label>
+            <div>{{myForm.input.$error}}</div>
+            <label for="latitude" class="col-lg-2 control-label">Latitude</label>
             <div class="col-lg-9">
-              <input id="latitude" name="latitude" type="text" class="form-control" ng-model="incident.latitude">
+              <input id="latitude" ng-required="incident.longitude" min="-90" max="90" name="latitude" type="number" class="form-control" ng-model="incident.latitude">
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.latitude.$error.max || form.latitude.$error.min">Latitude is invalid.</div>
+                <div class="help-block" ng-show="form.latitude.$error.required">Latitude is required.</div>
+              </div>
             </div>
           </div>
           <div class="form-group">
-            <label for="longitude" class="col-lg-2 control-label">longitude</label>
+            <label for="longitude" class="col-lg-2 control-label">Longitude</label>
             <div class="col-lg-9">
-              <input id="longitude" name="longitude" type="text" class="form-control" ng-model="incident.longitude">
+              <input id="longitude" ng-required="incident.latitude" min="-180" max="180" name="longitude" type="number" class="form-control" ng-model="incident.longitude">
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.longitude.$error.min || form.longitude.$error.max">Longitude is invalid.</div>
+                <div class="help-block" ng-show="form.longitude.$error.required">Longitude is required.</div>
+              </div>
             </div>
           </div>
           <div class="form-group">
