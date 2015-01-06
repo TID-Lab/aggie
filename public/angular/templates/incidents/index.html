@@ -96,7 +96,8 @@
       </td>
       <td class="compact content">{{ i.title }}</td>
       <td class="compact content">
-        {{ i.locationName }}
+        <span ng-if="i.locationName">{{ i.locationName }}</span> 
+        <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
         <div class="map-marker pull-right" ng-show="i.latitude && i.longitude"></div>
       </td>
       <td class="compact content">{{ i.assignedTo }}</td>

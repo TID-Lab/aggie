@@ -117,3 +117,4 @@ require('./directives/aggie-sparkline');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
 require('./directives/ng-autocomplete');
+require('./directives/ng-minmax');
