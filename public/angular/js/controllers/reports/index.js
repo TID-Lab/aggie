@@ -128,6 +128,26 @@ angular.module('Aggie')
       $scope.search({ page: null, keywords: null });
     };
 
+    $scope.noFilters = function () {
+      return $scope.searchParams.before === null &&
+        $scope.searchParams.after === null &&
+        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.status === null &&
+        $scope.searchParams.sourceType === null &&
+        $scope.searchParams.incidentId === null;
+    };
+
+    $scope.clearFilters = function() {
+      $scope.search({
+        before: null,
+        after: null,
+        sourceId: null,
+        status: null,
+        sourceType: null,
+        incidentId: null
+      });
+    };
+
     $scope.isFirstPage = function() {
       return $scope.pagination.page == 1;
     };
