@@ -14,11 +14,18 @@
 
 .modal-body {
   font-size: 14px;
+  padding: 15px;
+  .well {
+    padding: 0px;
+    margin-bottom: 0px;
+  }
 }
 
 .modal-header,
 .modal-footer {
   background-color: darken(#e3e6e3, 10%);
+  margin-top: 0px;
+  padding: 10px 20px 10px;
 }
 
 .modal-content {
@@ -31,21 +38,5 @@
   &:hover,
   &:focus {
     color: #000;
-  }
-}
-
-.modal-incident {
-  .well {
-    padding: 0px !important;
-    margin-bottom: 0px !important;
-  }
-
-  .modal-footer {
-    margin-top: 0px !important;
-    padding: 10px 20px 10px !important;
-  }
-  
-  .form-group:last-child {
-    margin-bottom: 0px !important;
   }
 }
