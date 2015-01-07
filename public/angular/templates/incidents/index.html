@@ -75,33 +75,41 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item', incidentClass(i)]" ng-click="viewIncident($event, i)">
+    <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item', incidentClass(i)]">
       <td class="compact">
-        <div class="interval">
-          <span class="interval-amount">{{ i.updatedAt | interval }}</span>
-          <span class="interval-relative">ago</span>
-        </div>
-        <div class="date-and-time">
-          <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
-          <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
-        </div>
+        <a href="incidents/{{i._id}}">
+          <div class="interval">
+            <span class="interval-amount">{{ i.updatedAt | interval }}</span>
+            <span class="interval-relative">ago</span>
+          </div>
+          <div class="date-and-time">
+            <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
+            <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
+          </div>
+        </a>
       </td>
       <td class="compact">
-        <div class="interval">
-          <span class="interval-amount">{{ i.storedAt | interval }}</span>
-          <span class="interval-relative">ago</span>
-        </div>
-        <div class="date-and-time">
-          <span class="time">{{ i.storedAt | aggieDate:'time' }}</span>
-          <span class="date">{{ i.storedAt | aggieDate:'date' }}</span>
-        </div>
-        <div class="created">{{ i | delay }}</div>
+        <a href="incidents/{{i._id}}">
+          <div class="interval">
+            <span class="interval-amount">{{ i.storedAt | interval }}</span>
+            <span class="interval-relative">ago</span>
+          </div>
+          <div class="date-and-time">
+            <span class="time">{{ i.storedAt | aggieDate:'time' }}</span>
+            <span class="date">{{ i.storedAt | aggieDate:'date' }}</span>
+          </div>
+          <div class="created">{{ i | delay }}</div>
+        </a>
       </td>
-      <td class="compact content">{{ i.title }}</td>
-      <td class="compact content">
-        <span ng-if="i.locationName">{{ i.locationName }}</span> 
-        <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
-        <div class="map-marker pull-right" ng-show="i.latitude && i.longitude"></div>
+      <td class="compact">
+        <a href="incidents/{{i._id}}"><strong>{{ i.title }}</strong></a>
+      </td>
+      <td class="compact">
+        <a href="incidents/{{i._id}}">
+          <strong ng-if="i.locationName">{{ i.locationName }}</strong> 
+          <strong ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</strong>
+          <div class="map-marker pull-right" ng-show="i.latitude && i.longitude"></div>
+        </a>
       </td>
       <td class="compact content">{{ i.assignedTo }}</td>
       <td class="compact content">{{ i.status | translate }}</td>
