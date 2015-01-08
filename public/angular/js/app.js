@@ -9,7 +9,7 @@ require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -116,3 +116,5 @@ require('./directives/aggie-toggle');
 require('./directives/aggie-sparkline');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
+require('./directives/ng-autocomplete');
+require('./directives/ng-minmax');

@@ -43,7 +43,7 @@ angular.module('Aggie')
   function($scope, $modalInstance, incidents, report) {
     $scope.incidents = incidents.results;
     $scope.report = angular.copy(report);
-    $scope._showErrors = false
+    $scope._showErrors = false;
 
     $scope.showErrors = function() {
       return $scope._showErrors;
