@@ -12,14 +12,14 @@
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
       <td class="compact time">
-          <div class="interval">
-            <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
-          </div>
-          <div class="date-and-time">
-            <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
-            <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
-          </div>
-          <div class="created">{{ r | delay }}</div>
+        <div class="interval">
+          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
+        </div>
+        <div class="created">{{ r | delay }}</div>
       </td>
       <td class="compact source" ng-class="sourceClass(r)">
         <div class="icon-left">
