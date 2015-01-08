@@ -17,9 +17,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item" ng-click="viewSource($event, s)">
-      <td class="compact source" ng-class="sourceClass(s)"><div class="icon-left">{{ s.nickname }}</div></td>
+    <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
+      <td class="compact source content" ng-class="sourceClass(s)">
+        <a href="sources/{{s._id}}">
+          <div class="icon-left">{{ s.nickname }}</div>
+        </a>
+      </td>
       <td class="expand content">{{ target(s) }}</td>
+      <td>
         <span ng-switch="source.type">
           <span ng-when="twitter">{{source.keywords}}</span>
           <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
