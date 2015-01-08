@@ -14,6 +14,7 @@ var ReportQuery = function(options) {
   this.sourceId = options.sourceId;
   this.sourceType = options.sourceType;
   this.incidentId = options.incidentId;
+  this.author = options.author;
   this.event = 'reports';
 };
 
@@ -28,12 +29,16 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId']);
+  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId', 'author']);
   if (query.keywords) {
     // Make all keywords lowercase, then sort them alphabetically
     query.keywords = query.keywords.replace(/(,|\s)+/g, ' ').split(' ').map(function(w) {
       return w.toLowerCase();
     }).sort().join(' ');
+  }
+  if (query.author) {
+    // Make all authors lowercase, then sort them alphabetically
+    query.author = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort().join(' ');
   }
   return query;
 };
