@@ -12,7 +12,6 @@
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
       <td class="compact time">
-        <a href="reports/{{r._id}}">
           <div class="interval">
             <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
           </div>
@@ -21,17 +20,16 @@
             <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
           </div>
           <div class="created">{{ r | delay }}</div>
-        </a>
       </td>
       <td class="compact source" ng-class="sourceClass(r)">
         <div class="icon-left">
-          <a href="reports/{{r._id}}">{{sourcesById[r._source].nickname || '[Deleted]'}}</a>
+          {{ sourcesById[r._source].nickname || '[Deleted]' }}
         </div>
       </td>
       <td class="compact author">
-        <a href="reports/{{r._id}}">{{ r.author }}</a>
+        {{ r.author }}
       </td>
-      <td class="expand content" ng-bind-html="r.content"></td>
+      <td class="expand content"><a href="reports/{{r._id}}">{{ r.content | stripHtml }}</a></td>
       <td class="compact incident">
         <button class="btn" ng-class="{ 'btn-info': r._incident, 'btn-default': !r._incident }" ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
           {{ r._incident ? incidentsById[r._incident].title : 'No incident' }}

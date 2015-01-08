@@ -169,8 +169,7 @@ table, .table {
     vertical-align: middle;
   }
   a {
-    color: #000;
-    text-decoration: none;
+    color: $link-blue;
     &:hover {
       color: lighten($link-blue, 10%);
     }
@@ -202,8 +201,8 @@ table, .table {
 }
 
 .content a {
-  text-decoration: underline;
-  color: $link-blue;
+  color: #000;
+  text-decoration: none;
 }
 
 .table-filters {

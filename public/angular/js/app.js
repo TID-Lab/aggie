@@ -107,6 +107,7 @@ require('./filters/delay');
 require('./filters/interval');
 require('./filters/max-count');
 require('./filters/with-line-breaks');
+require('./filters/strip-html');
 
 // Directives
 require('./directives/aggie-confirm');
