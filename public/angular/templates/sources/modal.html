@@ -43,8 +43,9 @@
 
           <div class="form-group" ng-show="source.type == 'twitter' && validSourceType(source)">
             <label for="keywords" class="col-lg-2 control-label">Keywords</label>
-            <div class="col-lg-6">
-              <input type="text" ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords" ng-required="source.type == 'twitter'">
+            <div class="col-lg-8">
+              <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords" ng-required="source.type == 'twitter'">
+              </textarea>
               <div class="help-block">
                 Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>. Note that <strong>passion fruit</strong> will match tweets containing both passion and fruit in any order. See <a hreft="https://dev.twitter.com/streaming/overview/request-parameters#track">here</a> for details.
               </div>
