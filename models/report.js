@@ -7,6 +7,7 @@ var textSearch = require('mongoose-text-search');
 var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
+var S = require('string');
 
 var schema = new mongoose.Schema({
   authoredAt: Date,
@@ -18,7 +19,6 @@ var schema = new mongoose.Schema({
   url: String,
   _source: {type: String, ref: 'Source'},
   _sourceType: String,
-  _sourceNickname: String,
   _incident: {type: String, ref: 'Incident'}
 });
 
@@ -36,9 +36,13 @@ schema.pre('save', function(next) {
 
   } else {
     // Capture updates before saving report
-    if (this.isModified('status')) this._statusWasModified = true;
-    if (this.isModified('_incident')) this._incidentWasModified = true;
+    this._statusWasModified = this.isModified('status');
+    this._incidentWasModified = this.isModified('_incident');
   }
+  
+  // nullify incident, if empty
+  if (S(this._incident).isEmpty()) this._incident = null;
+  
   next();
 });
 
@@ -101,17 +105,35 @@ Report.queryReports = function(query, page, callback) {
   } else {
     Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
       if (err) return callback(err);
+      
       var result = {
         total: reports.stats.n ? reports.stats.nscannedObjects : 0,
         results: _.chain(reports.results).pluck('obj').sortBy('storedAt').value().reverse()
       };
-      callback(null, result);
+      
+      var populateOptions = [
+        {path: '_source', select: 'nickname type'},
+        {path: '_incident', select: 'title'}
+      ];
+      
+      Report.populate(result.results, populateOptions, function(err, objs){
+        if (err) return callback(err);
+        
+        result.results = objs;
+        callback(null, result);
+      });
     });
   }
 };
 
 Report.findSortedPage = function(filter, page, callback) {
-  Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
+  var options = {sort: '-storedAt'};
+  options.populate = [
+    {path: '_source', select: 'nickname type'},
+    {path: '_incident', select: 'title'}
+  ];
+  
+  Report.findPage(filter, page, options, function(err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });
