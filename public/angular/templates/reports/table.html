@@ -31,10 +31,13 @@
       <td class="compact author" ng-class="{ strong: !isFlagged(r) }">
         {{ r.author }}
       </td>
-      <td class="expand content" ng-class="{ strong: !isFlagged(r) }"><a href="reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a></td>
+      <td class="expand content" ng-class="{ strong: !isFlagged(r) }">
+        <a href="reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+      </td>
       <td class="compact incident text-center relative">
         <a ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
-          <strong>{{ r._incident ? incidentsById[r._incident].title : 'Add' }}</strong>
+          <strong ng-if="r._incident">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
+          <strong ng-if="!r._incident">Add</strong>
         </a>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
