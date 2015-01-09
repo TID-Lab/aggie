@@ -120,6 +120,11 @@ angular.module('Aggie')
       $scope.newReports.addMany(uniqueReports);
     };
 
+    $scope.unlinkIncident = function (report) {
+      report._incident = '';
+      Report.update({id: report._id}, report);
+    }
+
     $scope.updateReportStatus = function(updatedReport) {
       if (!(updatedReport._id in $scope.reportsById)) { return }
       $scope.reportsById[updatedReport._id].status = updatedReport.status;
@@ -174,7 +179,7 @@ angular.module('Aggie')
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
         search($scope.currentPage - 1);
-      };
+      }
     };
 
     $scope.isRelevant = function(report) {
@@ -189,11 +194,20 @@ angular.module('Aggie')
       return !this.isRelevant(report) && !this.isIrrelevant(report);
     };
 
+    $scope.isFlagged = function (report) {
+      return report.status == 'flagged';
+    };
+
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
+    };
+
+    $scope.toggleReport = function (report) {
+      report.status = ($scope.isFlagged(report)) ? '' : 'flagged';
+      $scope.saveReport(report);
     };
 
     $scope.viewReport = function(event, report) {

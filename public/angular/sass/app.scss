@@ -1,6 +1,6 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
-$link-blue: #1c75bc;
+$link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 
 @import 'forms';
@@ -16,9 +16,12 @@ body {
 }
 
 a {
+  cursor: pointer;
   color: $link-blue;
+  text-decoration: none;
   &:hover {
     color: lighten($link-blue, 10%);
+    text-decoration: underline;
   }
 }
 
@@ -103,6 +106,10 @@ a {
   font-size: 0;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .toggle-item {
   font-size: 10px;
   text-transform: uppercase;
@@ -125,7 +132,6 @@ a {
   text-align: right;
   margin: 0;
 }
-
 
 
 .btn-default {

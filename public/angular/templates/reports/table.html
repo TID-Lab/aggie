@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th>Time</th>
+      <th>Media</th>
       <th>Source</th>
       <th>Author</th>
       <th>Content</th>
@@ -10,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, flagged: r.status == 'flagged' }">
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -22,22 +23,23 @@
         <div class="created">{{ r | delay }}</div>
       </td>
       <td class="compact source" ng-class="sourceClass(r)">
-        <div class="icon-left">
-          {{ sourcesById[r._source].nickname || '[Deleted]' }}
-        </div>
+        <div class="icon-left"></div>
       </td>
-      <td class="compact author">
+      <td class="compact source" ng-class="{ strong: !isFlagged(r) }">
+        {{ sourcesById[r._source].nickname || '[Deleted]' }}
+      </td>
+      <td class="compact author" ng-class="{ strong: !isFlagged(r) }">
         {{ r.author }}
       </td>
-      <td class="expand content"><a href="reports/{{r._id}}">{{ r.content | stripHtml }}</a></td>
-      <td class="compact incident">
-        <button class="btn" ng-class="{ 'btn-info': r._incident, 'btn-default': !r._incident }" ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
-          {{ r._incident ? incidentsById[r._incident].title : 'No incident' }}
-        </button>
-        <button class="btn-info" ng-show="incident != null" ng-click="unlinkReport(r)">Unlink</button>
+      <td class="expand content" ng-class="{ strong: !isFlagged(r) }"><a href="reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a></td>
+      <td class="compact incident text-center relative">
+        <a ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
+          <strong>{{ r._incident ? incidentsById[r._incident].title : 'Add' }}</strong>
+        </a>
+        <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
-      <td class="compact status">
-        <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
+      <td class="compact status text-center">
+        <div ng-click="toggleReport(r)" class="fa pointer" ng-class="r.status == 'flagged' ? 'fa-flag' : 'fa-flag-o'"></div>
       </div>
       </td>
     </tr>
