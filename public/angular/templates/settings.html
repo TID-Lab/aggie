@@ -1,10 +1,39 @@
 <div class="bs-component">
-  <div class="panel panel-info">
-    <div class="panel-heading">
-      <h3 class="panel-title">Settings</h3>
-    </div>
-    <div class="list-group">
-      <a href ui-sref="users" class="list-group-item">Users</a>
-    </div>
-  </div>
+  <ul class="breadcrumb">
+    <li class="active">Settings</li>
+    <li><a ui-sref="users">Users</a></li>
+  </ul>
+</div>
+
+<div ng-controller="FetchingController">
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>
+          <h5>Fetching</h5>
+        </td>
+        <td>
+          <div class="btn-group"
+               data-toggle="buttons">
+            <label class="btn btn-info"
+                   ng-click="toggle(true)"
+                   ng-class="{active:on===true}">
+              <input type="radio"> On
+            </label>
+            <label class="btn btn-info"
+                   ng-click="toggle(false)"
+                   ng-class="{active:on===false}">
+              <input type="radio"> Off
+            </label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn btn-info"
+          ng-click="save()">
+    Save
+  </button> 
+
 </div>

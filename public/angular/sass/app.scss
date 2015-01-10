@@ -50,6 +50,10 @@ a {
   }
 }
 
+.navbar-nav > li > ul {
+  background-color: darken($navbar-green, 10%);
+}
+
 .navbar-nav.navbar-right:last-child {
   margin-right: 0;
 }

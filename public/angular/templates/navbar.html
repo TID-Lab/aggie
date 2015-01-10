@@ -17,10 +17,23 @@
           {{currentUser.username}}</a>
         </li>
         <li ui-sref-active="active">
-          <a ui-sref="settings">
-            <i class="fa fa-gear fa-fw"></i>
+          <a id="dropdownMenu1" data-target="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
             Settings
           </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+              <a href role="menuitem" tabindex="-1" ui-sref="settings">
+                <i class="fa fa-gear fa-fw"></i>
+                Settings
+              </a>
+            </li>
+            <li role="presentation">
+              <a href role="menuitem" tabindex="-1" ui-sref="users">
+                <i class="fa fa-users fa-fw"></i>
+                Users
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href ng-click="logout()">
@@ -44,10 +57,6 @@
       <p class="navbar-text">Stats go here...</p>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
         <a href ui-sref="sources" ui-sref-opts="{ reload: true }">{{ unreadErrorCount }} Fetching Errors</a>
-      </div>
-      <div ng-controller="FetchingController" class="compact status fetching">
-        <label>Fetching</label>
-        <aggie-toggle toggle="fetchStatus" options="{ true: 'On', false: 'Off' }">
       </div>
     </div>
   </div>
