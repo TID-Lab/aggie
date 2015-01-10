@@ -86,6 +86,12 @@ Report.queryReports = function(query, page, callback) {
   if (query.sourceType) query.filter._sourceType = query.sourceType;
   if (query.incidentId) query.filter._incident = query.incidentId;
 
+  // Determine author filter
+  if (query.author) {
+    query.filter.author = {};
+    query.filter.author.$in = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort();;
+  }
+
   // Return only newer results
   if (query.since) {
     query.filter.storedAt = query.filter.storedAt || {};
