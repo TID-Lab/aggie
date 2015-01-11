@@ -10,9 +10,6 @@
   > tbody {
     > tr {
       transition: background 0.25s ease-in-out;
-      &.item {
-        cursor: pointer;
-      }
       > td {
         border: solid 1px #e4e4e4;
         &.status,
@@ -163,7 +160,6 @@ tbody {
   font-weight: bold;
 }
 
-
 .content {
   max-width: 400px;
 }
@@ -202,6 +198,11 @@ table, .table {
   tr.trend-disabled {
     background-color: rgba(100, 100, 100, 0.4);
   }
+}
+
+.content a {
+  color: #000;
+  text-decoration: none;
 }
 
 .table-filters {

@@ -129,6 +129,20 @@ angular.module('Aggie')
       $scope.search({ page: null, title: null, locationName: null});
     };
 
+    $scope.noFilters = function () {
+      return $scope.searchParams.assignedTo === null &&
+        $scope.searchParams.status === null &&
+        $scope.searchParams.verified === null;
+    };
+
+    $scope.clearFilters = function() {
+      $scope.search({
+          assignedTo: null,
+          status: null,
+          verified: null
+      });
+    };
+
     $scope.isFirstPage = function() {
       return $scope.pagination.page == 1;
     };

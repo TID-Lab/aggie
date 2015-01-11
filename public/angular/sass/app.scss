@@ -257,3 +257,13 @@ li.collapse, li.collapsing {
     font-size: 12px;
   }
 }
+
+.pac-container {
+  z-index: 1051 !important;
+}
+
+.map-marker {
+  width: 20px;
+  height: 20px;
+  background-image: url('../images/map-marker.png');
+}

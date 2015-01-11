@@ -20,6 +20,14 @@
       <td class="detail-value">{{ incident.locationName }}</td>
     </tr>
     <tr>
+      <td class="detail-key">Latitude</td>
+      <td class="detail-value">{{ incident.latitude | number:6 }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Longitude</td>
+      <td class="detail-value">{{ incident.longitude | number:6 }}</td>
+    </tr>
+    <tr>
       <td class="detail-key">Assigned To</td>
       <td class="detail-value">{{ incident.assignedTo }}</td>
     </tr>

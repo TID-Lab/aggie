@@ -42,13 +42,17 @@ angular.module('Aggie')
       google.maps.event.addListener(m, 'click', function() { self.show_info_window(this); });
     });
 
-    if (self.markers.length == 0)
+    if (self.markers.length == 0) {
       self.map.setCenter(new google.maps.LatLng(0, 0));
-
-    // else use bounds determined above
-    else
+    } else if (self.markers.length === 1) {
+      // if only one, center and set reasonable zoom (11)
+      self.map.setCenter(self.markers[0].position);
+      self.map.setZoom(11);
+    } else {
+      // else use bounds determined above
       // center/zoom the map
       self.map.fitBounds(bounds);
+    }
   };
 
   Map.prototype.show_info_window = function(marker) {

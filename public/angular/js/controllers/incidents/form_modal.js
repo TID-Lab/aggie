@@ -62,6 +62,12 @@ angular.module('Aggie')
         });
       });
     };
+
+    $scope.$watch('details.geometry.location', function(newVal, oldVal) {
+      if (oldVal == newVal) return;
+      $scope.incident.latitude = newVal.k;
+      $scope.incident.longitude = newVal.D;
+    });
   }
 ])
 
@@ -81,7 +87,7 @@ angular.module('Aggie')
     $scope.status = incidentStatusOptions;
     $scope.showErrors = false;
 
-    $scope.save = function(form) {
+    $scope.save = function(form) {      
       if (form.$invalid) {
         $scope.showErrors = true;
         return;

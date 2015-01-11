@@ -52,6 +52,14 @@ angular.module('Aggie')
       }
 
       Socket.on('reportStatusChanged', $scope.updateReportStatus);
+
+      // make links clickable
+      $scope.reports.forEach(linkify);
+    };
+
+    var linkify = function (report) {
+      report.content = Autolinker.link(report.content);
+      return report;
     };
 
     var removeDuplicates = function(reports) {
@@ -119,6 +127,7 @@ angular.module('Aggie')
 
     $scope.displayNewReports = function() {
       var reports = $scope.newReports.toArray();
+      reports.forEach(linkify);
       $scope.reports.concat(reports);
       $scope.visibleReports.addMany(reports);
       $scope.newReports = new Queue(paginationOptions.perPage);
@@ -126,6 +135,26 @@ angular.module('Aggie')
 
     $scope.clearSearch = function() {
       $scope.search({ page: null, keywords: null });
+    };
+
+    $scope.noFilters = function () {
+      return $scope.searchParams.before === null &&
+        $scope.searchParams.after === null &&
+        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.status === null &&
+        $scope.searchParams.sourceType === null &&
+        $scope.searchParams.incidentId === null;
+    };
+
+    $scope.clearFilters = function() {
+      $scope.search({
+        before: null,
+        after: null,
+        sourceId: null,
+        status: null,
+        sourceType: null,
+        incidentId: null
+      });
     };
 
     $scope.isFirstPage = function() {
