@@ -86,7 +86,14 @@ angular.module('Aggie')
 
     $scope.save = function(form) {
       if (form.$invalid) {
-        $scope.showErrors = true;
+        // username errors (required gets triggered if aggieusername is invalid?)
+        if (form.username.$error.aggieusername) {
+          $scope.showUsernameError = true;
+        } else {
+          $scope.showRequiredError = true;
+        }
+        // email errors
+        $scope.showEmailErrors = true;;
         return;
       }
       if ($scope.user._id) {
