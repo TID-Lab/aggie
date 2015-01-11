@@ -7,7 +7,8 @@ angular.module('Aggie')
   'AuthService',
   'FlashService',
   'Socket',
-  function($scope, $rootScope, $location, AuthService, flash, Socket) {
+  '$state',
+  function($scope, $rootScope, $location, AuthService, flash, Socket, $state) {
     $scope.unreadErrorCount = '0';
 
     var init = function() {
@@ -35,6 +36,12 @@ angular.module('Aggie')
           console.log('Error', err);
         }
       });
+    };
+
+    // needs special behavior, because state /profile/ is satisfied with
+    // /profile/:userId of any user
+    $scope.ownProfile = function () {
+      $state.go('profile', {userId: $rootScope.currentUser._id});
     };
 
     $rootScope.$watch('currentUser', init);

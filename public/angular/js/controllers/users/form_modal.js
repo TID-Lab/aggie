@@ -7,7 +7,8 @@ angular.module('Aggie')
   'User',
   'FlashService',
   '$translate',
-  function($rootScope, $scope, $modal, User, flash, $translate) {
+  '$state',
+  function($rootScope, $scope, $modal, User, flash, $translate, $state) {
     $scope.create = function() {
       var modalInstance = $modal.open({
         controller: 'UserFormModalInstanceController',
@@ -46,6 +47,10 @@ angular.module('Aggie')
           }
         });
       });
+    };
+
+    $scope.view = function (user) {
+      $state.go('profile', { userId: user._id });
     };
   }
 ])

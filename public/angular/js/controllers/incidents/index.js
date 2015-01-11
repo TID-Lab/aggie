@@ -24,7 +24,8 @@ angular.module('Aggie')
     $scope.users = users.map(function(u) {
       return {
         value: u.username,
-        label: u.username
+        label: u.username,
+        _id: u._id
       };
     });
 
@@ -199,6 +200,10 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Incident failed to be deleted.');
       });
+    };
+
+    $scope.viewProfile = function (id) {
+      $state.go('profile', {userId: id});
     };
 
     (fireDigestEveryThirtySeconds = function() {

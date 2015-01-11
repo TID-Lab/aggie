@@ -1,1 +1,28 @@
-<h1>Profile page</h1>
+<div class="profile">
+  <div>
+    <a href="" aria-hidden="true" class="avatar" itemprop="image">
+      <img ng-src="{{user.gravatar}}" alt class="avatar" width="230" height="230">
+    </a>
+  </div>
+
+  <h3>
+    <span>{{user.username}}</span>
+  </h3>
+
+  <ul>
+    <li>
+      <span>
+        <i class="fa fa-user fa-fw"></i>
+      </span>
+      {{user.role}}
+    </li>
+    <li>
+      <span>
+        <i class="fa fa-envelope fa-fw"></i>
+      </span>
+      <a class="email" href="mailto:{{user.email}}">
+        {{user.email}}
+      </a>
+    </li>
+  </ul>
+</div>

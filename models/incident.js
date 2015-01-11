@@ -17,6 +17,7 @@ var schema = new mongoose.Schema({
   updatedAt: Date,
   storedAt: Date,
   assignedTo: String,
+  assignedToId: String,
   status: {type: String, default: 'new', required: true},
   verified: {type: Boolean, default: false, required: true},
   notes: String
