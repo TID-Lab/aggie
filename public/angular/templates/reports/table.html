@@ -12,6 +12,7 @@
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, flagged: r.flagged == true }">
       <td class="compact time">
+        {{ r.read }}
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
         </div>
@@ -24,13 +25,13 @@
       <td class="compact source" ng-class="sourceClass(r)">
         <div class="icon-left"></div>
       </td>
-      <td class="compact source" ng-class="{ strong: !isFlagged(r) }">
+      <td class="compact source" ng-class="{ strong: !isRead(r) }">
         {{ sourcesById[r._source].nickname || '[Deleted]' }}
       </td>
-      <td class="compact author" ng-class="{ strong: !isFlagged(r) }">
+      <td class="compact author" ng-class="{ strong: !isRead(r) }">
         {{ r.author }}
       </td>
-      <td class="expand content" ng-class="{ strong: !isFlagged(r) }">
+      <td class="expand content" ng-class="{ strong: !isRead(r) }">
         <a href="reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
       <td class="compact incident text-center relative">

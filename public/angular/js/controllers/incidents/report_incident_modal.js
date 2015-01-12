@@ -24,6 +24,7 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(report) {
+        report.read = true;             
         Report.update({id: report._id}, report, function(response) {
           $rootScope.$state.go('reports', {}, { reload: true });
         }, function(err) {

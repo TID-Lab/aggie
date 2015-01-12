@@ -55,7 +55,7 @@ angular.module('Aggie')
       $scope.reports.forEach(linkify);
     };
 
-    var linkify = function (report) {
+    var linkify = function(report) {
       report.content = Autolinker.link(report.content);
       return report;
     };
@@ -118,7 +118,7 @@ angular.module('Aggie')
       $scope.newReports.addMany(uniqueReports);
     };
 
-    $scope.unlinkIncident = function (report) {
+    $scope.unlinkIncident = function(report) {
       report._incident = '';
       Report.update({id: report._id}, report);
     }
@@ -135,7 +135,7 @@ angular.module('Aggie')
       $scope.search({ page: null, keywords: null });
     };
 
-    $scope.noFilters = function () {
+    $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
         $scope.searchParams.sourceId === null &&
@@ -177,9 +177,13 @@ angular.module('Aggie')
       return !this.isRelevant(report) && !this.isIrrelevant(report);
     };
 
-    $scope.isFlagged = function (report) {
+    $scope.isFlagged = function(report) {
       return report.flagged;
     };
+
+    $scope.isRead = function(report) {
+      return report.read;
+    }
 
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
@@ -188,8 +192,13 @@ angular.module('Aggie')
       });
     };
 
-    $scope.toggleFlagged = function (report) {
+    $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
+      
+      if (report.flagged) {
+        report.read = report.flagged;
+      }
+
       $scope.saveReport(report);
     };
 
