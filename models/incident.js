@@ -20,7 +20,7 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
-  veracity: {type: Boolean, default: null, required: true},
+  veracity: {type: Boolean, default: null },
 
   escalated: {type: Boolean, default: false, required: true},
   closed: {type: Boolean, default: false, required: true},
@@ -44,8 +44,8 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
-autoIncrement.initialize(mongoose.createConnection(database.connectURL));
-schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum' });
+autoIncrement.initialize(mongoose.connection);
+schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {

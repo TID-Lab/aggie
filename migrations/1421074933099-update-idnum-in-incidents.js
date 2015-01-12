@@ -1,10 +1,16 @@
 var Incident = require('../models/incident');
+var each = require('async').each;
 
 exports.up = function(next) {
-  Incident.find({}, function (err, incidents) {
+  Incident.find({}, function(err, incidents) {
     if (err || !incidents) return;
-
-    next();
+    each(incidents, function(incident, done) {
+      var incidentRaw = incident.toObject();
+      incident.veracity = incidentRaw.verified;
+      incident.save(function(err) {
+        done();
+      });
+    }, next);
   });
 };
 

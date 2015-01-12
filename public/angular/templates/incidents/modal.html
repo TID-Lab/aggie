@@ -23,18 +23,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="status" class="col-lg-2 control-label">Status</label>
-            <div class="col-lg-9">
-              <select id="status" name="status" ng-model="incident.status" ng-options="value | capitalize for value in status" class="form-control" required></select>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.status.$error.required">Status is required.</div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
             <label for="veracity" class="col-lg-2 control-label">Verified</label>
             <div class="col-lg-9">
-              <input type="checkbox" id="veracity" name="veracity" ng-model="incident.verified" class="form-control">
+              <input type="checkbox" id="veracity" name="veracity" ng-model="incident.veracity" class="form-control">
             </div>
           </div>
           <div class="form-group">
