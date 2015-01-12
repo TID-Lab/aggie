@@ -189,7 +189,7 @@ angular.module('Aggie')
     };
 
     $scope.toggleFlagged = function (report) {
-      report.flagged = (report.flagged) ? false : true;
+      report.flagged = !report.flagged;
       $scope.saveReport(report);
     };
 
