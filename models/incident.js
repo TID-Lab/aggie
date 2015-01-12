@@ -7,6 +7,8 @@ var database = require('../lib/database');
 var mongoose = database.mongoose;
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
+var autoIncrement = require('mongoose-auto-increment');
+
 require('../lib/error');
 
 var schema = new mongoose.Schema({
@@ -18,9 +20,15 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
-  verified: {type: Boolean, default: false, required: true},
+  veracity: {type: Boolean, default: null, required: true},
+
+  escalated: {type: Boolean, default: false, required: true},
+  closed: {type: Boolean, default: false, required: true},
+  idnum: {type: Number, required: true},
+  
   notes: String
 });
+
 
 schema.pre('save', function(next) {
   if (this.isNew) this.storedAt = new Date();
@@ -36,6 +44,8 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
+autoIncrement.initialize(mongoose.createConnection(database.connectURL));
+schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum' });
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {
