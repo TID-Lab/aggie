@@ -7,11 +7,10 @@
       <th>Author</th>
       <th>Content</th>
       <th>Incident</th>
-      <th>Status</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, flagged: r.status == 'flagged' }">
+    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, flagged: r.flagged == true }">
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -42,8 +41,7 @@
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
       <td class="compact status text-center">
-        <div ng-click="toggleReport(r)" class="fa pointer" ng-class="r.status == 'flagged' ? 'fa-flag' : 'fa-flag-o'"></div>
-      </div>
+        <div ng-click="toggleFlagged(r)" class="fa pointer" ng-class="r.flagged == true ? 'fa-flag' : 'fa-flag-o'"></div>
       </td>
     </tr>
   </tbody>

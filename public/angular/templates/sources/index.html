@@ -25,7 +25,7 @@
       </td>
       <td class="expand content">{{ target(s) }}</td>
       <td>
-        <span ng-switch="source.type">
+        <span ng-switch="source.media">
           <span ng-when="twitter">{{source.keywords}}</span>
           <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
         </span>
