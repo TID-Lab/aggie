@@ -64,6 +64,12 @@ tbody {
       font-weight: bold;
     }
   }
+  tr.flagged {
+    background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 5%);
+    }
+  }
   tr.new-incident {
     background-color: rgba(146, 200, 220, 0.4);
   }
@@ -154,9 +160,15 @@ tbody {
   background: url('/images/rss.png') no-repeat 0 50%;
 }
 
+/*
 .source,
 .author,
 .content {
+  font-weight: bold;
+}
+*/
+
+.strong {
   font-weight: bold;
 }
 
@@ -165,13 +177,31 @@ tbody {
 }
 
 table, .table {
-  td.vertical-middle {
-    vertical-align: middle;
+  td {
+    &.vertical-middle {
+      vertical-align: middle;
+    }
+    
+    &.relative {
+      position: relative;
+    }
+
+    .fa {
+      font-size: 14px;
+    }
   }
   a {
     color: $link-blue;
+    text-decoration: none;
     &:hover {
       color: lighten($link-blue, 10%);
+      text-decoration: underline;
+    }
+    &.remove {
+      color: #000;
+      position: absolute;
+      top: 2px;
+      right: 2px;
     }
   }
   .btn {
@@ -202,7 +232,6 @@ table, .table {
 
 .content a {
   color: #000;
-  text-decoration: none;
 }
 
 .table-filters {
