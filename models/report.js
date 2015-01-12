@@ -14,10 +14,11 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   content: String,
   author: String,
-  status: String,
   url: String,
+  read: {type: Boolean, default: false, required: true},
+  flagged: {type: Boolean, default: false, required: true},
   _source: {type: String, ref: 'Source'},
-  _sourceType: String,
+  _media: String,
   _sourceNickname: String,
   _incident: {type: String, ref: 'Incident'}
 });
