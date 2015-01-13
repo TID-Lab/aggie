@@ -15,7 +15,7 @@ describe('Report writer', function() {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      bot = botFactory.create(new Source({nickname: 'lorem', type: 'dummy'}));
+      bot = botFactory.create(new Source({nickname: 'lorem', media: 'dummy'}));
       done();
     });
 
@@ -59,9 +59,9 @@ describe('Report writer', function() {
       reportQueue.clear();
 
       // Create sources for the most common words in English
-      Source.create({nickname: 'a', type: 'dummy', keywords: 'a'});
-      Source.create({nickname: 'b', type: 'dummy', keywords: 'b'});
-      Source.create({nickname: 'c', type: 'dummy', keywords: 'c'});
+      Source.create({nickname: 'a', media: 'dummy', keywords: 'a'});
+      Source.create({nickname: 'b', media: 'dummy', keywords: 'b'});
+      Source.create({nickname: 'c', media: 'dummy', keywords: 'c'});
 
       // Queue starting bots after sources are loaded
       process.nextTick(function() {

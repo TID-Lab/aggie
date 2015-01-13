@@ -3,17 +3,12 @@ angular.module('Aggie')
 .controller('ReportsShowController', [
   '$scope',
   '$stateParams',
+  'data',
   'Report',
-  'Source',
-  function($scope, $stateParams, Report, Source) {
-    Report.get({id: $stateParams.id}, function(report) {
-      $scope.markAsRead(report);
-      $scope.report = report;
-      $scope.report.content = Autolinker.link( report.content );
-      Source.get({id: report._source}, function(source) {
-        $scope.source = source;
-      });
-    });
+  function($scope, $stateParams, data, Report) {
+    $scope.report = data.report;
+    $scope.source = data.source;
+    $scope.markAsRead(data.report);
 
     $scope.markAsRead = function(report) {
       if (report.read) return;

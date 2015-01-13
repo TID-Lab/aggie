@@ -1,7 +1,8 @@
 require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var database = require('../lib/database');
+require('../lib/database');
+require('../models/incident');
 var reportController = require('../lib/api/v1/report-controller')();
 var Report = require('../models/report');
 var Source = require('../models/source');
@@ -13,7 +14,7 @@ describe('Report controller', function() {
   beforeEach(function(done){
     Report.remove({}, function(){
       Source.remove({}, function(){
-        Source.create({nickname: 'test', type: 'dummy', keywords: 'e'}, function(err, src){
+        Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function(err, src){
           source = src;
           done();
         });
@@ -27,7 +28,7 @@ describe('Report controller', function() {
     beforeEach(function(done){
       var past = new Date(2000,1,1,12,0,0); // Feb 1
       Report.create([
-        {authoredAt: new Date(), content: 'one', status: 'relevant', _source: source._id},
+        {authoredAt: new Date(), content: 'one', flagged: true, _source: source._id},
         {authoredAt: new Date(), content: 'one', _source: source._id},
         {authoredAt: new Date(), content: 'two', _source: source._id},
         {storedAt: past, authoredAt: past, content: 'three', _source: source._id}
@@ -64,11 +65,11 @@ describe('Report controller', function() {
 
     it('should query and filter reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&status=unassigned')
+        .get('/api/v1/report?keywords=one&flagged=true')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body.results.length).to.equal(1);
+          expect(res.body.results.length).to.equal(2);
           expect(res.body.results[0].content).to.equal('one');
           done();
         });
@@ -76,7 +77,7 @@ describe('Report controller', function() {
 
     it('should query and filter reports with no results', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=two&status=assigned')
+        .get('/api/v1/report?keywords=seven&read=true')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
