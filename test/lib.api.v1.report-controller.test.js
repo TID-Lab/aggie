@@ -28,7 +28,7 @@ describe('Report controller', function() {
     beforeEach(function(done){
       var past = new Date(2000,1,1,12,0,0); // Feb 1
       Report.create([
-        {authoredAt: new Date(), content: 'one', status: 'relevant', _source: source._id},
+        {authoredAt: new Date(), content: 'one', _source: source._id},
         {authoredAt: new Date(), content: 'one', _source: source._id},
         {authoredAt: new Date(), content: 'two', _source: source._id},
         {storedAt: past, authoredAt: past, content: 'three', _source: source._id}
@@ -65,11 +65,11 @@ describe('Report controller', function() {
 
     it('should query and filter reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&status=unassigned')
+        .get('/api/v1/report?keywords=one')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body.results.length).to.equal(1);
+          expect(res.body.results.length).to.equal(2);
           expect(res.body.results[0].content).to.equal('one');
           done();
         });
@@ -77,7 +77,7 @@ describe('Report controller', function() {
 
     it('should query and filter reports with no results', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=two&status=assigned')
+        .get('/api/v1/report?keywords=seven')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
