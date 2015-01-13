@@ -27,9 +27,12 @@ a {
 }
 
 .navbar-brand {
-  text-transform: uppercase;
-  text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
-  line-height: 19px;
+  margin-top: 5px;
+  margin-right: 20px;
+  background-image: url(../images/logo-v1.png);
+  background-repeat: no-repeat;
+  width: 104px;
+  height: 28px;
 }
 
 .navbar {
