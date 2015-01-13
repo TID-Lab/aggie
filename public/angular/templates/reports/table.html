@@ -6,11 +6,10 @@
       <th>Author</th>
       <th>Content</th>
       <th>Incident</th>
-      <th>Status</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, irrelevant: r.status == 'irrelevant', relevant: r.status == 'relevant' }">
+    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true }">
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -35,10 +34,6 @@
           {{ r._incident ? incidentsById[r._incident].title : 'No incident' }}
         </button>
         <button class="btn-info" ng-show="incident != null" ng-click="unlinkReport(r)">Unlink</button>
-      </td>
-      <td class="compact status">
-        <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">
-      </div>
       </td>
     </tr>
   </tbody>

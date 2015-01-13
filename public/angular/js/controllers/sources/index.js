@@ -24,13 +24,13 @@ angular.module('Aggie')
     };
 
     $scope.target = function(source) {
-      return source.type == 'twitter' ? source.keywords : source.url;
+      return source.media == 'twitter' ? source.keywords : source.url;
     };
 
     $scope.sourceClass = function(source) {
       var sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
-      if (sourceTypes.indexOf(source.type) !== -1) {
-        return source.type + '-source';
+      if (sourceTypes.indexOf(source.media) !== -1) {
+        return source.media + '-source';
       } else {
         return 'unknown-source';
       }
