@@ -13,7 +13,7 @@ require('../lib/error');
 var EVENTS_TO_RETURN = 50;
 
 var sourceSchema = new mongoose.Schema({
-  type: String,
+  media: String,
   nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
   url: {type: String, validate: validate({passIfEmpty: true}, 'isUrl')},
