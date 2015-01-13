@@ -1,5 +1,5 @@
 var Incident = require('../models/incident');
-var each = require('async').each;
+var each = require('async').eachSeries;
 
 exports.up = function(next) {
   Incident.find({}, function(err, incidents) {
