@@ -77,7 +77,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&verified',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -89,7 +89,7 @@ angular.module('Aggie')
             locationName: params.locationName,
             assignedTo: params.assignedTo,
             status: params.status,
-            verified: params.verified
+            veracity: params.veracity
           }).$promise;
         }],
         users: ['User', function(User) {
