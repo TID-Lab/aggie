@@ -51,6 +51,14 @@ a {
 }
 
 .navbar-nav > li > ul {
+  > li {
+    line-height: 40px;
+    > a {
+      font-size: 14px;
+    }
+  }
+  padding: 0;
+  border: hidden;
   background-color: darken($navbar-green, 10%);
 }
 
@@ -270,4 +278,39 @@ li.collapse, li.collapsing {
   width: 20px;
   height: 20px;
   background-image: url('../images/map-marker.png');
+}
+
+.table-settings {
+  position: relative;
+  left: 20%;
+  width: 50%;
+
+  label {
+    margin: 0;
+  }
+
+  .settings-label {
+    font-size: 16px;
+  }
+
+  td > div {
+    label.active {
+      background-color: #92c8dc;
+    }
+  }
+}
+
+.refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
 }

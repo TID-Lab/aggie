@@ -6,24 +6,21 @@
 </div>
 
 <div ng-controller="FetchingController">
-  <table class="table">
+  <table class="table table-settings">
     <tbody>
       <tr>
-        <td>
-          <h5>Fetching</h5>
+        <td class="col-sm-3">
+          <label class="settings-label">Fetching</label>
         </td>
-        <td>
-          <div class="btn-group"
-               data-toggle="buttons">
-            <label class="btn btn-info"
-                   ng-click="toggle(true)"
-                   ng-class="{active:on===true}">
-              <input type="radio"> On
+        <td class="text-center">
+          <div data-toggle="buttons">
+            <label ng-click="toggle(false)"
+                   class="toggle-item ng-class:{'active':on===false}">
+              Off
             </label>
-            <label class="btn btn-info"
-                   ng-click="toggle(false)"
-                   ng-class="{active:on===false}">
-              <input type="radio"> Off
+            <label ng-click="toggle(true)"
+                   class="toggle-item ng-class:{'active':on===true}">
+              On
             </label>
           </div>
         </td>
@@ -33,7 +30,10 @@
 
   <button class="btn btn-info"
           ng-click="save()">
-    Save
-  </button> 
+    <span class="fa fa-refresh refresh-animate"
+          ng-show="loading"></span>
+    <span ng-hide="loading">Save</span>
+    <span ng-show="loading">Loading</span>
+  </button>
 
 </div>
