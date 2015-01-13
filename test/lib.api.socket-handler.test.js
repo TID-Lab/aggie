@@ -100,7 +100,7 @@ describe('Socket handler', function() {
     client.once('sources', function(sources) {
       expect(sources).to.be.an.instanceof(Array);
       expect(sources).to.have.length(1);
-      expect(sources[0]).to.contain.keys(['_id', 'nickname', 'type', 'unreadErrorCount', 'enabled', '__v']);
+      expect(sources[0]).to.contain.keys(['_id', 'nickname', 'unreadErrorCount', 'enabled', '__v']);
       done();
     });
     Source.create({nickname: 'test', type: 'dummy'});
