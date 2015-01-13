@@ -8,7 +8,7 @@
     }
   };
 
-  Incident.filterAttributes = ['title', 'locationName', 'updatedAt', 'assignedTo', 'status', 'verified'];
+  Incident.filterAttributes = ['title', 'locationName', 'updatedAt', 'assignedTo', 'status', 'veracity'];
   Incident.statusOptions = ['new', 'working', 'alert', 'closed'];
 
   // Export the Incident class for node.js
