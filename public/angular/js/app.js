@@ -109,6 +109,7 @@ require('./filters/interval');
 require('./filters/max-count');
 require('./filters/with-line-breaks');
 require('./filters/strip-html');
+require('./filters/str-limit');
 
 // Directives
 require('./directives/aggie-confirm');
