@@ -57,7 +57,23 @@ angular.module('Aggie')
     $stateProvider.state('report', {
       url: '/reports/:id',
       templateUrl: '/templates/reports/show.html',
-      controller: 'ReportsShowController'
+      controller: 'ReportsShowController',
+      resolve: {
+        data: ['$stateParams', '$q', 'Report', 'Source', function($stateParams, $q, Report, Source) {
+          var deferred = $q.defer();
+          Report.get({ id: $stateParams.id }, function(report) {
+            report.content = Autolinker.link(report.content);
+            var data = { report: report };
+            
+            Source.get({ id: report._source }, function(source) {
+              data.source = source;
+              deferred.resolve(data);
+            });
+          });
+
+          return deferred.promise;
+        }]
+      }
     });
 
     $stateProvider.state('incidents', {

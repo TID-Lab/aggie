@@ -25,7 +25,6 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(report) {
         Report.update({id: report._id}, report, function(response) {
-          flash.setNotice('Report was successfully added to incident.');
           $rootScope.$state.go('reports', {}, { reload: true });
         }, function(err) {
           flash.setAlertNow('Report failed to be added to incident.');
