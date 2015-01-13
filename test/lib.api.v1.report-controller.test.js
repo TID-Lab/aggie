@@ -1,7 +1,8 @@
 require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var database = require('../lib/database');
+require('../lib/database');
+require('../models/incident');
 var reportController = require('../lib/api/v1/report-controller')();
 var Report = require('../models/report');
 var Source = require('../models/source');
@@ -13,7 +14,7 @@ describe('Report controller', function() {
   beforeEach(function(done){
     Report.remove({}, function(){
       Source.remove({}, function(){
-        Source.create({nickname: 'test', type: 'dummy', keywords: 'e'}, function(err, src){
+        Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function(err, src){
           source = src;
           done();
         });

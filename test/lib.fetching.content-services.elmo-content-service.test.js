@@ -22,7 +22,7 @@ function stubWithFixture(fixtureFile, service) {
 describe('ELMO content service', function() {
 
   it('factory should instantiate correct ELMO content service', function() {
-    var service = contentServiceFactory.create({type: 'elmo'});
+    var service = contentServiceFactory.create({media: 'elmo'});
     expect(service).to.be.instanceOf(ContentService);
     expect(service).to.be.instanceOf(ELMOContentService);
   });

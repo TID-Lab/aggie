@@ -15,6 +15,7 @@ var schema = new mongoose.Schema({
   content: String,
   author: String,
   url: String,
+  status: String,
   read: {type: Boolean, default: false, required: true},
   flagged: {type: Boolean, default: false, required: true},
   _source: {type: String, ref: 'Source'},
@@ -81,10 +82,10 @@ Report.queryReports = function(query, page, callback) {
     if (query.after) query.filter.storedAt.$gte = query.after;
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
-
+  
   // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
-  if (query.sourceType) query.filter._sourceType = query.sourceType;
+  if (query.sourceType) query.filter._media = query.sourceType;
   if (query.incidentId) query.filter._incident = query.incidentId;
 
   // Return only newer results

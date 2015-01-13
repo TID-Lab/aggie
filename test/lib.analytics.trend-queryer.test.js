@@ -56,8 +56,8 @@ describe('Trend queryer', function() {
       if (err) return done(err);
       trendQueryer = new TrendQueryer({trend: trend});
       setTimeout(function() {
-        Report.create({content: 'foo', _sourceType: 'bar'});
-        Report.create({content: 'baz', _sourceType: 'test'});
+        Report.create({content: 'foo', _media: 'bar'});
+        Report.create({content: 'baz', _media: 'test'});
         setTimeout(function() {
           trendQueryer.runQuery(function(err, counts) {
             if (err) return done(err);
