@@ -125,6 +125,19 @@ angular.module('Aggie')
       $scope.newIncidents = new Queue(paginationOptions.perPage);
     };
 
+    $scope.removeSelected = function() {
+      var selected = $scope.incidents.filter(function(item) { return item.selected; });
+      var ids = selected.map(function(item) { return item._id; });
+
+      Incident.removeSelected({ids: ids}, function () {
+        flash.setNotice('Incidents were successfully deleted.');
+        $rootScope.$state.go('incidents', {}, { reload: true });
+      }, function() {
+        flash.setAlertNow('Incident failed to be deleted.');
+      });
+
+    };
+
     $scope.clearSearch = function() {
       $scope.search({ page: null, title: null, locationName: null});
     };
@@ -136,8 +149,8 @@ angular.module('Aggie')
 
     $scope.clearFilters = function() {
       $scope.search({
-          assignedTo: null,
-          veracity: null
+        assignedTo: null,
+        veracity: null
       });
     };
 
