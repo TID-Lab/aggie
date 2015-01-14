@@ -12,7 +12,10 @@
       transition: background 0.25s ease-in-out;
       > td {
         border: solid 1px #e4e4e4;
-        &.status,
+        font-weight: normal;
+        &.status {
+          vertical-align: middle;
+        }
         &.incident {
           vertical-align: middle;
           min-width: 150px;
@@ -178,6 +181,7 @@ table, .table {
 
     .fa {
       font-size: 16px;
+      padding: 3px;
     }
 
   }
@@ -282,7 +286,7 @@ table, .table {
 }
 
 .actions {
-  width: 10%;
+  width: 50px;
   text-align: center;
 }
 
@@ -293,9 +297,7 @@ table, .table {
 td.content {
   height: 100% !important;
   max-width: 400px;
-
   a {
-
     color: #000;
     height: 100%;
     width: 100%;

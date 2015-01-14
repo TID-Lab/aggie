@@ -147,12 +147,16 @@ a {
   }
 }
 
-.zero-errors {
+.zero-errors, .green {
   color: green;
 }
 
-.multiple-errors {
+.multiple-errors, .red {
   color: red;
+}
+
+.blue {
+  color: $link-blue;
 }
 
 .fetching {

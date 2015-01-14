@@ -110,6 +110,7 @@ require('./filters/max-count');
 require('./filters/with-line-breaks');
 require('./filters/strip-html');
 require('./filters/str-limit');
+require('./filters/tripledigit');
 
 // Directives
 require('./directives/aggie-confirm');
