@@ -44,14 +44,23 @@ angular.module('Aggie')
 
     if (self.markers.length == 0) {
       self.map.setCenter(new google.maps.LatLng(0, 0));
-    } else if (self.markers.length === 1) {
-      // if only one, center and set reasonable zoom (11)
-      self.map.setCenter(self.markers[0].position);
-      self.map.setZoom(11);
     } else {
       // else use bounds determined above
       // center/zoom the map
       self.map.fitBounds(bounds);
+
+      // fitBounds() is apparently async:
+      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+      //
+      // so wait for event, check if zoomed in too much, if so,
+      // zoom to a reasonable level (11 is city-ish level)
+      var zoomChangeBoundsListener = 
+            google.maps.event.addListenerOnce(self.map, 'bounds_changed', function(event) {
+              if (self.map.zoom && self.map.zoom > 11){
+                self.map.setZoom(11);
+                google.maps.event.removeListener(zoomChangeBoundsListener);
+              }
+            });
     }
   };
 
