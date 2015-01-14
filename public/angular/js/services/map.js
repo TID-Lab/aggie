@@ -55,12 +55,12 @@ angular.module('Aggie')
       // so wait for event, check if zoomed in too much, if so,
       // zoom to a reasonable level (11 is city-ish level)
       var zoomChangeBoundsListener = 
-            google.maps.event.addListenerOnce(self.map, 'bounds_changed', function(event) {
-              if (self.map.zoom && self.map.zoom > 11){
-                self.map.setZoom(11);
-                google.maps.event.removeListener(zoomChangeBoundsListener);
-              }
-            });
+        google.maps.event.addListenerOnce(self.map, 'bounds_changed', function(event) {
+          if (self.map.zoom && self.map.zoom > 11){
+            self.map.setZoom(11);
+            google.maps.event.removeListener(zoomChangeBoundsListener);
+          }
+        });
     }
   };
 
