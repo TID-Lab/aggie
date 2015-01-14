@@ -14,23 +14,42 @@
           <div class="form-group">
             <label for="username" class="col-lg-3 control-label">Username</label>
             <div class="col-lg-6">
-              <input id="username" name="username" type="text" class="form-control" ng-model="user.username" ng-model-options="{ debounce: 300 }" required aggieusername>
-              <div class="has-error" ng-show="showRequiredError">
-                <div class="help-block" ng-show="form.username.$error.required">Username is required.</div>
-              </div>
-              <div class="has-error" ng-show="showUsernameError">
-                <div class="help-block" ng-show="form.username.$error.aggieusername">Username should be less than 15 characters and should contain letters, numbers, and underscores only.</div>
+              <div class="input-group">
+                <input id="username" name="username" type="text" class="form-control" ng-model="user.username" maxlength="15" required aggieusername ng-focus>
+                <span class="input-group-addon"><span ng-show="user.username.length && form.username.$focused">{{15 - user.username.length}}</span></span>
               </div>
             </div>
           </div>
+
+          <!-- errors -->
+          <div class="form-group">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.username.$error.required">
+                  Username is required.
+                </div>
+                <div class="help-block" ng-show="form.username.$error.aggieusername">
+                  Username should be less than 15 characters and should contain letters, numbers, and underscores only.
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="email" class="col-lg-3 control-label">Email</label>
             <div class="col-lg-6">
               <input id="email" name="email" type="email" class="form-control" ng-model="user.email" required>
-              <div class="has-error" ng-show="showEmailErrors">
-                <div class="help-block" ng-show="form.email.$error.required">Email is required.</div>
-                <div class="help-block" ng-show="form.email.$invalid">Email is invalid.</div>
+
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.email.$error.required">
+                  Email is required.
+                </div>
+                <div class="help-block" ng-show="form.email.$error.email">
+                  Email is invalid.
+                </div>
               </div>
+
             </div>
           </div>
           <div class="form-group" ng-hide="user._id == currentUser._id">
