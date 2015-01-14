@@ -51,15 +51,18 @@ schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt
 
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
-  Incident.findById(prevIncident || newIncident, function (err, incident) {
+  Incident.findById(prevIncident || newIncident, function(err, incident) {
     if (err || !incident) return;
+    var total = incident.totalReports;
 
-    if (prevIncident && incident.totalReports > 0) {
-      incident.totalReports -= 1;
+    if (prevIncident) {
+      total = (total > 0) ? total - 1 : 0;
     } 
     else if (newIncident) {
-      incident.totalReports += 1;
+      total = (total) ? total + 1 : 1;
     }
+
+    incident.totalReports = total;
 
     incident.save();
   });
