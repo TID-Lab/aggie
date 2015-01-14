@@ -278,16 +278,21 @@ li.collapse, li.collapsing {
   position:relative;
 }
 
+.container-main {
+  padding-bottom: 30px;
+}
+
 footer {
   position: absolute;
-  background-color: #009446;
+  background-color: #ebeced;
   height: 20px;
   width: 100%;
   bottom: 0px;
   left: 0px;
+  padding: 20px;
   .version {
-    margin-top: 5px;
     position: absolute;
-    right: 10px;
+    right: 12px;
+    bottom: 12px;
   }
 }
