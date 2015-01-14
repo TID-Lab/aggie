@@ -12,8 +12,8 @@ describe('BotMaster', function() {
   before(function(done){
     Source.remove({}, function(){
       Source.create(
-        {nickname: 'one', type: 'dummy', keywords: 'one'},
-        {nickname: 'two', type: 'dummy', keywords: 'two'},
+        {nickname: 'one', media: 'dummy', keywords: 'one'},
+        {nickname: 'two', media: 'dummy', keywords: 'two'},
         function(err){ done(err); }
       );
     });

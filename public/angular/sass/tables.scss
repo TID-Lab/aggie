@@ -15,9 +15,10 @@
         &.status,
         &.incident {
           vertical-align: middle;
-          .btn {
-            width: 100%;
-          }
+          min-width: 150px;
+        }
+        &.flagged {
+          vertical-align: middle;
         }
       }
     }
@@ -43,9 +44,6 @@
 tbody {
   tr.item {
     background-color: #fff;
-    &:hover {
-      background-color: #f6f7f7;
-    }
   }
   .relevant {
     background-color: #ecf6f8;
@@ -62,6 +60,16 @@ tbody {
   tr.unread {
     td {
       font-weight: bold;
+    }
+  }
+
+  tr.read {
+    background-color: #eee;
+  }
+  tr.flagged {
+    background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 5%);
     }
   }
   tr.new-incident {
@@ -112,7 +120,7 @@ tbody {
 .source {
   .icon-left {
     display: inline-block;
-    padding-left: 39px;
+    padding-left: 33px;
     min-height: 33px;
   }
 }
@@ -154,24 +162,37 @@ tbody {
   background: url('/images/rss.png') no-repeat 0 50%;
 }
 
-.source,
-.author,
-.content {
+.strong {
   font-weight: bold;
 }
 
-.content {
-  max-width: 400px;
-}
-
 table, .table {
-  td.vertical-middle {
-    vertical-align: middle;
+  td {
+    &.vertical-middle {
+      vertical-align: middle;
+    }
+    
+    &.relative {
+      position: relative;
+    }
+
+    .fa {
+      font-size: 16px;
+    }
+
   }
   a {
     color: $link-blue;
+    text-decoration: none;
     &:hover {
       color: lighten($link-blue, 10%);
+      text-decoration: underline;
+    }
+    &.remove {
+      color: #000;
+      position: absolute;
+      top: -2px;
+      right: 4px;
     }
   }
   .btn {
@@ -198,11 +219,6 @@ table, .table {
   tr.trend-disabled {
     background-color: rgba(100, 100, 100, 0.4);
   }
-}
-
-.content a {
-  color: #000;
-  text-decoration: none;
 }
 
 .table-filters {
@@ -272,6 +288,19 @@ table, .table {
 
 .table .middle {
   vertical-align: middle;
+}
+
+td.content {
+  height: 100% !important;
+  max-width: 400px;
+
+  a {
+
+    color: #000;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+  }
 }
 
 td.sparkline,

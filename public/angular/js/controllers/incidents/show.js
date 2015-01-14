@@ -87,8 +87,8 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.type] !== -1) {
-        return source.type + '-source';
+      if (source && $scope.sourceTypes[source.media] !== -1) {
+        return source.media + '-source';
       } else {
         return 'unknown-source';
       }
