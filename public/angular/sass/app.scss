@@ -1,6 +1,6 @@
 $navbar-green: #009446;
 $navbar-yellow: #eaef92;
-$link-blue: #1c75bc;
+$link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 
 @import 'forms';
@@ -8,17 +8,25 @@ $input-focus-outline: #66afe9;
 @import 'tables';
 @import 'tabs';
 
+html {
+  height: 100%;
+}
+
 body {
   background-color: #fff;
   font-size: 12px;
   line-height: 1;
   color: #333;
+  height: 100%;
 }
 
 a {
+  cursor: pointer;
   color: $link-blue;
+  text-decoration: none;
   &:hover {
     color: lighten($link-blue, 10%);
+    text-decoration: underline;
   }
 }
 
@@ -103,6 +111,10 @@ a {
   font-size: 0;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .toggle-item {
   font-size: 10px;
   text-transform: uppercase;
@@ -125,7 +137,6 @@ a {
   text-align: right;
   margin: 0;
 }
-
 
 
 .btn-default {
@@ -266,4 +277,28 @@ li.collapse, li.collapsing {
   width: 20px;
   height: 20px;
   background-image: url('../images/map-marker.png');
+}
+
+#wrapper {
+  min-height:100%;
+  position:relative;
+}
+
+.container-main {
+  padding-bottom: 30px;
+}
+
+footer {
+  position: absolute;
+  background-color: #ebeced;
+  height: 20px;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  padding: 20px;
+  .version {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+  }
 }

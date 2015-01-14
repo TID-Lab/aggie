@@ -8,8 +8,9 @@ require('./angular-translate');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
+require('./loading-bar');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete', 'angular-loading-bar'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -108,6 +109,7 @@ require('./filters/interval');
 require('./filters/max-count');
 require('./filters/with-line-breaks');
 require('./filters/strip-html');
+require('./filters/str-limit');
 
 // Directives
 require('./directives/aggie-confirm');
@@ -119,3 +121,4 @@ require('./directives/ng-focus');
 require('./directives/ng-password-match');
 require('./directives/ng-autocomplete');
 require('./directives/ng-minmax');
+require('./directives/ng-round');

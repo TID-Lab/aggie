@@ -9,7 +9,7 @@ describe('Source controller', function() {
   before(function(done) {
     source = {
       nickname: 'test',
-      type: 'twitter',
+      media: 'twitter',
       keywords: 'test'
     };
     done();
@@ -32,7 +32,7 @@ describe('Source controller', function() {
     it('should not allow the creation of multiple twitter sources', function(done) {
       request(sourceController)
         .post('/api/v1/source')
-        .send({nickname: 'test', type: 'twitter', keywords: 'test2'})
+        .send({nickname: 'test', media: 'twitter', keywords: 'test2'})
         .expect(422, 'only_one_twitter_allowed', done);
     });
   });
@@ -85,11 +85,11 @@ describe('Source controller', function() {
           done();
         });
     });
-    it('should not allow updating source type', function(done) {
+    it('should not allow updating source media', function(done) {
       request(sourceController)
         .put('/api/v1/source/' + source._id)
-        .send({type: 'dummy'})
-        .expect(422, 'source_type_change_not_allowed', done);
+        .send({media: 'dummy'})
+        .expect(422, 'source_media_change_not_allowed', done);
     });
   });
 

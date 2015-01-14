@@ -14,11 +14,11 @@ describe('Report queue', function() {
     before(function(done) {
       botMaster.kill();
       reportQueue.clear();
-      one = botFactory.create(new Source({nickname: '1', type: 'dummy', keywords: 'one'}));
+      one = botFactory.create(new Source({nickname: '1', media: 'dummy', keywords: 'one'}));
       one.start();
-      two = botFactory.create(new Source({nickname: '2', type: 'dummy', keywords: 'two'}));
+      two = botFactory.create(new Source({nickname: '2', media: 'dummy', keywords: 'two'}));
       two.start();
-      three = botFactory.create(new Source({nickname: '3', type: 'dummy', keywords: 'three'}));
+      three = botFactory.create(new Source({nickname: '3', media: 'dummy', keywords: 'three'}));
       three.start();
       // Stream data for 100ms
       setTimeout(function() {
@@ -76,9 +76,9 @@ describe('Report queue', function() {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      Source.create({nickname: 'one', type: 'dummy', keywords: 'one'});
-      Source.create({nickname: 'two', type: 'dummy', keywords: 'two'});
-      Source.create({nickname: 'three', type: 'dummy', keywords: 'three'});
+      Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
+      Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
+      Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
       process.nextTick(function() {
         botMaster.start();
         done();

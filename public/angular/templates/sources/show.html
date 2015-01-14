@@ -20,13 +20,13 @@
       <td class="detail-value">{{ source.nickname }}</td>
     </tr>
     <tr>
-      <td class="detail-key">Type</td>
-      <td class="detail-value">{{source.type | translate}}</td>
+      <td class="detail-key">Media</td>
+      <td class="detail-value">{{source.media | translate}}</td>
     </tr>
     <tr>
       <td class="detail-key">Target</td>
       <td class="detail-value">
-        <span ng-switch="source.type">
+        <span ng-switch="source.media">
           <span ng-when="twitter">{{source.keywords}}</span>
           <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
         </span>

@@ -78,7 +78,7 @@ angular.module('Aggie')
             '<h5>' + data.title + '</h5>' +
             '<p>' + data.locationName + '</p>' +
             '<p>Status: ' + data.status + '</p>' +
-            '<p>' + (data.verified ? 'Verified' : 'Unverified') + '</p>' +
+            '<p>' + (data.veracity ? 'Verified' : 'Unverified') + '</p>' +
             '<a href="/incidents/' + data._id + '" class="btn btn-sm btn-info">View Incident</a>'
           );
         },
