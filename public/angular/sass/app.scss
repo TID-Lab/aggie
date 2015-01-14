@@ -8,11 +8,16 @@ $input-focus-outline: #66afe9;
 @import 'tables';
 @import 'tabs';
 
+html {
+  height: 100%;
+}
+
 body {
   background-color: #fff;
   font-size: 12px;
   line-height: 1;
   color: #333;
+  height: 100%;
 }
 
 a {
@@ -272,4 +277,28 @@ li.collapse, li.collapsing {
   width: 20px;
   height: 20px;
   background-image: url('../images/map-marker.png');
+}
+
+#wrapper {
+  min-height:100%;
+  position:relative;
+}
+
+.container-main {
+  padding-bottom: 30px;
+}
+
+footer {
+  position: absolute;
+  background-color: #ebeced;
+  height: 20px;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  padding: 20px;
+  .version {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+  }
 }

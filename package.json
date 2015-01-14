@@ -52,7 +52,8 @@
     "winston": "~0.8.3",
     "winston-amazon-ses": "~0.1.4",
     "dateformat": "~1.0.11",
-    "strformat": "0.0.3"
+    "strformat": "0.0.3",
+    "ejs": "^2.0.8"
   },
   "devDependencies": {
     "chai": "~1.9.0",
