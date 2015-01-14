@@ -66,9 +66,6 @@ tbody {
     }
   }
 
-  tr.read {
-    background-color: #eee;
-  }
   tr.flagged {
     background-color: #FFDDDD;
     &:hover {
@@ -228,6 +225,8 @@ table, .table {
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
+  padding: 10px;
+  background-color: #bfbfbf;
   font-size: 12px;
   display: table;
   label {
@@ -272,7 +271,7 @@ table, .table {
 }
 
 .table-actions {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .table-filters,
@@ -283,6 +282,14 @@ table, .table {
     padding: 4px 8px;
     font-size: 12px;
   }
+
+  .checkbox-btn {
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 4px 8px 5px 8px;
+
+  }
+
 }
 
 .actions {

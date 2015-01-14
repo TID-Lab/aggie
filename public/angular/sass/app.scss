@@ -26,6 +26,18 @@ a {
   }
 }
 
+.padding {
+  padding: 10px;
+}
+  
+.padding-sm {
+  padding: 5px;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
 .navbar-wrapper {
   margin-bottom: 21px;
 }
@@ -152,16 +164,20 @@ a {
   color: green;
 }
 
-.multiple-errors, .red {
+.multiple-errors, .text-red {
   color: red;
 }
 
-.blue {
+.text-blue {
   color: $link-blue;
 }
 
-.gray {
+.text-gray {
   color: $gray;
+}
+
+.bg-gray {
+  background-color: #eee;
 }
 
 .fetching {
