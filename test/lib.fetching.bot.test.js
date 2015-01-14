@@ -5,7 +5,7 @@ var ContentService = require('../lib/fetching/content-service');
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory.create({type: 'dummy', keywords: 't', interval: 500});
+    bot = botFactory.create({media: 'dummy', keywords: 't', interval: 500});
     done();
   });
 

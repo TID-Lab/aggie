@@ -17,9 +17,7 @@ angular.module('Aggie')
             return User.query().$promise;
           }],
           incident: function() {
-            return {
-              status: 'new'
-            };
+            return {};
           }
         }
       });
@@ -97,7 +95,6 @@ angular.module('Aggie')
       };
     });
     $scope.veracity = veracityOptions;
-    $scope.status = incidentStatusOptions;
     $scope.showErrors = false;
 
     $scope.save = function(form) {

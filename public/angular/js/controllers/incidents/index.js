@@ -132,15 +132,13 @@ angular.module('Aggie')
 
     $scope.noFilters = function () {
       return $scope.searchParams.assignedTo === null &&
-        $scope.searchParams.status === null &&
-        $scope.searchParams.verified === null;
+        $scope.searchParams.veracity === null;
     };
 
     $scope.clearFilters = function() {
       $scope.search({
           assignedTo: null,
-          status: null,
-          verified: null
+          veracity: null
       });
     };
 
@@ -164,14 +162,6 @@ angular.module('Aggie')
       };
     };
 
-    $scope.isRelevant = function(incident) {
-      return incident.status == 'relevant';
-    };
-
-    $scope.isIrrelevant = function(incident) {
-      return incident.status == 'irrelevant';
-    };
-
     $scope.isUnassigned = function(incident) {
       return !this.isRelevant(incident) && !this.isIrrelevant(incident);
     };
@@ -187,10 +177,6 @@ angular.module('Aggie')
       if (angular.element(event.target)[0].tagName == 'TD') {
         $state.go('incident', { id: incident._id });
       }
-    };
-
-    $scope.incidentClass = function(incident) {
-      return incident.status + '-incident';
     };
 
     $scope.delete = function(incident) {

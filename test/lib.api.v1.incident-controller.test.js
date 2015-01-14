@@ -23,7 +23,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.property('_id');
           expect(res.body).to.have.property('updatedAt');
           expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('verified');
+          expect(res.body).to.have.property('veracity');
           incident._id = res.body._id;
           compare.call(this, res.body, incident);
           done();

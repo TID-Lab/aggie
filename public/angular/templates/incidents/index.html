@@ -29,13 +29,8 @@
         <option value="">Filter by User</option>
       </select>
     </div>
-    <div class="filter status-filter">
-      <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
-        <option value="">Filter by Status</option>
-      </select>
-    </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.verified" ng-options="option as 'veracity.' + option | translate for option in veracityOptions" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.veracity" ng-options="option as 'veracity.' + option | translate for option in veracityOptions" ng-change="search()" class="form-control">
         <option value="">Filter by Veracity</option>
       </select>
     </div>
@@ -69,13 +64,12 @@
       <th class="compact">Title</th>
       <th class="compact">Location</th>
       <th class="compact">Assigned To</th>
-      <th class="compact">Status</th>
-      <th class="compact">Verified</th>
+      <th class="compact">Veracity</th>
       <th class="compact"></th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item', incidentClass(i)]">
+    <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item']">
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.updatedAt | interval }}</span>
@@ -106,8 +100,9 @@
         <div class="map-marker pull-right" ng-show="i.latitude && i.longitude"></div>
       </td>
       <td class="compact content"><a href ng-click="viewProfile(i.assignedToId)">{{ i.assignedTo }}</a></td>
-      <td class="compact content">{{ i.status | translate }}</td>
-      <td class="compact content">{{ 'veracity.' + i.verified | translate }} </td>
+      <td class="compact content">
+        <span ng-if="i.veracity != null">{{ 'veracity.' + i.veracity | translate }}</span>
+      </td>
       <td class="compact">
         <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(i)">Edit</button>
         <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete(i)">Delete</button>
