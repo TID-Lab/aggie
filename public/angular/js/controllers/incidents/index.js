@@ -127,6 +127,7 @@ angular.module('Aggie')
 
     $scope.removeSelected = function() {
       var selected = $scope.incidents.filter(function(item) { return item.selected; });
+      if (!selected.length) return;
       var ids = selected.map(function(item) { return item._id; });
 
       Incident.removeSelected({ids: ids}, function () {
@@ -135,7 +136,6 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Incident failed to be deleted.');
       });
-
     };
 
     $scope.clearSearch = function() {

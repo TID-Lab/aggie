@@ -30,6 +30,8 @@ var schema = new mongoose.Schema({
   notes: String
 });
 
+schema.plugin(listenTo);
+autoIncrement.initialize(mongoose.connection);
 
 schema.pre('save', function(next) {
   if (this.isNew) this.storedAt = new Date();
@@ -45,9 +47,8 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
-autoIncrement.initialize(mongoose.connection);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
-schema.plugin(listenTo);
+
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   Incident.findById(prevIncident || newIncident, function (err, incident) {
