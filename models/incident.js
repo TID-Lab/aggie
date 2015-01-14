@@ -8,6 +8,8 @@ var mongoose = database.mongoose;
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
+var listenTo = require('mongoose-listento');
+var Report = require('./report');
 
 require('../lib/error');
 
@@ -21,11 +23,10 @@ var schema = new mongoose.Schema({
   assignedTo: String,
   status: {type: String, default: 'new', required: true},
   veracity: {type: Boolean, default: null },
-
   escalated: {type: Boolean, default: false, required: true},
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
-  
+  totalReports: {type: Number, default: 0},
   notes: String
 });
 
@@ -46,6 +47,22 @@ schema.post('save', function() {
 var Incident = mongoose.model('Incident', schema);
 autoIncrement.initialize(mongoose.connection);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
+schema.plugin(listenTo);
+
+schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
+  Incident.findById(prevIncident || newIncident, function (err, incident) {
+    if (err || !incident) return;
+
+    if (prevIncident && incident.totalReports > 0) {
+      incident.totalReports -= 1;
+    } 
+    else if (newIncident) {
+      incident.totalReports += 1;
+    }
+
+    incident.save();
+  });
+});
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {

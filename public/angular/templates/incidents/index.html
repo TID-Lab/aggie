@@ -78,7 +78,8 @@
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>
       <td class="compact">
-        <a href="incidents/{{i._id}}"><strong>{{ i.title }}</strong></a>
+        <a href="incidents/{{i._id}}"><strong>{{ i.title }}</strong></a><br />
+        <span class="gray">{{i.totalReports}} reports</span>
       </td>
       <td class="compact content">
         <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>

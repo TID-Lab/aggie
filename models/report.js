@@ -4,6 +4,7 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
+var listenTo = require('mongoose-listento');
 var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
@@ -25,8 +26,14 @@ var schema = new mongoose.Schema({
 
 // Give the report schema text search capabilities
 schema.plugin(textSearch);
+schema.plugin(listenTo);
 // Add a text index to the `content` field
 schema.index({content: 'text'});
+
+schema.path('_incident').set(function (incidentId) {
+  this._prevIncident = this._incident;
+  return incidentId;
+});
 
 schema.pre('save', function(next) {
   if (this.isNew) {
@@ -37,7 +44,10 @@ schema.pre('save', function(next) {
 
   } else {
     // Capture updates before saving report
-    if (this.isModified('_incident')) this._incidentWasModified = true;
+    if (this.isModified('_incident')) { 
+      this._incidentWasModified = true;
+    }
+
   }
   next();
 });
@@ -45,7 +55,10 @@ schema.pre('save', function(next) {
 // Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  if (this._incidentWasModified) schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
+  if (this._incidentWasModified) { 
+    schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
+    schema.emit('change:incident', this._prevIncident, this._incident);
+  }
 });
 
 var Report = mongoose.model('Report', schema);

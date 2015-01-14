@@ -2,6 +2,7 @@ $navbar-green: #009446;
 $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
+$gray: #aaaaaa;
 
 @import 'forms';
 @import 'modals';
@@ -157,6 +158,10 @@ a {
 
 .blue {
   color: $link-blue;
+}
+
+.gray {
+  color: $gray;
 }
 
 .fetching {

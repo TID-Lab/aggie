@@ -32,6 +32,7 @@
     "moment": "~2.8.4",
     "mongoose": "~3.8.7",
     "mongoose-auto-increment": "^3.2.0",
+    "mongoose-listento": "0.0.4",
     "mongoose-text-search": "0.0.2",
     "mongoose-validator": "~0.2.2",
     "nconf": "~0.7.1",
@@ -43,6 +44,7 @@
     "request": "~2.34.0",
     "resanitize": "~0.3.0",
     "socket.io": "~0.9.16",
+    "strformat": "0.0.3",
     "string": "~3.0.0",
     "timekeeper": "0.0.4",
     "timezone": "0.0.32",
@@ -50,9 +52,7 @@
     "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1",
     "winston": "~0.8.3",
-    "winston-amazon-ses": "~0.1.4",
-    "dateformat": "~1.0.11",
-    "strformat": "0.0.3"
+    "winston-amazon-ses": "~0.1.4"
   },
   "devDependencies": {
     "chai": "~1.9.0",
