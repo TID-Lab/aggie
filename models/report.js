@@ -30,9 +30,9 @@ schema.plugin(listenTo);
 // Add a text index to the `content` field
 schema.index({content: 'text'});
 
-schema.path('_incident').set(function (incidentId) {
+schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
-  return incidentId;
+  return _incident;
 });
 
 schema.pre('save', function(next) {
