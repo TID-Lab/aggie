@@ -109,7 +109,7 @@ angular.module('Aggie')
       }
     }
 
-    var filterSelected = function (items) {
+    var filterSelected = function(items) {
       return items.reduce(function(memo, item) { 
         if (item.selected) memo.push(item._id);
         return memo;
@@ -148,7 +148,7 @@ angular.module('Aggie')
       $scope.search({ page: null, title: null, locationName: null});
     };
 
-    $scope.noFilters = function () {
+    $scope.noFilters = function() {
       return $scope.searchParams.assignedTo === null &&
         $scope.searchParams.veracity === null;
     };
