@@ -109,6 +109,13 @@ angular.module('Aggie')
       }
     }
 
+    var filterSelected = function (items) {
+      return items.reduce(function(memo, item) { 
+        if (item.selected) memo.push(item._id);
+        return memo;
+      }, []);
+    }
+
     $scope.handleNewIncidents = function(incidents) {
       var uniqueIncidents = removeDuplicates(incidents);
       $scope.pagination.total += uniqueIncidents.length;
@@ -126,15 +133,14 @@ angular.module('Aggie')
     };
 
     $scope.removeSelected = function() {
-      var selected = $scope.incidents.filter(function(item) { return item.selected; });
-      if (!selected.length) return;
-      var ids = selected.map(function(item) { return item._id; });
-
-      Incident.removeSelected({ids: ids}, function () {
+      var ids = filterSelected($scope.incidents);
+      if (!ids.length) return;
+      
+      Incident.removeSelected({ids: ids}, function() {
         flash.setNotice('Incidents were successfully deleted.');
         $rootScope.$state.go('incidents', {}, { reload: true });
       }, function() {
-        flash.setAlertNow('Incident failed to be deleted.');
+        flash.setAlertNow('Incidents failed to be deleted.');
       });
     };
 
