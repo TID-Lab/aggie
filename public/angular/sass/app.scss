@@ -86,6 +86,15 @@ a {
   line-height: 1;
   margin: 0;
   padding: 8px 0;
+  font-weight: normal;
+
+  .nav-bar-number {
+    font-size: 18px;
+  }
+  .nav-bar-label {
+    font-size: 12px;
+    margin-right: 10px;  
+  }
 }
 
 .nav li.user {
