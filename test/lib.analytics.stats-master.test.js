@@ -7,7 +7,7 @@ var Incident = require('../models/incident');
 var _ = require('underscore');
 var async = require('async');
 
-describe('Stats master', function() {
+describe('StatsMaster', function() {
   function createReports(done) {
     Report.create([
       {storedAt: new Date(), content: 'one', flagged: true},
