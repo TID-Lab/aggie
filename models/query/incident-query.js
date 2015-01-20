@@ -10,7 +10,7 @@ var IncidentQuery = function(options) {
   this.locationName = options.locationName;
   this.assignedTo = options.assignedTo;
   this.status = options.status;
-  this.verified = options.verified;
+  this.veracity = options.veracity;
   this.event = 'incidents';
 };
 

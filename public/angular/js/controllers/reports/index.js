@@ -51,13 +51,11 @@ angular.module('Aggie')
         Socket.on('reports', $scope.handleNewReports);
       }
 
-      Socket.on('reportStatusChanged', $scope.updateReportStatus);
-
       // make links clickable
       $scope.reports.forEach(linkify);
     };
 
-    var linkify = function (report) {
+    var linkify = function(report) {
       report.content = Autolinker.link(report.content);
       return report;
     };
@@ -120,10 +118,10 @@ angular.module('Aggie')
       $scope.newReports.addMany(uniqueReports);
     };
 
-    $scope.updateReportStatus = function(updatedReport) {
-      if (!(updatedReport._id in $scope.reportsById)) { return }
-      $scope.reportsById[updatedReport._id].status = updatedReport.status;
-    };
+    $scope.unlinkIncident = function(report) {
+      report._incident = '';
+      Report.update({id: report._id}, report);
+    }
 
     $scope.displayNewReports = function() {
       var reports = $scope.newReports.toArray();
@@ -141,12 +139,11 @@ angular.module('Aggie')
       $scope.search({ author: null });
     };
 
-    $scope.noFilters = function () {
+    $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
         $scope.searchParams.sourceId === null &&
-        $scope.searchParams.status === null &&
-        $scope.searchParams.sourceType === null &&
+        $scope.searchParams.media === null &&
         $scope.searchParams.incidentId === null &&
         $scope.searchParams.author === null;
     };
@@ -156,8 +153,7 @@ angular.module('Aggie')
         before: null,
         after: null,
         sourceId: null,
-        status: null,
-        sourceType: null,
+        media: null,
         incidentId: null,
         author: null
       });
@@ -180,26 +176,36 @@ angular.module('Aggie')
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
         search($scope.currentPage - 1);
-      };
-    };
-
-    $scope.isRelevant = function(report) {
-      return report.status == 'relevant';
-    };
-
-    $scope.isIrrelevant = function(report) {
-      return report.status == 'irrelevant';
+      }
     };
 
     $scope.isUnassigned = function(report) {
       return !this.isRelevant(report) && !this.isIrrelevant(report);
     };
 
+    $scope.isFlagged = function(report) {
+      return report.flagged;
+    };
+
+    $scope.isRead = function(report) {
+      return report.read;
+    }
+
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
+    };
+
+    $scope.toggleFlagged = function(report) {
+      report.flagged = !report.flagged;
+      
+      if (report.flagged) {
+        report.read = report.flagged;
+      }
+
+      $scope.saveReport(report);
     };
 
     $scope.viewReport = function(event, report) {
@@ -210,8 +216,8 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.type] !== -1) {
-        return source.type + '-source';
+      if (source && $scope.sourceTypes[source.media] !== -1) {
+        return source.media + '-source';
       } else {
         return 'unknown-source';
       }
