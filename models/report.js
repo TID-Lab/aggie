@@ -28,6 +28,12 @@ schema.plugin(textSearch);
 // Add a text index to the `content` field
 schema.index({content: 'text'});
 
+// add indexes to fields used in querying
+schema.index({storedAt: -1});
+schema.index({_incident: 1});
+schema.index({_media: 1});
+schema.index({_source: 1});
+
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
