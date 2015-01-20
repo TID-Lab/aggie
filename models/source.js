@@ -13,7 +13,7 @@ require('../lib/error');
 var EVENTS_TO_RETURN = 50;
 
 var sourceSchema = new mongoose.Schema({
-  type: String,
+  media: String,
   nickname: {type: String, required: true, validate: validate('max', 20)},
   resource_id: String,
   url: {type: String, validate: validate({passIfEmpty: true}, 'isUrl')},
@@ -25,16 +25,16 @@ var sourceSchema = new mongoose.Schema({
 });
 
 sourceSchema.pre('save', function(next) {
-  // Do not allow changing type
-  if (!this.isNew && this.isModified('type')) return next(new Error.Validation('source_type_change_not_allowed'));
+  // Do not allow changing media
+  if (!this.isNew && this.isModified('media')) return next(new Error.Validation('source_media_change_not_allowed'));
   // Notify when changing error count
   if (!this.isNew && this.isModified('unreadErrorCount')) {
     this._sourceErrorCountUpdated = true;
   }
 
   // Only allow a single Twitter source
-  if (this.isNew && this.type === 'twitter') {
-    Source.findOne({type: 'twitter'}, function(err, source) {
+  if (this.isNew && this.media === 'twitter') {
+    Source.findOne({media: 'twitter'}, function(err, source) {
       if (source) return next(new Error.Validation('only_one_twitter_allowed'));
       else next();
     });

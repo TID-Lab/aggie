@@ -15,6 +15,7 @@
     "bcrypt-nodejs": "0.0.3",
     "connect-mongo": "~0.4.0",
     "connect-roles": "~3.0.3",
+    "dateformat": "~1.0.11",
     "email": "~0.2.6",
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
@@ -27,8 +28,10 @@
     "gulp-watchify": "0.2.0",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
+    "migrate": "^0.2.0",
     "moment": "~2.8.4",
     "mongoose": "~3.8.7",
+    "mongoose-auto-increment": "^3.2.0",
     "mongoose-text-search": "0.0.2",
     "mongoose-validator": "~0.2.2",
     "nconf": "~0.7.1",
@@ -48,7 +51,9 @@
     "vinyl-source-stream": "~0.1.1",
     "winston": "~0.8.3",
     "winston-amazon-ses": "~0.1.4",
-    "dateformat": "~1.0.11"
+    "dateformat": "~1.0.11",
+    "strformat": "0.0.3",
+    "ejs": "^2.0.8"
   },
   "devDependencies": {
     "chai": "~1.9.0",

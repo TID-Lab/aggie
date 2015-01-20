@@ -49,6 +49,8 @@ Contact mikeb@cc.gatech.edu for more information.
 1. Start Mongo DB.
 1. Run `npm install` from the project directory (This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates angular application.)
 1. Run `sudo npm install -g gulp mocha` (This installs gulp and mocha globally so they can be run from command line for testing.)
+1. Run `npm install -g migrate` (this install node-migrate globally)
+1. To run migrations run `migrate`. 
 1. To run tests, run `npm test`.
 1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To start server, run `npm start`.
