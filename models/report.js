@@ -77,7 +77,7 @@ Report.queryReports = function(query, page, callback) {
   // Determine author filter
   if (query.author) {
     query.filter.author = {};
-    query.filter.author.$in = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort();;
+    query.filter.author.$in = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort();
   }
 
   // Return only newer results

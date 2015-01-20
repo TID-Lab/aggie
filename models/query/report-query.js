@@ -39,11 +39,6 @@ ReportQuery.prototype.normalize = function() {
     }).sort().join(' ');
   }
 
-  if (query.author) {
-    // Sort all authors them alphabetically
-    query.author = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort();
-  }
-
   return query;
 };
 
