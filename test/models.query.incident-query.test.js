@@ -12,17 +12,17 @@ describe('Incident query attributes', function() {
     });
     Incident.remove(function(err) {
       if (err) return done(err);
-      Incident.create({title: 'The quick brown fox', verified: true, status: 'new'});
-      Incident.create({title: 'The slow white fox', verified: true, status: 'alert'});
-      Incident.create({title: 'The quick brown chicken', verified: false, status: 'working'});
-      Incident.create({title: 'The brown quick fox', verified: false, status: 'closed'});
+      Incident.create({title: 'The quick brown fox', veracity: true, status: 'new'});
+      Incident.create({title: 'The slow white fox', veracity: true, status: 'alert'});
+      Incident.create({title: 'The quick brown chicken', veracity: false, status: 'working'});
+      Incident.create({title: 'The brown quick fox', veracity: false, status: 'closed'});
       done();
     });
   });
 
   it('should normalize query', function() {
     var normalized = query.normalize();
-    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'status', 'verified']);
+    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'status', 'veracity']);
     expect(normalized.title).to.equal('quick brown');
   });
 
@@ -51,16 +51,16 @@ describe('Incident query attributes', function() {
     });
   });
 
-  it('should query by verified value', function(done) {
-    (new IncidentQuery({verified: true})).run(function(err, incidents) {
+  it('should query by veracity value', function(done) {
+    (new IncidentQuery({veracity: true})).run(function(err, incidents) {
       if (err) return done(err);
       expect(incidents).to.have.keys(['total', 'results']);
       expect(incidents.total).to.equal(2);
       expect(incidents.results).to.be.an.instanceof(Array);
       expect(incidents.results).to.have.length(2);
-      expect(incidents.results[0].verified).to.be.true;
+      expect(incidents.results[0].veracity).to.be.true;
       expect(incidents.results[0].title).to.contain('The quick brown fox');
-      expect(incidents.results[1].verified).to.be.true;
+      expect(incidents.results[1].veracity).to.be.true;
       expect(incidents.results[1].title).to.contain('The slow white fox');
       done();
     });
@@ -80,16 +80,16 @@ describe('Incident query attributes', function() {
   });
 
   it('should query by multiple properties', function(done) {
-    (new IncidentQuery({title: 'quick', verified: false})).run(function(err, incidents) {
+    (new IncidentQuery({title: 'quick', veracity: false})).run(function(err, incidents) {
       if (err) return done(err);
       expect(incidents).to.have.keys(['total', 'results']);
       expect(incidents.total).to.equal(2);
       expect(incidents.results).to.be.an.instanceof(Array);
       expect(incidents.results).to.have.length(2);
       expect(incidents.results[0].title).to.contain('quick');
-      expect(incidents.results[0].verified).to.be.false;
+      expect(incidents.results[0].veracity).to.be.false;
       expect(incidents.results[1].title).to.contain('quick');
-      expect(incidents.results[1].verified).to.be.false;
+      expect(incidents.results[1].veracity).to.be.false;
       done();
     });
   });

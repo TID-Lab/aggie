@@ -28,7 +28,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&sourceType&incidentId',
+      url: '/reports?keywords&page&before&after&sourceId&status&sourceType&incidentId&author',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -42,7 +42,8 @@ angular.module('Aggie')
             sourceId: params.sourceId,
             sourceType: params.sourceType,
             incidentId: params.incidentId,
-            status: params.status
+            status: params.status,
+            author: params.author
           }).$promise;
         }],
         sources: ['Source', function(Source) {
@@ -57,11 +58,27 @@ angular.module('Aggie')
     $stateProvider.state('report', {
       url: '/reports/:id',
       templateUrl: '/templates/reports/show.html',
-      controller: 'ReportsShowController'
+      controller: 'ReportsShowController',
+      resolve: {
+        data: ['$stateParams', '$q', 'Report', 'Source', function($stateParams, $q, Report, Source) {
+          var deferred = $q.defer();
+          Report.get({ id: $stateParams.id }, function(report) {
+            report.content = Autolinker.link(report.content);
+            var data = { report: report };
+            
+            Source.get({ id: report._source }, function(source) {
+              data.source = source;
+              deferred.resolve(data);
+            });
+          });
+
+          return deferred.promise;
+        }]
+      }
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&verified',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -73,7 +90,7 @@ angular.module('Aggie')
             locationName: params.locationName,
             assignedTo: params.assignedTo,
             status: params.status,
-            verified: params.verified
+            veracity: params.veracity
           }).$promise;
         }],
         users: ['User', function(User) {

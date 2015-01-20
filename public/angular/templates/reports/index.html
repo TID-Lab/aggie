@@ -13,6 +13,18 @@
         </div>
       </div>
     </div>
+    <div ng-hide="noFilters()">
+      <button type="submit" class="btn" ng-click="clearFilters()">Clear Filters</button>
+    </div>
+    <div class="filter author-filter">
+      <div class="input-group">
+        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="Enter author">
+        <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+        </div>
+      </div>
+    </div>
     <div class="filter status-filter">
       <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
         <option value="">Status</option>
@@ -20,7 +32,7 @@
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
-        <option value="">Source Type</option>
+        <option value="">Source Media</option>
       </select>
     </div>
     <div class="filter source-type-filter">
