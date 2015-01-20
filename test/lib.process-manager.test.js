@@ -71,6 +71,7 @@ describe('Process manager', function() {
         .get('/api/v1/report')
         .expect(200)
         .end(function(err, res) {
+          console.log('res: ', res);
           if (err) return done(err);
           process.nextTick(function() {
             callback(res.body)
@@ -91,7 +92,7 @@ describe('Process manager', function() {
     };
     var toggleFetching = function(state, callback) {
       request('http://localhost:3000')
-        .put('/api/v1/fetching/' + state)
+        .put('/api/v1/settings/fetching/' + state)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

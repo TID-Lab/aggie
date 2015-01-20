@@ -6,7 +6,7 @@ var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Source = require('../models/source');
 var Report = require('../models/report');
 var Incident = require('../models/incident');
-var fetchingController = require('../lib/api/v1/fetching-controller');
+var settingsController = require('../lib/api/v1/settings-controller');
 var request = require('supertest');
 
 var client;
@@ -88,8 +88,8 @@ describe('Socket handler', function() {
       expect(status.fetching).to.be.true;
       done();
     });
-    request(fetchingController)
-      .put('/api/v1/fetching/on')
+    request(settingsController)
+      .put('/api/v1/settings/fetching/on')
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
