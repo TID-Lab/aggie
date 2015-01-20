@@ -77,16 +77,16 @@ angular.module('Aggie')
     $scope._showErrors = false
 
     $scope.sourceClass = function(source) {
-      if (source && sourceTypes.indexOf(source.type) !== -1) {
-        return source.type + '-source';
+      if (source && sourceTypes.indexOf(source.media) !== -1) {
+        return source.media + '-source';
       } else {
         return 'unknown-source';
       }
     };
 
-    $scope.$watch('source.type', function(sourceType) {
+    $scope.$watch('source.media', function(sourceMedia) {
       var url = $scope.source.url;
-      if (sourceType == 'facebook') {
+      if (sourceMedia == 'facebook') {
         if (!url || url == '') {
           url = 'https://www.facebook.com/';
         }
@@ -98,19 +98,19 @@ angular.module('Aggie')
       $scope.source.url = url;
     });
 
-    $scope.validSourceType = function(formSource) {
-      if (formSource.type != 'twitter') { return true }
+    $scope.validSourceMedia = function(formSource) {
+      if (formSource.media != 'twitter') { return true }
       var valid = true;
       $scope.sources.forEach(function(source) {
-        valid = valid && (source._id == formSource._id || source.type != 'twitter')
+        valid = valid && (source._id == formSource._id || source.media != 'twitter')
       });
       return valid;
     };
 
-    $scope.$watch('source.type', function(newType, oldType) {
-      if (newType == 'twitter') {
+    $scope.$watch('source.media', function(newMedia, oldMedia) {
+      if (newMedia == 'twitter') {
         $scope.source.nickname = 'Twitter Search';
-      } else if (oldType == 'twitter') {
+      } else if (oldMedia == 'twitter') {
         $scope.source.nickname = '';
       }
     });
