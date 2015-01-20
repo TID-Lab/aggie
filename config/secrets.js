@@ -27,7 +27,6 @@ module.exports.get = function() {
 // update fetching flag
 module.exports.updateFetching = function(flag, cb) {
   cb = cb || function() {};
-
   nconf.set('fetching', S(flag).toBoolean());
   nconf.save(function(err){
     return cb(err);
