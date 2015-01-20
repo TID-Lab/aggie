@@ -23,11 +23,6 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(incident) {
-
-        // need userId for clickable link to profile page
-        incident.assignedToId = incident.assignedTo._id;
-        incident.assignedTo = incident.assignedTo.name;
-
         Incident.create(incident, function(inc) {
           flash.setNotice('Incident was successfully created.');
           $scope.incidents[inc._id] = inc;
@@ -53,11 +48,6 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(incident) {
-
-        // need userId for clickable link to profile page
-        incident.assignedToId = incident.assignedTo._id;
-        incident.assignedTo = incident.assignedTo.name;
-
         Incident.update({ id: incident._id }, incident, function(response) {
           flash.setNotice('Incident was successfully updated.');
           if ($state.is('incidents')) {
@@ -88,14 +78,9 @@ angular.module('Aggie')
   'incident',
   function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident) {
     $scope.incident = angular.copy(incident);
-    $scope.users = users.map(function(u) {
-      return {
-        name: u.username,
-        _id: u._id
-      };
-    });
     $scope.veracity = veracityOptions;
     $scope.showErrors = false;
+    $scope.users = users;
 
     $scope.save = function(form) {
       if (form.$invalid) {

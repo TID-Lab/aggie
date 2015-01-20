@@ -59,7 +59,7 @@
           <div class="form-group">
             <label for="user" class="col-lg-2 control-label">Assign To</label>
             <div class="col-lg-9">
-              <select id="user" name="user" ng-model="incident.assignedTo" ng-options="user.name for user in users" class="form-control">
+              <select id="user" name="user" ng-model="incident._assignedTo" ng-options="user._id as user.username for user in users" class="form-control">
                 <option value="">Select User</option>
               </select>
               <div class="has-error" ng-show="showErrors">

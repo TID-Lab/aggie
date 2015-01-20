@@ -14,7 +14,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('profile', {
-      url: '/profile/:userId',
+      url: '/profile/:userName',
       templateUrl: '/templates/profile.html',
       controller: 'UsersProfileController',
       resolve: {

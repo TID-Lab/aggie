@@ -5,6 +5,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var Schema = mongoose.Schema;
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
@@ -18,8 +19,7 @@ var schema = new mongoose.Schema({
   longitude: Number,
   updatedAt: Date,
   storedAt: Date,
-  assignedTo: String,
-  assignedToId: String,
+  _assignedTo: { type: Schema.Types.ObjectId, ref: 'User' },
   status: {type: String, default: 'new', required: true},
   veracity: {type: Boolean, default: null },
 

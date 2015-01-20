@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 angular.module('Aggie')
 
 .controller('UsersProfileController', [
@@ -10,14 +12,11 @@ angular.module('Aggie')
     $scope.users = users;
 
     function init () {
-      if (!stateParams["userId"] || stateParams["userId"] == "") {
-        $scope.user = $rootScope.currentUser;
-      } else {
-        for (var x = 0; x < $scope.users.length; x++) {
-          if ($scope.users[x]._id === stateParams.userId) {
-            $scope.user = $scope.users[x];
-          }
-        }
+      if ($rootScope.currentUser) {
+        $scope.currentUser = $rootScope.currentUser;
+        $scope.user = _.find($scope.users, function (u) {
+          return u.username === stateParams.userName;
+        });
       }
     }
 

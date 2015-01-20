@@ -50,7 +50,7 @@ angular.module('Aggie')
     };
 
     $scope.view = function (user) {
-      $state.go('profile', { userId: user._id });
+      $state.go('profile', { userName: user.username });
     };
   }
 ])

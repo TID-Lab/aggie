@@ -173,10 +173,8 @@ angular.module('Aggie')
       });
     };
 
-    $scope.viewIncident = function(event, incident) {
-      if (angular.element(event.target)[0].tagName == 'TD') {
-        $state.go('incident', { id: incident._id });
-      }
+    $scope.viewIncident = function(incident) {
+      $state.go('incident', { id: incident._id });
     };
 
     $scope.delete = function(incident) {
@@ -188,8 +186,8 @@ angular.module('Aggie')
       });
     };
 
-    $scope.viewProfile = function (id) {
-      $state.go('profile', {userId: id});
+    $scope.viewProfile = function (user) {
+      $state.go('profile', {userName: user.username});
     };
 
     (fireDigestEveryThirtySeconds = function() {

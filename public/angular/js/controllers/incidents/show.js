@@ -117,8 +117,8 @@ angular.module('Aggie')
       $state.go('incident', { id: $scope.incident._id }, { reload: true });
     };
 
-    $scope.viewProfile = function (id) {
-      $state.go('profile', {userId: id});
+    $scope.viewProfile = function (user) {
+      $state.go('profile', {userName: user.username});
     };
 
     init();

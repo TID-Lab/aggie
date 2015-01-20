@@ -38,10 +38,8 @@ angular.module('Aggie')
       });
     };
 
-    // needs special behavior, because state /profile/ is satisfied with
-    // /profile/:userId of any user
-    $scope.ownProfile = function () {
-      $state.go('profile', {userId: $rootScope.currentUser._id});
+    $scope.viewProfile = function (user) {
+      $state.go('profile', {userName: user.username});
     };
 
     $rootScope.$watch('currentUser', init);
