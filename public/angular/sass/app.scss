@@ -2,6 +2,7 @@ $navbar-green: #009446;
 $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
+$gray: #aaaaaa;
 
 @import 'forms';
 @import 'modals';
@@ -28,6 +29,18 @@ a {
     color: lighten($link-blue, 10%);
     text-decoration: underline;
   }
+}
+
+.padding {
+  padding: 10px;
+}
+
+.padding-sm {
+  padding: 5px;
+}
+
+.margin-right {
+  margin-right: 10px;
 }
 
 .navbar-wrapper {
@@ -152,12 +165,24 @@ a {
   }
 }
 
-.zero-errors {
+.zero-errors, .green, .text-green {
   color: green;
 }
 
-.multiple-errors {
+.multiple-errors, .text-red {
   color: red;
+}
+
+.text-blue {
+  color: $link-blue;
+}
+
+.text-gray {
+  color: $gray;
+}
+
+.bg-gray {
+  background-color: #eee;
 }
 
 .fetching {
