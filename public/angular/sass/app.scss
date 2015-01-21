@@ -26,9 +26,11 @@ a {
   margin-bottom: 21px;
 }
 
-.navbar-brand {
-  margin-top: 5px;
+/* Adding all this context so we override the default bootstrap -15 left margin */
+.navbar .container .navbar-brand {
+  margin-top: 7px;
   margin-right: 20px;
+  margin-left: 0;
   background-image: url(../images/logo-v1.png);
   background-repeat: no-repeat;
   width: 104px;
