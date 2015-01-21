@@ -3,6 +3,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var Schema = mongoose.Schema;
 var textSearch = require('mongoose-text-search');
 var listenTo = require('mongoose-listento');
 var Source = require('./source');
@@ -23,7 +24,7 @@ var schema = new Schema({
   _source: {type: String, ref: 'Source', index: true},
   _media: {type: String, index: true},
   _sourceNickname: String,
-  _incident: {type: String, ref: 'Incident', index: true},
+  _incident: {type: Schema.ObjectId, ref: 'Incident', index: true},
   checkedOutBy : {type: Schema.ObjectId, ref: 'User', index: true},
   checkedOutAt: {type: Date, index: true}
 });
@@ -142,7 +143,7 @@ Report.queryReports = function(query, page, callback) {
 };
 
 Report.findSortedPage = function(filter, page, callback) {
-  Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
+  Report.findPage(filter, page, {sort: '-storedAt', populate: '_incident', populateKeys: 'title'}, function(err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });

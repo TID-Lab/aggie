@@ -20,6 +20,12 @@
       <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
     </tr>
     <tr>
+      <td class="detail-key">Media</td>
+      <td class="detail-value">
+        <span ng-show="source">{{ source.media }}</span>
+      </td>
+    </tr>
+    <tr>
       <td class="detail-key">Source</td>
       <td class="detail-value">
         <span ng-show="source">{{ source.nickname }}</span>
@@ -35,7 +41,23 @@
     </tr>
     <tr>
       <td class="detail-key">Content</td>
-      <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
+      <td class="detail-value" ng-bind-html="report.content">{{ r.content}}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Incident</td>
+
+      <td class="incident relative">
+        <a ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">
+          <strong ng-if="report._incident">{{ report._incident.title | strLimit: 40 }}</strong>
+          <strong ng-if="!report._incident">Add</strong>
+        </a>
+        <a class="remove" ng-show="report._incident" ng-click="unlinkIncident(rport)">x</a>
+      </td>
+
+    </tr>
+    <tr>
+      <td class="detail-key">Flagged</td>
+      <td class="detail-value" >{{ report.flagged ? "Yes" : "No"}}</td>
     </tr>
   </tbody>
 </table>
