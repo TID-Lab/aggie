@@ -12,7 +12,10 @@
       transition: background 0.25s ease-in-out;
       > td {
         border: solid 1px #e4e4e4;
-        &.status,
+        font-weight: normal;
+        &.status {
+          vertical-align: middle;
+        }
         &.incident {
           vertical-align: middle;
           min-width: 150px;
@@ -42,9 +45,6 @@
 }
 
 tbody {
-  tr.item {
-    background-color: #fff;
-  }
   .relevant {
     background-color: #ecf6f8;
     &:hover {
@@ -63,9 +63,6 @@ tbody {
     }
   }
 
-  tr.read {
-    background-color: #eee;
-  }
   tr.flagged {
     background-color: #FFDDDD;
     &:hover {
@@ -171,13 +168,14 @@ table, .table {
     &.vertical-middle {
       vertical-align: middle;
     }
-    
+
     &.relative {
       position: relative;
     }
 
     .fa {
       font-size: 16px;
+      padding: 3px;
     }
 
   }
@@ -224,6 +222,8 @@ table, .table {
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
+  padding: 10px;
+  background-color: #bfbfbf;
   font-size: 12px;
   display: table;
   label {
@@ -268,7 +268,7 @@ table, .table {
 }
 
 .table-actions {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .table-filters,
@@ -279,10 +279,18 @@ table, .table {
     padding: 4px 8px;
     font-size: 12px;
   }
+
+  .checkbox-btn {
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 4px 8px 5px 8px;
+
+  }
+
 }
 
 .actions {
-  width: 10%;
+  width: 50px;
   text-align: center;
 }
 
@@ -293,9 +301,7 @@ table, .table {
 td.content {
   height: 100% !important;
   max-width: 400px;
-
   a {
-
     color: #000;
     height: 100%;
     width: 100%;
