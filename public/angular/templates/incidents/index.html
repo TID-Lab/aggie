@@ -66,7 +66,7 @@
   <thead>
     <tr>
       <th></th>
-      <th class="compact">ID#</th>  
+      <th class="compact">ID#</th>
       <th class="compact">Title</th>
       <th class="compact">Location</th>
       <th class="compact">Assigned To</th>
@@ -80,7 +80,7 @@
   <tbody>
     <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }">
       <td><input ng-model="i.selected" type="checkbox" ng-model="i._id" /></td>
-      <td class="compact content text-center">
+      <td class="compact content">
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>
       <td class="compact">
@@ -89,7 +89,7 @@
       </td>
       <td class="compact content">
         <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>
-        <span ng-if="i.locationName">{{ i.locationName }}</span> 
+        <span ng-if="i.locationName">{{ i.locationName }}</span>
         <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
       <td class="compact"><a href="profile/{{i._assignedTo._id}}"><strong>{{ i.assignedTo }}</strong></a></td>

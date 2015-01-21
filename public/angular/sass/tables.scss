@@ -45,9 +45,6 @@
 }
 
 tbody {
-  tr.item {
-    background-color: #fff;
-  }
   .relevant {
     background-color: #ecf6f8;
     &:hover {
@@ -171,7 +168,7 @@ table, .table {
     &.vertical-middle {
       vertical-align: middle;
     }
-    
+
     &.relative {
       position: relative;
     }
