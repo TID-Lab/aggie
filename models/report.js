@@ -44,7 +44,7 @@ schema.pre('save', function(next) {
 
   } else {
     // Capture updates before saving report
-    if (this.isModified('_incident')) { 
+    if (this.isModified('_incident')) {
       this._incidentWasModified = true;
     }
 
@@ -55,7 +55,7 @@ schema.pre('save', function(next) {
 // Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:save', {_id: this._id.toString()});
-  if (this._incidentWasModified) { 
+  if (this._incidentWasModified) {
     schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
     schema.emit('change:incident', this._prevIncident, this._incident);
   }
@@ -90,7 +90,7 @@ Report.queryReports = function(query, page, callback) {
   // Determine author filter
   if (query.author) {
     query.filter.author = {};
-    query.filter.author.$in = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort().map(function(author){
+  query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
       // Use case-insensitive matching with anchors so mongo index is still used.
       return new RegExp('^' + author + '$', 'i');
     });
