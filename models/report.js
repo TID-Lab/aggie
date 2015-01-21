@@ -81,11 +81,20 @@ Report.queryReports = function(query, page, callback) {
     if (query.after) query.filter.storedAt.$gte = query.after;
     if (query.before) query.filter.storedAt.$lte = query.before;
   }
-  
+
   // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
   if (query.sourceType) query.filter._media = query.sourceType;
   if (query.incidentId) query.filter._incident = query.incidentId;
+
+  // Determine author filter
+  if (query.author) {
+    query.filter.author = {};
+    query.filter.author.$in = query.author.replace(/(,|\s)+/g, ' ').split(' ').sort().map(function(author){
+      // Use case-insensitive matching with anchors so mongo index is still used.
+      return new RegExp('^' + author + '$', 'i');
+    });
+  }
 
   // Return only newer results
   if (query.since) {

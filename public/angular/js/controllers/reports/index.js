@@ -135,12 +135,17 @@ angular.module('Aggie')
       $scope.search({ page: null, keywords: null });
     };
 
+    $scope.clearAuthor = function() {
+      $scope.search({ author: null });
+    };
+
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
         $scope.searchParams.sourceId === null &&
         $scope.searchParams.media === null &&
-        $scope.searchParams.incidentId === null;
+        $scope.searchParams.incidentId === null &&
+        $scope.searchParams.author === null;
     };
 
     $scope.clearFilters = function() {
@@ -149,7 +154,8 @@ angular.module('Aggie')
         after: null,
         sourceId: null,
         media: null,
-        incidentId: null
+        incidentId: null,
+        author: null
       });
     };
 
