@@ -8,8 +8,9 @@ var listenTo = require('mongoose-listento');
 var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
+var Schema = mongoose.Schema;
 
-var schema = new mongoose.Schema({
+var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: Date,
@@ -23,7 +24,7 @@ var schema = new mongoose.Schema({
   _sourceNickname: String,
   _incident: {type: String, ref: 'Incident'},
   checkedOutBy : { type: Schema.ObjectId, ref: 'User' },
-  checkedOutAt Date
+  checkedOutAt: Date
 });
 
 // Give the report schema text search capabilities
@@ -130,5 +131,15 @@ Report.findSortedPage = function(filter, page, callback) {
     callback(null, reports);
   });
 };
+
+Report.checkoutBatch = function(userId, callback) {
+  // TODO: query for next N batch items
+  callback();
+}
+
+Report.releaseBatch = function(callback) {
+  // TODO: release batch items older than 5 minutes
+  callback();
+}
 
 module.exports = Report;

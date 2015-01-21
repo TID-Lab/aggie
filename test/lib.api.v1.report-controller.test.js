@@ -6,20 +6,25 @@ require('../models/incident');
 var reportController = require('../lib/api/v1/report-controller')();
 var Report = require('../models/report');
 var Source = require('../models/source');
+var User = require('../models/user');
+var async = require('async');
 var source;
+var user;
 
 describe('Report controller', function() {
-
-  // Clearing the db should eventually move to a global afterEach, but for now it's here else we'd break existing tests.
-  beforeEach(function(done){
-    Report.remove({}, function(){
-      Source.remove({}, function(){
-        Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function(err, src){
-          source = src;
-          done();
-        });
-      });
+  function createSource(done) {
+    Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function (err, src) {
+      source = src;
+      done();
     });
+  }
+
+  beforeEach(function(done) {
+    createSource(done);
+  });
+
+  afterEach(function(done) {
+    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {})], done);
   });
 
   describe('GET /api/v1/report', function() {
@@ -122,4 +127,33 @@ describe('Report controller', function() {
     });
   });
 
+  describe('GET /api/v1/report/batch/_id', function() {
+    function loadUser(done) {
+      User.findOne({}, function (err, u) {
+        user = u;
+        done();
+      });
+    }
+
+    function createReports(done) {
+      Report.create([
+        {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
+        {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id}
+      ], done);
+    }
+
+    beforeEach(function(done) {
+      async.series([loadUser, createReports], done);
+    });
+
+    it('should checkout batch', function(done) {
+      request(reportController)
+        .get('/api/v1/batch/'+ user.id)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          done();
+        });
+      });
+    });
 });
