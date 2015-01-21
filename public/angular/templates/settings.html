@@ -1,7 +1,6 @@
 <div class="bs-component">
   <ul class="breadcrumb">
     <li class="active">Settings</li>
-    <li><a ui-sref="users">Users</a></li>
   </ul>
 </div>
 
@@ -12,13 +11,12 @@
         <td class="col-sm-3">
           <label class="settings-label">Fetching</label>
         </td>
-        <td class="text-center">
+        <td>
           <div data-toggle="buttons">
             <label ng-click="toggle(false)"
                    class="toggle-item ng-class:{'active':on===false}">
               Off
-            </label>
-            <label ng-click="toggle(true)"
+            </label><label ng-click="toggle(true)"
                    class="toggle-item ng-class:{'active':on===true}">
               On
             </label>
