@@ -12,7 +12,7 @@ function timeAgo(miliseconds) {
 }
 
 function loadUser(done) {
-  User.findOne({}, function (err, u) {
+  User.findOne({}, function(err, u) {
     user = u;
     done();
   });
@@ -30,18 +30,18 @@ function createReport(done) {
 }
 
 describe('Report', function() {
-  beforeEach(function (done) {
+  beforeEach(function(done) {
     async.series([loadUser, createReport], done);
   });
 
-  afterEach(function (done) {
+  afterEach(function(done) {
     Report.remove({}, done);
   });
 
   it('should release a batch lock', function(done) {
-    async.series([Report.releaseBatch, Report.find.bind(Report, {})], function (err, result) {
+    async.series([Report.releaseBatch, Report.find.bind(Report, {})], function(err, result) {
       var reports = result[1];
-      reports.forEach(function (report) {
+      reports.forEach(function(report) {
         expect(report.checkedOutAt).not.exist;
         expect(report.checkedOutBy).not.exist;
       });
@@ -55,10 +55,10 @@ describe('Report', function() {
     async.series([
       Report.lockBatch.bind(Report, user._id, limit), 
       Report.find.bind(Report, {})
-    ], function (err, result) {
+    ], function(err, result) {
       var reports = result[1];
 
-      reports.forEach(function (report) {
+      reports.forEach(function(report) {
         if (report.read || report.content == 'five') {
           expect(report.checkedOutAt).not.exist;
           expect(report.checkedOutBy).not.exist;
@@ -77,18 +77,18 @@ describe('Report', function() {
     async.series([
       Report.lockBatch.bind(Report, user._id, 10), 
       Report.loadBatch.bind(Report, user._id, 10)
-    ], function (err, result) {
+    ], function(err, result) {
       var reports = result[1];
       expect(reports.length).to.eq(5);
       done();
     });
   });
 
-  it('should checkout new batch', function(done) {
-    Report.checkoutBatch(user._id, function (err, reports) {
+  it('should checkout a new batch', function(done) {
+    Report.checkoutBatch(user._id, function(err, reports) {
       expect(reports.length).to.eq(5);
       
-      reports.forEach(function (report) {
+      reports.forEach(function(report) {
         expect(report.checkedOutAt).to.exist;
         expect(report.checkedOutBy).to.exist;
       });
