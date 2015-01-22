@@ -82,20 +82,6 @@ describe('Socket handler', function() {
     Incident.create({title: 'The quick brown fox'});
   });
 
-  it('should receive updates from the global fetching status', function(done) {
-    client.once('fetchingStatusUpdate', function(status) {
-      expect(status).to.have.property('fetching');
-      expect(status.fetching).to.be.true;
-      done();
-    });
-    request(settingsController)
-      .put('/api/v1/settings/fetching/on')
-      .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-      });
-  });
-
   it('should stream a list of sources when a source changes', function(done) {
     client.once('sources', function(sources) {
       expect(sources).to.be.an.instanceof(Array);

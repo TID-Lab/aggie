@@ -71,7 +71,6 @@ describe('Process manager', function() {
         .get('/api/v1/report')
         .expect(200)
         .end(function(err, res) {
-          console.log('res: ', res);
           if (err) return done(err);
           process.nextTick(function() {
             callback(res.body)
