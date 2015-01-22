@@ -2,6 +2,7 @@ $navbar-green: #009446;
 $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
+$gray: #aaaaaa;
 
 @import 'forms';
 @import 'modals';
@@ -30,14 +31,31 @@ a {
   }
 }
 
+.padding {
+  padding: 10px;
+}
+
+.padding-sm {
+  padding: 5px;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
 .navbar-wrapper {
   margin-bottom: 21px;
 }
 
-.navbar-brand {
-  text-transform: uppercase;
-  text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
-  line-height: 19px;
+/* Adding all this context so we override the default bootstrap -15 left margin */
+.navbar .container .navbar-brand {
+  margin-top: 7px;
+  margin-right: 20px;
+  margin-left: 0;
+  background-image: url(../images/logo-v1.png);
+  background-repeat: no-repeat;
+  width: 104px;
+  height: 28px;
 }
 
 .navbar {
@@ -98,6 +116,15 @@ a {
   line-height: 1;
   margin: 0;
   padding: 8px 0;
+  font-weight: normal;
+
+  .nav-bar-number {
+    font-size: 18px;
+  }
+  .nav-bar-label {
+    font-size: 12px;
+    margin-right: 10px;  
+  }
 }
 
 .nav li.user {
@@ -164,12 +191,24 @@ a {
   }
 }
 
-.zero-errors {
+.zero-errors, .green, .text-green {
   color: green;
 }
 
-.multiple-errors {
+.multiple-errors, .text-red {
   color: red;
+}
+
+.text-blue {
+  color: $link-blue;
+}
+
+.text-gray {
+  color: $gray;
+}
+
+.bg-gray {
+  background-color: #eee;
 }
 
 .fetching {

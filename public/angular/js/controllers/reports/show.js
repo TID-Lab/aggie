@@ -8,7 +8,6 @@ angular.module('Aggie')
   function($scope, $stateParams, data, Report) {
     $scope.report = data.report;
     $scope.source = data.source;
-  
     $scope.markAsRead = function(report) {
       if (report.read) return;
       report.read = true;
