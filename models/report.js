@@ -8,7 +8,11 @@ var listenTo = require('mongoose-listento');
 var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
+var async = require('async');
+
 var Schema = mongoose.Schema;
+var ITEMS_PER_BATCH = 10; // 10 items per batch
+var BATCH_TIMEOUT = 5 * 60 * 1000 // 5 minutes
 
 var schema = new Schema({
   authoredAt: Date,
@@ -133,13 +137,57 @@ Report.findSortedPage = function(filter, page, callback) {
 };
 
 Report.checkoutBatch = function(userId, callback) {
-  // TODO: query for next N batch items
-  callback();
+  async.series([ 
+    this.releaseBatch, 
+    this.lockBatch.bind(this, userId, ITEMS_PER_BATCH),
+    this.loadBatch.bind(this, userId, ITEMS_PER_BATCH)
+  ], function (err, results) {
+    if (err) return callback(err);
+    callback(null, results[2]);
+  });
 }
 
+// release items in older batches
 Report.releaseBatch = function(callback) {
-  // TODO: release batch items older than 5 minutes
-  callback();
+  var conditions = { checkedOutAt: { $lt: timeAgo(BATCH_TIMEOUT) } };
+  var update = { checkedOutBy: null, checkedOutAt: null };
+
+  Report.update(conditions, update, { multi: true }, callback);
+}
+
+// lock a new batch for given user
+Report.lockBatch = function(userId, limit, callback) {
+  var conditions = {
+    checkedOutAt: null, 
+    checkedOutBy: null,
+    read: false
+  };
+
+  Report.find(conditions).limit(limit).exec(function(err, reports) {
+    if (err) return callback(err);
+    var ids = reports.map(function(report) { return report._id; });
+    var update = { checkedOutBy: userId, checkedOutAt: new Date() };
+
+    Report.update({ _id: { $in: ids } }, update, { multi: true }, callback);
+  });
+}
+
+// load a batch for user
+Report.loadBatch = function(userId, limit, callback) {
+  var conditions = {
+    checkedOutAt: { $ne: null }, 
+    checkedOutBy: userId
+  };
+
+  Report.find(conditions).limit(limit).exec(callback);
+}
+
+
+// helpers
+
+function timeAgo(miliseconds) {
+  var now = new Date();
+  return new Date(now.getTime() - miliseconds);
 }
 
 module.exports = Report;
