@@ -99,7 +99,7 @@ Report.queryReports = function(query, page, callback) {
   // Determine author filter
   if (query.author) {
     query.filter.author = {};
-  query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
+    query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
       // Use case-insensitive matching with anchors so mongo index is still used.
       return new RegExp('^' + author + '$', 'i');
     });
@@ -155,6 +155,14 @@ Report.releaseBatch = function(callback) {
   Report.update(conditions, update, { multi: true }, callback);
 }
 
+// cancel give batch
+Report.cancelBatch = function(userId, callback) {
+  var conditions = { checkedOutBy: userId };
+  var update = { checkedOutBy: null, checkedOutAt: null };
+  
+  Report.update(conditions, update, { multi: true }, callback);
+}
+
 // lock a new batch for given user
 Report.lockBatch = function(userId, limit, callback) {
   var conditions = {
@@ -163,11 +171,10 @@ Report.lockBatch = function(userId, limit, callback) {
     read: false
   };
 
-  Report.find(conditions).limit(limit).exec(function(err, reports) {
+  Report.find(conditions).sort({storedAt: -1}).limit(limit).exec(function(err, reports) {
     if (err) return callback(err);
     var ids = reports.map(function(report) { return report._id; });
     var update = { checkedOutBy: userId, checkedOutAt: new Date() };
-
     Report.update({ _id: { $in: ids } }, update, { multi: true }, callback);
   });
 }

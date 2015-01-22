@@ -148,7 +148,7 @@ describe('Report controller', function() {
 
     it('should checkout batch', function(done) {
       request(reportController)
-        .get('/api/v1/batch/'+ user.id)
+        .get('/api/v1/report/batch/'+ user.id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

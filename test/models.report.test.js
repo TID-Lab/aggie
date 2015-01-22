@@ -38,17 +38,6 @@ describe('Report', function() {
     Report.remove({}, done);
   });
 
-  it('should release a batch lock', function(done) {
-    async.series([Report.releaseBatch, Report.find.bind(Report, {})], function(err, result) {
-      var reports = result[1];
-      reports.forEach(function(report) {
-        expect(report.checkedOutAt).not.exist;
-        expect(report.checkedOutBy).not.exist;
-      });
-      done();
-    });
-  });
-
   it('should lock a batch', function(done) {
     var limit = 3;
 
@@ -69,6 +58,17 @@ describe('Report', function() {
         }
       });
 
+      done();
+    });
+  });
+
+  it('should release a batch lock', function(done) {
+    async.series([Report.releaseBatch, Report.find.bind(Report, {})], function(err, result) {
+      var reports = result[1];
+      reports.forEach(function(report) {
+        expect(report.checkedOutAt).not.exist;
+        expect(report.checkedOutBy).not.exist;
+      });
       done();
     });
   });
@@ -96,4 +96,12 @@ describe('Report', function() {
       done();
     });
   });
+
+  it('should cancel batch', function (done) {
+    Report.cancelBatch(user._id, function(err, num) {
+      expect(num).to.eq(1);
+      done();
+    });
+  });
+
 });
