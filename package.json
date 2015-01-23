@@ -53,7 +53,8 @@
     "winston-amazon-ses": "~0.1.4",
     "strformat": "0.0.3",
     "ejs": "^2.0.8",
-    "chance": "~0.7.1"
+    "chance": "~0.7.1",
+    "single-line-log": "~0.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.0",
