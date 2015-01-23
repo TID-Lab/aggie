@@ -3,6 +3,7 @@
 }
 
 .modal-header {
+
   .close {
     z-index: 1000;
     float: none;
@@ -22,7 +23,7 @@
 }
 
 .modal-content {
-  background-color: #e3e6e3;
+  background-color: #fff;
   font-size: 14px;
 }
 
@@ -31,5 +32,38 @@
   &:hover,
   &:focus {
     color: #000;
+  }
+}
+
+// Incident modals
+
+.report-to-existing {
+
+  .modal-lg {
+    width: 90%;
+  }
+
+  .modal-body {
+
+    p {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    div > p {
+      margin-bottom: 20px;
+    }
+
+    tbody tr {
+      transition: background 0.2s ease-in-out;
+
+      &.item:hover {
+        background-color: #eef3f7;
+      }
+    }
+  }
+
+  .modal-footer {
+    margin-top: 0;
   }
 }

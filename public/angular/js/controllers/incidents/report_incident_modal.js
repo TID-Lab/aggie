@@ -11,6 +11,8 @@ angular.module('Aggie')
   function($rootScope, $scope, $location, $modal, Incident, Report, flash) {
     $scope.setIncident = function(report) {
       var modalInstance = $modal.open({
+        windowClass: 'report-to-existing',
+        size: 'lg',
         controller: 'IncidentSelectModalInstanceController',
         templateUrl: 'templates/incidents/report_incident_modal.html',
         resolve: {
@@ -22,7 +24,6 @@ angular.module('Aggie')
           }
         }
       });
-
       modalInstance.result.then(function(report) {
         Report.update({id: report._id}, report, function(response) {
           flash.setNotice('Report was successfully added to incident.');
@@ -41,22 +42,12 @@ angular.module('Aggie')
   'incidents',
   'report',
   function($scope, $modalInstance, incidents, report) {
+    var report = angular.copy(report);
     $scope.incidents = incidents.results;
-    $scope.report = angular.copy(report);
-    $scope._showErrors = false
-
-    $scope.showErrors = function() {
-      return $scope._showErrors;
+    $scope.select = function (incident) {
+      report._incident = incident._id;
+      $modalInstance.close(report);
     };
-
-    $scope.save = function(form) {
-      if (form.$invalid) {
-        $scope._showErrors = true;
-        return;
-      }
-      $modalInstance.close($scope.report);
-    };
-
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
     };
