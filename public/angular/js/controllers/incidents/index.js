@@ -210,6 +210,10 @@ angular.module('Aggie')
       $timeout(fireDigestEveryThirtySeconds, 30 * 1000);
     })();
 
+    $scope.$on('$destroy', function() {
+      Socket.removeAllListeners('incidents');
+    });
+
     init();
   }
 ]);
