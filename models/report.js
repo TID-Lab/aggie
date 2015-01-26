@@ -166,7 +166,7 @@ Report.releaseBatch = function(callback) {
   Report.update(conditions, update, { multi: true }, callback);
 }
 
-// cancel give batch
+// cancel batch for given user
 Report.cancelBatch = function(userId, callback) {
   var conditions = { checkedOutBy: userId };
   var update = { checkedOutBy: null, checkedOutAt: null };
