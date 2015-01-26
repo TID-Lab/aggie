@@ -28,6 +28,7 @@ angular.module('Aggie')
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.sourceTypes = sourceTypes;
     $scope.statusOptions = statusOptions;
+    $scope.currentPath = $rootScope.$state.current.name 
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -106,6 +107,33 @@ angular.module('Aggie')
       } else {
         return items;
       }
+    }
+
+    var filterSelected = function(items) {
+      return items.reduce(function(memo, item) { 
+        if (item.selected) memo.push(item);
+        return memo;
+      }, []);
+    }
+
+    var markAsRead = function(items) {
+      return items.map(function(item) {
+        item.read = true;
+        return item;
+      });
+    }
+
+    var flag = function(items) {
+      return items.map(function(item) {
+        item.flagged = true;
+        return item;
+      });
+    }
+
+    var getIds = function(items) {
+      return items.map(function(item) {
+        return item._id;
+      });
     }
 
     $scope.handleNewReports = function(reports) {
@@ -206,6 +234,72 @@ angular.module('Aggie')
       }
 
       $scope.saveReport(report);
+    };
+
+    $scope.markSelectedAsRead = function() {
+      var items = filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(markAsRead(items));
+      Report.markAsRead({ids: ids});
+    };
+
+    $scope.grabBatch = function() {
+      var userId = $scope.currentUser._id;
+
+      Report.grabBatch({id: userId}, function (resource) {
+        // no more results found
+        if (!resource.results || !resource.results.length) {
+          var message = "No more unread reports found.";
+          
+          if ($scope.currentPath == 'batch') {
+            flash.setNotice(message);
+            $rootScope.$state.go('reports', {});
+          }
+          else {
+            flash.setNoticeNow(message);
+          }
+
+          return;
+        }
+
+        Report.resource = resource;
+        $rootScope.$state.go('batch', {id: $scope.currentUser._id}, {reload: true });
+      });
+    };
+
+    $scope.cancelBatch = function() {
+      Report.cancelBatch({id: $scope.currentUser._id}, function() {
+        $rootScope.$state.go('reports', {});
+      });
+    };
+
+    $scope.markAllReadAndGrabAnother = function() {
+      if (!$scope.reports) return;
+
+      var ids = getIds($scope.reports);
+      Report.markAsRead({ids: ids}, function() {
+        $scope.grabBatch();
+      });
+    };
+
+    $scope.markAllReadAndDone = function() {
+      if (!$scope.reports) return;
+
+      var ids = getIds($scope.reports);
+      
+      Report.markAsRead({ids: ids}, function() {
+        $rootScope.$state.go('reports', {}, { reload: true });
+      });
+    }; 
+
+    $scope.flagSelected = function() {
+      var items = filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(flag(items))
+
+      Report.flag({ids: ids});
     };
 
     $scope.viewReport = function(event, report) {

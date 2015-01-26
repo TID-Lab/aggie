@@ -1,0 +1,41 @@
+<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} new reports available.</a></alert>
+
+<div class="batch-mode">
+  <div class="pull-left">
+    <p class="nomargin title">Batch Mode</p>
+    <p class="nomargin">The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.</p>
+  </div>
+
+  <div class="pull-right">
+    <div class="table-actions">
+      <div class="pull-left margin-left">
+        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()">Mark All Read & Grab Another</a>
+      </div>
+      <div class="pull-left margin-left">
+        <button class="btn btn-default" ng-click="markAllReadAndDone()">Mark All Read & Done</a>
+      </div>
+      <div class="pull-left margin-left">
+        <button class="btn btn-default" ng-click="cancelBatch()">Cancel</a>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="table-actions margin-bottom-lg">
+  <div class="pull-left checkbox-btn bg-gray">
+    <input ng-select-all items="reports" type="checkbox" />
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <button class="btn btn-default" ng-click="markSelectedAsRead()">Mark as Read</a>
+  </div>
+  <div class="pull-left margin-right padding">
+    <button class="btn btn-default" ng-click="flagSelected()">Flag</a>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any results.</p>
+
+<div ng-include="'/templates/reports/table.html'"></div>

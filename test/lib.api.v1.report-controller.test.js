@@ -10,11 +10,33 @@ var User = require('../models/user');
 var async = require('async');
 var source;
 var user;
+var reports;
 
 describe('Report controller', function() {
   function createSource(done) {
     Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function (err, src) {
       source = src;
+      done();
+    });
+  }
+
+  function loadUser(done) {
+    User.findOne({}, function (err, u) {
+      user = u;
+      done();
+    });
+  }
+
+  function createReports(done) {
+    Report.create([
+      {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
+      {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id}
+    ], done);
+  }
+
+  function loadReports(done) {
+    Report.find({}, function (err, results) {
+      reports = results;
       done();
     });
   }
@@ -106,7 +128,6 @@ describe('Report controller', function() {
   });
 
   describe('DELETE /api/v1/report/_all', function() {
-
     beforeEach(function(done) {
       Report.create([
         {authoredAt: new Date(), content: 'one', _source: source._id},
@@ -128,20 +149,6 @@ describe('Report controller', function() {
   });
 
   describe('GET /api/v1/report/batch/_id', function() {
-    function loadUser(done) {
-      User.findOne({}, function (err, u) {
-        user = u;
-        done();
-      });
-    }
-
-    function createReports(done) {
-      Report.create([
-        {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
-        {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id}
-      ], done);
-    }
-
     beforeEach(function(done) {
       async.series([loadUser, createReports], done);
     });
@@ -154,6 +161,24 @@ describe('Report controller', function() {
           if (err) return done(err);
           done();
         });
-      });
     });
+  });
+
+  describe('POST api/v1/report/_read', function() {
+    beforeEach(function(done) {
+      async.series([loadUser, createReports, loadReports], done);
+    });
+
+    it('should mark reports as read', function(done) {
+      request(reportController)
+        .post('/api/v1/report/_read')
+        .send({ids: [reports[0].id, reports[1].id]})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
 });

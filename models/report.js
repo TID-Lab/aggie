@@ -70,6 +70,17 @@ schema.post('save', function() {
   }
 });
 
+schema.methods.flag = function() {
+  this.flagged = true;
+  this.markAsRead();
+};
+
+schema.methods.markAsRead = function() {
+  this.read = true;
+  this.checkedOutBy = null;
+  this.checkedOutAt = null;
+};
+
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
@@ -141,7 +152,7 @@ Report.checkoutBatch = function(userId, callback) {
     this.releaseBatch, 
     this.lockBatch.bind(this, userId, ITEMS_PER_BATCH),
     this.loadBatch.bind(this, userId, ITEMS_PER_BATCH)
-  ], function (err, results) {
+  ], function(err, results) {
     if (err) return callback(err);
     callback(null, results[2]);
   });

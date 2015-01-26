@@ -1,6 +1,7 @@
 <table aggie-table ng-show="pagination.total > 0">
   <thead>
     <tr>
+      <th></th>
       <th>Time</th>
       <th>Media</th>
       <th>Source</th>
@@ -12,6 +13,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged }">
+      <td><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>

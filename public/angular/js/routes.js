@@ -55,6 +55,24 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('batch', {
+      url: '/reports/batch/:id',
+      templateUrl: '/templates/reports/batch.html',
+      controller: 'ReportsIndexController',
+      resolve: {
+        reports: ['Report', '$stateParams', function(Report, params) {
+          if (Report.resource) return Report.resource;
+          return Report.grabBatch({ id: params.id }).$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }]
+      }
+    });
+
     $stateProvider.state('report', {
       url: '/reports/:id',
       templateUrl: '/templates/reports/show.html',

@@ -68,6 +68,22 @@
   </div>
 </form>
 
+<div class="table-actions margin-bottom-lg">
+  <div class="pull-left checkbox-btn bg-gray">
+    <input ng-select-all items="reports" type="checkbox" />
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <button class="btn btn-default" ng-click="markSelectedAsRead()">Mark as Read</a>
+  </div>
+  <div class="pull-left margin-right padding">
+    <button class="btn btn-default" ng-click="flagSelected()">Flag</a>
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</a>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
 <p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any results.</p>
 
 <div ng-include="'/templates/reports/table.html'"></div>

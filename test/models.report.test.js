@@ -19,17 +19,23 @@ function loadUser(done) {
 }
 
 function createReport(done) {
+  var t = new Date();
+
   Report.create([
-    {storedAt: new Date(), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60)},
-    {storedAt: new Date(), content: 'two', flagged: false},
-    {storedAt: new Date(), content: 'three', flagged: false},
-    {storedAt: new Date(), content: 'four', flagged: false},
-    {storedAt: new Date(), content: 'five', flagged: false},
-    {storedAt: new Date(), content: 'six', flagged: true, read: true}
+    {storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60)},
+    {storedAt: new Date(t.getTime() - 12000), content: 'two', flagged: false},
+    {storedAt: new Date(t.getTime() - 13000), content: 'three', flagged: false},
+    {storedAt: new Date(t.getTime() - 14000), content: 'four', flagged: false},
+    {storedAt: new Date(t.getTime() - 15000), content: 'five', flagged: false},
+    {storedAt: new Date(t.getTime() - 16000), content: 'six', flagged: true, read: true}
   ], done);
 }
 
 describe('Report', function() {
+  before(function (done) {
+    Report.remove({}, done);
+  });
+
   beforeEach(function(done) {
     async.series([loadUser, createReport], done);
   });
@@ -46,7 +52,6 @@ describe('Report', function() {
       Report.find.bind(Report, {})
     ], function(err, result) {
       var reports = result[1];
-
       reports.forEach(function(report) {
         if (report.read || report.content == 'five') {
           expect(report.checkedOutAt).not.exist;
