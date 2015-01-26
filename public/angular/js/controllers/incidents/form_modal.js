@@ -11,7 +11,7 @@ angular.module('Aggie')
     $scope.create = function() {
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
-        templateUrl: 'templates/incidents/modal.html',
+        templateUrl: '/templates/incidents/modal.html',
         resolve: {
           users: ['User', function(User) {
             return User.query().$promise;

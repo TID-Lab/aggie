@@ -3,6 +3,7 @@ $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 $gray: #aaaaaa;
+$blue: #5bc0de;
 
 @import 'forms';
 @import 'modals';
@@ -35,12 +36,33 @@ a {
   padding: 10px;
 }
 
+.nopadding {
+  padding: 0
+}
+
+.nomargin {
+  margin: 0
+}
+
+.padding-top-bottom {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .padding-sm {
   padding: 5px;
 }
 
 .margin-right {
   margin-right: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.margin-bottom-lg {
+  margin-bottom: 20px;
 }
 
 .navbar-wrapper {

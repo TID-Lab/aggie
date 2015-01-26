@@ -8,8 +8,10 @@ var listenTo = require('mongoose-listento');
 var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
+var async = require('async');
+var Schema = mongoose.Schema;
 
-var schema = new mongoose.Schema({
+var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: Date,
@@ -21,7 +23,9 @@ var schema = new mongoose.Schema({
   _source: {type: String, ref: 'Source'},
   _media: String,
   _sourceNickname: String,
-  _incident: {type: String, ref: 'Incident'}
+  _incident: {type: String, ref: 'Incident'},
+  checkedOutBy : { type: Schema.ObjectId, ref: 'User' },
+  checkedOutAt: Date
 });
 
 // Give the report schema text search capabilities
@@ -63,6 +67,18 @@ schema.post('save', function() {
   }
 });
 
+schema.methods.toggleFlagged = function(flagged) {
+  this.flagged = flagged;
+  
+  if (flagged) {
+    this.read = true;
+  }
+};
+
+schema.methods.toggleRead = function(read) {
+  this.read = read;
+};
+
 var Report = mongoose.model('Report', schema);
 
 // Query reports based on passed query data
@@ -92,7 +108,7 @@ Report.queryReports = function(query, page, callback) {
   // Determine author filter
   if (query.author) {
     query.filter.author = {};
-  query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
+    query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
       // Use case-insensitive matching with anchors so mongo index is still used.
       return new RegExp('^' + author + '$', 'i');
     });
