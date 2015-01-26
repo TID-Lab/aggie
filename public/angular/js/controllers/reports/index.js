@@ -48,7 +48,7 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
-      if ($scope.isFirstPage()) {
+      if ($scope.isFirstPage() && $scope.currentPath == 'reports') {
         Socket.emit('query', searchParams());
         Socket.on('reports', $scope.handleNewReports);
       }
