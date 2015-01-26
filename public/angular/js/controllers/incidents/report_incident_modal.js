@@ -3,13 +3,23 @@ angular.module('Aggie')
 .controller('IncidentSelectModalController', [
   '$rootScope',
   '$scope',
+  '$q',
   '$location',
   '$modal',
+  '$modalStack',
   'Incident',
   'Report',
   'FlashService',
-  function($rootScope, $scope, $location, $modal, Incident, Report, flash) {
-    $scope.setIncident = function(report) {
+  function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, flash) {
+
+    function updateReport (report) {
+      var defer = $q.defer();
+      Report.update({id: report._id}, report, defer.resolve, defer.reject);
+      return defer.promise;
+    }
+
+    $scope.setIncident = function (report) {
+      $modalStack.dismissAll();
       var modalInstance = $modal.open({
         windowClass: 'report-to-existing',
         size: 'lg',
@@ -24,11 +34,11 @@ angular.module('Aggie')
           }
         }
       });
-      modalInstance.result.then(function(report) {
-        Report.update({id: report._id}, report, function(response) {
+      modalInstance.result.then(function () {
+        updateReport(report).then(function () {
           flash.setNotice('Report was successfully added to incident.');
           $rootScope.$state.go('reports', {}, { reload: true });
-        }, function(err) {
+        }, function () {
           flash.setAlertNow('Report failed to be added to incident.');
         });
       });
@@ -37,13 +47,15 @@ angular.module('Aggie')
 ])
 
 .controller('IncidentSelectModalInstanceController', [
+  '$rootScope',
   '$scope',
   '$modalInstance',
   'incidents',
   'report',
-  function($scope, $modalInstance, incidents, report) {
-    var report = angular.copy(report);
+  function($rootScope, $scope, $modalInstance, incidents, report) {
+    $scope.report = angular.copy(report);
     $scope.incidents = incidents.results;
+    $scope.modal = $modalInstance;
     $scope.select = function (incident) {
       report._incident = incident._id;
       $modalInstance.close(report);

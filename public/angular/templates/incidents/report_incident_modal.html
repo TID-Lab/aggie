@@ -7,11 +7,11 @@
   </div>
   <div class="modal-body">
 
-    <p ng-hide="incidents" class="empty">Sorry, but we couldn't find any incidents. You can <a href="">create a new incident</a>.</p>
+    <p ng-hide="incidents" class="empty">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
 
     <div ng-show="incidents">
 
-      <p>Click an incident below to which you would like to add the report. Or you can <a href="">create a new incident</a>.</p>
+      <p>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
 
       <table class="table" ng-show="incidents">
         <thead>

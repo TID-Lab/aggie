@@ -27,10 +27,15 @@
       <td class="compact author">{{ r.author }}</td>
       <td class="expand content" ng-bind-html="r.content"></td>
       <td class="compact incident">
-        <button class="btn" ng-class="{ 'btn-info': r._incident, 'btn-default': !r._incident }" ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
-          {{ r._incident ? incidentsById[r._incident].title : 'No incident' }}
-        </button>
-        <button class="btn-info" ng-show="incident != null" ng-click="unlinkReport(r)">Unlink</button>
+        <div ng-if="incidents.length">
+          <button class="btn" ng-class="{ 'btn-info': r._incident, 'btn-default': !r._incident }" ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
+            {{ r._incident ? incidentsById[r._incident].title : 'No incident' }}
+          </button>
+          <button class="btn-info" ng-show="incident != null" ng-click="unlinkReport(r)">Unlink</button>
+        </div>
+        <div ng-if="!incidents.length">
+          <button class="btn" ng-controller="IncidentFormModalController" ng-click="create(r)">No incident</button>
+        </div>
       </td>
       <td class="compact status">
         <aggie-toggle toggle="r.status" allow-blank="true" options="{ relevant: 'Rel', irrelevant: 'Irr' }" on-change="saveReport(r)">

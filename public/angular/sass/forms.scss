@@ -72,6 +72,10 @@ input[type="date"] {
   width: 160px;
 }
 
+input + button {
+  margin-top: 8px;
+}
+
 label + aggie-toggle {
   margin-left: 4px;
 }
