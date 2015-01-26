@@ -2,7 +2,9 @@ require('./init');
 var expect = require('chai').expect;
 var Report = require('../models/report');
 var User = require('../models/user');
+var batch = require('../models/batch');
 var async = require('async');
+
 var user;
 
 // helpers
@@ -45,15 +47,13 @@ describe('Report', function() {
   });
 
   it('should lock a batch', function(done) {
-    var limit = 3;
-
     async.series([
-      Report.lockBatch.bind(Report, user._id, limit), 
+      batch.lock.bind(batch, user._id), 
       Report.find.bind(Report, {})
     ], function(err, result) {
       var reports = result[1];
       reports.forEach(function(report) {
-        if (report.read || report.content == 'five') {
+        if (report.read) {
           expect(report.checkedOutAt).not.exist;
           expect(report.checkedOutBy).not.exist;
         }
@@ -68,7 +68,7 @@ describe('Report', function() {
   });
 
   it('should release a batch lock', function(done) {
-    async.series([Report.releaseBatch, Report.find.bind(Report, {})], function(err, result) {
+    async.series([batch.releaseOld, Report.find.bind(Report, {})], function(err, result) {
       var reports = result[1];
       reports.forEach(function(report) {
         expect(report.checkedOutAt).not.exist;
@@ -80,8 +80,8 @@ describe('Report', function() {
 
   it('should load a batch', function(done) {
     async.series([
-      Report.lockBatch.bind(Report, user._id, 10), 
-      Report.loadBatch.bind(Report, user._id, 10)
+      batch.lock.bind(Report, user._id), 
+      batch.load.bind(Report, user._id)
     ], function(err, result) {
       var reports = result[1];
       expect(reports.length).to.eq(5);
@@ -90,7 +90,7 @@ describe('Report', function() {
   });
 
   it('should checkout a new batch', function(done) {
-    Report.checkoutBatch(user._id, function(err, reports) {
+    batch.checkout(user._id, function(err, reports) {
       expect(reports.length).to.eq(5);
       
       reports.forEach(function(report) {
@@ -103,7 +103,7 @@ describe('Report', function() {
   });
 
   it('should cancel batch', function (done) {
-    Report.cancelBatch(user._id, function(err, num) {
+    batch.cancel(user._id, function(err, num) {
       expect(num).to.eq(1);
       done();
     });

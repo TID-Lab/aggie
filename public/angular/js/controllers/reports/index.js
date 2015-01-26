@@ -13,10 +13,11 @@ angular.module('Aggie')
   'incidents',
   'statusOptions',
   'Report',
+  'Batch',
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -116,16 +117,16 @@ angular.module('Aggie')
       }, []);
     }
 
-    var markAsRead = function(items) {
+    var toggleRead = function(items, read) {
       return items.map(function(item) {
-        item.read = true;
+        item.read = read;
         return item;
       });
     }
 
-    var flag = function(items) {
+    var toggleFlagged = function(items, flagged) {
       return items.map(function(item) {
-        item.flagged = true;
+        item.flagged = flagged;
         return item;
       });
     }
@@ -166,6 +167,15 @@ angular.module('Aggie')
     $scope.clearAuthor = function() {
       $scope.search({ author: null });
     };
+
+    $scope.countAndCheck = function(key, value) {
+      var total = $scope.reports.reduce(function(total, report) {
+        if (report[key] === value) total += 1;
+        return total;
+      }, 0);
+
+      return total == $scope.reports.length;
+    }
 
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
@@ -236,18 +246,37 @@ angular.module('Aggie')
       $scope.saveReport(report);
     };
 
-    $scope.markSelectedAsRead = function() {
+    $scope.toggleSelectedRead = function(read) {
       var items = filterSelected($scope.reports);
       if (!items.length) return;
 
-      var ids = getIds(markAsRead(items));
-      Report.markAsRead({ids: ids});
+      var ids = getIds(toggleRead(items, read));
+      Report.toggleRead({ids: ids, read: read });
+    };
+
+    $scope.toggleAllRead = function(read) {
+      var ids = getIds(toggleRead($scope.reports, read));
+      Report.toggleRead({ids: ids, read: read });
+    };
+
+    $scope.someSelected = function() {
+    
+      return $scope.reports.some(function (report) {
+        return (report.selected);
+      });
+    }
+
+    $scope.toggleSelectedFlagged = function(flagged) {
+      var items = filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(toggleFlagged(items, flagged))
+
+      Report.toggleFlagged({ids: ids, flagged: flagged});
     };
 
     $scope.grabBatch = function() {
-      var userId = $scope.currentUser._id;
-
-      Report.grabBatch({id: userId}, function (resource) {
+      Batch.checkout({}, function (resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
           var message = "No more unread reports found.";
@@ -263,13 +292,13 @@ angular.module('Aggie')
           return;
         }
 
-        Report.resource = resource;
-        $rootScope.$state.go('batch', {id: $scope.currentUser._id}, {reload: true });
+        Batch.resource = resource;
+        $rootScope.$state.go('batch', {}, {reload: true });
       });
     };
 
     $scope.cancelBatch = function() {
-      Report.cancelBatch({id: $scope.currentUser._id}, function() {
+      Batch.cancel({}, function() {
         $rootScope.$state.go('reports', {});
       });
     };
@@ -292,15 +321,6 @@ angular.module('Aggie')
         $rootScope.$state.go('reports', {}, { reload: true });
       });
     }; 
-
-    $scope.flagSelected = function() {
-      var items = filterSelected($scope.reports);
-      if (!items.length) return;
-
-      var ids = getIds(flag(items))
-
-      Report.flag({ids: ids});
-    };
 
     $scope.viewReport = function(event, report) {
       if (angular.element(event.target)[0].tagName == 'TD') {

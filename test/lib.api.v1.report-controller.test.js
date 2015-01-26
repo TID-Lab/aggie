@@ -148,22 +148,6 @@ describe('Report controller', function() {
     });
   });
 
-  describe('GET /api/v1/report/batch/_id', function() {
-    beforeEach(function(done) {
-      async.series([loadUser, createReports], done);
-    });
-
-    it('should checkout batch', function(done) {
-      request(reportController)
-        .get('/api/v1/report/batch/'+ user.id)
-        .expect(200)
-        .end(function(err, res) {
-          if (err) return done(err);
-          done();
-        });
-    });
-  });
-
   describe('POST api/v1/report/_read', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports], done);
@@ -172,7 +156,7 @@ describe('Report controller', function() {
     it('should mark reports as read', function(done) {
       request(reportController)
         .post('/api/v1/report/_read')
-        .send({ids: [reports[0].id, reports[1].id]})
+        .send({ids: [reports[0].id, reports[1].id], read: true})
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

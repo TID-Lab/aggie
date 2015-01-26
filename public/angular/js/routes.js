@@ -56,13 +56,13 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('batch', {
-      url: '/reports/batch/:id',
+      url: '/reports/batch',
       templateUrl: '/templates/reports/batch.html',
       controller: 'ReportsIndexController',
       resolve: {
-        reports: ['Report', '$stateParams', function(Report, params) {
-          if (Report.resource) return Report.resource;
-          return Report.grabBatch({ id: params.id }).$promise;
+        reports: ['Batch', '$stateParams', function(Batch, params) {
+          if (Batch.resource) return Batch.resource;
+          return Batch.load({}).$promise;
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;

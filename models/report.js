@@ -9,10 +9,7 @@ var Source = require('./source');
 var Query = require('./query');
 var _ = require('underscore');
 var async = require('async');
-
 var Schema = mongoose.Schema;
-var ITEMS_PER_BATCH = 10; // 10 items per batch
-var BATCH_TIMEOUT = 5 * 60 * 1000 // 5 minutes
 
 var schema = new Schema({
   authoredAt: Date,
@@ -70,15 +67,16 @@ schema.post('save', function() {
   }
 });
 
-schema.methods.flag = function() {
-  this.flagged = true;
-  this.markAsRead();
+schema.methods.toggleFlagged = function(flagged) {
+  this.flagged = flagged;
+  
+  if (flagged) {
+    this.read = true;
+  }
 };
 
-schema.methods.markAsRead = function() {
-  this.read = true;
-  this.checkedOutBy = null;
-  this.checkedOutAt = null;
+schema.methods.toggleRead = function(read) {
+  this.read = read;
 };
 
 var Report = mongoose.model('Report', schema);
@@ -146,66 +144,5 @@ Report.findSortedPage = function(filter, page, callback) {
     callback(null, reports);
   });
 };
-
-Report.checkoutBatch = function(userId, callback) {
-  async.series([ 
-    this.releaseBatch, 
-    this.lockBatch.bind(this, userId, ITEMS_PER_BATCH),
-    this.loadBatch.bind(this, userId, ITEMS_PER_BATCH)
-  ], function(err, results) {
-    if (err) return callback(err);
-    callback(null, results[2]);
-  });
-}
-
-// release items in older batches
-Report.releaseBatch = function(callback) {
-  var conditions = { checkedOutAt: { $lt: timeAgo(BATCH_TIMEOUT) } };
-  var update = { checkedOutBy: null, checkedOutAt: null };
-
-  Report.update(conditions, update, { multi: true }, callback);
-}
-
-// cancel batch for given user
-Report.cancelBatch = function(userId, callback) {
-  var conditions = { checkedOutBy: userId };
-  var update = { checkedOutBy: null, checkedOutAt: null };
-  
-  Report.update(conditions, update, { multi: true }, callback);
-}
-
-// lock a new batch for given user
-Report.lockBatch = function(userId, limit, callback) {
-  var conditions = {
-    checkedOutAt: null, 
-    checkedOutBy: null,
-    read: false
-  };
-
-  Report.find(conditions).sort({storedAt: -1}).limit(limit).exec(function(err, reports) {
-    if (err) return callback(err);
-    var ids = reports.map(function(report) { return report._id; });
-    var update = { checkedOutBy: userId, checkedOutAt: new Date() };
-    Report.update({ _id: { $in: ids } }, update, { multi: true }, callback);
-  });
-}
-
-// load a batch for user
-Report.loadBatch = function(userId, limit, callback) {
-  var conditions = {
-    checkedOutAt: { $ne: null }, 
-    checkedOutBy: userId
-  };
-
-  Report.find(conditions).limit(limit).exec(callback);
-}
-
-
-// helpers
-
-function timeAgo(miliseconds) {
-  var now = new Date();
-  return new Date(now.getTime() - miliseconds);
-}
 
 module.exports = Report;

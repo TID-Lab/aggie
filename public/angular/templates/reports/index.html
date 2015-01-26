@@ -73,13 +73,19 @@
     <input ng-select-all items="reports" type="checkbox" />
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <button class="btn btn-default" ng-click="markSelectedAsRead()">Mark as Read</a>
+    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)">Mark as Read</a>
+    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)">Mark as Unread</a>
   </div>
   <div class="pull-left margin-right padding">
-    <button class="btn btn-default" ng-click="flagSelected()">Flag</a>
+    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)">Flag</a>
+    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)">Unflag</a>
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</a>
+    <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</button>
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <a ng-if="!countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(true)">Mark all Read</a>
+    <a ng-if="countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(false)">Mark all Unread</a>
   </div>
   <div class="clearfix"></div>
 </div>

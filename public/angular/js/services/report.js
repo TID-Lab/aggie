@@ -7,9 +7,7 @@ angular.module('Aggie')
     'query': { isArray: false },
     'save': { method: 'PUT' },
     'update': { method: 'PUT' },
-    'markAsRead': { method: 'POST', url: '/api/v1/report/_read', isArray: false },
-    'flag': { method: 'POST', url: '/api/v1/report/_flag', isArray: false },
-    'grabBatch': { method: 'GET', url: '/api/v1/report/batch/:id' },
-    'cancelBatch': { method: 'PUT', url: '/api/v1/report/batch/cancel' }
+    'toggleRead': { method: 'POST', url: '/api/v1/report/_read', isArray: false },
+    'toggleFlagged': { method: 'POST', url: '/api/v1/report/_flag', isArray: false }
   });
 });
