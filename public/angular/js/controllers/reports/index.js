@@ -307,7 +307,7 @@ angular.module('Aggie')
       if (!$scope.reports) return;
 
       var ids = getIds($scope.reports);
-      Report.markAsRead({ids: ids}, function() {
+      Report.toggleRead({ids: ids, read: true}, function() {
         $scope.grabBatch();
       });
     };
@@ -317,7 +317,7 @@ angular.module('Aggie')
 
       var ids = getIds($scope.reports);
       
-      Report.markAsRead({ids: ids}, function() {
+      Report.toggleRead({ids: ids, read: true}, function() {
         $rootScope.$state.go('reports', {}, { reload: true });
       });
     }; 
