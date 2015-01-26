@@ -6,6 +6,8 @@ var path = require('path');
 var fs = require('fs');
 var S = require('string');
 var jsmin = require('jsmin').jsmin;
+var _ = require('underscore');
+var fs = require('fs-extra');
 
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
@@ -20,8 +22,32 @@ var prefsFile = path.resolve(__dirname, 'server-prefs.json');
 nconf.add('prefs', {type: 'file', file: prefsFile});
 
 // get all configuration
+var _configuration = nconf.get();
+
+// set defaults
+_.defaults(_configuration, {api_request_timeout: 60, logger: {}});
+_.defaults(_configuration.logger, {SES: {}, file: {}, master: {}, api: {}, 
+                                   fetching: {}, analytics: {}});
+_.defaults(_configuration.logger.SES, {level: 'error', silent: false});
+_.defaults(_configuration.logger.file, {level: 'debug', silent: false, 
+                                        colorize: true, timestamp: true,
+                                        maxsize: 5242880, maxFiles: 10,
+                                        json: false, prettyPrint: true});
+_.defaults(_configuration.logger.master, {filename: 'logs/master.log'});
+_.defaults(_configuration.logger.api, {filename: 'logs/api.log', log_requests: false, 
+                                       log_responses: false});
+_.defaults(_configuration.logger.fetching, {filename: 'logs/fetching.log'});
+_.defaults(_configuration.logger.analytics, {filename: 'logs/analytics.log'});
+
+// ensure directories exist
+fs.ensureFileSync(_configuration.logger.master.filename);
+fs.ensureFileSync(_configuration.logger.api.filename);
+fs.ensureFileSync(_configuration.logger.fetching.filename);
+fs.ensureFileSync(_configuration.logger.analytics.filename);
+
+// return configuration
 module.exports.get = function() {
-  return nconf.get();
+  return _configuration;
 };
 
 // update fetching flag

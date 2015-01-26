@@ -1,18 +1,17 @@
 lib-cov
 *.seed
-*.log
 *.csv
 *.dat
 *.out
 *.pid
 *.gz
 *.swp
-*.log
 
 pids
 logs
 results
 tmp
+logs
 
 npm-debug.log
 node_modules
@@ -23,7 +22,8 @@ fiddle
 Thumbs.db
 .c9revisions
 .settings
-run-tests.sh
+server-prefs.json
+
 migrations/.migrate
 
 public/css/styles.css
