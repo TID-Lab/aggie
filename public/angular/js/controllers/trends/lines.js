@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.controller('TrendsIndexController', [
+.controller('TrendsLinesController', [
   '$scope',
   '$rootScope',
   'FlashService',
@@ -111,6 +111,28 @@ angular.module('Aggie')
       $scope.trends = trends;
 
       parseQueries();
+
+      console.log('trends: ', trends);
+
+      var datapoints = trends.map(function(t) {
+        return t.counts.map(function(c) {
+          return c.counts;
+        });
+      });
+
+      console.log('datapoints: ', datapoints);
+
+      // experimenting with canvasjs
+      var chart = new CanvasJS.Chart('chartContainer', {
+        data: [
+          {
+            type: 'area',
+            dataPoints: trends[0].counts
+          }
+        ]
+      });
+
+      chart.render();
     };
 
     $scope.parseKeywords = function(trend) {

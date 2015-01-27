@@ -158,10 +158,27 @@ angular.module('Aggie')
       templateUrl: '/templates/analysis.html'
     });
 
-    $stateProvider.state('analysis.trends', {
-      url: '/trends',
-      templateUrl: '/templates/trends/index.html',
-      controller: 'TrendsIndexController',
+    $stateProvider.state('analysis.trends-lines', {
+      url: '/trends-lines',
+      templateUrl: '/templates/trends/lines.html',
+      controller: 'TrendsLinesController',
+      resolve: {
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }],
+        trends: ['Trend', function(Trend) {
+          return Trend.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('analysis.trends-bars', {
+      url: '/trends-bars',
+      templateUrl: '/templates/trends/bars.html',
+      controller: 'TrendsBarsController',
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
