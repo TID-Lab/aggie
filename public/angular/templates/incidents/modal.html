@@ -23,7 +23,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group" ng-hide="minimal">
+          <!-- <div class="form-group" ng-hide="minimal">
             <label for="status" class="col-lg-2 control-label">Status</label>
             <div class="col-lg-9">
               <select id="status" name="status" ng-model="incident.status" ng-options="value | capitalize for value in status" class="form-control" required></select>
@@ -31,30 +31,39 @@
                 <div class="help-block" ng-show="form.status.$error.required">Status is required.</div>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="form-group" ng-hide="minimal">
             <label for="veracity" class="col-lg-2 control-label">Verified</label>
             <div class="col-lg-9">
-              <input type="checkbox" id="veracity" name="veracity" ng-model="incident.verified" class="form-control">
+              <input type="checkbox" id="veracity" name="veracity" ng-model="incident.veracity" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label for="location" class="col-lg-2 control-label">Location</label>
             <div class="col-lg-9">
-              <input id="location" name="location" type="text" class="form-control" ng-model="incident.locationName">
+              <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
               <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng">Edit coordinates...</button>
             </div>
           </div>
           <div class="form-group" ng-hide="minimalLatLng">
-            <label for="latitude" class="col-lg-2 control-label">Latitude</label>
-            <div class="col-lg-9">
-              <input id="latitude" name="latitude" type="text" class="form-control" ng-model="incident.latitude">
+            <label for="latitude" class="col-lg-2 control-label inline">Latitude</label>
+            <div class="col-lg-3 inline">
+              <input id="latitude" ng-required="incident.longitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="incident.latitude">
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.latitude.$error.pattern">Latitude is invalid.</div>
+                <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin">Latitude is invalid.</div>
+                <div class="help-block" ng-show="form.latitude.$error.required">Latitude is required if longitude is entered.</div>
+              </div>
             </div>
-          </div>
-          <div class="form-group" ng-hide="minimalLatLng">
-            <label for="longitude" class="col-lg-2 control-label">Longitude</label>
-            <div class="col-lg-9">
-              <input id="longitude" name="longitude" type="text" class="form-control" ng-model="incident.longitude">
+            <div class="col-lg-1 inline"></div>
+            <label for="longitude" class="col-lg-2 control-label inline">Longitude</label>
+            <div class="col-lg-3 inline">
+              <input id="longitude" ng-required="incident.latitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-180" ng-max="180" name="longitude" type="text" class="form-control" ng-round="6" ng-model="incident.longitude">
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin">Longitude is invalid.</div>
+                <div class="help-block" ng-show="form.longitude.$error.required">Longitude is required if latitude is entered.</div>
+                    <div class="help-block" ng-show="form.longitude.$error.pattern">Longitude is invalid.</div>
+              </div>
             </div>
           </div>
           <div class="form-group" ng-hide="minimal">
@@ -71,7 +80,7 @@
           <div class="form-group">
             <label for="notes" class="col-lg-2 control-label">Notes</label>
             <div class="col-lg-9 notes-text">
-              <textarea id="notes" name="notes" rows=5 class="form-control" ng-model="incident.notes"></textarea>
+              <textarea id="notes" name="notes" class="form-control" ng-model="incident.notes"></textarea>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.notes.$error.required">Notes field is required.</div>
               </div>

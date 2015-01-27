@@ -1,10 +1,37 @@
 <div class="bs-component">
-  <div class="panel panel-info">
-    <div class="panel-heading">
-      <h3 class="panel-title">Settings</h3>
-    </div>
-    <div class="list-group">
-      <a href ui-sref="users" class="list-group-item">Users</a>
-    </div>
-  </div>
+  <ul class="breadcrumb">
+    <li class="active">Settings</li>
+  </ul>
+</div>
+
+<div ng-controller="FetchingController">
+  <table class="table table-settings">
+    <tbody>
+      <tr>
+        <td class="col-sm-3">
+          <label class="settings-label">Fetching</label>
+        </td>
+        <td>
+          <div data-toggle="buttons">
+            <label ng-click="toggle(false)"
+                   class="toggle-item ng-class:{'active':on===false}">
+              Off
+            </label><label ng-click="toggle(true)"
+                   class="toggle-item ng-class:{'active':on===true}">
+              On
+            </label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn btn-info"
+          ng-click="save()">
+    <span class="fa fa-refresh refresh-animate"
+          ng-show="loading"></span>
+    <span ng-hide="loading">Save</span>
+    <span ng-show="loading">Loading</span>
+  </button>
+
 </div>

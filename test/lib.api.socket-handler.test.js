@@ -1,15 +1,16 @@
 require('./init');
 var expect = require('chai').expect;
-var socketHandler = require('../lib/api/socket-handler')();
+var SocketHandler = require('../lib/api/socket-handler');
 var streamer = require('../lib/api/streamer');
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 var Source = require('../models/source');
 var Report = require('../models/report');
 var Incident = require('../models/incident');
-var fetchingController = require('../lib/api/v1/fetching-controller');
+var settingsController = require('../lib/api/v1/settings-controller');
 var request = require('supertest');
-
+var socketHandler = new SocketHandler();
 var client;
+
 
 describe('Socket handler', function() {
   before(function(done) {
@@ -82,25 +83,11 @@ describe('Socket handler', function() {
     Incident.create({title: 'The quick brown fox'});
   });
 
-  it('should receive updates from the global fetching status', function(done) {
-    client.once('fetchingStatusUpdate', function(status) {
-      expect(status).to.have.property('fetching');
-      expect(status.fetching).to.be.true;
-      done();
-    });
-    request(fetchingController)
-      .put('/api/v1/fetching/on')
-      .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-      });
-  });
-
   it('should stream a list of sources when a source changes', function(done) {
     client.once('sources', function(sources) {
       expect(sources).to.be.an.instanceof(Array);
       expect(sources).to.have.length(1);
-      expect(sources[0]).to.contain.keys(['_id', 'nickname', 'type', 'unreadErrorCount', 'enabled', '__v']);
+      expect(sources[0]).to.contain.keys(['_id', 'nickname', 'unreadErrorCount', 'enabled', '__v']);
       done();
     });
     Source.create({nickname: 'test', type: 'dummy'});

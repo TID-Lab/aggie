@@ -16,7 +16,7 @@ angular.module('Aggie')
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
-        templateUrl: 'templates/incidents/modal.html',
+        templateUrl: '/templates/incidents/modal.html',
         resolve: {
           users: ['User', function(User) {
             return User.query().$promise;
@@ -25,9 +25,7 @@ angular.module('Aggie')
             return Incident.query().$promise;
           }],
           incident: function () {
-            return {
-              status: 'new'
-            };
+            return {};
           },
           report: function () {
             return report;
@@ -88,6 +86,12 @@ angular.module('Aggie')
         });
       });
     };
+
+    $scope.$watch('details.geometry.location', function(newVal, oldVal) {
+      if (oldVal == newVal) return;
+      $scope.incident.latitude = newVal.k;
+      $scope.incident.longitude = newVal.D;
+    });
   }
 ])
 
@@ -107,7 +111,6 @@ angular.module('Aggie')
       return u.username;
     });
     $scope.veracity = veracityOptions;
-    $scope.status = incidentStatusOptions;
     $scope.showErrors = false;
     $scope.report = report;
     $scope.minimal = !!report;

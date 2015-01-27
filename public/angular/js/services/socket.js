@@ -2,6 +2,7 @@ angular.module('Aggie')
 
 .factory('Socket', function ($rootScope) {
   var socket = io.connect('/');
+
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function() {
@@ -20,9 +21,18 @@ angular.module('Aggie')
             callback.apply(socket, args);
           }
         });
-      })
+      });
     },
 
-    off: socket.removeListener
+    join: function (room) {
+      socket.emit('join', room);
+    },
+
+    leave: function (room) {
+      socket.emit('leave', room);
+    },
+
+    off: socket.removeListener.bind(socket),
+    removeAllListeners: socket.removeAllListeners.bind(socket)
   };
 });
