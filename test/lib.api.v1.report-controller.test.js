@@ -6,20 +6,47 @@ require('../models/incident');
 var reportController = require('../lib/api/v1/report-controller')();
 var Report = require('../models/report');
 var Source = require('../models/source');
+var User = require('../models/user');
+var async = require('async');
 var source;
+var user;
+var reports;
 
 describe('Report controller', function() {
-
-  // Clearing the db should eventually move to a global afterEach, but for now it's here else we'd break existing tests.
-  beforeEach(function(done){
-    Report.remove({}, function(){
-      Source.remove({}, function(){
-        Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function(err, src){
-          source = src;
-          done();
-        });
-      });
+  function createSource(done) {
+    Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function (err, src) {
+      source = src;
+      done();
     });
+  }
+
+  function loadUser(done) {
+    User.findOne({}, function (err, u) {
+      user = u;
+      done();
+    });
+  }
+
+  function createReports(done) {
+    Report.create([
+      {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
+      {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id}
+    ], done);
+  }
+
+  function loadReports(done) {
+    Report.find({}, function (err, results) {
+      reports = results;
+      done();
+    });
+  }
+
+  beforeEach(function(done) {
+    createSource(done);
+  });
+
+  afterEach(function(done) {
+    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {})], done);
   });
 
   describe('GET /api/v1/report', function() {
@@ -101,7 +128,6 @@ describe('Report controller', function() {
   });
 
   describe('DELETE /api/v1/report/_all', function() {
-
     beforeEach(function(done) {
       Report.create([
         {authoredAt: new Date(), content: 'one', _source: source._id},
@@ -118,6 +144,23 @@ describe('Report controller', function() {
           request(reportController)
             .get('/api/v1/report')
             .expect(200, {total: 0, results: []}, done);
+        });
+    });
+  });
+
+  describe('POST api/v1/report/_read', function() {
+    beforeEach(function(done) {
+      async.series([loadUser, createReports, loadReports], done);
+    });
+
+    it('should mark reports as read', function(done) {
+      request(reportController)
+        .post('/api/v1/report/_read')
+        .send({ids: [reports[0].id, reports[1].id], read: true})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          done();
         });
     });
   });

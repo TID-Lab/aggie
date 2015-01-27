@@ -12,7 +12,7 @@ angular.module('Aggie')
     $scope.setIncident = function(report) {
       var modalInstance = $modal.open({
         controller: 'IncidentSelectModalInstanceController',
-        templateUrl: 'templates/incidents/report_incident_modal.html',
+        templateUrl: '/templates/incidents/report_incident_modal.html',
         scope: $scope,
         resolve: {
           incidents: ['Incident', function(Incident) {

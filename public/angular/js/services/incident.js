@@ -5,6 +5,6 @@ angular.module('Aggie')
     'query': { isArray: false },
     'create': { method: 'POST' },
     'update': { method: 'PUT' },
-    'removeSelected': { method: 'POST', url: '/api/v1/incident/_selected', isArray: false },
+    'removeSelected': { method: 'POST', url: '/api/v1/incident/_selected', isArray: false }
   });
 });

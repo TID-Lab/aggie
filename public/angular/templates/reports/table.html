@@ -1,6 +1,7 @@
 <table aggie-table ng-show="pagination.total > 0">
   <thead>
     <tr>
+      <th></th>
       <th>Time</th>
       <th>Media</th>
       <th>Source</th>
@@ -11,7 +12,8 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged }">
+    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+      <td><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -32,7 +34,7 @@
         {{ r.author }}
       </td>
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
-        <a href="reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+        <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
       <td class="expand incident text-center relative">
         <a ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
