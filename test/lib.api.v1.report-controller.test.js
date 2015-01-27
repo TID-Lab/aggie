@@ -127,6 +127,81 @@ describe('Report controller', function() {
     });
   });
 
+  describe('PUT /api/v1/report/:_id', function() {
+    
+    var report1 = null;
+    var report2 = null;
+
+    // Create some reports.
+    beforeEach(function(done){
+      var past = new Date(2000,1,1,12,0,0); // Feb 1
+      Report.create([
+        {authoredAt: new Date(), content: 'one', flagged: true, _source: source._id},
+        {authoredAt: new Date(), content: 'one', read: false, _source: source._id}
+      ], function(err, item1, item2) { 
+        report1 = item1, report2 = item2;
+        done(); 
+      });
+    });
+
+    it('should update the specified report', function(done) {
+      var data = {flagged: false, read: true};
+      request(reportController)
+        .put('/api/v1/report/' + report1._id)
+        .send(data)
+        .expect(200)
+        .end(function(err) {
+          if (err) return done(err);
+          
+          request(reportController)
+          .get('/api/v1/report/' + report1._id)
+          .expect(200)
+          .end(function(err, res) {
+            expect(res.body).to.have.property('flagged');
+            expect(res.body).to.have.property('read');
+            expect(res.body.flagged).to.equal(false);
+            expect(res.body.read).to.equal(true);
+            done();
+          });
+        });
+    });
+
+    it('should update multiple reports in one go', function(done) {
+      var data = [
+        {_id: report1._id, flagged: false, read: true},
+        {_id: report2._id, flagged: true, _incident: '54c73024ae04d1f9c3a678d6'},
+      ];
+      request(reportController)
+        .put('/api/v1/report/')
+        .send(data)
+        .expect(200)
+        .end(function(err) {
+          if (err) return done(err);
+          
+          request(reportController)
+          .get('/api/v1/report/' + report1._id)
+          .expect(200)
+          .end(function(err, res) {
+            expect(res.body).to.have.property('flagged');
+            expect(res.body).to.have.property('read');
+            expect(res.body.flagged).to.equal(false);
+            expect(res.body.read).to.equal(true);
+            
+            request(reportController)
+            .get('/api/v1/report/' + report2._id)
+            .expect(200)
+            .end(function(err, res) {
+              expect(res.body).to.have.property('flagged');
+              expect(res.body).to.have.property('_incident');
+              expect(res.body.flagged).to.equal(true);
+              expect(res.body._incident).to.equal('54c73024ae04d1f9c3a678d6');
+              done();
+            });
+          });
+        });
+    });
+  });
+
   describe('DELETE /api/v1/report/_all', function() {
     beforeEach(function(done) {
       Report.create([
@@ -148,14 +223,14 @@ describe('Report controller', function() {
     });
   });
 
-  describe('POST api/v1/report/_read', function() {
+  describe('PATCH api/v1/report/_read', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports], done);
     });
 
     it('should mark reports as read', function(done) {
       request(reportController)
-        .post('/api/v1/report/_read')
+        .patch('/api/v1/report/_read')
         .send({ids: [reports[0].id, reports[1].id], read: true})
         .expect(200)
         .end(function(err, res) {
