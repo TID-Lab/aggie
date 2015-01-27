@@ -12,18 +12,6 @@ angular.module('Aggie')
   'FlashService',
   function($rootScope, $scope, $q, $state, $modal, $modalStack, Incident, Report, flash) {
 
-    function updateReport (report) {
-      var defer = $q.defer();
-      Report.update({id: report._id}, report, defer.resolve, defer.reject);
-      return defer.promise;
-    }
-
-    function onIncidentCreate () {
-      flash.setNotice('Incident was successfully created.');
-      $scope.incidents[inc._id] = inc;
-      $rootScope.$state.go('incidents', {}, { reload: true });
-    }
-
     $scope.create = function (report) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
@@ -51,9 +39,14 @@ angular.module('Aggie')
         Incident.create(incident, function(inc) {
           if (report) {
             report._incident = inc._id;
-            updateReport(report).then(onIncidentCreate);
+            Report.update({id: report._id}, report, function () {
+              flash.setNotice('Report was successfully added to created incident.');
+              $rootScope.$state.go('reports', {}, { reload: true });
+            });
           } else {
-            onIncidentCreate();
+            flash.setNotice('Incident was successfully created.');
+            $scope.incidents[inc._id] = inc;
+            $rootScope.$state.go('incidents', {}, { reload: true });
           }
         }, function(err) {
           flash.setAlertNow('Incident failed to be created. Please contact support.');

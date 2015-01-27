@@ -15,11 +15,16 @@
 
 .modal-body {
   font-size: 14px;
+  
+  .info {
+    margin: 0;
+    font-weight: 500;
+  }
 }
 
 .modal-header,
 .modal-footer {
-  background-color: darken(#e3e6e3, 10%);
+  background-color: #c8cec8;
 }
 
 .modal-content {
@@ -44,11 +49,6 @@
   }
 
   .modal-body {
-
-    p {
-      margin: 0;
-      font-weight: 500;
-    }
 
     div > p {
       margin-bottom: 20px;
