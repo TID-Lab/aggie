@@ -2,7 +2,6 @@
 var socket = io.connect('/');
 
 // Add the result from each of the socket streams
-socket.on('fetchingStatusUpdate', prependData('fetchingStatusUpdate'));
 socket.on('reportStatusChanged', prependData('reportStatusChanged'));
 socket.on('reportIncidentChanged', prependData('reportIncidentChanged'));
 socket.on('sourceErrorCountUpdated', prependData('sourceErrorCountUpdated'));

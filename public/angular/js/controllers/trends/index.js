@@ -165,7 +165,7 @@ angular.module('Aggie')
     };
 
     $scope.$on('$destroy', function(){
-      Socket.off('trend', onTrend);
+      Socket.removeAllListeners('trend');
     });
 
     init();

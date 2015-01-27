@@ -2,7 +2,9 @@
   <div class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
-        <a href="/" class="navbar-brand">Aggie</a>
+        <a href="/">
+          <div class="navbar-brand"></div>
+        </a>
       </div>
       <ul class="nav navbar-nav" ng-show="currentUser">
         <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
@@ -17,10 +19,23 @@
           {{currentUser.username}}</a>
         </li>
         <li ui-sref-active="active">
-          <a ui-sref="settings">
-            <i class="fa fa-gear fa-fw"></i>
+          <a id="dropdownMenu1" data-target="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
             Settings
           </a>
+          <ul class="nav dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+              <a href role="menuitem" tabindex="-1" ui-sref="settings">
+                <i class="fa fa-gear fa-fw"></i>
+                Settings
+              </a>
+            </li>
+            <li role="presentation">
+              <a href role="menuitem" tabindex="-1" ui-sref="users">
+                <i class="fa fa-users fa-fw"></i>
+                Users
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href ng-click="logout()">
@@ -41,13 +56,16 @@
   </div>
   <div class="navbar navbar-stats" ng-show="currentUser">
     <div class="container">
-      <p class="navbar-text">Stats go here...</p>
+      <p class="navbar-text" ng-if="stats">
+        <span class="nav-bar-number">{{stats.totalReports}}</span> <span class="nav-bar-label">Total Reports</span>
+        <span class="nav-bar-number">{{stats.totalReportsPerMinute}}</span> <span class="nav-bar-label">Reports/min</span>
+        <span class="nav-bar-number">{{stats.totalReportsUnread}}</span> <span class="nav-bar-label">Unread</span>
+        <span class="nav-bar-number">{{stats.totalReportsFlagged}}</span> <span class="nav-bar-label">Flagged</span>
+        <span class="nav-bar-number">{{stats.totalIncidents}}</span> <span class="nav-bar-label">Incidents</span>
+        <span class="nav-bar-number">{{stats.totalEscalatedIncidents}}</span> <span class="nav-bar-label">Escalated Incidents</span>
+      </p>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
         <a href ui-sref="sources" ui-sref-opts="{ reload: true }">{{ unreadErrorCount }} Fetching Errors</a>
-      </div>
-      <div ng-controller="FetchingController" class="compact status fetching">
-        <label>Fetching</label>
-        <aggie-toggle toggle="fetchStatus" options="{ true: 'On', false: 'Off' }">
       </div>
     </div>
   </div>

@@ -13,10 +13,11 @@ angular.module('Aggie')
   'incidents',
   'statusOptions',
   'Report',
+  'Batch',
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -28,6 +29,7 @@ angular.module('Aggie')
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.sourceTypes = sourceTypes;
     $scope.statusOptions = statusOptions;
+    $scope.currentPath = $rootScope.$state.current.name 
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -46,12 +48,18 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
-      if ($scope.isFirstPage()) {
+      if ($scope.isFirstPage() && $scope.currentPath == 'reports') {
         Socket.emit('query', searchParams());
         Socket.on('reports', $scope.handleNewReports);
       }
 
-      Socket.on('reportStatusChanged', $scope.updateReportStatus);
+      // make links clickable
+      $scope.reports.forEach(linkify);
+    };
+
+    var linkify = function(report) {
+      report.content = Autolinker.link(report.content);
+      return report;
     };
 
     var removeDuplicates = function(reports) {
@@ -102,6 +110,33 @@ angular.module('Aggie')
       }
     }
 
+    var filterSelected = function(items) {
+      return items.reduce(function(memo, item) { 
+        if (item.selected) memo.push(item);
+        return memo;
+      }, []);
+    }
+
+    var toggleRead = function(items, read) {
+      return items.map(function(item) {
+        item.read = read;
+        return item;
+      });
+    }
+
+    var toggleFlagged = function(items, flagged) {
+      return items.map(function(item) {
+        item.flagged = flagged;
+        return item;
+      });
+    }
+
+    var getIds = function(items) {
+      return items.map(function(item) {
+        return item._id;
+      });
+    }
+
     $scope.handleNewReports = function(reports) {
       var uniqueReports = removeDuplicates(reports);
       $scope.pagination.total += uniqueReports.length;
@@ -112,13 +147,14 @@ angular.module('Aggie')
       $scope.newReports.addMany(uniqueReports);
     };
 
-    $scope.updateReportStatus = function(updatedReport) {
-      if (!(updatedReport._id in $scope.reportsById)) { return }
-      $scope.reportsById[updatedReport._id].status = updatedReport.status;
-    };
+    $scope.unlinkIncident = function(report) {
+      report._incident = '';
+      Report.update({id: report._id}, report);
+    }
 
     $scope.displayNewReports = function() {
       var reports = $scope.newReports.toArray();
+      reports.forEach(linkify);
       $scope.reports.concat(reports);
       $scope.visibleReports.addMany(reports);
       $scope.newReports = new Queue(paginationOptions.perPage);
@@ -126,6 +162,39 @@ angular.module('Aggie')
 
     $scope.clearSearch = function() {
       $scope.search({ page: null, keywords: null });
+    };
+
+    $scope.clearAuthor = function() {
+      $scope.search({ author: null });
+    };
+
+    $scope.countAndCheck = function(key, value) {
+      var total = $scope.reports.reduce(function(total, report) {
+        if (report[key] === value) total += 1;
+        return total;
+      }, 0);
+
+      return total == $scope.reports.length;
+    }
+
+    $scope.noFilters = function() {
+      return $scope.searchParams.before === null &&
+        $scope.searchParams.after === null &&
+        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.media === null &&
+        $scope.searchParams.incidentId === null &&
+        $scope.searchParams.author === null;
+    };
+
+    $scope.clearFilters = function() {
+      $scope.search({
+        before: null,
+        after: null,
+        sourceId: null,
+        media: null,
+        incidentId: null,
+        author: null
+      });
     };
 
     $scope.isFirstPage = function() {
@@ -145,20 +214,20 @@ angular.module('Aggie')
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
         search($scope.currentPage - 1);
-      };
-    };
-
-    $scope.isRelevant = function(report) {
-      return report.status == 'relevant';
-    };
-
-    $scope.isIrrelevant = function(report) {
-      return report.status == 'irrelevant';
+      }
     };
 
     $scope.isUnassigned = function(report) {
       return !this.isRelevant(report) && !this.isIrrelevant(report);
     };
+
+    $scope.isFlagged = function(report) {
+      return report.flagged;
+    };
+
+    $scope.isRead = function(report) {
+      return report.read;
+    }
 
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
@@ -166,6 +235,92 @@ angular.module('Aggie')
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
     };
+
+    $scope.toggleFlagged = function(report) {
+      report.flagged = !report.flagged;
+      
+      if (report.flagged) {
+        report.read = report.flagged;
+      }
+
+      $scope.saveReport(report);
+    };
+
+    $scope.toggleSelectedRead = function(read) {
+      var items = filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(toggleRead(items, read));
+      Report.toggleRead({ids: ids, read: read });
+    };
+
+    $scope.toggleAllRead = function(read) {
+      var ids = getIds(toggleRead($scope.reports, read));
+      Report.toggleRead({ids: ids, read: read });
+    };
+
+    $scope.someSelected = function() {
+    
+      return $scope.reports.some(function (report) {
+        return (report.selected);
+      });
+    }
+
+    $scope.toggleSelectedFlagged = function(flagged) {
+      var items = filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(toggleFlagged(items, flagged))
+
+      Report.toggleFlagged({ids: ids, flagged: flagged});
+    };
+
+    $scope.grabBatch = function() {
+      Batch.checkout({}, function (resource) {
+        // no more results found
+        if (!resource.results || !resource.results.length) {
+          var message = "No more unread reports found.";
+          
+          if ($scope.currentPath == 'batch') {
+            flash.setNotice(message);
+            $rootScope.$state.go('reports', {});
+          }
+          else {
+            flash.setNoticeNow(message);
+          }
+
+          return;
+        }
+
+        Batch.resource = resource;
+        $rootScope.$state.go('batch', {}, {reload: true });
+      });
+    };
+
+    $scope.cancelBatch = function() {
+      Batch.cancel({}, function() {
+        $rootScope.$state.go('reports', {});
+      });
+    };
+
+    $scope.markAllReadAndGrabAnother = function() {
+      if (!$scope.reports) return;
+
+      var ids = getIds($scope.reports);
+      Report.toggleRead({ids: ids, read: true}, function() {
+        $scope.grabBatch();
+      });
+    };
+
+    $scope.markAllReadAndDone = function() {
+      if (!$scope.reports) return;
+
+      var ids = getIds($scope.reports);
+      
+      Report.toggleRead({ids: ids, read: true}, function() {
+        $rootScope.$state.go('reports', {}, { reload: true });
+      });
+    }; 
 
     $scope.viewReport = function(event, report) {
       if (angular.element(event.target)[0].tagName == 'TD') {
@@ -175,8 +330,8 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.type] !== -1) {
-        return source.type + '-source';
+      if (source && $scope.sourceTypes[source.media] !== -1) {
+        return source.media + '-source';
       } else {
         return 'unknown-source';
       }

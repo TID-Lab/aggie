@@ -7,7 +7,7 @@ var Source = require('../models/source');
 
 describe('Push bot', function() {
   before(function(done) {
-    var source = new Source({nickname: 't', type: 'dummy', keywords: 't'});
+    var source = new Source({nickname: 't', media: 'dummy', keywords: 't'});
     var contentService = contentServiceFactory.create(source);
     pushBot = new PushBot({source: source, contentService: contentService});
     done();
