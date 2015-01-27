@@ -23,7 +23,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.property('_id');
           expect(res.body).to.have.property('updatedAt');
           expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('verified');
+          expect(res.body).to.have.property('veracity');
           incident._id = res.body._id;
           compare.call(this, res.body, incident);
           done();
@@ -133,4 +133,17 @@ describe('Incident controller', function() {
     });
   });
 
+  describe('POST /api/v1/incident/_selected', function() {
+    it('should delete all incidents', function(done) {
+      request(incidentController)
+        .post('/api/v1/incident/_selected')
+        .send({ids: [incident._id]})
+        .expect(200)
+        .end(function(err, res) {
+          request(incidentController)
+            .get('/api/v1/incident')
+            .expect(200, {total: 0, results: []}, done);
+        });
+    });
+  });
 });

@@ -109,6 +109,13 @@ angular.module('Aggie')
       }
     }
 
+    var filterSelected = function(items) {
+      return items.reduce(function(memo, item) { 
+        if (item.selected) memo.push(item._id);
+        return memo;
+      }, []);
+    }
+
     $scope.handleNewIncidents = function(incidents) {
       var uniqueIncidents = removeDuplicates(incidents);
       $scope.pagination.total += uniqueIncidents.length;
@@ -125,21 +132,31 @@ angular.module('Aggie')
       $scope.newIncidents = new Queue(paginationOptions.perPage);
     };
 
+    $scope.removeSelected = function() {
+      var ids = filterSelected($scope.incidents);
+      if (!ids.length) return;
+      
+      Incident.removeSelected({ids: ids}, function() {
+        flash.setNotice('Incidents were successfully deleted.');
+        $rootScope.$state.go('incidents', {}, { reload: true });
+      }, function() {
+        flash.setAlertNow('Incidents failed to be deleted.');
+      });
+    };
+
     $scope.clearSearch = function() {
       $scope.search({ page: null, title: null, locationName: null});
     };
 
-    $scope.noFilters = function () {
+    $scope.noFilters = function() {
       return $scope.searchParams.assignedTo === null &&
-        $scope.searchParams.status === null &&
-        $scope.searchParams.verified === null;
+        $scope.searchParams.veracity === null;
     };
 
     $scope.clearFilters = function() {
       $scope.search({
-          assignedTo: null,
-          status: null,
-          verified: null
+        assignedTo: null,
+        veracity: null
       });
     };
 
@@ -163,14 +180,6 @@ angular.module('Aggie')
       };
     };
 
-    $scope.isRelevant = function(incident) {
-      return incident.status == 'relevant';
-    };
-
-    $scope.isIrrelevant = function(incident) {
-      return incident.status == 'irrelevant';
-    };
-
     $scope.isUnassigned = function(incident) {
       return !this.isRelevant(incident) && !this.isIrrelevant(incident);
     };
@@ -186,10 +195,6 @@ angular.module('Aggie')
       if (angular.element(event.target)[0].tagName == 'TD') {
         $state.go('incident', { id: incident._id });
       }
-    };
-
-    $scope.incidentClass = function(incident) {
-      return incident.status + '-incident';
     };
 
     $scope.delete = function(incident) {

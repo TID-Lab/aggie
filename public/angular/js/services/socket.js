@@ -21,7 +21,15 @@ angular.module('Aggie')
             callback.apply(socket, args);
           }
         });
-      })
+      });
+    },
+
+    join: function (room) {
+      socket.emit('join', room);
+    },
+
+    leave: function (room) {
+      socket.emit('leave', room);
     },
 
     off: socket.removeListener.bind(socket),

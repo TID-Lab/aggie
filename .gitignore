@@ -24,6 +24,7 @@ Thumbs.db
 .c9revisions
 .settings
 run-tests.sh
+migrations/.migrate
 
 public/css/styles.css
 public/angular/css/app.css

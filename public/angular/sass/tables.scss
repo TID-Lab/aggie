@@ -12,12 +12,16 @@
       transition: background 0.25s ease-in-out;
       > td {
         border: solid 1px #e4e4e4;
-        &.status,
+        font-weight: normal;
+        &.status {
+          vertical-align: middle;
+        }
         &.incident {
           vertical-align: middle;
-          .btn {
-            width: 100%;
-          }
+          min-width: 150px;
+        }
+        &.flagged {
+          vertical-align: middle;
         }
       }
     }
@@ -41,12 +45,6 @@
 }
 
 tbody {
-  tr.item {
-    background-color: #fff;
-    &:hover {
-      background-color: #f6f7f7;
-    }
-  }
   .relevant {
     background-color: #ecf6f8;
     &:hover {
@@ -62,6 +60,13 @@ tbody {
   tr.unread {
     td {
       font-weight: bold;
+    }
+  }
+
+  tr.flagged {
+    background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 5%);
     }
   }
   tr.new-incident {
@@ -112,7 +117,7 @@ tbody {
 .source {
   .icon-left {
     display: inline-block;
-    padding-left: 39px;
+    padding-left: 33px;
     min-height: 33px;
   }
 }
@@ -154,24 +159,38 @@ tbody {
   background: url('/images/rss.png') no-repeat 0 50%;
 }
 
-.source,
-.author,
-.content {
+.strong {
   font-weight: bold;
 }
 
-.content {
-  max-width: 400px;
-}
-
 table, .table {
-  td.vertical-middle {
-    vertical-align: middle;
+  td {
+    &.vertical-middle {
+      vertical-align: middle;
+    }
+
+    &.relative {
+      position: relative;
+    }
+
+    .fa {
+      font-size: 16px;
+      padding: 3px;
+    }
+
   }
   a {
     color: $link-blue;
+    text-decoration: none;
     &:hover {
       color: lighten($link-blue, 10%);
+      text-decoration: underline;
+    }
+    &.remove {
+      color: #000;
+      position: absolute;
+      top: -2px;
+      right: 4px;
     }
   }
   .btn {
@@ -200,14 +219,24 @@ table, .table {
   }
 }
 
-.content a {
-  color: #000;
-  text-decoration: none;
+.batch-mode {
+  background-color: $blue;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 12px;
+  color: #fff;
+  .title {
+    font-size: 14px;
+    font-weight: normal;
+  }
 }
 
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
+  padding: 10px;
+  background-color: #bfbfbf;
   font-size: 12px;
   display: table;
   label {
@@ -251,27 +280,53 @@ table, .table {
   }
 }
 
-.table-actions {
-  margin-bottom: 10px;
-}
-
 .table-filters,
-.table-actions {
+.table-actions,
+.batch-actions {
   .btn {
     line-height: 15px;
     height: 25px;
     padding: 4px 8px;
     font-size: 12px;
+    
+    &.highlight {
+      color: #000;
+      font-weight: normal;
+    }
+  }
+
+  .checkbox-btn {
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 4px 8px 5px 8px;
+  }
+
+}
+
+.table-actions {
+  .btn {
+    width: 100px;
   }
 }
 
 .actions {
-  width: 10%;
+  width: 50px;
   text-align: center;
 }
 
 .table .middle {
   vertical-align: middle;
+}
+
+td.content {
+  height: 100% !important;
+  max-width: 400px;
+  a {
+    color: #000;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+  }
 }
 
 td.sparkline,

@@ -32,12 +32,8 @@
       <td class="detail-value">{{ incident.assignedTo }}</td>
     </tr>
     <tr>
-      <td class="detail-key">Status</td>
-      <td class="detail-value">{{ incident.status | capitalize }}</td>
-    </tr>
-    <tr>
       <td class="detail-key">Verified</td>
-      <td class="detail-value">{{ incident.verified ? 'Verified' : 'Unverified' }}</td>
+      <td class="detail-value">{{ incident.veracity ? 'Verified' : 'Unverified' }}</td>
     </tr>
     <tr>
       <td class="detail-key">Notes</td>
