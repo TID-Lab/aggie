@@ -63,8 +63,14 @@ angular.module('Aggie')
           users: ['User', function(User) {
             return User.query().$promise;
           }],
+          incidents: ['Incident', function(Incident) {
+            return Incident.query().$promise;
+          }],
           incident: function() {
             return incident;
+          },
+          report: function () {
+            return null;
           }
         }
       });
