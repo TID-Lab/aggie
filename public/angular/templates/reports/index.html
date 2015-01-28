@@ -13,9 +13,6 @@
         </div>
       </div>
     </div>
-    <div ng-hide="noFilters()">
-      <button type="submit" class="btn" ng-click="clearFilters()">Clear Filters</button>
-    </div>
     <div class="filter author-filter">
       <div class="input-group">
         <input type="text" ng-model="searchParams.author" class="form-control" placeholder="Enter author">
@@ -32,7 +29,7 @@
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
-        <option value="">Source Media</option>
+        <option value="">Media</option>
       </select>
     </div>
     <div class="filter source-type-filter">
@@ -43,6 +40,8 @@
     <div class="filter incident-filter">
       <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents" ng-change="search()" class="form-control">
         <option value="">Incident</option>
+        <option value="any">Any Incident</option>
+        <option value="no">No Incident></option>
       </select>
     </div>
     <div class="filter date-filter">
@@ -51,19 +50,11 @@
         <span ng-switch-when="3">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
         <span ng-switch-when="2">After <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
         <span ng-switch-when="1">Before <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-        <span ng-switch-default>Any time</span>
+        <span ng-switch-default>Date/Time</span>
       </button>
     </div>
-    <div class="filter pagination">
-      <ul class="pager">
-        <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
-        <li>
-          <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-        </li>
-        <li>
-          <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-        </li>
-      </ul>
+    <div ng-hide="noFilters()">
+      <button type="submit" class="btn" ng-click="clearFilters()">X</button>
     </div>
   </div>
 </form>
@@ -87,7 +78,17 @@
     <a ng-if="!countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(true)">Mark all Read</a>
     <a ng-if="countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(false)">Mark all Unread</a>
   </div>
-  <div class="clearfix"></div>
+  <div class="pull-right padding-top-bottom pagination">
+    <ul class="pager">
+      <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
+      <li>
+        <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+      </li>
+      <li>
+        <button ng-class="{disabled: isLastPage() }" ui-sref="reports({ page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any results.</p>
