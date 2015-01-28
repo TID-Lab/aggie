@@ -148,14 +148,14 @@ describe('Report controller', function() {
     });
   });
 
-  describe('POST api/v1/report/_read', function() {
+  describe('PATCH api/v1/report/_read', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports], done);
     });
 
     it('should mark reports as read', function(done) {
       request(reportController)
-        .post('/api/v1/report/_read')
+        .patch('/api/v1/report/_read')
         .send({ids: [reports[0].id, reports[1].id], read: true})
         .expect(200)
         .end(function(err, res) {
