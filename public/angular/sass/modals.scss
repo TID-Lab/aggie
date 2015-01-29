@@ -13,6 +13,10 @@
   }
 }
 
+.modal-lg {
+  width: 90%;
+}
+
 .modal-body {
   font-size: 14px;
   padding: 15px;
@@ -26,6 +30,15 @@
   .well {
     padding: 0px;
     margin-bottom: 0px;
+  }
+
+  tbody tr {
+    transition: background 0.2s ease-in-out;
+
+    &.item:hover {
+      cursor: pointer;
+      background-color: #eef3f7;
+    }
   }
 }
 
@@ -46,30 +59,5 @@
   &:hover,
   &:focus {
     color: #000;
-  }
-}
-
-// Incident modals
-
-.report-to-existing {
-
-  .modal-lg {
-    width: 90%;
-  }
-
-  .modal-body {
-
-    tbody tr {
-      transition: background 0.2s ease-in-out;
-
-      &.item:hover {
-        cursor: pointer;
-        background-color: #eef3f7;
-      }
-    }
-  }
-
-  .modal-footer {
-    margin-top: 0;
   }
 }

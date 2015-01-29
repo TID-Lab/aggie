@@ -19,7 +19,6 @@ angular.module('Aggie')
         size: 'lg',
         controller: 'IncidentSelectModalInstanceController',
         templateUrl: '/templates/incidents/report_incident_modal.html',
-        scope: $scope,
         resolve: {
           incidents: ['Incident', function(Incident) {
             return Incident.query().$promise;
@@ -33,9 +32,8 @@ angular.module('Aggie')
       modalInstance.result.then(function(report) {
         report.read = true;
         Report.update({id: report._id}, report, function(response) {
-          $scope.$parent.r = report;
           flash.setNotice('Report was successfully added to incident.');
-          $rootScope.$state.go('reports', {}, { reload: true });
+          $rootScope.$state.go('reports', { r: report }, { reload: false });
         }, function(err) {
           flash.setAlertNow('Report failed to be added to incident.');
         });
@@ -60,7 +58,7 @@ angular.module('Aggie')
       report._incident = incident._id;
       $modalInstance.close(report);
     }
-    
+
     $scope.showErrors = function() {
       return $scope._showErrors;
     };

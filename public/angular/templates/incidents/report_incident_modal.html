@@ -7,58 +7,13 @@
   </div>
   <div class="modal-body">
 
-    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">Create a New Incident</button>.</p>
 
     <div ng-show="incidents">
 
-      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">Create a New Incident</button>.</p>
 
-      <table class="table" ng-show="incidents">
-        <thead>
-          <tr>
-            <th class="compact">Updated</th>
-            <th class="compact">Created</th>
-            <th class="compact">Title</th>
-            <th class="compact">Location</th>
-            <th class="compact">Assigned To</th>
-            <th class="compact">Status</th>
-            <th class="compact">Verified</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="i in incidents | orderBy:'-updatedAt'" ng-class="['item', incidentClass(i)]" ng-click="select(i)">
-            <td class="compact">
-              <div class="interval">
-                <span class="interval-amount">{{ i.updatedAt | interval }}</span>
-                <span class="interval-relative">ago</span>
-              </div>
-              <div class="date-and-time">
-                <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
-                <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
-              </div>
-            </td>
-            <td class="compact">
-              <div class="interval">
-                <span class="interval-amount">{{ i.storedAt | interval }}</span>
-                <span class="interval-relative">ago</span>
-              </div>
-              <div class="date-and-time">
-                <span class="time">{{ i.storedAt | aggieDate:'time' }}</span>
-                <span class="date">{{ i.storedAt | aggieDate:'date' }}</span>
-              </div>
-              <div class="created">{{ i | delay }}</div>
-            </td>
-            <td class="compact content">{{ i.title }}</td>
-            <td class="compact content">
-              {{ i.locationName }}
-              <div class="coordinates" ng-show="i.latitude || i.longitude">({{ i.latitude }}, {{ i.longitude }})</div>
-            </td>
-            <td class="compact content">{{ i.assignedTo }}</td>
-            <td class="compact content">{{ i.status | translate }}</td>
-            <td class="compact content">{{ 'veracity.' + i.verified | translate }} </td>
-          </tr>
-        </tbody>
-      </table>
+      <div ng-include="'/templates/incidents/table.html'"></div>
 
     </div>
 

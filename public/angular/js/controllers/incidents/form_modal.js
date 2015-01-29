@@ -36,10 +36,11 @@ angular.module('Aggie')
       modalInstance.result.then(function(incident) {
         Incident.create(incident, function(inc) {
           if (report) {
+            report.read = true;
             report._incident = inc._id;
             Report.update({id: report._id}, report, function () {
               flash.setNotice('Report was successfully added to created incident.');
-              $rootScope.$state.go('reports', {}, { reload: true });
+              $rootScope.$state.go('reports', { r: report }, { reload: false });
             });
           } else {
             flash.setNotice('Incident was successfully created.');
