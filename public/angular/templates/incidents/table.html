@@ -28,7 +28,7 @@
       <td class="compact content">
         <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>
         <span ng-if="i.locationName">{{ i.locationName }}</span>
-        <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
+        <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
       <td class="compact"><a href="profile/{{i._assignedTo._id}}"><strong>{{ i.assignedTo }}</strong></a></td>
       <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] }}</td>
