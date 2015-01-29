@@ -1,7 +1,7 @@
 <table class="table" ng-show="pagination.total > 0 || modal">
   <thead>
     <tr>
-      <th></th>
+      <th ng-hide="modal"></th>
       <th class="compact">ID#</th>
       <th class="compact">Title</th>
       <th class="compact">Location</th>
@@ -9,8 +9,8 @@
       <th class="compact">Status</th>
       <th class="compact">Veracity</th>
       <th class="compact">Escalated?</th>
-      <th ng-hide="modal" class="compact">Last Updated</th>
-      <th class="compact"></th>
+      <th class="compact">Last Updated</th>
+      <th ng-hide="modal" class="compact"></th>
     </tr>
   </thead>
   <tbody>
