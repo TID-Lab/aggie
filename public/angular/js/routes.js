@@ -176,8 +176,8 @@ angular.module('Aggie')
       templateUrl: '/templates/analysis.html'
     });
 
-    $stateProvider.state('analysis.trends-lines', {
-      url: '/trends-lines',
+    $stateProvider.state('analysis.trend-lines', {
+      url: '/trend-lines',
       templateUrl: '/templates/trends/lines.html',
       controller: 'TrendsLinesController',
       resolve: {
@@ -193,8 +193,8 @@ angular.module('Aggie')
       }
     });
 
-    $stateProvider.state('analysis.trends-bars', {
-      url: '/trends-bars',
+    $stateProvider.state('analysis.trend-bars', {
+      url: '/trend-bars',
       templateUrl: '/templates/trends/bars.html',
       controller: 'TrendsBarsController',
       resolve: {

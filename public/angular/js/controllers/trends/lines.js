@@ -34,6 +34,7 @@ angular.module('Aggie')
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
 
       processTrends(trends);
+      renderChart();
 
       Socket.on('trend', onTrend);
     };
@@ -41,6 +42,7 @@ angular.module('Aggie')
     var onTrend = function(trends) {
       var trendsCopy = angular.copy(trends);
       processTrends(trendsCopy);
+      renderChart();
     };
 
     var parseQueries = function() {
@@ -111,25 +113,29 @@ angular.module('Aggie')
       $scope.trends = trends;
 
       parseQueries();
+    };
 
-      console.log('trends: ', trends);
-
-      var datapoints = trends.map(function(t) {
-        return t.counts.map(function(c) {
-          return c.counts;
-        });
+    var renderChart = function () {
+      var time;
+      var datapoints = $scope.trends.map(function(t) {
+        time = 0;
+        if (t.enabled) {
+          return t.counts.map(function(c) {
+            time++;
+            return {x: new Date(parseInt(c.timebox)), y: c.counts};
+          });
+        } else {
+          return null;
+        }
       });
 
-      console.log('datapoints: ', datapoints);
+      var charts = [];
+      datapoints.forEach(function(d) {
+        charts.push({type: 'area', dataPoints: d, lineThickness: 0});
+      });
 
-      // experimenting with canvasjs
       var chart = new CanvasJS.Chart('chartContainer', {
-        data: [
-          {
-            type: 'area',
-            dataPoints: trends[0].counts
-          }
-        ]
+        data: charts
       });
 
       chart.render();
@@ -142,7 +148,7 @@ angular.module('Aggie')
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
         flash.setNotice('Trend was successfully deleted.');
-         $rootScope.$state.go('analysis.trends', {}, { reload: true });
+         $rootScope.$state.go('analysis.trend-lines', {}, { reload: true });
       }, function() {
         flash.setAlertNow('Trend failed to be deleted.');
       });
@@ -153,6 +159,7 @@ angular.module('Aggie')
         if (trend.enabled) {
           trend.lastEnabledAt = new Date().toISOString();
         }
+        renderChart();
       });
     };
 
