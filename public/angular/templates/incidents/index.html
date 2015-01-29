@@ -94,7 +94,7 @@
         <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
       <td class="compact">
-        <a ng-if="i.creator" href="profile/{{i.creator._id}}">
+        <a ng-if="i.creator" href="profile/{{i.creator.username}}">
           <strong>{{ i.creator.username }}</strong>
         </a>
       </td>
