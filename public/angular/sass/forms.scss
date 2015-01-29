@@ -14,11 +14,12 @@ label {
 
 .form-control {
   box-shadow: none;
-  background-color: #f3f6f9;
+  background-color: #eaeaea;
   padding: 4px 8px;
 }
 
 .input-group {
+
   .form-control:focus {
     border-right: none;
   }
@@ -37,7 +38,7 @@ label {
 
 .input-group-addon {
   padding: 4px 8px;
-  background-color: #f3f6f9;
+  background-color: #eaeaea;
   color: #000;
   .read-only & {
     background-color: #ebebeb;
@@ -70,6 +71,10 @@ input {
 
 input[type="date"] {
   width: 160px;
+}
+
+input + button {
+  margin-top: 8px;
 }
 
 label + aggie-toggle {
