@@ -21,7 +21,8 @@ var sourceSchema = new mongoose.Schema({
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
   unreadErrorCount: {type: Number, default: 0},
-  lastReportDate: Date
+  lastReportDate: Date,
+  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false},
 });
 
 sourceSchema.pre('save', function(next) {
