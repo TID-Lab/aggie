@@ -39,7 +39,6 @@ angular.module('Aggie')
             report.read = true;
             report._incident = inc._id;
             Report.update({id: report._id}, report, function () {
-              flash.setNotice('Report was successfully added to created incident.');
               $rootScope.$state.go('reports', { r: report }, { reload: false });
             });
           } else {
