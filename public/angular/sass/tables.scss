@@ -219,6 +219,19 @@ table, .table {
   }
 }
 
+.batch-mode {
+  background-color: $blue;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 12px;
+  color: #fff;
+  .title {
+    font-size: 14px;
+    font-weight: normal;
+  }
+}
+
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
@@ -267,26 +280,33 @@ table, .table {
   }
 }
 
-.table-actions {
-  margin-bottom: 20px;
-}
-
 .table-filters,
-.table-actions {
+.table-actions,
+.batch-actions {
   .btn {
     line-height: 15px;
     height: 25px;
     padding: 4px 8px;
     font-size: 12px;
+    
+    &.highlight {
+      color: #000;
+      font-weight: normal;
+    }
   }
 
   .checkbox-btn {
     font-size: 14px;
     margin-top: 10px;
     padding: 4px 8px 5px 8px;
-
   }
 
+}
+
+.table-actions {
+  .btn {
+    width: 100px;
+  }
 }
 
 .actions {

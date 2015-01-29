@@ -48,7 +48,7 @@
   </div>
 </form>
 
-<div class="table-actions">
+<div class="table-actions margin-bottom-lg">
   <div class="pull-left checkbox-btn bg-gray">
     <input ng-select-all items="incidents" type="checkbox" />
   </div>
@@ -69,6 +69,7 @@
       <th class="compact">ID#</th>
       <th class="compact">Title</th>
       <th class="compact">Location</th>
+      <th class="compact">Creator</th>
       <th class="compact">Assigned To</th>
       <th class="compact">Status</th>
       <th class="compact">Veracity</th>
@@ -91,6 +92,11 @@
         <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>
         <span ng-if="i.locationName">{{ i.locationName }}</span>
         <span ng-if="!i.locationName">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
+      </td>
+      <td class="compact">
+        <a ng-if="i.creator" href="profile/{{i.creator.username}}">
+          <strong>{{ i.creator.username }}</strong>
+        </a>
       </td>
       <td class="compact"><a href="profile/{{i._assignedTo._id}}"><strong>{{ i.assignedTo }}</strong></a></td>
       <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] }}</td>
