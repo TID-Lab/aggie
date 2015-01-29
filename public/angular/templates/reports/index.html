@@ -23,25 +23,23 @@
       </div>
     </div>
     <div class="filter status-filter">
-      <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
         <option value="">Status</option>
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes | orderBy:'toString()'" ng-change="search()" class="form-control">
         <option value="">Media</option>
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.sourceId" ng-options="value._id as value.nickname for (key, value) in sources" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.sourceId" ng-options="value._id as value.nickname for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
         <option value="">Source</option>
       </select>
     </div>
     <div class="filter incident-filter">
-      <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
         <option value="">Incident</option>
-        <option value="any">Any Incident</option>
-        <option value="no">No Incident></option>
       </select>
     </div>
     <div class="filter date-filter">

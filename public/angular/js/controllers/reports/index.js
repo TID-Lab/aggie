@@ -26,6 +26,7 @@ angular.module('Aggie')
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.incidents = incidents.results;
+    console.log(incidents);
     $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
@@ -180,7 +181,6 @@ angular.module('Aggie')
     }
 
     $scope.noFilters = function() {
-      console.log($scope.searchParams);
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
         $scope.searchParams.sourceId === null &&

@@ -112,6 +112,7 @@ require('./filters/with-line-breaks');
 require('./filters/strip-html');
 require('./filters/str-limit');
 require('./filters/tripledigit');
+require('./filters/orderObjectBy');
 
 // Directives
 require('./directives/aggie-confirm');
