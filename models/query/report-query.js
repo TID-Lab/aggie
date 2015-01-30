@@ -8,12 +8,17 @@ var _ = require('underscore');
 var ReportQuery = function(options) {
   options = options || {};
   this.keywords = options.keywords;
-  this.status = options.status;
+
+  if (options.status) {
+    this._parseStatus(options.status);
+  }
+
+  this._parseIncidentId(options.incidentId);
+
   this.after = options.after;
   this.before = options.before;
   this.sourceId = options.sourceId;
   this.sourceType = options.sourceType;
-  this.incidentId = options.incidentId;
   this.author = options.author;
   this.event = 'reports';
 };
@@ -41,5 +46,38 @@ ReportQuery.prototype.normalize = function() {
 
   return query;
 };
+
+ReportQuery.prototype._parseStatus = function(status) {
+  switch(status) {
+    case 'flagged':
+      this.flagged = true;
+      break;
+    case 'unflagged':
+      this.unflagged = true;
+      break;
+    case 'read':
+      this.read = true;
+      break;
+    case 'unread':
+      this.read = false;
+      break;
+    case 'read & unflagged':
+      this.read = true;
+      this.flagged = false;
+      break;
+  }
+}
+
+ReportQuery.prototype._parseIncidentId = function(incidentId) {
+  if (incidentId == 'any') {
+    this.incidentId = { $ne: null };
+  }
+  else if (incidentId == 'no') {
+    this.incidentId = null;
+  }
+  else {
+    this.incidentId = incidentId;
+  }
+}
 
 module.exports = ReportQuery;

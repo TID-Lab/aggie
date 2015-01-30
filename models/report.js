@@ -69,7 +69,7 @@ schema.post('save', function() {
 
 schema.methods.toggleFlagged = function(flagged) {
   this.flagged = flagged;
-  
+
   if (flagged) {
     this.read = true;
   }
@@ -104,6 +104,9 @@ Report.queryReports = function(query, page, callback) {
   if (query.sourceId) query.filter._source = query.sourceId;
   if (query.sourceType) query.filter._media = query.sourceType;
   if (query.incidentId) query.filter._incident = query.incidentId;
+
+  if (_.isBoolean(query.read)) query.filter.read = query.read;
+  if (_.isBoolean(query.flagged)) query.filter.flagged = query.flagged;
 
   // Determine author filter
   if (query.author) {
