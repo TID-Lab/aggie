@@ -65,7 +65,9 @@
     "gulp-jshint": "~1.5.0",
     "gulp-mocha": "~0.4.1",
     "mocha": "~1.17.1",
-    "supertest": "~0.9.0"
+    "supertest": "~0.9.0",
+    "async": "^0.9.0",
+    "dateformat": "^1.0.11"
   },
   "subdomain": "aggie",
   "engines": {

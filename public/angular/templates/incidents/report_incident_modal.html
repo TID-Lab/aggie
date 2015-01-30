@@ -6,24 +6,19 @@
     </h4>
   </div>
   <div class="modal-body">
-    <div class="well bs-component">
-      <form name="form" class="form-horizontal">
-        <fieldset>
-          <div class="form-group">
-            <label for="incident" class="col-lg-3 control-label">Incident</label>
-            <div class="col-lg-6">
-              <select ui-select2 id="incident" name="incident" ng-model="report._incident" data-placeholder="Select Incident" class="form-control">
-                <option value="">[No Incident]</option>
-                <option ng-repeat="incident in incidents" value="{{incident._id}}">{{incident.title}}</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
-      </form>
+
+    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+
+    <div ng-show="incidents">
+
+      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+
+      <div ng-include="'/templates/incidents/table.html'"></div>
+
     </div>
+
   </div>
   <div class="modal-footer">
     <button class="btn btn-default" ng-click="close()">Close</button>
-    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
   </div>
 </div>
