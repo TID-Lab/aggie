@@ -69,10 +69,10 @@ ReportQuery.prototype._parseStatus = function(status) {
 }
 
 ReportQuery.prototype._parseIncidentId = function(incidentId) {
-  if (incidentId == 'any') {
+  if (incidentId == 'a') {
     this.incidentId = { $ne: null };
   }
-  else if (incidentId == 'no') {
+  else if (incidentId == 'n') {
     this.incidentId = null;
   }
   else {
