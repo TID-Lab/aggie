@@ -110,8 +110,19 @@ angular.module('Aggie')
     var renderChart = function () {
       var chart = new CanvasJS.Chart('chartContainer', {
         data: buildDataSeries(),
-        axisX: { labelFontSize: 11, labelFontFamily: FONTS },
-        axisY: { labelFontSize: 10, labelFontFamily: FONTS }
+        axisX: {
+          labelFontSize: 11,
+          labelFontFamily: FONTS,
+          lineThickness: 1,
+          tickThickness: 1
+        },
+        axisY: {
+          labelFontSize: 11,
+          labelFontFamily: FONTS,
+          gridThickness: 1,
+          lineThickness: 1,
+          tickThickness: 1
+        }
       });
       chart.render();
     };
@@ -143,12 +154,12 @@ angular.module('Aggie')
         return {
           x: new Date(parseInt(c.timebox)),
           y: c.counts,
-          color: trend.color
+          color: trend.color,
           toolTipContent: "<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}",
           keywords: q.keywords ? '<p>Keywords: ' + q.keywords + '</p>' : '',
           media: q.sourceType ? '<p>Media: ' + q.sourceType + '</p>' : '',
           source: q.sourceId ? '<p>Source: ' + $scope.sourcesById[q.sourceId].nickname + '</p>' : '',
-          incident: q.incidentId ? '<p>Incident: ' + $scope.incidentsById[q.incidentId].title + '</p>' : '',
+          incident: q.incidentId ? '<p>Incident: ' + $scope.incidentsById[q.incidentId].title + '</p>' : ''
         };
       });
     };
