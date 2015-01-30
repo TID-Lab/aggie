@@ -28,18 +28,21 @@
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes | orderBy:'toString()'" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.sourceType" ng-options="type | capitalize | translate for type in sourceTypes | orderBy:'toString()'" ng-change="search()" class="form-control">
         <option value="">Media</option>
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.sourceId" ng-options="value._id as value.nickname for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
         <option value="">Source</option>
       </select>
     </div>
     <div class="filter incident-filter">
-      <select ng-model="searchParams.incidentId" ng-options="value._id as value.title for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
-        <option value="">Incident</option>
+      <select ng-model="searchParams.incidentId" ng-change="search()" class="form-control">
+        <option value="null">Incident</option>
+        <option value="a">Any Incident</option>
+        <option value="n">No Incident</option>
+        <option ng-repeat="(key, value) in incidents | orderObjectBy:'title'" value="value._id">{{ value.title | capitalize }}</option>
       </select>
     </div>
     <div class="filter date-filter">
