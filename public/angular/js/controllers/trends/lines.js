@@ -139,18 +139,16 @@ angular.module('Aggie')
     // Get the data points for the chart for a given trend.
     var getDataPoints = function(trend) {
       return trend.counts.map(function(c) {
+        var q = trend.query;
         return {
-          toolTipContent: "<p>{keywords} ({y})</p>"
-            + "<p>{sourceType}</p>"
-            + "<p>{source}</p>"
-            + "<p>{incident}</p>",
           x: new Date(parseInt(c.timebox)),
           y: c.counts,
-          keywords: trend.query.keywords,
-          sourceType: trend.query.sourceType,
-          source: trend.query.sourceId ? $scope.sourcesById[trend.query.sourceId].nickname : '',
-          incident: trend.query.incidentId ? $scope.incidentsById[trend.query.incidentId].title : '',
           color: trend.color
+          toolTipContent: "<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}",
+          keywords: q.keywords ? '<p>Keywords: ' + q.keywords + '</p>' : '',
+          media: q.sourceType ? '<p>Media: ' + q.sourceType + '</p>' : '',
+          source: q.sourceId ? '<p>Source: ' + $scope.sourcesById[q.sourceId].nickname + '</p>' : '',
+          incident: q.incidentId ? '<p>Incident: ' + $scope.incidentsById[q.incidentId].title + '</p>' : '',
         };
       });
     };
