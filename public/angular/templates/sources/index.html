@@ -11,6 +11,7 @@
   <thead>
     <tr>
       <th class="compact">Name</th>
+      <th class="compact">Creator</th>
       <th class="expand">Target</th>
       <th class="compact">Unread Error Count</th>
       <th class="compact">Enabled</th>
@@ -22,6 +23,9 @@
         <a href="sources/{{s._id}}">
           <div class="icon-left">{{ s.nickname }}</div>
         </a>
+      </td>
+      <td class="compact content">
+        <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>
       <td>

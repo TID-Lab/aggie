@@ -21,6 +21,7 @@ var schema = new mongoose.Schema({
   updatedAt: Date,
   storedAt: Date,
   assignedTo: String,
+  creator : { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: {type: String, default: 'new', required: true},
   veracity: {type: Boolean, default: null },
   escalated: {type: Boolean, default: false, required: true},
