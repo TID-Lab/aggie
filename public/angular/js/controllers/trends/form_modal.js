@@ -27,7 +27,6 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(trend) {
         Trend.create(trend, function(response) {
-          flash.setNotice('Trend was successfully created.');
           $rootScope.$state.go($rootScope.$state.current, {}, { reload: true });
         }, function(err) {
           flash.setAlertNow('Trend failed to be created. Please contact support.');

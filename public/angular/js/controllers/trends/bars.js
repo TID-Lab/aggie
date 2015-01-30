@@ -102,7 +102,7 @@ angular.module('Aggie')
 
       // set height proportional to max trend bucket value in view per max height
       trends.map(function (t) {
-        t.max = Math.floor((t.max / globalMax) * maxHeight);
+        t.max = Math.floor(((t.max / globalMax) * maxHeight) * 0.5);
       });
 
       // Let Angular know our secrets...

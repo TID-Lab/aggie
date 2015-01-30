@@ -58,24 +58,20 @@ angular.module('Aggie')
 
     var processTrends = function(trends) {
       var startTime = null,
-        endTime = null,
-        globalMax = null,
-
-        // maximum height is either the screenheight / number of trends, or 50, whichever is higher
-        maxHeight = Math.max(Math.floor(window.screen.availHeight/trends.length), 50);
+        endTime = null;
 
       // Determine minimum startTime and maximum endTime
       trends.forEach(function(trend) {
         var counts = trend.counts.reverse();
-        if (!counts.length) { return }
-        startTime = Math.min(parseInt(counts[0].timebox), startTime || Infinity)
+        if (!counts.length) { return; }
+        startTime = Math.min(parseInt(counts[0].timebox), startTime || Infinity);
         endTime = Math.max(parseInt(counts[counts.length - 1].timebox), endTime);
       });
 
       // Adjust startTime so no more than N timeboxes will be shown.
       startTime = Math.max(startTime, endTime - config.interval * config.perPage);
 
-      trends.forEach(function(trend) {
+      trends.forEach(function(trend, i) {
         var counts = [],
           displayCounts = [],
           countsByTimebox = {};
@@ -90,21 +86,16 @@ angular.module('Aggie')
         for (var t = startTime; t <= endTime; t += config.interval) {
           var item = countsByTimebox[t];
           if (!item) {
-            item = { counts: null, timebox: t }
+            item = { counts: 0, timebox: t };
             countsByTimebox[t] = item;
           }
-          counts.push(item)
+          counts.push(item);
         }
 
         trend.counts = counts;
-      });
 
-      // get the maximum max
-      globalMax = Math.max.apply(null, trends.map(function(t){return t.max;}));
-
-      // set height proportional to max trend bucket value in view per max height
-      trends.map(function (t) {
-        t.max = Math.floor((t.max / globalMax) * maxHeight);
+        // set trend color
+        trend.color = $scope.customColors[i % $scope.customColors.length];
       });
 
       // Let Angular know our secrets...
@@ -115,6 +106,21 @@ angular.module('Aggie')
       parseQueries();
     };
 
+    $scope.customColors = [
+      '#c0b1d5',
+      '#cde2a7',
+      '#eca9a6',
+      '#a3bee6',
+      '#f2a24f',
+      '#5bbfd9',
+      '#ab96c8',
+      '#b7d37c',
+      '#d56962',
+      '#71a1d8'
+    ];
+
+    CanvasJS.addColorSet('aggieColors', $scope.customColors);
+
     var renderChart = function () {
       var time;
       var datapoints = $scope.trends.map(function(t) {
@@ -122,7 +128,17 @@ angular.module('Aggie')
         if (t.enabled) {
           return t.counts.map(function(c) {
             time++;
-            return {x: new Date(parseInt(c.timebox)), y: c.counts};
+            return {
+              toolTipContent: "<p>{keywords} ({y})</p>"
+                + "<p>{sourceType}</p>"
+                + "<p>{source}</p>"
+                + "<p>{incident}</p>",
+              x: new Date(parseInt(c.timebox)),
+              y: c.counts,
+              keywords: t.query.keywords,
+              sourceType: t.query.sourceType,
+              source: t.query.sourceId ? $scope.sourcesById[t.query.sourceId].nickname : '',
+              incident: t.query.incidentId ? $scope.incidentsById[t.query.incidentId].title : ''};
           });
         } else {
           return null;
@@ -130,13 +146,29 @@ angular.module('Aggie')
       });
 
       var charts = [];
-      datapoints.forEach(function(d) {
-        charts.push({type: 'area', dataPoints: d, lineThickness: 0});
+      datapoints.forEach(function(d, i) {
+        charts.push({
+          type: 'stackedArea',
+          dataPoints: d,
+          lineThickness: 0,
+          fillOpacity: 1
+        });
       });
 
-      var chart = new CanvasJS.Chart('chartContainer', {
-        data: charts
-      });
+      var chart = new CanvasJS.Chart(
+        'chartContainer',
+        {
+          colorSet: 'aggieColors',
+          data: charts,
+          axisX: {
+            labelFontSize: 11,
+            labelFontFamily: '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif'
+          },
+          axisY: {
+            labelFontSize: 10,
+            labelFontFamily: '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif'
+          }
+        });
 
       chart.render();
     };

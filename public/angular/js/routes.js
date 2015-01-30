@@ -3,6 +3,8 @@ angular.module('Aggie')
 .config([
   '$stateProvider',
   function($stateProvider, tz) {
+    var lastAnalysis;
+
     $stateProvider.state('home', {
       url: '/',
       onEnter: function($state) {
@@ -176,10 +178,22 @@ angular.module('Aggie')
       templateUrl: '/templates/analysis.html'
     });
 
+    $stateProvider.state('lastAnalysis', {
+      onEnter: function($state) {
+        if (!lastAnalysis) {
+          lastAnalysis = 'analysis.trend-lines';
+        }
+        $state.go(lastAnalysis);
+      }
+    });
+
     $stateProvider.state('analysis.trend-lines', {
       url: '/trend-lines',
       templateUrl: '/templates/trends/lines.html',
       controller: 'TrendsLinesController',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.trend-lines';
+      },
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
@@ -197,6 +211,9 @@ angular.module('Aggie')
       url: '/trend-bars',
       templateUrl: '/templates/trends/bars.html',
       controller: 'TrendsBarsController',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.trend-bars';
+      },
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
@@ -212,6 +229,9 @@ angular.module('Aggie')
 
     $stateProvider.state('analysis.incidentsMap', {
       url: '/incidents-map',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.incidentsMap';
+      },
       templateUrl: '/templates/incidents/map.html',
       controller: 'IncidentsMapController',
       resolve: {

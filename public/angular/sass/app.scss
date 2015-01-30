@@ -416,3 +416,82 @@ footer {
     bottom: 12px;
   }
 }
+
+
+.legend-item {
+  font-weight: bold;
+  width: 100%;
+}
+
+.legend-item label {
+  padding: 0.5em;
+}
+
+.legend-item input[type="checkbox"] {
+  float: left;
+  margin-right: 10px;
+  vertical-align: bottom;
+}
+
+.legend-item input[type="checkbox"],
+.legend-item .close {
+}
+
+.legend-terms {
+  font-size: 11px;
+  font-weight: bold;
+  color: #222222;
+  float: left;
+  padding-left: 18px;
+  position: relative;
+}
+
+.legend-terms-disabled {
+  font-size: 11px;
+  font-weight: normal;
+  color: lightgrey;
+  float: left;
+  padding-left: 18px;
+  position: relative;
+}
+
+.legend-terms:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 8px;
+}
+
+.legend-terms p {
+  margin: 0 0 5px 0;
+}
+
+.legend-terms p:last-child {
+  margin: 0;
+}
+
+.legend-terms p strong {
+  color: silver;
+}
+
+.clear {
+  font-size: 15px;
+  background: transparent;
+  border: 0;
+  color: light-grey;
+}
+
+.canvasjs-chart-tooltip > div > p {
+  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #222222;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  margin: 2px;
+}
+
+.table-actions button {
+  font-weight: bold;
+}
