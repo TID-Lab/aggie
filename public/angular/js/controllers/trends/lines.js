@@ -24,6 +24,9 @@ angular.module('Aggie')
     $scope.startTime = null;
     $scope.endTime = null;
 
+    var FONTS = '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif';
+    var COLORS = ['#c0b1d5','#cde2a7','#eca9a6','#a3bee6','#f2a24f','#5bbfd9','#ab96c8','#b7d37c','#d56962','#71a1d8'];
+
     var config = {
       interval: 1000 * 60 * 5,
       perPage: 48
@@ -92,10 +95,8 @@ angular.module('Aggie')
           counts.push(item);
         }
 
+        trend.color = COLORS[i++ % COLORS.length];
         trend.counts = counts;
-
-        // set trend color
-        trend.color = $scope.customColors[i % $scope.customColors.length];
       });
 
       // Let Angular know our secrets...
@@ -106,71 +107,52 @@ angular.module('Aggie')
       parseQueries();
     };
 
-    $scope.customColors = [
-      '#c0b1d5',
-      '#cde2a7',
-      '#eca9a6',
-      '#a3bee6',
-      '#f2a24f',
-      '#5bbfd9',
-      '#ab96c8',
-      '#b7d37c',
-      '#d56962',
-      '#71a1d8'
-    ];
-
-    CanvasJS.addColorSet('aggieColors', $scope.customColors);
-
     var renderChart = function () {
-      var time;
-      var datapoints = $scope.trends.map(function(t) {
-        time = 0;
-        if (t.enabled) {
-          return t.counts.map(function(c) {
-            time++;
-            return {
-              toolTipContent: "<p>{keywords} ({y})</p>"
-                + "<p>{sourceType}</p>"
-                + "<p>{source}</p>"
-                + "<p>{incident}</p>",
-              x: new Date(parseInt(c.timebox)),
-              y: c.counts,
-              keywords: t.query.keywords,
-              sourceType: t.query.sourceType,
-              source: t.query.sourceId ? $scope.sourcesById[t.query.sourceId].nickname : '',
-              incident: t.query.incidentId ? $scope.incidentsById[t.query.incidentId].title : ''};
-          });
-        } else {
-          return null;
-        }
+      var chart = new CanvasJS.Chart('chartContainer', {
+        data: buildDataSeries(),
+        axisX: { labelFontSize: 11, labelFontFamily: FONTS },
+        axisY: { labelFontSize: 10, labelFontFamily: FONTS }
       });
+      chart.render();
+    };
 
-      var charts = [];
-      datapoints.forEach(function(d, i) {
-        charts.push({
+    // Build the data series (plural) to be used in the chart.
+    var buildDataSeries = function() {
+      var series = [];
+
+      // We reverse the trends array because the lines are built from bottom up
+      // but the legend is built from top down.
+      $scope.trends.slice(0).reverse().forEach(function(t) {
+        if (!t.enabled) return;
+        series.push({
+          color: t.color,
           type: 'stackedArea',
-          dataPoints: d,
+          dataPoints: getDataPoints(t),
           lineThickness: 0,
           fillOpacity: 1
         });
       });
 
-      var chart = new CanvasJS.Chart(
-        'chartContainer',
-        {
-          colorSet: 'aggieColors',
-          data: charts,
-          axisX: {
-            labelFontSize: 11,
-            labelFontFamily: '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif'
-          },
-          axisY: {
-            labelFontSize: 10,
-            labelFontFamily: '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif'
-          }
-        });
+      return series;
+    };
 
-      chart.render();
+    // Get the data points for the chart for a given trend.
+    var getDataPoints = function(trend) {
+      return trend.counts.map(function(c) {
+        return {
+          toolTipContent: "<p>{keywords} ({y})</p>"
+            + "<p>{sourceType}</p>"
+            + "<p>{source}</p>"
+            + "<p>{incident}</p>",
+          x: new Date(parseInt(c.timebox)),
+          y: c.counts,
+          keywords: trend.query.keywords,
+          sourceType: trend.query.sourceType,
+          source: trend.query.sourceId ? $scope.sourcesById[trend.query.sourceId].nickname : '',
+          incident: trend.query.incidentId ? $scope.incidentsById[trend.query.incidentId].title : '',
+          color: trend.color
+        };
+      });
     };
 
     $scope.parseKeywords = function(trend) {

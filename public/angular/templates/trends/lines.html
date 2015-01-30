@@ -1,4 +1,4 @@
-<p ng-hide="trends.length > 0 ">Sorry, but we couldn't find any results.</p>
+<p ng-hide="trends.length > 0 ">There are currently no trends. Click 'Create Trend' to make one.</p>
 
 <div id="chartContainer" style="margin: 5px; height: 400px; width: 80%; float: left;">
 </div>
@@ -6,7 +6,7 @@
 <div class="table-actions" style="float:left; width: 200px;">
   <button ng-controller="TrendFormModalController" class="btn btn-info" ng-click="create()">Create Trend</button>
 
-  <div ng-repeat="t in trends | orderBy:['-enabled', '-lastEnabledAt']" class="legend-item">
+  <div ng-repeat="t in trends | orderBy:['-enabled']" class="legend-item">
     <label>
       <input type="checkbox" ng-model="t.enabled" ng-change="toggleEnabled(t)" ng-checked="{{t.enabled}}">
       <span class="legend-color" style="float: left; content: ''; height: 30px; width: 8px; background-color: {{t.enabled ? t.color : 'lightgrey'}}"></span>
