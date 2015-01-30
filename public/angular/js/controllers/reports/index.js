@@ -26,7 +26,6 @@ angular.module('Aggie')
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.incidents = incidents.results;
-    console.log(incidents);
     $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
