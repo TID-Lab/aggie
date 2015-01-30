@@ -23,12 +23,36 @@
               </div>
             </div>
           </div>
+
           <div class="form-group" ng-hide="minimal">
-            <label for="veracity" class="col-lg-2 control-label">Verified</label>
+            <label for="veracity" class="col-lg-2 control-label">Veracity</label>
+            <div class="col-lg-4">
+              <select ng-model="incident.veracity"
+                      class="form-control"
+                      ng-options="v.value as v.label for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
+              </select>
+            </div>
+
+            <label class="col-lg-2 control-label">Status</label>
+            <div class="col-lg-3">
+              <select ng-model="incident.closed"
+                      class="form-control"
+                      ng-options="v.value as v.label for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
+              </select>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.user.$error.required">User is required.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group" ng-hide="minimal">
+            <label for="escalated" class="col-lg-2 control-label">Escalated</label>
             <div class="col-lg-9">
-              <input type="checkbox" id="veracity" name="veracity" ng-model="incident.veracity" class="form-control">
+              <input type="checkbox" id="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
             </div>
           </div>
+
           <div class="form-group">
             <label for="location" class="col-lg-2 control-label">Location</label>
             <div class="col-lg-9">
@@ -36,6 +60,7 @@
               <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng">Edit coordinates...</button>
             </div>
           </div>
+
           <div class="form-group" ng-hide="minimalLatLng">
             <label for="latitude" class="col-lg-2 control-label inline">Latitude</label>
             <div class="col-lg-3 inline">

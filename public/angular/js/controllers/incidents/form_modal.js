@@ -25,7 +25,10 @@ angular.module('Aggie')
             return Incident.query().$promise;
           }],
           incident: function () {
-            return {};
+            return {
+              veracity: null,
+              closed: false
+            };
           },
           report: function () {
             return report;
@@ -114,7 +117,8 @@ angular.module('Aggie')
     $scope.showErrors = false;
     $scope.report = report;
     $scope.minimal = !!report;
-    $scope.minimalLatLng = $scope.minimal;
+    $scope.minimalLatLng = true;
+
     $scope.save = function(form) {
       if (form.$invalid) {
         $scope.showErrors = true;

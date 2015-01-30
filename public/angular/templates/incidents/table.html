@@ -39,7 +39,7 @@
           <span ng-if="!i.veracity" class="text-red">False</span>
         </div>
       </td>
-      <td class="compact content">{{ {true: 'Escalated'}[i.escalated] }}</td>
+      <td class="compact content">{{ {false: 'No', true: 'Yes'}[i.escalated] }}</td>
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.updatedAt | interval }}</span>
