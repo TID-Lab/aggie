@@ -33,6 +33,10 @@ sourceSchema.pre('save', function(next) {
     this._sourceErrorCountUpdated = true;
   }
 
+  if (!this.isNew && this.isModified('enabled')) {
+    this._sourceStatusChanged = true;
+  }
+
   // Only allow a single Twitter source
   if (this.isNew && this.media === 'twitter') {
     Source.findOne({media: 'twitter'}, function(err, source) {
@@ -45,8 +49,17 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
-  if (!this._silent) sourceSchema.emit('source:save', {_id: this._id.toString()});
-  if (this._sourceErrorCountUpdated) sourceSchema.emit('sourceErrorCountUpdated');
+  if (this._sourceStatusChanged) {
+    var event = (this.enabled) ? 'source:enable' : 'source:disable';
+    sourceSchema.emit(event, {_id: this._id.toString()});
+  }
+  else {
+    if (!this._silent) sourceSchema.emit('source:save', {_id: this._id.toString()});
+  }
+
+  if (this._sourceErrorCountUpdated) {
+    sourceSchema.emit('sourceErrorCountUpdated');
+  }
 });
 
 sourceSchema.pre('remove', function(next) {
@@ -56,22 +69,12 @@ sourceSchema.pre('remove', function(next) {
 
 // Enable source
 sourceSchema.methods.enable = function() {
-  if (!this.enabled) {
-    this.enabled = true;
-    this.save(function(err, source) {
-      sourceSchema.emit('source:enable', {_id: source._id.toString()});
-    });
-  }
+  this.enabled = true;
 };
 
 // Disable source
 sourceSchema.methods.disable = function() {
-  if (this.enabled) {
-    this.enabled = false;
-    this.save(function(err, source) {
-      sourceSchema.emit('source:disable', {_id: source._id.toString()});
-    });
-  }
+  this.enabled = false;
 };
 
 // Log events in source
