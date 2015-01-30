@@ -3,6 +3,7 @@
 }
 
 .modal-header {
+
   .close {
     z-index: 1000;
     float: none;
@@ -12,24 +13,44 @@
   }
 }
 
+.modal-lg {
+  width: 90%;
+}
+
 .modal-body {
   font-size: 14px;
   padding: 15px;
+
+  .info {
+    margin: 0;
+    margin-bottom: 25px;
+    font-weight: 500;
+  }
+
   .well {
     padding: 0px;
     margin-bottom: 0px;
+  }
+
+  tbody tr {
+    transition: background 0.2s ease-in-out;
+
+    &.item:hover {
+      cursor: pointer;
+      background-color: #eef3f7;
+    }
   }
 }
 
 .modal-header,
 .modal-footer {
-  background-color: darken(#e3e6e3, 10%);
+  background-color: #c8cec8;
   margin-top: 0px;
   padding: 10px 20px 10px;
 }
 
 .modal-content {
-  background-color: #e3e6e3;
+  background-color: #fff;
   font-size: 14px;
 }
 

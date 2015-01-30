@@ -2,6 +2,8 @@ $navbar-green: #009446;
 $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
+$gray: #aaaaaa;
+$blue: #5bc0de;
 
 @import 'forms';
 @import 'modals';
@@ -30,14 +32,52 @@ a {
   }
 }
 
+.padding {
+  padding: 10px;
+}
+
+.nopadding {
+  padding: 0
+}
+
+.nomargin {
+  margin: 0
+}
+
+.padding-top-bottom {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.padding-sm {
+  padding: 5px;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.margin-bottom-lg {
+  margin-bottom: 20px;
+}
+
 .navbar-wrapper {
   margin-bottom: 21px;
 }
 
-.navbar-brand {
-  text-transform: uppercase;
-  text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
-  line-height: 19px;
+/* Adding all this context so we override the default bootstrap -15 left margin */
+.navbar .container .navbar-brand {
+  margin-top: 7px;
+  margin-right: 20px;
+  margin-left: 0;
+  background-image: url(../images/logo-v1.png);
+  background-repeat: no-repeat;
+  width: 104px;
+  height: 28px;
 }
 
 .navbar {
@@ -56,6 +96,18 @@ a {
       background-color: darken($navbar-green, 10%);
     }
   }
+}
+
+.navbar-nav > li > ul {
+  > li {
+    line-height: 40px;
+    > a {
+      font-size: 14px;
+    }
+  }
+  padding: 0;
+  border: hidden;
+  background-color: darken($navbar-green, 10%);
 }
 
 .navbar-nav.navbar-right:last-child {
@@ -86,6 +138,15 @@ a {
   line-height: 1;
   margin: 0;
   padding: 8px 0;
+  font-weight: normal;
+
+  .nav-bar-number {
+    font-size: 18px;
+  }
+  .nav-bar-label {
+    font-size: 12px;
+    margin-right: 10px;  
+  }
 }
 
 .nav li.user {
@@ -97,7 +158,7 @@ a {
 }
 
 .well {
-  background-color: #e3e6e3;
+  background-color: #fff;
 }
 
 .btn {
@@ -152,12 +213,24 @@ a {
   }
 }
 
-.zero-errors {
+.zero-errors, .green, .text-green {
   color: green;
 }
 
-.multiple-errors {
+.multiple-errors, .text-red {
   color: red;
+}
+
+.text-blue {
+  color: $link-blue;
+}
+
+.text-gray {
+  color: $gray;
+}
+
+.bg-gray {
+  background-color: #eee;
 }
 
 .fetching {
@@ -260,6 +333,13 @@ li.collapse, li.collapsing {
   }
 }
 
+.btn-text {
+  padding: 0;
+  border: none;
+  background: none;
+  color: rgb(25,181,217);
+}
+
 #map-canvas {
   width: 100%;
   height: 450px;
@@ -277,6 +357,40 @@ li.collapse, li.collapsing {
   width: 20px;
   height: 20px;
   background-image: url('../images/map-marker.png');
+}
+
+.table-settings {
+  position: relative;
+  width: 50%;
+
+  label {
+    margin: 0;
+  }
+
+  .settings-label {
+    font-size: 16px;
+  }
+
+  td > div {
+    label.active {
+      background-color: #92c8dc;
+    }
+  }
+}
+
+.refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
 }
 
 #wrapper {

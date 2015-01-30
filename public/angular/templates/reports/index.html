@@ -16,6 +16,20 @@
     <div ng-hide="noFilters()">
       <button type="submit" class="btn" ng-click="clearFilters()">Clear Filters</button>
     </div>
+    <div class="filter author-filter">
+      <div class="input-group">
+        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="Enter author">
+        <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+        </div>
+      </div>
+    </div>
+    <div class="filter status-filter">
+      <select ng-model="searchParams.status" ng-options="option as option | translate for option in statusOptions" ng-change="search()" class="form-control">
+        <option value="">Status</option>
+      </select>
+    </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceType" ng-options="type | translate for type in sourceTypes" ng-change="search()" class="form-control">
         <option value="">Source Media</option>
@@ -53,6 +67,28 @@
     </div>
   </div>
 </form>
+
+<div class="table-actions margin-bottom-lg">
+  <div class="pull-left checkbox-btn bg-gray">
+    <input ng-select-all items="reports" type="checkbox" />
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)">Mark as Read</a>
+    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)">Mark as Unread</a>
+  </div>
+  <div class="pull-left margin-right padding">
+    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)">Flag</a>
+    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)">Unflag</a>
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</button>
+  </div>
+  <div class="pull-left margin-left padding-top-bottom">
+    <a ng-if="!countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(true)">Mark all Read</a>
+    <a ng-if="countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(false)">Mark all Unread</a>
+  </div>
+  <div class="clearfix"></div>
+</div>
 
 <p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any results.</p>
 

@@ -28,6 +28,10 @@
       <td class="detail-value">{{ incident.longitude | number:6 }}</td>
     </tr>
     <tr>
+      <td class="detail-key">Creator</td>
+      <td class="detail-value">{{ incident.creator.username }}</td>
+    </tr>
+    <tr>
       <td class="detail-key">Assigned To</td>
       <td class="detail-value"><a href ng-click="viewProfile(incident._assignedTo)">{{ incident._assignedTo.username }}</a></td>
     </tr>

@@ -3,17 +3,22 @@ angular.module('Aggie')
 .controller('IncidentSelectModalController', [
   '$rootScope',
   '$scope',
+  '$q',
   '$location',
   '$modal',
+  '$modalStack',
   'Incident',
   'Report',
   'FlashService',
-  function($rootScope, $scope, $location, $modal, Incident, Report, flash) {
-    $scope.setIncident = function(report) {
+  function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, flash) {
+
+    $scope.setIncident = function (report) {
+      $modalStack.dismissAll();
       var modalInstance = $modal.open({
+        windowClass: 'report-to-existing',
+        size: 'lg',
         controller: 'IncidentSelectModalInstanceController',
-        templateUrl: 'templates/incidents/report_incident_modal.html',
-        scope: $scope,
+        templateUrl: '/templates/incidents/report_incident_modal.html',
         resolve: {
           incidents: ['Incident', function(Incident) {
             return Incident.query().$promise;
@@ -25,9 +30,9 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(report) {
-        report.read = true;     
+        report.read = true;
         Report.update({id: report._id}, report, function(response) {
-          $scope.$parent.r = report;
+          $rootScope.$state.go('reports', { r: report }, { reload: false });
         }, function(err) {
           flash.setAlertNow('Report failed to be added to incident.');
         });
@@ -37,14 +42,21 @@ angular.module('Aggie')
 ])
 
 .controller('IncidentSelectModalInstanceController', [
+  '$rootScope',
   '$scope',
   '$modalInstance',
   'incidents',
   'report',
-  function($scope, $modalInstance, incidents, report) {
-    $scope.incidents = incidents.results;
+  function($rootScope, $scope, $modalInstance, incidents, report) {
     $scope.report = angular.copy(report);
+    $scope.incidents = incidents.results;
+    $scope.modal = $modalInstance;
     $scope._showErrors = false;
+
+    $scope.select = function (incident) {
+      report._incident = incident._id;
+      $modalInstance.close(report);
+    }
 
     $scope.showErrors = function() {
       return $scope._showErrors;
@@ -61,5 +73,6 @@ angular.module('Aggie')
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
     };
+
   }
 ]);

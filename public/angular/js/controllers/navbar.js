@@ -10,17 +10,25 @@ angular.module('Aggie')
   '$state',
   function($scope, $rootScope, $location, AuthService, flash, Socket, $state) {
     $scope.unreadErrorCount = '0';
-
+ 
     var init = function() {
       if ($rootScope.currentUser) {
         Socket.on('sourceErrorCountUpdated', sourceErrorCountUpdated);
+        Socket.on('stats', updateStats);
+        Socket.join('stats');
       } else {
         Socket.off('sourceErrorCountUpdated');
+        Socket.leave('stats');
+        Socket.removeAllListeners('stats');
       }
     };
 
     var sourceErrorCountUpdated = function(response) {
       $scope.unreadErrorCount = response.unreadErrorCount;
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     $scope.logout = function() {

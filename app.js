@@ -7,7 +7,7 @@ var log = require('./lib/master-logger').log;
 // fork child at specific module path
 function _fork(modulePath) {
   var child = processManager.fork(modulePath);
-  require('./lib/master-logger').init(child.moduleName);
+  initLogger(child.moduleName);
   log(child.moduleName, 'debug', 'Aggie started');
 }
 

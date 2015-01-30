@@ -7,6 +7,7 @@
     </h4>
   </div>
   <div class="modal-body">
+    <p ng-show="report" class="info">Enter the incident details below<span ng-show="incidents.length">. Or you can <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">choose an existing incident</button></span>.</p>
     <div class="well bs-component">
       <form name="form" class="form-horizontal">
         <fieldset>
@@ -22,7 +23,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-hide="minimal">
             <label for="veracity" class="col-lg-2 control-label">Verified</label>
             <div class="col-lg-9">
               <input type="checkbox" id="veracity" name="veracity" ng-model="incident.veracity" class="form-control">
@@ -32,9 +33,10 @@
             <label for="location" class="col-lg-2 control-label">Location</label>
             <div class="col-lg-9">
               <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
+              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng">Edit coordinates...</button>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-hide="minimalLatLng">
             <label for="latitude" class="col-lg-2 control-label inline">Latitude</label>
             <div class="col-lg-3 inline">
               <input id="latitude" ng-required="incident.longitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="incident.latitude">
@@ -49,14 +51,13 @@
             <div class="col-lg-3 inline">
               <input id="longitude" ng-required="incident.latitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-180" ng-max="180" name="longitude" type="text" class="form-control" ng-round="6" ng-model="incident.longitude">
               <div class="has-error" ng-show="showErrors">
-
                 <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin">Longitude is invalid.</div>
                 <div class="help-block" ng-show="form.longitude.$error.required">Longitude is required if latitude is entered.</div>
                     <div class="help-block" ng-show="form.longitude.$error.pattern">Longitude is invalid.</div>
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-hide="minimal">
             <label for="user" class="col-lg-2 control-label">Assign To</label>
             <div class="col-lg-9">
               <select id="user" name="user" ng-model="incident._assignedTo" ng-options="user._id as user.username for user in users" class="form-control">

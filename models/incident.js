@@ -9,6 +9,8 @@ var Schema = mongoose.Schema;
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
+var listenTo = require('mongoose-listento');
+var Report = require('./report');
 
 require('../lib/error');
 
@@ -19,17 +21,19 @@ var schema = new mongoose.Schema({
   longitude: Number,
   updatedAt: Date,
   storedAt: Date,
-  _assignedTo: { type: Schema.Types.ObjectId, ref: 'User' },
+  assignedTo: String,
+  creator : { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: {type: String, default: 'new', required: true},
   veracity: {type: Boolean, default: null },
-
   escalated: {type: Boolean, default: false, required: true},
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
-  
+  totalReports: {type: Number, default: 0},
   notes: String
 });
 
+schema.plugin(listenTo);
+autoIncrement.initialize(mongoose.connection);
 
 schema.pre('save', function(next) {
   if (this.isNew) this.storedAt = new Date();
@@ -45,8 +49,26 @@ schema.post('save', function() {
 });
 
 var Incident = mongoose.model('Incident', schema);
-autoIncrement.initialize(mongoose.connection);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
+
+
+schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
+  Incident.findById(prevIncident || newIncident, function(err, incident) {
+    if (err || !incident) return;
+    var total = incident.totalReports;
+
+    if (prevIncident) {
+      total = (total > 0) ? total - 1 : 0;
+    } 
+    else if (newIncident) {
+      total = (total) ? total + 1 : 1;
+    }
+
+    incident.totalReports = total;
+
+    incident.save();
+  });
+});
 
 // Query incidents based on passed query data
 Incident.queryIncidents = function(query, page, options, callback) {
