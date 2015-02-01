@@ -1,7 +1,7 @@
 <p ng-hide="trends.length > 0 ">There are currently no trends. Click 'Create Trend' to make one.</p>
+<p ng-hide="trends.length == 0">Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.</p>
 
-<div id="chartContainer" style="margin: 5px; height: 600px; width: 80%; float: left;">
-</div>
+<div id="chartContainer" style="margin: 5px; height: 600px; width: 80%; float: left;"></div>
 
 <div class="table-actions" style="float:left; width: 200px;">
   <button ng-controller="TrendFormModalController" class="btn btn-info" ng-click="create()">Create Trend</button>
@@ -30,3 +30,5 @@
     </div>
   </div>
 </div>
+
+
