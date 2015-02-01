@@ -79,9 +79,15 @@ angular.module('Aggie')
       return memo;
     };
 
-    $scope.search = function(params) {
+    $scope.search = function() {
       $scope.$evalAsync(function() {
-        $state.go('reports', searchParams(params), { reload: true });
+
+        // Remove empty params.
+        var params = searchParams();
+        for (var key in params) {
+          if (!params[key]) params[key] = null;
+        }
+        $state.go('reports', params, { reload: true });
       });
     };
 
