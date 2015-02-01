@@ -108,7 +108,7 @@ angular.module('Aggie')
     };
 
     var renderChart = function () {
-      var chart = new CanvasJS.Chart('chartContainer', {
+      $scope.chart = new CanvasJS.Chart('chartContainer', {
         data: buildDataSeries(),
         axisX: {
           labelFontSize: 11,
@@ -125,7 +125,7 @@ angular.module('Aggie')
           tickThickness: 1
         }
       });
-      chart.render();
+      $scope.chart.render();
     };
 
     // Build the data series (plural) to be used in the chart.
@@ -136,14 +136,15 @@ angular.module('Aggie')
       // but the legend is built from top down.
       $scope.trends.slice(0).reverse().forEach(function(t) {
         if (!t.enabled) return;
-        series.push({
+        t.series = {
           color: t.color,
           type: 'stackedArea',
           cursor: 'pointer',
           dataPoints: getDataPoints(t),
           lineThickness: 0,
           fillOpacity: 1
-        });
+        };
+        series.push(t.series);
       });
 
       return series;
