@@ -29,17 +29,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-
-  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId', 'author']);
-
-  if (query.keywords) {
-    // Make all keywords lowercase, then sort them alphabetically
-    query.keywords = query.keywords.replace(/(,|\s)+/g, ' ').split(' ').map(function(w) {
-      return w.toLowerCase();
-    }).sort().join(' ');
-  }
-
-  return query;
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId', 'author']);
 };
 
 module.exports = ReportQuery;
