@@ -97,14 +97,6 @@ angular.module('Aggie')
         trend.counts = counts;
       });
 
-      // get the maximum max
-      globalMax = Math.max.apply(null, trends.map(function(t){return t.max;}));
-
-      // set height proportional to max trend bucket value in view per max height
-      trends.map(function (t) {
-        t.max = Math.floor(((t.max / globalMax) * maxHeight) * 0.5);
-      });
-
       // Let Angular know our secrets...
       $scope.startTime = startTime;
       $scope.endTime = endTime;
