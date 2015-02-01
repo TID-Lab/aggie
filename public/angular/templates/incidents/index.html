@@ -57,9 +57,12 @@
   <div class="pull-left margin-right padding">
     <button ng-controller="IncidentFormModalController" class="btn btn-primary" ng-click="create()">Create Incident</a>
   </div>
-  <div class="pull-right padding pagination">
+
+  <div class="pull-right padding-top-bottom pagination">
     <ul class="pager">
-      <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
+      <li class="pager-label">
+        {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}
+      </li>
       <li>
         <button ng-class="{disabled: isFirstPage() }" ui-sref="incidents({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
       </li>

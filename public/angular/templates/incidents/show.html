@@ -47,20 +47,20 @@
 <p ng-hide="pagination.total > 0">There are no reports to display.</p>
 
 <div ng-show="pagination.total > 0">
-  <form>
-    <div class="table-filters">
-      <div class="filter pagination">
-        <ul class="pager">
-          <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
-          <li>
-            <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-          </li>
-          <li>
-            <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-          </li>
-        </ul>
-      </div>
+  <div class="table-actions">
+    <div class="pull-right padding-top-bottom pagination">
+      <ul class="pager">
+        <li class="pager-label">
+          {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}
+        </li>
+        <li>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
     </div>
-  </form>
+  </div>
   <div ng-include="'/templates/reports/table.html'"></div>
 </div>

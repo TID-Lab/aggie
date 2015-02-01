@@ -81,7 +81,9 @@
   </div>
   <div class="pull-right padding-top-bottom pagination">
     <ul class="pager">
-      <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
+      <li class="pager-label">
+        {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}
+      </li>
       <li>
         <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
       </li>
