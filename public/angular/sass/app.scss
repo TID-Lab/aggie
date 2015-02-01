@@ -67,6 +67,44 @@ a {
   margin-bottom: 20px;
 }
 
+/* BUTONS */
+
+.btn {
+  color: #fff;
+  text-decoration: none;
+  line-height: 15px;
+  height: 25px;
+  padding: 4px 8px;
+  font-size: 12px;
+
+  &.highlight {
+    color: #000;
+    font-weight: normal;
+  }
+}
+
+.btn-info {
+  background-color: #5BC0DE;
+  &:hover {
+    background-color: #39B3D7;
+  }
+}
+
+.btn-default {
+  background-color: #ebeced;
+  color: #808285;
+  &:hover {
+    background-color: #d1d3d4;
+  }
+}
+
+.button-row {
+  .btn {
+    width: 100px;
+  }
+}
+
+
 .navbar-wrapper {
   margin-bottom: 21px;
 }

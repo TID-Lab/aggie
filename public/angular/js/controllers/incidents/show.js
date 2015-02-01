@@ -25,6 +25,7 @@ angular.module('Aggie')
     $scope.sourcesById = {};
     $scope.sourceTypes = sourceTypes;
     $scope.visibleReports = new Queue(paginationOptions.perPage);
+    $scope.pageType = 'show-incident';
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
