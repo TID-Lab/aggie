@@ -25,7 +25,7 @@ angular.module('Aggie')
     $scope.endTime = null;
 
     var FONTS = '"Lato","Helvetica Neue",Helvetica,Arial,sans-serif';
-    var COLORS = ['#c0b1d5','#cde2a7','#eca9a6','#a3bee6','#f2a24f','#5bbfd9','#ab96c8','#b7d37c','#d56962','#71a1d8'];
+    var COLORS = ['#4661EE','#EC5657','#1BCDD1','#8FAABB','#B08BEB','#3EA0DD','#F5A52A','#23BFAA','#FAA586','#EB8CC6'];
 
     var config = {
       interval: 1000 * 60 * 5,
