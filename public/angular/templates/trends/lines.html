@@ -6,18 +6,27 @@
 <div class="table-actions" style="float:left; width: 200px;">
   <button ng-controller="TrendFormModalController" class="btn btn-info" ng-click="create()">Create Trend</button>
 
-  <div ng-repeat="t in trends | orderBy:['-enabled']" class="legend-item">
-    <label>
+  <div class="legend">
+    <div ng-repeat="t in trends | orderBy:['-enabled']" class="legend-item">
       <input type="checkbox" ng-model="t.enabled" ng-change="toggleEnabled(t)" ng-checked="{{t.enabled}}">
-      <span class="legend-color" style="float: left; content: ''; height: 30px; width: 8px; background-color: {{t.enabled ? t.color : 'lightgrey'}}"></span>
-      <span ng-class="{'legend-terms': t.enabled, 'legend-terms-disabled': !t.enabled }">
-        <p>{{t.query.keywords | translate}}</p>
-        <p ng-show="t.query.sourceType"><strong>Media:</strong> {{t.query.sourceType | translate}} </p>
-        <p ng-show="t.query.sourceId"><strong>Source:</strong> {{sourcesById[t.query.sourceId].nickname}} </p>
-        <p ng-show="t.query.incidentId"><strong>Incident:</strong> {{incidentsById[t.query.incidentId].title}} </p>
-      </span>
-      <button class="clear" aggie-confirm="Are you sure you want to delete this trend? (All historical data will be lost)" on-confirm="deleteTrend(t)">&times;</button>
-    </label>
+      <div class="legend-color" style="background-color: {{t.enabled ? t.color : 'lightgrey'}}"></div>
+      <button aggie-confirm="Are you sure you want to delete this trend? (All historical data will be lost)"
+        class="delete" on-confirm="deleteTrend(t)">&times;</button>
+      <div ng-class="['legend-terms', t.enabled ? 'legend-terms-enabled' : 'legend-terms-disabled']">
+        <p ng-show="t.query.keywords" title="{{t.query.keywords | translate}}">
+          {{t.query.keywords | translate}}
+        </p>
+        <p ng-show="t.query.sourceType" title="Media: {{t.query.sourceType | translate}}">
+          <em>Media:</em> {{t.query.sourceType | translate}}
+        </p>
+        <p ng-show="t.query.sourceId" title="Source: {{sourcesById[t.query.sourceId].nickname}}">
+          <em>Source:</em> {{sourcesById[t.query.sourceId].nickname}}
+        </p>
+        <p ng-show="t.query.incidentId" title="Incident: {{incidentsById[t.query.incidentId].title}}">
+          <em>Incident:</em> {{incidentsById[t.query.incidentId].title}}
+        </p>
+      </div>
+      <div class="clearfix"></div>
+    </div>
   </div>
-
 </div>

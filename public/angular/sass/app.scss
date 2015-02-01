@@ -417,70 +417,68 @@ footer {
   }
 }
 
+.legend {
+  margin-top: 20px;
 
-.legend-item {
-  font-weight: bold;
-  width: 100%;
-}
+  .legend-item {
+    background-color: #f6f6f6;
+    margin-bottom: 10px;
+    padding: 5px;
 
-.legend-item label {
-  padding: 0.5em;
-}
+    input[type="checkbox"] {
+      float: left;
+      margin-top: 0px;
+      margin-right: 10px;
+    }
+  }
 
-.legend-item input[type="checkbox"] {
-  float: left;
-  margin-right: 10px;
-  vertical-align: bottom;
-}
+  .legend-color {
+    float: left;
+    content: '';
+    height: 30px;
+    width: 8px;
+  }
 
-.legend-item input[type="checkbox"],
-.legend-item .close {
-}
+  .legend-terms {
+    margin-left: 38px;
 
-.legend-terms {
-  font-size: 11px;
-  font-weight: bold;
-  color: #222222;
-  float: left;
-  padding-left: 18px;
-  position: relative;
-}
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 8px;
+    }
 
-.legend-terms-disabled {
-  font-size: 11px;
-  font-weight: normal;
-  color: lightgrey;
-  float: left;
-  padding-left: 18px;
-  position: relative;
-}
+    p {
+      margin: 0 16px 3px 0;
+      overflow: hidden;
+      white-space: nowrap;
 
-.legend-terms:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 8px;
-}
+      &:last-child {
+        margin: 0;
+      }
 
-.legend-terms p {
-  margin: 0 0 5px 0;
-}
+      em {
+        font-style: normal;
+        color: #aaa;
+      }
+    }
+  }
 
-.legend-terms p:last-child {
-  margin: 0;
-}
+  .legend-terms-disabled {
+    color: #aaa;
+  }
 
-.legend-terms p strong {
-  color: silver;
-}
-
-.clear {
-  font-size: 15px;
-  background: transparent;
-  border: 0;
-  color: light-grey;
+  button.delete {
+    font-size: 15px;
+    background: transparent;
+    border: 0;
+    float: right;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .canvasjs-chart-tooltip > div > p {
