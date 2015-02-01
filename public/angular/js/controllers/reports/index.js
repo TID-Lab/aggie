@@ -79,11 +79,11 @@ angular.module('Aggie')
       return memo;
     };
 
-    $scope.search = function() {
+    $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
 
         // Remove empty params.
-        var params = searchParams();
+        var params = searchParams(newParams);
         for (var key in params) {
           if (!params[key]) params[key] = null;
         }
@@ -188,20 +188,24 @@ angular.module('Aggie')
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
-        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.status === null &&
         $scope.searchParams.media === null &&
+        $scope.searchParams.sourceId === null &&
         $scope.searchParams.incidentId === null &&
-        $scope.searchParams.author === null;
+        $scope.searchParams.author === null &&
+        $scope.searchParams.keywords === null;
     };
 
     $scope.clearFilters = function() {
       $scope.search({
         before: null,
         after: null,
+        status: null,
         sourceId: null,
         media: null,
         incidentId: null,
-        author: null
+        author: null,
+        keywords: null
       });
     };
 
