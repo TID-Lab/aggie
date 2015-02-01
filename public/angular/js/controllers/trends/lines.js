@@ -114,7 +114,8 @@ angular.module('Aggie')
           labelFontSize: 11,
           labelFontFamily: FONTS,
           lineThickness: 1,
-          tickThickness: 1
+          tickThickness: 1,
+          valueFormatString: "h:mmTT" // Should match aggie date format short_time
         },
         axisY: {
           labelFontSize: 11,
