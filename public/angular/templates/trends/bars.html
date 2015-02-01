@@ -4,7 +4,7 @@
 
 <p ng-hide="trends.length > 0 ">Sorry, but we couldn't find any results.</p>
 
-<table aggie-table ng-show="trends.length > 0">
+<table aggie-table ng-show="trends.length > 0" class="trend-bars">
   <thead>
     <tr>
       <th>Query</th>
@@ -15,7 +15,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="t in trends | orderBy:['-enabled', '-lastEnabledAt']" ng-class="trendClass(t)">
-      <td class="compact content">
+      <td class="compact content trend-info">
         <div ng-show="t.query.keywords">Keywords: {{t.query.keywords | translate}}</div>
         <div ng-show="t.query.sourceType">Media: {{t.query.sourceType | translate}}</div>
         <div ng-show="t.query.sourceId">Source: {{sourcesById[t.query.sourceId].nickname || '[Deleted]'}}</div>
