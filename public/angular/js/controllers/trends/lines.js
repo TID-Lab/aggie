@@ -138,6 +138,7 @@ angular.module('Aggie')
         series.push({
           color: t.color,
           type: 'stackedArea',
+          cursor: 'pointer',
           dataPoints: getDataPoints(t),
           lineThickness: 0,
           fillOpacity: 1
@@ -155,12 +156,27 @@ angular.module('Aggie')
           x: new Date(parseInt(c.timebox)),
           y: c.counts,
           color: trend.color,
+          click: function() { gotoReports(q, c); },
           toolTipContent: "<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}",
           keywords: q.keywords ? '<p>Keywords: ' + q.keywords + '</p>' : '',
           media: q.sourceType ? '<p>Media: ' + q.sourceType + '</p>' : '',
           source: q.sourceId ? '<p>Source: ' + $scope.sourcesById[q.sourceId].nickname + '</p>' : '',
           incident: q.incidentId ? '<p>Incident: ' + $scope.incidentsById[q.incidentId].title + '</p>' : ''
         };
+      });
+    };
+
+    // Loads the report page with query params matching the passed query object and count.
+    var gotoReports = function(query, count) {
+      var startTime = new Date(parseInt(count.timebox));
+      var endTime = new Date(parseInt(count.timebox) + config.interval);
+      $rootScope.$state.go('reports', {
+        keywords: query.keywords,
+        before: tz(endTime, '%FT%T'),
+        after: tz(startTime, '%FT%T'),
+        incidentId: query.incidentId,
+        media: query.sourceType,
+        sourceId: query.sourceId
       });
     };
 
