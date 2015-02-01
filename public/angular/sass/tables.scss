@@ -250,13 +250,6 @@ table, .table {
       height: 25px;
     }
   }
-  .date-filter,
-  .pagination {
-    white-space: nowrap;
-    .pager-label {
-      margin-right: 4px;
-    }
-  }
 }
 
 .table-filters,
@@ -266,6 +259,28 @@ table, .table {
     font-size: 14px;
     margin-top: 10px;
     padding: 4px 8px 5px 8px;
+  }
+}
+
+.pagination {
+  margin: 0;
+
+  .btn {
+    width: 25px;
+    font-size: 18px;
+  }
+
+  li {
+    display: inline-block;
+
+    &:not(.pager-label) {
+      margin-left: 5px;
+    }
+
+    &.pager-label {
+      margin-right: 5px;
+      font-size: 13px;
+    }
   }
 }
 

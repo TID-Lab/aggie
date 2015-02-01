@@ -9,7 +9,7 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
-  'sourceTypes',
+  'mediaOptions',
   'incidents',
   'statusOptions',
   'Report',
@@ -17,7 +17,9 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
+    incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
+
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -27,7 +29,7 @@ angular.module('Aggie')
     $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name
 
@@ -77,9 +79,15 @@ angular.module('Aggie')
       return memo;
     };
 
-    $scope.search = function(params) {
+    $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
-        $state.go('reports', searchParams(params), { reload: true });
+
+        // Remove empty params.
+        var params = searchParams(newParams);
+        for (var key in params) {
+          if (!params[key]) params[key] = null;
+        }
+        $state.go('reports', params, { reload: true });
       });
     };
 
@@ -180,20 +188,24 @@ angular.module('Aggie')
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
-        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.status === null &&
         $scope.searchParams.media === null &&
+        $scope.searchParams.sourceId === null &&
         $scope.searchParams.incidentId === null &&
-        $scope.searchParams.author === null;
+        $scope.searchParams.author === null &&
+        $scope.searchParams.keywords === null;
     };
 
     $scope.clearFilters = function() {
       $scope.search({
         before: null,
         after: null,
+        status: null,
         sourceId: null,
         media: null,
         incidentId: null,
-        author: null
+        author: null,
+        keywords: null
       });
     };
 
@@ -330,7 +342,7 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.media] !== -1) {
+      if (source && $scope.mediaOptions[source.media] !== -1) {
         return source.media + '-source';
       } else {
         return 'unknown-source';

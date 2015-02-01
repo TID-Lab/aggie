@@ -30,7 +30,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&sourceType&incidentId&author',
+      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -42,7 +42,7 @@ angular.module('Aggie')
             after: params.after,
             before: params.before,
             sourceId: params.sourceId,
-            sourceType: params.sourceType,
+            media: params.media,
             incidentId: params.incidentId,
             status: params.status,
             author: params.author
@@ -85,7 +85,7 @@ angular.module('Aggie')
           Report.get({ id: $stateParams.id }, function(report) {
             report.content = Autolinker.link(report.content);
             var data = { report: report };
-            
+
             Source.get({ id: report._source }, function(source) {
               data.source = source;
               deferred.resolve(data);
@@ -98,7 +98,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&veracity',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity&escalated',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -110,7 +110,8 @@ angular.module('Aggie')
             locationName: params.locationName,
             assignedTo: params.assignedTo,
             status: params.status,
-            veracity: params.veracity
+            veracity: params.veracity,
+            escalated: params.escalated
           }).$promise;
         }],
         users: ['User', function(User) {
