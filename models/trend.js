@@ -92,7 +92,6 @@ Trend.findPaginatedCounts = function(filters, page, options, callback) {
     if (err) return callback(err);
     trends = _.map(trends, function(trend) {
       trend = trend.toJSON();
-      trend.max = Math.max.apply(null, _.pluck(trend.counts, 'counts'));
       return trend;
     });
     callback(null, trends);
