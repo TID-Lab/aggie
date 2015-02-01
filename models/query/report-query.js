@@ -49,19 +49,19 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype._parseStatus = function(status) {
   switch(status) {
-    case 'flagged':
+    case 'Flagged':
       this.flagged = true;
       break;
-    case 'unflagged':
+    case 'Unflagged':
       this.unflagged = true;
       break;
-    case 'read':
+    case 'Read':
       this.read = true;
       break;
-    case 'unread':
+    case 'Unread':
       this.read = false;
       break;
-    case 'read_unflagged':
+    case 'Read & Unflagged':
       this.read = true;
       this.flagged = false;
       break;
