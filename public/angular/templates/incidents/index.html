@@ -6,7 +6,7 @@
           <i class="fa fa-search"></i>
         </span>
         <input type="text" ng-model="searchParams.title" class="form-control" placeholder="Enter title">
-        <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.title">×</a>
+        <a href class="input-group-addon" ng-click="searchParams.title = null" ng-show="searchParams.title">×</a>
       </div>
     </div>
     <div class="filter search">
@@ -15,7 +15,7 @@
           <i class="fa fa-search"></i>
         </span>
         <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="Enter location">
-        <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.locationName">×</a>
+        <a href class="input-group-addon" ng-click="searchParams.locationName = null" ng-show="searchParams.locationName">×</a>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
         </div>
@@ -38,7 +38,7 @@
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
-        <option value="">Escalated</option>
+        <option value="">Escalated?</option>
       </select>
     </div>
     <div ng-hide="noFilters()">

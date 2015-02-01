@@ -78,9 +78,16 @@ angular.module('Aggie')
       return memo;
     };
 
-    $scope.search = function(params) {
+    $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
-        $state.go('incidents', searchParams(params), { reload: true });
+
+        // Remove empty params.
+        var params = searchParams(newParams);
+        for (var key in params) {
+          if (!params[key]) params[key] = null;
+        }
+
+        $state.go('incidents', params, { reload: true });
       });
     };
 
@@ -146,20 +153,18 @@ angular.module('Aggie')
       });
     };
 
-    $scope.clearSearch = function() {
-      $scope.search({ page: null, title: null, locationName: null});
-    };
-
     $scope.noFilters = function() {
-      return $scope.searchParams.assignedTo === null &&
-        $scope.searchParams.veracity === null;
+      console.log($scope.searchParams)
+      return $scope.searchParams.title === null &&
+        $scope.searchParams.locationName === null &&
+        $scope.searchParams.assignedTo === null &&
+        $scope.searchParams.status === null &&
+        $scope.searchParams.veracity === null &&
+        $scope.searchParams.escalated === null;
     };
 
     $scope.clearFilters = function() {
-      $scope.search({
-        assignedTo: null,
-        veracity: null
-      });
+      $scope.search({ page: null, title: null, locationName: null, assignedTo: null, status: null, veracity: null, escalated: null});
     };
 
     $scope.isFirstPage = function() {

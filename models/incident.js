@@ -57,7 +57,7 @@ schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
 
     if (prevIncident) {
       total = (total > 0) ? total - 1 : 0;
-    } 
+    }
     else if (newIncident) {
       total = (total) ? total + 1 : 1;
     }
@@ -96,6 +96,17 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
+  if (query.veracity == 'confirmed true') filter.veracity = true;
+  if (query.veracity == 'confirmed false') filter.veracity = false;
+  if (query.veracity == 'unconfirmed') filter.veracity = null;
+
+  if (query.status == 'open') filter.closed = false;
+  if (query.status == 'closed') filter.closed = true;
+  delete filter.status;
+
+  if (query.escalated == 'escalated') filter.escalated = true;
+  if (query.escalated == 'unescalated') filter.escalated = false;
+
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
   else delete filter.title;
@@ -104,6 +115,8 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Re-set search timestamp
   query.since = new Date();
+
+  console.log(filter)
 
   // Just use filters when no keywords are provided
   Incident.findPage(filter, page, options, callback);
