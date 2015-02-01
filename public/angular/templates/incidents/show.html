@@ -29,11 +29,11 @@
     </tr>
     <tr>
       <td class="detail-key">Creator</td>
-      <td class="detail-value">{{ incident.creator.username }}</td>
+      <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
     </tr>
     <tr>
       <td class="detail-key">Assigned To</td>
-      <td class="detail-value">{{ incident.assignedTo }}</td>
+      <td class="detail-value"><a href="/users/{{ incident.assignedTo }}">{{ incident.assignedTo }}</a></td>
     </tr>
     <tr>
       <td class="detail-key">Verified</td>
