@@ -18,7 +18,7 @@ var ReportQuery = function(options) {
   this.after = options.after;
   this.before = options.before;
   this.sourceId = options.sourceId;
-  this.sourceType = options.sourceType;
+  this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
 };
@@ -35,7 +35,7 @@ ReportQuery.prototype.run = function(callback) {
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
 
-  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId', 'author']);
+  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author']);
 
   if (query.keywords) {
     // Make all keywords lowercase, then sort them alphabetically

@@ -40,13 +40,13 @@ angular.module('Aggie')
 .controller('TrendFormModalInstanceController', [
   '$scope',
   '$modalInstance',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'incidents',
   'trend',
-  function($scope, $modalInstance, sourceTypes, sources, incidents, trend) {
+  function($scope, $modalInstance, mediaOptions, sources, incidents, trend) {
     $scope.sources = sources;
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.trend = angular.copy(trend);
     $scope._showErrors = false

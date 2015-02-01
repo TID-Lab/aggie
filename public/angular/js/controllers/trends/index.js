@@ -4,7 +4,7 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   'FlashService',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'incidents',
   'trends',
@@ -12,13 +12,13 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'tz',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
+  function($scope, $rootScope, flash, mediaOptions, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = [];
     $scope.sources = sources;
     $scope.sourcesById = {};
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.incidentsById;
     $scope.startTime = null;
@@ -148,7 +148,7 @@ angular.module('Aggie')
         before: tz(endTime, '%FT%T'),
         after: tz(startTime, '%FT%T'),
         incidentId: trend.query.incidentId,
-        sourceType: trend.query.sourceType,
+        media: trend.query.media,
         sourceId: trend.query.sourceId,
         status: trend.query.status
       });

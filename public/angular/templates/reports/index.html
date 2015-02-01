@@ -28,7 +28,7 @@
       </select>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.sourceType" ng-options="type | capitalize | translate for type in sourceTypes | orderBy:'toString()'" ng-change="search()" class="form-control">
+      <select ng-model="searchParams.media" ng-options="media | capitalize | translate for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
         <option value="">Media</option>
       </select>
     </div>

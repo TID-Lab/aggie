@@ -8,7 +8,7 @@ angular.module('Aggie')
   'incident',
   'reports',
   'sources',
-  'sourceTypes',
+  'mediaOptions',
   'Queue',
   'paginationOptions',
   'incidentStatusOptions',
@@ -16,14 +16,14 @@ angular.module('Aggie')
   'Incident',
   'FlashService',
   'Report',
-  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, sourceTypes, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
+  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.sources = sources;
     $scope.sourcesById = {};
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.visibleReports = new Queue(paginationOptions.perPage);
 
     $scope.pagination = {
@@ -87,7 +87,7 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.media] !== -1) {
+      if (source && $scope.mediaOptions[source.media] !== -1) {
         return source.media + '-source';
       } else {
         return 'unknown-source';

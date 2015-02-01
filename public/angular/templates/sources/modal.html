@@ -13,7 +13,7 @@
           <div class="form-group" ng-class="{ 'read-only': source._id }">
             <label for="media" class="col-lg-2 control-label">Media</label>
             <div class="col-lg-8">
-              <select name="media" class="form-control" ng-model="source.media" ng-options="media as media | translate for media in sourceTypes" required ng-hide="source._id">
+              <select name="media" class="form-control" ng-model="source.media" ng-options="media as media | translate for media in mediaOptions" required ng-hide="source._id">
                 <option value="">Choose source media</option>
               </select>
               <input type="text" class="form-control" ng-model="source.mieda" ng-show="source._id" readonly>

@@ -102,7 +102,7 @@ Report.queryReports = function(query, page, callback) {
 
   // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
-  if (query.sourceType) query.filter._media = query.sourceType;
+  if (query.media) query.filter._media = query.media;
   if (query.incidentId) query.filter._incident = query.incidentId;
 
   if (_.isBoolean(query.read)) query.filter.read = query.read;

@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.value('sourceTypes', ['twitter', 'facebook', 'rss', 'elmo'])
+.value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo'])
 
 .value('statusOptions', ['Read', 'Unread', 'Flagged', 'Unflagged', 'Read & Unflagged'])
 

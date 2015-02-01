@@ -28,8 +28,8 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(source) {
-      var sourceTypes = ['twitter', 'facebook', 'rss', 'elmo'];
-      if (sourceTypes.indexOf(source.media) !== -1) {
+      var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo'];
+      if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
       } else {
         return 'unknown-source';
