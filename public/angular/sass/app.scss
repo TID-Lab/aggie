@@ -9,6 +9,7 @@ $blue: #5bc0de;
 @import 'modals';
 @import 'tables';
 @import 'tabs';
+@import 'trend-bars';
 
 html {
   height: 100%;
@@ -20,6 +21,7 @@ body {
   line-height: 1;
   color: #333;
   height: 100%;
+  font-weight: normal;
 }
 
 a {
@@ -145,7 +147,7 @@ a {
   }
   .nav-bar-label {
     font-size: 12px;
-    margin-right: 10px;  
+    margin-right: 10px;
   }
 }
 
@@ -399,7 +401,7 @@ li.collapse, li.collapsing {
 }
 
 .container-main {
-  padding-bottom: 30px;
+  padding-bottom: 60px;
 }
 
 footer {
@@ -415,4 +417,81 @@ footer {
     right: 12px;
     bottom: 12px;
   }
+}
+
+.legend {
+  margin-top: 20px;
+
+  .legend-item {
+    background-color: #f6f6f6;
+    margin-bottom: 10px;
+    padding: 5px;
+
+    input[type="checkbox"] {
+      float: left;
+      margin-top: 0px;
+      margin-right: 10px;
+    }
+  }
+
+  .legend-color {
+    float: left;
+    content: '';
+    height: 30px;
+    width: 8px;
+  }
+
+  .legend-terms {
+    margin-left: 38px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 8px;
+    }
+
+    p {
+      margin: 0 16px 3px 0;
+      overflow: hidden;
+      white-space: nowrap;
+
+      &:last-child {
+        margin: 0;
+      }
+
+      em {
+        font-style: normal;
+        color: #aaa;
+      }
+    }
+  }
+
+  .legend-terms-disabled {
+    color: #aaa;
+  }
+
+  button.delete {
+    font-size: 15px;
+    background: transparent;
+    border: 0;
+    float: right;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.canvasjs-chart-tooltip > div > p {
+  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #222222;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  margin: 0;
+}
+
+.table-actions button {
+  font-weight: bold;
 }

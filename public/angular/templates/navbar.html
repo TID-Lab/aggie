@@ -10,7 +10,7 @@
         <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
         <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents">Incidents</a></li>
         <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources">Sources</a></li>
-        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="analysis.trends">Analysis</a></li>
+        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis">Analysis</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
         <li ui-sref-active="active" class="user">

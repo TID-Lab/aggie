@@ -30,7 +30,7 @@ angular.module('Aggie')
               interval = 1000 * 60 * 5,
               date = new Date(parseInt(scope.startTime()) + offset * interval),
               reportText = value ? value + ' reports' : 'No data';
-            return '<div>' + reportText + ' (' + aggieDateFilter(date, 'datetime') + ')</div>';
+            return '<div>' + reportText + ' (' + aggieDateFilter(date, 'short_time') + ')</div>';
           },
           chartRangeMin: 0,
           tooltipClassname: 'aggie-tooltip',
