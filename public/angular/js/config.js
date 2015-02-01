@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .value('sourceTypes', ['twitter', 'facebook', 'rss', 'elmo'])
 
-.value('statusOptions', ['read', 'unread', 'flagged', 'unflagged', 'read & unflagged'])
+.value('statusOptions', ['read', 'unread', 'flagged', 'unflagged', 'read_unflagged'])
 
 .value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
 

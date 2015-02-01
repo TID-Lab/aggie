@@ -61,7 +61,7 @@ ReportQuery.prototype._parseStatus = function(status) {
     case 'unread':
       this.read = false;
       break;
-    case 'read & unflagged':
+    case 'read_unflagged':
       this.read = true;
       this.flagged = false;
       break;
