@@ -12,7 +12,7 @@ var fs = require('fs-extra');
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
 var data = fs.readFileSync(secretsFile, 'utf8');
-  
+
 // remove comments from secrets file
 var secrets = JSON.parse(jsmin(data));
 nconf.add('secrets', {type: 'literal', store: secrets});
@@ -26,15 +26,15 @@ var _configuration = nconf.get();
 
 // set defaults
 _.defaults(_configuration, {api_request_timeout: 60, logger: {}});
-_.defaults(_configuration.logger, {SES: {}, file: {}, master: {}, api: {}, 
+_.defaults(_configuration.logger, {SES: {}, file: {}, master: {}, api: {},
                                    fetching: {}, analytics: {}});
 _.defaults(_configuration.logger.SES, {level: 'error', silent: false});
-_.defaults(_configuration.logger.file, {level: 'debug', silent: false, 
+_.defaults(_configuration.logger.file, {level: 'debug', silent: false,
                                         colorize: true, timestamp: true,
                                         maxsize: 5242880, maxFiles: 10,
                                         json: false, prettyPrint: true});
 _.defaults(_configuration.logger.master, {filename: 'logs/master.log'});
-_.defaults(_configuration.logger.api, {filename: 'logs/api.log', log_requests: false, 
+_.defaults(_configuration.logger.api, {filename: 'logs/api.log', log_requests: false,
                                        log_responses: false});
 _.defaults(_configuration.logger.fetching, {filename: 'logs/fetching.log'});
 _.defaults(_configuration.logger.analytics, {filename: 'logs/analytics.log'});
@@ -46,7 +46,8 @@ fs.ensureFileSync(_configuration.logger.fetching.filename);
 fs.ensureFileSync(_configuration.logger.analytics.filename);
 
 // return configuration
-module.exports.get = function() {
+module.exports.get = function(options) {
+  if (options && options.reload) _configuration = nconf.get();
   return _configuration;
 };
 
