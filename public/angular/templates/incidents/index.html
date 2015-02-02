@@ -21,22 +21,22 @@
         </div>
       </div>
     </div>
-    <div class="filter source-type-filter">
+    <div class="filter">
       <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
         <option value="">Assigned To</option>
       </select>
     </div>
-    <div class="filter source-type-filter">
+    <div class="filter">
       <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
         <option value="">Status</option>
       </select>
     </div>
-    <div class="filter source-type-filter">
+    <div class="filter">
       <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
         <option value="">Veracity</option>
       </select>
     </div>
-    <div class="filter source-type-filter">
+    <div class="filter">
       <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
         <option value="">Escalated?</option>
       </select>
