@@ -117,8 +117,6 @@ Incident.queryIncidents = function(query, page, options, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
-  console.log(filter)
-
   // Just use filters when no keywords are provided
   Incident.findPage(filter, page, options, callback);
 };
