@@ -1,8 +1,5 @@
-<div class="table-filters">
-  <div class="filter">
-    <button class="btn btn-info" ng-click="refresh()">Refresh Source list</button>
-    <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create new source</button>
-  </div>
+<div class="button-row">
+  <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create Source</button>
 </div>
 
 <div class="clearfix"></div>
@@ -12,6 +9,7 @@
 <table aggie-table ng-show="sources.length > 0">
   <thead>
     <tr>
+      <th class="compact">Media</th>
       <th class="compact">Name</th>
       <th class="compact">Creator</th>
       <th class="expand">Target</th>
@@ -21,9 +19,12 @@
   </thead>
   <tbody>
     <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
-      <td class="compact source content" ng-class="sourceClass(s)">
+      <td class="compact source" ng-class="sourceClass(s)">
+        <div class="icon-left"></div>
+      </td>
+      <td class="compact source content">
         <a href="sources/{{s._id}}">
-          <div class="icon-left">{{ s.nickname }}</div>
+          {{ s.nickname }}
         </a>
       </td>
       <td class="compact content">

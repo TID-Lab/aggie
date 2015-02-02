@@ -18,6 +18,7 @@ $font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @import 'components/tabs';
 @import 'sections/trend-bars';
 @import 'sections/trend-lines';
+@import 'sections/profile';
 
 // NOTE: Over time, the styles below should be refactored into separate files. See https://github.com/styleguide/css
 // for directory structure.
@@ -276,13 +277,4 @@ footer {
     right: 12px;
     bottom: 12px;
   }
-}
-
-.profile > h3 > span > a {
-  font-size: 12px;
-}
-
-.profile ul li {
-  font-size: 18px;
-  margin: 7px;
 }
