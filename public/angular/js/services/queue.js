@@ -67,6 +67,24 @@ angular.module('Aggie')
     this.elements = new Array(this.capacity);
   };
 
+  CircularQueue.prototype.find = function(predicate) {
+    var result;
+
+    return this.elements.some(function(item) {
+      if (predicate(item)) {
+        result = item;
+        return true;
+      }
+    });
+
+    return result;
+  };
+
+  CircularQueue.prototype.update = function(element) {
+    return this.elements[index] = element;
+  };
+
+
   return CircularQueue;
 });
 
