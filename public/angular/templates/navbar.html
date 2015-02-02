@@ -14,7 +14,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
         <li ui-sref-active="active" class="user">
-          <a ui-sref="profile">
+          <a href ng-click="viewProfile(currentUser)">
           <i class="fa fa-user fa-fw"></i>
           {{currentUser.username}}</a>
         </li>

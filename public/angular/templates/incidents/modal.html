@@ -85,21 +85,16 @@
           <div class="form-group" ng-hide="minimal">
             <label for="user" class="col-lg-2 control-label">Assign To</label>
             <div class="col-lg-9">
-              <select id="user" name="user" ng-model="incident.assignedTo" ng-options="user for user in users" class="form-control">
+              <select id="user" name="user" ng-model="incident.assignedTo"
+                ng-options="user as user.username for user in users track by user._id" class="form-control">
                 <option value="">Select User</option>
               </select>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.user.$error.required">User is required.</div>
-              </div>
             </div>
           </div>
           <div class="form-group">
             <label for="notes" class="col-lg-2 control-label">Notes</label>
             <div class="col-lg-9 notes-text">
               <textarea id="notes" name="notes" class="form-control" ng-model="incident.notes"></textarea>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.notes.$error.required">Notes field is required.</div>
-              </div>
             </div>
           </div>
         </fieldset>

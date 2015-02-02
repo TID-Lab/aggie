@@ -1,6 +1,5 @@
 <div class="bs-component">
   <ul class="breadcrumb">
-    <li><a ui-sref="settings">Settings</a></li>
     <li class="active">Users</li>
   </ul>
 </div>
@@ -25,7 +24,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="u in users">
-      <td class="compact content">{{ u.username }}</td>
+      <td class="compact content" ng-controller="UserFormModalController">
+        <a href class="link" ng-click="view(u)">{{ u.username }}</a>
+      </td>
       <td class="compact content">{{ u.email }}</td>
       <td class="compact content">{{ u.role | translate }}</td>
       <td ng-controller="UserFormModalController" class="actions compact">

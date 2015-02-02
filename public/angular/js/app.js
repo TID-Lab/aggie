@@ -89,6 +89,7 @@ require('./controllers/sources/index');
 require('./controllers/sources/show');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
+require('./controllers/users/profile');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');

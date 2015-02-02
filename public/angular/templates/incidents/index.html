@@ -22,8 +22,8 @@
       </div>
     </div>
     <div class="filter source-type-filter">
-      <select ng-model="searchParams.assignedTo" ng-options="user.value as (user.label | capitalize) for user in users" ng-change="search()" class="form-control">
-        <option value="">User</option>
+      <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
+        <option value="">Assigned To</option>
       </select>
     </div>
     <div class="filter source-type-filter">

@@ -23,19 +23,13 @@ angular.module('Aggie')
     $scope.veracityOptions = veracityOptions;
     $scope.escalatedOptions = escalatedOptions;
 
-    $scope.users = users.map(function(u) {
-      return {
-        value: u.username,
-        label: u.username
-      };
-    });
+    $scope.users = users;
 
     $rootScope.$watch('currentUser', function(user) {
-      if (!user) { return }
-      $scope.users.unshift({
-        label: 'Assigned to me',
-        value: user.username
-      });
+      if (user) {
+        // Add a 'me' option for 'assigned to' filter.
+        $scope.users.unshift({_id: user._id, username: '[Me]'});
+      }
     });
 
     $scope.incidentsById = {};
@@ -154,7 +148,6 @@ angular.module('Aggie')
     };
 
     $scope.noFilters = function() {
-      console.log($scope.searchParams)
       return $scope.searchParams.title === null &&
         $scope.searchParams.locationName === null &&
         $scope.searchParams.assignedTo === null &&
@@ -198,10 +191,8 @@ angular.module('Aggie')
       });
     };
 
-    $scope.viewIncident = function(event, incident) {
-      if (angular.element(event.target)[0].tagName == 'TD') {
-        $state.go('incident', { id: incident._id });
-      }
+    $scope.viewIncident = function(incident) {
+      $state.go('incident', { id: incident._id });
     };
 
     $scope.delete = function(incident) {
@@ -211,6 +202,10 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow('Incident failed to be deleted.');
       });
+    };
+
+    $scope.viewProfile = function (user) {
+      $state.go('profile', {userName: user.username});
     };
 
     (fireDigestEveryThirtySeconds = function() {

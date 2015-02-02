@@ -110,9 +110,7 @@ angular.module('Aggie')
   function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, incidents, report) {
     $scope.incidents = incidents.results;
     $scope.incident = angular.copy(incident);
-    $scope.users = users.map(function(u) {
-      return u.username;
-    });
+    $scope.users = users;
     $scope.veracity = veracityOptions;
     $scope.showErrors = false;
     $scope.report = report;
@@ -124,6 +122,12 @@ angular.module('Aggie')
         $scope.showErrors = true;
         return;
       }
+      // Don't need to send creator as it's not editable.
+      delete $scope.incident.creator;
+
+      // Only send assignedTo _id, not whole object.
+      $scope.incident.assignedTo = ($scope.incident.assignedTo || {_id: null})['_id'];
+
       $modalInstance.close($scope.incident);
     };
 

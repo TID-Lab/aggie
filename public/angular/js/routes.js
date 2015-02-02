@@ -16,8 +16,14 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('profile', {
-      url: '/profile',
-      templateUrl: '/templates/profile.html'
+      url: '/profile/:userName',
+      templateUrl: '/templates/users/profile.html',
+      controller: 'UsersProfileController',
+      resolve: {
+        users: ['User', function(User) {
+          return User.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('login', {
