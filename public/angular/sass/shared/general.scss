@@ -22,3 +22,10 @@ a {
 .jumbotron {
   background-color: #e3e6e3;
 }
+
+// Overriding this weird bootstrap style.
+table a:not(.btn),
+.table a:not(.btn) {
+  color: #000;
+  text-decoration: none;
+}
