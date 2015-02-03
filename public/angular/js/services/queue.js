@@ -70,7 +70,7 @@ angular.module('Aggie')
   CircularQueue.prototype.find = function(predicate) {
     var result;
 
-    return this.elements.some(function(item) {
+    this.elements.some(function(item) {
       if (predicate(item)) {
         result = item;
         return true;
