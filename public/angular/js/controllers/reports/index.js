@@ -51,8 +51,10 @@ angular.module('Aggie')
       $scope.visibleReports.addMany(visibleReports);
 
       if ($scope.isFirstPage() && $scope.currentPath == 'reports') {
+        Socket.join('reports');
+        Socket.on('report:updated', $scope.updateReport.bind($scope));
         Socket.emit('query', searchParams());
-        Socket.on('reports', $scope.handleNewReports);
+        Socket.on('reports', $scope.handleNewReports.bind($scope));
       }
 
       // make links clickable
@@ -143,6 +145,16 @@ angular.module('Aggie')
       return items.map(function(item) {
         return item._id;
       });
+    }
+
+    $scope.updateReport = function(report) {
+      var foundReport = $scope.visibleReports.find(function (item) {
+        return item._id == report._id;
+      });
+
+      if (!foundReport) return;
+
+      angular.extend(foundReport, report);
     }
 
     $scope.handleNewReports = function(reports) {
@@ -354,6 +366,7 @@ angular.module('Aggie')
     })();
 
     $scope.$on('$destroy', function() {
+      Socket.leave('reports');
       Socket.removeAllListeners('reports');
     });
 
