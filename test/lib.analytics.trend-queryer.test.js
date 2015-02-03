@@ -52,7 +52,7 @@ describe('Trend queryer', function() {
   });
 
   it('should run query without keywords', function(done) {
-    Trend.create({_query: Query.hash(new ReportQuery({sourceType: 'test', since: 1}))}, function(err, trend) {
+    Trend.create({_query: Query.hash(new ReportQuery({media: 'test', since: 1}))}, function(err, trend) {
       if (err) return done(err);
       trendQueryer = new TrendQueryer({trend: trend});
       setTimeout(function() {

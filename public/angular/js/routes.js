@@ -209,6 +209,7 @@ angular.module('Aggie')
           return Incident.query().$promise;
         }],
         trends: ['Trend', function(Trend) {
+          console.log('RESOLVING TRENDS')
           return Trend.query().$promise;
         }]
       }

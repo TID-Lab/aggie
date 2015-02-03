@@ -16,14 +16,14 @@
         <p ng-show="t.query.keywords" title="{{t.query.keywords | translate}}">
           {{t.query.keywords | translate}}
         </p>
-        <p ng-show="t.query.sourceType" title="Media: {{t.query.sourceType | translate}}">
-          <em>Media:</em> {{t.query.sourceType | translate}}
+        <p ng-show="t.query.media" title="Media: {{t.query.media | translate}}">
+          <em>Media:</em> {{t.query.media | translate}}
         </p>
-        <p ng-show="t.query.sourceId" title="Source: {{sourcesById[t.query.sourceId].nickname}}">
-          <em>Source:</em> {{sourcesById[t.query.sourceId].nickname}}
+        <p ng-show="t.query.sourceId" title="Source: {{t.query.sourceNickname}}">
+          <em>Source:</em> {{t.query.sourceNickname}}
         </p>
-        <p ng-show="t.query.incidentId" title="Incident: {{incidentsById[t.query.incidentId].title}}">
-          <em>Incident:</em> {{incidentsById[t.query.incidentId].title}}
+        <p ng-show="t.query.incidentId" title="Incident: {{t.query.incidentTitle}}">
+          <em>Incident:</em> {{t.query.incidentTitle}}
         </p>
       </div>
       <div class="clearfix"></div>

@@ -4,7 +4,7 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   'FlashService',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'incidents',
   'trends',
@@ -12,13 +12,13 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'tz',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
+  function($scope, $rootScope, flash, mediaOptions, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = [];
     $scope.sources = sources;
     $scope.sourcesById = {};
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.incidentsById;
     $scope.startTime = null;
@@ -48,8 +48,8 @@ angular.module('Aggie')
       renderChart();
     };
 
-    var parseQueries = function() {
-      $scope.trends.forEach(function(trend) {
+    var parseQueries = function(trends) {
+      trends.forEach(function(trend) {
         trend.query = angular.fromJson(trend._query);
       });
     };
@@ -74,6 +74,9 @@ angular.module('Aggie')
       // Adjust startTime so no more than N timeboxes will be shown.
       startTime = Math.max(startTime, endTime - config.interval * config.perPage);
 
+      // REFACTOR: Not sure why queries can't be returned as full JSON objects.
+      parseQueries(trends);
+
       trends.forEach(function(trend, i) {
         var counts = [],
           displayCounts = [],
@@ -97,14 +100,17 @@ angular.module('Aggie')
 
         trend.color = COLORS[i++ % COLORS.length];
         trend.counts = counts;
+
+        // REFACTOR: These populations should really happen in the model.
+        var x;
+        trend.query.sourceNickname = (x = $scope.sourcesById[trend.query.sourceId]) ? x.nickname : "[Unknown]"
+        trend.query.incidentTitle = (x = $scope.incidentsById[trend.query.incidentId]) ? x.title : "[Unknown]"
       });
 
       // Let Angular know our secrets...
       $scope.startTime = startTime;
       $scope.endTime = endTime;
       $scope.trends = trends;
-
-      parseQueries();
     };
 
     var renderChart = function () {
@@ -161,9 +167,9 @@ angular.module('Aggie')
           click: function() { gotoReports(q, c); },
           toolTipContent: "<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}",
           keywords: q.keywords ? '<p>Keywords: ' + q.keywords + '</p>' : '',
-          media: q.sourceType ? '<p>Media: ' + q.sourceType + '</p>' : '',
-          source: q.sourceId ? '<p>Source: ' + $scope.sourcesById[q.sourceId].nickname + '</p>' : '',
-          incident: q.incidentId ? '<p>Incident: ' + $scope.incidentsById[q.incidentId].title + '</p>' : ''
+          media: q.media ? '<p>Media: ' + q.media + '</p>' : '',
+          source: q.sourceId ? '<p>Source: ' + q.sourceNickname + '</p>' : '',
+          incident: q.incidentId ? '<p>Incident: ' + q.incidentTitle + '</p>' : ''
         };
       });
     };
@@ -177,7 +183,7 @@ angular.module('Aggie')
         before: tz(endTime, '%FT%T'),
         after: tz(startTime, '%FT%T'),
         incidentId: query.incidentId,
-        media: query.sourceType,
+        media: query.media,
         sourceId: query.sourceId
       });
     };
@@ -218,7 +224,7 @@ angular.module('Aggie')
         before: tz(endTime, '%FT%T'),
         after: tz(startTime, '%FT%T'),
         incidentId: trend.query.incidentId,
-        sourceType: trend.query.sourceType,
+        media: trend.query.media,
         sourceId: trend.query.sourceId,
         status: trend.query.status
       });

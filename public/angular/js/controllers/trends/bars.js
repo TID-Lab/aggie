@@ -90,6 +90,7 @@ angular.module('Aggie')
         }
 
         trend.counts = counts;
+        trend.minmax = Math.min(300, trend.max/2);
       });
 
       // Let Angular know our secrets...
