@@ -3,6 +3,8 @@ angular.module('Aggie')
 .config([
   '$stateProvider',
   function($stateProvider, tz) {
+    var lastAnalysis;
+
     $stateProvider.state('home', {
       url: '/',
       onEnter: function($state) {
@@ -14,8 +16,14 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('profile', {
-      url: '/profile',
-      templateUrl: '/templates/profile.html'
+      url: '/profile/:userName',
+      templateUrl: '/templates/users/profile.html',
+      controller: 'UsersProfileController',
+      resolve: {
+        users: ['User', function(User) {
+          return User.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('login', {
@@ -28,7 +36,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&sourceType&incidentId&author',
+      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -40,7 +48,7 @@ angular.module('Aggie')
             after: params.after,
             before: params.before,
             sourceId: params.sourceId,
-            sourceType: params.sourceType,
+            media: params.media,
             incidentId: params.incidentId,
             status: params.status,
             author: params.author
@@ -83,7 +91,7 @@ angular.module('Aggie')
           Report.get({ id: $stateParams.id }, function(report) {
             report.content = Autolinker.link(report.content);
             var data = { report: report };
-            
+
             Source.get({ id: report._source }, function(source) {
               data.source = source;
               deferred.resolve(data);
@@ -96,7 +104,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&veracity',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity&escalated',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -108,7 +116,8 @@ angular.module('Aggie')
             locationName: params.locationName,
             assignedTo: params.assignedTo,
             status: params.status,
-            veracity: params.veracity
+            veracity: params.veracity,
+            escalated: params.escalated
           }).$promise;
         }],
         users: ['User', function(User) {
@@ -176,10 +185,43 @@ angular.module('Aggie')
       templateUrl: '/templates/analysis.html'
     });
 
-    $stateProvider.state('analysis.trends', {
-      url: '/trends',
-      templateUrl: '/templates/trends/index.html',
-      controller: 'TrendsIndexController',
+    $stateProvider.state('lastAnalysis', {
+      onEnter: function($state) {
+        if (!lastAnalysis) {
+          lastAnalysis = 'analysis.trend-lines';
+        }
+        $state.go(lastAnalysis);
+      }
+    });
+
+    $stateProvider.state('analysis.trend-lines', {
+      url: '/trend-lines',
+      templateUrl: '/templates/trends/lines.html',
+      controller: 'TrendsLinesController',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.trend-lines';
+      },
+      resolve: {
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }],
+        trends: ['Trend', function(Trend) {
+          console.log('RESOLVING TRENDS')
+          return Trend.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('analysis.trend-bars', {
+      url: '/trend-bars',
+      templateUrl: '/templates/trends/bars.html',
+      controller: 'TrendsBarsController',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.trend-bars';
+      },
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
@@ -195,6 +237,9 @@ angular.module('Aggie')
 
     $stateProvider.state('analysis.incidentsMap', {
       url: '/incidents-map',
+      onEnter: function($state) {
+        lastAnalysis = 'analysis.incidentsMap';
+      },
       templateUrl: '/templates/incidents/map.html',
       controller: 'IncidentsMapController',
       resolve: {

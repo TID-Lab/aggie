@@ -53,9 +53,11 @@
     "vinyl-source-stream": "~0.1.1",
     "winston": "~0.8.3",
     "winston-amazon-ses": "~0.1.4",
-    "dateformat": "~1.0.11",
     "strformat": "0.0.3",
-    "ejs": "^2.0.8"
+    "chance": "~0.7.1",
+    "single-line-log": "~0.4.1",
+    "ejs": "^2.0.8",
+    "fs-extra": "~0.15.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",

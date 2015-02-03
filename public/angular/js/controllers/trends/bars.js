@@ -1,10 +1,10 @@
 angular.module('Aggie')
 
-.controller('TrendsIndexController', [
+.controller('TrendsBarsController', [
   '$scope',
   '$rootScope',
   'FlashService',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'incidents',
   'trends',
@@ -12,13 +12,13 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'tz',
-  function($scope, $rootScope, flash, sourceTypes, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
+  function($scope, $rootScope, flash, mediaOptions, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = [];
     $scope.sources = sources;
     $scope.sourcesById = {};
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.incidentsById;
     $scope.startTime = null;
@@ -55,12 +55,7 @@ angular.module('Aggie')
     };
 
     var processTrends = function(trends) {
-      var startTime = null,
-        endTime = null,
-        globalMax = null,
-
-        // maximum height is either the screenheight / number of trends, or 50, whichever is higher
-        maxHeight = Math.max(Math.floor(window.screen.availHeight/trends.length), 50);
+      var startTime = null, endTime = null;
 
       // Determine minimum startTime and maximum endTime
       trends.forEach(function(trend) {
@@ -84,25 +79,18 @@ angular.module('Aggie')
           return memo;
         }, countsByTimebox);
 
-        // Fill in missing timebox data
+        // Fill in missing timebox data, and get max count over range.
+        trend.max = 0;
         for (var t = startTime; t <= endTime; t += config.interval) {
-          var item = countsByTimebox[t];
-          if (!item) {
-            item = { counts: null, timebox: t }
-            countsByTimebox[t] = item;
-          }
-          counts.push(item)
+          if (countsByTimebox[t])
+            trend.max = Math.max(trend.max, countsByTimebox[t].counts);
+          else
+            countsByTimebox[t] = {counts: null, timebox: t};
+          counts.push(countsByTimebox[t])
         }
 
         trend.counts = counts;
-      });
-
-      // get the maximum max
-      globalMax = Math.max.apply(null, trends.map(function(t){return t.max;}));
-
-      // set height proportional to max trend bucket value in view per max height
-      trends.map(function (t) {
-        t.max = Math.floor((t.max / globalMax) * maxHeight);
+        trend.minmax = Math.min(300, trend.max/2);
       });
 
       // Let Angular know our secrets...
@@ -120,7 +108,7 @@ angular.module('Aggie')
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
         flash.setNotice('Trend was successfully deleted.');
-         $rootScope.$state.go('analysis.trends', {}, { reload: true });
+         $rootScope.$state.go('analysis.trend-bars', {}, { reload: true });
       }, function() {
         flash.setAlertNow('Trend failed to be deleted.');
       });
@@ -148,7 +136,7 @@ angular.module('Aggie')
         before: tz(endTime, '%FT%T'),
         after: tz(startTime, '%FT%T'),
         incidentId: trend.query.incidentId,
-        sourceType: trend.query.sourceType,
+        media: trend.query.media,
         sourceId: trend.query.sourceId,
         status: trend.query.status
       });

@@ -10,11 +10,11 @@
         <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
         <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents">Incidents</a></li>
         <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources">Sources</a></li>
-        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="analysis.trends">Analysis</a></li>
+        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis">Analysis</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
         <li ui-sref-active="active" class="user">
-          <a ui-sref="profile">
+          <a href ng-click="viewProfile(currentUser)">
           <i class="fa fa-user fa-fw"></i>
           {{currentUser.username}}</a>
         </li>
@@ -57,12 +57,18 @@
   <div class="navbar navbar-stats" ng-show="currentUser">
     <div class="container">
       <p class="navbar-text" ng-if="stats">
-        <span class="nav-bar-number">{{stats.totalReports}}</span> <span class="nav-bar-label">Total Reports</span>
-        <span class="nav-bar-number">{{stats.totalReportsPerMinute}}</span> <span class="nav-bar-label">Reports/min</span>
-        <span class="nav-bar-number">{{stats.totalReportsUnread}}</span> <span class="nav-bar-label">Unread</span>
-        <span class="nav-bar-number">{{stats.totalReportsFlagged}}</span> <span class="nav-bar-label">Flagged</span>
-        <span class="nav-bar-number">{{stats.totalIncidents}}</span> <span class="nav-bar-label">Incidents</span>
-        <span class="nav-bar-number">{{stats.totalEscalatedIncidents}}</span> <span class="nav-bar-label">Escalated Incidents</span>
+        <span class="nav-bar-number">{{stats.totalReports | number}}</span>
+        <span class="nav-bar-label">Total Reports</span>
+        <span class="nav-bar-number">{{stats.totalReportsPerMinute | number}}</span>
+        <span class="nav-bar-label">Reports/min</span>
+        <span class="nav-bar-number">{{stats.totalReportsUnread | number}}</span>
+        <span class="nav-bar-label">Unread</span>
+        <span class="nav-bar-number">{{stats.totalReportsFlagged | number}}</span>
+        <span class="nav-bar-label">Flagged</span>
+        <span class="nav-bar-number">{{stats.totalIncidents | number}}</span>
+        <span class="nav-bar-label">Incidents</span>
+        <span class="nav-bar-number">{{stats.totalEscalatedIncidents | number}}</span>
+        <span class="nav-bar-label">Escalated Incidents</span>
       </p>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
         <a href ui-sref="sources" ui-sref-opts="{ reload: true }">{{ unreadErrorCount }} Fetching Errors</a>

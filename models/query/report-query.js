@@ -8,12 +8,17 @@ var _ = require('underscore');
 var ReportQuery = function(options) {
   options = options || {};
   this.keywords = options.keywords;
-  this.status = options.status;
+
+  if (options.status) {
+    this._parseStatus(options.status);
+  }
+
+  this._parseIncidentId(options.incidentId);
+
   this.after = options.after;
   this.before = options.before;
   this.sourceId = options.sourceId;
-  this.sourceType = options.sourceType;
-  this.incidentId = options.incidentId;
+  this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
 };
@@ -29,17 +34,40 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-
-  var query = _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'sourceType', 'incidentId', 'author']);
-
-  if (query.keywords) {
-    // Make all keywords lowercase, then sort them alphabetically
-    query.keywords = query.keywords.replace(/(,|\s)+/g, ' ').split(' ').map(function(w) {
-      return w.toLowerCase();
-    }).sort().join(' ');
-  }
-
-  return query;
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author']);
 };
+
+ReportQuery.prototype._parseStatus = function(status) {
+  switch(status) {
+    case 'Flagged':
+      this.flagged = true;
+      break;
+    case 'Unflagged':
+      this.unflagged = true;
+      break;
+    case 'Read':
+      this.read = true;
+      break;
+    case 'Unread':
+      this.read = false;
+      break;
+    case 'Read & Unflagged':
+      this.read = true;
+      this.flagged = false;
+      break;
+  }
+}
+
+ReportQuery.prototype._parseIncidentId = function(incidentId) {
+  if (incidentId == 'a') {
+    this.incidentId = { $ne: null };
+  }
+  else if (incidentId == 'n') {
+    this.incidentId = null;
+  }
+  else {
+    this.incidentId = incidentId;
+  }
+}
 
 module.exports = ReportQuery;

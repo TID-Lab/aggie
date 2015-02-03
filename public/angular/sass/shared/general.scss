@@ -1,0 +1,24 @@
+// This file should hold styles that 1) concern the general look and feel and 2) cannot be grouped into another file.
+
+body {
+  background-color: #fff;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #333;
+  height: 100%;
+}
+
+a {
+  cursor: pointer;
+  color: $link-blue;
+  text-decoration: none;
+  &:hover {
+    color: lighten($link-blue, 10%);
+    text-decoration: underline;
+  }
+}
+
+// Used in 404 page and elsewhere. Default Bootstrap style is weird color.
+.jumbotron {
+  background-color: #e3e6e3;
+}

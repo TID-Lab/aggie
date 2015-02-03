@@ -32,6 +32,12 @@
   .expand {
     width: 100%;
   }
+
+  // The main link in the table, which gets special treatment.
+  a.table-primary {
+    font-weight: bold;
+    color: $link-blue;
+  }
 }
 
 .detail-table {
@@ -193,27 +199,6 @@ table, .table {
       right: 4px;
     }
   }
-  .btn {
-    color: #fff;
-    text-decoration: none;
-    line-height: 15px;
-    height: 25px;
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-  .btn-info {
-    background-color: #5BC0DE;
-    &:hover {
-      background-color: #39B3D7;
-    }
-  }
-  .btn-default {
-    background-color: #ebeced;
-    color: #808285;
-    &:hover {
-      background-color: #d1d3d4;
-    }
-  }
   tr.trend-disabled {
     background-color: rgba(100, 100, 100, 0.4);
   }
@@ -271,41 +256,37 @@ table, .table {
       height: 25px;
     }
   }
-  .date-filter,
-  .pagination {
-    white-space: nowrap;
-    .pager-label {
-      margin-right: 4px;
-    }
-  }
 }
 
 .table-filters,
-.table-actions,
+.button-row,
 .batch-actions {
-  .btn {
-    line-height: 15px;
-    height: 25px;
-    padding: 4px 8px;
-    font-size: 12px;
-    
-    &.highlight {
-      color: #000;
-      font-weight: normal;
-    }
-  }
-
   .checkbox-btn {
     font-size: 14px;
     margin-top: 10px;
     padding: 4px 8px 5px 8px;
   }
-
 }
 
-.table-actions {
+.pagination {
+  margin: 0;
+
   .btn {
-    width: 100px;
+    width: 25px;
+    font-size: 18px;
+  }
+
+  li {
+    display: inline-block;
+
+    &:not(.pager-label) {
+      margin-left: 5px;
+    }
+
+    &.pager-label {
+      margin-right: 5px;
+      font-size: 13px;
+    }
   }
 }
 
@@ -356,3 +337,4 @@ td.sparkline,
   }
   box-sizing: border-box;
 }
+

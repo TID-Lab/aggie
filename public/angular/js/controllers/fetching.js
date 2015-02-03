@@ -6,7 +6,7 @@ angular.module('Aggie')
   '$timeout',
   function($scope, Fetching, $timeout) {
 
-    Fetching.get(function success (data) {
+    Fetching.get(function success(data) {
       $scope.on = data;
     }, failure);
 

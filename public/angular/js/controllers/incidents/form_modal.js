@@ -3,12 +3,17 @@ angular.module('Aggie')
 .controller('IncidentFormModalController', [
   '$rootScope',
   '$scope',
+  '$q',
   '$state',
   '$modal',
+  '$modalStack',
   'Incident',
+  'Report',
   'FlashService',
-  function($rootScope, $scope, $state, $modal, Incident, flash) {
-    $scope.create = function() {
+  function($rootScope, $scope, $q, $state, $modal, $modalStack, Incident, Report, flash) {
+
+    $scope.create = function (report) {
+      $modalStack.dismissAll();
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
         templateUrl: '/templates/incidents/modal.html',
@@ -16,21 +21,35 @@ angular.module('Aggie')
           users: ['User', function(User) {
             return User.query().$promise;
           }],
-          incident: function() {
-            return {};
+          incident: function () {
+            return {
+              veracity: null,
+              closed: false
+            };
+          },
+          report: function () {
+            return report;
           }
         }
       });
 
       modalInstance.result.then(function(incident) {
         Incident.create(incident, function(inc) {
-          flash.setNotice('Incident was successfully created.');
-          $scope.incidents[inc._id] = inc;
-          $rootScope.$state.go('incidents', {}, { reload: true });
+          if (report) {
+            report.read = true;
+            report._incident = inc._id;
+            Report.update({id: report._id}, report, function () {
+              $rootScope.$state.go('reports', { r: report }, { reload: false });
+            });
+          } else {
+            flash.setNotice('Incident was successfully created.');
+            $rootScope.$state.go('incidents', {}, { reload: true });
+          }
         }, function(err) {
           flash.setAlertNow('Incident failed to be created. Please contact support.');
         });
       });
+
     };
 
     $scope.edit = function(incident) {
@@ -43,6 +62,9 @@ angular.module('Aggie')
           }],
           incident: function() {
             return incident;
+          },
+          report: function () {
+            return null;
           }
         }
       });
@@ -76,19 +98,27 @@ angular.module('Aggie')
   'veracityOptions',
   'users',
   'incident',
-  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident) {
+  'report',
+  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, report) {
     $scope.incident = angular.copy(incident);
-    $scope.users = users.map(function(u) {
-      return u.username;
-    });
+    $scope.users = users;
     $scope.veracity = veracityOptions;
     $scope.showErrors = false;
+    $scope.report = report;
+    $scope.minimal = !!report;
+    $scope.minimalLatLng = true;
 
-    $scope.save = function(form) {      
+    $scope.save = function(form) {
       if (form.$invalid) {
         $scope.showErrors = true;
         return;
       }
+      // Don't need to send creator as it's not editable.
+      delete $scope.incident.creator;
+
+      // Only send assignedTo _id, not whole object.
+      $scope.incident.assignedTo = ($scope.incident.assignedTo || {_id: null})['_id'];
+
       $modalInstance.close($scope.incident);
     };
 

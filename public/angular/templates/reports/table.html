@@ -7,7 +7,7 @@
       <th>Source</th>
       <th>Author</th>
       <th>Content</th>
-      <th>Incident</th>
+      <th ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
       <th>Flagged</th>
     </tr>
   </thead>
@@ -36,11 +36,18 @@
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
-      <td class="expand incident text-center relative">
-        <a ng-controller="IncidentSelectModalController" ng-show="incidentsById != null" ng-click="setIncident(r)">
-          <strong ng-if="r._incident">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-          <strong ng-if="!r._incident">Add</strong>
-        </a>
+      <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
+        <div ng-if="incidents.length">
+          <a ng-controller="IncidentSelectModalController" ng-click="setIncident(r)" class="table-primary">
+            <strong ng-if="r._incident">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
+            <strong ng-if="!r._incident">Add</strong>
+          </a>
+        </div>
+        <div ng-if="!incidents.length">
+          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
+            <strong ng-if="!r._incident">Add</strong>
+          </a>
+        </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
       <td class="flagged text-center">

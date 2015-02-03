@@ -7,7 +7,8 @@ angular.module('Aggie')
   'AuthService',
   'FlashService',
   'Socket',
-  function($scope, $rootScope, $location, AuthService, flash, Socket) {
+  '$state',
+  function($scope, $rootScope, $location, AuthService, flash, Socket, $state) {
     $scope.unreadErrorCount = '0';
  
     var init = function() {
@@ -43,6 +44,10 @@ angular.module('Aggie')
           console.log('Error', err);
         }
       });
+    };
+
+    $scope.viewProfile = function (user) {
+      $state.go('profile', {userName: user.username});
     };
 
     $rootScope.$watch('currentUser', init);

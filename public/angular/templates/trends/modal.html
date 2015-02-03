@@ -11,14 +11,14 @@
             <label for="keywords" class="col-lg-3 control-label">Keywords</label>
             <div class="col-lg-6">
               <input type="text" ng-model="trend.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords">
-              <div class="help-block">Separated by commas, e.g. <strong>apple, paw paw, banana</strong></div>
+              <div class="help-block">e.g. <strong>apple "passion fruit" banana</strong></div>
             </div>
           </div>
           <div class="form-group">
-            <label for="type" class="col-lg-3 control-label">Source Type</label>
+            <label for="type" class="col-lg-3 control-label">Media</label>
             <div class="col-lg-6">
-              <select name="type" class="form-control" ng-model="trend.sourceType" ng-options="type as type | translate for type in sourceTypes">
-                <option value="">Choose source type</option>
+              <select name="type" class="form-control" ng-model="trend.media" ng-options="media as media | translate for media in mediaOptions">
+                <option value="">Choose media</option>
               </select>
             </div>
           </div>

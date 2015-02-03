@@ -1,0 +1,25 @@
+<div class="profile">
+  <h3>
+    <span>{{user.username}}</span>
+    <span ng-controller="UserFormModalController" >
+      <a href ng-click="edit($parent.user)" ng-show="$parent.user.username === $parent.currentUser.username">edit</a>
+    </span>
+  </h3>
+
+  <ul>
+    <li>
+      <span>
+        <i class="fa fa-group fa-fw"></i>
+      </span>
+      {{user.role | translate}}
+    </li>
+    <li>
+      <span>
+        <i class="fa fa-envelope fa-fw"></i>
+      </span>
+      <a class="email" href="mailto:{{user.email}}">
+        {{user.email}}
+      </a>
+    </li>
+  </ul>
+</div>

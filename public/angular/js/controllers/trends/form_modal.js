@@ -27,8 +27,7 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(trend) {
         Trend.create(trend, function(response) {
-          flash.setNotice('Trend was successfully created.');
-          $rootScope.$state.go('analysis.trends', {}, { reload: true });
+          $rootScope.$state.go($rootScope.$state.current, {}, { reload: true });
         }, function(err) {
           flash.setAlertNow('Trend failed to be created. Please contact support.');
         });
@@ -40,13 +39,13 @@ angular.module('Aggie')
 .controller('TrendFormModalInstanceController', [
   '$scope',
   '$modalInstance',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'incidents',
   'trend',
-  function($scope, $modalInstance, sourceTypes, sources, incidents, trend) {
+  function($scope, $modalInstance, mediaOptions, sources, incidents, trend) {
     $scope.sources = sources;
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.trend = angular.copy(trend);
     $scope._showErrors = false
