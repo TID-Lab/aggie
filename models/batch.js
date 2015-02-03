@@ -8,10 +8,10 @@ function Batch() {}
 
 // checkout new batch
 Batch.prototype.checkout = function(userId, callback) {
-  async.series([ 
+  async.series([
     this.releaseOld,
-    this.cancel.bind(this, userId), 
-    this.lock.bind(this, userId), 
+    this.cancel.bind(this, userId),
+    this.lock.bind(this, userId),
     this.load.bind(this, userId)
   ], function(err, results) {
     if (err) return callback(err);
@@ -31,14 +31,14 @@ Batch.prototype.releaseOld = function(callback) {
 Batch.prototype.cancel = function(userId, callback) {
   var conditions = { checkedOutBy: userId };
   var update = { checkedOutBy: null, checkedOutAt: null };
-  
+
   Report.update(conditions, update, { multi: true }, callback);
 },
 
 // lock a new batch for given user
 Batch.prototype.lock = function(userId, callback) {
   var conditions = {
-    checkedOutAt: null, 
+    checkedOutAt: null,
     checkedOutBy: null,
     read: false
   };
@@ -59,10 +59,10 @@ Batch.prototype.lock = function(userId, callback) {
 // load a batch for user
 Batch.prototype.load = function(userId, callback) {
   var conditions = {
-    checkedOutAt: { $ne: null }, 
+    checkedOutAt: { $ne: null },
     checkedOutBy: userId
   };
-  
+
   Report
     .find(conditions)
     .limit(ITEMS_PER_BATCH)
