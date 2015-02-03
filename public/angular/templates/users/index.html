@@ -23,7 +23,7 @@
   <tbody>
     <tr ng-repeat="u in users">
       <td class="compact content" ng-controller="UserFormModalController">
-        <a href class="link" ng-click="view(u)">{{ u.username }}</a>
+        <a href class="table-primary" ng-click="view(u)">{{ u.username }}</a>
       </td>
       <td class="compact content">{{ u.email }}</td>
       <td class="compact content">{{ u.role | translate }}</td>

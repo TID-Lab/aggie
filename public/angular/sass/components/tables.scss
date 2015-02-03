@@ -32,6 +32,12 @@
   .expand {
     width: 100%;
   }
+
+  // The main link in the table, which gets special treatment.
+  a.table-primary {
+    font-weight: bold;
+    color: $link-blue;
+  }
 }
 
 .detail-table {
@@ -302,10 +308,6 @@ td.content {
     width: 100%;
     display: inline-block;
   }
-
-  .link {
-    color: #24AEC8;
-  }
 }
 
 td.sparkline,
@@ -335,3 +337,4 @@ td.sparkline,
   }
   box-sizing: border-box;
 }
+

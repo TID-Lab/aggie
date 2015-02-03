@@ -20,7 +20,7 @@
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>
       <td class="compact">
-        <a ng-hide="modal" href="incidents/{{i._id}}"><strong>{{ i.title }}</strong></a>
+        <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary"><strong>{{ i.title }}</strong></a>
         <strong ng-show="modal">{{ i.title }}</strong>
         <br />
         <span class="text-gray">{{i.totalReports}} reports</span>
