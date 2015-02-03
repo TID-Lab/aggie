@@ -14,24 +14,25 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
-  storedAt: Date,
+  storedAt: {type: Date, index: true},
   content: String,
-  author: String,
+  author: {type: String, index: true},
   url: String,
-  read: {type: Boolean, default: false, required: true},
-  flagged: {type: Boolean, default: false, required: true},
-  _source: {type: String, ref: 'Source'},
-  _media: String,
+  read: {type: Boolean, default: false, required: true, index: true},
+  flagged: {type: Boolean, default: false, required: true, index: true},
+  _source: {type: String, ref: 'Source', index: true},
+  _media: {type: String, index: true},
   _sourceNickname: String,
-  _incident: {type: String, ref: 'Incident'},
-  checkedOutBy : { type: Schema.ObjectId, ref: 'User' },
-  checkedOutAt: Date
+  _incident: {type: String, ref: 'Incident', index: true},
+  checkedOutBy : {type: Schema.ObjectId, ref: 'User', index: true},
+  checkedOutAt: {type: Date, index: true}
 });
 
 // Give the report schema text search capabilities
 schema.plugin(textSearch);
 schema.plugin(listenTo);
-// Add a text index to the `content` field
+
+// Add fulltext index to the `content` field.
 schema.index({content: 'text'});
 
 schema.path('_incident').set(function(_incident) {
