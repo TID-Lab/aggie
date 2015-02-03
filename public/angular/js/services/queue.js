@@ -80,11 +80,6 @@ angular.module('Aggie')
     return result;
   };
 
-  CircularQueue.prototype.update = function(element) {
-    return this.elements[index] = element;
-  };
-
-
   return CircularQueue;
 });
 
