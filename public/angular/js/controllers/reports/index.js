@@ -76,9 +76,8 @@ angular.module('Aggie')
       }, []);
     };
 
-    var groupById = function(memo, item, index) {
+    var groupById = function(memo, item) {
       memo[item._id] = item;
-      memo[item._id].index = index;
       return memo;
     };
 
