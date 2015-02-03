@@ -21,9 +21,6 @@ angular.module('Aggie')
           users: ['User', function(User) {
             return User.query().$promise;
           }],
-          incidents: ['Incident', function(Incident) {
-            return Incident.query().$promise;
-          }],
           incident: function () {
             return {
               veracity: null,
@@ -46,7 +43,6 @@ angular.module('Aggie')
             });
           } else {
             flash.setNotice('Incident was successfully created.');
-            $scope.incidents[inc._id] = inc;
             $rootScope.$state.go('incidents', {}, { reload: true });
           }
         }, function(err) {
@@ -63,9 +59,6 @@ angular.module('Aggie')
         resolve: {
           users: ['User', function(User) {
             return User.query().$promise;
-          }],
-          incidents: ['Incident', function(Incident) {
-            return Incident.query().$promise;
           }],
           incident: function() {
             return incident;
@@ -105,10 +98,8 @@ angular.module('Aggie')
   'veracityOptions',
   'users',
   'incident',
-  'incidents',
   'report',
-  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, incidents, report) {
-    $scope.incidents = incidents.results;
+  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, report) {
     $scope.incident = angular.copy(incident);
     $scope.users = users;
     $scope.veracity = veracityOptions;
