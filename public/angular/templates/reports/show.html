@@ -51,7 +51,7 @@
           <strong ng-if="report._incident">{{ report._incident.title | strLimit: 40 }}</strong>
           <strong ng-if="!report._incident">Add</strong>
         </a>
-        <a class="remove" ng-show="report._incident" ng-click="unlinkIncident(rport)">x</a>
+        <a class="remove" ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
       </td>
 
     </tr>

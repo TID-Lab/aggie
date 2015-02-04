@@ -19,7 +19,6 @@ angular.module('Aggie')
         size: 'lg',
         controller: 'IncidentSelectModalInstanceController',
         templateUrl: '/templates/incidents/report_incident_modal.html',
-// !!!!! NOTE DAVID SCOPE IS HERE BECAUSE NEED PARENT? I FORGET
         scope: $scope,
         resolve: {
           incidents: ['Incident', function(Incident) {
@@ -34,13 +33,13 @@ angular.module('Aggie')
       modalInstance.result.then(function(report) {
         report.read = true;
         Report.update({id: report._id}, report, function(response) {
-          // we're getting the report here because it is easier than
-          // getting the incidents list. we have just updated
-          // _incident, which is an ObjectId. now we want the populated
-          // object again
-          Report.get({id: report._id}, function (res) {
-            $scope.$parent.r = res;
-          });
+          // faking an incident population since this doesn't happen
+          // upon report updating
+          report._incident = {
+            _id: report._incident,
+            title: report.incidentTitle
+          };
+          $scope.$parent.report = report;
         }, function(err) {
           flash.setAlertNow('Report failed to be added to incident.');
         });
@@ -63,8 +62,19 @@ angular.module('Aggie')
 
     $scope.select = function (incident) {
       report._incident = incident._id;
+
+      var incidentTitle;
+
+      incidents.results.forEach(function(i){
+        if (i._id === incident._id) {
+          incidentTitle = i.title;
+        }
+      });
+
+      report.incidentTitle = incidentTitle;
+
       $modalInstance.close(report);
-    }
+    };
 
     $scope.showErrors = function() {
       return $scope._showErrors;
