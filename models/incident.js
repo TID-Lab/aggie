@@ -101,10 +101,12 @@ Incident.queryIncidents = function(query, page, options, callback) {
   if (query.veracity == 'confirmed true') filter.veracity = true;
   if (query.veracity == 'confirmed false') filter.veracity = false;
   if (query.veracity == 'unconfirmed') filter.veracity = null;
+  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
   if (query.status == 'open') filter.closed = false;
   if (query.status == 'closed') filter.closed = true;
   delete filter.status;
+  if (_.isBoolean(query.closed)) filter.closed = query.closed;
 
   if (query.escalated == 'escalated') filter.escalated = true;
   if (query.escalated == 'unescalated') filter.escalated = false;
