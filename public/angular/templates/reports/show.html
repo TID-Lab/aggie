@@ -48,7 +48,7 @@
 
       <td class="incident relative">
         <a ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">
-          <strong ng-if="report._incident">{{ report._incident.title | strLimit: 40 }}</strong>
+          <strong ng-if="report._incident.title">{{ report._incident.title | strLimit: 40 }}</strong>
           <strong ng-if="!report._incident">Add</strong>
         </a>
         <a class="remove" ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
