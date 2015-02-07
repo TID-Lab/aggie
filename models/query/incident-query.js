@@ -6,6 +6,7 @@ var util = require('util');
 var _ = require('underscore');
 
 var IncidentQuery = function(options) {
+  options = options || {};
   this.title = options.title;
   this.locationName = options.locationName;
   this.assignedTo = options.assignedTo;
