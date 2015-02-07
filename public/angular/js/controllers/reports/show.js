@@ -12,7 +12,12 @@ angular.module('Aggie')
       if (report.read) return;
       report.read = true;
       Report.save({ id: report._id }, report);
-    }
+    };
+
+    $scope.unlinkIncident = function(report) {
+      report._incident = null;
+      Report.update({id: report._id}, report);
+    };
 
     $scope.markAsRead(data.report);
   }

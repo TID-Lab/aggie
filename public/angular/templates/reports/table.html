@@ -12,46 +12,46 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-      <td><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
+    <tr ng-repeat="report in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': report.read, flagged: report.flagged, unread: !report.read && !report.flagged }">
+      <td><input ng-model="report.selected" type="checkbox" ng-model="report._id" /></td>
       <td class="compact time">
         <div class="interval">
-          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
+          <span class="interval-amount">{{ report.storedAt | interval }}</span> <span class="interval-relative">ago</span>
         </div>
         <div class="date-and-time">
-          <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
-          <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
+          <span class="time">{{ report.storedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ report.storedAt | aggieDate:'date' }}</span>
         </div>
-        <div class="created">{{ r | delay }}</div>
+        <div class="created">{{ report | delay }}</div>
       </td>
-      <td class="compact source" ng-class="sourceClass(r)">
+      <td class="compact source" ng-class="sourceClass(report)">
         <div class="icon-left"></div>
       </td>
-      <td class="compact source" ng-class="{ strong: !isRead(r) }">
-        {{ sourcesById[r._source].nickname || '[Deleted]' }}
+      <td class="compact source" ng-class="{ strong: !isRead(report) }">
+        {{ sourcesById[report._source].nickname || '[Deleted]' }}
       </td>
-      <td class="compact author" ng-class="{ strong: !isRead(r) }">
-        {{ r.author }}
+      <td class="compact author" ng-class="{ strong: !isRead(report) }">
+        {{ report.author }}
       </td>
-      <td class="expand content" ng-class="{ strong: !isRead(r) }">
-        <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+      <td class="expand content" ng-class="{ strong: !isRead(report) }">
+        <a href="/reports/{{report._id}}">{{ (report.content || '[No Content]') | stripHtml }}</a>
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
         <div ng-if="incidents.length">
-          <a ng-controller="IncidentSelectModalController" ng-click="setIncident(r)" class="table-primary">
-            <strong ng-if="r._incident">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong ng-if="!r._incident">Add</strong>
+          <a ng-controller="IncidentSelectModalController" ng-click="setIncident(report)" class="table-primary">
+            <strong ng-if="report._incident">{{ incidentsById[report._incident].title | strLimit: 40 }}</strong>
+            <strong ng-if="!report._incident">Add</strong>
           </a>
         </div>
         <div ng-if="!incidents.length">
-          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
-            <strong ng-if="!r._incident">Add</strong>
+          <a ng-controller="IncidentFormModalController" ng-click="create(report)" class="table-primary">
+            <strong ng-if="!report._incident">Add</strong>
           </a>
         </div>
-        <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
+        <a class="remove" ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
       </td>
       <td class="flagged text-center">
-        <div ng-click="toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
+        <div ng-click="toggleFlagged(report)" class="fa pointer" ng-class="report.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
       </td>
     </tr>
   </tbody>
