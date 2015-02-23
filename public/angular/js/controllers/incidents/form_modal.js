@@ -7,10 +7,11 @@ angular.module('Aggie')
   '$state',
   '$modal',
   '$modalStack',
+  '$location',
   'Incident',
   'Report',
   'FlashService',
-  function($rootScope, $scope, $q, $state, $modal, $modalStack, Incident, Report, flash) {
+  function($rootScope, $scope, $q, $state, $modal, $modalStack, $location, Incident, Report, flash) {
 
     $scope.create = function (report) {
       $modalStack.dismissAll();
@@ -36,10 +37,15 @@ angular.module('Aggie')
       modalInstance.result.then(function(incident) {
         Incident.create(incident, function(inc) {
           if (report) {
+            var batchMode = $location.url() === '/reports/batch';
             report.read = true;
             report._incident = inc._id;
             Report.update({id: report._id}, report, function () {
-              $rootScope.$state.go('reports', { r: report }, { reload: false });
+              if (batchMode) {
+                $rootScope.$state.go('batch', {}, { reload: true });
+              } else {
+                $rootScope.$state.go('reports', { r: report }, { reload: false });
+              }
             });
           } else {
             flash.setNotice('Incident was successfully created.');
