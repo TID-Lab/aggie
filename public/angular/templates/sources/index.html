@@ -13,7 +13,7 @@
       <th class="compact">Name</th>
       <th class="compact">Creator</th>
       <th class="expand">Target</th>
-      <th class="compact">Unread Error Count</th>
+      <th class="compact">New Warnings</th>
       <th class="compact">Enabled</th>
     </tr>
   </thead>
@@ -31,12 +31,6 @@
         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>
-      <td>
-        <span ng-switch="source.media">
-          <span ng-when="twitter">{{source.keywords}}</span>
-          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
-        </span>
-      </td>
       <td class="compact content zero-errors" ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
       <td class="compact status">
         <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
