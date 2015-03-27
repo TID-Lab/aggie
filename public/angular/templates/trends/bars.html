@@ -23,7 +23,7 @@
         <div ng-show="t.query.sourceId">Source: {{sourcesById[t.query.sourceId].nickname || '[Deleted]'}}</div>
         <div ng-show="t.query.incidentId">Incident: {{incidentsById[t.query.incidentId].title || '[Deleted]'}}</div>
       </td>
-      <td class="content compact sparkline">
+      <td class="content expand sparkline">
         <aggie-sparkline values="t.counts" start-time="startTime" height="t.minmax" callback="showReport(sparkEvent, t)"></aggie-sparkline>
       </td>
       <td class="compact text-center status">
