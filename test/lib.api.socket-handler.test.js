@@ -2,7 +2,7 @@ require('./init');
 var expect = require('chai').expect;
 var SocketHandler = require('../lib/api/socket-handler');
 var streamer = require('../lib/api/streamer');
-var io = require('../node_modules/socket.io/node_modules/socket.io-client');
+var io = require('../node_modules/socket.io-client');
 var Source = require('../models/source');
 var Report = require('../models/report');
 var Incident = require('../models/incident');
