@@ -65,22 +65,34 @@ The following need to be installed.
 1. Navigate to `localhost:3000` in your browser.
    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
 
-### Maintenance
-
+## Maintenance
 1. To run migrations run `migrate`.
-1. To run tests, run `npm test`.
-1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+2. To run tests, run `npm test`.
+3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 
 ## Project Configuration
-You can adjust the settings in the `config/secrets.json` file.
+You can adjust the settings in the `config/secrets.json` file to configure the application.
 
 ### Tests
 Set `config.adminParty=true` if you want to run tests.
 
 ### Social Media and Feeds
+
+#### Twitter
+   * Follow [these instructions](https://dev.twitter.com/oauth/overview/application-owner-access-tokens) to generate tokens to use the Twitter API.
+   * In your `secrets.json` file:
+      1. Uncomment the lines for the Twitter hash/object (`"twitter": {},`).
+      2. Replace `consumer_key`, `consumer_secret`, `access_token`, and `access_token_secret` with the keys from [your app](https://apps.twitter.com).
+
 #### Facebook
-   * Obtain `client_id` and `client_secret` from https://developers.facebook.com/apps. Create an app if necessary.
-   * To obtain facebook token, do `GET https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials`.
+   * Known issue: The current Facebook API is not compatible with Aggie. Please see https://github.com/TID-Lab/aggie/issues/139 for more information.
+   * Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
+   * Inside your Facebook app, obtain `client_id` and `client_secret`.
+   * To obtain an access token:
+      * in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
+      * OR do `GET https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials`.
+   * Uncomment the lines for the Facebook hash/object (`"facebook": {},`).
+   * Replace the `accessToken` placeholder with your access token.
 
 ### Emails
    1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
@@ -101,8 +113,23 @@ Set `config.adminParty=true` if you want to run tests.
       - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
       - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
-## Deployment
+## Using the Application
+### Sources
+#### Adding Sources
+   1. Inside the application, go to `Sources > Create Source`.
+   2. To add a Twitter search, add all relevant keywords.
+      - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
+   3. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`.)
 
+#### Warnings
+   As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
+
+   1. Go to `Sources`.
+   2. In the `Name` column, click the appropriate source.
+   3. Under `Recent Events`, you can see recent warnings for the source.
+
+
+## Deployment
 Internally, we use [forever](https://github.com/nodejitsu/forever) to keep Aggie
 running. Since this is a multi-process application, the forever monitor will
 sometimes hang up when restarting the Aggie process after deploying a new
