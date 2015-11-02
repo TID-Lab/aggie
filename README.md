@@ -23,7 +23,9 @@ Users can be assigned to *admin*, *manager*, *monitor*, and *viewer* roles, each
 
 Aggie is built using Angular.js and Express.js, both state-of-the-art development frameworks.
 
-Contact mikeb@cc.gatech.edu for more information.
+Contact mikeb@cc.gatech.edu for more information on the Aggie project.
+
+[Sassafras Tech Collective](http://sassafras.coop) offers managed instances of Aggie, along with development and support services.
 
 ## Development Installation
 
