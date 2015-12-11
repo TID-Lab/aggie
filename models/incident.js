@@ -48,6 +48,17 @@ schema.post('save', function() {
   schema.emit('incident:save', {_id: this._id.toString()});
 });
 
+schema.post('remove', function() {
+  //Unlink removed incident from reports
+  Report.find({ _incident: this._id.toString() }, function(err, reports){
+    reports.forEach(function(report) {
+      report._incident = null;
+      report.save();
+    });
+  });
+
+});
+
 var Incident = mongoose.model('Incident', schema);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
 
