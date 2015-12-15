@@ -43,7 +43,7 @@ pipes.buildAngular = function() {
 };
 
 gulp.task('watchAngular', function() {
-  buildAngular()
+  pipes.buildAngular()
     .pipe(livereload());
 });
 
