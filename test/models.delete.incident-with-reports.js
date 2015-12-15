@@ -15,7 +15,7 @@ function loadUser(done) {
   });
 }
 
-function removeAll(done){
+function removeAll(done) {
   Report.remove({}, function() {
     Incident.remove({}, done);
   });
@@ -45,7 +45,7 @@ function createReports(done) {
   ], done);
 }
 
-function removeIncident(done){
+function removeIncident(done) {
   Incident.findOne({ _id: id1 }, function(err, incident) {
     incident.remove(done);
   });

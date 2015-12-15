@@ -29,7 +29,7 @@ var schema = new mongoose.Schema({
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
   totalReports: {type: Number, default: 0},
-  notes: String
+  notes: String,
 });
 
 schema.plugin(listenTo);
@@ -41,6 +41,7 @@ schema.pre('save', function(next) {
   if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
+
   next();
 });
 
@@ -50,7 +51,7 @@ schema.post('save', function() {
 
 schema.post('remove', function() {
   //Unlink removed incident from reports
-  Report.find({ _incident: this._id.toString() }, function(err, reports){
+  Report.find({ _incident: this._id.toString() }, function(err, reports) {
     reports.forEach(function(report) {
       report._incident = null;
       report.save();
@@ -62,7 +63,6 @@ schema.post('remove', function() {
 var Incident = mongoose.model('Incident', schema);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
 
-
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   Incident.findById(prevIncident || newIncident, function(err, incident) {
     if (err || !incident) return;
@@ -70,8 +70,7 @@ schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
 
     if (prevIncident) {
       total = (total > 0) ? total - 1 : 0;
-    }
-    else if (newIncident) {
+    } else if (newIncident) {
       total = (total) ? total + 1 : 1;
     }
 
@@ -89,10 +88,12 @@ Incident.queryIncidents = function(query, page, options, callback) {
     page = 0;
     options = {};
   }
+
   if (typeof options === 'function') {
     callback = options;
     options = {};
   }
+
   if (page < 0) page = 0;
 
   var filter = {};
