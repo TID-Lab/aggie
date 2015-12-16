@@ -12,13 +12,14 @@ angular.module('Aggie')
   'mediaOptions',
   'incidents',
   'statusOptions',
+  'linkedtoIncidentOptions',
   'Report',
   'Batch',
   'Socket',
   'Queue',
   'paginationOptions',
   function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
-    incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
+    incidents, statusOptions, linkedtoIncidentOptions, Report, Batch, Socket, Queue, paginationOptions) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -31,7 +32,11 @@ angular.module('Aggie')
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
-    $scope.currentPath = $rootScope.$state.current.name
+    $scope.currentPath = $rootScope.$state.current.name;
+
+    //We add options to search reports with any or none incidents linked
+    $scope.incidents.push(linkedtoIncidentOptions[0]);
+    $scope.incidents.push(linkedtoIncidentOptions[1]);
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
