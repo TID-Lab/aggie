@@ -39,7 +39,7 @@
     </div>
     <div class="filter incident-filter">
       <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
-        <option value="">Incident</option>
+        <option value="">Linked Incident</option>
       </select>
     </div>
     <div class="filter date-filter">
