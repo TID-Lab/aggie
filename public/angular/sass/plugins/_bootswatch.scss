@@ -1,4 +1,4 @@
-// Superhero 3.1.1
+// Superhero 3.3.2
 // Bootswatch
 // -----------------------------------------------------
 
@@ -7,7 +7,7 @@
 // Navbar =====================================================================
 
 .navbar {
-  .box-shadow(none);
+  @include box-shadow(none);
   border: none;
   font-size: 12px;
 
@@ -15,7 +15,7 @@
 
     .badge {
       background-color: #fff;
-      color: @navbar-default-bg;
+      color: $navbar-default-bg;
     }
   }
 
@@ -23,7 +23,7 @@
 
     .badge {
       background-color: #fff;
-      color: @navbar-inverse-bg;
+      color: $navbar-inverse-bg;
     }
   }
 }
@@ -36,7 +36,7 @@
 
   &-default {
     &:hover {
-      background-color: darken(@btn-default-bg, 3%);
+      background-color: darken($btn-default-bg, 3%);
     }
   }
 
@@ -54,38 +54,38 @@ body {
 
 .text-primary,
 .text-primary:hover {
-  color: @brand-primary;
+  color: $brand-primary;
 }
 
 .text-success,
 .text-success:hover {
-  color: @brand-success;
+  color: $brand-success;
 }
 
 .text-danger,
 .text-danger:hover {
-  color: @brand-danger;
+  color: $brand-danger;
 }
 
 .text-warning,
 .text-warning:hover {
-  color: @brand-warning;
+  color: $brand-warning;
 }
 
 .text-info,
 .text-info:hover {
-  color: @brand-info;
+  color: $brand-info;
 }
 
 .page-header {
-  border-bottom-color: @table-border-color;
+  border-bottom-color: $table-border-color;
 }
 
 .dropdown-menu {
 
   border: none;
   margin: 0;
-  .box-shadow(none);
+  @include box-shadow(none);
 
   > li > a {
     font-size: 12px;
@@ -94,7 +94,7 @@ body {
 }
 
 .btn-group.open .dropdown-toggle {
-  .box-shadow(none);
+  @include box-shadow(none);
 }
 
 .dropdown-header {
@@ -107,13 +107,17 @@ table,
 .table {
   font-size: 12px;
 
-  a {
+  a:not(.btn) {
     color: #fff;
     text-decoration: underline;
   }
 
+  .dropdown-menu a {
+    text-decoration: none;
+  }
+
   .text-muted {
-    color: @text-muted;
+    color: $text-muted;
   }
 
   > thead > tr > th,
@@ -130,7 +134,7 @@ table,
 
 input,
 textarea {
-  color: @input-color;
+  color: $input-color;
 }
 
 label,
@@ -143,14 +147,18 @@ label,
 
 .input-addon,
 .input-group-addon {
-  color: @text-color;
+  color: $text-color;
 }
 
 .has-warning {
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: @brand-warning;
+    color: $brand-warning;
+  }
+
+  .input-group-addon {
+    border: none;
   }
 }
 
@@ -158,7 +166,11 @@ label,
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: @brand-danger;
+    color: $brand-danger;
+  }
+
+  .input-group-addon {
+    border: none;
   }
 }
 
@@ -166,19 +178,23 @@ label,
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: @brand-success;
+    color: $brand-success;
+  }
+
+  .input-group-addon {
+    border: none;
   }
 }
 
 .form-control:focus {
-  .box-shadow(none);
+  @include box-shadow(none);
 }
 
 .has-warning,
 .has-error,
 .has-success {
   .form-control:focus {
-    .box-shadow(none);
+    @include box-shadow(none);
   }
 }
 
@@ -194,32 +210,23 @@ label,
 
 .nav-tabs {
   > li > a {
-    color: @text-color;
+    color: $text-color;
   }
 }
 
 .nav-pills {
   > li > a {
-    color: @text-color;
+    color: $text-color;
   }
 }
 
 .pager {
   a {
-    color: @text-color;
+    color: $text-color;
   }
 }
 
 // Indicators =================================================================
-
-.close {
-  opacity: 0.4;
-
-  &:hover,
-  &:focus {
-    opacity: 1;
-  }
-}
 
 .label {
   font-weight: 300;
@@ -234,25 +241,76 @@ label,
   }
 }
 
+.close {
+  opacity: 0.4;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
 // Progress bars ==============================================================
 
 // Containers =================================================================
 
 .well {
-  .box-shadow(none);
+  @include box-shadow(none);
+}
+
+a.list-group-item {
+
+  &.active,
+  &.active:hover,
+  &.active:focus {
+    border: none;
+  }
+
+  &-success {
+    &.active {
+      background-color: $state-success-bg;
+    }
+
+    &.active:hover,
+    &.active:focus {
+      background-color: darken($state-success-bg, 5%);
+    }
+  }
+
+  &-warning {
+    &.active {
+      background-color: $state-warning-bg;
+    }
+    
+    &.active:hover,
+    &.active:focus {
+      background-color: darken($state-warning-bg, 5%);
+    }
+  }
+
+  &-danger {
+    &.active {
+      background-color: $state-danger-bg;
+    }
+    
+    &.active:hover,
+    &.active:focus {
+      background-color: darken($state-danger-bg, 5%);
+    }
+  }
 }
 
 .panel {
   border: none;
 
   &-default > .panel-heading {
-    background-color: @table-bg-hover;
-    color: @text-color;
+    background-color: $table-bg-hover;
+    color: $text-color;
   }
 }
 
 .thumbnail {
-  background-color: @well-bg;
+  background-color: $well-bg;
   border: none;
 }
 
@@ -261,7 +319,7 @@ label,
 
   &-header,
   &-footer {
-    background-color: @table-bg-hover;
+    background-color: $table-bg-hover;
     border: none;
     border-radius: 0;
   }

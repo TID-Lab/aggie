@@ -14,24 +14,25 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
-  storedAt: Date,
+  storedAt: {type: Date, index: true},
   content: String,
-  author: String,
+  author: {type: String, index: true},
   url: String,
-  read: {type: Boolean, default: false, required: true},
-  flagged: {type: Boolean, default: false, required: true},
-  _source: {type: String, ref: 'Source'},
-  _media: String,
+  read: {type: Boolean, default: false, required: true, index: true},
+  flagged: {type: Boolean, default: false, required: true, index: true},
+  _source: {type: String, ref: 'Source', index: true},
+  _media: {type: String, index: true},
   _sourceNickname: String,
-  _incident: {type: String, ref: 'Incident'},
-  checkedOutBy : { type: Schema.ObjectId, ref: 'User' },
-  checkedOutAt: Date
+  _incident: {type: String, ref: 'Incident', index: true},
+  checkedOutBy : {type: Schema.ObjectId, ref: 'User', index: true},
+  checkedOutAt: {type: Date, index: true}
 });
 
 // Give the report schema text search capabilities
 schema.plugin(textSearch);
 schema.plugin(listenTo);
-// Add a text index to the `content` field
+
+// Add fulltext index to the `content` field.
 schema.index({content: 'text'});
 
 schema.path('_incident').set(function(_incident) {
@@ -59,17 +60,16 @@ schema.pre('save', function(next) {
 // Emit information about updates after saving report
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:new', {_id: this._id.toString()});
-  if (!this._wasNew) schema.emit('report:updated', {_id: this._id.toString()});
+  if (!this._wasNew) schema.emit('report:updated', this);
 
   if (this._incidentWasModified) {
-    schema.emit('report:incident', {_id: this._id.toString(), _incident: this._incident ? this._incident.toString() : null});
     schema.emit('change:incident', this._prevIncident, this._incident);
   }
 });
 
 schema.methods.toggleFlagged = function(flagged) {
   this.flagged = flagged;
-  
+
   if (flagged) {
     this.read = true;
   }
@@ -102,8 +102,11 @@ Report.queryReports = function(query, page, callback) {
 
   // Convert reference fields for Report compatibility
   if (query.sourceId) query.filter._source = query.sourceId;
-  if (query.sourceType) query.filter._media = query.sourceType;
+  if (query.media) query.filter._media = query.media;
   if (query.incidentId) query.filter._incident = query.incidentId;
+
+  if (_.isBoolean(query.read)) query.filter.read = query.read;
+  if (_.isBoolean(query.flagged)) query.filter.flagged = query.flagged;
 
   // Determine author filter
   if (query.author) {

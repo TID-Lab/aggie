@@ -67,17 +67,17 @@ angular.module('Aggie')
 .controller('SourceFormModalInstanceController', [
   '$scope',
   '$modalInstance',
-  'sourceTypes',
+  'mediaOptions',
   'sources',
   'locals',
-  function($scope, $modalInstance, sourceTypes, sources, locals) {
+  function($scope, $modalInstance, mediaOptions, sources, locals) {
     $scope.sources = sources;
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.source = angular.copy(locals.source);
     $scope._showErrors = false
 
     $scope.sourceClass = function(source) {
-      if (source && sourceTypes.indexOf(source.media) !== -1) {
+      if (source && mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
       } else {
         return 'unknown-source';

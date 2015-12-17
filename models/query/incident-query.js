@@ -6,11 +6,12 @@ var util = require('util');
 var _ = require('underscore');
 
 var IncidentQuery = function(options) {
+  options = options || {};
   this.title = options.title;
   this.locationName = options.locationName;
   this.assignedTo = options.assignedTo;
-  this.status = options.status;
-  this.veracity = options.veracity;
+  this.closed = options.status == 'closed';
+  this.veracity = options.veracity == 'Confirmed true' ? true : (options.veracity == 'Confirmed false' ? false : null);
   this.event = 'incidents';
 };
 

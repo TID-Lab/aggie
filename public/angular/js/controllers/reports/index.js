@@ -9,15 +9,18 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
-  'sourceTypes',
+  'mediaOptions',
   'incidents',
   'statusOptions',
+  'linkedtoIncidentOptions',
   'Report',
   'Batch',
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, sourceTypes, incidents, statusOptions, Report, Batch, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
+    incidents, statusOptions, linkedtoIncidentOptions, Report, Batch, Socket, Queue, paginationOptions) {
+
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -27,9 +30,13 @@ angular.module('Aggie')
     $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
-    $scope.sourceTypes = sourceTypes;
+    $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
-    $scope.currentPath = $rootScope.$state.current.name 
+    $scope.currentPath = $rootScope.$state.current.name;
+
+    //We add options to search reports with any or none incidents linked
+    $scope.incidents.push(linkedtoIncidentOptions[0]);
+    $scope.incidents.push(linkedtoIncidentOptions[1]);
 
     $scope.pagination = {
       page: parseInt($stateParams.page) || 1,
@@ -49,8 +56,10 @@ angular.module('Aggie')
       $scope.visibleReports.addMany(visibleReports);
 
       if ($scope.isFirstPage() && $scope.currentPath == 'reports') {
+        Socket.join('reports');
+        Socket.on('report:updated', $scope.updateReport.bind($scope));
         Socket.emit('query', searchParams());
-        Socket.on('reports', $scope.handleNewReports);
+        Socket.on('reports', $scope.handleNewReports.bind($scope));
       }
 
       // make links clickable
@@ -77,9 +86,15 @@ angular.module('Aggie')
       return memo;
     };
 
-    $scope.search = function(params) {
+    $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
-        $state.go('reports', searchParams(params), { reload: true });
+
+        // Remove empty params.
+        var params = searchParams(newParams);
+        for (var key in params) {
+          if (!params[key]) params[key] = null;
+        }
+        $state.go('reports', params, { reload: true });
       });
     };
 
@@ -111,7 +126,7 @@ angular.module('Aggie')
     }
 
     var filterSelected = function(items) {
-      return items.reduce(function(memo, item) { 
+      return items.reduce(function(memo, item) {
         if (item.selected) memo.push(item);
         return memo;
       }, []);
@@ -135,6 +150,16 @@ angular.module('Aggie')
       return items.map(function(item) {
         return item._id;
       });
+    }
+
+    $scope.updateReport = function(report) {
+      var foundReport = $scope.visibleReports.find(function (item) {
+        return item._id == report._id;
+      });
+
+      if (!foundReport) return;
+
+      angular.extend(foundReport, report);
     }
 
     $scope.handleNewReports = function(reports) {
@@ -180,20 +205,24 @@ angular.module('Aggie')
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
-        $scope.searchParams.sourceId === null &&
+        $scope.searchParams.status === null &&
         $scope.searchParams.media === null &&
+        $scope.searchParams.sourceId === null &&
         $scope.searchParams.incidentId === null &&
-        $scope.searchParams.author === null;
+        $scope.searchParams.author === null &&
+        $scope.searchParams.keywords === null;
     };
 
     $scope.clearFilters = function() {
       $scope.search({
         before: null,
         after: null,
+        status: null,
         sourceId: null,
         media: null,
         incidentId: null,
-        author: null
+        author: null,
+        keywords: null
       });
     };
 
@@ -238,7 +267,7 @@ angular.module('Aggie')
 
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
-      
+
       if (report.flagged) {
         report.read = report.flagged;
       }
@@ -260,7 +289,7 @@ angular.module('Aggie')
     };
 
     $scope.someSelected = function() {
-    
+
       return $scope.reports.some(function (report) {
         return (report.selected);
       });
@@ -280,7 +309,7 @@ angular.module('Aggie')
         // no more results found
         if (!resource.results || !resource.results.length) {
           var message = "No more unread reports found.";
-          
+
           if ($scope.currentPath == 'batch') {
             flash.setNotice(message);
             $rootScope.$state.go('reports', {});
@@ -316,11 +345,11 @@ angular.module('Aggie')
       if (!$scope.reports) return;
 
       var ids = getIds($scope.reports);
-      
+
       Report.toggleRead({ids: ids, read: true}, function() {
         $rootScope.$state.go('reports', {}, { reload: true });
       });
-    }; 
+    };
 
     $scope.viewReport = function(event, report) {
       if (angular.element(event.target)[0].tagName == 'TD') {
@@ -330,7 +359,7 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(report) {
       var source = $scope.sourcesById[report._source];
-      if (source && $scope.sourceTypes[source.media] !== -1) {
+      if (source && $scope.mediaOptions[source.media] !== -1) {
         return source.media + '-source';
       } else {
         return 'unknown-source';
@@ -340,6 +369,11 @@ angular.module('Aggie')
     (fireDigestEveryThirtySeconds = function() {
       $timeout(fireDigestEveryThirtySeconds, 30 * 1000);
     })();
+
+    $scope.$on('$destroy', function() {
+      Socket.leave('reports');
+      Socket.removeAllListeners('reports');
+    });
 
     init();
   }

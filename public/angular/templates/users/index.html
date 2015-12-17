@@ -1,15 +1,14 @@
 <div class="bs-component">
   <ul class="breadcrumb">
-    <li><a ui-sref="settings">Settings</a></li>
     <li class="active">Users</li>
   </ul>
 </div>
 
-<div class="table-filters">
-  <div class="filter">
-    <button ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()">Create new user</a>
-  </div>
+<div class="button-row">
+  <button ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()">Create User</a>
 </div>
+
+<div class="clearfix"></div>
 
 <p ng-hide="users.length > 0 ">Sorry, but we couldn't find any users.</p>
 
@@ -23,7 +22,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="u in users">
-      <td class="compact content">{{ u.username }}</td>
+      <td class="compact content" ng-controller="UserFormModalController">
+        <a href="/profile/{{u.username}}" class="table-primary">{{ u.username }}</a>
+      </td>
       <td class="compact content">{{ u.email }}</td>
       <td class="compact content">{{ u.role | translate }}</td>
       <td ng-controller="UserFormModalController" class="actions compact">

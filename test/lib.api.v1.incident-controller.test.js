@@ -94,7 +94,7 @@ describe('Incident controller', function() {
     });
     it('should get an empty list of incidents', function(done) {
       request(incidentController)
-        .get('/api/v1/incident?status=alert')
+        .get('/api/v1/incident?title=notexistingtitle')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

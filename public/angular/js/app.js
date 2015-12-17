@@ -89,12 +89,14 @@ require('./controllers/sources/index');
 require('./controllers/sources/show');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
+require('./controllers/users/profile');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');
 require('./controllers/incidents/form_modal');
 require('./controllers/incidents/report_incident_modal');
-require('./controllers/trends/index');
+require('./controllers/trends/bars');
+require('./controllers/trends/lines');
 require('./controllers/analysis');
 require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
@@ -112,6 +114,7 @@ require('./filters/with-line-breaks');
 require('./filters/strip-html');
 require('./filters/str-limit');
 require('./filters/tripledigit');
+require('./filters/orderObjectBy');
 
 // Directives
 require('./directives/aggie-confirm');

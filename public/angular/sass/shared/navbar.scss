@@ -1,0 +1,96 @@
+.navbar-wrapper {
+  margin-bottom: 21px;
+}
+
+/* Adding all this context so we override the default bootstrap -15 left margin */
+.navbar .container .navbar-brand {
+  margin-top: 7px;
+  margin-right: 20px;
+  margin-left: 0;
+  background-image: url(../images/logo-v1.png);
+  background-repeat: no-repeat;
+  width: 104px;
+  height: 28px;
+}
+
+.navbar {
+  font-size: 14px;
+}
+
+.navbar-default {
+  background-color: $navbar-green;
+  margin-bottom: 0;
+  .navbar-nav > li {
+    > a:hover,
+    > a:focus,
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      background-color: darken($navbar-green, 10%);
+    }
+  }
+}
+
+.navbar-nav > li > ul {
+  > li {
+    line-height: 40px;
+    > a {
+      font-size: 14px;
+    }
+  }
+  padding: 0;
+  border: hidden;
+  background-color: darken($navbar-green, 10%);
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0;
+}
+
+.navbar-stats {
+  min-height: 34px;
+  background-color: $navbar-yellow;
+  .navbar-text {
+    line-height: 26px;
+  }
+  .container {
+    height: 44px;
+    position: relative;
+    padding-top: 8px;
+  }
+  .navbar-nav > li {
+    > a:hover,
+    > a:focus,
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      background-color: darken($navbar-yellow, 10%);
+    }
+  }
+}
+
+.navbar-text {
+  line-height: 1;
+  margin: 0;
+  font-weight: $medium-weight;
+
+  .nav-bar-number {
+    font-size: 18px;
+  }
+  .nav-bar-label {
+    font-size: 12px;
+    margin-right: 10px;
+  }
+}
+
+.nav li.user {
+  font-weight: bold;
+}
+
+.source-errors {
+  float: right;
+  padding-top: 5px;
+  a {
+    color: #333;
+  }
+}

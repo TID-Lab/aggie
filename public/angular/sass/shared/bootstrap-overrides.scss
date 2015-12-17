@@ -1,0 +1,17 @@
+table a:not(.btn),
+.table a:not(.btn) {
+  color: #000;
+  text-decoration: none;
+}
+
+body {
+  font-weight: normal;
+}
+
+.modal-content {
+  border: none;
+}
+
+.form-control {
+  font-size: 14px;
+}

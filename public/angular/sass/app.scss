@@ -4,32 +4,27 @@ $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 $gray: #aaaaaa;
 $blue: #5bc0de;
+$normal-weight: normal; // This is what the bootstrap style uses.
+$medium-weight: 400; // Not quite bold.
+$font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-@import 'forms';
-@import 'modals';
-@import 'tables';
-@import 'tabs';
+@import 'shared/general';
+@import 'shared/forms';
+@import 'shared/navbar';
+@import 'shared/buttons';
+@import 'shared/bootstrap-overrides';
+@import 'components/modals';
+@import 'components/tables';
+@import 'components/tabs';
+@import 'sections/trend-bars';
+@import 'sections/trend-lines';
+@import 'sections/profile';
+
+// NOTE: Over time, the styles below should be refactored into separate files. See https://github.com/styleguide/css
+// for directory structure.
 
 html {
   height: 100%;
-}
-
-body {
-  background-color: #fff;
-  font-size: 12px;
-  line-height: 1;
-  color: #333;
-  height: 100%;
-}
-
-a {
-  cursor: pointer;
-  color: $link-blue;
-  text-decoration: none;
-  &:hover {
-    color: lighten($link-blue, 10%);
-    text-decoration: underline;
-  }
 }
 
 .padding {
@@ -65,106 +60,8 @@ a {
   margin-bottom: 20px;
 }
 
-.navbar-wrapper {
-  margin-bottom: 21px;
-}
-
-/* Adding all this context so we override the default bootstrap -15 left margin */
-.navbar .container .navbar-brand {
-  margin-top: 7px;
-  margin-right: 20px;
-  margin-left: 0;
-  background-image: url(../images/logo-v1.png);
-  background-repeat: no-repeat;
-  width: 104px;
-  height: 28px;
-}
-
-.navbar {
-  font-size: 14px;
-}
-
-.navbar-default {
-  background-color: $navbar-green;
-  margin-bottom: 0;
-  .navbar-nav > li {
-    > a:hover,
-    > a:focus,
-    &.active > a,
-    &.active > a:hover,
-    &.active > a:focus {
-      background-color: darken($navbar-green, 10%);
-    }
-  }
-}
-
-.navbar-nav > li > ul {
-  > li {
-    line-height: 40px;
-    > a {
-      font-size: 14px;
-    }
-  }
-  padding: 0;
-  border: hidden;
-  background-color: darken($navbar-green, 10%);
-}
-
-.navbar-nav.navbar-right:last-child {
-  margin-right: 0;
-}
-
-.navbar-stats {
-  min-height: 34px;
-  background-color: $navbar-yellow;
-  .navbar-text {
-    line-height: 26px;
-  }
-  .container {
-    position: relative;
-  }
-  .navbar-nav > li {
-    > a:hover,
-    > a:focus,
-    &.active > a,
-    &.active > a:hover,
-    &.active > a:focus {
-      background-color: darken($navbar-yellow, 10%);
-    }
-  }
-}
-
-.navbar-text {
-  line-height: 1;
-  margin: 0;
-  padding: 8px 0;
-  font-weight: normal;
-
-  .nav-bar-number {
-    font-size: 18px;
-  }
-  .nav-bar-label {
-    font-size: 12px;
-    margin-right: 10px;  
-  }
-}
-
-.nav li.user {
-  font-weight: bold;
-}
-
-.jumbotron {
-  background-color: #e3e6e3;
-}
-
 .well {
-  background-color: #e3e6e3;
-}
-
-.btn {
-  &:focus, &:active:focus {
-    outline: none;
-  }
+  background-color: #fff;
 }
 
 .toggle-switch {
@@ -197,11 +94,6 @@ a {
 .pager {
   text-align: right;
   margin: 0;
-}
-
-
-.btn-default {
-  background-color: #5BC0DE;
 }
 
 .breadcrumb {
@@ -256,18 +148,6 @@ a {
   width: 15%;
 }
 
-.source-errors {
-  position: absolute;
-  right: 140px;
-  top: 0;
-  padding: 14px;
-  height: 26px;
-}
-
-.source-errors a {
-  color: red;
-}
-
 a.list-group-item {
   background-color: #fff;
   color: #555;
@@ -306,31 +186,8 @@ a.list-group-item {
   background-color: #428bca;
 }
 
-.timepicker-picker .table-condensed {
-  td {
-    border: none;
-  }
-  td a span.fa {
-    margin-top: -18px;
-    background-color: transparent;
-  }
-  td a.btn, td button.btn {
-    background-color: #428bca;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-  }
-}
-
 li.collapse, li.collapsing {
   margin: 10px;
-}
-
-.btn-default {
-  background-color: #ebeced;
-  color: #808285;
-  &:hover {
-    background-color: #d1d3d4;
-  }
 }
 
 #map-canvas {
@@ -392,7 +249,7 @@ li.collapse, li.collapsing {
 }
 
 .container-main {
-  padding-bottom: 30px;
+  padding-bottom: 60px;
 }
 
 footer {

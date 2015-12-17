@@ -1,0 +1,23 @@
+.trend-bars {
+  td.sparkline,
+  .table > tbody > tr > td.sparkline { // Why must you use such specific selectors, Bootstrap?
+    width: 748px;
+    max-width: 748px; // This overrides the max width on td.content
+    vertical-align: bottom;
+    canvas {
+      vertical-align: bottom !important;
+    }
+  }
+
+  .aggie-sparkline {
+    cursor: pointer;
+  }
+
+  td.trend-info {
+    max-width: 150px;
+    div {
+      overflow: hidden;
+      white-space: nowrap; // We don't want trends with tons of keywords to make this cell huge.
+    }
+  }
+}

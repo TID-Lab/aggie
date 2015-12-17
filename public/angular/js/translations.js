@@ -36,7 +36,7 @@ angular.module('Aggie').config([
       'admin': 'Admin',
     })
 
-    // Source types
+    // Source media
     .translations('en', {
       'twitter': 'Twitter',
       'rss': 'RSS',
@@ -63,8 +63,14 @@ angular.module('Aggie').config([
     // Trend query options
     .translations('en', {
       'keywords': 'Keywords',
-      'sourceType': 'Source Type',
+      'media': 'Media',
       'sourceId': 'Source'
+    })
+
+    // Linked to report options
+    .translations('en', {
+      '* Any Incident': '* Any Incident',
+      '* Without Incident': '* Without Incident'
     })
 
     .preferredLanguage('en');

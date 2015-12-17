@@ -5,11 +5,9 @@
   </ul>
 </div>
 
-<div class="table-filters">
-  <div class="filter">
-    <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="edit(incident)">Edit incident</button>
-    <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete()">Delete incident</button>
-  </div>
+<div class="button-row">
+  <button ng-controller="IncidentFormModalController" class="btn btn-info margin-right" ng-click="edit(incident)">Edit</button>
+  <button class="btn btn-info" aggie-confirm="Are you sure you want to delete this incident?" on-confirm="delete()">Delete</button>
 </div>
 
 <br/><br/>
@@ -17,23 +15,27 @@
   <tbody>
     <tr>
       <td class="detail-key">Location</td>
-      <td class="detail-value">{{ incident.locationName }}</td>
+      <td class="detail-value">
+        <div ng-if="incident.locationName">{{ incident.locationName }}</div>
+        <div ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</td>
     </tr>
     <tr>
-      <td class="detail-key">Latitude</td>
-      <td class="detail-value">{{ incident.latitude | number:6 }}</td>
-    </tr>
-    <tr>
-      <td class="detail-key">Longitude</td>
-      <td class="detail-value">{{ incident.longitude | number:6 }}</td>
+      <td class="detail-key">Creator</td>
+      <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
     </tr>
     <tr>
       <td class="detail-key">Assigned To</td>
-      <td class="detail-value">{{ incident.assignedTo }}</td>
+      <td class="detail-value"><a href="/users/{{ incident.assignedTo.username }}">{{ incident.assignedTo.username }}</a></td>
     </tr>
     <tr>
-      <td class="detail-key">Verified</td>
-      <td class="detail-value">{{ incident.veracity ? 'Verified' : 'Unverified' }}</td>
+      <td class="detail-key">Status</td>
+      <td class="detail-value">{{ incident.closed ? 'Closed' : 'Open' }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key">Veracity</td>
+      <td class="detail-value">
+        {{ incident.veracity ? 'Confirmed True' : (incident.veracity === false ? 'Confirmed False' : 'Unconfirmed') }}
+      </td>
     </tr>
     <tr>
       <td class="detail-key">Notes</td>
@@ -47,20 +49,20 @@
 <p ng-hide="pagination.total > 0">There are no reports to display.</p>
 
 <div ng-show="pagination.total > 0">
-  <form>
-    <div class="table-filters">
-      <div class="filter pagination">
-        <ul class="pager">
-          <li class="pager-label">{{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}</li>
-          <li>
-            <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-          </li>
-          <li>
-            <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-          </li>
-        </ul>
-      </div>
+  <div class="table-actions">
+    <div class="pull-right padding-top-bottom pagination">
+      <ul class="pager">
+        <li class="pager-label">
+          {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}
+        </li>
+        <li>
+          <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
+        </li>
+        <li>
+          <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
+        </li>
+      </ul>
     </div>
-  </form>
+  </div>
   <div ng-include="'/templates/reports/table.html'"></div>
 </div>

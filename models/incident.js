@@ -5,6 +5,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var Schema = mongoose.Schema;
 var validate = require('mongoose-validator').validate;
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
@@ -20,14 +21,15 @@ var schema = new mongoose.Schema({
   longitude: Number,
   updatedAt: Date,
   storedAt: Date,
-  assignedTo: String,
+  assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: {type: String, default: 'new', required: true},
   veracity: {type: Boolean, default: null },
   escalated: {type: Boolean, default: false, required: true},
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
   totalReports: {type: Number, default: 0},
-  notes: String
+  notes: String,
 });
 
 schema.plugin(listenTo);
@@ -39,6 +41,7 @@ schema.pre('save', function(next) {
   if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
+
   next();
 });
 
@@ -46,9 +49,19 @@ schema.post('save', function() {
   schema.emit('incident:save', {_id: this._id.toString()});
 });
 
+schema.post('remove', function() {
+  //Unlink removed incident from reports
+  Report.find({ _incident: this._id.toString() }, function(err, reports) {
+    reports.forEach(function(report) {
+      report._incident = null;
+      report.save();
+    });
+  });
+
+});
+
 var Incident = mongoose.model('Incident', schema);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
-
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   Incident.findById(prevIncident || newIncident, function(err, incident) {
@@ -57,8 +70,7 @@ schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
 
     if (prevIncident) {
       total = (total > 0) ? total - 1 : 0;
-    } 
-    else if (newIncident) {
+    } else if (newIncident) {
       total = (total) ? total + 1 : 1;
     }
 
@@ -76,10 +88,12 @@ Incident.queryIncidents = function(query, page, options, callback) {
     page = 0;
     options = {};
   }
+
   if (typeof options === 'function') {
     callback = options;
     options = {};
   }
+
   if (page < 0) page = 0;
 
   var filter = {};
@@ -95,6 +109,19 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt = filter.storedAt || {};
     filter.storedAt.$gte = query.since;
   }
+
+  if (query.veracity == 'confirmed true') filter.veracity = true;
+  if (query.veracity == 'confirmed false') filter.veracity = false;
+  if (query.veracity == 'unconfirmed') filter.veracity = null;
+  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+
+  if (query.status == 'open') filter.closed = false;
+  if (query.status == 'closed') filter.closed = true;
+  delete filter.status;
+  if (_.isBoolean(query.closed)) filter.closed = query.closed;
+
+  if (query.escalated == 'escalated') filter.escalated = true;
+  if (query.escalated == 'unescalated') filter.escalated = false;
 
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
