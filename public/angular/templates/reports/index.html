@@ -69,6 +69,9 @@
     <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)">Flag</a>
     <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)">Unflag</a>
   </div>
+  <div class="pull-left margin-right padding">
+    <a ng-class="{highlight: someSelected()}" class="btn btn-default"ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)">Add to Incident</a>
+  </div>
   <div class="pull-left margin-left padding-top-bottom">
     <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</button>
   </div>

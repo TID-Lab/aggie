@@ -35,7 +35,7 @@ describe('Report controller', function() {
   }
 
   function loadReports(done) {
-    Report.find({}, function (err, results) {
+    Report.find({}, function(err, results) {
       reports = results;
       done();
     });
@@ -52,8 +52,8 @@ describe('Report controller', function() {
   describe('GET /api/v1/report', function() {
 
     // Create some reports.
-    beforeEach(function(done){
-      var past = new Date(2000,1,1,12,0,0); // Feb 1
+    beforeEach(function(done) {
+      var past = new Date(2000, 1, 1, 12, 0, 0); // Feb 1
       Report.create([
         {authoredAt: new Date(), content: 'one', flagged: true, _source: source._id},
         {authoredAt: new Date(), content: 'one', _source: source._id},
@@ -165,4 +165,36 @@ describe('Report controller', function() {
     });
   });
 
+  describe('PATCH api/v1/report/_link', function() {
+    beforeEach(function(done) {
+      async.series([loadUser, createReports, loadReports], done);
+    });
+
+    it('should link reports to specific Incident', function(done) {
+      request(reportController)
+        .patch('/api/v1/report/_link')
+        .send({ids: [reports[0].id, reports[1].id], incident: '54c73024ae04d1f9c3a678d6'})
+        .expect(200)
+        .end(function(err) {
+          if (err) return done(err);
+
+          request(reportController)
+          .get('/api/v1/report/' + reports[0]._id)
+          .expect(200)
+          .end(function(err, res) {
+            expect(res.body).to.have.property('_incident');
+            expect(res.body._incident).to.equal('54c73024ae04d1f9c3a678d6');
+
+            request(reportController)
+            .get('/api/v1/report/' + reports[1]._id)
+            .expect(200)
+            .end(function(err, res) {
+              expect(res.body).to.have.property('_incident');
+              expect(res.body._incident).to.equal('54c73024ae04d1f9c3a678d6');
+              done();
+            });
+          });
+        });
+    });
+  });
 });

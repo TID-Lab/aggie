@@ -125,7 +125,7 @@ angular.module('Aggie')
       }
     }
 
-    var filterSelected = function(items) {
+    $scope.filterSelected = function(items) {
       return items.reduce(function(memo, item) {
         if (item.selected) memo.push(item);
         return memo;
@@ -276,7 +276,7 @@ angular.module('Aggie')
     };
 
     $scope.toggleSelectedRead = function(read) {
-      var items = filterSelected($scope.reports);
+      var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
 
       var ids = getIds(toggleRead(items, read));
@@ -290,31 +290,30 @@ angular.module('Aggie')
 
     $scope.someSelected = function() {
 
-      return $scope.reports.some(function (report) {
+      return $scope.reports.some(function(report) {
         return (report.selected);
       });
-    }
+    };
 
     $scope.toggleSelectedFlagged = function(flagged) {
-      var items = filterSelected($scope.reports);
+      var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
 
-      var ids = getIds(toggleFlagged(items, flagged))
+      var ids = getIds(toggleFlagged(items, flagged));
 
       Report.toggleFlagged({ids: ids, flagged: flagged});
     };
 
     $scope.grabBatch = function() {
-      Batch.checkout({}, function (resource) {
+      Batch.checkout({}, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
-          var message = "No more unread reports found.";
+          var message = 'No more unread reports found.';
 
           if ($scope.currentPath == 'batch') {
             flash.setNotice(message);
             $rootScope.$state.go('reports', {});
-          }
-          else {
+          } else {
             flash.setNoticeNow(message);
           }
 
