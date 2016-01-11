@@ -1,0 +1,13 @@
+web:
+  image: tid-lab/aggie-test
+  links:
+    - db
+  environment:
+    - MONGO_HOST=db
+  ports:
+    - "80:3000"
+db:
+  image: mongo:latest
+  ports:
+     - "27017:27017"
+  command: "--smallfiles --logpath=/dev/null"

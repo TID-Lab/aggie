@@ -61,7 +61,7 @@ The following need to be installed.
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
   - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
   - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
-1. Run `npm install` from the project directory.
+1. Run `npm install && node install.js` from the project directory.
   - This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates the angular application.
 1. In your terminal during 'npm install', a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Run `npm install -g gulp mocha`.
