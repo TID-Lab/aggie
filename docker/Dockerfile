@@ -8,20 +8,19 @@ WORKDIR /usr/src/
 # WORKDIR aggie
 
 # we use branch for testing first
-RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie & git checkout dockerize-aggie
+RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout dockerize-aggie
 
 # Eventually we can install from master
 # RUN git clone https://github.com/TID-Lab/aggie.git
 
 WORKDIR aggie
 
-
 RUN mv config/secrets.json.example config/secrets.json
 
 # RUN npm install --production
 
 # Uncomment when using git clone
-RUN npm install
+RUN npm install --global gulp && npm install --unsafe-perm=true
 
 EXPOSE 3000
 
