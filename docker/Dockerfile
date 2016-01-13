@@ -2,6 +2,8 @@ FROM node:0.10
 
 WORKDIR /usr/src/
 
+RUN curl -L https://npmjs.org/install.sh | sh
+
 # Using local version of aggie for debugging
 # RUN mkdir aggie
 # COPY . aggie/
