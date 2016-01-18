@@ -18,6 +18,7 @@
     'toggle fetching': ['manager', 'admin'],
     'manage trends': ['manager', 'admin'],
     'change settings': ['admin'],
+    'change admin password': ['admin']
   };
 
   // Determine if a user can do a certain action

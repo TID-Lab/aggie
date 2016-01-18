@@ -8,11 +8,20 @@ angular.module('Aggie')
   'FlashService',
   'Socket',
   '$state',
-  function($scope, $rootScope, $location, AuthService, flash, Socket, $state) {
+  'AdminPwd',
+  function($scope, $rootScope, $location, AuthService, flash, Socket, $state, adminPwd) {
     $scope.unreadErrorCount = '0';
- 
+
     var init = function() {
       if ($rootScope.currentUser) {
+
+        var adminNeedsToChangePwd = $rootScope.currentUser.username === 'admin' &&
+              $rootScope.currentUser.hasDefaultPassword;
+
+        if (adminNeedsToChangePwd) {
+          adminPwd.openModal();
+        }
+
         Socket.on('sourceErrorCountUpdated', sourceErrorCountUpdated);
         Socket.on('stats', updateStats);
         Socket.join('stats');
@@ -46,7 +55,7 @@ angular.module('Aggie')
       });
     };
 
-    $scope.viewProfile = function (user) {
+    $scope.viewProfile = function(user) {
       $state.go('profile', {userName: user.username});
     };
 
