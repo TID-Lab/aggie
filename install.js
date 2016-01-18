@@ -34,7 +34,8 @@ function createAdminUser(callback) {
         email: config.fromEmail,
         username: 'admin',
         password: config.adminPassword,
-        role: 'admin'
+        role: 'admin',
+        hasDefaultPassword: true
       };
       // Create new admin user
       User.create(userData, function(err, user) {

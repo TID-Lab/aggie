@@ -14,7 +14,7 @@ before(function(done) {
       database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
         if (err) return done(err);
         // Create admin user for testing
-        User.create({provider: 'test', email: 'admin@example.com', username: 'admin', password: 'letmein', role: 'admin'});
+        User.create({provider: 'test', email: 'admin@example.com', username: 'admin', password: 'letmein', hasDefaultPassword: true, role: 'admin'});
         // Enable full-text indexing for Reports
         Report.ensureIndexes(function() {
           done();

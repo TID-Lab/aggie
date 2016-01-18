@@ -16,7 +16,8 @@
     'edit reports': ['monitor', 'manager', 'admin'],
     'edit sources': ['manager', 'admin'],
     'toggle fetching': ['manager', 'admin'],
-    'manage trends': ['manager', 'admin']
+    'manage trends': ['manager', 'admin'],
+    'change admin password': ['admin']
   };
 
   // Determine if a user can do a certain action
