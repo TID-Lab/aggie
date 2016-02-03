@@ -1,6 +1,3 @@
 {
-  "data": [{
-    "name": "posts",
-    "fql_result_set": []
-  }]
+  "data": []
 }

@@ -72,35 +72,29 @@ describe('Facebook content service', function() {
 
   it('should get new comments from old posts', function(done) {
 
-    // Fetch first batch
-    var service = stubWithFixture('facebook-1.json');
-    service.fetch({maxCount: 50}, function(){});
-
-    // Stub for second batch
-    stubWithFixture('facebook-2.json', service);
-
+    var service = stubWithFixture('facebook-2.json');
     service.once('error', function(err) { done(err); });
 
     var fetched = 0;
     service.on('report', function(reportData) {
       switch (++fetched) {
-        case 1:
+        case 2:
           expect(reportData.content).to.contain('Totez cool');
           expect(reportData.author).to.equal('Test User 2');
           expect(reportData.url).to.contain('https');
           break;
-        case 2:
+        case 3:
           expect(reportData.content).to.contain('ranked');
           expect(reportData.author).to.equal('Test User 3');
           expect(reportData.url).to.contain('https');
           break;
-        case 2:
+        case 4:
           return done(new Error('Unexpected report'));
       }
     });
 
     // Give enough time for extra report to appear.
-    setTimeout(function() { if (fetched == 2) done(); }, 100);
+    setTimeout(function() { if (fetched == 3) done(); }, 100);
 
     service.fetch({maxCount: 50}, function(){});
   });
@@ -111,13 +105,6 @@ describe('Facebook content service', function() {
       var service = new FacebookContentService({url: ''});
       expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing Facebook URL', done);
-      service.fetch({maxCount: 50}, function(){});
-    });
-
-    it('should emit an invalid URL error', function(done) {
-      var service = stubWithFixture('facebook-no-source-match.json');
-      expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Invalid Facebook URL', done);
       service.fetch({maxCount: 50}, function(){});
     });
   });

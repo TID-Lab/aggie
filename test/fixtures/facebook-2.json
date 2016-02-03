@@ -1,58 +1,35 @@
-{
-  "data": [{
-    "name": "source",
-    "fql_result_set": [{
-      "id": 40796308305,
-      "site": "www.facebook.com",
-      "type": "page",
-      "url": "https://www.facebook.com/georgiatech"
-    }]
-  }, {
-    "name": "posts",
-    "fql_result_set": [{
-      "source_id": "251841205227",
-      "post_id": "251841205227_10154233081715228",
-      "updated_time": 1401659358,
-      "created_time": 1401622269,
-      "actor_id": "251841205227",
-      "permalink": "https://www.facebook.com/photo.php?fbid=10154233081380228&set=a.261947725227.302128.251841205227&type=1",
-      "message": "Bioengineers at Georgia Tech are developing a better way to rebuild and repair broken bones from inside the human body. -- http://c.gatech.edu/1onyDu"
-    }, {
-      "source_id": "251841205227",
-      "post_id": "251841205227_10203944397313584",
-      "updated_time": 1401971524,
-      "created_time": 1401971524,
-      "actor_id": "2518412052273",
-      "permalink": "https://www.facebook.com/georgiatech/posts/10203944397313584",
-      "message": "GA Tech ranked #18 for the Best Computer Science Graduate Degree Programs: \nhttp://www.thebestschools.org/rankings/20-top-graduate-programs-computer-science-application-process/\n"
-    }]
-  }, {
-    "name": "authors",
-    "fql_result_set": [{
-      "id": "251841205227",
+[
+  {
+    "id": 123123123123,
+    "from": {
+      "id": 23232323,
       "name": "Georgia Tech"
-    }, {
-      "id": "2518412052271",
-      "name": "Test User 1"
-    }, {
-      "id": "2518412052272",
-      "name": "Test User 2"
-    }, {
-      "id": "2518412052273",
+    },
+    "message": "Bioengineers at Georgia Tech are developing a better way to rebuild and repair broken bones from inside the human body. -- http://c.gatech.edu/1onyDu",
+    "link": "https://www.facebook.com/photo.php?fbid=10154233081380228&set=a.261947725227.302128.251841205227&type=1",
+    "created_time": "2015-09-09T20:43:14+0000",
+    "comments": {
+      "data":[
+        {
+          "id": 123123123123,
+          "from": {
+            "id": 23232323,
+            "name": "Test User 2"
+          },
+          "message": "Totez cool",
+          "created_time": "2015-09-09T20:43:14+0000"
+        }
+      ]
+    }
+  },
+  {
+    "id": 123123123123,
+    "from": {
+      "id": 23232323,
       "name": "Test User 3"
-    }]
-  }, {
-    "name": "comments",
-    "fql_result_set": [{
-      "fromid": "2518412052272",
-      "time": 1401659358,
-      "text": "Totez cool",
-      "text_tags": [],
-      "id": "251841205227_10154233081715228_10154234625965228",
-      "post_id": "251841205227_10154233081715228",
-      "likes": 0,
-      "user_likes": false,
-      "post_fbid": "10154234625965228"
-    }]
-  }]
-}
+    },
+    "message": "GA Tech ranked #18 for the Best Computer Science Graduate Degree Programs: \nhttp://www.thebestschools.org/rankings/20-top-graduate-programs-computer-science-application-process/\n",
+    "link": "https://www.facebook.com/photo.php?fbid=10154233081380228&set=a.261947725227.302128.251841205227&type=1",
+    "created_time": "2015-09-09T20:43:14+0000"
+  }
+]
