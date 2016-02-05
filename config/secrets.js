@@ -13,9 +13,7 @@ var fs = require('fs-extra');
 var secretsFile = path.resolve(__dirname, 'secrets.json');
 var data = fs.readFileSync(secretsFile, 'utf8');
 
-// remove comments from secrets file
-var secrets = JSON.parse(jsmin(data));
-nconf.add('secrets', {type: 'literal', store: secrets});
+nconf.add('secrets', {type: 'file', file: secretsFile});
 
 // load server preferences
 var prefsFile = path.resolve(__dirname, 'server-prefs.json');
@@ -56,6 +54,20 @@ module.exports.updateFetching = function(flag, cb) {
   cb = cb || function() {};
   nconf.set('fetching', S(flag).toBoolean());
   nconf.save(function(err){
+    return cb(err);
+  });
+};
+
+// update settings
+module.exports.update = function(type, settings, cb) {
+  cb = cb || function() {};
+
+  for (var key in settings) {
+    var item = type + ':' + key;
+    nconf.set(item, settings[key]);
+  }
+
+  nconf.save(function(err) {
     return cb(err);
   });
 };
