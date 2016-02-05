@@ -25,13 +25,40 @@
       </tr>
     </tbody>
   </table>
-
-  <button class="btn btn-info"
-          ng-click="save()">
-    <span class="fa fa-refresh refresh-animate"
-          ng-show="loading"></span>
-    <span ng-hide="loading">Save</span>
-    <span ng-show="loading">Loading</span>
-  </button>
-
+</div>
+<div ng-controller="MediaSettingsController">
+  <table class="table table-settings">
+    <thead>
+      <tr>
+        <td class="col-sm-3">
+          <label class="settings-label">Media</label>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="mediaOption in mediaOptions">
+          <td class="col-sm-3">
+            <label class="settings-label">{{ mediaOption | capitalize }}</label>
+          </td>
+          <td>
+            <div data-toggle="buttons">
+              <label ng-click="toggle(mediaOption, false)"
+                     class="toggle-item ng-class:{'active':media[mediaOption].on===false}">
+                Off
+              </label><label ng-click="toggle(mediaOption, true)"
+                             class="toggle-item ng-class:{'active':media[mediaOption].on===true}">
+                On
+              </label>
+            </div>
+          </td>
+          <td>
+            <div class="ng-scope">
+              <button class="btn btn-info ng-scope" ng-click="edit(mediaOption)">Edit</button>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 </div>

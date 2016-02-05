@@ -10,11 +10,11 @@ describe('Settings controller', function() {
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
     botMaster.addListeners('fetching', settingsController);
-    
+
     Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
     Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
     Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
-    
+
     var config = require('../config/secrets');
     config.updateFetching(false, function(err){
       done();
@@ -25,7 +25,7 @@ describe('Settings controller', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {enabled: false}, done);
+        .expect(200, {fetching: false, setting: 'fetching' }, done);
     });
   });
 
@@ -52,7 +52,7 @@ describe('Settings controller', function() {
     it('should return fetching status as enabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {enabled: true}, done);
+        .expect(200, {fetching: true, setting: 'fetching'}, done);
     });
   });
 
@@ -79,7 +79,7 @@ describe('Settings controller', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {enabled: false}, done);
+        .expect(200, {fetching: false, setting: 'fetching'}, done);
     });
   });
 

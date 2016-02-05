@@ -33,7 +33,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   $rootScope.$state = $state;
 
   var publicRoute = function(state) {
-    return !!(state.data && state.data.public === true)
+    return !!(state.data && state.data.public === true);
   };
 
   $rootScope.$on('$stateChangeSuccess', function(e, toState) {
@@ -62,6 +62,7 @@ require('./translations');
 // Services
 require('./services/auth');
 require('./services/fetching');
+require('./services/settings');
 require('./services/flash');
 require('./services/queue');
 require('./services/report');
@@ -89,6 +90,8 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/media/settings');
+require('./controllers/media/settings/settings_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');

@@ -17,7 +17,8 @@
     'edit sources': ['manager', 'admin'],
     'toggle fetching': ['manager', 'admin'],
     'manage trends': ['manager', 'admin'],
-    'change admin password': ['admin']
+    'change admin password': ['admin'],
+    'change settings': ['admin']
   };
 
   // Determine if a user can do a certain action
@@ -25,13 +26,14 @@
     if (User.permissions[permission]) {
       return User.permissions[permission].indexOf(this.role) > -1;
     }
+
     return false;
   };
 
   // Determine if a user is of a specified role
   User.prototype.is = function(role) {
     return this.role === role;
-  }
+  };
 
   // Export the User class for node.js
   // If we're in the browser, add `User` as a global object

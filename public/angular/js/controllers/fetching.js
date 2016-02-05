@@ -10,13 +10,12 @@ angular.module('Aggie')
       $scope.on = data;
     }, failure);
 
-    $scope.toggle = function (x) {
-      $scope.on = x;
-      console.log('Toggling!');
-      Fetching.set($scope.on, success, failure);
+    $scope.toggle = function(x) {
+      Fetching.set(x, success(x), failure);
     };
 
     function success(data) {
+      $scope.on = data;
       flash.setNoticeNow('Fetching has been successfully switched.');
     };
 
