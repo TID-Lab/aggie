@@ -9,7 +9,8 @@
     <div class="modal-body">
       <alert type="info" ng-show="success">The credentials are valid. You need to save them before
         continuing.</alert>
-      <alert type="danger" ng-show="failure">The credentials are invalid or they have expired.</alert>
+      <alert type="danger" ng-show="failure">{{ message }}</alert>
+
       <ol ng-if="media === 'twitter'">
         <li>Follow <a href="https://dev.twitter.com/oauth/overview/application-owner-access-tokens" target="_blank">
             these instructions</a> to generate tokens to use the Twitter API.
@@ -56,7 +57,12 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" aggie-confirm="Are you sure you want to delete the settings for this source?" on-confirm="delete(media, settings)">
+      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(media, settings)">
+        <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
+        <span ng-hide="loading">Test</span>
+        <span ng-show="loading">Testing</span></button>
+      <button class="btn btn-default" aggie-confirm="Are you sure you want to delete the settings for this source?"
+              on-confirm="delete(media, settings)">
         Delete
       </button>
       <button class="btn btn-default" ng-click="close()">Cancel</button>
