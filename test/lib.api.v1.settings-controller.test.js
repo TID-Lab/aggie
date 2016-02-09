@@ -4,8 +4,16 @@ var request = require('supertest');
 var settingsController = require('../lib/api/v1/settings-controller');
 var botMaster = require('../lib/fetching/bot-master');
 var Source = require('../models/source');
+var config = require('../config/secrets.js');
+
+function clone(a) {
+  return JSON.parse(JSON.stringify(a));
+}
 
 describe('Settings controller', function() {
+  var twitterSettings;
+  var testSettings;
+
   before(function(done) {
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
@@ -15,8 +23,77 @@ describe('Settings controller', function() {
     Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
     Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
 
-    var config = require('../config/secrets');
+    twitterSettings =  clone(config.get().twitter);
+    testSettings = {
+      consumer_key: 'testing',
+      consumer_secret: 'test',
+      access_token: 'api',
+      access_token_secret: 'error'
+    };
+
     config.updateFetching(false, function(err){
+      done();
+    });
+  });
+
+  describe('GET /api/v1/settings/twitter', function(){
+    it('should return the settings JSON of twitter', function(done){
+      request(settingsController)
+        .get('/api/v1/settings/twitter')
+        .expect(200, {twitter: config.get({ reload: true }).twitter, setting: 'twitter' }, done);
+    });
+  });
+
+  describe('POST /api/v1/settings/media/twitter', function(){
+
+    it('should test the settings of twitter', function(done){
+
+      request(settingsController)
+        .post('/api/v1/settings/media/twitter')
+        .send( { settings: testSettings })
+        .end(function(err, res){
+          if (err) return done(err);
+          expect(res.body.success).to.be.false;
+          return done();
+        });
+    });
+    it('should not change the settings of twitter ', function(done){
+      console.log(twitterSettings);
+      request(settingsController)
+        .post('/api/v1/settings/media/twitter')
+        .send( { settings: testSettings })
+        .end(function(err, res){
+          if (err) return done(err);
+          console.log(twitterSettings);
+          expect(clone(config.get({ reload: true }).twitter)).to.deep.equal(twitterSettings);
+          return done();
+        });
+    });
+  });
+
+  describe('PUT /api/v1/settings/media/twitter', function(){
+    it('should update twitter settings', function(done){
+
+      request(settingsController)
+        .put('/api/v1/settings/media/twitter')
+        .send( { settings: testSettings })
+        .end(function(err, res){
+          if (err) return done(err);
+          var newSettings = config.get({ reload: true }).twitter;
+          console.log(twitterSettings);
+          expect(newSettings).to.deep.equal(testSettings);
+          return done();
+        });
+    });
+
+    after(function(done){
+      //Revert changes to settings
+      console.log(twitterSettings);
+      request(settingsController)
+        .put('/api/v1/settings/media/twitter')
+        .send( { settings: twitterSettings })
+        .end();
+
       done();
     });
   });
