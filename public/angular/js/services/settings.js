@@ -13,10 +13,10 @@ angular.module('Aggie')
       }, failure);
     },
 
-    set: function(type, item, value, success, failure) {
+    set: function(item, value, success, failure) {
       var body = {};
       body.settings = value;
-      return Settings.update({ type: type, item: item }, body, success, failure);
+      return Settings.update({ item: item }, body, success, failure);
     },
 
     test: function(type, item, value, success, failure) {

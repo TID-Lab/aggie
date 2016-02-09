@@ -32,7 +32,7 @@ angular.module('Aggie')
       setting.on = value;
 
       if ((value && media.configured) || !value) {
-        Settings.set('media', mediaName, setting, success(mediaName, setting, value), failure);
+        Settings.set(mediaName, setting, success(mediaName, setting, value), failure);
       } else {
         var modalInstance = modal.create(mediaName, media);
       };

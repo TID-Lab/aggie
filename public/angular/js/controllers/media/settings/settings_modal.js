@@ -13,7 +13,7 @@ angular.module('Aggie')
     $scope._showErrors = false;
     $scope.save = function(form, mediaName, settings) {
       settings.configured = true;
-      Settings.set('media', mediaName, settings, success(mediaName, 'saved'), failure);
+      Settings.set(mediaName, settings, success(mediaName, 'saved'), failure);
       $modalInstance.close();
     };
 
@@ -26,7 +26,7 @@ angular.module('Aggie')
       settings.on = false;
       settings.configured = false;
 
-      Settings.set('media', mediaName, settings, success(mediaName, 'deleted'), failure);
+      Settings.set(mediaName, settings, success(mediaName, 'deleted'), failure);
       $modalInstance.close();
     };
 

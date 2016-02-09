@@ -28,7 +28,9 @@ describe('Settings controller', function() {
       consumer_key: 'testing',
       consumer_secret: 'test',
       access_token: 'api',
-      access_token_secret: 'error'
+      access_token_secret: 'error',
+      configured: false,
+      on: false
     };
 
     config.updateFetching(false, function(err){
@@ -58,29 +60,26 @@ describe('Settings controller', function() {
         });
     });
     it('should not change the settings of twitter ', function(done){
-      console.log(twitterSettings);
       request(settingsController)
         .post('/api/v1/settings/media/twitter')
         .send( { settings: testSettings })
         .end(function(err, res){
           if (err) return done(err);
-          console.log(twitterSettings);
           expect(clone(config.get({ reload: true }).twitter)).to.deep.equal(twitterSettings);
           return done();
         });
     });
   });
 
-  describe('PUT /api/v1/settings/media/twitter', function(){
+  describe('PUT /api/v1/settings/twitter', function(){
     it('should update twitter settings', function(done){
 
       request(settingsController)
-        .put('/api/v1/settings/media/twitter')
+        .put('/api/v1/settings/twitter')
         .send( { settings: testSettings })
         .end(function(err, res){
           if (err) return done(err);
           var newSettings = config.get({ reload: true }).twitter;
-          console.log(twitterSettings);
           expect(newSettings).to.deep.equal(testSettings);
           return done();
         });
@@ -88,11 +87,10 @@ describe('Settings controller', function() {
 
     after(function(done){
       //Revert changes to settings
-      console.log(twitterSettings);
       request(settingsController)
         .put('/api/v1/settings/media/twitter')
         .send( { settings: twitterSettings })
-        .end();
+        .end(function(err, res) {});
 
       done();
     });

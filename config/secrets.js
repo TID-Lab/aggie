@@ -63,12 +63,12 @@ module.exports.updateFetching = function(flag, cb) {
   });
 };
 
-// update media settings
-module.exports.updateMedia = function(mediaName, settings, cb) {
+// update settings
+module.exports.update = function(type, settings, cb) {
   cb = cb || function() {};
 
   for (var key in settings) {
-    var item = mediaName + ':' + key;
+    var item = type + ':' + key;
     nconf.set(item, settings[key]);
   }
 
