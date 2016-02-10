@@ -33,7 +33,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   $rootScope.$state = $state;
 
   var publicRoute = function(state) {
-    return !!(state.data && state.data.public === true)
+    return !!(state.data && state.data.public === true);
   };
 
   $rootScope.$on('$stateChangeSuccess', function(e, toState) {
@@ -62,6 +62,7 @@ require('./translations');
 // Services
 require('./services/auth');
 require('./services/fetching');
+require('./services/settings');
 require('./services/flash');
 require('./services/queue');
 require('./services/report');
@@ -73,6 +74,7 @@ require('./services/trend');
 require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
+require('./services/admin_pwd');
 
 // Controllers
 require('./controllers/application');
@@ -82,11 +84,14 @@ require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
+require('./controllers/admin_choose_password_modal');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
+require('./controllers/media/settings');
+require('./controllers/media/settings/settings_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');

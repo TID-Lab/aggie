@@ -82,27 +82,21 @@ Set `config.adminParty=true` if you want to run tests.
 
 #### Twitter
   1. Follow [these instructions](https://dev.twitter.com/oauth/overview/application-owner-access-tokens) to generate tokens to use the Twitter API.
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the Twitter hash/object (`"twitter": {},`).
-    1. Replace `consumer_key`, `consumer_secret`, `access_token`, and `access_token_secret` with the keys from [your app](https://apps.twitter.com).
+  1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
   1. Known issue: The current Facebook API is not compatible with Aggie. Please see https://github.com/TID-Lab/aggie/issues/139 for more information.
   1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
   1. Inside your Facebook app, obtain `client_id` and `client_secret`.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the Facebook hash/object (`"facebook": {},`).
-    1. Replace the `accessToken` placeholder with your access token.
-
+  1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
+  
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the ELMO hash/object (`"elmo": {},`).
-    1. Set the value of `authToken` to the API key you obtained above.
-  1. See below for instructions on adding individual ELMO sources to the app.
+1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+
 
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.

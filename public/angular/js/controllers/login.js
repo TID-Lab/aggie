@@ -3,22 +3,29 @@ angular.module('Aggie')
     '$scope',
     '$state',
     '$rootScope',
+    'admin_pwd',
     'AuthService',
     '$location',
     'FlashService',
-    function($scope, $state, $rootScope, AuthService, $location, flash) {
+    function($scope, $state, $rootScope, adminPwd, AuthService, $location, flash) {
       $scope.login = function(form) {
         AuthService.login({
-            'username': $scope.user.username,
-            'password': $scope.user.password
+            username: $scope.user.username,
+            password: $scope.user.password
           },
           function(err) {
+            delete $scope.user;
             if (!err) {
-              $state.go('reports');
+              if ($rootScope.currentUser.username == 'admin'
+              && $rootScope.currentUser.hasDefaultPassword) {
+                adminPwd.openModal();
+              } else {
+                $state.go('reports');
+              }
             } else {
               flash.setAlertNow(err.data);
             }
-        });
+          });
       };
     }
   ]);

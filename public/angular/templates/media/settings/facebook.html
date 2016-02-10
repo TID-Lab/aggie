@@ -1,0 +1,34 @@
+<div>
+  <form name="settingsForm" class="form-horizontal" novalidate>
+    <div class="modal-header">
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
+      <h4 class="modal-title">
+        <div>
+          <div class="icon-left">&nbsp;Edit Facebook Settings Source</div>
+      </h4>
+      </div>
+      <div class="modal-body">
+        <alert type="info" ng-show="success">The credentials are valid. You need to save them before continuing. </alert>
+        <alert type="info" ng-show="failure">The credentials are invalid or they have expired</alert>
+        <p ng-show="settingsForm.$invalid" class="">The field is required.</p>
+        <p ng-show="!settingsForm.$invalid" class=""> You can now test (recommended) or save the settings.</p>
+        <div class="well bs-component">
+          <fieldset>
+            <div class="form-group" >
+              <label for="consumer_key" class="col-lg-2 control-label">Access Token</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings.accessToken" class="form-control" id="accessToken" name="accessToken" placeholder="{{ settings.accessToken }}" ng-focus required>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test('facebook', settings)">Test</button>
+        <button class="btn btn-info" aggie-confirm="Are you sure you want to delete the settings for this source?" on-confirm="delete('facebook', settings)">Delete</button>
+        <button class="btn btn-default" ng-click="close()">Cancel</button>
+        <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, 'facebook', settings)">Save & Close</button>
+      </div>
+    </div>
+  </form>
+</div>

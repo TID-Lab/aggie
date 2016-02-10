@@ -18,8 +18,9 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
+  'admin_pwd',
   function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
-    incidents, statusOptions, linkedtoIncidentOptions, Report, Batch, Socket, Queue, paginationOptions) {
+    incidents, statusOptions, linkedtoIncidentOptions, Report, Batch, Socket, Queue, paginationOptions, adminPwd) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;

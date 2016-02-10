@@ -1,0 +1,53 @@
+<div>
+  <form name="settingsForm" class="form-horizontal" novalidate>
+    <div class="modal-header">
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
+      <h4 class="modal-title">
+        <div>
+          <div class="icon-left">&nbsp;Edit Twitter Settings Source</div>
+      </h4>
+      </div>
+      <div class="modal-body">
+        <alert type="info" ng-show="success">The credentials are valid. You need to save them before continuing. </alert>
+        <alert type="info" ng-show="failure">The credentials are invalid or they have expired</alert>
+        <p ng-show="settingsForm.$invalid" class=""> All fields are required.</p>
+        <p ng-show="!settingsForm.$invalid" class=""> You can now test (recommended) or save the settings.</p>
+        <div class="well bs-component">
+          <fieldset>
+            <div class="form-group" >
+              <label for="consumer_key" class="col-lg-2 control-label">Consumer Key</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings.consumer_key" class="form-control" id="consumer_key" name="consumer_key" placeholder="{{ settings.consumer_key }}" ng-focus required>
+              </div>
+            </div>
+            <div class="form-group" >
+              <label for="consumer_secret" class="col-lg-2 control-label">Consumer Secret</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings.consumer_secret" class="form-control" id="consumer_secret" name="consumer_secret" placeholder="{{ settings.consumer_secret }}" required>
+              </div>
+            </div>
+            <div class="form-group" >
+              <label for="access_token" class="col-lg-2 control-label">Access Token</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings.access_token" class="form-control" id="access_token" name="access_token" placeholder="{{ settings.access_token }}" ng-focus>
+              </div>
+            </div>
+            <div class="form-group" >
+              <label for="access_token_secret" class="col-lg-2 control-label">Access Token Secret</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings.access_token_secret" class="form-control" id="access_token_secret" name="access_token_secret" placeholder="{{ settings.access_token_secret }}" required>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test('twitter', settings)">Test</button>
+        <button class="btn btn-info" aggie-confirm="Are you sure you want to delete the settings for this source?" on-confirm="delete('twitter', settings)">Delete</button>
+        <button class="btn btn-default" ng-click="close()">Cancel</button>
+        <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, 'twitter', settings)">Save & Close</button>
+      </div>
+    </div>
+  </form>
+</div>
