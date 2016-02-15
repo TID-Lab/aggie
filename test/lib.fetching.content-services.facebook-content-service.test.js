@@ -33,6 +33,14 @@ describe('Facebook content service', function() {
     setTimeout(done, 100);
   });
 
+  it('should grab the correct source given multiple url types', function() {
+    var service = new FacebookContentService({url: "http://test.com/"});
+    expect(service._getSourceFromUrl('http://facebook.com/cocacola')).to.equal('cocacola');
+    expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
+        .to.equal('CocaColaUnitedStates');
+    expect(service._getSourceFromUrl('https://www.facebook.com/Gatorade/')).to.equal('Gatorade');
+  });
+
   it('should fetch mock content from Facebook', function(done) {
     var service = stubWithFixture('facebook-1.json');
     var fetched = 0;
@@ -70,22 +78,30 @@ describe('Facebook content service', function() {
     service.fetch({maxCount: 50}, function(){});
   });
 
-  it('should get new comments from old posts', function(done) {
+  it('should get new comments from old posts, excluding already added posts', function(done) {
 
-    var service = stubWithFixture('facebook-2.json');
+    var service = stubWithFixture('facebook-1.json');
+    service.fetch({maxCount: 50}, function(){});
+
+    stubWithFixture('facebook-2.json', service);
     service.once('error', function(err) { done(err); });
 
     var fetched = 0;
     service.on('report', function(reportData) {
       switch (++fetched) {
-        case 2:
+        case 1:
           expect(reportData.content).to.contain('Totez cool');
           expect(reportData.author).to.equal('Test User 2');
           expect(reportData.url).to.contain('https');
           break;
+        case 2:
+          expect(reportData.content).to.contain('Best');
+          expect(reportData.author).to.equal('Test User 3');
+          expect(reportData.url).to.contain('https');
+          break;
         case 3:
           expect(reportData.content).to.contain('ranked');
-          expect(reportData.author).to.equal('Test User 3');
+          expect(reportData.author).to.equal('Test User 4');
           expect(reportData.url).to.contain('https');
           break;
         case 4:

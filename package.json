@@ -21,7 +21,7 @@
     "email": "~0.2.6",
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
-    "fbgraph": "~0.2.9",
+    "fbgraph": "~1.1.0",
     "feedparser": "~0.16.6",
     "fs-extra": "~0.15.0",
     "glob": "~3.2.9",
