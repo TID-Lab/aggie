@@ -109,7 +109,7 @@ You can adjust the settings in the `config/secrets.json` file to configure the a
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
   1. `email.from` is the address from which application emails will come
-  1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com).
+  1. `email.transport` is the set of parameters that will be passed to [NodeMailer 2.1.0](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 
 ### Fetching
