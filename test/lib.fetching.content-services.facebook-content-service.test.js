@@ -39,6 +39,7 @@ describe('Facebook content service', function() {
     expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
         .to.equal('CocaColaUnitedStates');
     expect(service._getSourceFromUrl('https://www.facebook.com/Gatorade/')).to.equal('Gatorade');
+    expect(service._getSourceFromUrl('https://www.facebook.com/groups/Gatorade/')).to.equal('Gatorade');
   });
 
   it('should fetch mock content from Facebook', function(done) {
