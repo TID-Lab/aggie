@@ -75,7 +75,6 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/media_modal');
-require('./services/admin_pwd');
 
 // Controllers
 require('./controllers/application');
@@ -85,7 +84,7 @@ require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
-require('./controllers/admin_choose_password_modal');
+require('./controllers/password_reset_admin');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
