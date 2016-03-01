@@ -12,8 +12,8 @@ angular.module('Aggie')
 
     $scope.settings = settings;
     $scope.media = media;
-
     $scope._showErrors = false;
+
     $scope.save = function(form, mediaName, settings) {
       settings.configured = true;
       Settings.set(mediaName, settings, success(mediaName, 'saved'), failure);

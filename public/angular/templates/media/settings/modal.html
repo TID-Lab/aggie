@@ -8,9 +8,8 @@
     </div>
     <div class="modal-body">
       <alert type="info" ng-show="success">The credentials are valid. You need to save them before
-        continuing.
-      </alert>
-      <alert type="info" ng-show="failure">The credentials are invalid or they have expired</alert>
+        continuing.</alert>
+      <alert type="danger" ng-show="failure">The credentials are invalid or they have expired.</alert>
       <ol ng-if="media === 'twitter'">
         <li>Follow <a href="https://dev.twitter.com/oauth/overview/application-owner-access-tokens" target="_blank">
             these instructions</a> to generate tokens to use the Twitter API.
@@ -49,14 +48,17 @@
           <div class="form-group" ng-repeat="(settingName, settingValue) in settings | cleanSettings" >
             <label for="{{ settingName }}" class="col-lg-2 control-label">{{ settingName }}</label>
             <div class="col-lg-8">
-              <input type="text" ng-model="settings[settingName]" class="form-control" id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" ng-focus required />
+              <input type="text" ng-model="settings[settingName]" class="form-control"
+                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" ng-focus required />
             </div>
           </div>
         </fieldset>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-info" aggie-confirm="Are you sure you want to delete the settings for this source?" on-confirm="delete(media, settings)">Delete</button>
+      <button class="btn btn-default" aggie-confirm="Are you sure you want to delete the settings for this source?" on-confirm="delete(media, settings)">
+        Delete
+      </button>
       <button class="btn btn-default" ng-click="close()">Cancel</button>
       <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, media, settings)">Save &amp; Close</button>
     </div>
