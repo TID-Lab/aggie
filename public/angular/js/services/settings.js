@@ -19,9 +19,8 @@ angular.module('Aggie')
       return Settings.update({ item: item }, body, success, failure);
     },
 
-    test: function(type, item, value, success, failure) {
-      var body = {};
-      body.settings = value;
+    test: function(type, item, settings, success, failure) {
+      var body = { settings: settings };
       return Settings.test({ type: type, item: item, action: 'test' }, body, success, failure);
     },
 
