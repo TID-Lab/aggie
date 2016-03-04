@@ -76,7 +76,10 @@ The following need to be installed.
 You can adjust the settings in the `config/secrets.json` file to configure the application.
 
 ### Tests
-Set `config.adminParty=true` if you want to run tests.
+1. Follow the system requirements and installation instructions
+2. In config/secrets.json, uncomment the dummy settings for API configuration
+3. Check that `config.adminParty=true` is set
+4. Run `npm test` (`gulp --file=[test/filename]` for a single test)
 
 ### Social Media and Feeds
 
