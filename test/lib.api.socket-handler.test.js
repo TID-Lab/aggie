@@ -18,7 +18,8 @@ describe('Socket handler', function() {
     streamer.addListeners('incident', Incident.schema);
     socketHandler.addListeners('source', Source.schema);
     socketHandler.server.listen(3000);
-    client = io.connect('http://localhost:3000', {
+    client = io.connect('https://localhost:3000', {
+      secure: true,
       transports: ['websocket'],
       'force new connection': true
     });
