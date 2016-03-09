@@ -12,7 +12,7 @@ angular.module('Aggie')
   'FlashService',
   function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, flash) {
 
-    $scope.setIncident = function (report) {
+    $scope.setIncident = function(reports) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
         windowClass: 'report-to-existing',
@@ -23,17 +23,28 @@ angular.module('Aggie')
           incidents: ['Incident', function(Incident) {
             return Incident.query().$promise;
           }],
-          report: function() {
-            return report;
+          reports: function() {
+            if (!reports) {
+              reports = $scope.filterSelected($scope.reports);
+            }
+
+            return reports;
           }
         }
       });
 
-      modalInstance.result.then(function(report) {
-        report.read = true;
-        Report.update({id: report._id}, report, function(response) {}, function(err) {
-          flash.setAlertNow('Report failed to be added to incident.');
+      modalInstance.result.then(function(incidentId) {
+        //report.read = true;
+        var ids = [];
+        reports.map(function(report) {
+          //Update report in web
+          report._incident = incidentId;
+          ids.push(report._id);
+          return report;
         });
+
+        //Update report in server
+        Report.linkToIncident({ids: ids, incident: incidentId});
       });
     };
   }
@@ -44,17 +55,17 @@ angular.module('Aggie')
   '$scope',
   '$modalInstance',
   'incidents',
-  'report',
-  function($rootScope, $scope, $modalInstance, incidents, report) {
-    $scope.report = angular.copy(report);
+  'reports',
+  function($rootScope, $scope, $modalInstance, incidents, reports) {
+    $scope.reports = angular.copy(reports);
     $scope.incidents = incidents.results;
     $scope.modal = $modalInstance;
     $scope._showErrors = false;
 
-    $scope.select = function (incident) {
-      report._incident = incident._id;
-      $modalInstance.close(report);
-    }
+    $scope.select = function(incident) {
+      //report._incident = incident._id;
+      $modalInstance.close(incident._id);
+    };
 
     $scope.showErrors = function() {
       return $scope._showErrors;
@@ -65,7 +76,8 @@ angular.module('Aggie')
         $scope._showErrors = true;
         return;
       }
-      $modalInstance.close($scope.report);
+
+      $modalInstance.close($scope.reports);
     };
 
     $scope.close = function() {

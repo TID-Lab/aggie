@@ -6,7 +6,7 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var Schema = mongoose.Schema;
-var validate = require('mongoose-validator').validate;
+var validate = require('mongoose-validator');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 var listenTo = require('mongoose-listento');
@@ -14,8 +14,13 @@ var Report = require('./report');
 
 require('../lib/error');
 
+var length_validator = validate({
+  validator: 'isLength',
+  arguments: [0, 32]
+});
+
 var schema = new mongoose.Schema({
-  title: {type: String, required: true, validate: validate('max', 32)},
+  title: {type: String, required: true, validate: length_validator},
   locationName: String,
   latitude: Number,
   longitude: Number,
@@ -29,7 +34,7 @@ var schema = new mongoose.Schema({
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
   totalReports: {type: Number, default: 0},
-  notes: String
+  notes: String,
 });
 
 schema.plugin(listenTo);
@@ -41,6 +46,7 @@ schema.pre('save', function(next) {
   if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
+
   next();
 });
 
@@ -48,9 +54,19 @@ schema.post('save', function() {
   schema.emit('incident:save', {_id: this._id.toString()});
 });
 
+schema.post('remove', function() {
+  //Unlink removed incident from reports
+  Report.find({ _incident: this._id.toString() }, function(err, reports) {
+    reports.forEach(function(report) {
+      report._incident = null;
+      report.save();
+    });
+  });
+
+});
+
 var Incident = mongoose.model('Incident', schema);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
-
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   Incident.findById(prevIncident || newIncident, function(err, incident) {
@@ -59,8 +75,7 @@ schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
 
     if (prevIncident) {
       total = (total > 0) ? total - 1 : 0;
-    }
-    else if (newIncident) {
+    } else if (newIncident) {
       total = (total) ? total + 1 : 1;
     }
 
@@ -78,10 +93,12 @@ Incident.queryIncidents = function(query, page, options, callback) {
     page = 0;
     options = {};
   }
+
   if (typeof options === 'function') {
     callback = options;
     options = {};
   }
+
   if (page < 0) page = 0;
 
   var filter = {};

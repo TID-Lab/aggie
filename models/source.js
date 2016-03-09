@@ -6,17 +6,27 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var validate = require('mongoose-validator').validate;
+var validate = require('mongoose-validator');
 var _ = require('underscore');
 require('../lib/error');
 
 var EVENTS_TO_RETURN = 50;
 
+var length_validator = validate({
+  validator: 'isLength',
+  arguments: [0, 20]
+});
+
+var url_validator = validate({
+  validator: 'isURL',
+  passIfEmpty: true
+});
+
 var sourceSchema = new mongoose.Schema({
   media: String,
-  nickname: {type: String, required: true, validate: validate('max', 20)},
+  nickname: {type: String, required: true, validate: length_validator},
   resource_id: String,
-  url: {type: String, validate: validate({passIfEmpty: true}, 'isUrl')},
+  url: {type: String, validate: url_validator},
   keywords: String,
   enabled: {type: Boolean, default: true},
   events: {type: Array, default: []},
