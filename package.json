@@ -68,6 +68,7 @@
     "dateformat": "^1.0.11",
     "mocha": "^2.3.3",
     "socket.io": "^0.9.17",
+    "socket.io-client": "^0.9.16",
     "supertest": "^1.1.0"
   },
   "subdomain": "aggie",
