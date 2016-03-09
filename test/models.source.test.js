@@ -8,7 +8,7 @@ describe('Source attributes', function() {
       expect(err).to.have.keys(['message', 'name', 'errors']);
       expect(err.errors).to.have.keys(['nickname', 'url']);
       expect(err.errors.nickname.type).to.equal('required');
-      expect(err.errors.url.message).to.contain('Invalid URL');
+      expect(err.errors.url.message).to.contain('Validator failed for path `url` with value `hey`');
       done();
     });
   });

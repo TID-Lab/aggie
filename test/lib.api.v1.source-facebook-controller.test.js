@@ -18,7 +18,7 @@ describe('Facebook source controller', function() {
     ];
 
     _.each(sources, function(source_name) {
-      it('should create a new facebook source', function(done) {
+      it('should create a new facebook source ' + source_name, function(done) {
         var source = {
           nickname: source_name,
           media: 'facebook',
