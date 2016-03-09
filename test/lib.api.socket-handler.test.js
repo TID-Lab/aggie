@@ -11,6 +11,11 @@ var request = require('supertest');
 var socketHandler = new SocketHandler();
 var client;
 
+// Suggestions from varios stackoverflow answers, not working
+// var https = require('https');
+// https.globalAgent.options.rejectUnauthorized = false;
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 
 describe('Socket handler', function() {
   before(function(done) {
@@ -19,9 +24,9 @@ describe('Socket handler', function() {
     socketHandler.addListeners('source', Source.schema);
     socketHandler.server.listen(3000);
     client = io.connect('https://localhost:3000', {
-      secure: true,
       transports: ['websocket'],
-      'force new connection': true
+      'force new connection': true,
+//      agent: https.globalAgent,
     });
     done();
   });
