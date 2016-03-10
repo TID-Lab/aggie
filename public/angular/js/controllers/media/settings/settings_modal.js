@@ -13,6 +13,7 @@ angular.module('Aggie')
     $scope.settings = settings;
     $scope.media = media;
     $scope._showErrors = false;
+    $scope.loading = false;
 
     $scope.save = function(form, mediaName, settings) {
       settings.configured = true;
@@ -44,6 +45,31 @@ angular.module('Aggie')
     function failure(data) {
       flash.setAlertNow('An error has occurred');
       console.log('failure: ', data);
+    };
+
+    $scope.test = function(mediaName, settings) {
+      $scope.success = false;
+      $scope.failure = false;
+      $scope.loading = true;
+      Settings.test('media', mediaName, settings, successTest, failureTest);
+    };
+
+    function successTest(response, responseHeaders) {
+      $scope.loading = false;
+
+      if (response.success) {
+        $scope.success = true;
+      } else {
+        $scope.failure = true;
+        $scope.message = response.message;
+      }
+    };
+
+    function failureTest(data) {
+      $scope.loading = false;
+
+      $scope.failure = true;
+      $scope.message = data.message;
     };
   },
 ]);

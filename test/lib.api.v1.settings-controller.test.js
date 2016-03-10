@@ -40,12 +40,25 @@ describe('Settings controller', function() {
     });
   });
 
-  describe('POST /api/v1/settings/media/twitter', function() {
+  describe('POST /api/v1/settings/media/twitter/test', function() {
+
+    it('should test the settings of twitter', function(done) {
+      request(settingsController)
+        .post('/api/v1/settings/media/twitter/test')
+        .send({ settings: testSettings })
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          expect(res.body.success).to.be.false;
+          return done();
+        });
+    });
 
     it('should not change the settings of twitter ', function(done) {
       request(settingsController)
-        .post('/api/v1/settings/media/twitter')
+        .post('/api/v1/settings/media/twitter/test')
         .send({ settings: testSettings })
+        .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           expect(_.clone(config.get({ reload: true }).twitter)).to.deep.equal(twitterSettings);
