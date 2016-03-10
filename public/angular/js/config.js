@@ -16,6 +16,10 @@ angular.module('Aggie')
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
 
-.value('paginationOptions', {
-  perPage: 25
-});
+.value('paginationOptions', { perPage: 25 })
+
+.value('emailTransportOptions', [
+  { method: 'SES', settingNames: ['AWSAccessKeyID', 'AWSSecretKey']},
+  { method: 'SMTP', settingNames: ['host', 'port', 'secure', 'auth:user', 'auth:pass']},
+  { method: 'SendGrid', settingNames: ['auth:api_key'] } ]);
+

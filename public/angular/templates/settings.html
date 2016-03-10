@@ -58,3 +58,46 @@
     </table>
   </div>
 </div>
+
+<div ng-controller="EmailSettingsController">
+  <table class="table table-settings">
+    <thead>
+      <tr>
+        <td class="col-sm-3">
+          <label class="settings-label">Email</label>
+        </td>
+      </tr>
+      <tr>
+        <th class="compact">Setting</th>
+        <th class="compact">Value</th>
+        <th class="compact text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-sm-3">
+          <label class="settings-label">Admin email address</label>
+        </td>
+        <td>
+          <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"/>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-info ng-scope" ng-click="saveEmail()">Save</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-sm-3">
+          <label class="settings-label">Email sender configuration</label>
+        </td>
+        <td>
+          {{ transport.method }}
+        </td>
+        <td>
+          <div class="ng-scope text-center">
+            <button class="btn btn-info ng-scope" ng-click="editTransport()">Edit</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
