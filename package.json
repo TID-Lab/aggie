@@ -37,6 +37,7 @@
     "gulp-rename": "^1.2.2",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
+    "locale": "0.0.20",
     "migrate": "^0.2.0",
     "moment": "~2.8.4",
     "mongoose": "~3.8.23",
