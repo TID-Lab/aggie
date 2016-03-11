@@ -8,14 +8,25 @@ var Report = require('../models/report');
 var Incident = require('../models/incident');
 var settingsController = require('../lib/api/v1/settings-controller');
 var request = require('supertest');
-var socketHandler = new SocketHandler();
+var authentication = require('../lib/api/authentication');
+var express = require('express');
+var https = require('https');
+var path = require('path');
+var fs = require('fs');
+
+function createServer(app){
+  // Get full path for certificate files
+  var keyFile = path.resolve(__dirname, '../config/key.pem');
+  var certFile = path.resolve(__dirname, '../config/cert.pem');
+  return https.createServer({
+    key: fs.readFileSync(keyFile),
+    cert: fs.readFileSync(certFile),
+  }, app);
+}
+
+var app = express();
+var socketHandler = new SocketHandler(app, createServer(app), authentication(app));
 var client;
-
-// Suggestions from varios stackoverflow answers, not working
-// var https = require('https');
-// https.globalAgent.options.rejectUnauthorized = false;
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 
 describe('Socket handler', function() {
   before(function(done) {
@@ -23,10 +34,12 @@ describe('Socket handler', function() {
     streamer.addListeners('incident', Incident.schema);
     socketHandler.addListeners('source', Source.schema);
     socketHandler.server.listen(3000);
+
+    https.globalAgent.options.rejectUnauthorized = false;
     client = io.connect('https://localhost:3000', {
       transports: ['websocket'],
       'force new connection': true,
-//      agent: https.globalAgent,
+      agent: https.globalAgent,
     });
     done();
   });
