@@ -17,13 +17,13 @@ describe('Language cookie', function() {
       .get('/reports')
       .set('Accept-Language', 'en, en-gb;q=0.8, de;q=0.7')
       .expect(200)
-      .expect('set-cookie', 'lang=en; Path=/', done);
+      .expect('set-cookie', 'aggie-lang=en; Path=/', done);
   });
   it('should pick the best language', function(done) {
     request(app)
       .get('/reports')
       .set('Accept-Language', 'not-a-language, also-not-a-language;q=0.8, es;q=0.7')
       .expect(200)
-      .expect('set-cookie', 'lang=es; Path=/', done);
+      .expect('set-cookie', 'aggie-lang=es; Path=/', done);
   });
 });
