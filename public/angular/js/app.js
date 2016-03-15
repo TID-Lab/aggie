@@ -9,8 +9,11 @@ require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
 require('./loading-bar');
+require('angular-cookies');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete', 'angular-loading-bar'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 
+  'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete', 
+  'angular-loading-bar', 'ngCookies'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -31,8 +34,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
 
 .run([
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 
-  'FlashService', 
-  function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
+  'FlashService', '$cookies', '$translate',
+  function ($rootScope, $urlRouter, $location, AuthService, $state, flash,
+            $cookies, $translate) {
     $rootScope.$state = $state;
 
     var publicRoute = function(state) {
@@ -54,6 +58,12 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
           $state.go('login');
         });
       }
+    });
+
+    $rootScope.$watch(function getLangCookie() {
+      return $cookies['aggie-lang'];
+    }, function useLang(lang) {
+      $translate.use(lang);
     });
   }
 ]);

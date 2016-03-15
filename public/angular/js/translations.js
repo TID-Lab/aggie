@@ -73,6 +73,22 @@ angular.module('Aggie').config([
       '* Without Incident': '* Without Incident'
     })
 
+    // User roles
+    .translations('es', {
+      'viewer': 'Espectador',
+      'monitor': 'Escucha',
+      'manager': 'Jefe',
+      'admin': 'Administración',
+    })
+
+    // Incident status options
+    .translations('es', {
+      'new': 'Nuevo',
+      'working': 'Trabajando',
+      'alert': 'Aviso',
+      'closed': 'Cerrado'
+    })
+
     .preferredLanguage('en');
   }
 ]);

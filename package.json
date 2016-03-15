@@ -13,6 +13,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "angular-cookies": "~1.2.29",
     "async": "^0.9.0",
     "bcrypt-nodejs": "0.0.3",
     "chance": "~0.7.1",
