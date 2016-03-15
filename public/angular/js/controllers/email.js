@@ -7,8 +7,8 @@ angular.module('Aggie')
   '$filter',
   'FlashService',
 //  'mediaSettingsOptions',
-//  'MediaSettingsModal',
-  function($scope, Settings, $timeout, $filter, flash) {
+  '$modal',
+  function($scope, Settings, $timeout, $filter, flash, $modal) {
 
     $scope.mail = "";
     $scope.transport = {};
@@ -16,45 +16,30 @@ angular.module('Aggie')
       $scope.email = data.email.from;
       $scope.transport = angular.copy(data.email.transport);
     }, failure)
-    // $scope.media = {};
-    
-    // mediaSettingsOptions.forEach(getSetting);
 
-    // $scope.mediaOptions = mediaSettingsOptions;
-    // $scope.edit = function(media) {
-    //   var modalInstance = modal.create(media, $scope.media[media]);
-    // };
-
-    // $scope.toggle = function(mediaName, value) {
-    //   var mediaSettings = $scope.media[mediaName];
-    //   var setting = {};
-
-    //   setting.on = value;
-
-    //   if (value && mediaSettings.configured || !value) {
-    //     Settings.set(mediaName, setting, success(mediaName, setting, value), failure);
-    //   } else {
-    //     var modalInstance = modal.create(mediaName, mediaSettings);
-    //   };
-    // };
-
-    // function getSetting(name, index, mediaItems) {
-    //   Settings.get(name, function success(data) {
-    //     $scope.media[data.setting] = angular.copy(data[data.setting]);
-    //   }, failure);
-
-    // };
     function success() {
       flash.setNoticeNow('The mail setting has been correctly saved');
     };
 
-    $scope.saveEmail = function(){
-      Settings.set('email', { from: $scope.email }, success, failure);
-    }
+    $scope.saveEmail = function() {
+      Settings.set('email', { from: $scope.email, transport: $scope.transport }, success, failure);
+    };
 
     $scope.editTransport = function(){
-      
-    }
+      var modalInstance = $modal.open({
+        controller: 'EmailSettingsModalInstanceController',
+        templateUrl: 'templates/email_modal.html',
+        resolve: {
+          settingsValues: function() {
+            return $scope.transport || {};
+          }
+        }
+      });
+      modalInstance.result.then(function(method) {
+        $scope.transport.method = method;
+      }); 
+    };
+
     function failure(data) {
       flash.setAlertNow('An error has occurred saving the email setting');
       console.log('failure: ', data);
