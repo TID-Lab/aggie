@@ -65,16 +65,11 @@ module.exports.updateFetching = function(flag, cb) {
 module.exports.update = function(type, settings, cb) {
   cb = cb || function() {};
 
-  for (var key in settings) {
-    var item = type + ':' + key;
-    nconf.set(item, settings[key]);
-  }
-
+  nconf.set(type, settings);
   nconf.save(function(err) {
     return cb(err);
   });
 };
-
 
 // clear settings
 module.exports.clear = function(key, cb) {

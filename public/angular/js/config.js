@@ -18,8 +18,8 @@ angular.module('Aggie')
 
 .value('paginationOptions', { perPage: 25 })
 
-.value('emailTransportOptions', [
-  { method: 'SES', settingNames: ['AWSAccessKeyID', 'AWSSecretKey']},
-  { method: 'SMTP', settingNames: ['host', 'port', 'secure', 'auth:user', 'auth:pass']},
-  { method: 'SendGrid', settingNames: ['auth:api_key'] } ]);
+.value('emailTransportOptions', {
+  'SES': ['accessKeyId', 'secretAccessKey', 'region'],
+  'SMTP': ['host', 'port', 'secure', 'user', 'pass'],
+  'SendGrid': ['api_key'] });
 
