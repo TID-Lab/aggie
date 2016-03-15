@@ -19,7 +19,7 @@ angular.module('Aggie')
 .value('paginationOptions', { perPage: 25 })
 
 .value('emailTransportOptions', {
-  'SES': ['accessKeyId', 'secretAccessKey', 'region'],
-  'SMTP': ['host', 'port', 'secure', 'user', 'pass'],
-  'SendGrid': ['api_key'] });
+  SES: ['accessKeyId', 'secretAccessKey', 'region'],
+  SMTP: ['host', 'port', 'secure', 'user', 'pass'],
+  SendGrid: ['api_key'] });
 

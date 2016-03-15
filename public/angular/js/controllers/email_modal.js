@@ -8,8 +8,10 @@ angular.module('Aggie')
   'FlashService',
   'settingsValues',
   function($scope, $modalInstance, Settings, emailTransportOptions, flash, settings) {
-
-    $scope.transport = settings;
+    $scope.transport = {};
+    $scope.transport.method = settings.method || {};
+    $scope.transport.options = settings.options || {};
+    $scope.transport.from = settings.from || {};
     $scope._showErrors = false;
     $scope.emailTransportOptions = emailTransportOptions;
 
@@ -18,7 +20,7 @@ angular.module('Aggie')
       // We first clear previous settings in the configuration
       Settings.clear('email:transport', setSetting, failure);
 
-      $modalInstance.close();
+      $modalInstance.close($scope.transport.method);
     };
 
     $scope.close = function() {
