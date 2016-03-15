@@ -29,30 +29,34 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   return require('timezone');
 })
 
-.run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
-  $rootScope.$state = $state;
+.run([
+  '$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 
+  'FlashService', 
+  function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
+    $rootScope.$state = $state;
 
-  var publicRoute = function(state) {
-    return !!(state.data && state.data.public === true);
-  };
+    var publicRoute = function(state) {
+      return !!(state.data && state.data.public === true)
+    };
 
-  $rootScope.$on('$stateChangeSuccess', function(e, toState) {
-    if (!publicRoute(toState) && !$rootScope.currentUser) {
-      e.preventDefault();
-      res = AuthService.getCurrentUser().then(function() {
-        if ($rootScope.currentUser) {
-          $urlRouter.sync();
-        } else {
-          flash.setAlert('You must be logged in before accessing that page.');
+    $rootScope.$on('$stateChangeSuccess', function(e, toState) {
+      if (!publicRoute(toState) && !$rootScope.currentUser) {
+        e.preventDefault();
+        res = AuthService.getCurrentUser().then(function() {
+          if ($rootScope.currentUser) {
+            $urlRouter.sync();
+          } else {
+            flash.setAlert('You must be logged in before accessing that page.');
+            $state.go('login');
+          }
+        }).catch(function(error) {
+          flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
           $state.go('login');
-        }
-      }).catch(function(error) {
-        flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
-        $state.go('login');
-      });
-    }
-  });
-}]);
+        });
+      }
+    });
+  }
+]);
 
 // Configuration
 require('./config');
