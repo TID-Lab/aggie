@@ -13,9 +13,9 @@ angular.module('Aggie')
           },
           settingsValues: function() {
             return settings;
-          },
-        },
+          }
+        }
       });
-    },
+    }
   };
 });
