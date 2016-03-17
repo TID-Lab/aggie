@@ -15,6 +15,7 @@ angular.module('Aggie')
     mediaSettingsOptions.forEach(getSetting);
 
     $scope.mediaOptions = mediaSettingsOptions;
+
     $scope.edit = function(media) {
       var modalInstance = modal.create(media, $scope.media[media]);
     };
@@ -29,6 +30,6 @@ angular.module('Aggie')
     function failure(data) {
       flash.setAlertNow('An error has occurred setting the media status');
       console.log('failure: ', data);
-    };
-  },
+    }
+  }
 ]);

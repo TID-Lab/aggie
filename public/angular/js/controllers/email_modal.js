@@ -15,7 +15,7 @@ angular.module('Aggie')
     $scope._showErrors = false;
     $scope.emailTransportOptions = emailTransportOptions;
 
-    $scope.save = function(form) {
+    $scope.save = function() {
 
       // We first clear previous settings in the configuration
       Settings.clear('email:transport', setSetting, failure);
@@ -27,7 +27,7 @@ angular.module('Aggie')
       $modalInstance.dismiss('cancel');
     };
 
-    function setSetting(){
+    function setSetting() {
 
       // We produce a clean settings object with only the settings for a given method
       settings = { method: $scope.transport.method, options: {} };
@@ -45,6 +45,6 @@ angular.module('Aggie')
     function failure(data) {
       flash.setAlertNow('An error has occurred');
       console.log('failure: ', data);
-    };
-  },
+    }
+  }
 ]);
