@@ -20,7 +20,7 @@
     "no-trailing-spaces": "error",
     "no-unused-vars": ["warn", {"argsIgnorePattern": "^(err|error|req|res)$"}],
     "no-use-before-define": ["error", "nofunc"],
-    "object-curly-spacing": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
     "quotes": ["error", "single", "avoid-escape"],
     "semi": ["error", "always"],
     "keyword-spacing": ["error", {"before": true, "after": true}],
