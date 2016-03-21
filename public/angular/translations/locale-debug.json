@@ -1,0 +1,36 @@
+{
+  "username_not_unique": "ERROR_USERNAME_NOT_UNIQUE",
+  "email_not_unique": "ERROR_EMAIL_NOT_UNIQUE",
+  "email_invalid": "ERROR_EMAIL_INVALID",
+  "password_too_short": "ERROR_PASSWORD_TOO_SHORT",
+  "notice": {
+    "report": {
+      "unlinked": "NOTICE.REPORT.UNLINKED"
+    }
+  },
+  "relevant": "INIDENT_STATUS_RELEVANT",
+  "irrelevant": "INIDENT_STATUS_IRRELEVANT",
+  "assigned": "INIDENT_STATUS_ASSIGNED",
+  "unassigned": "INIDENT_STATUS_UNASSIGNED",
+  "viewer": "USER_VIEWER",
+  "monitor": "USER_MONITOR",
+  "manager": "USER_MANAGER",
+  "admin": "USER_ADMIN",
+  "twitter": "SOURCE_MEDIA_TWITTER",
+  "rss": "SOURCE_MEDIA_RSS",
+  "elmo": "SOURCE_MEDIA_ELMO",
+  "facebook": "SOURCE_MEDIA_FACEBOOK",
+  "new": "INCIDENT_NEW",
+  "working": "INCIDENT_WORKING",
+  "alert": "INCIDENT_ALERT",
+  "closed": "INCIDENT_CLOSED",
+  "veracity": {
+    "true": "VERACITY.VERIFIED",
+    "false": "VERACTIY.UNVERIFIED"
+  },
+  "keywords": "TREND_QUERY_KEYWORDS",
+  "media": "TREND_QUERY_MEDIA",
+  "sourceId": "TREND_QUERY_SOURCE",
+  "* Any Incident": "REPORT_OPTIONS_ANY_INCIDENT",
+  "* Without Incident": "REPORT_OPTIONS_WITHOUT_INCIDENT"
+}

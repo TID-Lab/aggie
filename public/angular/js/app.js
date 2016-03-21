@@ -4,11 +4,12 @@ require('./angular-sanitize');
 require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
-require('./angular-translate');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
 require('./loading-bar');
+require('angular-translate');
+require('angular-translate-loader-static-files');
 require('angular-cookies');
 
 angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 

@@ -1,0 +1,36 @@
+{
+  "username_not_unique": "That username is already in our database. Please choose another.",
+  "email_not_unique": "That email is already in our database. Please choose another.",
+  "email_invalid": "That email is not valid. Please correct it and try again.",
+  "password_too_short": "That password was too short. Please use a longer one.",
+  "notice": {
+    "report": {
+      "unlinked": "Report has been successfully unlinked"
+    }
+  },
+  "relevant": "Relevant",
+  "irrelevant": "Irrelevant",
+  "assigned": "Assigned",
+  "unassigned": "Unassigned",
+  "viewer": "Viewer",
+  "monitor": "Monitor",
+  "manager": "Manager",
+  "admin": "Admin",
+  "twitter": "Twitter",
+  "rss": "RSS",
+  "elmo": "Elmo",
+  "facebook": "Facebook",
+  "new": "New",
+  "working": "Working",
+  "alert": "Alert",
+  "closed": "Closed",
+  "veracity": {
+    "true": "Verified",
+    "false": "Unverified"
+  },
+  "keywords": "Keywords",
+  "media": "Media",
+  "sourceId": "Source",
+  "* Any Incident": "* Any Incident",
+  "* Without Incident": "* Without Incident"
+}
