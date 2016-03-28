@@ -13,7 +13,7 @@
 
       <ol ng-if="media === 'twitter'">
         <li>Follow <a href="https://dev.twitter.com/oauth/overview/application-owner-access-tokens" target="_blank">
-            these instructions</a> to generate tokens to use the Twitter API.
+          these instructions</a> to generate tokens to use the Twitter API.
         </li>
         <li>Replace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, and
           <code>access_token_secret</code> with the keys from <a href="https://apps.twitter.com" target="_blank">
@@ -47,17 +47,17 @@
       <div class="well bs-component">
         <fieldset>
           <div class="form-group" ng-repeat="(settingName, settingValue) in settings | cleanSettings" >
-            <label for="{{ settingName }}" class="col-lg-2 control-label">{{ settingName }}</label>
+            <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
             <div class="col-lg-8">
               <input type="text" ng-model="settings[settingName]" class="form-control"
-                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" ng-focus required />
+                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
             </div>
           </div>
         </fieldset>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(media, settings)">
+      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(media, settings)" ng-if="media !== 'elmo'">
         <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
         <span ng-hide="loading">Test</span>
         <span ng-show="loading">Testing</span></button>
@@ -66,7 +66,9 @@
         Delete
       </button>
       <button class="btn btn-default" ng-click="close()">Cancel</button>
-      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, media, settings)">Save &amp; Close</button>
+      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, media, settings)">
+        Save &amp; Close
+      </button>
     </div>
   </form>
 </div>
