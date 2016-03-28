@@ -21,7 +21,7 @@ angular.module('Aggie')
     };
 
     $scope.newPwd = function(form) {
-      if (!$scope.passwordsMatch()) {
+      if (!$scope.passwordsMatch() || !$scope.isPasswordLongEnough()) {
         $scope.showErrors = true;
         return;
       }

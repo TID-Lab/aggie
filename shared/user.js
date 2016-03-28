@@ -8,7 +8,7 @@
     }
   };
 
-  User.PASSWORD_MIN_LENGTH = 6;
+  User.PASSWORD_MIN_LENGTH = 8;
 
   User.permissions = {
     'view data': ['viewer', 'monitor', 'manager', 'admin'],
