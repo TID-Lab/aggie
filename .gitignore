@@ -35,3 +35,7 @@ buildAssets
 NOTES
 
 data
+
+config/cert.pem
+
+config/key.pem
