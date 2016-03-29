@@ -21,9 +21,12 @@ angular.module('Aggie')
     };
 
     $scope.newPwd = function(form) {
-      if (!$scope.passwordsMatch() || !$scope.isPasswordLongEnough()) {
-        $scope.showErrors = true;
-        return;
+      if (!$scope.isPasswordLongEnough()) {
+        return flash.setAlertNow('Password is not long enough');
+      }
+
+      if (!$scope.passwordsMatch()) {
+        return flash.setAlertNow('Passwords do not match');
       }
 
       $http.put('/reset-admin-password', { password: $scope.user.password })
