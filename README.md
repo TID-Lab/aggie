@@ -56,10 +56,11 @@ The following need to be installed.
   - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
   1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-1. To make https work, you need to copy your SSL certificate information to the `config` folder ( to files named `key.pem` and `cert.pem`).
+1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
   - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
   - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
+  - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
   - This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates the angular application.
 1. In your terminal during 'npm install', a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
