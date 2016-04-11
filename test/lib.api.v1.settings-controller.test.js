@@ -7,6 +7,12 @@ var Source = require('../models/source');
 var config = require('../config/secrets');
 var _ = require('underscore');
 
+function getTwitterBot(){
+  return _.find(botMaster.bots, function(bot) {
+    return bot.source.nickname === 'twitterSource';
+  });
+}
+
 describe('Settings controller', function() {
   before(function(done) {
     botMaster.kill();
@@ -16,8 +22,10 @@ describe('Settings controller', function() {
     Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
     Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
     Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
+    Source.create({nickname: 'twitterSource', media: 'twitter', keywords: 'four'});
 
     twitterSettings =  _.clone(config.get().twitter);
+
     testSettings = {
       consumer_key: 'testing',
       consumer_secret: 'test',
@@ -68,6 +76,14 @@ describe('Settings controller', function() {
   });
 
   describe('PUT /api/v1/settings/twitter', function() {
+
+    var originalTwitterBot;
+
+    before(function(done){
+      originalTwitterBot = _.clone(getTwitterBot());
+      done();
+    });
+
     it('should update twitter settings', function(done) {
 
       request(settingsController)
@@ -81,11 +97,26 @@ describe('Settings controller', function() {
         });
     });
 
-    after(function(done) {
+    it('should reload the twitter bots to use the new settings', function(done) {
+
+      request(settingsController)
+        .put('/api/v1/settings/twitter')
+        .send({ settings: testSettings })
+        .end(function(err, res) {
+          if (err) return done(err);
+          setTimeout(function(){
+            var newTwitterBot = getTwitterBot();
+            expect(originalTwitterBot).to.not.deep.equal(newTwitterBot);
+            return done();
+          }, 100);
+        });
+    });
+
+    afterEach(function(done) {
 
       // Revert changes to settings
       request(settingsController)
-        .put('/api/v1/settings/media/twitter')
+        .put('/api/v1/settings/twitter')
         .send({ settings: twitterSettings })
         .end(function(err, res) {});
 
