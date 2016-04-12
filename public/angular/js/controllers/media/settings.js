@@ -19,19 +19,6 @@ angular.module('Aggie')
       var modalInstance = modal.create(media, $scope.media[media]);
     };
 
-    $scope.toggle = function(mediaName, value) {
-      var mediaSettings = $scope.media[mediaName];
-      var setting = {};
-
-      setting.on = value;
-
-      if (value && mediaSettings.configured || !value) {
-        Settings.set(mediaName, setting, success(mediaName, setting, value), failure);
-      } else {
-        var modalInstance = modal.create(mediaName, mediaSettings);
-      };
-    };
-
     function getSetting(name, index, mediaItems) {
       Settings.get(name, function success(data) {
         $scope.media[data.setting] = angular.copy(data[data.setting]);
