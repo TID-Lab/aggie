@@ -6,7 +6,7 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var Schema = mongoose.Schema;
-var validate = require('mongoose-validator').validate;
+var validate = require('mongoose-validator');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 var listenTo = require('mongoose-listento');
@@ -14,8 +14,13 @@ var Report = require('./report');
 
 require('../lib/error');
 
+var length_validator = validate({
+  validator: 'isLength',
+  arguments: [0, 32]
+});
+
 var schema = new mongoose.Schema({
-  title: {type: String, required: true, validate: validate('max', 32)},
+  title: {type: String, required: true, validate: length_validator},
   locationName: String,
   latitude: Number,
   longitude: Number,
