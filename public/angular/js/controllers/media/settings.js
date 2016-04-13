@@ -26,11 +26,6 @@ angular.module('Aggie')
       Settings.get(name, function success(data) {
         $scope.media[data.setting] = angular.copy(data[data.setting]);
       }, failure);
-
-    }
-
-    function success(mediaName, setting, value) {
-      $scope.media[mediaName].on = value;
     }
 
     function failure(data) {
