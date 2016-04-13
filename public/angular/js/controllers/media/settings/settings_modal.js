@@ -16,7 +16,6 @@ angular.module('Aggie')
     $scope.loading = false;
 
     $scope.save = function(form, mediaName, settings) {
-      settings.configured = true;
       Settings.set(mediaName, settings, success(mediaName, 'saved'), failure);
       $modalInstance.close();
     };
@@ -26,9 +25,6 @@ angular.module('Aggie')
       for (var setting in settings) {
         settings[setting] = '';
       }
-
-      settings.on = false;
-      settings.configured = false;
 
       Settings.set(mediaName, settings, success(mediaName, 'deleted'), failure);
       $modalInstance.close();

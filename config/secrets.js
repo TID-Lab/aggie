@@ -3,7 +3,6 @@
 
 var nconf = require('nconf');
 var path = require('path');
-var fs = require('fs');
 var S = require('string');
 var jsmin = require('jsmin').jsmin;
 var _ = require('underscore');
@@ -11,7 +10,6 @@ var fs = require('fs-extra');
 
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
-var data = fs.readFileSync(secretsFile, 'utf8');
 
 nconf.add('secrets', {type: 'file', file: secretsFile});
 

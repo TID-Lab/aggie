@@ -25,9 +25,6 @@ angular.module('Aggie')
       }, failure);
 
     };
-    function success(mediaName, setting, value) {
-      $scope.media[mediaName].on = value;
-    };
 
     function failure(data) {
       flash.setAlertNow('An error has occurred setting the media status');

@@ -119,7 +119,6 @@ require('./filters/strip-html');
 require('./filters/str-limit');
 require('./filters/tripledigit');
 require('./filters/orderObjectBy');
-require('./filters/clean-settings');
 
 // Directives
 require('./directives/aggie-confirm');
