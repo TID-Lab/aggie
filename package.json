@@ -21,14 +21,14 @@
     "email": "~0.2.6",
     "express": "~3.4.8",
     "express-spa-router": "0.0.6",
-    "fbgraph": "~0.2.9",
+    "fbgraph": "~1.1.0",
     "feedparser": "~0.16.6",
     "fs-extra": "~0.15.0",
     "glob": "~3.2.9",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",
-    "gulp-jshint": "^1.11.2",
     "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^1.11.2",
     "gulp-livereload": "^3.8.1",
     "gulp-mocha": "^2.1.3",
     "gulp-plumber": "^1.0.1",
@@ -41,10 +41,12 @@
     "mongoose-auto-increment": "^3.2.0",
     "mongoose-listento": "0.0.4",
     "mongoose-text-search": "0.0.2",
-    "mongoose-validator": "~0.2.2",
+    "mongoose-validator": "^1.2.4",
     "nconf": "~0.7.1",
     "node-sass": "~0.8.6",
-    "nodemailer": "~0.6.3",
+    "nodemailer": "~2.1.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemailer-ses-transport": "^1.3.0",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
     "passport.socketio": "~3.0.1",
@@ -68,11 +70,12 @@
     "dateformat": "^1.0.11",
     "mocha": "^2.3.3",
     "socket.io": "^0.9.17",
+    "socket.io-client": "^0.9.16",
     "supertest": "^1.1.0"
   },
   "subdomain": "aggie",
   "engines": {
     "node": ">=0.10.0"
   },
-  "license": "MIT"  
+  "license": "MIT"
 }

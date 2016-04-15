@@ -3,32 +3,24 @@ angular.module('Aggie')
 .controller('FetchingController', [
   '$scope',
   'Fetching',
-  '$timeout',
-  function($scope, Fetching, $timeout) {
+  'FlashService',
+  function ($scope, Fetching, flash) {
 
     Fetching.get(function success(data) {
       $scope.on = data;
     }, failure);
 
-    $scope.toggle = function (x) {
-      $scope.on = x;
+    $scope.toggle = function(x) {
+      Fetching.set(x, success(x), failure);
     };
 
-    $scope.save = function () {
-      $scope.loading = true;
-      Fetching.set($scope.on, success, failure);
+    function success(data) {
+      $scope.on = data;
     };
 
-    function success (data) {
-      // a tiny delay just in case the response is
-      // so super-fast, user doesn't see any indication
-      $timeout(function () {
-        $scope.loading = false;
-      }, 300);
-    }
-
-    function failure (data) {
+    function failure(data) {
+      flash.setAlertNow('An error has occurred setting the fetching status');
       console.log('failure: ', data);
-    }
+    };
   }
 ]);

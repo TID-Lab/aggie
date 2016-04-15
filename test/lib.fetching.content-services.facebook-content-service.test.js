@@ -33,6 +33,15 @@ describe('Facebook content service', function() {
     setTimeout(done, 100);
   });
 
+  it('should grab the correct source given multiple url types', function() {
+    var service = new FacebookContentService({url: "http://test.com/"});
+    expect(service._getSourceFromUrl('http://facebook.com/cocacola')).to.equal('cocacola');
+    expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
+        .to.equal('CocaColaUnitedStates');
+    expect(service._getSourceFromUrl('https://www.facebook.com/Gatorade/')).to.equal('Gatorade');
+    expect(service._getSourceFromUrl('https://www.facebook.com/groups/Gatorade/')).to.equal('Gatorade');
+  });
+
   it('should fetch mock content from Facebook', function(done) {
     var service = stubWithFixture('facebook-1.json');
     var fetched = 0;
@@ -70,15 +79,12 @@ describe('Facebook content service', function() {
     service.fetch({maxCount: 50}, function(){});
   });
 
-  it('should get new comments from old posts', function(done) {
+  it('should get new comments from old posts, excluding already added posts', function(done) {
 
-    // Fetch first batch
     var service = stubWithFixture('facebook-1.json');
     service.fetch({maxCount: 50}, function(){});
 
-    // Stub for second batch
     stubWithFixture('facebook-2.json', service);
-
     service.once('error', function(err) { done(err); });
 
     var fetched = 0;
@@ -90,17 +96,22 @@ describe('Facebook content service', function() {
           expect(reportData.url).to.contain('https');
           break;
         case 2:
-          expect(reportData.content).to.contain('ranked');
+          expect(reportData.content).to.contain('Best');
           expect(reportData.author).to.equal('Test User 3');
           expect(reportData.url).to.contain('https');
           break;
-        case 2:
+        case 3:
+          expect(reportData.content).to.contain('ranked');
+          expect(reportData.author).to.equal('Test User 4');
+          expect(reportData.url).to.contain('https');
+          break;
+        case 4:
           return done(new Error('Unexpected report'));
       }
     });
 
     // Give enough time for extra report to appear.
-    setTimeout(function() { if (fetched == 2) done(); }, 100);
+    setTimeout(function() { if (fetched == 3) done(); }, 100);
 
     service.fetch({maxCount: 50}, function(){});
   });
@@ -111,13 +122,6 @@ describe('Facebook content service', function() {
       var service = new FacebookContentService({url: ''});
       expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing Facebook URL', done);
-      service.fetch({maxCount: 50}, function(){});
-    });
-
-    it('should emit an invalid URL error', function(done) {
-      var service = stubWithFixture('facebook-no-source-match.json');
-      expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Invalid Facebook URL', done);
       service.fetch({maxCount: 50}, function(){});
     });
   });
