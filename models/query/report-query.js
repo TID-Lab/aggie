@@ -38,7 +38,7 @@ ReportQuery.prototype.normalize = function() {
 };
 
 ReportQuery.prototype._parseStatus = function(status) {
-  switch(status) {
+  switch (status) {
     case 'Flagged':
       this.flagged = true;
       break;
@@ -56,18 +56,16 @@ ReportQuery.prototype._parseStatus = function(status) {
       this.flagged = false;
       break;
   }
-}
+};
 
 ReportQuery.prototype._parseIncidentId = function(incidentId) {
-  if (incidentId == 'a') {
-    this.incidentId = { $ne: null };
-  }
-  else if (incidentId == 'n') {
-    this.incidentId = null;
-  }
-  else {
+  if (incidentId == 'any') {
+    this.incidentId = { $nin: [null, ''] };
+  } else if (incidentId == 'none') {
+    this.incidentId = {$in: [null, '']};
+  } else {
     this.incidentId = incidentId;
   }
-}
+};
 
 module.exports = ReportQuery;
