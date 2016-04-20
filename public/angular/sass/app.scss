@@ -19,6 +19,7 @@ $font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @import 'sections/trend-bars';
 @import 'sections/trend-lines';
 @import 'sections/profile';
+@import 'sections/settings';
 
 // NOTE: Over time, the styles below should be refactored into separate files. See https://github.com/styleguide/css
 // for directory structure.
@@ -207,25 +208,6 @@ li.collapse, li.collapsing {
   width: 20px;
   height: 20px;
   background-image: url('../images/map-marker.png');
-}
-
-.table-settings {
-  position: relative;
-  width: 50%;
-
-  label {
-    margin: 0;
-  }
-
-  .settings-label {
-    font-size: 16px;
-  }
-
-  td > div {
-    label.active {
-      background-color: #92c8dc;
-    }
-  }
 }
 
 .refresh-animate {

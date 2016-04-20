@@ -1,0 +1,31 @@
+.table-settings {
+  width: inherit;
+
+  label {
+    margin: 0;
+  }
+
+  // Label column
+  td:first-of-type {
+    width: 200px;
+  }
+
+  td.value {
+    width: 300px;
+  }
+
+  td.action {
+    width: 75px;
+    text-align: center;
+  }
+
+  td.text-field {
+    padding: 0;
+  }
+
+  td > div {
+    label.active {
+      background-color: #92c8dc;
+    }
+  }
+}
