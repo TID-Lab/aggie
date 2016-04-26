@@ -1,5 +1,5 @@
 web:
-  image: unucs/aggie:docker
+  build: .
   links:
     - db
   environment:
@@ -8,8 +8,6 @@ web:
     - "80:3000"
 db:
   image: mongo:2.6.11
-  volumes:
-    - /usr/share/aggie-data:/data/db
   ports:
-     - "27017:27017"
+     - "27020:27017"
   command: "--smallfiles --logpath=/dev/null"
