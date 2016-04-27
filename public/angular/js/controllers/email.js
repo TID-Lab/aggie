@@ -8,7 +8,6 @@ angular.module('Aggie')
   'FlashService',
   '$modal',
   function($scope, Settings, $timeout, $filter, flash, $modal) {
-
     $scope.mail = '';
     $scope.transport = {};
     Settings.get('email', function success(data) {
@@ -22,10 +21,6 @@ angular.module('Aggie')
 
     $scope.saveEmail = function() {
       Settings.set('email', { from: $scope.email, transport: $scope.transport }, success, failure);
-    };
-
-    $scope.editTransport = function() {
-      Settings.set('email', { from: $scope.email }, success, failure);
     };
 
     $scope.editTransport = function() {

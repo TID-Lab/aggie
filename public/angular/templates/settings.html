@@ -46,10 +46,11 @@
       <label class="settings-label">App Email Address</label>
     </td>
     <td class="value text-field">
-      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"/>
+      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
+             ng-change="formChanged=true"/>
     </td>
     <td class="action">
-      <button class="btn btn-info ng-scope" ng-click="saveEmail()">Save</button>
+      <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()">Save</button>
     </td>
   </tr>
   <tr>

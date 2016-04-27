@@ -8,10 +8,10 @@
     </div>
     <div class="modal-body">
       <div class="well bs-component">
-        <form name="form" class="form-horizontal">
+        <form name="form" class="form-horizontal" novalidate>
           <fieldset>
             <div class="form-group">
-              <label for="transport" class="col-lg-2 control-label">Transport</label>
+              <label for="transport" class="col-lg-3 control-label">Transport</label>
               <div class="col-lg-8">
                 <select name="method" class="form-control" ng-model="transport.method"
                           ng-options="name as name for (name, settings) in emailTransportOptions">
@@ -23,13 +23,17 @@
               </div>
             </div>
 
-            <div ng-repeat="setting in emailTransportOptions[transport.method]">
-              <label for="{{ setting }}" class="col-lg-2 control-label">{{ setting }}</label>
-              <div class="">
-                <div class="input-group">
+            <div class="form-group" ng-repeat="setting in emailTransportOptions[transport.method]">
+              <label for="{{ setting }}" class="col-lg-3 control-label">{{ setting }}</label>
+              <div class="col-lg-8">
+                <div ng-if="!(setting === 'secure' && transport.method === 'SMTP')">
                   <input type="text" ng-model="transport.options[setting]" class="form-control"
                          id="{{ setting }}" name="{{ setting }}" placeholder="{{ transport.options[setting] }}"
                          required size="80" maxlength="120"/>
+                </div>
+                <div ng-if="setting === 'secure' && transport.method === 'SMTP'">
+                  <input type="checkbox" ng-model="transport.options[setting]" class="form-control"
+                         id="{{ setting }}" name="{{ setting }}"/>
                 </div>
               </div>
             </div>

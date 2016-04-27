@@ -16,10 +16,8 @@ angular.module('Aggie')
     $scope.emailTransportOptions = emailTransportOptions;
 
     $scope.save = function() {
-
       // We first clear previous settings in the configuration
       Settings.clear('email:transport', setSetting, failure);
-
       $modalInstance.close($scope.transport.method);
     };
 
@@ -28,7 +26,6 @@ angular.module('Aggie')
     };
 
     function setSetting() {
-
       // We produce a clean settings object with only the settings for a given method
       settings = { method: $scope.transport.method, options: {} };
       emailTransportOptions[settings.method].forEach(function(setting) {
