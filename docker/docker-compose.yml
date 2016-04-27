@@ -5,7 +5,7 @@ web:
   environment:
     - MONGO_HOST=db
   ports:
-    - "80:3000"
+    - "443:3000"
 db:
   image: mongo:2.6.11
   ports:
