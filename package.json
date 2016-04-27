@@ -7,7 +7,9 @@
   },
   "scripts": {
     "postinstall": "gulp angular",
+    "prestart": "node install.js",
     "start": "node app.js",
+    "pretest": "node install.js",
     "test": "mocha"
   },
   "dependencies": {

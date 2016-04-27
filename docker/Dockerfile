@@ -17,4 +17,4 @@ RUN npm install --global gulp && npm install --unsafe-perm=true
 
 EXPOSE 3000
 
-CMD node install.js && npm start
+CMD npm start
