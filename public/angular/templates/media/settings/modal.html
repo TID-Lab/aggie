@@ -46,7 +46,7 @@
       <p ng-show="settingsForm.$invalid">The field is required.</p>
       <div class="well bs-component">
         <fieldset>
-          <div class="form-group" ng-repeat="(settingName, settingValue) in settings" >
+          <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
             <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
             <div class="col-lg-8">
               <input type="text" ng-model="settings[settingName]" class="form-control"

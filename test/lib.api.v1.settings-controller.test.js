@@ -25,9 +25,7 @@ describe('Settings controller', function() {
       consumer_key: 'testing',
       consumer_secret: 'test',
       access_token: 'api',
-      access_token_secret: 'error',
-      configured: false,
-      on: false,
+      access_token_secret: 'error'
     };
 
     config.updateFetching(false, function(err) {
