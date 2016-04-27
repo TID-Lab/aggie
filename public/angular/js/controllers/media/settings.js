@@ -20,10 +20,8 @@ angular.module('Aggie')
       var modalInstance = modal.create(media, $scope.media[media]);
     };
 
-    $scope.inHttp = false;
-    if ($window.location.protocol === 'http:') {
-      $scope.inHttp = true;
-    }
+    $scope.inHttp = $window.location.protocol === 'http:';
+
     $scope.toggle = function(mediaName, value) {
       var mediaSettings = $scope.media[mediaName];
       var setting = {};
