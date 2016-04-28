@@ -28,6 +28,11 @@
 </div>
 
 <div ng-controller="MediaSettingsController">
+  <div class="alert alert-danger" role="alert" ng-if="inHttp">
+    <span>Media settings modified here will be insecurely transmitted to the server.
+      We strongly advise <a href="https://github.com/TID-Lab/aggie#installation">
+      <span class="text-blue">enabling https support</span></a>.</span>
+  </div>
   <table class="table table-settings">
     <thead>
       <tr>

@@ -2,13 +2,14 @@ angular.module('Aggie')
 
 .controller('MediaSettingsController', [
   '$scope',
+  '$window',
   'Settings',
   '$timeout',
   '$filter',
   'FlashService',
   'mediaSettingsOptions',
   'MediaSettingsModal',
-  function($scope, Settings, $timeout, $filter, flash, mediaSettingsOptions, modal) {
+  function($scope, $window, Settings, $timeout, $filter, flash, mediaSettingsOptions, modal) {
 
     $scope.media = {};
 
@@ -18,6 +19,8 @@ angular.module('Aggie')
     $scope.edit = function(media) {
       var modalInstance = modal.create(media, $scope.media[media]);
     };
+
+    $scope.inHttp = $window.location.protocol === 'http:';
 
     $scope.toggle = function(mediaName, value) {
       var mediaSettings = $scope.media[mediaName];
