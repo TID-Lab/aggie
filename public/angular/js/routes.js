@@ -35,6 +35,12 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('reset_admin_password', {
+      url: '/reset_admin_password',
+      templateUrl: '/templates/reset-admin-password.html',
+      controller: 'ResetAdminPasswordController',
+    });
+
     $stateProvider.state('reports', {
       url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
       templateUrl: '/templates/reports/index.html',

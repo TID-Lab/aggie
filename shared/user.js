@@ -8,7 +8,7 @@
     }
   };
 
-  User.PASSWORD_MIN_LENGTH = 6;
+  User.PASSWORD_MIN_LENGTH = 8;
 
   User.permissions = {
     'view data': ['viewer', 'monitor', 'manager', 'admin'],
@@ -18,6 +18,7 @@
     'toggle fetching': ['manager', 'admin'],
     'manage trends': ['manager', 'admin'],
     'change settings': ['admin'],
+    'change admin password': ['admin']
   };
 
   // Determine if a user can do a certain action

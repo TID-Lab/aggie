@@ -2,17 +2,17 @@
   <div class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
-        <a href="/">
+        <a ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
           <div class="navbar-brand"></div>
         </a>
       </div>
-      <ul class="nav navbar-nav" ng-show="currentUser">
+      <ul class="nav navbar-nav" ng-show="currentUser && !$state.includes('reset_admin_password') ">
         <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
         <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents">Incidents</a></li>
         <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources">Sources</a></li>
         <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis">Analysis</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
+      <ul class="nav navbar-nav navbar-right" ng-show="currentUser && !$state.includes('reset_admin_password')">
         <li ui-sref-active="active" class="user">
           <a href ng-click="viewProfile(currentUser)">
           <i class="fa fa-user fa-fw"></i>
@@ -52,9 +52,17 @@
           </a>
         </li>
       </ul>
+      <ul class="nav navbar-nav navbar-right" ng-show="$state.includes('reset_admin_password')">
+        <li ui-sref-active="active">
+                    <a href ng-click="logout()">
+            <i class="fa fa-sign-out fa-fw"></i>
+            Log out
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="navbar navbar-stats" ng-show="currentUser">
+  <div class="navbar navbar-stats" ng-show="currentUser && !$state.includes('reset_admin_password')">
     <div class="container">
       <p class="navbar-text" ng-if="stats">
         <span class="nav-bar-number">{{stats.totalReports | number}}</span>

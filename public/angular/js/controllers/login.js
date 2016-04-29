@@ -9,8 +9,8 @@ angular.module('Aggie')
     function($scope, $state, $rootScope, AuthService, $location, flash) {
       $scope.login = function(form) {
         AuthService.login({
-            'username': $scope.user.username,
-            'password': $scope.user.password
+            username: $scope.user.username,
+            password: $scope.user.password
           },
           function(err) {
             if (!err) {

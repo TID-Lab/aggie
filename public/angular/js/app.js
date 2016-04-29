@@ -84,6 +84,7 @@ require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');
 require('./controllers/password_reset_modal');
+require('./controllers/password_reset_admin');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
 require('./controllers/sources/form_modal');

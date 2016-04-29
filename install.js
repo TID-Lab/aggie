@@ -31,10 +31,11 @@ function createAdminUser(callback) {
     if (!user) {
       var userData = {
         provider: 'aggie',
-        email: config.fromEmail,
+        email: config.adminEmail,
         username: 'admin',
         password: config.adminPassword,
-        role: 'admin'
+        role: 'admin',
+        hasDefaultPassword: true
       };
       // Create new admin user
       User.create(userData, function(err, user) {
