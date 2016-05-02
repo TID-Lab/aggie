@@ -22,8 +22,10 @@ var url_validator = validate({
   passIfEmpty: true
 });
 
+var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy'];
+
 var sourceSchema = new mongoose.Schema({
-  media: String,
+  media: {type: String, enum: mediaValues},
   nickname: {type: String, required: true, validate: length_validator},
   resource_id: String,
   url: {type: String, validate: url_validator},
@@ -134,4 +136,7 @@ Source.countAllErrors = function(callback) {
   });
 };
 
+Source.getMediaValues = function() {
+  return mediaValues;
+};
 module.exports = Source;

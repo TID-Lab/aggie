@@ -9,27 +9,33 @@ var _ = require('underscore');
 
 describe('Settings controller', function() {
   before(function(done) {
+    config.update('dummy', { set: 'initialDummySetting' }, function(err) {
+      Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
+      Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
+      Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
+    });
+
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
     botMaster.addListeners('fetching', settingsController);
 
-    Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
-    Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
-    Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
-
     twitterSettings =  _.clone(config.get().twitter);
+
     testSettings = {
       consumer_key: 'testing',
       consumer_secret: 'test',
       access_token: 'api',
-      access_token_secret: 'error',
-      configured: false,
-      on: false,
+      access_token_secret: 'error'
     };
 
     config.updateFetching(false, function(err) {
       done();
     });
+  });
+
+  after(function(done) {
+    botMaster.kill();
+    Source.remove({}, done);
   });
 
   describe('GET /api/v1/settings/twitter', function() {
@@ -68,6 +74,7 @@ describe('Settings controller', function() {
   });
 
   describe('PUT /api/v1/settings/twitter', function() {
+
     it('should update twitter settings', function(done) {
 
       request(settingsController)
@@ -85,12 +92,47 @@ describe('Settings controller', function() {
 
       // Revert changes to settings
       request(settingsController)
-        .put('/api/v1/settings/media/twitter')
+        .put('/api/v1/settings/twitter')
         .send({ settings: twitterSettings })
-        .end(function(err, res) {});
-
-      done();
+        .end(done);
     });
+  });
+
+  describe('PUT /api/v1/settings/dummy', function() {
+
+//    originalDummyBot;
+//    newDummyBot;
+
+    before(function(done){
+      newSettings = { set: 'dummySetting' };
+      botStatus = botMaster.bots[0].enabled;
+      request(settingsController)
+        .put('/api/v1/settings/dummy')
+        .send({ settings: newSettings })
+        .end(function(err, res) {
+          if (err) return done(err);
+          setTimeout(function() {
+            done();
+          }, 100);
+        });
+    });
+
+    it('should reload the dummy bots to use the new settings', function() {
+      botMaster.bots.forEach(function(bot) {
+        expect(newSettings).to.deep.equal(bot.contentService.config);
+      });
+    });
+
+    it('should keep the same status of bots', function() {
+      botMaster.bots.forEach(function(bot) {
+        expect(botStatus).to.equal(bot.enabled);
+      });
+    });
+
+    after(function(done) {
+      config.clear('dummy', done);
+    });
+
   });
 
   describe('GET /api/v1/settings/fetching', function() {

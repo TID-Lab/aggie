@@ -16,7 +16,6 @@ angular.module('Aggie')
 
     function success(data) {
       $scope.on = data;
-      flash.setNoticeNow('Fetching has been successfully switched.');
     };
 
     function failure(data) {
