@@ -80,6 +80,8 @@ require('./services/media_modal');
 require('./controllers/application');
 require('./controllers/choose_password');
 require('./controllers/fetching');
+require('./controllers/email');
+require('./controllers/email_modal');
 require('./controllers/login');
 require('./controllers/navbar');
 require('./controllers/password_reset');

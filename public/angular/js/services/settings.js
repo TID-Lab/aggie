@@ -3,7 +3,7 @@ angular.module('Aggie')
 .factory('Settings', function($resource) {
   var Settings = $resource('/api/v1/settings/:type/:item/:action', {}, {
     update: { method: 'PUT' },
-    test: { method: 'POST', ignoreLoadingBar: true },
+    test: { method: 'POST', ignoreLoadingBar: true }
   });
 
   return {
@@ -24,5 +24,8 @@ angular.module('Aggie')
       return Settings.test({ type: type, item: item, action: 'test' }, body, success, failure);
     },
 
+    clear: function(item, success, failure) {
+      return Settings.delete({ item: item }, {}, success, failure);
+    }
   };
 });

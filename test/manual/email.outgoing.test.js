@@ -1,27 +1,20 @@
-var config = require('../../config/secrets').email;
-var nodemailer = require("nodemailer");
+'use strict';
 
+var mailer = require('../../lib/mailer');
+var config = require('../../config/secrets.js').get().email;
 if (!process.argv[2]) {
-  console.log("Usage: node test/manual/email.outgoing.test.js <destination-email-address>");
+  console.log('Usage: node test/manual/email.outgoing.test.js <destination-email-address>');
   process.exit();
 }
 
-var transport = nodemailer.createTransport(config.transport.method, config.transport.options);
-
-var mailOptions = {
-  from: config.from,
-  to: process.argv[2],
-  subject: "Hello ✔",
-  text: "Hello world ✔",
-  html: "<b>Hello world ✔</b>"
-}
-
-// send mail with defined transport object
-transport.sendMail(mailOptions, function(err, response){
+// send mail with mailer
+console.log('Sending message');
+mailer.send('Test subject', 'Test body', process.argv[2], config.from, function(err, response) {
   if (err) {
+    console.log('We got an error: ');
     console.log(err);
   } else {
-    console.log("Message sent: " + response.message);
+    console.log('Message sent: ' + response.message);
   }
-  transport.close(); // shut down the connection pool, no more messages
 });
+
