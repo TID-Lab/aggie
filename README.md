@@ -27,6 +27,20 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 [Sassafras Tech Collective](http://sassafras.coop) offers managed instances of Aggie, along with development and support services.
 
+## Deployment Installation via Docker
+
+1. Install **docker** (version >= 1.0.0, such as 1.11.0).
+  - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
+2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
+  - In your terminal, navigate to your main projects folder (e.g. Documents).
+  - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+3. Start aggie
+  - Navigate to the `docker` directory in aggie: `cd aggie/docker`
+  - run `docker-compose up`
+  - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+4. Navigate to `https://localhost` in your browser.
+  - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+
 ## Development Installation
 
 ### System requirements
@@ -69,8 +83,9 @@ The following need to be installed.
   - This installs node-migrate globally.
 1. To start server, run `npm start`.
   - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-1. Navigate to `localhost:3000` in your browser.
+1. Navigate to `https://localhost:3000` in your browser.
   - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+  - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
 ## Maintenance
 1. To run migrations run `migrate`.
