@@ -22,12 +22,12 @@ var log = require('single-line-log').stdout;
 ////////////////////////////////////////////////////////////////////////////////
 
 var args = {
-  maxpages: 10000, 
+  maxpages: 10000,
   ramuptime: 200,
   maxclients: 30,
   waitbetweenrequests: 1000,
   totalrequests: 10,
-  baseurl: 'http://localhost:3000'
+  baseurl: 'https://localhost:3000'
 };
 
 var errors = 0; // error count
@@ -68,12 +68,12 @@ function logProgress() {
   (function repeat() {
     setTimeout(function(){
       if (finished) return;
-      
+
       var averageResponseTime = totalResponseTime / requestCount;
-      log('Errors:', errors, 
-          'Total Requests:', requestCount, 
+      log('Errors:', errors,
+          'Total Requests:', requestCount,
           'Average response time (sec):', moment.duration(averageResponseTime).asSeconds());
-      
+
       logProgress();
     }, 100);
   })();
@@ -81,33 +81,33 @@ function logProgress() {
 
 describe('Fetching load test', function() {
   // Get command line arguments
-  before(function(done) {
+  before(function() {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     _.each(process.argv, function(arg) {
       arg = arg.split('=');
       if (_.contains(['--maxpages', '--ramuptime', '--maxclients', '--waitbetweenrequests', '--totalrequests', '--baseurl'], arg[0])) {
         args[arg[0].replace('--', '')] = arg[1];
       }
     });
-    done();
   });
 
   it('should fire continuous queries for reports', function(done) {
     this.timeout(0);
     logProgress();
-    
+
     (function loop(n) {
       setTimeout(function(){
         simulateClient(function(){
           if (--n) return loop(n);
-          
-          
+
+
           finished = true;
           var averageResponseTime = totalResponseTime / requestCount;
-          console.log('\nTotal clients:', args.maxclients, 
-                      'Errors:', errors, 
-                      'Total Requests:', requestCount, 
+          console.log('\nTotal clients:', args.maxclients,
+                      'Errors:', errors,
+                      'Total Requests:', requestCount,
                       'Average response time (sec):', moment.duration(averageResponseTime).asSeconds());
-          
+
           return done();
         });
       }, args.ramuptime);

@@ -15,8 +15,8 @@ describe('User controller', function() {
   // Create some users.
   beforeEach(function(done) {
     User.create([
-      {provider: 'test', email: 'foo@example.com', username: 'foo', password: 'letmein'},
-      {provider: 'test', email: 'bar@example.com', username: 'bar', password: 'letmein'}
+      {provider: 'test', email: 'foo@example.com', username: 'foo', password: 'letmein2'},
+      {provider: 'test', email: 'bar@example.com', username: 'bar', password: 'letmein3'}
     ], function(err, u1, u2) {
       users = [u1, u2];
       done(err);
@@ -55,7 +55,7 @@ describe('User controller', function() {
     it('should create a new user', function(done) {
       request(userController)
         .post('/api/v1/user')
-        .send({provider: 'test', email: 'baz@example.com', username: 'baz', password: 'letmein'})
+        .send({provider: 'test', email: 'baz@example.com', username: 'baz', password: 'letmein4'})
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

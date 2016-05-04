@@ -3,7 +3,6 @@
 
 var nconf = require('nconf');
 var path = require('path');
-var fs = require('fs');
 var S = require('string');
 var jsmin = require('jsmin').jsmin;
 var _ = require('underscore');
@@ -11,11 +10,8 @@ var fs = require('fs-extra');
 
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
-var data = fs.readFileSync(secretsFile, 'utf8');
 
-// remove comments from secrets file
-var secrets = JSON.parse(jsmin(data));
-nconf.add('secrets', {type: 'literal', store: secrets});
+nconf.add('secrets', {type: 'file', file: secretsFile});
 
 // load server preferences
 var prefsFile = path.resolve(__dirname, 'server-prefs.json');
@@ -47,7 +43,12 @@ fs.ensureFileSync(_configuration.logger.analytics.filename);
 
 // return configuration
 module.exports.get = function(options) {
-  if (options && options.reload) _configuration = nconf.get();
+  if (options && options.reload) {
+
+    // Load again to get changes done in different processes
+    nconf.load();
+    _configuration = nconf.get();
+  }
   return _configuration;
 };
 
@@ -56,6 +57,27 @@ module.exports.updateFetching = function(flag, cb) {
   cb = cb || function() {};
   nconf.set('fetching', S(flag).toBoolean());
   nconf.save(function(err){
+    return cb(err);
+  });
+};
+
+// update settings
+module.exports.update = function(type, settings, cb) {
+  cb = cb || function() {};
+
+  nconf.set(type, settings);
+  nconf.save(function(err) {
+    return cb(err);
+  });
+};
+
+// clear settings
+module.exports.clear = function(key, cb) {
+  cb = cb || function() {};
+
+  nconf.clear(key);
+
+  nconf.save(function(err) {
     return cb(err);
   });
 };

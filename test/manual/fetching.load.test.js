@@ -24,19 +24,19 @@ var args = {
   reports: 1000, // total number of reports
   interval: 10, // 100 reports per second
   buffer: 50, // buffer size for each Source
-  baseurl: 'http://localhost:3000'
+  baseurl: 'https://localhost:3000'
 };
 
 describe('Fetching load test', function() {
   // Get command line arguments
-  before(function(done) {
+  before(function() {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     _.each(process.argv, function(arg) {
       arg = arg.split('=');
       if (_.contains(['--sources', '--reports', '--interval', '--buffer', '--baseurl'], arg[0])) {
         args[arg[0].replace('--', '')] = arg[1];
       }
     });
-    done();
   });
 
   it('should create new sources', function(done) {

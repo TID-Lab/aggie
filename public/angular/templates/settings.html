@@ -4,34 +4,66 @@
   </ul>
 </div>
 
-<div ng-controller="FetchingController">
-  <table class="table table-settings">
-    <tbody>
-      <tr>
-        <td class="col-sm-3">
-          <label class="settings-label">Fetching</label>
-        </td>
-        <td>
-          <div data-toggle="buttons">
-            <label ng-click="toggle(false)"
-                   class="toggle-item ng-class:{'active':on===false}">
-              Off
-            </label><label ng-click="toggle(true)"
-                   class="toggle-item ng-class:{'active':on===true}">
-              On
-            </label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<table class="table table-settings" ng-controller="FetchingController">
+  <tbody>
+    <tr>
+      <td>
+        <label class="settings-label">Fetching</label>
+      </td>
+      <td class="action">
+        <div data-toggle="buttons">
+          <label ng-click="toggle(false)"
+                 class="toggle-item ng-class:{'active':on===false}">
+            Off
+          </label><label ng-click="toggle(true)"
+                         class="toggle-item ng-class:{'active':on===true}">
+            On
+          </label>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <button class="btn btn-info"
-          ng-click="save()">
-    <span class="fa fa-refresh refresh-animate"
-          ng-show="loading"></span>
-    <span ng-hide="loading">Save</span>
-    <span ng-show="loading">Loading</span>
-  </button>
+<h4>Media Authentication</h4>
+<table class="table table-settings" ng-controller="MediaSettingsController">
+  <tr ng-repeat="mediaOption in mediaOptions">
+    <td>
+      <label class="settings-label">{{ mediaOption | capitalize }}</label>
+    </td>
+    <td class="action">
+      <div class="ng-scope">
+        <button class="btn btn-info ng-scope" ng-click="edit(mediaOption)">Edit</button>
+      </div>
+    </td>
+  </tr>
+</table>
 
-</div>
+<h4>Email</h4>
+<table class="table table-settings" ng-controller="EmailSettingsController">
+  <tr>
+    <td>
+      <label class="settings-label">App Email Address</label>
+    </td>
+    <td class="value text-field">
+      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
+             ng-change="formChanged=true"/>
+    </td>
+    <td class="action">
+      <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()">Save</button>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label class="settings-label">Email Transport</label>
+    </td>
+    <td class="value">
+      <p>{{ transport.method }}</p>
+    </td>
+    <td class="action">
+      <div class="ng-scope">
+        <button class="btn btn-info ng-scope" ng-click="editTransport()">Edit</button>
+      </div>
+    </td>
+  </tr>
+</table>

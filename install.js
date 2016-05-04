@@ -10,7 +10,13 @@ var tasks = [];
 // Enable full-text indexing for Reports
 function enableIndexing(callback) {
   // Wait for database connection
-  setTimeout(function() {
+  database.mongoose.connection.on('error', function(err) {
+    console.error('mongoose connection error (retrying): ', err);
+    setTimeout(function() {
+      database.mongoose.connect(database.connectURL);
+    }, 200);
+  });
+  database.mongoose.connection.once('open', function() {
     // Enable database-level text search
     database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
       if (err) console.error(err);
@@ -21,7 +27,7 @@ function enableIndexing(callback) {
         callback();
       });
     });
-  }, 1000);
+  });
 };
 tasks.push(enableIndexing);
 
@@ -31,10 +37,11 @@ function createAdminUser(callback) {
     if (!user) {
       var userData = {
         provider: 'aggie',
-        email: config.fromEmail,
+        email: config.adminEmail,
         username: 'admin',
         password: config.adminPassword,
-        role: 'admin'
+        role: 'admin',
+        hasDefaultPassword: true
       };
       // Create new admin user
       User.create(userData, function(err, user) {

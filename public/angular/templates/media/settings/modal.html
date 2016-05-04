@@ -1,0 +1,74 @@
+<div>
+  <form name="settingsForm" class="form-horizontal" novalidate>
+    <div class="modal-header">
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
+      <h4 class="modal-title">
+        <div class="icon-left">&nbsp;Edit {{ media | capitalize }} Settings Source</div>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <alert type="info" ng-show="success">The credentials are valid. You need to save them before
+        continuing.</alert>
+      <alert type="danger" ng-show="failure">{{ message }}</alert>
+
+      <ol ng-if="media === 'twitter'">
+        <li>Follow <a href="https://dev.twitter.com/oauth/overview/application-owner-access-tokens" target="_blank">
+          these instructions</a> to generate tokens to use the Twitter API.
+        </li>
+        <li>Replace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, and
+          <code>access_token_secret</code> with the keys from <a href="https://apps.twitter.com" target="_blank">
+            your app</a>.
+        </li>
+      </ol>
+      <ol ng-if="media === 'facebook'">
+        <li>Visit <a href="https://developers.facebook.com/apps/" target="_blank">your apps</a> on the Facebook
+          developers site. Create a new app if needed.
+        </li>
+        <li>Inside your Facebook app, obtain <code>client_id</code> and <code>client_secret</code>.</li>
+        <li>To obtain an access token, in a browser, visit
+          <code>https://graph.facebook.com/oauth/access_token?client_secret=xxx&amp;client_id=xxx&amp;grant_type=client_credentials</code>
+          using your <code>client_id</code> and <code>client_secret</code>.
+        </li>
+        <li>Replace the <code>accessToken</code> placeholder with your access token.</li>
+      </ol>
+      <ol ng-if="media === 'elmo'">
+        <li>Log in to your ELMO instance with an account having coordinator or higher privileges on
+          the mission you want to track.
+        </li>
+        <li>In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID
+          in the URL bar (e.g. if URL ends in <code>/m/mymission/forms/123</code>, the ID is <code>123</code>).
+        </li>
+        <li>Visit your profile page (click the icon bearing your username in the top-right corner) and copy
+          your API key (click 'Regenerate' if necessary).
+        </li>
+        <li>Set the value of <code>authToken</code> to the API key you obtained above.</li>
+      </ol>
+      <p ng-show="settingsForm.$invalid">The field is required.</p>
+      <div class="well bs-component">
+        <fieldset>
+          <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
+            <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
+            <div class="col-lg-8">
+              <input type="text" ng-model="settings[settingName]" class="form-control"
+                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(media, settings)" ng-if="media !== 'elmo'">
+        <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
+        <span ng-hide="loading">Test</span>
+        <span ng-show="loading">Testing</span></button>
+      <button class="btn btn-default" aggie-confirm="Are you sure you want to delete the settings for this source?"
+              on-confirm="delete(media, settings)">
+        Delete
+      </button>
+      <button class="btn btn-default" ng-click="close()">Cancel</button>
+      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, media, settings)">
+        Save &amp; Close
+      </button>
+    </div>
+  </form>
+</div>

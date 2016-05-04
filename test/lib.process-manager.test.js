@@ -1,3 +1,4 @@
+require('./init');
 var expect = require('chai').expect;
 var processManager = require('../lib/process-manager');
 var Source = require('../models/source');
@@ -5,23 +6,50 @@ var botMaster = require('../lib/fetching/bot-master');
 var request = require('supertest');
 var Report = require('../models/report');
 
+/**
+ * BEWARE, this test suite has side effects. The practical result is that no
+ * other test suite should fork the '/lib/api' or '/lib/fetching' modules at
+ * this time. In addition, there is inter-dependence between the tests within
+ * this suite. Precisely, all tests depend on the first ('should fork a
+ * process').
+ *
+ * Side effects
+ * ------------
+ * When a process is forked, it registers routes with the process manager to
+ * subscribe to interprocess messages. As a reasonable precaution, the process
+ * manager does not allow duplicate routes, and when a process is killed its
+ * routes are not removed. As a result, if e.g. the /lib/fetching module is
+ * forked, killed, and forked again, the routes for the second copy will fail to
+ * be registered. The second copy of the /lib/fetching module then cannot
+ * receive messages from other processes (e.g. /lib/api).
+ *
+ * Inter-dependence
+ * ----------------
+ * All of the tests in this module rely on the /lib/fetching and /lib/api
+ * processes. Per the above discussion, each of these processes can only exist
+ * once, so they must be shared by the tests here. As the first test creates
+ * the /lib/fetching process, it cannot be done without.
+ *
+ * Resolution
+ * ----------
+ * Generally, tests with side effects and tests depending on each other should
+ * be discouraged where possible. To fix this, I recommend that each test get
+ * its own /lib/api and /lib/fetching process. To make this possible, the
+ * process manager should remove routes for processes when they are killed.
+ */
 describe('Process manager', function() {
-  before(function(done) {
+  before('Let API server start listening', function(done) {
     processManager.fork('/lib/api');
-    // Let API server start listening
-    setTimeout(function() {
-      done();
-    }, 500);
+    setTimeout(done, 500);
   });
 
-  it('should fork a process', function(done) {
+  it('should fork a process', function() {
     expect(processManager.children).to.be.an.instanceOf(Array);
     var children = processManager.children.length;
     var child = processManager.fork('/lib/fetching');
     expect(child).to.have.property('pid');
     expect(child.pid).to.be.above(process.pid);
     expect(processManager.children).to.have.length(children + 1);
-    done();
   });
 
   it('should get a forked process', function() {
@@ -64,10 +92,8 @@ describe('Process manager', function() {
   });
 
   it('should simulate a full inter-process messaging workflow', function(done) {
-    processManager.fork('/lib/api');
-    processManager.fork('/lib/fetching');
     var getReports = function(callback) {
-      request('http://localhost:3000')
+      request('https://localhost:3000')
         .get('/api/v1/report')
         .expect(200)
         .end(function(err, res) {
@@ -78,7 +104,7 @@ describe('Process manager', function() {
         });
     };
     var createSource = function(data, callback) {
-      request('http://localhost:3000')
+      request('https://localhost:3000')
         .post('/api/v1/source')
         .send(data)
         .expect(200)
@@ -90,7 +116,7 @@ describe('Process manager', function() {
         });
     };
     var toggleFetching = function(state, callback) {
-      request('http://localhost:3000')
+      request('https://localhost:3000')
         .put('/api/v1/settings/fetching/' + state)
         .expect(200)
         .end(function(err, res) {
@@ -105,7 +131,7 @@ describe('Process manager', function() {
         expect(reports).to.contain.property('results');
         expect(reports.results).to.be.an.instanceof(Array);
         var length = reports.total;
-        createSource({nickname: 'lorem', type: 'dummy', keywords: 'Lorem ipsum'}, function() {
+        createSource({nickname: 'lorem', media: 'dummy', keywords: 'Lorem ipsum'}, function() {
           toggleFetching('on', function() {
             setTimeout(function() {
               toggleFetching('off', function() {

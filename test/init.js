@@ -1,6 +1,8 @@
 process.env.NODE_ENV = 'test';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://localhost/aggie-test';
+var host = process.env.MONGO_HOST || 'localhost';
+var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://' + host + '/aggie-test';
 var database = require('../lib/database');
 var Report = require('../models/report');
 var User = require('../models/user');
@@ -14,7 +16,7 @@ before(function(done) {
       database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
         if (err) return done(err);
         // Create admin user for testing
-        User.create({provider: 'test', email: 'admin@example.com', username: 'admin', password: 'letmein', role: 'admin'});
+        User.create({provider: 'test', email: 'admin@example.com', username: 'admin', password: 'letmein1', hasDefaultPassword: true, role: 'admin'});
         // Enable full-text indexing for Reports
         Report.ensureIndexes(function() {
           done();

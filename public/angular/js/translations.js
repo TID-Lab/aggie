@@ -67,6 +67,12 @@ angular.module('Aggie').config([
       'sourceId': 'Source'
     })
 
+    // Linked to report options
+    .translations('en', {
+      '* Any Incident': '* Any Incident',
+      '* Without Incident': '* Without Incident'
+    })
+
     .preferredLanguage('en');
   }
 ]);

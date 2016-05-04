@@ -27,6 +27,20 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 [Sassafras Tech Collective](http://sassafras.coop) offers managed instances of Aggie, along with development and support services.
 
+## Deployment Installation via Docker
+
+1. Install **docker** (version >= 1.0.0, such as 1.11.0).
+  - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
+2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
+  - In your terminal, navigate to your main projects folder (e.g. Documents).
+  - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+3. Start aggie
+  - Navigate to the `docker` directory in aggie: `cd aggie/docker`
+  - run `docker-compose up`
+  - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+4. Navigate to `https://localhost` in your browser.
+  - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+
 ## Development Installation
 
 ### System requirements
@@ -56,16 +70,22 @@ The following need to be installed.
   - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
   1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+  - If you do not have the certificate you can create a new self-signed certificate with the following command:
+  `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
+  - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
+  - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
-  - This installs all dependencies, adds indexing support to MongoDB, creates an admin user, and concatenates the angular application.
-1. In your terminal during 'npm install', a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+  - This installs all dependencies and concatenates the angular application.
 1. Run `npm install -g gulp mocha`.
   - This installs gulp and mocha globally so they can be run from the command line for testing.
 1. Run `npm install -g migrate`.
   - This installs node-migrate globally.
 1. To start server, run `npm start`.
-1. Navigate to `localhost:3000` in your browser.
+  - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+1. Navigate to `https://localhost:3000` in your browser.
   - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+  - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
 ## Maintenance
 1. To run migrations run `migrate`.
@@ -76,41 +96,32 @@ The following need to be installed.
 You can adjust the settings in the `config/secrets.json` file to configure the application.
 
 ### Tests
-1. Follow the system requirements and installation instructions
-2. In config/secrets.json, uncomment the dummy settings for API configuration
-3. Check that `config.adminParty=true` is set
-4. Run `npm test` (`gulp --file=[test/filename]` for a single test)
+Set `config.adminParty=true` if you want to run tests.
 
 ### Social Media and Feeds
 
 #### Twitter
   1. Follow [these instructions](https://dev.twitter.com/oauth/overview/application-owner-access-tokens) to generate tokens to use the Twitter API.
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the Twitter hash/object (`"twitter": {},`).
-    1. Replace `consumer_key`, `consumer_secret`, `access_token`, and `access_token_secret` with the keys from [your app](https://apps.twitter.com).
+  1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
   1. Known issue: The current Facebook API is not compatible with Aggie. Please see https://github.com/TID-Lab/aggie/issues/139 for more information.
   1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
   1. Inside your Facebook app, obtain `client_id` and `client_secret`.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the Facebook hash/object (`"facebook": {},`).
-    1. Replace the `accessToken` placeholder with your access token.
-
+  1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
+  
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
-  1. In your `secrets.json` file:
-    1. Uncomment the lines for the ELMO hash/object (`"elmo": {},`).
-    1. Set the value of `authToken` to the API key you obtained above.
-  1. See below for instructions on adding individual ELMO sources to the app.
+1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+
 
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
   1. `email.from` is the address from which application emails will come
-  1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com).
+  1. `email.transport` is the set of parameters that will be passed to [NodeMailer 2.1.0](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 
 ### Fetching
