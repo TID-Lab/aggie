@@ -1,3 +1,4 @@
+'use strict';
 angular.module('Aggie').config([
   '$translateProvider',
   function($translateProvider) {
@@ -6,6 +7,7 @@ angular.module('Aggie').config([
       prefix: '/translations/locale-',
       suffix: '.json'
     })
-    .preferredLanguage('en');
+    .preferredLanguage('en')
+    .useSanitizeValueStrategy('sanitizeParameters');
   }
 ]);
