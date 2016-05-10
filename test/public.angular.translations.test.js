@@ -17,6 +17,7 @@ var fs = require('graceful-fs');
 var path = require('path');
 var async = require('async');
 var _ = require('lodash');
+var deepKeys = require('deep-keys');
 
 function getTranslations(callback) {
    var dirname = 'public/angular/translations';
@@ -39,11 +40,15 @@ describe('Translations files', function() {
      function(done) {
     getTranslations(function(err, allLanguages) {
       if (err) return done(err);
-      var allKnownStrings = _.union(_.map(_.values(allLanguages), _.keys));
+      var knownStrings = _.map(_.values(allLanguages), function(translations) {
+        return deepKeys(translations);
+      });
+      var allKnownStrings = _.union.apply({}, knownStrings);
       var debugFile = 'locale-debug.json';
       expect(allLanguages).to.have.property(debugFile);
       var debugTranslations = _.compact(allLanguages[debugFile]);
-      expect(debugTranslations).to.have.all.keys(allKnownStrings);
+      expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
+      done();
     });
   });
 });
