@@ -16,7 +16,7 @@ angular.module('Aggie')
     }, failure);
 
     function success() {
-      flash.setNoticeNow('The mail setting has been correctly saved');
+      flash.setNoticeNow('settings.email.success');
     }
 
     $scope.saveEmail = function() {
@@ -39,7 +39,7 @@ angular.module('Aggie')
     };
 
     function failure(data) {
-      flash.setAlertNow('An error has occurred saving the email setting');
+      flash.setAlertNow('settings.email.error');
       console.log('failure: ', data);
     }
   }

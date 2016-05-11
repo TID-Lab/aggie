@@ -30,7 +30,7 @@ angular.module('Aggie')
     }
 
     function failure(data) {
-      flash.setAlertNow('An error has occurred setting the media status');
+      flash.setAlertNow('settings.media.error');
       console.log('failure: ', data);
     }
   }

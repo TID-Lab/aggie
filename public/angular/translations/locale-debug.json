@@ -32,5 +32,102 @@
   "media": "TREND_QUERY_MEDIA",
   "sourceId": "TREND_QUERY_SOURCE",
   "* Any Incident": "REPORT_OPTIONS_ANY_INCIDENT",
-  "* Without Incident": "REPORT_OPTIONS_WITHOUT_INCIDENT"
+  "* Without Incident": "REPORT_OPTIONS_WITHOUT_INCIDENT",
+  "passwordReset": {
+    "noMatch": "PASSWORD_RESET.NO_MATCH",
+    "tooShort": "PASSWORD_RESET.TOO_SHORT",
+    "success": "PASSWORD_RESET.SUCCESS",
+    "error": "PASSWORD_RESET.ERROR",
+    "admin": {
+      "success": "PASSWORD_RESET.ADMIN.SUCCESS",
+      "error": "PASSWORD_RESET.ADMIN.ERROR"
+    },
+    "email": {
+      "success": "PASSWORD_RESET.EMAIL.SUCCESS [{{email}}]",
+      "noUser": "PASSWORD_RESET.EMAIL.NO_USER [{{email}}]",
+      "error": "PASSWORD_RESET.EMAIL.ERROR"
+    }
+  },
+  "settings": {
+    "email": {
+      "success": "EMAIL.SETTINGS.SUCCESS",
+      "error": "EMAIL.SETTINGS.ERROR",
+      "settingsModal": {
+        "success": "EMAIL.SETTINGS_MODAL.SUCCESS [{{method}}]",
+        "error": "EMAIL.SETTINGS_MODAL.ERROR"
+      }
+    },
+    "media": {
+      "error": "MEDIA.SETTINGS.ERROR",
+      "settingsModal": {
+        "success": "MEDIA.SETTINGS_MODAL.SUCCESS [{{mediaName}}, {{verb}}]",
+        "error": "MEDIA.SETTINGS_MODAL.ERROR"
+      }
+    }
+  },
+  "An error has occurred setting the fetching status": "FETCHING_SETTINGS_ERROR",
+  "incident": {
+    "create": {
+      "success": "INCIDENT.CREATE.SUCCESS",
+      "error": "INCIDENT.CREATE.ERROR"
+    },
+    "update": {
+      "success": "INCIDENT.UPDATE.SUCCESS",
+      "error": "INCIDENT.UPDATE.ERROR"
+    },
+    "delete": {
+      "success": "INCIDENT.DELETE.SUCCESS",
+      "error": "INCIDENT.DELETE.ERROR"
+    },
+    "deleteMultiple": {
+      "success": "INCIDENT.DELETE_MULTIPLE.SUCCESS",
+      "error": "INCIDENT.DELETE_MULTIPLE.ERROR"
+    },
+    "save": {
+      "error": "INCIDENT.SAVE.ERROR"
+    }
+  },
+  "Sorry, but that report couldn't be saved for some reason": "REPORT_SAVE_ERROR",
+  "No more unread reports found.": "REPORT_NO_UNREAD",
+  "You have been successfully logged out.": "LOGOUT_SUCCESS",
+  "source": {
+    "create": {
+      "success": "SOURCE.CREATE.SUCCESS",
+      "error": "SOURCE.CREATE.ERROR"
+    },
+    "update": {
+      "success": "SOURCE.UPDATE.SUCCESS",
+      "error": "SOURCE.UPDATE.ERROR"
+    },
+    "save": {
+      "error": "SOURCE.SAVE.ERROR"
+    },
+    "delete": {
+      "success": "SOURCE.DELETE.SUCCESS",
+      "error": "SOURCE.DELETE.ERROR"
+    }
+  },
+  "trend": {
+    "create": {
+      "error": "TREND.CREATE.ERROR"
+    },
+    "delete": {
+      "success": "TREND.DELETE.SUCCESS",
+      "error": "TREND.DELETE.ERROR"
+    }
+  },
+  "user": {
+    "create": {
+      "success": "USER.CREATE.SUCCESS",
+      "error": "USER.CREATE.ERROR"
+    },
+    "update": {
+      "success": "USER.UPDATE.SUCCESS",
+      "error": "USER.UPDATE.ERROR"
+    },
+    "delete": {
+      "success": "USER.DELETE.SUCCESS",
+      "error": "USER.DELETE.ERROR"
+    }
+  }
 }

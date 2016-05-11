@@ -32,5 +32,104 @@
   "media": "Media",
   "sourceId": "Source",
   "* Any Incident": "* Any Incident",
-  "* Without Incident": "* Without Incident"
+  "* Without Incident": "* Without Incident",
+  "passwordReset": {
+    "noMatch": "Passwords do not match",
+    "tooShort": "Password is not long enough",
+    "success": "An error has occurred when resetting your password",
+    "error": "Your password has been successfully reset.",
+    "admin": {
+      "success": "The admin password was changed successfully.",
+      "error": "There was an error setting the new admin password."
+    },
+    "email": {
+      "success": "An email has been sent to {{email}} with instructions for resetting your password",
+      "noUser": "User with email {{email}} does not exist.",
+      "error": "There was an error sending the password reset email. Please contact support."
+    }
+  },
+  "email": {
+    "settings": {
+      "success": "The mail setting has been correctly saved",
+      "error": "An error has occurred saving the email setting"
+    },
+    "settingsModal": {
+      "success": "{{method}} setting has been successfully saved.",
+      "error": "An error has occurred"
+    }
+  },
+  "An error has occurred setting the fetching status": "An error has occurred setting the fetching status",
+  "incident": {
+    "create": {
+      "success": "Incident was successfully created.",
+      "error": "Incident failed to be created. Please contact support."
+    },
+    "update": {
+      "success": "Incident was successfully updated.",
+      "error": "Incident failed to be updated."
+    },
+    "delete": {
+      "success": "Incident was successfully deleted.",
+      "error": "Incident failed to be deleted."
+    },
+    "deleteMultiple": {
+      "success": "Incidents were successfully deleted.",
+      "error": "Incidents failed to be deleted."
+    },
+    "save": {
+      "error": "Sorry, but that incident couldn't be saved for some reason"
+    }
+  },
+  "Sorry, but that report couldn't be saved for some reason": "Sorry, but that report couldn't be saved for some reason",
+  "No more unread reports found.": "No more unread reports found.",
+  "media": {
+    "settings": {
+      "error": "An error has occurred setting the media status"
+    },
+    "settingsModal": {
+      "success": "{{mediaName}} settings has been successfully {{verb}}.",
+      "error": "An error has occurred"
+    }
+  },
+  "You have been successfully logged out.": "You have been successfully logged out.",
+  "source": {
+    "create": {
+      "success": "Source was successfully created.",
+      "error": "Source failed to be created. Please contact support."
+    },
+    "update": {
+      "success": "Source was successfully updated.",
+      "error": "Source failed to be updated."
+    },
+    "save": {
+      "error": "Sorry, but that source couldn't be saved for some reason"
+    },
+    "delete": {
+      "success": "Source was successfully deleted, but reports related to this source will still remain.",
+      "error": "Source failed to be deleted."
+    }
+  },
+  "trend": {
+    "create": {
+      "error": "Trend failed to be created. Please contact support."
+    },
+    "delete": {
+      "success": "Trend was successfully deleted.",
+      "error": "Trend failed to be deleted."
+    }
+  },
+  "user": {
+    "create": {
+      "success": "User was successfully created and an email has been sent to them with password instructions.",
+      "error": "User failed to be created. Please contact support."
+    },
+    "update": {
+      "success": "User was successfully updated.",
+      "error": "Could not update user. Please contact support."
+    },
+    "delete": {
+      "success": "User was successfully deleted.",
+      "error": "User failed to be deleted."
+    }
+  }
 }
