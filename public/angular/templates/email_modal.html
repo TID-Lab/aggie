@@ -3,7 +3,7 @@
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
       <div class="transport">
-        <div>Edit Email Transport Settings</div>
+        <div translate>Edit Email Transport Settings</div>
     </h4>
     </div>
     <div class="modal-body">
@@ -11,14 +11,14 @@
         <form name="form" class="form-horizontal" novalidate>
           <fieldset>
             <div class="form-group">
-              <label for="transport" class="col-lg-3 control-label">Transport</label>
+              <label for="transport" class="col-lg-3 control-label" translate>Transport</label>
               <div class="col-lg-8">
                 <select name="method" class="form-control" ng-model="transport.method"
                           ng-options="name as name for (name, settings) in emailTransportOptions">
-                  <option value="">Choose transport method</option>
+                  <option value="" translate>Choose transport method</option>
                 </select>
                 <div class="has-error" ng-show="showErrors()">
-                  <div class="help-block" ng-show="form.method.$error.required">Select transport first</div>
+                  <div class="help-block" ng-show="form.method.$error.required" translate>Select transport first</div>
                 </div>
               </div>
             </div>
@@ -42,8 +42,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" ng-click="close()">Close</button>
-      <button class="btn btn-primary" ng-click="save()">Submit</button>
+      <button class="btn btn-default" ng-click="close()" translate>Close</button>
+      <button class="btn btn-primary" ng-click="save()" translate>Submit</button>
     </div>
   </div>
 </div>

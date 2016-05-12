@@ -48,14 +48,21 @@
       "error": "There was an error sending the password reset email. Please contact support."
     }
   },
-  "email": {
-    "settings": {
+  "settings": {
+    "email": {
       "success": "The mail setting has been correctly saved",
-      "error": "An error has occurred saving the email setting"
+      "error": "An error has occurred saving the email setting",
+      "settingsModal": {
+        "success": "{{method}} setting has been successfully saved.",
+        "error": "An error has occurred"
+      }
     },
-    "settingsModal": {
-      "success": "{{method}} setting has been successfully saved.",
-      "error": "An error has occurred"
+    "media": {
+      "error": "An error has occurred setting the media status",
+      "settingsModal": {
+        "success": "{{mediaName}} settings has been successfully {{verb}}.",
+        "error": "An error has occurred"
+      }
     }
   },
   "An error has occurred setting the fetching status": "An error has occurred setting the fetching status",
@@ -82,15 +89,6 @@
   },
   "Sorry, but that report couldn't be saved for some reason": "Sorry, but that report couldn't be saved for some reason",
   "No more unread reports found.": "No more unread reports found.",
-  "media": {
-    "settings": {
-      "error": "An error has occurred setting the media status"
-    },
-    "settingsModal": {
-      "success": "{{mediaName}} settings has been successfully {{verb}}.",
-      "error": "An error has occurred"
-    }
-  },
   "You have been successfully logged out.": "You have been successfully logged out.",
   "source": {
     "create": {
@@ -131,5 +129,101 @@
       "success": "User was successfully deleted.",
       "error": "User failed to be deleted."
     }
-  }
+  },
+  "Uh oh!": "Uh oh!",
+  "Sorry, but that page could not be found.": "Sorry, but that page could not be found.",
+  "Trends (Lines)": "Trends (Lines)",
+  "Trends (Bars)": "Trends (Bars)",
+  "Incident Map": "Incident Map",
+  "Set a password for your account": "Set a password for your account",
+  "Password": "Password",
+  "Password Confirmation": "Password Confirmation",
+  "Cancel": "Cancel",
+  "Submit": "Submit",
+  "Confirm": "Confirm",
+  "Date Filters": "Date Filters",
+  "From:": "From:",
+  "To:": "To:",
+  "Clear": "Clear",
+  "Edit Email Transport Settings": "Edit Email Transport Settings",
+  "Transport": "Transport",
+  "Choose transport method": "Choose transport method",
+  "Select transport first": "Select transport first",
+  "Aggie Homepage": "Aggie Homepage",
+  "Username": "Username",
+  "Enter username": "Enter username",
+  "Enter password": "Enter password",
+  "Forgot password?": "Forgot password?",
+  "Reports": "Reports",
+  "Incidents": "Incidents",
+  "Sources": "Sources",
+  "Analysis": "Analysis",
+  "Users": "Users",
+  "Settings": "Settings",
+  "Log in": "Log in",
+  "Log out": "Log out",
+  "Warnings": "Warnings",
+  "Reset Password": "Reset Password",
+  "Email": "Email",
+  "Enter email": "Enter email",
+  "Set New Admin Password": "Set New Admin Password",
+  "The admin password must be changed after installation of Aggie. Please do so before continuing.": "The admin password must be changed after installation of Aggie. Please do so before continuing.",
+  "Remember that the password has to be at least 8 characters long.": "Remember that the password has to be at least 8 characters long.",
+  "By default there is no email address associated with your admin account. If you forget your password, you may be unable to recover your account. Please add an email under Settings &gt; Users &gt; admin.": "By default there is no email address associated with your admin account. If you forget your password, you may be unable to recover your account. Please add an email under Settings &gt; Users &gt; admin.",
+  "Fetching": "Fetching",
+  "On": "On",
+  "Off": "Off",
+  "Edit": "Edit",
+  "App Email Address": "App Email Address",
+  "Save": "Save",
+  "Email Transport": "Email Transport",
+  "Go": "Go",
+  "Assigned To": "Assigned To",
+  "Status": "Status",
+  "Veracity": "Veracity",
+  "Escalated?": "Escalated?",
+  "Delete": "Delete",
+  "Create Incident": "Create Incident",
+  "Sorry, but we couldn't find any incidents.": "Sorry, but we couldn't find any incidents.",
+  "Edit Incident": "Edit Incident",
+  "Enter the incident details below": "Enter the incident details below",
+  "Or you can": "Or you can",
+  "choose an existing incident": "choose an existing incident",
+  "Title": "Title",
+  "Title is required.": "Title is required.",
+  "User is required.": "User is required.",
+  "Escalated": "Escalated",
+  "Location": "Location",
+  "Edit coordinates...": "Edit coordinates...",
+  "Latitude": "Latitude",
+  "Latitude is invalid.": "Latitude is invalid.",
+  "Latitude is required if longitude is entered.": "Latitude is required if longitude is entered.",
+  "Longitude": "Longitude",
+  "Longitude is invalid.": "Longitude is invalid.",
+  "Longitude is required if latitude is entered.": "Longitude is required if latitude is entered.",
+  "Select User": "Select User",
+  "Notes": "Notes",
+  "Add report to incident": "Add report to incident",
+  "Sorry, but we couldn't find any incidents. You can": "Sorry, but we couldn't find any incidents. You can",
+  "create a new incident": "create a new incident",
+  "Click an incident below to which you would like to add the report. Or you can": "Click an incident below to which you would like to add the report. Or you can",
+  "Creator": "Creator",
+  "Closed": "Closed",
+  "Open": "Open",
+  "Confirmed True": "Confirmed True",
+  "Confirmed False": "Confirmed False",
+  "Unconfirmed": "Unconfirmed",
+  "There are no reports to display.": "There are no reports to display.",
+  "of": "of",
+  "Are you sure you want to delete selected incidents?": "Are you sure you want to delete selected incidents?",
+  "ID#": "ID#",
+  "Last Updated": "Last Updated",
+  "reports": "reports",
+  "Confirmed": "Confirmed",
+  "True": "True",
+  "False": "False",
+  "ago": "ago",
+  "Are you sure you want to delete this incident?": "Are you sure you want to delete this incident?",
+  "No": "No",
+  "Yes": "Yes"
 }
