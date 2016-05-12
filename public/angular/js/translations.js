@@ -8,6 +8,7 @@ angular.module('Aggie').config([
       suffix: '.json'
     })
     .preferredLanguage('en')
+    .fallbackLanguage(['en', 'debug'])
     .useSanitizeValueStrategy('sanitizeParameters');
   }
 ]);
