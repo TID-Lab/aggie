@@ -18,15 +18,23 @@ var path = require('path');
 var async = require('async');
 var _ = require('lodash');
 var deepKeys = require('deep-keys');
+var clarinet = require('clarinet').parser();
+
+var prefix = 'locale-';
+var suffix = '.json';
+var debugFile = prefix + 'debug' + suffix;
 
 function getTranslations(callback) {
    var dirname = 'public/angular/translations';
    fs.readdir(dirname, function(err, filenames) {
      if (err) return callback(err);
+     filenames = _.filter(filenames, function(filename) {
+       return _.startsWith(filename, prefix) && _.endsWith(filename, suffix);
+     });
      async.map(filenames, function(filename, mapCallback) {
-       fs.readFile(path.join(dirname, filename), function(err, json) {
+       fs.readFile(path.join(dirname, filename), 'utf8', function(err, json) {
          if (err) return mapCallback(err);
-         mapCallback(null, [filename, JSON.parse(json)]);
+         mapCallback(null, [filename, json]);
       });
     }, function(err, allLanguages) {
       if (err) return callback(err);
@@ -40,14 +48,47 @@ describe('Translations files', function() {
      function(done) {
     getTranslations(function(err, allLanguages) {
       if (err) return done(err);
-      var knownStrings = _.map(_.values(allLanguages), function(translations) {
-        return deepKeys(translations);
+      var knownStrings = _.map(_.values(allLanguages), function(json) {
+        return deepKeys(JSON.parse(json));
       });
       var allKnownStrings = _.union.apply({}, knownStrings);
-      var debugFile = 'locale-debug.json';
       expect(allLanguages).to.have.property(debugFile);
-      var debugTranslations = _.compact(allLanguages[debugFile]);
+      var debugTranslations = JSON.parse(allLanguages[debugFile]);
       expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
+      done();
+    });
+  });
+
+  it("dictionaries shouldn't have duplicate keys", function(done) {
+    function check(json, filename) {
+      var keys = {};
+      var lastKey;
+      var path = [];
+
+      var newKey = function(key) {
+        key = key.replace(/(\.)/g, '\\.');
+        var k = path.join('.') + (path.length ? '.' : '') + key;
+        expect(keys, 'file [' + filename + ']').to.not.have.property(k);
+        keys[k] = 'Yup';
+        lastKey = key;
+      };
+
+      clarinet.onkey = newKey;
+      clarinet.onopenobject = function(k) {
+        if (lastKey) {
+          path.push(lastKey);
+        }
+        newKey(k);
+      };
+      clarinet.oncloseobject = function() {
+        path.pop();
+      };
+      clarinet.write(json).close();
+    }
+
+    getTranslations(function(err, allLanguages) {
+      if (err) return done(err);
+      _.each(allLanguages, check);
       done();
     });
   });
