@@ -1,21 +1,21 @@
-<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} new reports available.</a></alert>
+<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 
 <div class="batch-mode">
   <div class="pull-left">
-    <p class="nomargin title">Batch Mode</p>
-    <p class="nomargin">The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.</p>
+    <p class="nomargin title" translate>Batch Mode</p>
+    <p class="nomargin" translate>The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.</p>
   </div>
 
   <div class="pull-right">
     <div class="batch-actions">
       <div class="pull-left margin-left">
-        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()">Mark All Read &amp; Grab Another</a>
+        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
       </div>
       <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="markAllReadAndDone()">Mark All Read &amp; Done</a>
+        <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
       </div>
       <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="cancelBatch()">Cancel</a>
+        <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
       </div>
       <div class="clearfix"></div>
     </div>
@@ -28,18 +28,18 @@
     <input ng-select-all items="reports" type="checkbox" />
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)">Mark as Read</a>
-    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)">Mark as Unread</a>
+    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>
+    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</a>
   </div>
   <div class="pull-left margin-right padding">
-    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)">Flag</a>
-    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)">Unflag</a>
+    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</a>
+    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</a>
   </div>
   <div class="clearfix"></div>
 </div>
 
 <div class="clearfix"></div>
 
-<p ng-hide="pagination.total > 0 ">Sorry, but we couldn't find any reports assigned to you.</p>
+<p ng-hide="pagination.total > 0 " translate>Sorry, but we couldn't find any reports assigned to you.</p>
 
 <div ng-include="'/templates/reports/table.html'"></div>

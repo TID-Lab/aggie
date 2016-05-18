@@ -3,7 +3,7 @@
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
       <div class="source" ng-class="sourceClass(source)">
-        <div class="icon-left">&nbsp;{{ source._id ? 'Edit' : 'Create' }} Source</div>
+        <div class="icon-left">&nbsp;{{ source._id ? 'Edit' : 'Create' | translate }} {{ 'Source' | translate }}</div>
     </h4>
   </div>
   <div class="modal-body">
@@ -11,44 +11,42 @@
       <form name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group" ng-class="{ 'read-only': source._id }">
-            <label for="media" class="col-lg-2 control-label">Media</label>
+            <label for="media" class="col-lg-2 control-label" translate>Media</label>
             <div class="col-lg-8">
               <select name="media" class="form-control" ng-model="source.media" ng-options="media as media | translate for media in mediaOptions" required ng-hide="source._id">
-                <option value="">Choose source media</option>
+                <option value="" translate>Choose source media</option>
               </select>
               <input type="text" class="form-control" ng-model="source.media" ng-show="source._id" readonly>
               <div class="has-error" ng-show="showErrors()">
-                <div class="help-block" ng-show="form.media.$error.required">Media is required.</div>
+                <div class="help-block" ng-show="form.media.$error.required" translate>Media is required.</div>
               </div>
             </div>
           </div>
 
-          <div class="alert alert-danger col-lg-10 col-lg-offset-1" ng-hide="validSourceMedia(source)">
+          <div class="alert alert-danger col-lg-10 col-lg-offset-1" ng-hide="validSourceMedia(source)" translate>
             Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.
           </div>
 
           <div class="form-group" ng-show="source.media && validSourceMedia(source)" ng-class="{ 'read-only': source.media == 'twitter' }">
-            <label for="nickname" class="col-lg-2 control-label">Nickname</label>
+            <label for="nickname" class="col-lg-2 control-label" translate>Nickname</label>
             <div class="col-lg-8">
               <div class="input-group">
                 <input type="text" ng-model="source.nickname" ng-readonly="source.media == 'twitter'" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" required maxlength="20" ng-focus>
                 <span class="input-group-addon"><span ng-show="source.nickname.length && form.nickname.$focused">{{20 - source.nickname.length}}</span></span>
               </div>
-              <div class="help-block" ng-hide="source.media == 'twitter'">A short name for this source.</div>
+              <div class="help-block" ng-hide="source.media == 'twitter'" translate>A short name for this source.</div>
               <div class="has-error" ng-show="showErrors() && form.nickname.$invalid">
-                <div class="help-block" ng-show="form.nickname.$error.required">Nickname is required.</div>
+                <div class="help-block" ng-show="form.nickname.$error.required" translate>Nickname is required.</div>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-show="source.media == 'twitter' && validSourceMedia(source)">
-            <label for="keywords" class="col-lg-2 control-label">Keywords</label>
+            <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
               <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords" ng-required="source.media == 'twitter'">
               </textarea>
-              <div class="help-block">
-                Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>. Note that <strong>passion fruit</strong> will match tweets containing both passion and fruit in any order. See <a href="https://dev.twitter.com/streaming/overview/request-parameters#track">here</a> for details.
-              </div>
+              <div class="help-block" translate="sources_modal.help"></div>
               <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
                 <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required for twitter sources.</div>
               </div>
@@ -56,7 +54,7 @@
           </div>
 
           <div class="form-group" ng-show="source.media && source.media != 'twitter' && validSourceMedia(source)">
-            <label for="url" class="col-lg-2 control-label">URL</label>
+            <label for="url" class="col-lg-2 control-label" translate>URL</label>
             <div class="col-lg-8">
               <div class="input-group">
                 <div ng-switch="source.media">
@@ -66,13 +64,13 @@
                 <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
               </div>
               <div class="help-block" ng-switch="source.media">
-                <span ng-switch-when="rss">The URL of the RSS feed, e.g. <strong>http://example.com/rss.xml</strong></span>
-                <span ng-switch-when="facebook">The URL of the Facebook page or group, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong></span>
-                <span ng-switch-when="elmo">The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong></span>
+                <span ng-switch-when="rss" translate="sources_modal.rss_url"></span>
+                <span ng-switch-when="facebook" translate="sources_modal.facebook_url"></span>
+                <span ng-switch-when="elmo" translate="sources_modal.elmo_url"></span>
               </div>
               <div class="has-error" ng-show="showErrors() && form.url.$invalid">
-                <div class="help-block" ng-show="form.url.$error.required">URL is required.</div>
-                <div class="help-block" ng-show="form.url.$dirty && !form.url.$error.required">URL is invalid.</div>
+                <div class="help-block" ng-show="form.url.$error.required" translate>URL is required.</div>
+                <div class="help-block" ng-show="form.url.$dirty && !form.url.$error.required" translate>URL is invalid.</div>
               </div>
             </div>
           </div>
@@ -81,7 +79,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()">Close</button>
-    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
+    <button class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>
