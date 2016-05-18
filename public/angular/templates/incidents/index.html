@@ -38,7 +38,7 @@
     </div>
     <div class="filter">
       <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
-        <option value="">Escalated?</option>
+        <option value="" translate>Escalated?</option>
       </select>
     </div>
     <div ng-hide="noFilters()">

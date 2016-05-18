@@ -6,7 +6,7 @@
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
-        <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="Enter keywords">
+        <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter keywords' | translate }}">
         <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.keywords">×</a>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
@@ -15,7 +15,7 @@
     </div>
     <div class="filter author-filter">
       <div class="input-group">
-        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="Enter author">
+        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter author' | translate }}">
         <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
