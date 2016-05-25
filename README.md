@@ -31,9 +31,10 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 1. Install **docker** (version >= 1.0.0, such as 1.11.0).
   - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
+  - Linux installations require to install **[docker-compose](https://docs.docker.com/compose/install/)** separetedly 
 2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
   - In your terminal, navigate to your main projects folder (e.g. Documents).
-  - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+  - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
 3. Start aggie
   - Navigate to the `docker` directory in aggie: `cd aggie/docker`
   - run `docker-compose up`
