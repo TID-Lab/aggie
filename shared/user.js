@@ -12,12 +12,12 @@
 
   User.permissions = {
     'view data': ['viewer', 'monitor', 'admin'],
-    'edit incidents': ['monitor', 'admin'],
-    'edit reports': ['monitor', 'admin'],
+    'edit data': ['monitor', 'admin'],
     'edit sources': ['monitor', 'admin'],
-    'toggle fetching': ['admin'],
     'manage trends': ['monitor', 'admin'],
     'change settings': ['admin'],
+    'view users': ['monitor', 'admin'],
+    'manage users': ['admin'],
     'change admin password': ['admin']
   };
 
