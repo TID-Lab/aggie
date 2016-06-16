@@ -9,7 +9,7 @@ angular.module('Aggie')
 .value('linkedtoIncidentOptions', [{ _id: 'any', title: '* Any Incident' },
                                    { _id: 'none', title: '* Without Incident' }])
 
-.value('userRoles', ['viewer', 'monitor', 'manager', 'admin'])
+.value('userRoles', ['viewer', 'monitor', 'admin'])
 
 .value('incidentStatusOptions', ['open', 'closed'])
 
