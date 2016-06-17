@@ -29,7 +29,7 @@
       <td class="compact content">{{ u.role | translate }}</td>
       <td ng-controller="UserFormModalController" class="actions compact">
         <a href ng-click="edit(u)"><i class="fa fa-pencil text-blue"></i></a>
-        <a href aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
+        <a href ng-show="currentUser.role === 'admin'" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
       </td>
     </tr>
   </tbody>

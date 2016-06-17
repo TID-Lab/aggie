@@ -18,7 +18,7 @@
     'change settings': ['admin'],
     'view users': ['viewer', 'monitor', 'admin'],
     'update users': ['viewer', 'monitor', 'admin'],
-    'admin users' : ['admin'],
+    'admin users': ['admin'],
     'change admin password': ['admin']
   };
 
