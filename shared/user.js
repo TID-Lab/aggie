@@ -16,8 +16,9 @@
     'edit sources': ['monitor', 'admin'],
     'manage trends': ['monitor', 'admin'],
     'change settings': ['admin'],
-    'view users': ['monitor', 'admin'],
-    'manage users': ['admin'],
+    'view users': ['viewer', 'monitor', 'admin'],
+    'update users': ['viewer', 'monitor', 'admin'],
+    'admin users' : ['admin'],
     'change admin password': ['admin']
   };
 
