@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div ng-hide="currentUser.role === 'viewer'" class="filter">
+    <div ng-hide="currentUser.can('not view other users')" class="filter">
       <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
         <option value="" translate>Assigned To</option>
       </select>
@@ -47,7 +47,7 @@
   </div>
 </form>
 
-<div ng-hide="currentUser.role === 'viewer'" class="button-row margin-bottom-lg">
+<div ng-show="currentUser.can('edit data')" class="button-row margin-bottom-lg">
   <div class="pull-left checkbox-btn bg-gray">
     <input ng-select-all items="incidents" type="checkbox" />
   </div>

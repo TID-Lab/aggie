@@ -57,7 +57,7 @@
   </div>
 </form>
 
-<div class="button-row margin-bottom-lg" ng-hide="currentUser.role === 'viewer'">
+<div class="button-row margin-bottom-lg" ng-show="currentUser.can('edit data')">
   <div class="pull-left checkbox-btn bg-gray">
     <input ng-select-all items="reports" type="checkbox" />
   </div>

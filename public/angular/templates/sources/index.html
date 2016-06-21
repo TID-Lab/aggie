@@ -1,5 +1,5 @@
 <div class="button-row">
-  <button ng-controller="SourceFormModalController" ng-hide="currentUser.role === 'viewer'"
+  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
           class="btn btn-info" ng-click="create()" translate>Create Source</button>
 </div>
 
@@ -12,10 +12,10 @@
     <tr>
       <th class="compact" translate>Media</th>
       <th class="compact" translate>Name</th>
-      <th class="compact" ng-hide="currentUser.role === 'viewer'" translate>Creator</th>
+      <th class="compact" ng-hide="currentUser.can('not view other users')" translate>Creator</th>
       <th class="expand" translate>Target</th>
-      <th class="compact" ng-hide="currentUser.role === 'viewer'" translate">New Warnings</th>
-      <th class="compact" ng-hide="currentUser.role === 'viewer'" translate>Enabled</th>
+      <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
+      <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
     </tr>
   </thead>
   <tbody>
@@ -28,13 +28,13 @@
           {{ s.nickname }}
         </a>
       </td>
-      <td class="compact content" ng-hide="currentUser.role === 'viewer'">
+      <td class="compact content" ng-hide="currentUser.can('not view other users')">
         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>
-      <td class="compact content zero-errors" ng-hide="currentUser.role === 'viewer'"
+      <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
           ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status" ng-hide="currentUser.role === 'viewer'">
+      <td class="compact status" ng-show="currentUser.can('edit data')">
         <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
       </td>
     </tr>
