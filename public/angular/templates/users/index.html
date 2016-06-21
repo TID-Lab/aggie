@@ -4,7 +4,7 @@
   </ul>
 </div>
 
-<div class="button-row">
+<div ng-show="currentUser.can('admin users')" class="button-row">
   <button ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
 </div>
 
