@@ -39,3 +39,6 @@ data
 config/cert.pem
 
 config/key.pem
+
+docs/_build
+
