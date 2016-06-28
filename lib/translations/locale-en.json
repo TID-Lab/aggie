@@ -1,0 +1,10 @@
+{
+  "newUser": {
+    "subject": "Welcome to Aggie!",
+    "body": "<p>A new Aggie user account has been created for you!<p>Your username is <strong><%= user.username %></strong>.</p><p>To choose a password and login to your account, <a href=\"<%= protocol %>://<%= host %>/choose_password/<%= token %>\">click here</a> or copy the link below into your browser.</p><p><%= protocol %>://<%= host %>/choose_password/<%= token %></p><p>You are receiving this message because someone created an account on <%= host %> for this email address. If you were not expecting this, please disregard this email.</p>"
+  },
+  "forgotPassword": {
+    "subject": "Aggie Password Reset Request",
+    "body": "<p>To change your Aggie password, <a href=\"<%= protocol %>://<%= host %>/password_reset/<%= token %>\">click here</a> or copy the link below into your browser.</p><p><%= protocol %>://<%= host %>/password_reset/<%= token %></p><p>You are receiving this message because someone requested a new password from <%= host %> for an account registered with this email address. If you did not initiate this request, please ignore this email.</p>"
+  }
+}
