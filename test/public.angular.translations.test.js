@@ -24,8 +24,7 @@ var prefix = 'locale-';
 var suffix = '.json';
 var debugFile = prefix + 'debug' + suffix;
 
-function getTranslations(callback) {
-   var dirname = 'public/angular/translations';
+function getTranslations(dirname, callback) {
    fs.readdir(dirname, function(err, filenames) {
      if (err) return callback(err);
      filenames = _.filter(filenames, function(filename) {
@@ -38,58 +37,63 @@ function getTranslations(callback) {
       });
     }, function(err, allLanguages) {
       if (err) return callback(err);
-      callback(null, _.object(allLanguages));
+      callback(null, _.fromPairs(allLanguages));
     });
   });
 }
 
-describe('Translations files', function() {
-  it('debug language should contain the union of the other languages',
-     function(done) {
-    getTranslations(function(err, allLanguages) {
-      if (err) return done(err);
-      var knownStrings = _.map(_.values(allLanguages), function(json) {
-        return deepKeys(JSON.parse(json));
+function testTranslationDir(dirname) {
+  describe('Translations files ' + dirname, function() {
+    it('debug language should contain the union of the other languages',
+       function(done) {
+      getTranslations(dirname, function(err, allLanguages) {
+        if (err) return done(err);
+        var knownStrings = _.map(_.values(allLanguages), function(json) {
+          return deepKeys(JSON.parse(json));
+        });
+        var allKnownStrings = _.union.apply({}, knownStrings);
+        expect(allLanguages).to.have.property(debugFile);
+        var debugTranslations = JSON.parse(allLanguages[debugFile]);
+        expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
+        done();
       });
-      var allKnownStrings = _.union.apply({}, knownStrings);
-      expect(allLanguages).to.have.property(debugFile);
-      var debugTranslations = JSON.parse(allLanguages[debugFile]);
-      expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
-      done();
+    });
+
+    it("dictionaries shouldn't have duplicate keys", function(done) {
+      function check(json, filename) {
+        var keys = {};
+        var lastKey;
+        var path = [];
+
+        var newKey = function(key) {
+          key = key.replace(/(\.)/g, '\\.');
+          var k = path.join('.') + (path.length ? '.' : '') + key;
+          expect(keys, 'file [' + filename + ']').to.not.have.property(k);
+          keys[k] = 'Yup';
+          lastKey = key;
+        };
+
+        clarinet.onkey = newKey;
+        clarinet.onopenobject = function(k) {
+          if (lastKey) {
+            path.push(lastKey);
+          }
+          newKey(k);
+        };
+        clarinet.oncloseobject = function() {
+          path.pop();
+        };
+        clarinet.write(json).close();
+      }
+
+      getTranslations(dirname, function(err, allLanguages) {
+        if (err) return done(err);
+        _.each(allLanguages, check);
+        done();
+      });
     });
   });
+}
 
-  it("dictionaries shouldn't have duplicate keys", function(done) {
-    function check(json, filename) {
-      var keys = {};
-      var lastKey;
-      var path = [];
-
-      var newKey = function(key) {
-        key = key.replace(/(\.)/g, '\\.');
-        var k = path.join('.') + (path.length ? '.' : '') + key;
-        expect(keys, 'file [' + filename + ']').to.not.have.property(k);
-        keys[k] = 'Yup';
-        lastKey = key;
-      };
-
-      clarinet.onkey = newKey;
-      clarinet.onopenobject = function(k) {
-        if (lastKey) {
-          path.push(lastKey);
-        }
-        newKey(k);
-      };
-      clarinet.oncloseobject = function() {
-        path.pop();
-      };
-      clarinet.write(json).close();
-    }
-
-    getTranslations(function(err, allLanguages) {
-      if (err) return done(err);
-      _.each(allLanguages, check);
-      done();
-    });
-  });
-});
+testTranslationDir('public/angular/translations');
+testTranslationDir('lib/translations');
