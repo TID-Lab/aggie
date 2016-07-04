@@ -30,6 +30,7 @@
     "feedparser": "~0.16.6",
     "fs-extra": "~0.15.0",
     "glob": "~3.2.9",
+    "graceful-fs": "^4.1.4",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.0",
