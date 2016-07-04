@@ -10,8 +10,8 @@ var livereload = require('gulp-livereload');
 var jsoncombine = require('gulp-jsoncombine');
 var path = require('path');
 var _ = require('lodash');
-var deepKeys = require('deep-keys');
 var merge = require('merge-stream');
+var makeDebugDict = require('./gulp/make-debug-translations');
 
 // Use --file=[filename] to run continuous tests on a file during development.
 // Gulp will automatically run the tests on that file whenever the code changes
@@ -91,19 +91,8 @@ pipes.debugTranslations = function(dirname) {
     path.join(dirname, 'locale-*.json')
   ])
     .pipe(jsoncombine(debugFilename, function(data) {
-      var keys = _.union.apply({}, _.map(data, function(dict) {
-        return deepKeys(dict);
-      }));
-      var names = _.map(keys, function name(key) {
-        var params = _.union.apply({}, _.map(data, function(dict) {
-          var translation = _.get(dict, key) || '';
-          return translation.match(/{{.*?}}/g);
-        }));
-        params = params.length ? ' [' + params + ']' : '';
-        return key.toUpperCase().replace(/ /g, '_') + params;
-      });
-      var result = _.zipObjectDeep(keys, names);
-      return new Buffer(JSON.stringify(result));
+      var result = makeDebugDict(_.values(data));
+      return new Buffer(JSON.stringify(result, null, 2));
     }))
     .pipe(gulp.dest(dirname));
 };
