@@ -6,12 +6,11 @@
     </h4>
   </div>
   <div class="modal-body">
-
-    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
-
+    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">create a new incident</button>.</p>
+    
     <div ng-show="incidents">
 
-      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">create a new incident</button>.</p>
 
       <div ng-include="'/templates/incidents/table.html'"></div>
 
