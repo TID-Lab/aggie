@@ -37,14 +37,9 @@
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
-        <div ng-if="incidents.length">
+        <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong ng-if="!r._incident">Add</strong>
-          </a>
-        </div>
-        <div ng-if="!incidents.length">
-          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
             <strong ng-if="!r._incident">Add</strong>
           </a>
         </div>
