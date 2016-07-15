@@ -91,8 +91,8 @@ angular.module('Aggie')
 
     $scope.$watch('details.geometry.location', function(newVal, oldVal) {
       if (oldVal == newVal) return;
-      $scope.incident.latitude = newVal.k;
-      $scope.incident.longitude = newVal.D;
+      $scope.incident.latitude = $scope.details.geometry.location.lat();
+      $scope.incident.longitude = $scope.details.geometry.location.lng();
     });
   }
 ])
