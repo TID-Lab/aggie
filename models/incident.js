@@ -70,14 +70,11 @@ schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
-    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {
-      if (err || !incident) return;
-    });
+    //Callbacks added to execute query immediately
+    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {});
   }
 
-  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err, incident) {
-    if (err || !incident) return;
-  });
+  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err, incident) {});
 
 });
 

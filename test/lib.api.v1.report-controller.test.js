@@ -39,7 +39,8 @@ describe('Report controller', function() {
 
   function createIncidents(done) {
     Incident.create([
-      { authoredAt: new Date(), title: 'First incident'}
+      { authoredAt: new Date(), title: 'First incident'},
+      { authoredAt: new Date(), title: 'Second incident'}
     ], done);
   }
 
@@ -63,7 +64,7 @@ describe('Report controller', function() {
   });
 
   afterEach(function(done) {
-    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {})], done);
+    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {}), Incident.remove.bind(Incident, {})], done);
   });
 
   describe('GET /api/v1/report', function() {
@@ -187,10 +188,10 @@ describe('Report controller', function() {
       async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
     });
 
-    it('should link reports to specific Incident', function(done) {
+    it('should link 2 reports to specific Incident', function(done) {
       request(reportController)
         .patch('/api/v1/report/_link')
-        .send({ ids: [reports[0].id, reports[1].id], incident: incidents[0]._id })
+        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
@@ -213,17 +214,28 @@ describe('Report controller', function() {
           });
         });
     });
+
     it('should update the totalReports field in incident', function(done) {
       request(reportController)
         .patch('/api/v1/report/_link')
-        .send({ ids: [reports[2].id], incident: incidents[0]._id })
+        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
-          Incident.findById(incidents[0]._id, function(err, incident) {
-            expect(incident.totalReports).to.equal(3);
-            done();
-          });
+            Incident.findById(incidents[0]._id, function(err, incident) {
+              expect(incident.totalReports).to.equal(2);
+              request(reportController)
+                .patch('/api/v1/report/_link')
+                .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
+                .expect(200)
+                .end(function(err) {
+                  if (err) return done(err);
+                  Incident.findById(incidents[0]._id, function(err, inc) {
+                    expect(inc.totalReports).to.equal(0);
+                    done(err);
+                  });
+                });
+            });
         });
     });
   });
