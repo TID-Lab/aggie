@@ -2,30 +2,30 @@
   <div class="modal-header">
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
-      <div class="icon-left" ng-show="incident._id == null">Create Incident</div>
-      <div class="icon-left" ng-show="incident._id != null">Edit Incident</div>
+      <div class="icon-left" ng-show="incident._id == null" translate>Create Incident</div>
+      <div class="icon-left" ng-show="incident._id != null" translate>Edit Incident</div>
     </h4>
   </div>
   <div class="modal-body">
-    <p ng-show="report" class="info">Enter the incident details below<span ng-show="incidents.length">. Or you can <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">choose an existing incident</button></span>.</p>
+    <p ng-show="report" class="info">{{'Enter the incident details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing incident' | translate}}</button></span>.</p>
     <div class="well bs-component">
       <form name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group">
-            <label for="Title" class="col-lg-2 control-label">Title</label>
+            <label for="Title" class="col-lg-2 control-label" translate>Title</label>
             <div class="col-lg-9">
               <div class="input-group">
                 <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" maxlength="32" required ng-focus>
                 <span class="input-group-addon"><span ng-show="incident.title.length && form.title.$focused">{{32 - incident.title.length}}</span></span>
               </div>
               <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.title.$error.required">Title is required.</div>
+                <div class="help-block" ng-show="form.title.$error.required" translate>Title is required.</div>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-hide="minimal">
-            <label for="veracity" class="col-lg-2 control-label">Veracity</label>
+            <label for="veracity" class="col-lg-2 control-label" translate>Veracity</label>
             <div class="col-lg-4">
               <select ng-model="incident.veracity"
                       class="form-control"
@@ -33,66 +33,66 @@
               </select>
             </div>
 
-            <label class="col-lg-2 control-label">Status</label>
+            <label class="col-lg-2 control-label" translate>Status</label>
             <div class="col-lg-3">
               <select ng-model="incident.closed"
                       class="form-control"
                       ng-options="v.value as v.label for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
               </select>
               <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.user.$error.required">User is required.</div>
+                <div class="help-block" ng-show="form.user.$error.required" translate>User is required.</div>
               </div>
             </div>
 
           </div>
 
           <div class="form-group" ng-hide="minimal">
-            <label for="escalated" class="col-lg-2 control-label">Escalated</label>
+            <label for="escalated" class="col-lg-2 control-label" translate>Escalated</label>
             <div class="col-lg-9">
               <input type="checkbox" id="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
             </div>
           </div>
 
           <div class="form-group">
-            <label for="location" class="col-lg-2 control-label">Location</label>
+            <label for="location" class="col-lg-2 control-label" translate>Location</label>
             <div class="col-lg-9">
               <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
-              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng">Edit coordinates...</button>
+              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng" translate>Edit coordinates...</button>
             </div>
           </div>
 
           <div class="form-group" ng-hide="minimalLatLng">
-            <label for="latitude" class="col-lg-2 control-label inline">Latitude</label>
+            <label for="latitude" class="col-lg-2 control-label inline" translate>Latitude</label>
             <div class="col-lg-3 inline">
               <input id="latitude" ng-required="incident.longitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="incident.latitude">
               <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.latitude.$error.pattern">Latitude is invalid.</div>
+                <div class="help-block" ng-show="form.latitude.$error.pattern" translate>Latitude is invalid.</div>
                 <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin">Latitude is invalid.</div>
-                <div class="help-block" ng-show="form.latitude.$error.required">Latitude is required if longitude is entered.</div>
+                <div class="help-block" ng-show="form.latitude.$error.required" translate>Latitude is required if longitude is entered.</div>
               </div>
             </div>
             <div class="col-lg-1 inline"></div>
-            <label for="longitude" class="col-lg-2 control-label inline">Longitude</label>
+            <label for="longitude" class="col-lg-2 control-label inline" translate>Longitude</label>
             <div class="col-lg-3 inline">
               <input id="longitude" ng-required="incident.latitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-180" ng-max="180" name="longitude" type="text" class="form-control" ng-round="6" ng-model="incident.longitude">
               <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin">Longitude is invalid.</div>
-                <div class="help-block" ng-show="form.longitude.$error.required">Longitude is required if latitude is entered.</div>
-                    <div class="help-block" ng-show="form.longitude.$error.pattern">Longitude is invalid.</div>
+                <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin" translate>Longitude is invalid.</div>
+                <div class="help-block" ng-show="form.longitude.$error.required" translate>Longitude is required if latitude is entered.</div>
+                    <div class="help-block" ng-show="form.longitude.$error.pattern" translate>Longitude is invalid.</div>
               </div>
             </div>
           </div>
           <div class="form-group" ng-hide="minimal">
-            <label for="user" class="col-lg-2 control-label">Assign To</label>
+            <label for="user" class="col-lg-2 control-label" translate>Assign To</label>
             <div class="col-lg-9">
               <select id="user" name="user" ng-model="incident.assignedTo"
                 ng-options="user as user.username for user in users track by user._id" class="form-control">
-                <option value="">Select User</option>
+                <option value="" translate>Select User</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="notes" class="col-lg-2 control-label">Notes</label>
+            <label for="notes" class="col-lg-2 control-label" translate>Notes</label>
             <div class="col-lg-9 notes-text">
               <textarea id="notes" name="notes" class="form-control" ng-model="incident.notes"></textarea>
             </div>
@@ -102,7 +102,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()">Close</button>
-    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
+    <button class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>

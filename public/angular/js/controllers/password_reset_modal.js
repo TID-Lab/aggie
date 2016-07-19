@@ -15,15 +15,13 @@ angular.module('Aggie').controller('PasswordResetModalController', [
       modalInstance.result.then(function(email) {
         $http.post('/reset-password', { email: email })
           .success(function(response) {
-            flash.setNoticeNow('An email has been sent to ' +
-              email + ' with instructions for resetting your password' );
+            flash.setNoticeNow('passwordReset.email.success', { email: email });
           })
           .error(function(mesg, status) {
             if (status == 404) {
-              flash.setAlertNow('User with email ' +
-                email + ' does not exist.');
+              flash.setAlertNow('passwordReset.email.noUser', { email: email });
             } else {
-              flash.setAlertNow('There was an error sending the password reset email. Please contact support.');
+              flash.setAlertNow('passwordReset.email.error');
             }
           });
       });

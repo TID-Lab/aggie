@@ -2,13 +2,13 @@
   <thead>
     <tr>
       <th></th>
-      <th>Time</th>
-      <th>Media</th>
-      <th>Source</th>
-      <th>Author</th>
-      <th>Content</th>
-      <th ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
-      <th>Flagged</th>
+      <th translate>Time</th>
+      <th translate>Media</th>
+      <th translate>Source</th>
+      <th translate>Author</th>
+      <th translate>Content</th>
+      <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
+      <th translate>Flagged</th>
     </tr>
   </thead>
   <tbody>
@@ -40,7 +40,7 @@
         <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong ng-if="!r._incident">Add</strong>
+            <strong ng-if="!r._incident" translate>Add</strong>
           </a>
         </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>

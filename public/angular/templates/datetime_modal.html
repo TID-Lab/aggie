@@ -1,7 +1,7 @@
 <div ng-controller="DatetimeModalController">
   <div class="modal-header">
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
-    <h4 class="modal-title">Date Filters</h4>
+    <h4 class="modal-title" translate>Date Filters</h4>
   </div>
   <div class="modal-body">
     <div class="well bs-component">
@@ -9,21 +9,21 @@
         <fieldset>
           <div class="form-group">
             <div>
-              <label for="type" class="control-label">From:</label>
-              <input type="text" name="after" aggie-datepicker ng-model="times.after" placeholder="Start date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
+              <label for="type" class="control-label" translate>From:</label>
+              <input type="text" name="after" aggie-datepicker ng-model="times.after" placeholder="{{ 'Start date / time' | translate }}" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
             <div>
-              <label for="type" class="control-label">To:</label>
-              <input type="text" name="before" aggie-datepicker ng-model="times.before" placeholder="End date / time" data-date-format="MM/DD/YYYY HH:mm:ss">
+              <label for="type" class="control-label" translate>To:</label>
+              <input type="text" name="before" aggie-datepicker ng-model="times.before" placeholder="{{ 'End date / time' | translate }}" data-date-format="MM/DD/YYYY HH:mm:ss">
             </div>
-            <button class="btn btn-default" ng-click="clear()">Clear</button>
+            <button class="btn btn-default" ng-click="clear()" translate>Clear</button>
           </div>
         </fieldset>
       </form>
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()">Cancel</button>
-    <button class="btn btn-primary" ng-click="save(form)">Submit</button>
+    <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>

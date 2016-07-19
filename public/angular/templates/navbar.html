@@ -7,10 +7,10 @@
         </a>
       </div>
       <ul class="nav navbar-nav" ng-show="currentUser && !$state.includes('reset_admin_password') ">
-        <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports">Reports</a></li>
-        <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents">Incidents</a></li>
-        <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources">Sources</a></li>
-        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis">Analysis</a></li>
+        <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports" translate>Reports</a></li>
+        <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents" translate>Incidents</a></li>
+        <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources" translate>Sources</a></li>
+        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis" translate>Analysis</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="currentUser && !$state.includes('reset_admin_password')">
         <li ui-sref-active="active" class="user">
@@ -19,20 +19,20 @@
           {{currentUser.username}}</a>
         </li>
         <li ui-sref-active="active">
-          <a id="dropdownMenu1" data-target="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+          <a id="dropdownMenu1" data-target="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" translate>
             Settings
           </a>
           <ul class="nav dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
             <li role="presentation">
               <a href role="menuitem" tabindex="-1" ui-sref="settings">
                 <i class="fa fa-gear fa-fw"></i>
-                Settings
+                {{'Settings' | translate}}
               </a>
             </li>
             <li role="presentation">
               <a href role="menuitem" tabindex="-1" ui-sref="users">
                 <i class="fa fa-users fa-fw"></i>
-                Users
+                {{'Users' | translate}}
               </a>
             </li>
           </ul>
@@ -40,7 +40,7 @@
         <li>
           <a href ng-click="logout()">
             <i class="fa fa-sign-out fa-fw"></i>
-            Log out
+            {{'Log out' | translate}}
           </a>
         </li>
       </ul>
@@ -48,7 +48,7 @@
         <li ui-sref-active="active">
           <a href ui-sref="login">
             <i class="fa fa-sign-in fa-fw"></i>
-            Log in
+            {{'Log in' | translate}}
           </a>
         </li>
       </ul>
@@ -56,7 +56,7 @@
         <li ui-sref-active="active">
                     <a href ng-click="logout()">
             <i class="fa fa-sign-out fa-fw"></i>
-            Log out
+            {{'Log out' | translate}}
           </a>
         </li>
       </ul>
@@ -66,20 +66,20 @@
     <div class="container">
       <p class="navbar-text" ng-if="stats">
         <span class="nav-bar-number">{{stats.totalReports | number}}</span>
-        <span class="nav-bar-label">Total Reports</span>
+        <span class="nav-bar-label" translate>Total Reports</span>
         <span class="nav-bar-number">{{stats.totalReportsPerMinute | number}}</span>
-        <span class="nav-bar-label">Reports/min</span>
+        <span class="nav-bar-label" translate>Reports/min</span>
         <span class="nav-bar-number">{{stats.totalReportsUnread | number}}</span>
-        <span class="nav-bar-label">Unread</span>
+        <span class="nav-bar-label" translate>Unread</span>
         <span class="nav-bar-number">{{stats.totalReportsFlagged | number}}</span>
-        <span class="nav-bar-label">Flagged</span>
+        <span class="nav-bar-label" translate>Flagged</span>
         <span class="nav-bar-number">{{stats.totalIncidents | number}}</span>
-        <span class="nav-bar-label">Incidents</span>
+        <span class="nav-bar-label" translate>Incidents</span>
         <span class="nav-bar-number">{{stats.totalEscalatedIncidents | number}}</span>
-        <span class="nav-bar-label">Escalated Incidents</span>
+        <span class="nav-bar-label" translate>Escalated Incidents</span>
       </p>
       <div class="source-errors" ng-show="unreadErrorCount > 0">
-        <a href ui-sref="sources" ui-sref-opts="{ reload: true }"><i class="fa fa-warning"></i> {{ unreadErrorCount }} Warnings</a>
+        <a href ui-sref="sources" ui-sref-opts="{ reload: true }"><i class="fa fa-warning"></i> {{ unreadErrorCount }} {{'Warnings' | translate}}</a>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} new reports available.</a></alert>
+<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <form>
   <div class="table-filters">
     <div class="filter search">
@@ -6,49 +6,49 @@
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
-        <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="Enter keywords">
+        <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter keywords' | translate }}">
         <a href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.keywords">×</a>
         <div class="input-group-btn">
-          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+          <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
         </div>
       </div>
     </div>
     <div class="filter author-filter">
       <div class="input-group">
-        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="Enter author">
+        <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter author' | translate }}">
         <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
         <div class="input-group-btn">
-          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+          <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
         </div>
       </div>
     </div>
     <div class="filter status-filter">
       <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
-        <option value="">Status</option>
+        <option value="" translate>Status</option>
       </select>
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.media" ng-options="media | capitalize | translate for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
-        <option value="">Media</option>
+        <option value="" translate>Media</option>
       </select>
     </div>
     <div class="filter source-type-filter">
       <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
-        <option value="">Source</option>
+        <option value="" translate>Source</option>
       </select>
     </div>
     <div class="filter incident-filter">
       <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
-        <option value="">Linked Incident</option>
+        <option value="" translate>Linked Incident</option>
       </select>
     </div>
     <div class="filter date-filter">
       <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
         <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
-        <span ng-switch-when="3">From <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-        <span ng-switch-when="2">After <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
-        <span ng-switch-when="1">Before <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-        <span ng-switch-default>Date/Time</span>
+          <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+          <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+          <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+        <span ng-switch-default translate>Date/Time</span>
       </button>
     </div>
     <div ng-hide="noFilters()">
@@ -62,27 +62,27 @@
     <input ng-select-all items="reports" type="checkbox" />
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)">Mark as Read</a>
-    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)">Mark as Unread</a>
+    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>
+    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</a>
   </div>
   <div class="pull-left margin-right padding">
-    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)">Flag</a>
-    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)">Unflag</a>
+    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</a>
+    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</a>
   </div>
   <div class="pull-left margin-right padding">
-    <a ng-class="{highlight: someSelected()}" class="btn btn-default"ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)">Add to Incident</a>
+    <a ng-class="{highlight: someSelected()}" class="btn btn-default"ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>Add to Incident</a>
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <button class="btn btn-primary" ng-click="grabBatch()">Grab Batch</button>
+    <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
   </div>
   <div class="pull-left margin-left padding-top-bottom">
-    <a ng-if="!countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(true)">Mark all Read</a>
-    <a ng-if="countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(false)">Mark all Unread</a>
+    <a ng-if="!countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(true)" translate>Mark all Read</a>
+    <a ng-if="countAndCheck('read', true)" class="btn btn-default" ng-click="toggleAllRead(false)" translate>Mark all Unread</a>
   </div>
   <div class="pull-right padding-top-bottom pagination">
     <ul class="pager">
       <li class="pager-label">
-        {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total | maxCount:pagination.visibleTotal }}
+        {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
       </li>
       <li>
         <button ng-class="{disabled: isFirstPage() }" ui-sref="reports({ page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
@@ -96,6 +96,6 @@
 
 <div class="clearfix"></div>
 
-<p ng-hide="pagination.total > 0">Sorry, but we couldn't find any results.</p>
+<p ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p>
 
 <div ng-include="'/templates/reports/table.html'"></div>

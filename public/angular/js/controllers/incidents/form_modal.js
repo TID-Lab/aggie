@@ -50,11 +50,11 @@ angular.module('Aggie')
               }
             });
           } else {
-            flash.setNotice('Incident was successfully created.');
+            flash.setNotice('incident.create.success');
             $rootScope.$state.go('incidents', {}, { reload: true });
           }
         }, function(err) {
-          flash.setAlertNow('Incident failed to be created. Please contact support.');
+          flash.setAlertNow('incident.create.error');
         });
       });
 
@@ -79,14 +79,14 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(incident) {
         Incident.update({ id: incident._id }, incident, function(response) {
-          flash.setNotice('Incident was successfully updated.');
+          flash.setNotice('incident.update.success');
           if ($state.is('incidents')) {
             $state.go('incidents', { page: 1, title: null }, { reload: true });
           } else {
             $state.go('incident', { id: incident._id }, { reload: true });
           }
         }, function() {
-          flash.setAlertNow('Incident failed to be updated.');
+          flash.setAlertNow('incident.update.error');
         });
       });
     };

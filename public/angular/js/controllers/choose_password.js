@@ -14,7 +14,7 @@ angular.module('Aggie').controller('ChoosePasswordController', [
 
     $scope.resetPassword = function() {
       if (!$scope.passwordsMatch()) {
-        return flash.setAlertNow('Passwords do not match');
+        return flash.setAlertNow('passwordReset.noMatch');
       }
 
       var params = {
@@ -25,10 +25,10 @@ angular.module('Aggie').controller('ChoosePasswordController', [
       $http.put('/reset-password', params).success(function(userData) {
         AuthService.login({username: userData.username, password: params.password}, function(err) {
           if (err) {
-            flash.setAlertNow('An error has occurred when resetting your password');
-            $state.go('login')
+            flash.setAlertNow('passwordReset.error');
+            $state.go('login');
           } else {
-            flash.setNotice('Your password has been successfully reset.');
+            flash.setNotice('passwordReset.success');
             $state.go('reports');
           }
         });

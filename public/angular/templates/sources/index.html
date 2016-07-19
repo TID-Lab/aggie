@@ -1,20 +1,20 @@
 <div class="button-row">
-  <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()">Create Source</button>
+  <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()" translate>Create Source</button>
 </div>
 
 <div class="clearfix"></div>
 
-<p ng-hide="sources.length > 0">Sorry, but we couldn't find any sources.</p>
+<p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
 
 <table aggie-table ng-show="sources.length > 0">
   <thead>
     <tr>
-      <th class="compact">Media</th>
-      <th class="compact">Name</th>
-      <th class="compact">Creator</th>
-      <th class="expand">Target</th>
-      <th class="compact">New Warnings</th>
-      <th class="compact">Enabled</th>
+      <th class="compact" translate>Media</th>
+      <th class="compact" translate>Name</th>
+      <th class="compact" translate>Creator</th>
+      <th class="expand" translate>Target</th>
+      <th class="compact" translate>New Warnings</th>
+      <th class="compact" translate>Enabled</th>
     </tr>
   </thead>
   <tbody>
