@@ -31,7 +31,7 @@
         <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
       <td class="compact"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
-      <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] }}</td>
+      <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
       <td class="compact content">
         <div ng-if="i.veracity != null">
           <div translate>Confirmed</div>

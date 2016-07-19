@@ -15,11 +15,18 @@ Aggie sends is in `lib/mailer.js`, for all languages.
 
 When adding a new string that will be shown on the app, give the translation a
 translation ID (possibly the string itself). Then include this string in
-`locale-en.json` as `"translation_id": "your string"`.
+`locale-en.json` as `"translation_id": "your string"`. Strings can include 
 
-To show your string, you can then just use your translation ID and pass it
-through the [angular translate filter](https://angular-translate.github.io/docs/#/guide/04_using-translate-filter)
-or [directive](https://angular-translate.github.io/docs/#/guide/05_using-translate-directive).
+To show your string, you can then just use its translation ID and pass it
+through the [angular translate filter]
+(https://angular-translate.github.io/docs/#/guide/04_using-translate-filter) 
+e.g.,  `placeholder="{{'Enter title' | translate}}"`, or 
+[directive](https://angular-translate.github.io/docs/#/guide/05_using-translate-directive), 
+e.g., `<button translate>Go</button>`. If your strings needs to display 
+interpolated values, as in `Password must be at least {{passwordMinLength}} characters`,
+you can use the translate angular directive together with the translate-value directive as in:
+``translate="password_min_length" translate-value-passwordMinLength="{{passwordMinLength}}">``
+
 To check that your string is being translated correctly, run the app and execute
 the following in the browser console to switch the language to `debug`:
 
@@ -27,7 +34,9 @@ the following in the browser console to switch the language to `debug`:
 angular.element(document.querySelector('html')).injector().get('$translate').use('debug').then((x) => { console.log(x)})
 ```
 
-Your string should immediately be replaced by "SHORT DESCRIPTION OF YOUR STRING".
+The new string, and all the other strings, should change to the translation ID
+and be displayed _ALL_CAPS_UNDERSCORE_DELIMITED, plus any interpolated
+parameters found in the input strings, e.g., `_SHORT_DESCRIPTION_OF_YOUR_STRING`.
 
 
 ### Supporting more languages
