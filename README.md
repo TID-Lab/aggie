@@ -56,7 +56,7 @@ The following need to be installed.
       - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
       - After installing nvm:
       1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-      2. use this command: `nvm use 0.10`.
+      2. use this command: `nvm use` to install the version specified in `.nvmrc`.
 2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
   1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
   2. Stop and restart Mongo DB.
