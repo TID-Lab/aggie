@@ -1,5 +1,8 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
+var async = require('async');
 var Incident = require('../models/incident');
 var IncidentQuery = require('../models/query/incident-query');
 
@@ -11,11 +14,12 @@ describe('Incident query attributes', function() {
     });
     Incident.remove(function(err) {
       if (err) return done(err);
-      Incident.create({title: 'The quick brown fox', veracity: null, closed: true});
-      Incident.create({title: 'The slow white fox', veracity: true, closed: false});
-      Incident.create({title: 'The quick brown chicken', veracity: null, closed: false});
-      Incident.create({title: 'The brown quick fox', veracity: false, closed: true});
-      done();
+      async.each([
+        { title: 'The quick brown fox', veracity: null, closed: true },
+        { title: 'The slow white fox', veracity: true, closed: false },
+        { title: 'The quick brown chicken', veracity: null, closed: false },
+        { title: 'The brown quick fox', veracity: false, closed: true }
+      ], Incident.create.bind(Incident), done);
     });
   });
 
