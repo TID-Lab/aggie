@@ -70,6 +70,27 @@ function wipeModels(models) {
 }
 module.exports.wipeModels = wipeModels;
 
+function waitForEventsToStop(emitter, eventName, timeout, callback) {
+  var x;
+
+  var start = function() {
+    setTimeout(function() {
+      x = null;
+      callback();
+    }, timeout);
+  };
+
+  start();
+
+  emitter.on(eventName, function() {
+    if (x) {
+      clearTimeout(x);
+      start();
+    }
+  });
+}
+module.exports.waitForEventsToStop = waitForEventsToStop;
+
 function removeUsersExceptAdmin(done) {
   var query = {
     username: { $ne: 'admin' }
