@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var PushBot = require('../lib/fetching/bots/push-bot');
 var Bot = require('../lib/fetching/bot');
@@ -29,4 +29,5 @@ describe('Push bot', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

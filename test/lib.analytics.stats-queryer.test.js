@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var StatsQueryer = require('../lib/analytics/stats-queryer');
 var Report = require('../models/report');
@@ -66,7 +66,7 @@ describe('StatsQueryer', function() {
       done();
     });
   });
-  
+
   it('should count reports incidents', function(done) {
     this.statsQueryer.count('incidents', function(err, stats) {
       expect(stats.totalIncidents).to.equal(3);
@@ -76,4 +76,5 @@ describe('StatsQueryer', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

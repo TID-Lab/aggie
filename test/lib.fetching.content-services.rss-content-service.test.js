@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var RSSContentService = require('../lib/fetching/content-services/rss-content-service');
 var fs = require('fs');
@@ -21,7 +21,7 @@ describe('RSS content service', function() {
 
   it('should fetch empty content', function(done) {
     var service = stubWithFixture('rss-empty.json');
-    expectToNotEmitReport(service, done);
+    utils.expectToNotEmitReport(service, done);
     service.once('error', function(err) { done(err); });
     setTimeout(done, 100);
   });
@@ -134,4 +134,6 @@ describe('RSS content service', function() {
 
     service.fetch({maxCount: 50}, function(){});
   });
+
+  after(utils.expectModelsEmpty);
 });

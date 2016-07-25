@@ -1,9 +1,8 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
 var incidentController = require('../lib/api/v1/incident-controller')();
-var Incident = require('../models/incident');
 
 var incident;
 describe('Incident controller', function() {
@@ -146,4 +145,6 @@ describe('Incident controller', function() {
         });
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

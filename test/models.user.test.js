@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var chai = require('chai');
 var should = chai.should();
 var User = require('../models/user');
@@ -50,4 +50,7 @@ describe('User attributes', function() {
       done();
     });
   });
+
+  after(utils.removeUsersExceptAdmin);
+  after(utils.expectModelsEmpty);
 });

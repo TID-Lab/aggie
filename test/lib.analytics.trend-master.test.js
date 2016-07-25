@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
@@ -179,4 +179,6 @@ describe('Trend master', function() {
       });
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

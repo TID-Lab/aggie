@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
@@ -124,4 +124,5 @@ describe('Trend controller', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

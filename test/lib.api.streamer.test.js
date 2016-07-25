@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var streamer = require('../lib/api/streamer');
 var ReportQuery = require('../models/query/report-query');
@@ -56,4 +56,7 @@ describe('Streamer', function() {
       done();
     });
   });
+
+  after(utils.wipeModels([Report]));
+  after(utils.expectModelsEmpty);
 });

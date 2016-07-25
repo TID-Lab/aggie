@@ -1,7 +1,8 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var botFactory = require('../lib/fetching/bot-factory');
 var ContentService = require('../lib/fetching/content-service');
+var Report = require('../models/report');
 
 describe('Bot', function() {
   before(function(done) {
@@ -51,4 +52,5 @@ describe('Bot', function() {
     bot.clearQueue();
   });
 
+  after(utils.expectModelsEmpty);
 });

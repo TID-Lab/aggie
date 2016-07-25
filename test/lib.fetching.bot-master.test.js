@@ -1,8 +1,5 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
-var request = require('supertest');
-var _ = require('underscore');
-var EventEmitter = require('events').EventEmitter;
 var botMaster = require('../lib/fetching/bot-master');
 var Bot = require('../lib/fetching/bot');
 var Source = require('../models/source');
@@ -80,4 +77,7 @@ describe('BotMaster', function() {
     expect(botMaster.bots).to.be.empty;
     done();
   });
+
+  after(utils.wipeModels([Source]));
+  after(utils.expectModelsEmpty);
 });

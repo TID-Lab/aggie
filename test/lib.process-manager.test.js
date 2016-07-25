@@ -1,9 +1,8 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var processManager = require('../lib/process-manager');
-var Source = require('../models/source');
-var botMaster = require('../lib/fetching/bot-master');
 var request = require('supertest');
+var Source = require('../models/source');
 var Report = require('../models/report');
 
 /**
@@ -158,4 +157,6 @@ describe('Process manager', function() {
     });
   });
 
+  after(utils.wipeModels([Report, Source]));
+  after(utils.expectModelsEmpty);
 });

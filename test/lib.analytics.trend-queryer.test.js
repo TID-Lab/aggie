@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var TrendQueryer = require('../lib/analytics/trend-queryer');
 var Trend = require('../models/trend');
@@ -148,13 +148,6 @@ describe('Trend queryer', function() {
   });
 
   // Clean up
-  after(function(done) {
-    Trend.remove(function(err) {
-      if (err) return done(err);
-      Report.remove(function(err) {
-        if (err) return done(err);
-        done();
-      });
-    });
-  });
+  after(utils.wipeModels([Trend, Report]));
+  after(utils.expectModelsEmpty);
 });

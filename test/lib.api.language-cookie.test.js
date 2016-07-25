@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var express = require('express');
@@ -19,6 +19,7 @@ describe('Language cookie', function() {
       .expect(200)
       .expect('set-cookie', 'aggie-lang=en; Path=/', done);
   });
+
   it('should pick the best language', function(done) {
     request(app)
       .get('/reports')
@@ -26,4 +27,6 @@ describe('Language cookie', function() {
       .expect(200)
       .expect('set-cookie', 'aggie-lang=es; Path=/', done);
   });
+
+  after(utils.expectModelsEmpty);
 });

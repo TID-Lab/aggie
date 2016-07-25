@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var statsMaster = require('../lib/analytics/stats-master');
 var statsQueryer = require('../lib/analytics/stats-queryer');
@@ -108,4 +108,6 @@ describe('StatsMaster', function() {
       done();
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var SocketHandler = require('../lib/api/socket-handler');
 var streamer = require('../lib/api/streamer');
@@ -126,4 +126,8 @@ describe('Socket handler', function() {
   after(function(done) {
     socketHandler.server.close(done);
   });
+
+  // Clean up the database
+  after(utils.wipeModels([Report, Incident, Source]));
+  after(utils.expectModelsEmpty);
 });

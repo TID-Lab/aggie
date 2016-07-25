@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var settingsController = require('../lib/api/v1/settings-controller');
@@ -197,4 +197,5 @@ describe('Settings controller', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

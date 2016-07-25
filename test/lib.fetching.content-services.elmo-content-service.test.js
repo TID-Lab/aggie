@@ -1,5 +1,4 @@
-require('./init');
-var util = require('util');
+var utils = require('./init');
 var expect = require('chai').expect;
 var fs = require('fs');
 var ELMOContentService = require('../lib/fetching/content-services/elmo-content-service');
@@ -29,7 +28,7 @@ describe('ELMO content service', function() {
 
   it('should fetch empty content', function(done) {
     var service = stubWithFixture('elmo-0.json');
-    expectToNotEmitReport(service, done);
+    utils.expectToNotEmitReport(service, done);
     expect(service._lastReportDate).to.be.undefined;
     service.once('error', function(err) {
       done(err);
@@ -74,7 +73,7 @@ describe('ELMO content service', function() {
 
     it('should emit a missing URL error', function(done) {
       var service = new ELMOContentService({});
-      expectToNotEmitReport(service, done);
+      utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing ELMO URL', done);
       service.fetch({maxCount: 50}, function(){});
     });
@@ -86,16 +85,18 @@ describe('ELMO content service', function() {
       service._httpRequest = function(params, callback) {
         process.nextTick(function() { callback({message: 'Unauthorized'}); });
       };
-      expectToNotEmitReport(service, done);
+      utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Unauthorized', done);
       service.fetch({maxCount: 50}, function(){});
     });
 
     it('should emit json parse error', function(done) {
       var service = stubWithFixture('elmo-bad.json');
-      expectToNotEmitReport(service, done);
+      utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Parse error: Unexpected end of input', done);
       service.fetch({maxCount: 50}, function(){});
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var ReportQuery = require('../models/query/report-query');
 
@@ -23,4 +23,6 @@ describe('Query attributes', function() {
     var similar = ReportQuery.compare(otherQuery, query);
     expect(similar).to.be.true;
   });
+
+  after(utils.expectModelsEmpty);
 });

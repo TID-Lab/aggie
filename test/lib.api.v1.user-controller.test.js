@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var userController = require('../lib/api/v1/user-controller')();
@@ -6,12 +6,6 @@ var User = require('../models/user');
 var users;
 
 describe('User controller', function() {
-
-  // Clearing the db should eventually move to a global afterEach, but for now it's here else we'd break existing tests.
-  beforeEach(function(done){
-    User.remove({}, function(err){ done(err); });
-  });
-
   // Create some users.
   beforeEach(function(done) {
     User.create([
@@ -23,6 +17,10 @@ describe('User controller', function() {
     });
   });
 
+  // Clearing the db should eventually move to a global afterEach, but for now
+  // it's here else we'd break existing tests.
+  afterEach(utils.removeUsersExceptAdmin);
+
   describe('GET /api/v1/user', function() {
     it('should get a list of all users', function(done) {
       request(userController)
@@ -30,8 +28,9 @@ describe('User controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          expect(res.body.length).to.equal(2);
-          expect(res.body[0].username).to.equal('foo');
+          // The admin user is always around, so 2+1=3
+          expect(res.body.length).to.equal(3);
+          expect(res.body[1].username).to.equal('foo');
           done();
         });
     });
@@ -104,4 +103,5 @@ describe('User controller', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var contentServiceFactory = require('../lib/fetching/content-service-factory');
 var ContentService = require('../lib/fetching/content-service');
@@ -25,4 +25,6 @@ describe('Content service', function() {
       done();
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

@@ -1,8 +1,7 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var Incident = require('../models/incident');
 var IncidentQuery = require('../models/query/incident-query');
-var _ = require('underscore');
 
 var query;
 describe('Incident query attributes', function() {
@@ -90,4 +89,6 @@ describe('Incident query attributes', function() {
     });
   });
 
+  after(utils.wipeModels([Incident]));
+  after(utils.expectModelsEmpty);
 });

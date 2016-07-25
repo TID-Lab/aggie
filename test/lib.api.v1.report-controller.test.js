@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 require('../lib/database');
@@ -23,9 +23,9 @@ describe('Report controller', function() {
   }
 
   function loadUser(done) {
-    User.findOne({}, function (err, u) {
+    User.findOne({}, function(err, u) {
       user = u;
-      done();
+      done(err);
     });
   }
 
@@ -59,13 +59,9 @@ describe('Report controller', function() {
   }
 
 
-  beforeEach(function(done) {
-    createSource(done);
-  });
+  beforeEach(createSource);
 
-  afterEach(function(done) {
-    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {}), Incident.remove.bind(Incident, {})], done);
-  });
+  afterEach(utils.wipeModels([Report, Source, Incident]));
 
   describe('GET /api/v1/report', function() {
 
@@ -239,4 +235,6 @@ describe('Report controller', function() {
         });
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

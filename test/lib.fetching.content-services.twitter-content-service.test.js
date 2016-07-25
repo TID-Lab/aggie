@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var EventEmitter = require('events').EventEmitter;
 var TwitterContentService = require('../lib/fetching/content-services/twitter-content-service');
@@ -36,4 +36,5 @@ describe('Twitter content service', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

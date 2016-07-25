@@ -1,6 +1,4 @@
-require('./init');
-var util = require('util');
-var fs = require('fs');
+var utils = require('./init');
 var expect = require('chai').expect;
 var FacebookContentService = require('../lib/fetching/content-services/facebook-content-service');
 var ContentService = require('../lib/fetching/content-service');
@@ -28,7 +26,7 @@ describe('Facebook content service', function() {
 
   it('should fetch empty content', function(done) {
     var service = stubWithFixture('facebook-0.json');
-    expectToNotEmitReport(service, done);
+    utils.expectToNotEmitReport(service, done);
     service.once('error', function(err) { done(err); });
     setTimeout(done, 100);
   });
@@ -120,9 +118,11 @@ describe('Facebook content service', function() {
 
     it('should emit a missing URL error', function(done) {
       var service = new FacebookContentService({url: ''});
-      expectToNotEmitReport(service, done);
+      utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing Facebook URL', done);
       service.fetch({maxCount: 50}, function(){});
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

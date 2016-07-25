@@ -1,12 +1,13 @@
 'use strict';
 
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
 var Source = require('../models/source');
 
 describe('Source attributes', function() {
   it('should return validation errors', function(done) {
+    // This shouldn't get saved because it should error
     Source.create({ url: 'hey' }, function(err) {
       expect(err).to.have.keys(['message', 'name', 'errors']);
       expect(err.errors).to.have.keys(['nickname', 'url']);
@@ -17,6 +18,7 @@ describe('Source attributes', function() {
   });
 
   it('should return total number of errors', function(done) {
+    // These are not saved to the database
     var one = new Source({ nickname: 'one', type: 'dummy' });
     var two = new Source({ nickname: 'two', type: 'dummy' });
     async.parallel([
@@ -33,4 +35,7 @@ describe('Source attributes', function() {
       });
     });
   });
+
+  after(Source.remove.bind(Source, {}));
+  after(utils.expectModelsEmpty);
 });
