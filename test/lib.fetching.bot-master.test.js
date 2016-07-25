@@ -1,10 +1,11 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var botMaster = require('../lib/fetching/bot-master');
-var Bot = require('../lib/fetching/bot');
+var Report = require('../models/report');
 var Source = require('../models/source');
 
 describe('BotMaster', function() {
+  before(utils.expectModelsEmpty);
 
   before(function(done){
     Source.remove({}, function(){
@@ -78,6 +79,15 @@ describe('BotMaster', function() {
     done();
   });
 
-  after(utils.wipeModels([Source]));
+  // We have to remove all the reports here for a very sneaky reason. If you run
+  // this test file alone, there's no problem; no reports get created. But when
+  // you use mocha to run this file and one which imports
+  // '../lib/fetching/report-writer', the bots will start adding reports to the
+  // queue and they'll get saved. With enough latency, this call actually won't
+  // be enough to stop these reports from interacting with other tests, as
+  // this test file could exit with reports still in the queue. The moral is
+  // probably that sharing state with `require` statements isn't very good for
+  // modular testing.
+  after(utils.wipeModels([Source, Report]));
   after(utils.expectModelsEmpty);
 });

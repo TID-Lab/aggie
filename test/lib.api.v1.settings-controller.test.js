@@ -4,6 +4,7 @@ var request = require('supertest');
 var settingsController = require('../lib/api/v1/settings-controller');
 var botMaster = require('../lib/fetching/bot-master');
 var Source = require('../models/source');
+var Report = require('../models/report');
 var config = require('../config/secrets');
 var _ = require('underscore');
 
@@ -197,5 +198,9 @@ describe('Settings controller', function() {
     });
   });
 
+  // We have to delete reports here for a very sneaky reason, because when other
+  // tests are present the bots can save reports (see comment in
+  // test/lib.fetching.bot-master.test.js).
+  after(utils.wipeModels([Report]));
   after(utils.expectModelsEmpty);
 });
