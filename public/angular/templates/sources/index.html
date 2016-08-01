@@ -12,7 +12,7 @@
     <tr>
       <th class="compact" translate>Media</th>
       <th class="compact" translate>Name</th>
-      <th class="compact" ng-hide="currentUser.can('not view other users')" translate>Creator</th>
+      <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
       <th class="expand" translate>Target</th>
       <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
       <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
@@ -28,7 +28,7 @@
           {{ s.nickname }}
         </a>
       </td>
-      <td class="compact content" ng-hide="currentUser.can('not view other users')">
+      <td class="compact content" ng-show="currentUser.can('view other users')">
         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>

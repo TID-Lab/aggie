@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div ng-hide="currentUser.can('not view other users')" class="filter">
+    <div ng-show="currentUser.can('view other users')" class="filter">
       <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
         <option value="" translate>Assigned To</option>
       </select>

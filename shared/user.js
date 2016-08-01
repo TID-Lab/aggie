@@ -15,7 +15,7 @@
     'edit data': ['monitor', 'admin'],
     'change settings': ['admin'],
     'view users': ['viewer', 'monitor', 'admin'],
-    'not view other users': ['viewer'],
+    'view other users': ['manager', 'admin'],
     'update users': ['viewer', 'monitor', 'admin'],
     'admin users': ['admin'],
     'change admin password': ['admin']

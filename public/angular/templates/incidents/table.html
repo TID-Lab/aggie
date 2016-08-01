@@ -5,7 +5,7 @@
       <th class="compact" translate>ID#</th>
       <th class="compact" translate>Title</th>
       <th class="compact" translate>Location</th>
-      <th ng-hide="currentUser.can('not view other users')" class="compact" translate>Assigned To</th>
+      <th ng-show="currentUser.can('view other users')" class="compact" translate>Assigned To</th>
       <th class="compact" translate>Status</th>
       <th class="compact" translate>Veracity</th>
       <th class="compact translate">Escalated?</th>
@@ -30,7 +30,7 @@
         <span ng-if="i.locationName">{{ i.locationName }}</span>
         <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
-      <td ng-hide="currentUser.can('not view other users')" class="compact"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
+      <td ng-show="currentUser.can('view other users')" class="compact"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
       <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
       <td class="compact content">
         <div ng-if="i.veracity != null">
