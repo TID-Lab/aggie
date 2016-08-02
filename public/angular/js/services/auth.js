@@ -2,13 +2,14 @@ angular.module('Aggie')
   .factory('AuthService', [
     '$rootScope',
     '$http',
-    function AuthService($rootScope, $http) {
+    'shared',
+    function AuthService($rootScope, $http, shared) {
       return {
         login: function(credentials, callback) {
           var cb = callback || angular.noop;
           $http.post('/login', credentials)
             .then(function (res) {
-              $rootScope.currentUser = res.data;
+              $rootScope.currentUser = new shared.User(res.data);
               return cb();
             }, function(err) {
               return cb(err);
@@ -19,7 +20,7 @@ angular.module('Aggie')
           var promise = $http.get('/session');
           promise.then(function(res) {
             if (res.data.username) {
-              $rootScope.currentUser = res.data;
+              $rootScope.currentUser = new shared.User(res.data);
             }
           });
           return promise;

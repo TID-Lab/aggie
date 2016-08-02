@@ -1,5 +1,6 @@
 <div class="button-row">
-  <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="create()" translate>Create Source</button>
+  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
+          class="btn btn-info" ng-click="create()" translate>Create Source</button>
 </div>
 
 <div class="clearfix"></div>
@@ -11,10 +12,10 @@
     <tr>
       <th class="compact" translate>Media</th>
       <th class="compact" translate>Name</th>
-      <th class="compact" translate>Creator</th>
+      <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
       <th class="expand" translate>Target</th>
-      <th class="compact" translate>New Warnings</th>
-      <th class="compact" translate>Enabled</th>
+      <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
+      <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
     </tr>
   </thead>
   <tbody>
@@ -27,12 +28,13 @@
           {{ s.nickname }}
         </a>
       </td>
-      <td class="compact content">
+      <td class="compact content" ng-show="currentUser.can('view other users')">
         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>
-      <td class="compact content zero-errors" ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status">
+      <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
+          ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+      <td class="compact status" ng-show="currentUser.can('edit data')">
         <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
       </td>
     </tr>

@@ -11,13 +11,13 @@
   User.PASSWORD_MIN_LENGTH = 8;
 
   User.permissions = {
-    'view data': ['viewer', 'monitor', 'manager', 'admin'],
-    'edit incidents': ['monitor', 'manager', 'admin'],
-    'edit reports': ['monitor', 'manager', 'admin'],
-    'edit sources': ['manager', 'admin'],
-    'toggle fetching': ['manager', 'admin'],
-    'manage trends': ['manager', 'admin'],
+    'view data': ['viewer', 'monitor', 'admin'],
+    'edit data': ['monitor', 'admin'],
     'change settings': ['admin'],
+    'view users': ['viewer', 'monitor', 'admin'],
+    'view other users': ['manager', 'admin'],
+    'update users': ['viewer', 'monitor', 'admin'],
+    'admin users': ['admin'],
     'change admin password': ['admin']
   };
 

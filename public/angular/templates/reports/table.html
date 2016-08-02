@@ -1,7 +1,7 @@
 <table aggie-table ng-show="pagination.total > 0">
   <thead>
     <tr>
-      <th></th>
+      <th ng-show="currentUser.can('edit data')"></th>
       <th translate>Time</th>
       <th translate>Media</th>
       <th translate>Source</th>
@@ -13,7 +13,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-      <td><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
+      <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -40,13 +40,18 @@
         <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong ng-if="!r._incident" translate>Add</strong>
+            <strong ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
+          </a>
+        </div>
+        <div ng-if="incidents.length > 2">
+          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
+            <strong ng-if="!r._incident">Add</strong>
           </a>
         </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
       <td class="flagged text-center">
-        <div ng-click="toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
+        <div ng-click="currentUser.can('edit data') && toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
       </td>
     </tr>
   </tbody>
