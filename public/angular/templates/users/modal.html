@@ -62,10 +62,10 @@
             </div>
           </div>
           <div ng-show="user._id == currentUser._id">
-            <div class="form-group" ng-hide="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
-              <button type="button" class="btn col-lg-6 col-lg-offset-3" ng-click="showPassword = !showPassword" translate>Change password</button>
+            <div class="form-group" ng-hide="model.showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
+              <button type="button" class="btn col-lg-6 col-lg-offset-3" ng-click="model.showPassword = true" translate>Change password</button>
             </div>
-            <div ng-show="showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
+            <div ng-show="model.showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
               <div class="form-group">
                 <label for="password" class="col-lg-3 control-label" translate>Password</label>
                 <div class="col-lg-6">

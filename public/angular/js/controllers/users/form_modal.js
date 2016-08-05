@@ -69,9 +69,9 @@ angular.module('Aggie')
     $scope.user = angular.copy(user);
     $scope.user.oldUserName = user.username;
     $scope.showErrors = false;
-    $scope.showPassword = false;
     $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
     $scope.message = '';
+    $scope.model = { showPassword: false };
 
     var handleSuccess = function(response) {
       $modalInstance.close(response);
