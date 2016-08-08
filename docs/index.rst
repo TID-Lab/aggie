@@ -3,22 +3,29 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Aggie's documentation!
+Welcome to Aggie's Documentation!
 =================================
-
-Contents: Hello world!
 
 .. toctree::
    :maxdepth: 2
 
-   content/page1
-   content/folder/page2
+
+
+   content/intro/introduction
+   content/installation
+   content/settings/settings
+   content/smtc/smtc
+   content/usingaggie/usingaggie
+   content/usermanagement/usermanagement
 
 
 
-Indices and tables
+
+
+
+
+Indices and Tables
 ==================
 
 * :ref:`genindex`
 * :ref:`search`
-
