@@ -13,7 +13,7 @@ describe('LoginController', function () {
     scope.user = { username: 'bob', password: 'secret' };
     httpBackend = $httpBackend;
 
-    controller = $controller('LoginController', { 
+    controller = $controller('LoginController', {
       $scope: scope
     });
 
@@ -22,6 +22,8 @@ describe('LoginController', function () {
     httpBackend.when('GET', '/api/v1/source').respond(200, []);
     httpBackend.when('GET', '/api/v1/incident').respond(200, {});
     httpBackend.when('GET', '/session').respond(200, {});
+    httpBackend.when('GET', '/translations/locale-en.json').respond(200, {});
+    httpBackend.when('GET', '/translations/locale-debug.json').respond(200, {});
   }));
 
   afterEach(function() {
@@ -33,15 +35,15 @@ describe('LoginController', function () {
     httpBackend.when('POST', '/login', scope.user).respond(200, { id: 1 });
     scope.login();
     httpBackend.flush();
-    expect(scope.currentUser).to.deep.equal({ id: 1 });
+    expect(scope.currentUser.id).to.equal(1);
   });
 
   it('should navigate to reports after login', inject(function($state) {
     httpBackend.when('POST', '/login', scope.user).respond(200, { id: 1 });
     scope.login();
     httpBackend.flush();
- 
+
     expect($state.current.name).to.equal('reports');
-    
+
   }));
 });

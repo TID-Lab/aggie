@@ -3,7 +3,7 @@
 module.exports = function(karma) {
   karma.set({
 
-    frameworks: ['mocha', 'browserify'],
+    frameworks: ['mocha', 'chai', 'browserify'],
 
     preprocessors: {
       'public/angular/templates/**/*.html': ['ng-html2js'],
@@ -14,16 +14,8 @@ module.exports = function(karma) {
       'test/public/vendor/jquery-1.11.0.min.js',
       'public/angular/js/app.js',
       'public/angular/templates/**/*.html',
-      'node_modules/chai/chai.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'test/public/**/*.test.js'
-    ],
-
-    plugins: [
-      'karma-browserify',
-      'karma-mocha',
-      'karma-phantomjs-launcher',
-      'karma-ng-html2js-preprocessor'
     ],
 
     reporters: ['dots'],
@@ -41,8 +33,7 @@ module.exports = function(karma) {
 
     // browserify configuration
     browserify: {
-      debug: true,
-      transform: ['browserify-shim']
+      debug: true
     }
   });
 };
