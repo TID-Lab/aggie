@@ -16,4 +16,4 @@ Achitecturally, Aggie has two modules; the backend server that crawls the intern
 ![Achitectural Design](achitecture.png)
 
 ## Acknowledgements
-Aggie has reached thus far from the generous contributions of many developers and collaborators. To date, sixteen developers have contributed code to Aggie's Project ([**list here**](C:/Users/andy/Documents/GitHub/aggie/docs/content/intro/collaborations.pdf)). We thank everyone involved in the open source community of Aggie.
+Aggie has reached thus far from the generous contributions of many developers and collaborators. To date, sixteen developers have contributed code to Aggie's Project ([**list here**](collaborations.html)). We thank everyone involved in the open source community of Aggie.

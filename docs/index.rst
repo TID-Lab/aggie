@@ -17,9 +17,7 @@ Welcome to Aggie's Documentation!
    content/smtc/smtc
    content/usingaggie/usingaggie
    content/usermanagement/usermanagement
-
-
-
+   content/intro/collaborations
 
 
 
