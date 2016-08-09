@@ -10,7 +10,7 @@
     "prestart": "node install.js",
     "start": "node app.js",
     "pretest": "node install.js",
-    "test": "mocha"
+    "test": "mocha && karma start --single-run"
   },
   "dependencies": {
     "angular-cookies": "~1.2.29",

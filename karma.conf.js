@@ -27,7 +27,9 @@ module.exports = function(karma) {
 
     browsers: ['PhantomJS'],
 
-    logLevel: 'LOG_DEBUG',
+    // Possible values: karma.LOG_DISABLE, karma.LOG_ERROR, karma.LOG_WARN,
+    // karma.LOG_INFO, karma.LOG_DEBUG
+    logLevel: karma.LOG_INFO,
     singleRun: false,
     autoWatch: true,
 
