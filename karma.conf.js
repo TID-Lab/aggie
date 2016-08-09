@@ -31,7 +31,6 @@ module.exports = function(karma) {
     singleRun: false,
     autoWatch: true,
 
-    // browserify configuration
     browserify: {
       debug: true
     }

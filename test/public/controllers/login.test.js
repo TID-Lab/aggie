@@ -2,8 +2,8 @@
 
 var expect = chai.expect;
 
-describe('LoginController', function () {
-  var scope, controller, httpBackend;
+describe('LoginController', function() {
+  var scope, httpBackend;
 
   beforeEach(module('Aggie'));
   beforeEach(module('aggie.templates'));
@@ -13,11 +13,8 @@ describe('LoginController', function () {
     scope.user = { username: 'bob', password: 'secret' };
     httpBackend = $httpBackend;
 
-    controller = $controller('LoginController', {
-      $scope: scope
-    });
+    $controller('LoginController', { $scope: scope });
 
-    // TODO: these should not execute before user is login
     httpBackend.when('GET', '/api/v1/report?page=0').respond(200, {});
     httpBackend.when('GET', '/api/v1/source').respond(200, []);
     httpBackend.when('GET', '/api/v1/incident').respond(200, {});
@@ -31,10 +28,11 @@ describe('LoginController', function () {
     httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should set currentUser', function () {
+  it('should set currentUser', function() {
     httpBackend.when('POST', '/login', scope.user).respond(200, { id: 1 });
     scope.login();
     httpBackend.flush();
+
     expect(scope.currentUser.id).to.equal(1);
   });
 
