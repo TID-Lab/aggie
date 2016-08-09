@@ -31,7 +31,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 1. Install **docker** (version >= 1.0.0, such as 1.11.0).
   - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
-  - Linux installations require to install **[docker-compose](https://docs.docker.com/compose/install/)** separetedly 
+  - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately
 2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
   - In your terminal, navigate to your main projects folder (e.g. Documents).
   - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
@@ -78,8 +78,8 @@ The following need to be installed.
   - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
   - This installs all dependencies and concatenates the angular application.
-1. Run `npm install -g gulp mocha`.
-  - This installs gulp and mocha globally so they can be run from the command line for testing.
+1. Run `npm install -g gulp mocha karma-cli`.
+  - This installs gulp, mocha, and karma globally so they can be run from the command line for testing.
 1. Run `npm install -g migrate`.
   - This installs node-migrate globally.
 1. To start server, run `npm start`.
@@ -91,6 +91,8 @@ The following need to be installed.
 ## Maintenance
 1. To run migrations run `migrate`.
 2. To run tests, run `npm test`.
+  - Calling `mocha` will run just the backend tests
+  - `karma start` will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 
 ## Project Configuration
@@ -111,7 +113,7 @@ Set `config.adminParty=true` if you want to run tests.
   1. Inside your Facebook app, obtain `client_id` and `client_secret`.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
-  
+
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
