@@ -11,11 +11,11 @@ angular.module('Aggie').factory('FlashService', [
 
     return {
       getAlert: function() {
-        return $translate.instant(currentFlash.alert);
+        return $translate.instant(currentFlash.alert, currentFlash.params);
       },
 
       getNotice: function() {
-        return $translate.instant(currentFlash.notice);
+        return $translate.instant(currentFlash.notice, currentFlash.params);
       },
 
       setAlert: function(message, params) {
