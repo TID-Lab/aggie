@@ -33,7 +33,7 @@ var schema = new mongoose.Schema({
   escalated: {type: Boolean, default: false, required: true},
   closed: {type: Boolean, default: false, required: true},
   idnum: {type: Number, required: true},
-  totalReports: {type: Number, default: 0},
+  totalReports: {type: Number, default: 0, min: 0},
   notes: String,
 });
 
@@ -69,20 +69,13 @@ var Incident = mongoose.model('Incident', schema);
 schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
-  Incident.findById(prevIncident || newIncident, function(err, incident) {
-    if (err || !incident) return;
-    var total = incident.totalReports;
+  if (prevIncident !== newIncident) {
+    //Callbacks added to execute query immediately
+    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {});
+  }
 
-    if (prevIncident) {
-      total = (total > 0) ? total - 1 : 0;
-    } else if (newIncident) {
-      total = (total) ? total + 1 : 1;
-    }
+  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err, incident) {});
 
-    incident.totalReports = total;
-
-    incident.save();
-  });
 });
 
 // Query incidents based on passed query data

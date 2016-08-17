@@ -5,12 +5,14 @@ require('../lib/database');
 require('../models/incident');
 var reportController = require('../lib/api/v1/report-controller')();
 var Report = require('../models/report');
+var Incident = require('../models/incident');
 var Source = require('../models/source');
 var User = require('../models/user');
 var async = require('async');
 var source;
 var user;
 var reports;
+var incidents;
 
 describe('Report controller', function() {
   function createSource(done) {
@@ -30,7 +32,15 @@ describe('Report controller', function() {
   function createReports(done) {
     Report.create([
       {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
-      {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id}
+      {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id},
+      {authoredAt: new Date(), content: 'three', _source: source._id, checkedOutBy: user.id}
+    ], done);
+  }
+
+  function createIncidents(done) {
+    Incident.create([
+      { authoredAt: new Date(), title: 'First incident'},
+      { authoredAt: new Date(), title: 'Second incident'}
     ], done);
   }
 
@@ -41,12 +51,20 @@ describe('Report controller', function() {
     });
   }
 
+  function loadIncidents(done) {
+    Incident.find({}, function(err, results) {
+      incidents = results;
+      done();
+    });
+  }
+
+
   beforeEach(function(done) {
     createSource(done);
   });
 
   afterEach(function(done) {
-    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {})], done);
+    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {}), Incident.remove.bind(Incident, {})], done);
   });
 
   describe('GET /api/v1/report', function() {
@@ -167,13 +185,13 @@ describe('Report controller', function() {
 
   describe('PATCH api/v1/report/_link', function() {
     beforeEach(function(done) {
-      async.series([loadUser, createReports, loadReports], done);
+      async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
     });
 
-    it('should link reports to specific Incident', function(done) {
+    it('should link 2 reports to specific Incident', function(done) {
       request(reportController)
         .patch('/api/v1/report/_link')
-        .send({ids: [reports[0].id, reports[1].id], incident: '54c73024ae04d1f9c3a678d6'})
+        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
@@ -183,17 +201,41 @@ describe('Report controller', function() {
           .expect(200)
           .end(function(err, res) {
             expect(res.body).to.have.property('_incident');
-            expect(res.body._incident).to.equal('54c73024ae04d1f9c3a678d6');
+            expect(res.body._incident).to.equal(String(incidents[0]._id));
 
             request(reportController)
             .get('/api/v1/report/' + reports[1]._id)
             .expect(200)
             .end(function(err, res) {
               expect(res.body).to.have.property('_incident');
-              expect(res.body._incident).to.equal('54c73024ae04d1f9c3a678d6');
+              expect(res.body._incident).to.equal(String(incidents[0]._id));
               done();
             });
           });
+        });
+    });
+
+    it('should update the totalReports field in incident', function(done) {
+      request(reportController)
+        .patch('/api/v1/report/_link')
+        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+        .expect(200)
+        .end(function(err) {
+          if (err) return done(err);
+            Incident.findById(incidents[0]._id, function(err, incident) {
+              expect(incident.totalReports).to.equal(2);
+              request(reportController)
+                .patch('/api/v1/report/_link')
+                .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
+                .expect(200)
+                .end(function(err) {
+                  if (err) return done(err);
+                  Incident.findById(incidents[0]._id, function(err, inc) {
+                    expect(inc.totalReports).to.equal(0);
+                    done(err);
+                  });
+                });
+            });
         });
     });
   });

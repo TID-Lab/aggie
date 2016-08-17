@@ -34,16 +34,10 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(incidentId) {
-        //report.read = true;
-        var ids = [];
-        reports.map(function(report) {
-          //Update report in web
-          report._incident = incidentId;
-          ids.push(report._id);
-          return report;
+        var ids = reports.map(function(report) {
+          return report._id;
         });
 
-        //Update report in server
         Report.linkToIncident({ids: ids, incident: incidentId});
       });
     };

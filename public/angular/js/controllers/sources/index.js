@@ -12,7 +12,7 @@ angular.module('Aggie')
     $scope.saveSource = function(source) {
       Source.save({ id: source._id }, source, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that source couldn't be saved for some reason");
+        flash.setAlertNow('source.save.error');
         source.enabled = !source.enabled;
       });
     };

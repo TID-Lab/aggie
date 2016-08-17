@@ -2,16 +2,15 @@
   <div class="modal-header">
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
-      <div class="icon-left">Add report to incident</div>
+      <div class="icon-left" translate>Add report to incident</div>
     </h4>
   </div>
   <div class="modal-body">
-
-    <p ng-hide="incidents" class="info">Sorry, but we couldn't find any incidents. You can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+    <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any incidents. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">{{'create a new incident' | translate}}</button>.</p>
 
     <div ng-show="incidents">
 
-      <p class='info'>Click an incident below to which you would like to add the report. Or you can <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(report)">create a new incident</button>.</p>
+      <p class='info'>{{'Click an incident below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
 
       <div ng-include="'/templates/incidents/table.html'"></div>
 
@@ -19,6 +18,6 @@
 
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()">Close</button>
+    <button class="btn btn-default" ng-click="close()" translate>Close</button>
   </div>
 </div>

@@ -13,7 +13,7 @@ angular.module('Aggie')
   'FlashService',
   function($rootScope, $scope, $q, $state, $modal, $modalStack, $location, Incident, Report, flash) {
 
-    $scope.create = function (report) {
+    $scope.create = function(reports) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
         controller: 'IncidentFormModalInstanceController',
@@ -22,37 +22,39 @@ angular.module('Aggie')
           users: ['User', function(User) {
             return User.query().$promise;
           }],
-          incident: function () {
+          incident: function() {
             return {
               veracity: null,
               closed: false
             };
           },
-          report: function () {
-            return report;
+          reports: function() {
+            return reports;
           }
         }
       });
 
       modalInstance.result.then(function(incident) {
         Incident.create(incident, function(inc) {
-          if (report) {
+          if (reports) {
             var batchMode = $location.url() === '/reports/batch';
-            report.read = true;
-            report._incident = inc._id;
-            Report.update({id: report._id}, report, function () {
+            var ids = reports.map(function(report) {
+              return report._id;
+            });
+
+            Report.linkToIncident({ids: ids, incident: inc._id}, function () {
               if (batchMode) {
                 $rootScope.$state.go('batch', {}, { reload: true });
               } else {
-                $rootScope.$state.go('reports', { r: report }, { reload: false });
+                $rootScope.$state.go('reports', { r: reports[0] }, { reload: false });
               }
             });
           } else {
-            flash.setNotice('Incident was successfully created.');
+            flash.setNotice('incident.create.success');
             $rootScope.$state.go('incidents', {}, { reload: true });
           }
         }, function(err) {
-          flash.setAlertNow('Incident failed to be created. Please contact support.');
+          flash.setAlertNow('incident.create.error');
         });
       });
 
@@ -69,30 +71,30 @@ angular.module('Aggie')
           incident: function() {
             return incident;
           },
-          report: function () {
-            return null;
+          reports: function() {
+            return [];
           }
         }
       });
 
       modalInstance.result.then(function(incident) {
         Incident.update({ id: incident._id }, incident, function(response) {
-          flash.setNotice('Incident was successfully updated.');
+          flash.setNotice('incident.update.success');
           if ($state.is('incidents')) {
             $state.go('incidents', { page: 1, title: null }, { reload: true });
           } else {
             $state.go('incident', { id: incident._id }, { reload: true });
           }
         }, function() {
-          flash.setAlertNow('Incident failed to be updated.');
+          flash.setAlertNow('incident.update.error');
         });
       });
     };
 
     $scope.$watch('details.geometry.location', function(newVal, oldVal) {
       if (oldVal == newVal) return;
-      $scope.incident.latitude = newVal.k;
-      $scope.incident.longitude = newVal.D;
+      $scope.incident.latitude = $scope.details.geometry.location.lat();
+      $scope.incident.longitude = $scope.details.geometry.location.lng();
     });
   }
 ])
@@ -104,14 +106,14 @@ angular.module('Aggie')
   'veracityOptions',
   'users',
   'incident',
-  'report',
-  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, report) {
+  'reports',
+  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, reports) {
     $scope.incident = angular.copy(incident);
     $scope.users = users;
     $scope.veracity = veracityOptions;
     $scope.showErrors = false;
-    $scope.report = report;
-    $scope.minimal = !!report;
+    $scope.reports = reports;
+    $scope.minimal = Boolean(reports);
     $scope.minimalLatLng = true;
 
     $scope.save = function(form) {

@@ -140,10 +140,10 @@ angular.module('Aggie')
       if (!ids.length) return;
 
       Incident.removeSelected({ids: ids}, function() {
-        flash.setNotice('Incidents were successfully deleted.');
+        flash.setNotice('incident.deleteMultiple.success');
         $rootScope.$state.go('incidents', {}, { reload: true });
       }, function() {
-        flash.setAlertNow('Incidents failed to be deleted.');
+        flash.setAlertNow('incident.deleteMultiple.error');
       });
     };
 
@@ -187,7 +187,7 @@ angular.module('Aggie')
     $scope.saveIncident = function(incident) {
       Incident.save({ id: incident._id }, incident, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that incident couldn't be saved for some reason");
+        flash.setAlertNow('incident.save.error');
       });
     };
 
@@ -197,10 +197,10 @@ angular.module('Aggie')
 
     $scope.delete = function(incident) {
       Incident.delete({id: incident._id}, function(){
-        flash.setNotice('Incident was successfully deleted.');
+        flash.setNotice('incident.delete.success');
         $rootScope.$state.go('incidents', {}, { reload: true });
       }, function() {
-        flash.setAlertNow('Incident failed to be deleted.');
+        flash.setAlertNow('incident.delete.error');
       });
     };
 

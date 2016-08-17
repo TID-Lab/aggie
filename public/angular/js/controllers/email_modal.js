@@ -36,11 +36,11 @@ angular.module('Aggie')
     }
 
     function success(method) {
-      flash.setNoticeNow(method + ' setting has been successfully saved.');
+      flash.setNoticeNow('settings.email.settingsModal.success', { method: method });
     }
 
     function failure(data) {
-      flash.setAlertNow('An error has occurred');
+      flash.setAlertNow('settings.email.settingsModal.error');
       console.log('failure: ', data);
     }
   }

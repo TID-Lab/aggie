@@ -24,7 +24,7 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(user) {
         $scope.users.push(user);
-        flash.setNoticeNow('User was successfully created and an email has been sent to them with password instructions.');
+        flash.setNoticeNow('user.create.success');
       });
     };
 
@@ -40,7 +40,7 @@ angular.module('Aggie')
       });
 
       modalInstance.result.then(function(user) {
-        flash.setNoticeNow('User was successfully updated.');
+        flash.setNoticeNow('user.update.success');
         angular.forEach($scope.users, function(u, i) {
           if (u._id == user._id) {
             $scope.users[i] = user;
@@ -69,9 +69,9 @@ angular.module('Aggie')
     $scope.user = angular.copy(user);
     $scope.user.oldUserName = user.username;
     $scope.showErrors = false;
-    $scope.showPassword = false;
     $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
     $scope.message = '';
+    $scope.model = { showPassword: false };
 
     var handleSuccess = function(response) {
       $modalInstance.close(response);
@@ -82,9 +82,9 @@ angular.module('Aggie')
         $scope.message = error;
       }).catch(function() {
         if ($scope.user._id) {
-          $scope.message = 'Could not update user. Please contact support.';
+          $scope.message = 'user.update.error';
         } else {
-          $scope.message = 'User failed to be created. Please contact support.';
+          $scope.message = 'user.create.error';
         }
       });
     };

@@ -14,12 +14,13 @@ angular.module('Aggie')
   'statusOptions',
   'linkedtoIncidentOptions',
   'Report',
+  'Incident',
   'Batch',
   'Socket',
   'Queue',
   'paginationOptions',
   function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
-    incidents, statusOptions, linkedtoIncidentOptions, Report, Batch, Socket, Queue, paginationOptions) {
+           incidents, statusOptions, linkedtoIncidentOptions, Report, Incident, Batch, Socket, Queue, paginationOptions) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -34,7 +35,7 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
 
-    //We add options to search reports with any or none incidents linked
+    // We add options to search reports with any or none incidents linked
     $scope.incidents.push(linkedtoIncidentOptions[0]);
     $scope.incidents.push(linkedtoIncidentOptions[1]);
 
@@ -55,11 +56,13 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
-      if ($scope.isFirstPage() && $scope.currentPath == 'reports') {
+      if ($scope.currentPath === 'reports') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
-        Socket.emit('query', searchParams());
-        Socket.on('reports', $scope.handleNewReports.bind($scope));
+        if ($scope.isFirstPage()) {
+          Socket.emit('query', searchParams());
+          Socket.on('reports', $scope.handleNewReports.bind($scope));
+        }
       }
 
       // make links clickable
@@ -160,6 +163,12 @@ angular.module('Aggie')
       if (!foundReport) return;
 
       angular.extend(foundReport, report);
+      if (!$scope.incidentsById[report._incident]) {
+        Incident.get({ id: report._incident }, function(inc) {
+          incidents.results.push(inc);
+          $scope.incidentsById[report._incident] = inc;
+        });
+      }
     }
 
     $scope.handleNewReports = function(reports) {
@@ -233,7 +242,6 @@ angular.module('Aggie')
     $scope.isLastPage = function() {
       return $scope.pagination.end >= $scope.pagination.visibleTotal;
     };
-
     $scope.nextPage = function() {
       if (!$scope.isLastPage()) {
         $scope.search($scope.currentPage + 1);
