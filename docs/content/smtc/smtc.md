@@ -41,7 +41,7 @@ To be set for a monitoring event, cross check the status of the items and activi
   <tr>
     <td style="text-align:center">2</td>
     <td>Personnel</td>
-    <td>Set up STMC and teams. Build relationships with relevant stakeholders and communicate SMTC value added on the day of monitoring the event</td>
+    <td>Set up SMTC and teams. Build relationships with relevant stakeholders and communicate SMTC value added on the day of monitoring the event</td>
   </tr>
 
   <tr>
