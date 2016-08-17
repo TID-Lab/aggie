@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Aggie'
-copyright = u'2016, Tom Smyth and many others'
+copyright = u'2016. This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License'
 author = u'Tom Smyth and many others'
 
 # The version info for the project you're documenting, acts as replacement for

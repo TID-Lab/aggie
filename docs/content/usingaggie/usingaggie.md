@@ -36,7 +36,7 @@ This column indicates the name of the source, as set in the Sources tab In the c
   -   **The Author column**:
 This indicates the social media account of the person who authored the report.
   -   **The Content column**:
-This column shows the exact content of report published by the author.
+This column shows the exact content of the report published by the author.
   -   **The Incident column**:
 This column is used to add a report to an existing incident or create a new incident.
   -   **The Flagged column**:
@@ -165,7 +165,7 @@ Normally, *incidents* are created by Trackers. However, should the need arise, v
 3.	Type in the *Title* of the incident (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Incident and a brief note describing the incident. Set the veracity and status fields as applicable.
 
 ### Editing an Incident
-Verifiers can always update the status of incidents by editing them. To do this:
+Verifiers can always update the status of incidents by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of an Incident. To do this:
 1.	From the incidents page, click the **blue edit pencil** at the end of the incident row (last column).
 ![Editing an Incident](incident_editing.png)
 2.	Update the incident by editing appropriate sections. For example, you can edit the *veracity* and *status* of the incident, add any helpful *notes* or *escalate* the incident.
