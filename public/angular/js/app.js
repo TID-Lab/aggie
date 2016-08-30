@@ -10,10 +10,11 @@ require('../vendor/select2/ui-select2');
 require('./loading-bar');
 require('angular-translate');
 require('angular-translate-loader-static-files');
+require('angular-translate-handler-log');
 require('angular-cookies');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 
-  'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete', 
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
+  'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete',
   'angular-loading-bar', 'ngCookies'])
 
 .config(['$urlRouterProvider', '$locationProvider',
@@ -34,7 +35,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 })
 
 .run([
-  '$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 
+  '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
   'FlashService', '$cookies', '$translate',
   function ($rootScope, $urlRouter, $location, AuthService, $state, flash,
             $cookies, $translate) {

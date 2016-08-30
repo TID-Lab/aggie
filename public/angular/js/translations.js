@@ -9,6 +9,7 @@ angular.module('Aggie').config([
     })
     .preferredLanguage('en')
     .fallbackLanguage(['en', 'debug'])
-    .useSanitizeValueStrategy('sanitizeParameters');
+    .useSanitizeValueStrategy('sanitizeParameters')
+    .useMissingTranslationHandlerLog();
   }
 ]);

@@ -348,5 +348,16 @@
   "Total Reports": "Total Reports",
   "Reports/min": "Reports/min",
   "Escalated Incidents": "Escalated Incidents",
-  "Mark all Unread": "Mark all Unread"
+  "Mark all Unread": "Mark all Unread",
+  "Sorry, we had some trouble finding your user account. Please log in again.": "Sorry, we had some trouble finding your user account. Please log in again.",
+  "You must be logged in before accessing that page.": "You must be logged in before accessing that page.",
+  "ELMO": "ELMO",
+  "Facebook": "Facebook",
+  "Rss": "Rss",
+  "Twitter": "Twitter",
+  "Mark all Read": "Mark all Read",
+  "Confirmed true": "Confirmed true",
+  "Confirmed false": "Confirmed false",
+  "Unescalated": "Unescalated",
+  "Assign To": "Assign To"
 }

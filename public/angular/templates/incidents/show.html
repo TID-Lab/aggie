@@ -7,7 +7,7 @@
 
 <div ng-show="currentUser.can('edit data')" class="button-row">
   <button ng-controller="IncidentFormModalController" class="btn btn-info margin-right" ng-click="edit(incident)" translate>Edit</button>
-  <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete()" translate>Delete</button>
+  <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete()">Delete</button>
 </div>
 
 <br/><br/>
