@@ -43,11 +43,6 @@
             <strong ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
           </a>
         </div>
-        <div ng-if="incidents.length > 2">
-          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
-            <strong ng-if="!r._incident">Add</strong>
-          </a>
-        </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
       <td class="flagged text-center">
