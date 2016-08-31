@@ -1,19 +1,19 @@
 <table aggie-table ng-show="pagination.total > 0">
   <thead>
     <tr>
-      <th></th>
-      <th>Time</th>
-      <th>Media</th>
-      <th>Source</th>
-      <th>Author</th>
-      <th>Content</th>
-      <th ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
-      <th>Flagged</th>
+      <th ng-show="currentUser.can('edit data')"></th>
+      <th translate>Time</th>
+      <th translate>Media</th>
+      <th translate>Source</th>
+      <th translate>Author</th>
+      <th translate>Content</th>
+      <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
+      <th translate>Flagged</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-      <td><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
+      <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
@@ -37,21 +37,16 @@
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
-        <div ng-if="incidents.length">
+        <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong ng-if="!r._incident">Add</strong>
-          </a>
-        </div>
-        <div ng-if="!incidents.length">
-          <a ng-controller="IncidentFormModalController" ng-click="create(r)" class="table-primary">
-            <strong ng-if="!r._incident">Add</strong>
+            <strong ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
           </a>
         </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
       </td>
       <td class="flagged text-center">
-        <div ng-click="toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
+        <div ng-click="currentUser.can('edit data') && toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
       </td>
     </tr>
   </tbody>

@@ -35,11 +35,13 @@ angular.module('Aggie')
     };
 
     function success(mediaName, verb) {
-      flash.setNoticeNow($filter('capitalize')(mediaName) + ' settings has been successfully ' + verb + '.');
+      flash.setNoticeNow('settings.media.settingsModal.success',
+                         { mediaName: $filter('capitalize')(mediaName),
+                           verb: verb });
     };
 
     function failure(data) {
-      flash.setAlertNow('An error has occurred');
+      flash.setAlertNow('settings.media.settingsModal.error');
       console.log('failure: ', data);
     };
 

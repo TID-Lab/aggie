@@ -28,6 +28,8 @@ migrations/.migrate
 public/css/styles.css
 public/angular/css/app.css
 public/angular/js/app.min.js
+public/angular/translations/locale-debug.json
+lib/translations/locale-debug.json
 config/secrets.json
 
 buildAssets

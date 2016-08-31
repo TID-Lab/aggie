@@ -29,7 +29,7 @@ angular.module('Aggie')
         Trend.create(trend, function(response) {
           $rootScope.$state.go($rootScope.$state.current, {}, { reload: true });
         }, function(err) {
-          flash.setAlertNow('Trend failed to be created. Please contact support.');
+          flash.setAlertNow('trend.create.error');
         });
       });
     };

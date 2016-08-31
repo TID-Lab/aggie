@@ -22,20 +22,20 @@ angular.module('Aggie')
 
     $scope.newPwd = function(form) {
       if (!$scope.isPasswordLongEnough()) {
-        return flash.setAlertNow('Password is not long enough');
+        return flash.setAlertNow('passwordReset.tooShort');
       }
 
       if (!$scope.passwordsMatch()) {
-        return flash.setAlertNow('Passwords do not match');
+        return flash.setAlertNow('passwordReset.noMatch');
       }
 
       $http.put('/reset-admin-password', { password: $scope.user.password })
         .success(function(response) {
-          flash.setNotice('The admin password was changed successfully.');
+          flash.setNotice('passwordReset.admin.success');
           $state.go('reports');
         })
         .error(function(mesg, status) {
-          flash.setAlertNow('There was an error setting the new admin password.');
+          flash.setAlertNow('passwordReset.admin.error');
         });
     };
   }

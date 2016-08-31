@@ -13,11 +13,10 @@ angular.module('Aggie')
 
     $scope.delete = function() {
       Source.delete({id: $scope.source._id}, function(){
-        flash.setNotice('Source was successfully deleted, ' +
-          'but reports related to this source will still remain.');
+        flash.setNotice('source.delete.success');
          $rootScope.$state.go('sources');
       }, function() {
-        flash.setAlertNow('Source failed to be deleted.');
+        flash.setAlertNow('source.delete.error');
       });
     };
   }

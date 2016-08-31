@@ -11,27 +11,35 @@ angular.module('Aggie').factory('FlashService', [
 
     return {
       getAlert: function() {
-        return $translate.instant(currentFlash.alert);
+        return $translate.instant(currentFlash.alert, currentFlash.params);
       },
 
       getNotice: function() {
-        return $translate.instant(currentFlash.notice);
+        return $translate.instant(currentFlash.notice, currentFlash.params);
       },
 
-      setAlert: function(message) {
-        flash = { alert: message };
+      setAlert: function(message, params) {
+        flash = { alert: message,
+                  params: params
+                };
       },
 
-      setNotice: function(message) {
-        flash = { notice: message };
+      setNotice: function(message, params) {
+        flash = { notice: message,
+                  params: params
+                };
      },
 
-      setAlertNow: function(message) {
-        currentFlash = { alert: message };
+      setAlertNow: function(message, params) {
+        currentFlash = { alert: message,
+                         params: params
+                       };
       },
 
-      setNoticeNow: function(message) {
-        currentFlash = { notice: message };
+      setNoticeNow: function(message, params) {
+        currentFlash = { notice: message,
+                         params: params
+                       };
       }
     };
   }

@@ -11,14 +11,14 @@ angular.module('Aggie')
 
     $scope.delete = function(user) {
       User.delete({_id: user._id}, function(){
-        flash.setNoticeNow('User was successfully deleted.');
+        flash.setNoticeNow('user.delete.success');
         for (var i in $scope.users) {
           if (user._id == $scope.users[i]._id) {
             $scope.users.splice(i, 1);
           }
         }
       }, function() {
-        flash.setAlertNow('User failed to be deleted.');
+        flash.setAlertNow('user.delete.error');
       });
     };
   }

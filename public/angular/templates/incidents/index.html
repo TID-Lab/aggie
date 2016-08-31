@@ -5,7 +5,7 @@
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
-        <input type="text" ng-model="searchParams.title" class="form-control" placeholder="Enter title">
+        <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter title' | translate}}">
         <a href class="input-group-addon" ng-click="searchParams.title = null" ng-show="searchParams.title">×</a>
       </div>
     </div>
@@ -14,31 +14,31 @@
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
-        <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="Enter location">
+        <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter location' | translate }}">
         <a href class="input-group-addon" ng-click="searchParams.locationName = null" ng-show="searchParams.locationName">×</a>
         <div class="input-group-btn">
-          <button type="submit" class="btn btn-info" ng-click="search()">Go</button>
+          <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
         </div>
       </div>
     </div>
-    <div class="filter">
+    <div ng-show="currentUser.can('view other users')" class="filter">
       <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
-        <option value="">Assigned To</option>
+        <option value="" translate>Assigned To</option>
       </select>
     </div>
     <div class="filter">
       <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
-        <option value="">Status</option>
+        <option value="" translate>Status</option>
       </select>
     </div>
     <div class="filter">
       <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
-        <option value="">Veracity</option>
+        <option value="" translate>Veracity</option>
       </select>
     </div>
     <div class="filter">
       <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
-        <option value="">Escalated?</option>
+        <option value="" translate>Escalated?</option>
       </select>
     </div>
     <div ng-hide="noFilters()">
@@ -47,15 +47,15 @@
   </div>
 </form>
 
-<div class="button-row margin-bottom-lg">
+<div ng-show="currentUser.can('edit data')" class="button-row margin-bottom-lg">
   <div class="pull-left checkbox-btn bg-gray">
     <input ng-select-all items="incidents" type="checkbox" />
   </div>
   <div class="pull-left margin-right padding">
-    <button class="btn btn-default" aggie-confirm="Are you sure you want to delete selected incidents?" on-confirm="removeSelected()">Delete</a>
+    <button class="btn btn-default" aggie-confirm="{{'Are you sure you want to delete selected incidents?' | translate}}" on-confirm="removeSelected()">{{'Delete' | translate}}</a>
   </div>
   <div class="pull-left margin-right padding">
-    <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()">Create Incident</button>
+    <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()" translate>Create Incident</button>
   </div>
 
   <div class="pull-right padding-top-bottom pagination">
@@ -75,6 +75,6 @@
 
 <div class="clearfix"></div>
 
-<p ng-hide="pagination.total > 0">Sorry, but we couldn't find any incidents.</p>
+<p ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any incidents.</p>
 
 <div ng-include="'/templates/incidents/table.html'"></div>

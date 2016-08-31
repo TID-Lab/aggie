@@ -97,10 +97,10 @@ angular.module('Aggie')
 
     $scope.delete = function() {
       Incident.delete({id: $scope.incident._id}, function(){
-        flash.setNotice('Incident was successfully deleted.');
+        flash.setNotice('incident.delete.success');
          $rootScope.$state.go('incidents');
       }, function() {
-        flash.setAlertNow('Incident failed to be deleted.');
+        flash.setAlertNow('incident.delete.error');
       });
     };
 

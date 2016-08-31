@@ -4,13 +4,18 @@ require('./angular-sanitize');
 require('./ui-bootstrap');
 require('./ui-bootstrap-templates');
 require('./angular-resource');
-require('./angular-translate');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
 require('./loading-bar');
+require('angular-translate');
+require('angular-translate-loader-static-files');
+require('angular-translate-handler-log');
+require('angular-cookies');
 
-angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete', 'angular-loading-bar'])
+angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
+  'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete',
+  'angular-loading-bar', 'ngCookies'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
@@ -29,30 +34,41 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource', 'pascalprech
   return require('timezone');
 })
 
-.run(['$rootScope', '$urlRouter', '$location', 'AuthService', '$state', 'FlashService', function ($rootScope, $urlRouter, $location, AuthService, $state, flash) {
-  $rootScope.$state = $state;
+.run([
+  '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
+  'FlashService', '$cookies', '$translate',
+  function ($rootScope, $urlRouter, $location, AuthService, $state, flash,
+            $cookies, $translate) {
+    $rootScope.$state = $state;
 
-  var publicRoute = function(state) {
-    return !!(state.data && state.data.public === true);
-  };
+    var publicRoute = function(state) {
+      return !!(state.data && state.data.public === true)
+    };
 
-  $rootScope.$on('$stateChangeSuccess', function(e, toState) {
-    if (!publicRoute(toState) && !$rootScope.currentUser) {
-      e.preventDefault();
-      res = AuthService.getCurrentUser().then(function() {
-        if ($rootScope.currentUser) {
-          $urlRouter.sync();
-        } else {
-          flash.setAlert('You must be logged in before accessing that page.');
+    $rootScope.$on('$stateChangeSuccess', function(e, toState) {
+      if (!publicRoute(toState) && !$rootScope.currentUser) {
+        e.preventDefault();
+        res = AuthService.getCurrentUser().then(function() {
+          if ($rootScope.currentUser) {
+            $urlRouter.sync();
+          } else {
+            flash.setAlert('You must be logged in before accessing that page.');
+            $state.go('login');
+          }
+        }).catch(function(error) {
+          flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
           $state.go('login');
-        }
-      }).catch(function(error) {
-        flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
-        $state.go('login');
-      });
-    }
-  });
-}]);
+        });
+      }
+    });
+
+    $rootScope.$watch(function getLangCookie() {
+      return $cookies['aggie-lang'];
+    }, function useLang(lang) {
+      $translate.use(lang);
+    });
+  }
+]);
 
 // Configuration
 require('./config');

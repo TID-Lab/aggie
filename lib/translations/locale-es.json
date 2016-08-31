@@ -1,0 +1,10 @@
+{
+  "newUser": {
+    "subject": "Bienvenido a Aggie!",
+    "body": "<p>Se ha creado una nueva cuenta en Aggie para ti. Tu nombre de usuario es <strong><%= user.username %></strong>.</p><p>Para acceder a tu cuenta y elegir tu contraseña accede a esta<a href=\"<%= protocol %>://<%= host %>/choose_password/<%= token %>\">página</a> o copia el siguiente enlace en tu navegador:</p><p><%= protocol %>://<%= host %>/choose_password/<%= token %></p><p>Has recibido este mensaje porque alguien ha creado una cuenta en <%= host %> con tu dirección de correo electrónico. Si no esperaba esta invitación, puede ignorar este correo electrónico.</p>"
+  },
+  "forgotPassword": {
+    "subject": "Aggie: Solicitud para cambiar la contraseña",
+    "body": "<p>Para cambiar tu contraseña haz <a href=\"<%= protocol %>://<%= host %>/password_reset/<%= token %>\">click aquí</a> o copia el siguiente enlace en tu navegador:</p><p><%= protocol %>://<%= host %>/password_reset/<%= token %></p><p>Has recibido este mensaje porque alguien ha pedido cambiar la contraseña en <%= host %> de una cuenta con esta dirección de correo electrónico. Si no esperaba este correo electrónico, puede ignorar este correo electrónico.</p>"
+  }
+}

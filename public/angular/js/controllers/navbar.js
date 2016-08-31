@@ -10,14 +10,12 @@ angular.module('Aggie')
   '$state',
   function($scope, $rootScope, $location, AuthService, flash, Socket, $state) {
     $scope.unreadErrorCount = '0';
-
     var init = function() {
       if ($rootScope.currentUser) {
 
         var adminNeedsToChangePwd = $rootScope.currentUser.username === 'admin' &&
               $rootScope.currentUser.hasDefaultPassword;
 
-        console.log($state.current.name);
         if (adminNeedsToChangePwd && $state.current.name != 'reset_admin_password') {
           $state.go('reset_admin_password');
         }

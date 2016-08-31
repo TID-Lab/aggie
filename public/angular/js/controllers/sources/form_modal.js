@@ -27,10 +27,10 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(source) {
         Source.create(source, function(response) {
-          flash.setNotice('Source was successfully created.');
+          flash.setNotice('source.create.success');
           $rootScope.$state.go('source', { id: response._id }, { reload: true });
         }, function(err) {
-          flash.setAlertNow('Source failed to be created. Please contact support.');
+          flash.setAlertNow('source.create.error');
         });
       });
     };
@@ -54,10 +54,10 @@ angular.module('Aggie')
 
       modalInstance.result.then(function(source) {
         Source.update({ id: source._id }, source, function(response) {
-          flash.setNotice('Source was successfully updated.');
+          flash.setNotice('source.update.success');
           $rootScope.$state.go('source', { id: source._id }, { reload: true });
         }, function() {
-            flash.setAlertNow('Source failed to be updated.');
+            flash.setAlertNow('source.update.error');
         });
       });
     };
