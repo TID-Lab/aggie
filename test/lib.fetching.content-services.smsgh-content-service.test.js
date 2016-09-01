@@ -19,7 +19,11 @@ describe('SMSGhana content service', function() {
 
     it('should start the server properly', function(done) {
 
-      request('http://localhost:1111', function(error, response, body) {
+      request({
+        url: 'http://localhost:1111',
+        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        method: 'GET'
+        }, function (error, response, body) {
           done(error);
       });
 
@@ -29,14 +33,14 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111',
-        qs: {phone_num: '9845098450', message: 'lorem ipsum dolor'},
+        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
         method: 'GET'
         }, function (error, response, body) {
         if (error) {
           console.log(error);
         }
         else if (response.statusCode != '200'){
-          console.log(response.statusCode, body);//Change this, obviously.
+          console.log(response.statusCode, body);//Depends on how the content-service is coded.
         }
         else {
           //Pass the test
@@ -50,12 +54,21 @@ describe('SMSGhana content service', function() {
       service.once('report', function(reportData) {
 
         // Ensure proper fields are returned from emitted raw data below.
-        expect(reportData.authoredAt.getFullYear()).to.equal(2012);
-        expect(reportData.fetchedAt.getFullYear()).to.equal((new Date()).getFullYear());
-        expect(reportData.content).to.equal('foo bar baz');
-        expect(reportData.author).to.equal('9845098450');
+        expect(reportData.Date).to.equal('2016-09-01');
+        expect(reportData.Fulltext).to.equal('lorem ipsum dolor');
+        expect(reportData.From).to.equal('9845098450');
 
         done();
+      });
+
+      request({
+        url: 'http://localhost:1111',
+        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        method: 'GET'
+        }, function (error, response, body) {
+          if (error) {
+            console.log(error);
+          }
       });
     });
   });
@@ -72,7 +85,7 @@ describe('SMSGhana content service', function() {
       service.stop();
       request({
         url: 'http://localhost:1111',
-        qs: {phone_num: '9845098450', message: 'lorem ipsum dolor'},
+        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
         method: 'GET'
         }, function (error, response, body) {
         if (!error) {
