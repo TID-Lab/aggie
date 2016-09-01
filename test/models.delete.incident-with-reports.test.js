@@ -3,15 +3,6 @@ var expect = require('chai').expect;
 var Incident = require('../models/incident');
 var Report = require('../models/report');
 var async = require('async');
-var User = require('../models/user');
-
-var user;
-
-function removeAll(done) {
-  Report.remove({}, function() {
-    Incident.remove({}, done);
-  });
-}
 
 var id1;
 var id2;
