@@ -1,0 +1,14 @@
+language: node_js
+
+before_install:
+  - "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
+  - "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
+  - "sudo apt-get update"
+  - "sudo apt-get install mongodb-org-server"
+  - "mongod --version"
+
+before_script:
+  - cp config/secrets.json.example config/secrets.json
+  - openssl req -x509 -newkey rsa:2048 -keyout config/key.pem -out config/cert.pem -days 365 -nodes -subj "/O=Aggie"
+
+script: karma start --single-run
