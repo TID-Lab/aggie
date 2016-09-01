@@ -1,0 +1,14 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        javascript:
+          mass_threshold: 80
+  eslint:
+    enabled: true
+    channel: "eslint-2"
+  fixme:
+    enabled: true
+  nodesecurity:
+    enabled: true
