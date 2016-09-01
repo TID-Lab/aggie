@@ -35,7 +35,7 @@ Incidents
 2. Click `Add` in the incident column of one of the reports [modal appears
 suggesting you create a new incident]
 3. Click `create a new incident` [create incident modal appears]
-4. Add a title for the incident and assign the incident to some user
+4. Add a title for the incident
 5. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
 6. Select a location and save the incident [modal closes]
@@ -47,18 +47,20 @@ reports]
 10. Click `Create Incident` [modal appears]
 11. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
+12. Pick a a location, enter a title and save the incident [incident is saved successfully]
 
 Users and emails
 ----------------
 
-1. Go to Settings [goes to `/settings`]
-2. Set up email settings
-3. Go to Settings > Users [list of users is shown]
-4. Click Create User [modal appears]
-5. Select name, a valid email, and `Viewer` [possible roles are listed correctly]
-6. Submit [email is sent]
-7. Logout
-8. Click link in email [goes to `/choose_password/...`]
-9. Select new password and login
-10. Click Settings [Users and not Settings appears in dropdown]
-11. Go to Settings > Users [only this user appears, cannot create new users]
+1. Go to Settings > Settings [goes to `/settings`]
+2. Set app email address [saved successfully]
+3. Set up email transport settings [saved successfully]
+4. Go to Settings > Users [list of users is shown]
+5. Click Create User [modal appears]
+6. Select name, a valid email, and `Viewer` [possible roles are listed correctly]
+7. Submit [email is sent]
+8. Logout
+9. Click link in email [goes to `/choose_password/...`]
+10. Select new password and login
+11. Click Settings [Users and not Settings appears in dropdown]
+12. Go to Settings > Users [only this user appears, cannot create new users]
