@@ -26,7 +26,7 @@ function createReports(done) {
     { _incident: id2 },
     { _incident: id2 },
     { _incident: '' },
-    {}, //incident: null
+    {}, // incident: null
   ], done);
 }
 
@@ -34,8 +34,8 @@ var queryNone;
 var queryAny;
 
 function createQueries(done) {
-  queryNone = new ReportQuery({incidentId:'none'});
-  queryAny = new ReportQuery({incidentId:'any'});
+  queryNone = new ReportQuery({ incidentId:'none' });
+  queryAny = new ReportQuery({ incidentId:'any' });
   done();
 }
 

@@ -6,12 +6,12 @@ var TwitterContentService = require('../lib/fetching/content-services/twitter-co
 describe('Twitter content service', function() {
 
   it('should handle incoming tweets properly', function(done) {
-    var service = new TwitterContentService({keywords: 't'});
+    var service = new TwitterContentService({ keywords: 't' });
 
     // Stub getStream method to return fake stream we control.
     var fakeStream = new EventEmitter();
-    fakeStream.stop = function(){};
-    service._getStream = function() { return fakeStream; }
+    fakeStream.stop = function() {};
+    service._getStream = function() { return fakeStream; };
 
     // Setup handler.
     service.once('report', function(reportData) {
@@ -31,7 +31,7 @@ describe('Twitter content service', function() {
     fakeStream.emit('tweet', {
       created_at: new Date(2012, 3, 4, 12, 0, 0),
       text: 'foo bar baz',
-      user: {screen_name: 'bozo'},
+      user: { screen_name: 'bozo' },
       id_str: '123'
     });
   });

@@ -9,11 +9,11 @@ var contentServiceFactory = require('../lib/fetching/content-service-factory');
 // If service is null, creates an ElmoContentService
 function stubWithFixture(fixtureFile, service) {
   // Create service if not provided.
-  service = service || new ELMOContentService({url: 'http://example.com'});
+  service = service || new ELMOContentService({ url: 'http://example.com' });
 
   // Make the stub function return the expected args (err, res, body).
   fixtureFile = 'test/fixtures/' + fixtureFile;
-  service._httpRequest = function(params, callback) { callback(null, {statusCode: 200}, fs.readFileSync(fixtureFile).toString()); };
+  service._httpRequest = function(params, callback) { callback(null, { statusCode: 200 }, fs.readFileSync(fixtureFile).toString()); };
 
   return service;
 }
@@ -21,7 +21,7 @@ function stubWithFixture(fixtureFile, service) {
 describe('ELMO content service', function() {
 
   it('factory should instantiate correct ELMO content service', function() {
-    var service = contentServiceFactory.create({media: 'elmo'});
+    var service = contentServiceFactory.create({ media: 'elmo' });
     expect(service).to.be.instanceOf(ContentService);
     expect(service).to.be.instanceOf(ELMOContentService);
   });
@@ -66,7 +66,7 @@ describe('ELMO content service', function() {
     setTimeout(function() { if (fetched == 2) done(); }, 100);
 
     // Run fetch
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   describe('errors', function() {
@@ -75,26 +75,26 @@ describe('ELMO content service', function() {
       var service = new ELMOContentService({});
       utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing ELMO URL', done);
-      service.fetch({maxCount: 50}, function(){});
+      service.fetch({ maxCount: 50 }, function() {});
     });
 
     it('should emit an unauthorized token error', function(done) {
-      var service = new ELMOContentService({url: 'https://example.com', authToken: '123'});
+      var service = new ELMOContentService({ url: 'https://example.com', authToken: '123' });
 
       // Stub the content service to return 403
       service._httpRequest = function(params, callback) {
-        process.nextTick(function() { callback({message: 'Unauthorized'}); });
+        process.nextTick(function() { callback({ message: 'Unauthorized' }); });
       };
       utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Unauthorized', done);
-      service.fetch({maxCount: 50}, function(){});
+      service.fetch({ maxCount: 50 }, function() {});
     });
 
     it('should emit json parse error', function(done) {
       var service = stubWithFixture('elmo-bad.json');
       utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Parse error: Unexpected end of input', done);
-      service.fetch({maxCount: 50}, function(){});
+      service.fetch({ maxCount: 50 }, function() {});
     });
   });
 

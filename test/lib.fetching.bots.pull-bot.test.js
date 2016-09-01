@@ -7,9 +7,9 @@ var Source = require('../models/source');
 
 describe('Pull bot', function() {
   before(function(done) {
-    var source = new Source({nickname: 'dummy-pull', media: 'dummy-pull'});
+    var source = new Source({ nickname: 'dummy-pull', media: 'dummy-pull' });
     var contentService = contentServiceFactory.create(source);
-    pullBot = new PullBot({source: source, contentService: contentService, interval: 100});
+    pullBot = new PullBot({ source: source, contentService: contentService, interval: 100 });
     done();
   });
 

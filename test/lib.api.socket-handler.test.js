@@ -14,7 +14,7 @@ var https = require('https');
 var path = require('path');
 var fs = require('fs');
 
-function createServer(app){
+function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../config/key.pem');
   var certFile = path.resolve(__dirname, '../config/cert.pem');
@@ -54,7 +54,7 @@ describe('Socket handler', function() {
   });
 
   it('should establish connections with a query', function(done) {
-    client.emit('query', {keywords: 'test'});
+    client.emit('query', { keywords: 'test' });
     setTimeout(function() {
       expect(streamer.queries).to.be.an.instanceof(Array);
       expect(streamer.queries).to.not.be.empty;
@@ -73,14 +73,14 @@ describe('Socket handler', function() {
       expect(reports[2].content.toLowerCase()).to.contain('test');
       done();
     });
-    Report.create({content: 'This is a test'});
-    Report.create({content: 'This is another TEST'});
-    Report.create({content: 'Testing this'});
-    Report.create({content: 'one two three'});
+    Report.create({ content: 'This is a test' });
+    Report.create({ content: 'This is another TEST' });
+    Report.create({ content: 'Testing this' });
+    Report.create({ content: 'one two three' });
   });
 
   it('should establish connections with an incident query', function(done) {
-    client.emit('incidentQuery', {title: 'quick brown'});
+    client.emit('incidentQuery', { title: 'quick brown' });
     setTimeout(function() {
       expect(streamer.queries).to.be.an.instanceof(Array);
       expect(streamer.queries).to.not.be.empty;
@@ -98,8 +98,8 @@ describe('Socket handler', function() {
       expect(incidents[0].title).to.equal('The quick brown fox');
       done();
     });
-    Incident.create({title: 'The slow white fox'});
-    Incident.create({title: 'The quick brown fox'});
+    Incident.create({ title: 'The slow white fox' });
+    Incident.create({ title: 'The quick brown fox' });
   });
 
   it('should stream a list of sources when a source changes', function(done) {
@@ -109,7 +109,7 @@ describe('Socket handler', function() {
       expect(sources[0]).to.contain.keys(['_id', 'nickname', 'unreadErrorCount', 'enabled', '__v']);
       done();
     });
-    Source.create({nickname: 'test', type: 'dummy'});
+    Source.create({ nickname: 'test', type: 'dummy' });
   });
 
   // Disconnect socket

@@ -24,12 +24,12 @@ function createReport(done) {
   var t = new Date();
 
   Report.create([
-    {storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60)},
-    {storedAt: new Date(t.getTime() - 12000), content: 'two', flagged: false},
-    {storedAt: new Date(t.getTime() - 13000), content: 'three', flagged: false},
-    {storedAt: new Date(t.getTime() - 14000), content: 'four', flagged: false},
-    {storedAt: new Date(t.getTime() - 15000), content: 'five', flagged: false},
-    {storedAt: new Date(t.getTime() - 16000), content: 'six', flagged: true, read: true}
+    { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60) },
+    { storedAt: new Date(t.getTime() - 12000), content: 'two', flagged: false },
+    { storedAt: new Date(t.getTime() - 13000), content: 'three', flagged: false },
+    { storedAt: new Date(t.getTime() - 14000), content: 'four', flagged: false },
+    { storedAt: new Date(t.getTime() - 15000), content: 'five', flagged: false },
+    { storedAt: new Date(t.getTime() - 16000), content: 'six', flagged: true, read: true }
   ], done);
 }
 
@@ -98,7 +98,7 @@ describe('Report', function() {
     });
   });
 
-  it('should cancel batch', function (done) {
+  it('should cancel batch', function(done) {
     batch.cancel(user._id, function(err, num) {
       expect(num).to.eq(1);
       done();

@@ -32,7 +32,7 @@ describe('Source controller', function() {
     it('should not allow the creation of multiple twitter sources', function(done) {
       request(sourceController)
         .post('/api/v1/source')
-        .send({nickname: 'test', media: 'twitter', keywords: 'test2'})
+        .send({ nickname: 'test', media: 'twitter', keywords: 'test2' })
         .expect(422, 'only_one_twitter_allowed', done);
     });
   });
@@ -60,7 +60,7 @@ describe('Source controller', function() {
             .end(function(err, res) {
               if (err) return done(err);
               expect(res.body).to.have.property('events');
-              expect(res.body).to.have.property('unreadErrorCount')
+              expect(res.body).to.have.property('unreadErrorCount');
               expect(res.body.events).to.be.an.instanceof(Array);
               expect(res.body.unreadErrorCount).to.equal(1);
               source.events = res.body.events;
@@ -88,7 +88,7 @@ describe('Source controller', function() {
     it('should not allow updating source media', function(done) {
       request(sourceController)
         .put('/api/v1/source/' + source._id)
-        .send({media: 'dummy'})
+        .send({ media: 'dummy' })
         .expect(422, 'source_media_change_not_allowed', done);
     });
   });
@@ -129,7 +129,7 @@ describe('Source controller', function() {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
           expect(res.body).to.not.be.empty;
-          compare(_.findWhere(res.body, {_id: source._id}), source);
+          compare(_.findWhere(res.body, { _id: source._id }), source);
           done();
         });
     });

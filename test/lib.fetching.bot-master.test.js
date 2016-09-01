@@ -7,12 +7,12 @@ var Source = require('../models/source');
 describe('BotMaster', function() {
   before(utils.expectModelsEmpty);
 
-  before(function(done){
-    Source.remove({}, function(){
+  before(function(done) {
+    Source.remove({}, function() {
       Source.create(
-        {nickname: 'one', media: 'dummy', keywords: 'one'},
-        {nickname: 'two', media: 'dummy', keywords: 'two'},
-        function(err){ done(err); }
+        { nickname: 'one', media: 'dummy', keywords: 'one' },
+        { nickname: 'two', media: 'dummy', keywords: 'two' },
+        function(err) { done(err); }
       );
     });
   });
@@ -38,7 +38,7 @@ describe('BotMaster', function() {
     expect(botMaster.bots).to.have.length(2);
     // Change the source to force reload.
     Source.findOne({}, function(err, source) {
-      botMaster.once('botMaster:addedBot', function(){
+      botMaster.once('botMaster:addedBot', function() {
         expect(botMaster.bots).to.have.length(2);
         expect(botMaster._getBot(source._id).source.keywords).to.equal('foo');
         done();

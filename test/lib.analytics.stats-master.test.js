@@ -8,17 +8,17 @@ var async = require('async');
 describe('StatsMaster', function() {
   function createReports(done) {
     Report.create([
-      {storedAt: new Date(), content: 'one', flagged: true},
-      {storedAt: new Date(), content: 'two', flagged: false},
-      {storedAt: new Date("2014-01-01"), content: 'three', flagged: true, read: true }
+      { storedAt: new Date(), content: 'one', flagged: true },
+      { storedAt: new Date(), content: 'two', flagged: false },
+      { storedAt: new Date('2014-01-01'), content: 'three', flagged: true, read: true }
     ], done);
   }
 
   function createIncidents(done) {
     Incident.create([
-      {title: 'Incident 1', veracity: false, escalated: false, status: 'new'},
-      {title: 'Incident 2', veracity: true, escalated: false, status: 'new'},
-      {title: 'Incident 3', veracity: true, escalated: true, status: 'new'}
+      { title: 'Incident 1', veracity: false, escalated: false, status: 'new' },
+      { title: 'Incident 2', veracity: true, escalated: false, status: 'new' },
+      { title: 'Incident 3', veracity: true, escalated: true, status: 'new' }
     ], done);
   }
 
@@ -78,7 +78,7 @@ describe('StatsMaster', function() {
   });
 
   it('should count all stats', function(done) {
-    statsMaster.countStats('all', function (err, stats) {
+    statsMaster.countStats('all', function(err, stats) {
       expect(stats.totalReports).to.equal(3);
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
@@ -90,7 +90,7 @@ describe('StatsMaster', function() {
   });
 
   it('should count only reports stats', function(done) {
-    statsMaster.countStats('reports', function (err, stats) {
+    statsMaster.countStats('reports', function(err, stats) {
       expect(stats.totalReports).to.equal(3);
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
@@ -101,7 +101,7 @@ describe('StatsMaster', function() {
   });
 
   it('should count only incidents', function(done) {
-    statsMaster.countStats('incidents', function (err, stats) {
+    statsMaster.countStats('incidents', function(err, stats) {
       expect(stats.totalIncidents).to.equal(3);
       expect(stats.totalEscalatedIncidents).to.equal(1);
       expect(stats.totalReports).not.exist;

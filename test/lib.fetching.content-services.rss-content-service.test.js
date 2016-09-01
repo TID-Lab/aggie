@@ -8,11 +8,11 @@ var path = require('path');
 // If service is null, creates a dummy FacebookContentService
 function stubWithFixture(fixtureFile, service) {
   // Create service if not provided.
-  service = service || new RSSContentService({url: 'http://example.com'});
+  service = service || new RSSContentService({ url: 'http://example.com' });
 
   // Make the stub function return the expected args (err, data).
   fixtureFile = 'test/fixtures/' + fixtureFile;
-  service._doRequest = function(callback) { callback(null, {statusCode: 200}, fs.createReadStream(fixtureFile)); };
+  service._doRequest = function(callback) { callback(null, { statusCode: 200 }, fs.createReadStream(fixtureFile)); };
 
   return service;
 }
@@ -59,13 +59,13 @@ describe('RSS content service', function() {
     // Give enough time for extra report to appear.
     setTimeout(function() { if (fetched == 2) done(); }, 100);
 
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   it('should avoid duplicates', function(done) {
     // Fetch first time.
     var service = stubWithFixture('rss-good-1.xml');
-    service.fetch({maxCount: 50}, function(){
+    service.fetch({ maxCount: 50 }, function() {
 
       // Stub for second fetch, which has one overlapping item.
       stubWithFixture('rss-good-2.xml', service);
@@ -90,7 +90,7 @@ describe('RSS content service', function() {
       setTimeout(function() { if (fetched == 2) done(); }, 100);
 
       // Run second fetch.
-      service.fetch({maxCount: 50}, function(){});
+      service.fetch({ maxCount: 50 }, function() {});
     });
   });
 
@@ -112,7 +112,7 @@ describe('RSS content service', function() {
       done();
     });
 
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   it('should emit errors for malformed data', function(done) {
@@ -132,7 +132,7 @@ describe('RSS content service', function() {
       done();
     });
 
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   after(utils.expectModelsEmpty);

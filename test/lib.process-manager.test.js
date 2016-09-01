@@ -98,7 +98,7 @@ describe('Process manager', function() {
         .end(function(err, res) {
           if (err) return done(err);
           process.nextTick(function() {
-            callback(res.body)
+            callback(res.body);
           });
         });
     };
@@ -110,7 +110,7 @@ describe('Process manager', function() {
         .end(function(err, res) {
           if (err) return done(err);
           setTimeout(function() {
-            callback()
+            callback();
           }, 500);
         });
     };
@@ -130,7 +130,7 @@ describe('Process manager', function() {
         expect(reports).to.contain.property('results');
         expect(reports.results).to.be.an.instanceof(Array);
         var length = reports.total;
-        createSource({nickname: 'lorem', media: 'dummy', keywords: 'Lorem ipsum'}, function() {
+        createSource({ nickname: 'lorem', media: 'dummy', keywords: 'Lorem ipsum' }, function() {
           toggleFetching('on', function() {
             setTimeout(function() {
               toggleFetching('off', function() {

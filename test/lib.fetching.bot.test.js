@@ -6,7 +6,7 @@ var Report = require('../models/report');
 
 describe('Bot', function() {
   before(function(done) {
-    bot = botFactory.create({media: 'dummy', keywords: 't', interval: 500});
+    bot = botFactory.create({ media: 'dummy', keywords: 't', interval: 500 });
     done();
   });
 

@@ -7,7 +7,7 @@ var ContentService = require('../lib/fetching/content-service');
 // If service is null, creates a dummy FacebookContentService
 function stubWithFixture(fixtureFile, service) {
   // Create service if not provided.
-  service = service || new FacebookContentService({url: 'http://example.com'});
+  service = service || new FacebookContentService({ url: 'http://example.com' });
 
   // Make the stub function return the expected args (err, data).
   fixtureFile = './fixtures/' + fixtureFile;
@@ -32,7 +32,7 @@ describe('Facebook content service', function() {
   });
 
   it('should grab the correct source given multiple url types', function() {
-    var service = new FacebookContentService({url: "http://test.com/"});
+    var service = new FacebookContentService({ url: "http://test.com/" });
     expect(service._getSourceFromUrl('http://facebook.com/cocacola')).to.equal('cocacola');
     expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
         .to.equal('CocaColaUnitedStates');
@@ -74,13 +74,13 @@ describe('Facebook content service', function() {
     // Give enough time for extra report to appear.
     setTimeout(function() { if (fetched == 3) done(); }, 100);
 
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   it('should get new comments from old posts, excluding already added posts', function(done) {
 
     var service = stubWithFixture('facebook-1.json');
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
 
     stubWithFixture('facebook-2.json', service);
     service.once('error', function(err) { done(err); });
@@ -111,16 +111,16 @@ describe('Facebook content service', function() {
     // Give enough time for extra report to appear.
     setTimeout(function() { if (fetched == 3) done(); }, 100);
 
-    service.fetch({maxCount: 50}, function(){});
+    service.fetch({ maxCount: 50 }, function() {});
   });
 
   describe('Errors', function() {
 
     it('should emit a missing URL error', function(done) {
-      var service = new FacebookContentService({url: ''});
+      var service = new FacebookContentService({ url: '' });
       utils.expectToNotEmitReport(service, done);
       expectToEmitError(service, 'Missing Facebook URL', done);
-      service.fetch({maxCount: 50}, function(){});
+      service.fetch({ maxCount: 50 }, function() {});
     });
   });
 

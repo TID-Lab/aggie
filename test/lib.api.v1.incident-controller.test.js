@@ -7,7 +7,7 @@ var incidentController = require('../lib/api/v1/incident-controller')();
 var incident;
 describe('Incident controller', function() {
   before(function(done) {
-    incident = {title: 'test'};
+    incident = { title: 'test' };
     done();
   });
 
@@ -59,7 +59,7 @@ describe('Incident controller', function() {
     it('should whitelist status values', function(done) {
       request(incidentController)
         .put('/api/v1/incident/' + incident._id)
-        .send({status: 'undefined'})
+        .send({ status: 'undefined' })
         .expect(422, 'status_error', done);
     });
   });
@@ -74,7 +74,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.keys(['total', 'results']);
           expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.not.be.empty;
-          compare(_.findWhere(res.body.results, {_id: incident._id}), incident);
+          compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
           done();
         });
     });
@@ -87,7 +87,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.keys(['total', 'results']);
           expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.not.be.empty;
-          compare(_.findWhere(res.body.results, {_id: incident._id}), incident);
+          compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
           done();
         });
     });
@@ -127,7 +127,7 @@ describe('Incident controller', function() {
         .end(function(err, res) {
           request(incidentController)
             .get('/api/v1/incident')
-            .expect(200, {total: 0, results: []}, done);
+            .expect(200, { total: 0, results: [] }, done);
         });
     });
   });
@@ -136,12 +136,12 @@ describe('Incident controller', function() {
     it('should delete all incidents', function(done) {
       request(incidentController)
         .post('/api/v1/incident/_selected')
-        .send({ids: [incident._id]})
+        .send({ ids: [incident._id] })
         .expect(200)
         .end(function(err, res) {
           request(incidentController)
             .get('/api/v1/incident')
-            .expect(200, {total: 0, results: []}, done);
+            .expect(200, { total: 0, results: [] }, done);
         });
     });
   });

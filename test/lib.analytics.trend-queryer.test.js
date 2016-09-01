@@ -11,9 +11,9 @@ var _ = require('underscore');
 var trendQueryer;
 describe('Trend queryer', function() {
   before(function(done) {
-    Trend.create({_query: Query.hash(new ReportQuery({keywords: 'test'}))}, function(err, trend) {
+    Trend.create({ _query: Query.hash(new ReportQuery({ keywords: 'test' })) }, function(err, trend) {
       if (err) return done(err);
-      trendQueryer = new TrendQueryer({trend: trend});
+      trendQueryer = new TrendQueryer({ trend: trend });
       done();
     });
   });
@@ -32,11 +32,11 @@ describe('Trend queryer', function() {
   });
 
   it('should run query associated with trend', function(done) {
-    Report.create({content: 'test'});
-    Report.create({content: 'testing this'});
-    Report.create({content: 'but not this'});
-    Report.create({content: 'this should also be tested'});
-    Report.create({content: 'but this one should not'});
+    Report.create({ content: 'test' });
+    Report.create({ content: 'testing this' });
+    Report.create({ content: 'but not this' });
+    Report.create({ content: 'this should also be tested' });
+    Report.create({ content: 'but this one should not' });
     setTimeout(function() {
       trendQueryer.runQuery(function(err, counts) {
         if (err) return done(err);
@@ -52,12 +52,12 @@ describe('Trend queryer', function() {
   });
 
   it('should run query without keywords', function(done) {
-    Trend.create({_query: Query.hash(new ReportQuery({media: 'test', since: 1}))}, function(err, trend) {
+    Trend.create({ _query: Query.hash(new ReportQuery({ media: 'test', since: 1 })) }, function(err, trend) {
       if (err) return done(err);
-      trendQueryer = new TrendQueryer({trend: trend});
+      trendQueryer = new TrendQueryer({ trend: trend });
       setTimeout(function() {
-        Report.create({content: 'foo', _media: 'bar'});
-        Report.create({content: 'baz', _media: 'test'});
+        Report.create({ content: 'foo', _media: 'bar' });
+        Report.create({ content: 'baz', _media: 'test' });
         setTimeout(function() {
           trendQueryer.runQuery(function(err, counts) {
             if (err) return done(err);
@@ -73,26 +73,26 @@ describe('Trend queryer', function() {
   });
 
   it('should group analytics by 5-minute timeboxes', function(done) {
-    Trend.create({_query: Query.hash(new ReportQuery({keywords: 'qwerty'}))}, function(err, trend) {
+    Trend.create({ _query: Query.hash(new ReportQuery({ keywords: 'qwerty' })) }, function(err, trend) {
       setTimeout(function() {
         if (err) return done(err);
-        trendQueryer = new TrendQueryer({trend: trend});
+        trendQueryer = new TrendQueryer({ trend: trend });
 
         // Create one report now
-        Report.create({content: 'qwerty'});
+        Report.create({ content: 'qwerty' });
 
         process.nextTick(function() {
           // Create two reports 5 minutes in the future
           timekeeper.travel(new Date(Date.now() + 300000));
-          Report.create({content: 'qwerty'});
-          Report.create({content: 'qwerty'});
+          Report.create({ content: 'qwerty' });
+          Report.create({ content: 'qwerty' });
 
           process.nextTick(function() {
             // Create three reports 10 minutes in the future
             timekeeper.travel(new Date(Date.now() + 600000));
-            Report.create({content: 'qwerty'});
-            Report.create({content: 'qwerty'});
-            Report.create({content: 'qwerty'});
+            Report.create({ content: 'qwerty' });
+            Report.create({ content: 'qwerty' });
+            Report.create({ content: 'qwerty' });
 
             setTimeout(function() {
               // Run trend analytics
@@ -116,21 +116,21 @@ describe('Trend queryer', function() {
 
   it('should back-fill trend counts for old reports', function(done) {
     // Create reports
-    Report.create({content: 'backfill'});
-    Report.create({content: 'backfill'});
-    Report.create({content: 'backfill'});
+    Report.create({ content: 'backfill' });
+    Report.create({ content: 'backfill' });
+    Report.create({ content: 'backfill' });
     process.nextTick(function() {
       // Travel 10 minutes into the future
       timekeeper.travel(new Date(Date.now() + 300000));
-      Report.create({content: 'backfill'});
-      Report.create({content: 'backfill'});
+      Report.create({ content: 'backfill' });
+      Report.create({ content: 'backfill' });
       process.nextTick(function() {
         // Travel 10 minutes into the future
         timekeeper.travel(new Date(Date.now() + 600000));
         // Create a new trend
-        Trend.create({_query: Query.hash(new ReportQuery({keywords: 'backfill'}))}, function(err, trend) {
+        Trend.create({ _query: Query.hash(new ReportQuery({ keywords: 'backfill' })) }, function(err, trend) {
           if (err) return done(err);
-          trendQueryer = new TrendQueryer({trend: trend});
+          trendQueryer = new TrendQueryer({ trend: trend });
           trendQueryer.backFill(function(err, counts) {
             if (err) return done(err);
             counts = _.sortBy(counts, 'timebox');

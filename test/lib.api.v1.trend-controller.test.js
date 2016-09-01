@@ -10,7 +10,7 @@ var ReportQuery = require('../models/query/report-query');
 var trend;
 describe('Trend controller', function() {
   before(function(done) {
-    trend = {keywords: 'test'};
+    trend = { keywords: 'test' };
     done();
   });
 
@@ -48,9 +48,9 @@ describe('Trend controller', function() {
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '123'}))});
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '456'}))});
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '789'}))});
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '123' })) });
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '456' })) });
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '789' })) });
       setTimeout(function() {
         request(trendController)
           .get('/api/v1/trend')
@@ -59,7 +59,7 @@ describe('Trend controller', function() {
             if (err) return done(err);
             expect(res.body).to.be.an.instanceof(Array);
             expect(res.body).to.have.length(4);
-            compare(_.findWhere(res.body, {_id: trend._id}), trend);
+            compare(_.findWhere(res.body, { _id: trend._id }), trend);
             done();
           });
       }, 100);
