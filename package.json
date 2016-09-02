@@ -12,7 +12,7 @@
     "start": "node app.js",
 
     "premocha": "node install.js",
-    "mocha": "mocha test/backend",
+    "mocha": "mocha --no-exit test/backend",
     "karma": "karma start --single-run",
     "test": "npm run mocha && npm run karma",
 
