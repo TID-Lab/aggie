@@ -119,7 +119,7 @@ describe('Facebook content service', function() {
     it('should emit a missing URL error', function(done) {
       var service = new FacebookContentService({ url: '' });
       utils.expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Missing Facebook URL', done);
+      utils.expectToEmitError(service, 'Missing Facebook URL', done);
       service.fetch({ maxCount: 50 }, function() {});
     });
   });

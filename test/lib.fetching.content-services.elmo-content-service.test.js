@@ -74,7 +74,7 @@ describe('ELMO content service', function() {
     it('should emit a missing URL error', function(done) {
       var service = new ELMOContentService({});
       utils.expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Missing ELMO URL', done);
+      utils.expectToEmitError(service, 'Missing ELMO URL', done);
       service.fetch({ maxCount: 50 }, function() {});
     });
 
@@ -86,14 +86,14 @@ describe('ELMO content service', function() {
         process.nextTick(function() { callback({ message: 'Unauthorized' }); });
       };
       utils.expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Unauthorized', done);
+      utils.expectToEmitError(service, 'Unauthorized', done);
       service.fetch({ maxCount: 50 }, function() {});
     });
 
     it('should emit json parse error', function(done) {
       var service = stubWithFixture('elmo-bad.json');
       utils.expectToNotEmitReport(service, done);
-      expectToEmitError(service, 'Parse error: Unexpected end of input', done);
+      utils.expectToEmitError(service, 'Parse error: Unexpected end of input', done);
       service.fetch({ maxCount: 50 }, function() {});
     });
   });
