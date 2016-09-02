@@ -18,7 +18,7 @@ describe('Report controller', function() {
   function createSource(done) {
     Source.create({ nickname: 'test', media: 'dummy', keywords: 'e' }, function(err, src) {
       source = src;
-      done();
+      done(err);
     });
   }
 
@@ -47,14 +47,14 @@ describe('Report controller', function() {
   function loadReports(done) {
     Report.find({}, function(err, results) {
       reports = results;
-      done();
+      done(err);
     });
   }
 
   function loadIncidents(done) {
     Incident.find({}, function(err, results) {
       incidents = results;
-      done();
+      done(err);
     });
   }
 
@@ -73,7 +73,7 @@ describe('Report controller', function() {
         { authoredAt: new Date(), content: 'one', _source: source._id },
         { authoredAt: new Date(), content: 'two', _source: source._id },
         { storedAt: past, authoredAt: past, content: 'three', _source: source._id }
-      ], function() { done(); });
+      ], done);
     });
 
     it('should get a list of all reports', function(done) {
@@ -146,7 +146,7 @@ describe('Report controller', function() {
       Report.create([
         { authoredAt: new Date(), content: 'one', _source: source._id },
         { authoredAt: new Date(), content: 'two', _source: source._id }
-      ], function() { done(); });
+      ], done);
     });
 
     it('should delete all reports', function(done) {
@@ -196,6 +196,7 @@ describe('Report controller', function() {
           .get('/api/v1/report/' + reports[0]._id)
           .expect(200)
           .end(function(err, res) {
+            if (err) return done(err);
             expect(res.body).to.have.property('_incident');
             expect(res.body._incident).to.equal(String(incidents[0]._id));
 
@@ -203,6 +204,7 @@ describe('Report controller', function() {
             .get('/api/v1/report/' + reports[1]._id)
             .expect(200)
             .end(function(err, res) {
+              if (err) return done(err);
               expect(res.body).to.have.property('_incident');
               expect(res.body._incident).to.equal(String(incidents[0]._id));
               done();
@@ -219,18 +221,19 @@ describe('Report controller', function() {
         .end(function(err) {
           if (err) return done(err);
           Incident.findById(incidents[0]._id, function(err, incident) {
+            if (err) return done(err);
             expect(incident.totalReports).to.equal(2);
             request(reportController)
-                .patch('/api/v1/report/_link')
-                .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
-                .expect(200)
-                .end(function(err) {
-                  if (err) return done(err);
-                  Incident.findById(incidents[0]._id, function(err, inc) {
-                    expect(inc.totalReports).to.equal(0);
-                    done(err);
-                  });
+              .patch('/api/v1/report/_link')
+              .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
+              .expect(200)
+              .end(function(err) {
+                if (err) return done(err);
+                Incident.findById(incidents[0]._id, function(err, inc) {
+                  expect(inc.totalReports).to.equal(0);
+                  done(err);
                 });
+              });
           });
         });
     });
