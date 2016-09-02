@@ -1,15 +1,18 @@
+'use strict';
+
 require('./init');
 var request = require('request');
 var expect = require('chai').expect;
-var EventEmitter = require('events').EventEmitter;
+// var EventEmitter = require('events').EventEmitter;
 var SMSGhContentService = require('../lib/fetching/content-services/smsgh-content-service');
 
 describe('SMSGhana content service', function() {
-  describe('Testing start, send, and process', function(){
+  describe('Testing start, send, and process', function() {
 
+    var service;
 
-    beforeEach(function () {
-      var service = new SMSGhContentService();
+    beforeEach(function() {
+      service = new SMSGhContentService();
       service.start();
     });
 
@@ -21,10 +24,12 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111',
-        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
-        }, function (error, response, body) {
-          done(error);
+        }, function(error, response) {
+          if (response.statusCode === 200) {
+            done(error);
+          }
       });
 
     });
@@ -33,19 +38,14 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111',
-        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
-        }, function (error, response, body) {
+        }, function(error, response) {
         if (error) {
-          console.log(error);
+          return done(error);
         }
-        else if (response.statusCode != '200'){
-          console.log(response.statusCode, body);//Depends on how the content-service is coded.
-        }
-        else {
-          //Pass the test
-          done();
-        }
+        expect(response.statusCode).to.be(200);
+        return done();
       });
     });
 
@@ -54,7 +54,7 @@ describe('SMSGhana content service', function() {
       service.once('report', function(reportData) {
 
         // Ensure proper fields are returned from emitted raw data below.
-        expect(reportData.Date).to.equal('2016-09-01');
+        expect(reportData.AuthoredAt).to.equal('2016-09-01');
         expect(reportData.Fulltext).to.equal('lorem ipsum dolor');
         expect(reportData.From).to.equal('9845098450');
 
@@ -63,11 +63,11 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111',
-        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
-        }, function (error, response, body) {
-          if (error) {
-            console.log(error);
+        }, function(error, response) {
+          if (error || response.statusCode !== 200) {
+            return done(error);
           }
       });
     });
@@ -75,26 +75,26 @@ describe('SMSGhana content service', function() {
 
   describe('testing stop', function() {
 
-    before(function () {
-      var service = new SMSGhContentService();
+    var service;
+
+    before(function() {
+      service = new SMSGhContentService();
       service.start();
     });
 
-    it('should stop server properly', function(done){
+    it('should stop server properly', function(done) {
 
       service.stop();
+
       request({
         url: 'http://localhost:1111',
-        qs: {From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01'},
+        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
-        }, function (error, response, body) {
-        if (!error) {
-          console.log(response, body);
+        }, function(error) {
+        if (error) {
+          expectNotToEmitReport(service, done);
         }
-        else {
-          //Pass the test
-          done();
-        }
+        done(error);
       });
     });
   });
