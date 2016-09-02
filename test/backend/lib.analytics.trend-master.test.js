@@ -168,17 +168,13 @@ describe('Trend master', function() {
   });
 
   // Clean up
-  after(function(done) {
+  after(function() {
     trendMaster.trends = [];
     trendMaster.disable();
-    Trend.remove(function(err) {
-      if (err) return done(err);
-      Report.remove(function(err) {
-        if (err) return done(err);
-        done();
-      });
-    });
+    Trend.schema.removeAllListeners();
+    Report.schema.removeAllListeners();
   });
 
+  after(utils.wipeModels([Trend, Report]));
   after(utils.expectModelsEmpty);
 });
