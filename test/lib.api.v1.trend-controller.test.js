@@ -26,7 +26,7 @@ describe('Trend controller', function() {
           expect(res.body).to.have.property('_query');
           trend._id = res.body._id;
           trend._query = res.body._query;
-          compare.call(this, res.body, trend);
+          utils.compare(res.body, trend);
           done();
         });
     });
@@ -39,7 +39,7 @@ describe('Trend controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, trend);
+          utils.compare(res.body, trend);
           done();
         });
     });
@@ -59,7 +59,7 @@ describe('Trend controller', function() {
             if (err) return done(err);
             expect(res.body).to.be.an.instanceof(Array);
             expect(res.body).to.have.length(4);
-            compare(_.findWhere(res.body, { _id: trend._id }), trend);
+            utils.compare(_.findWhere(res.body, { _id: trend._id }), trend);
             done();
           });
       }, 100);

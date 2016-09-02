@@ -24,7 +24,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.property('status');
           expect(res.body).to.have.property('veracity');
           incident._id = res.body._id;
-          compare.call(this, res.body, incident);
+          utils.compare(res.body, incident);
           done();
         });
     });
@@ -37,7 +37,7 @@ describe('Incident controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, incident);
+          utils.compare(res.body, incident);
           done();
         });
     });
@@ -52,7 +52,7 @@ describe('Incident controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, incident);
+          utils.compare(res.body, incident);
           done();
         });
     });
@@ -74,7 +74,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.keys(['total', 'results']);
           expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.not.be.empty;
-          compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
+          utils.compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
           done();
         });
     });
@@ -87,7 +87,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.keys(['total', 'results']);
           expect(res.body.results).to.be.an.instanceof(Array);
           expect(res.body.results).to.not.be.empty;
-          compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
+          utils.compare(_.findWhere(res.body.results, { _id: incident._id }), incident);
           done();
         });
     });

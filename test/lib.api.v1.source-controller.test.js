@@ -6,6 +6,8 @@ var sourceController = require('../lib/api/v1/source-controller')();
 var Source = require('../models/source');
 
 describe('Source controller', function() {
+  var source;
+
   before(function(done) {
     source = {
       nickname: 'test',
@@ -25,7 +27,7 @@ describe('Source controller', function() {
           if (err) return done(err);
           expect(res.body).to.have.property('_id');
           source._id = res.body._id;
-          compare.call(this, res.body, source);
+          utils.compare(res.body, source);
           done();
         });
     });
@@ -44,7 +46,7 @@ describe('Source controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, source);
+          utils.compare(res.body, source);
           done();
         });
     });
@@ -81,7 +83,7 @@ describe('Source controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, source);
+          utils.compare(res.body, source);
           done();
         });
     });
@@ -129,7 +131,7 @@ describe('Source controller', function() {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
           expect(res.body).to.not.be.empty;
-          compare(_.findWhere(res.body, { _id: source._id }), source);
+          utils.compare(_.findWhere(res.body, { _id: source._id }), source);
           done();
         });
     });

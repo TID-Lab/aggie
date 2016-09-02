@@ -1,3 +1,5 @@
+'use strict';
+
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -70,27 +72,6 @@ function wipeModels(models) {
 }
 module.exports.wipeModels = wipeModels;
 
-function waitForEventsToStop(emitter, eventName, timeout, callback) {
-  var x;
-
-  var start = function() {
-    setTimeout(function() {
-      x = null;
-      callback();
-    }, timeout);
-  };
-
-  start();
-
-  emitter.on(eventName, function() {
-    if (x) {
-      clearTimeout(x);
-      start();
-    }
-  });
-}
-module.exports.waitForEventsToStop = waitForEventsToStop;
-
 function removeUsersExceptAdmin(done) {
   var query = {
     username: { $ne: 'admin' }
@@ -100,13 +81,14 @@ function removeUsersExceptAdmin(done) {
 module.exports.removeUsersExceptAdmin = removeUsersExceptAdmin;
 
 // Compare object attributes
-compare = function(a, b) {
+function compare(a, b) {
   for (var attr in a) {
     if (b[attr]) {
       expect(a[attr]).to.equal(b[attr]);
     }
   }
-};
+}
+module.exports.compare = compare;
 
 // Expect listener to not emit reports
 function expectToNotEmitReport(listener, done) {
@@ -117,10 +99,11 @@ function expectToNotEmitReport(listener, done) {
 module.exports.expectToNotEmitReport = expectToNotEmitReport;
 
 // Expect listener to emit specific errors
-expectToEmitError = function(listener, message, done) {
+function expectToEmitError(listener, message, done) {
   listener.once('error', function(err) {
     expect(err).to.be.an.instanceof(Error);
     expect(err.message).to.contain(message);
     done();
   });
-};
+}
+module.exports.expectToEmitError = expectToEmitError;

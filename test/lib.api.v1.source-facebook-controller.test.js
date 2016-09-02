@@ -36,7 +36,7 @@ describe('Facebook source controller', function() {
             if (err) return done(err);
             expect(res.body).to.have.property('_id');
             source._id = res.body._id;
-            compare.call(this, res.body, source);
+            utils.compare(res.body, source);
             done();
           });
       });

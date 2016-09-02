@@ -1,9 +1,12 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var statsMaster = require('../lib/analytics/stats-master');
 var Report = require('../models/report');
 var Incident = require('../models/incident');
 var async = require('async');
+var _ = require('lodash');
 
 describe('StatsMaster', function() {
   function createReports(done) {
@@ -29,7 +32,9 @@ describe('StatsMaster', function() {
 
   beforeEach(function(done) {
     async.parallel([createReports, createIncidents], function(err) {
-      utils.waitForEventsToStop(statsMaster, 'stats', 100, done.bind({}, err));
+      // Call done on just the third 'stats' event
+      var finished = _.after(3, _.once(done.bind({}, err)));
+      statsMaster.on('stats', finished);
     });
   });
 
