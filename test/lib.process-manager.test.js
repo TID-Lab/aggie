@@ -1,9 +1,8 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var processManager = require('../lib/process-manager');
-var Source = require('../models/source');
-var botMaster = require('../lib/fetching/bot-master');
 var request = require('supertest');
+var Source = require('../models/source');
 var Report = require('../models/report');
 
 /**
@@ -99,7 +98,7 @@ describe('Process manager', function() {
         .end(function(err, res) {
           if (err) return done(err);
           process.nextTick(function() {
-            callback(res.body)
+            callback(res.body);
           });
         });
     };
@@ -111,7 +110,7 @@ describe('Process manager', function() {
         .end(function(err, res) {
           if (err) return done(err);
           setTimeout(function() {
-            callback()
+            callback();
           }, 500);
         });
     };
@@ -131,7 +130,7 @@ describe('Process manager', function() {
         expect(reports).to.contain.property('results');
         expect(reports.results).to.be.an.instanceof(Array);
         var length = reports.total;
-        createSource({nickname: 'lorem', media: 'dummy', keywords: 'Lorem ipsum'}, function() {
+        createSource({ nickname: 'lorem', media: 'dummy', keywords: 'Lorem ipsum' }, function() {
           toggleFetching('on', function() {
             setTimeout(function() {
               toggleFetching('off', function() {
@@ -158,4 +157,6 @@ describe('Process manager', function() {
     });
   });
 
+  after(utils.wipeModels([Report, Source]));
+  after(utils.expectModelsEmpty);
 });

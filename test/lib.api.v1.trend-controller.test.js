@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
@@ -10,7 +10,7 @@ var ReportQuery = require('../models/query/report-query');
 var trend;
 describe('Trend controller', function() {
   before(function(done) {
-    trend = {keywords: 'test'};
+    trend = { keywords: 'test' };
     done();
   });
 
@@ -26,7 +26,7 @@ describe('Trend controller', function() {
           expect(res.body).to.have.property('_query');
           trend._id = res.body._id;
           trend._query = res.body._query;
-          compare.call(this, res.body, trend);
+          utils.compare(res.body, trend);
           done();
         });
     });
@@ -39,7 +39,7 @@ describe('Trend controller', function() {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
-          compare.call(this, res.body, trend);
+          utils.compare(res.body, trend);
           done();
         });
     });
@@ -48,9 +48,9 @@ describe('Trend controller', function() {
   describe('GET /api/v1/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '123'}))});
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '456'}))});
-      Trend.create({_query: Query.hash(new ReportQuery({keywords: '789'}))});
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '123' })) });
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '456' })) });
+      Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '789' })) });
       setTimeout(function() {
         request(trendController)
           .get('/api/v1/trend')
@@ -59,7 +59,7 @@ describe('Trend controller', function() {
             if (err) return done(err);
             expect(res.body).to.be.an.instanceof(Array);
             expect(res.body).to.have.length(4);
-            compare(_.findWhere(res.body, {_id: trend._id}), trend);
+            utils.compare(_.findWhere(res.body, { _id: trend._id }), trend);
             done();
           });
       }, 100);
@@ -124,4 +124,5 @@ describe('Trend controller', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 require('../lib/database');
@@ -16,31 +16,31 @@ var incidents;
 
 describe('Report controller', function() {
   function createSource(done) {
-    Source.create({nickname: 'test', media: 'dummy', keywords: 'e'}, function (err, src) {
+    Source.create({ nickname: 'test', media: 'dummy', keywords: 'e' }, function(err, src) {
       source = src;
       done();
     });
   }
 
   function loadUser(done) {
-    User.findOne({}, function (err, u) {
+    User.findOne({}, function(err, u) {
       user = u;
-      done();
+      done(err);
     });
   }
 
   function createReports(done) {
     Report.create([
-      {authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id},
-      {authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id},
-      {authoredAt: new Date(), content: 'three', _source: source._id, checkedOutBy: user.id}
+      { authoredAt: new Date(), content: 'one', _source: source._id, checkedOutBy: user.id },
+      { authoredAt: new Date(), content: 'two', _source: source._id, checkedOutBy: user.id },
+      { authoredAt: new Date(), content: 'three', _source: source._id, checkedOutBy: user.id }
     ], done);
   }
 
   function createIncidents(done) {
     Incident.create([
-      { authoredAt: new Date(), title: 'First incident'},
-      { authoredAt: new Date(), title: 'Second incident'}
+      { authoredAt: new Date(), title: 'First incident' },
+      { authoredAt: new Date(), title: 'Second incident' }
     ], done);
   }
 
@@ -59,13 +59,9 @@ describe('Report controller', function() {
   }
 
 
-  beforeEach(function(done) {
-    createSource(done);
-  });
+  beforeEach(createSource);
 
-  afterEach(function(done) {
-    async.parallel([Report.remove.bind(Report, {}), Source.remove.bind(Source, {}), Incident.remove.bind(Incident, {})], done);
-  });
+  afterEach(utils.wipeModels([Report, Source, Incident]));
 
   describe('GET /api/v1/report', function() {
 
@@ -73,10 +69,10 @@ describe('Report controller', function() {
     beforeEach(function(done) {
       var past = new Date(2000, 1, 1, 12, 0, 0); // Feb 1
       Report.create([
-        {authoredAt: new Date(), content: 'one', flagged: true, _source: source._id},
-        {authoredAt: new Date(), content: 'one', _source: source._id},
-        {authoredAt: new Date(), content: 'two', _source: source._id},
-        {storedAt: past, authoredAt: past, content: 'three', _source: source._id}
+        { authoredAt: new Date(), content: 'one', flagged: true, _source: source._id },
+        { authoredAt: new Date(), content: 'one', _source: source._id },
+        { authoredAt: new Date(), content: 'two', _source: source._id },
+        { storedAt: past, authoredAt: past, content: 'three', _source: source._id }
       ], function() { done(); });
     });
 
@@ -134,7 +130,7 @@ describe('Report controller', function() {
 
     it('should filter by date range', function(done) {
       request(reportController)
-        .get('/api/v1/report?after=' + new Date(2000,0,31,12,0,0) + '&before=' + new Date(2000,1,2,12,0,0))
+        .get('/api/v1/report?after=' + new Date(2000, 0, 31, 12, 0, 0) + '&before=' + new Date(2000, 1, 2, 12, 0, 0))
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -148,8 +144,8 @@ describe('Report controller', function() {
   describe('DELETE /api/v1/report/_all', function() {
     beforeEach(function(done) {
       Report.create([
-        {authoredAt: new Date(), content: 'one', _source: source._id},
-        {authoredAt: new Date(), content: 'two', _source: source._id}
+        { authoredAt: new Date(), content: 'one', _source: source._id },
+        { authoredAt: new Date(), content: 'two', _source: source._id }
       ], function() { done(); });
     });
 
@@ -161,7 +157,7 @@ describe('Report controller', function() {
           if (err) return done(err);
           request(reportController)
             .get('/api/v1/report')
-            .expect(200, {total: 0, results: []}, done);
+            .expect(200, { total: 0, results: [] }, done);
         });
     });
   });
@@ -174,7 +170,7 @@ describe('Report controller', function() {
     it('should mark reports as read', function(done) {
       request(reportController)
         .patch('/api/v1/report/_read')
-        .send({ids: [reports[0].id, reports[1].id], read: true})
+        .send({ ids: [reports[0].id, reports[1].id], read: true })
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -239,4 +235,6 @@ describe('Report controller', function() {
         });
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

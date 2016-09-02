@@ -1,25 +1,26 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var settingsController = require('../lib/api/v1/settings-controller');
 var botMaster = require('../lib/fetching/bot-master');
 var Source = require('../models/source');
+var Report = require('../models/report');
 var config = require('../config/secrets');
 var _ = require('underscore');
 
 describe('Settings controller', function() {
   before(function(done) {
     config.update('dummy', { set: 'initialDummySetting' }, function(err) {
-      Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
-      Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
-      Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
+      Source.create({ nickname: 'one', media: 'dummy', keywords: 'one' });
+      Source.create({ nickname: 'two', media: 'dummy', keywords: 'two' });
+      Source.create({ nickname: 'three', media: 'dummy', keywords: 'three' });
     });
 
     botMaster.kill();
     botMaster.addListeners('source', Source.schema);
     botMaster.addListeners('fetching', settingsController);
 
-    twitterSettings =  _.clone(config.get().twitter);
+    twitterSettings = _.clone(config.get().twitter);
 
     testSettings = {
       consumer_key: 'testing',
@@ -42,7 +43,7 @@ describe('Settings controller', function() {
     it('should return the settings JSON of twitter', function(done) {
       request(settingsController)
         .get('/api/v1/settings/twitter')
-        .expect(200, {twitter: config.get({ reload: true }).twitter, setting: 'twitter' }, done);
+        .expect(200, { twitter: config.get({ reload: true }).twitter, setting: 'twitter' }, done);
     });
   });
 
@@ -103,7 +104,7 @@ describe('Settings controller', function() {
 //    originalDummyBot;
 //    newDummyBot;
 
-    before(function(done){
+    before(function(done) {
       newSettings = { set: 'dummySetting' };
       botStatus = botMaster.bots[0].enabled;
       request(settingsController)
@@ -139,7 +140,7 @@ describe('Settings controller', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {fetching: false, setting: 'fetching' }, done);
+        .expect(200, { fetching: false, setting: 'fetching' }, done);
     });
   });
 
@@ -166,7 +167,7 @@ describe('Settings controller', function() {
     it('should return fetching status as enabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {fetching: true, setting: 'fetching'}, done);
+        .expect(200, { fetching: true, setting: 'fetching' }, done);
     });
   });
 
@@ -193,8 +194,13 @@ describe('Settings controller', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
         .get('/api/v1/settings/fetching')
-        .expect(200, {fetching: false, setting: 'fetching'}, done);
+        .expect(200, { fetching: false, setting: 'fetching' }, done);
     });
   });
 
+  // We have to delete reports here for a very sneaky reason, because when other
+  // tests are present the bots can save reports (see comment in
+  // test/lib.fetching.bot-master.test.js).
+  after(utils.wipeModels([Report]));
+  after(utils.expectModelsEmpty);
 });

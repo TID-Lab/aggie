@@ -1,25 +1,8 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var Incident = require('../models/incident');
 var Report = require('../models/report');
-var _ = require('underscore');
 var async = require('async');
-var User = require('../models/user');
-
-var user;
-
-function loadUser(done) {
-  User.findOne({}, function(err, u) {
-    user = u;
-    done();
-  });
-}
-
-function removeAll(done) {
-  Report.remove({}, function() {
-    Incident.remove({}, done);
-  });
-}
 
 var id1;
 var id2;
@@ -53,11 +36,12 @@ function removeIncident(done) {
 
 describe('Deleting an incident that has associated reports', function() {
   before(function(done) {
-    async.series([loadUser, removeAll, createIncidents, createReports, removeIncident], done);
+    async.series([createIncidents, createReports, removeIncident], done);
   });
 
   it('should remove the incident', function(done) {
     Incident.find({ _id: id1 }, function(err, incidents) {
+      if (err) return done(err);
       expect(incidents.length).to.equal(0);
       done();
     });
@@ -65,6 +49,7 @@ describe('Deleting an incident that has associated reports', function() {
 
   it('should not remove the other incident', function(done) {
     Incident.find({ _id: id2 }, function(err, incidents) {
+      if (err) return done(err);
       expect(incidents.length).to.equal(1);
       done();
     });
@@ -72,6 +57,7 @@ describe('Deleting an incident that has associated reports', function() {
 
   it('should not affect other reports', function(done) {
     Report.find({ _incident: id2 }, function(err, reports) {
+      if (err) return done(err);
       expect(reports.length).to.equal(3);
       done();
     });
@@ -79,9 +65,12 @@ describe('Deleting an incident that has associated reports', function() {
 
   it('should remove reference to the incidents in the right reports', function(done) {
     Report.find({ _incident: id1 }, function(err, reports) {
+      if (err) return done(err);
       expect(reports.length).to.equal(0);
       done();
     });
   });
 
+  after(utils.wipeModels([Report, Incident]));
+  after(utils.expectModelsEmpty);
 });

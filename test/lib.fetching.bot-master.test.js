@@ -1,20 +1,18 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
-var request = require('supertest');
-var _ = require('underscore');
-var EventEmitter = require('events').EventEmitter;
 var botMaster = require('../lib/fetching/bot-master');
-var Bot = require('../lib/fetching/bot');
+var Report = require('../models/report');
 var Source = require('../models/source');
 
 describe('BotMaster', function() {
+  before(utils.expectModelsEmpty);
 
-  before(function(done){
-    Source.remove({}, function(){
+  before(function(done) {
+    Source.remove({}, function() {
       Source.create(
-        {nickname: 'one', media: 'dummy', keywords: 'one'},
-        {nickname: 'two', media: 'dummy', keywords: 'two'},
-        function(err){ done(err); }
+        { nickname: 'one', media: 'dummy', keywords: 'one' },
+        { nickname: 'two', media: 'dummy', keywords: 'two' },
+        function(err) { done(err); }
       );
     });
   });
@@ -40,7 +38,7 @@ describe('BotMaster', function() {
     expect(botMaster.bots).to.have.length(2);
     // Change the source to force reload.
     Source.findOne({}, function(err, source) {
-      botMaster.once('botMaster:addedBot', function(){
+      botMaster.once('botMaster:addedBot', function() {
         expect(botMaster.bots).to.have.length(2);
         expect(botMaster._getBot(source._id).source.keywords).to.equal('foo');
         done();
@@ -80,4 +78,16 @@ describe('BotMaster', function() {
     expect(botMaster.bots).to.be.empty;
     done();
   });
+
+  // We have to remove all the reports here for a very sneaky reason. If you run
+  // this test file alone, there's no problem; no reports get created. But when
+  // you use mocha to run this file and one which imports
+  // '../lib/fetching/report-writer', the bots will start adding reports to the
+  // queue and they'll get saved. With enough latency, this call actually won't
+  // be enough to stop these reports from interacting with other tests, as
+  // this test file could exit with reports still in the queue. The moral is
+  // probably that sharing state with `require` statements isn't very good for
+  // modular testing.
+  after(utils.wipeModels([Source, Report]));
+  after(utils.expectModelsEmpty);
 });

@@ -1,24 +1,25 @@
-require('./init');
+'use strict';
+
+var utils = require('./init');
 var expect = require('chai').expect;
 var reportQueue = require('../lib/fetching/report-queue');
-var reportWriter = require('../lib/fetching/report-writer');
 var botFactory = require('../lib/fetching/bot-factory');
 var botMaster = require('../lib/fetching/bot-master');
-var CircularQueue = require('../lib/fetching/circular-queue');
-var Report = require('../models/report');
 var Source = require('../models/source');
+var Report = require('../models/report');
 
 describe('Report queue', function() {
+  var one, two, three;
 
   describe('base functions', function() {
     before(function(done) {
       botMaster.kill();
       reportQueue.clear();
-      one = botFactory.create(new Source({nickname: '1', media: 'dummy', keywords: 'one'}));
+      one = botFactory.create(new Source({ nickname: '1', media: 'dummy', keywords: 'one' }));
       one.start();
-      two = botFactory.create(new Source({nickname: '2', media: 'dummy', keywords: 'two'}));
+      two = botFactory.create(new Source({ nickname: '2', media: 'dummy', keywords: 'two' }));
       two.start();
-      three = botFactory.create(new Source({nickname: '3', media: 'dummy', keywords: 'three'}));
+      three = botFactory.create(new Source({ nickname: '3', media: 'dummy', keywords: 'three' }));
       three.start();
       // Stream data for 100ms
       setTimeout(function() {
@@ -76,9 +77,9 @@ describe('Report queue', function() {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      Source.create({nickname: 'one', media: 'dummy', keywords: 'one'});
-      Source.create({nickname: 'two', media: 'dummy', keywords: 'two'});
-      Source.create({nickname: 'three', media: 'dummy', keywords: 'three'});
+      Source.create({ nickname: 'one', media: 'dummy', keywords: 'one' });
+      Source.create({ nickname: 'two', media: 'dummy', keywords: 'two' });
+      Source.create({ nickname: 'three', media: 'dummy', keywords: 'three' });
       process.nextTick(function() {
         botMaster.start();
         done();
@@ -110,4 +111,6 @@ describe('Report queue', function() {
     });
   });
 
+  after(utils.wipeModels([Report, Source]));
+  after(utils.expectModelsEmpty);
 });

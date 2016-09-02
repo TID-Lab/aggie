@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var PullBot = require('../lib/fetching/bots/pull-bot');
 var Bot = require('../lib/fetching/bot');
@@ -7,9 +7,9 @@ var Source = require('../models/source');
 
 describe('Pull bot', function() {
   before(function(done) {
-    var source = new Source({nickname: 'dummy-pull', media: 'dummy-pull'});
+    var source = new Source({ nickname: 'dummy-pull', media: 'dummy-pull' });
     var contentService = contentServiceFactory.create(source);
-    pullBot = new PullBot({source: source, contentService: contentService, interval: 100});
+    pullBot = new PullBot({ source: source, contentService: contentService, interval: 100 });
     done();
   });
 
@@ -30,4 +30,5 @@ describe('Pull bot', function() {
     pullBot.start();
   });
 
+  after(utils.expectModelsEmpty);
 });

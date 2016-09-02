@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var StatsQueryer = require('../lib/analytics/stats-queryer');
 var Report = require('../models/report');
@@ -9,17 +9,17 @@ describe('StatsQueryer', function() {
 
   function createReports(done) {
     Report.create([
-      {storedAt: new Date(), content: 'one', flagged: true},
-      {storedAt: new Date(), content: 'two', flagged: false},
-      {storedAt: new Date("2014-01-01"), content: 'three', flagged: true, read: true }
+      { storedAt: new Date(), content: 'one', flagged: true },
+      { storedAt: new Date(), content: 'two', flagged: false },
+      { storedAt: new Date('2014-01-01'), content: 'three', flagged: true, read: true }
     ], done);
   }
 
   function createIncidents(done) {
     Incident.create([
-      {title: 'Incident 1', veracity: false, escalated: false, status: 'new'},
-      {title: 'Incident 2', veracity: true, escalated: false, status: 'new'},
-      {title: 'Incident 3', veracity: true, escalated: true, status: 'new'}
+      { title: 'Incident 1', veracity: false, escalated: false, status: 'new' },
+      { title: 'Incident 2', veracity: true, escalated: false, status: 'new' },
+      { title: 'Incident 3', veracity: true, escalated: true, status: 'new' }
     ], done);
   }
 
@@ -27,11 +27,11 @@ describe('StatsQueryer', function() {
     this.statsQueryer = new StatsQueryer();
   });
 
-  beforeEach(function (done) {
+  beforeEach(function(done) {
     async.parallel([createReports, createIncidents], done);
   });
 
-  afterEach(function (done) {
+  afterEach(function(done) {
     async.parallel([Incident.remove.bind(Incident, {}), Report.remove.bind(Report, {})], done);
   });
 
@@ -66,7 +66,7 @@ describe('StatsQueryer', function() {
       done();
     });
   });
-  
+
   it('should count reports incidents', function(done) {
     this.statsQueryer.count('incidents', function(err, stats) {
       expect(stats.totalIncidents).to.equal(3);
@@ -76,4 +76,5 @@ describe('StatsQueryer', function() {
     });
   });
 
+  after(utils.expectModelsEmpty);
 });

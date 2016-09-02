@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var trendMaster = require('../lib/analytics/trend-master');
 var TrendQueryer = require('../lib/analytics/trend-queryer');
@@ -15,9 +15,9 @@ describe('Trend master', function() {
   });
 
   it('should track all trends', function(done) {
-    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'one'}))});
-    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'two'}))});
-    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'three'}))});
+    Trend.create({ _query: ReportQuery.hash(new ReportQuery({ keywords: 'one' })) });
+    Trend.create({ _query: ReportQuery.hash(new ReportQuery({ keywords: 'two' })) });
+    Trend.create({ _query: ReportQuery.hash(new ReportQuery({ keywords: 'three' })) });
     setTimeout(function() {
       expect(trendMaster).to.have.property('trends');
       expect(trendMaster.trends).to.be.an.instanceof(Array);
@@ -46,7 +46,7 @@ describe('Trend master', function() {
   });
 
   it('should track when trends are disabled', function(done) {
-    var trendId = _.findWhere(trendMaster.trends, {enabled: true})._id;
+    var trendId = _.findWhere(trendMaster.trends, { enabled: true })._id;
     Trend.findById(trendId, function(err, trend) {
       if (err) return done(err);
       trend.toggle('disable', function(err) {
@@ -62,7 +62,7 @@ describe('Trend master', function() {
   });
 
   it('should track when trends are enabled', function(done) {
-    var trendId = _.findWhere(trendMaster.trends, {enabled: false})._id;
+    var trendId = _.findWhere(trendMaster.trends, { enabled: false })._id;
     Trend.findById(trendId, function(err, trend) {
       if (err) return done(err);
       trend.toggle('enable', function(err) {
@@ -79,14 +79,14 @@ describe('Trend master', function() {
 
   it('should trigger a trend to run a query', function(done) {
     trendMaster.disable();
-    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'four'}))});
+    Trend.create({ _query: ReportQuery.hash(new ReportQuery({ keywords: 'four' })) });
     setTimeout(function() {
-      Report.create({content: 'four'});
-      Report.create({content: 'four'});
-      Report.create({content: 'four'});
-      Report.create({content: 'four'});
+      Report.create({ content: 'four' });
+      Report.create({ content: 'four' });
+      Report.create({ content: 'four' });
+      Report.create({ content: 'four' });
       setTimeout(function() {
-        var trendId = _.findWhere(trendMaster.trends, {_query: '{"keywords":"four"}'})._id;
+        var trendId = _.findWhere(trendMaster.trends, { _query: '{"keywords":"four"}' })._id;
         trendMaster.enable();
         trendMaster.query(trendId, function(err, trends, trend) {
           if (err) return done(err);
@@ -110,18 +110,18 @@ describe('Trend master', function() {
         done();
       }
     });
-    Report.create({content: 'one'});
-    Report.create({content: 'two'});
-    Report.create({content: 'three'});
+    Report.create({ content: 'one' });
+    Report.create({ content: 'two' });
+    Report.create({ content: 'three' });
     setTimeout(function() {
-      Report.create({content: 'one'});
-      Report.create({content: 'two'});
-      Report.create({content: 'three'});
+      Report.create({ content: 'one' });
+      Report.create({ content: 'two' });
+      Report.create({ content: 'three' });
     }, 200);
     setTimeout(function() {
-      Report.create({content: 'one'});
-      Report.create({content: 'two'});
-      Report.create({content: 'three'});
+      Report.create({ content: 'one' });
+      Report.create({ content: 'two' });
+      Report.create({ content: 'three' });
     }, 300);
   });
 
@@ -141,16 +141,16 @@ describe('Trend master', function() {
       }
     });
     // Create a new trend while queries are running
-    Trend.create({_query: ReportQuery.hash(new ReportQuery({keywords: 'five'}))}, function(err, trend) {
+    Trend.create({ _query: ReportQuery.hash(new ReportQuery({ keywords: 'five' })) }, function(err, trend) {
       if (err) return done(err);
     });
-    Report.create({content: 'one'});
-    Report.create({content: 'two'});
-    Report.create({content: 'three'});
-    Report.create({content: 'four'});
+    Report.create({ content: 'one' });
+    Report.create({ content: 'two' });
+    Report.create({ content: 'three' });
+    Report.create({ content: 'four' });
     // Create a report for the new trend to capture
     setTimeout(function() {
-      Report.create({content: 'five'}, function(err, report) {
+      Report.create({ content: 'five' }, function(err, report) {
         if (err) return done(err);
       });
     }, 200);
@@ -179,4 +179,6 @@ describe('Trend master', function() {
       });
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

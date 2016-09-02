@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var CircularQueue = require('../lib/fetching/circular-queue');
 
@@ -75,4 +75,5 @@ describe('Circular queue', function() {
     done();
   });
 
+  after(utils.expectModelsEmpty);
 });

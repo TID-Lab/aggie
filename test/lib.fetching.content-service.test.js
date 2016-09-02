@@ -1,4 +1,4 @@
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var contentServiceFactory = require('../lib/fetching/content-service-factory');
 var ContentService = require('../lib/fetching/content-service');
@@ -7,7 +7,7 @@ var Source = require('../models/source');
 
 describe('Content service', function() {
   before(function(done) {
-    var source = new Source({nickname: 't', media: 'dummy', keywords: 't'});
+    var source = new Source({ nickname: 't', media: 'dummy', keywords: 't' });
     contentService = contentServiceFactory.create(source);
     done();
   });
@@ -25,4 +25,6 @@ describe('Content service', function() {
       done();
     });
   });
+
+  after(utils.expectModelsEmpty);
 });

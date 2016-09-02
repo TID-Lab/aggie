@@ -11,7 +11,7 @@
  *       want to add translations for a new language.
  */
 'use strict';
-require('./init');
+var utils = require('./init');
 var expect = require('chai').expect;
 var fs = require('graceful-fs');
 var path = require('path');
@@ -92,6 +92,8 @@ function testTranslationDir(dirname) {
         done();
       });
     });
+
+    after(utils.expectModelsEmpty);
   });
 }
 

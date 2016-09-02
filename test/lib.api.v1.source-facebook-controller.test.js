@@ -1,8 +1,11 @@
-require('./init');
+'use strict';
+
+var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
 var sourceController = require('../lib/api/v1/source-controller')();
+var Source = require('../models/source');
 
 describe('Facebook source controller', function() {
   describe('POST /api/v1/source', function() {
@@ -33,10 +36,13 @@ describe('Facebook source controller', function() {
             if (err) return done(err);
             expect(res.body).to.have.property('_id');
             source._id = res.body._id;
-            compare.call(this, res.body, source);
+            utils.compare(res.body, source);
             done();
           });
       });
     });
   });
+
+  after(utils.wipeModels([Source]));
+  after(utils.expectModelsEmpty);
 });

@@ -1,4 +1,6 @@
-require('./init');
+'use strict';
+
+var utils = require('./init');
 var expect = require('chai').expect;
 var _ = require('underscore');
 var reportWriter = require('../lib/fetching/report-writer');
@@ -9,22 +11,23 @@ var Report = require('../models/report');
 var Source = require('../models/source');
 
 describe('Report writer', function() {
+  var bot;
 
   describe('base functions', function() {
     beforeEach(function(done) {
       botMaster.kill();
       botMaster.addListeners('source', Source.schema);
       reportQueue.clear();
-      bot = botFactory.create(new Source({nickname: 'lorem', media: 'dummy'}));
+      bot = botFactory.create(new Source({ nickname: 'lorem', media: 'dummy' }));
       done();
     });
 
     it('should fetch reports from available bots', function(done) {
       bot.once('report', function() {
-        reportQueue.enqueue(this);
-        var report_data = reportWriter.fetch();
-        expect(report_data).to.have.property('content');
-        expect(report_data.content).to.contain('Lorem ipsum');
+        reportQueue.enqueue(bot);
+        var reportData = reportWriter.fetch();
+        expect(reportData).to.have.property('content');
+        expect(reportData.content).to.contain('Lorem ipsum');
         done();
       });
       bot.start();
@@ -32,9 +35,9 @@ describe('Report writer', function() {
 
     it('should write reports to database', function(done) {
       bot.once('report', function() {
-        reportQueue.enqueue(this);
-        var report_data = reportWriter.fetch();
-        reportWriter.write(report_data, function(err, report) {
+        reportQueue.enqueue(bot);
+        var reportData = reportWriter.fetch();
+        reportWriter.write(reportData, function(err, report) {
           if (err) return done(err);
           expect(report).to.have.property('_id');
           Report.findById(report._id, function(err, found) {
@@ -59,9 +62,9 @@ describe('Report writer', function() {
       reportQueue.clear();
 
       // Create sources for the most common words in English
-      Source.create({nickname: 'a', media: 'dummy', keywords: 'a'});
-      Source.create({nickname: 'b', media: 'dummy', keywords: 'b'});
-      Source.create({nickname: 'c', media: 'dummy', keywords: 'c'});
+      Source.create({ nickname: 'a', media: 'dummy', keywords: 'a' });
+      Source.create({ nickname: 'b', media: 'dummy', keywords: 'b' });
+      Source.create({ nickname: 'c', media: 'dummy', keywords: 'c' });
 
       // Queue starting bots after sources are loaded
       process.nextTick(function() {
@@ -89,6 +92,7 @@ describe('Report writer', function() {
 
       // Verify number of reports in database
       Report.find(function(err, reports) {
+        if (err) return done(err);
         reportCount = reports.length;
         done();
       });
@@ -109,6 +113,7 @@ describe('Report writer', function() {
         process.nextTick(function() {
           // Verify that reports were inserted into database
           Report.find(function(err, reports) {
+            if (err) return done(err);
             expect(reports.length).to.equal(queueCount + reportCount);
             done();
           });
@@ -119,4 +124,6 @@ describe('Report writer', function() {
     });
   });
 
+  after(utils.wipeModels([Source, Report]));
+  after(utils.expectModelsEmpty);
 });
