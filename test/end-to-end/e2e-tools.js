@@ -162,3 +162,12 @@ module.exports.deleteSource = function(sourceName, nickname) {
   element(by.buttonText('Confirm')).click();
   return;
 };
+
+module.exports.makeReports = function(n, done) {
+  Report.create(_.map(_.range(n), function(i) {
+    return {
+      authoredAt: new Date(),
+      content: i
+    };
+  }), done);
+};

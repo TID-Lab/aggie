@@ -105,5 +105,9 @@ describe('Report', function() {
     });
   });
 
+  it('should not have a batch if none was checked out');
+
+  it('should apply a filter when checking out a batch');
+
   after(utils.expectModelsEmpty);
 });
