@@ -23,30 +23,31 @@ describe('SMSGhana content service', function() {
     it('should start the server properly', function(done) {
 
       request({
-        url: 'http://localhost:1111',
+        url: 'http://localhost:1111/smsghana',
         qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
           if (response.statusCode === 200) {
-            done(error);
+            done();
           }
-      });
+          done(error);
+        });
 
     });
 
     it('should receive messages via HTTP request properly', function(done) {
 
       request({
-        url: 'http://localhost:1111',
+        url: 'http://localhost:1111/smsghana',
         qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
         if (error) {
           return done(error);
         }
-        expect(response.statusCode).to.be(200);
+        expect(response.statusCode).to.equal(200);
         return done();
-      });
+        });
     });
 
     it('should handle messages received via HTTP requests properly', function(done) {
@@ -62,14 +63,14 @@ describe('SMSGhana content service', function() {
       });
 
       request({
-        url: 'http://localhost:1111',
+        url: 'http://localhost:1111/smsghana',
         qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
           if (error || response.statusCode !== 200) {
             return done(error);
           }
-      });
+        });
     });
   });
 
@@ -87,15 +88,16 @@ describe('SMSGhana content service', function() {
       service.stop();
 
       request({
-        url: 'http://localhost:1111',
+        url: 'http://localhost:1111/smsghana',
         qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
         }, function(error) {
         if (error) {
-          expectNotToEmitReport(service, done);
+          expectToNotEmitReport(service, done);
+          return done();
         }
         done(error);
-      });
+        });
     });
   });
 });
