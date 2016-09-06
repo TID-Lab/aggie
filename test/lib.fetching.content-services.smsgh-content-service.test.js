@@ -20,20 +20,23 @@ describe('SMSGhana content service', function() {
       service.stop();
     });
 
-    it('should start the server properly', function(done) {
+    /*
+    it('should fail', function(done) {
+      expect(true).to.equal(false);
 
-      request({
-        url: 'http://localhost:1111/smsghana',
-        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
-        method: 'GET'
-        }, function(error, response) {
-          if (response.statusCode === 200) {
-            done();
-          }
-          done(error);
-        });
-
+      done();
     });
+
+    it('should fail', function(done) {
+      var e = new (require('events').EventEmitter)();
+      e.on('foo', function() {
+        expect(true).to.equal(false);
+
+        done(); 
+      });
+      e.emit('foo');
+    });
+    */
 
     it('should receive messages via HTTP request properly', function(done) {
 
@@ -49,28 +52,65 @@ describe('SMSGhana content service', function() {
         return done();
         });
     });
+    /*
+    it('should fail', function(done) {
+      service.once('report', function() {
+        expect(true).to.equal(false);
+      });
+      service.foo();
+    });
+
+    it('should fail supertest', function(done) {
+      service.once('report', function() {
+        expect(true).to.equal(false);
+      });
+      var request = require('supertest');
+      request(service._app).get('/foo').end(function() {});
+    });
+
+    it('should fail', function(done) {
+      service.once('report', function() {
+        console.log('asdf2');
+        done();
+        expect(true).to.equal(false);
+      });
+      request({ url: 'http://localhost:1111/foo' });
+    });
+    */
 
     it('should handle messages received via HTTP requests properly', function(done) {
       // Setup handler.
       service.once('report', function(reportData) {
-
+        // console.log(reportData);
+        // console.log(typeof reportData.authoredAt);
+        expect(true).to.equal(true);
+        // console.log("passed true === true");
+        //done();
+        var test_date = new Date('2016-09-01');
+        // console.log("authoredAt: "+test_date);
+        // console.log(typeof test_date);
         // Ensure proper fields are returned from emitted raw data below.
-        expect(reportData.AuthoredAt).to.equal('2016-09-01');
-        expect(reportData.Fulltext).to.equal('lorem ipsum dolor');
-        expect(reportData.From).to.equal('9845098450');
-
+        expect(reportData.authoredAt).to.eql(test_date);
+        // console.log("passed date check");
+        expect(reportData.content).to.equal('lorem ipsum dolor');
+        // console.log("passed content check");
+        expect(reportData.author).to.equal('9845098450');
+        // console.log("passed author checks");
         done();
       });
+//      service.emit('report');
 
       request({
         url: 'http://localhost:1111/smsghana',
         qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
-          if (error || response.statusCode !== 200) {
+          expect(response.statusCode).to.equal(200);
+          if (error) {
             return done(error);
           }
         });
+        
     });
   });
 
