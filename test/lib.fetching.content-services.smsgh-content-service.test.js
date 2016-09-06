@@ -3,11 +3,10 @@
 require('./init');
 var request = require('request');
 var expect = require('chai').expect;
-// var EventEmitter = require('events').EventEmitter;
 var SMSGhContentService = require('../lib/fetching/content-services/smsgh-content-service');
 
 describe('SMSGhana content service', function() {
-  describe('Testing start, send, and process', function() {
+  describe('Testing start and receive message', function() {
 
     var service;
 
@@ -20,25 +19,8 @@ describe('SMSGhana content service', function() {
       service.stop();
     });
 
-    /*
-    it('should fail', function(done) {
-      expect(true).to.equal(false);
 
-      done();
-    });
-
-    it('should fail', function(done) {
-      var e = new (require('events').EventEmitter)();
-      e.on('foo', function() {
-        expect(true).to.equal(false);
-
-        done(); 
-      });
-      e.emit('foo');
-    });
-    */
-
-    it('should receive messages via HTTP request properly', function(done) {
+    it('should start the server and send 200 code', function(done) {
 
       request({
         url: 'http://localhost:1111/smsghana',
@@ -52,53 +34,16 @@ describe('SMSGhana content service', function() {
         return done();
         });
     });
-    /*
-    it('should fail', function(done) {
-      service.once('report', function() {
-        expect(true).to.equal(false);
-      });
-      service.foo();
-    });
+    
 
-    it('should fail supertest', function(done) {
-      service.once('report', function() {
-        expect(true).to.equal(false);
-      });
-      var request = require('supertest');
-      request(service._app).get('/foo').end(function() {});
-    });
-
-    it('should fail', function(done) {
-      service.once('report', function() {
-        console.log('asdf2');
-        done();
-        expect(true).to.equal(false);
-      });
-      request({ url: 'http://localhost:1111/foo' });
-    });
-    */
-
-    it('should handle messages received via HTTP requests properly', function(done) {
-      // Setup handler.
+    it('should generate reports correctly', function(done) {
       service.once('report', function(reportData) {
-        // console.log(reportData);
-        // console.log(typeof reportData.authoredAt);
-        expect(true).to.equal(true);
-        // console.log("passed true === true");
-        //done();
-        var test_date = new Date('2016-09-01');
-        // console.log("authoredAt: "+test_date);
-        // console.log(typeof test_date);
-        // Ensure proper fields are returned from emitted raw data below.
-        expect(reportData.authoredAt).to.eql(test_date);
-        // console.log("passed date check");
+
+        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
         expect(reportData.content).to.equal('lorem ipsum dolor');
-        // console.log("passed content check");
         expect(reportData.author).to.equal('9845098450');
-        // console.log("passed author checks");
         done();
       });
-//      service.emit('report');
 
       request({
         url: 'http://localhost:1111/smsghana',
