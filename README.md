@@ -108,7 +108,6 @@ Set `config.adminParty=true` if you want to run tests.
   1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
-  1. Known issue: The current Facebook API is not compatible with Aggie. Please see https://github.com/TID-Lab/aggie/issues/139 for more information.
   1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
   1. Inside your Facebook app, obtain `client_id` and `client_secret`.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
