@@ -12,11 +12,11 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = new SMSGhContentService();
-      service.start();
+      service.subscribe('report');
     });
 
     afterEach(function() {
-      service.stop();
+      service.unsubscribe();
     });
 
 
@@ -24,7 +24,7 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111/smsghana',
-        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
+        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
         if (error) {
@@ -47,7 +47,7 @@ describe('SMSGhana content service', function() {
 
       request({
         url: 'http://localhost:1111/smsghana',
-        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
+        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
         method: 'GET'
         }, function(error, response) {
           expect(response.statusCode).to.equal(200);
@@ -65,16 +65,16 @@ describe('SMSGhana content service', function() {
 
     before(function() {
       service = new SMSGhContentService();
-      service.start();
+      service.subscribe('report');
     });
 
     it('should stop server properly', function(done) {
 
-      service.stop();
+      service.unsubscribe();
 
       request({
         url: 'http://localhost:1111/smsghana',
-        qs: { From: '9845098450', Fulltext: 'lorem ipsum dolor', Date: '2016-09-01' },
+        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
         method: 'GET'
         }, function(error) {
         if (error) {
