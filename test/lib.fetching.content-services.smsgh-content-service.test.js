@@ -19,11 +19,11 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = new SMSGhContentService();
-      service.start();
+      service.subscribe('report');
     });
 
     afterEach(function() {
-      service.stop();
+      service.unsubscribe();
     });
 
 
@@ -41,7 +41,15 @@ describe('SMSGhana content service', function() {
         });
     });
     
+    it('should be able to add new source correctly', function(done) {
 
+    });
+
+    it('should generate tests for each new source correctly', function(done) {
+
+    });
+
+    // This should be deprecated after the above test is ready
     it('should generate reports correctly', function(done) {
       service.once('report', function(reportData) {
 
@@ -62,6 +70,12 @@ describe('SMSGhana content service', function() {
         });
         
     });
+
+    it('should remove one source but still listen to other sources', function(done) {
+
+    });
+
+
   });
 
   describe('testing stop', function() {
@@ -70,12 +84,17 @@ describe('SMSGhana content service', function() {
 
     before(function() {
       service = new SMSGhContentService();
-      service.start();
+      service.subscribe('report');
     });
 
+    it('should stop listening on server after all unsubscribe', function(done) {
+
+    });
+
+    //This will be deprecated after above test is ready
     it('should stop server properly', function(done) {
 
-      service.stop();
+      service.unsubscribe();
 
       request('http://localhost:1111')
         .get('/smsghana')
