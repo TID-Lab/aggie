@@ -1,9 +1,16 @@
 'use strict';
 
 require('./init');
-var request = require('request');
+var request = require('supertest');
 var expect = require('chai').expect;
 var SMSGhContentService = require('../lib/fetching/content-services/smsgh-content-service');
+
+// This can be modified as more fields are added
+var req_params = {
+  'from': '9845098450',
+  'fulltext': 'lorem ipsum dolor',
+  'date': '2016-09-01'
+};
 
 describe('SMSGhana content service', function() {
   describe('Testing start and receive message', function() {
@@ -12,26 +19,25 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = new SMSGhContentService();
-      service.subscribe('report');
+      service.start();
     });
 
     afterEach(function() {
-      service.unsubscribe();
+      service.stop();
     });
 
 
     it('should start the server and send 200 code', function(done) {
 
-      request({
-        url: 'http://localhost:1111/smsghana',
-        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
-        method: 'GET'
-        }, function(error, response) {
-        if (error) {
-          return done(error);
-        }
-        expect(response.statusCode).to.equal(200);
-        return done();
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(req_params)
+        .expect(200)
+        .end(function (err,res) {
+          if (err) {
+            return done(err);
+          }
+          return done();
         });
     });
     
@@ -45,14 +51,13 @@ describe('SMSGhana content service', function() {
         done();
       });
 
-      request({
-        url: 'http://localhost:1111/smsghana',
-        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
-        method: 'GET'
-        }, function(error, response) {
-          expect(response.statusCode).to.equal(200);
-          if (error) {
-            return done(error);
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(req_params)
+        .expect(200)
+        .end(function (err,res) {
+          if (err) {
+            return done(err);
           }
         });
         
@@ -65,23 +70,22 @@ describe('SMSGhana content service', function() {
 
     before(function() {
       service = new SMSGhContentService();
-      service.subscribe('report');
+      service.start();
     });
 
     it('should stop server properly', function(done) {
 
-      service.unsubscribe();
+      service.stop();
 
-      request({
-        url: 'http://localhost:1111/smsghana',
-        qs: { from: '9845098450', fulltext: 'lorem ipsum dolor', date: '2016-09-01' },
-        method: 'GET'
-        }, function(error) {
-        if (error) {
-          expectToNotEmitReport(service, done);
-          return done();
-        }
-        done(error);
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(req_params)
+        .end(function (err,res) {
+          if (err) {
+            expectToNotEmitReport(service, done);
+            return done();
+          }
+          done(err);
         });
     });
   });
