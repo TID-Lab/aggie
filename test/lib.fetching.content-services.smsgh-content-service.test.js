@@ -83,7 +83,7 @@ describe('SMSGhana content service', function() {
       dodoEventName = service.subscribe({keyword: 'dodo'});
       bozoEventName = service.subscribe({keyword: 'bozo'});
       var service_counter = 0;
-      /*
+      
       async.parallel([
         function(callback) {
           service.once(dummyEventName, function(reportData) {
@@ -111,21 +111,21 @@ describe('SMSGhana content service', function() {
           });
         }
       ], function(error, results) {
-        console.log("entered final function");
+      
         if (error) {
           done(error);
         }
         done();
       });
-      */
-      console.log("Arrived here");
-      console.log(dummyEventName);
+    
+    
+    /*
       service.once(dummyEventName, function(reportData) {
-        console.log("Entered "+dummyEventName+" before expect");
+      
         expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
         expect(reportData.content).to.equal('lorem ipsum dolor');
         expect(reportData.author).to.equal('9845098450');
-        console.log("Entered "+dummyEventName+" after expect "+service_counter);
+      
         service_counter += 1;
         if (service_counter === 3) {
           done();
@@ -133,7 +133,7 @@ describe('SMSGhana content service', function() {
       });
 
       service.once(dodoEventName, function(reportData) {
-        console.log("Entered "+dodoEventName+" before expect");
+      
         expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
         expect(reportData.content).to.equal('lorem ipsum dolor');
         expect(reportData.author).to.equal('1234567890');
@@ -143,7 +143,7 @@ describe('SMSGhana content service', function() {
         }
       });
       service.once(bozoEventName, function(reportData) {
-        console.log("Entered "+bozoEventName+" before expect");
+      
         expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
         expect(reportData.content).to.equal('lorem ipsum dolor');
         expect(reportData.author).to.equal('9876543210');
@@ -153,8 +153,8 @@ describe('SMSGhana content service', function() {
         }
 
       });
-
-      console.log("About to send request");
+    */
+    
       request('http://localhost:1111')
         .get('/smsghana')
         .query(req_params)
@@ -164,7 +164,7 @@ describe('SMSGhana content service', function() {
             return done(err);
           }
         });
-      console.log("request sent");
+    
 
       request('http://localhost:1111')
         .get('/smsghana')
@@ -189,34 +189,6 @@ describe('SMSGhana content service', function() {
         service.unsubscribe();
     });
 
-    /*
-    // This should be deprecated after the above test is ready
-    it('should generate reports correctly', function(done) {
-      
-
-      service.once(dummyEventName, function(reportData) {
-
-        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
-        expect(reportData.content).to.equal('lorem ipsum dolor');
-        expect(reportData.author).to.equal('9845098450');
-      });
-
-
-
-      request('http://localhost:1111')
-        .get('/smsghana')
-        .query(req_params)
-        .expect(200)
-        .end(function (err,res) {
-          if (err) {
-            return done(err);
-          }
-        });
-        
-    });
-    */
-
-    // All sources are still active
     it('should remove one source but still listen to other sources', function(done) {
       dodoEventName = service.subscribe({keyword: 'dodo'});
       bozoEventName = service.subscribe({keyword: 'bozo'});
@@ -243,7 +215,7 @@ describe('SMSGhana content service', function() {
         });
         }
       ], function(error, results) {
-        console.log("entered final function again");
+      
         if (error) {
           done(error);
         }
@@ -278,20 +250,19 @@ describe('SMSGhana content service', function() {
 
   describe('testing stop', function() {
 
-    var service;
+    var service, dummyEventName, dodoEventName, bozoEventName;
 
     before(function() {
       service = new SMSGhContentService();
-      service.subscribe({keyword:'dummy'});
+      dummyEventName = service.subscribe({keyword:'dummy'});
     });
 
     it('should stop listening on server after all unsubscribe', function(done) {
-      done();
-    });
+      dodoEventName = service.subscribe({keyword: 'dodo'});
+      bozoEventName = service.subscribe({keyword: 'bozo'});
 
-    //This will be deprecated after above test is ready
-    it('should stop server properly', function(done) {
-
+      service.unsubscribe();
+      service.unsubscribe();
       service.unsubscribe();
 
       request('http://localhost:1111')
