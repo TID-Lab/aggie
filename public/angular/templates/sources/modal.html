@@ -41,23 +41,15 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media == 'twitter' && validSourceMedia(source)">
+          <div class="form-group" ng-show="source.media == 'smsgh' || (source.media == 'twitter' && validSourceMedia(source))">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
               <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}" ng-required="source.media == 'twitter'">
               </textarea>
-              <div class="help-block" translate="sources_modal.help"></div>
+              <div ng-show="source.media == 'twitter'" class="help-block" translate="sources_modal.help"></div>
               <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
                 <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required for twitter sources.</div>
               </div>
-            </div>
-          </div>
-
-          <div class="form-group" ng-show="source.media == 'smsgh'">
-            <label for="keywords" class="col-lg-2 control-label" translate>Keyword</label>
-            <div class="col-lg-8">
-              <input type="text" ng-model="source.keyword" class="form-control" id="keyword" name="keyword" placeholder="{{ 'Enter keyword' | translate }}">
-              </input>
             </div>
           </div>
 
