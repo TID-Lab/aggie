@@ -38,7 +38,7 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = new SMSGhContentService();
-      dummyEventName = service.subscribe({keyword:'dummy'});
+      dummyEventName = service.subscribe('dummy');
     });
 
     afterEach(function() {
@@ -61,8 +61,8 @@ describe('SMSGhana content service', function() {
     });
     
     it('should be able to add new source correctly', function(done) {
-      dodoEventName = service.subscribe({keyword: 'dodo'});
-      bozoEventName = service.subscribe({keyword: 'bozo'});
+      dodoEventName = service.subscribe('dodo');
+      bozoEventName = service.subscribe('bozo');
 
       request('http://localhost:1111')
         .get('/smsghana')
@@ -80,8 +80,8 @@ describe('SMSGhana content service', function() {
     });
 
     it('should generate reports for each new source correctly', function(done) {
-      dodoEventName = service.subscribe({keyword: 'dodo'});
-      bozoEventName = service.subscribe({keyword: 'bozo'});
+      dodoEventName = service.subscribe('dodo');
+      bozoEventName = service.subscribe('bozo');
       var service_counter = 0;
       
       async.parallel([
@@ -190,8 +190,8 @@ describe('SMSGhana content service', function() {
     });
 
     it('should remove one source but still listen to other sources', function(done) {
-      dodoEventName = service.subscribe({keyword: 'dodo'});
-      bozoEventName = service.subscribe({keyword: 'bozo'});
+      dodoEventName = service.subscribe('dodo');
+      bozoEventName = service.subscribe('bozo');
 
       service.unsubscribe();
 
@@ -254,12 +254,12 @@ describe('SMSGhana content service', function() {
 
     before(function() {
       service = new SMSGhContentService();
-      dummyEventName = service.subscribe({keyword:'dummy'});
+      dummyEventName = service.subscribe('dummy');
     });
 
     it('should stop listening on server after all unsubscribe', function(done) {
-      dodoEventName = service.subscribe({keyword: 'dodo'});
-      bozoEventName = service.subscribe({keyword: 'bozo'});
+      dodoEventName = service.subscribe('dodo');
+      bozoEventName = service.subscribe('bozo');
 
       service.unsubscribe();
       service.unsubscribe();
