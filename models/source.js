@@ -22,7 +22,7 @@ var url_validator = validate({
   passIfEmpty: true
 });
 
-var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy'];
+var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh'];
 
 var sourceSchema = new mongoose.Schema({
   media: {type: String, enum: mediaValues},
