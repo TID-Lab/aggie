@@ -1,6 +1,6 @@
 'use strict';
 
-require('./init');
+var utils = require('./init');
 var request = require('supertest');
 var expect = require('chai').expect;
 var async = require('async');
@@ -270,7 +270,7 @@ describe('SMSGhana content service', function() {
         .query(req_params)
         .end(function (err,res) {
           if (err) {
-            expectToNotEmitReport(service, done);
+            utils.expectToNotEmitReport(service, done);
             return done();
           }
           done(err);
