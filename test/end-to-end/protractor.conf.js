@@ -9,5 +9,10 @@ exports.config = {
     browserName: 'chrome'
   },
 
-  baseUrl: 'http://localhost:8000/'
+  baseUrl: 'https://localhost:3000/',
+
+  framework: 'mocha',
+  mochaOpts: {
+    timeout: 20000
+  }
 };

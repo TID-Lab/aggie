@@ -3,9 +3,7 @@
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-var host = process.env.MONGO_HOST || 'localhost';
-var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://' + host + '/aggie-test';
-var database = require('../../lib/database');
+var dbTools = require('../database-tools');
 var Report = require('../../models/report');
 var User = require('../../models/user');
 var Source = require('../../models/source');
@@ -13,37 +11,17 @@ var Trend = require('../../models/trend');
 var Incident = require('../../models/incident');
 var expect = require('chai').expect;
 var async = require('async');
+var _ = require('lodash');
+
+module.exports = _.clone(dbTools);
 
 before(function(done) {
-  // Change database before starting any test
-  database.mongoose.disconnect(function() {
-    database.mongoose.connect(dbConnectURL, function() {
-      // Enable database-level text search
-      database.mongoose.connections[0].db.admin().command({ setParameter: 1, textSearchEnabled: true }, function(err, res) {
-        if (err) return done(err);
-        // Create admin user for testing
-        User.create({
-          provider: 'test',
-          email: 'admin@example.com',
-          username: 'admin',
-          password: 'letmein1',
-          hasDefaultPassword: true,
-          role: 'admin'
-        });
-        // Enable full-text indexing for Reports
-        Report.ensureIndexes(done);
-      });
-    });
+  dbTools.initDb(function(err) {
+    if (err) return done(err);
+    dbTools.resetDb(done);
   });
 });
-
-// Drop test database after all tests are done
-after(function(done) {
-  database.mongoose.connection.db.dropDatabase(function() {
-    database.mongoose.disconnect(done);
-  });
-});
-
+after(dbTools.disconnectDropDb);
 
 function expectModelsEmpty(done) {
   User.find({}, function(err, results) {
@@ -52,7 +30,6 @@ function expectModelsEmpty(done) {
     async.each([Report, Source, Trend, Incident], expectEmpty, done);
   });
 }
-module.exports = {};
 module.exports.expectModelsEmpty = expectModelsEmpty;
 
 function expectEmpty(model, done) {
@@ -63,14 +40,7 @@ function expectEmpty(model, done) {
   });
 }
 
-function wipeModels(models) {
-  return function(done) {
-    async.each(models, function(model, callback) {
-      model.remove({}, callback);
-    }, done);
-  };
-}
-module.exports.wipeModels = wipeModels;
+module.exports.wipeModels = dbTools.wipeModels;
 
 function removeUsersExceptAdmin(done) {
   var query = {
