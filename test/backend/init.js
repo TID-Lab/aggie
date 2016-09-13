@@ -40,8 +40,6 @@ function expectEmpty(model, done) {
   });
 }
 
-module.exports.wipeModels = dbTools.wipeModels;
-
 function removeUsersExceptAdmin(done) {
   var query = {
     username: { $ne: 'admin' }
