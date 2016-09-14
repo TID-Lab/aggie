@@ -37,7 +37,7 @@ describe('SMSGhana content service', function() {
     var service, dummyEventName, dodoEventName, bozoEventName;
 
     beforeEach(function() {
-      service = new SMSGhContentService();
+      service = SMSGhContentService;
       dummyEventName = service.subscribe('dummy');
     });
 
@@ -253,7 +253,7 @@ describe('SMSGhana content service', function() {
     var service, dummyEventName, dodoEventName, bozoEventName;
 
     before(function() {
-      service = new SMSGhContentService();
+      service = SMSGhContentService;
       dummyEventName = service.subscribe('dummy');
     });
 
