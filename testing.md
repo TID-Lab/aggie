@@ -71,12 +71,7 @@ Users and emails
 
 Batches
 -------
-Without clicking grab batch, there is no batch
-when you click grab batch, you get a batch
-if you leave and come back, you can go back to your batch
 you can finish a batch and then you have no batch
 then you can click grab batch again and get a new batch
 from grab batch you can grab another
-from grab batch you can mark all and grab another
-if you click grab batch with a filter it filters
-if you click grab another with a filter it filters
+if you grab a batch and someone else grabs a batch they don't overlap

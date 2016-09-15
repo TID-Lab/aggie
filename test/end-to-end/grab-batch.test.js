@@ -65,13 +65,72 @@ describe('grab batch', function() {
     return expect(firstSet).to.eventually.not.eql(secondSet);
   });
 
-});
+  describe('with filter', function() {
+    beforeEach(utils.makeReports(9, 'philip', 'june 2016', 'foo'));
+    beforeEach(utils.makeReports(5, 'philip', 'sept 2016', 'bar'));
+    beforeEach(utils.makeReports(3, 'andres', 'june 2016', 'bar baz'));
 
-describe('grab batch with filter', function() {
+    var clickAndExpectFrom = function(clickBy, howMany, fromWhere) {
+      element(clickBy).click();
+      var reports = getReports(true).map(getText);
+      var e1 = expect(reports).to.eventually.have.length(howMany);
+      var e2 = reports.then(function(arr) {
+        expect(fromWhere).to.include.members(arr);
+      });
+      return promise.all([e1, e2]);
+    };
 
-  it('by keyword');
-  it('by author');
-  it('by author twice');
-  it('by time');
-  it('by time twice');
+    var authorPhilip = [
+      '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo', '9 foo',
+      '1 bar', '2 bar', '3 bar', '4 bar', '5 bar'
+    ];
+
+    var keywordBar = [
+      '1 bar', '2 bar', '3 bar', '4 bar', '5 bar',
+      '1 bar baz', '2 bar baz', '3 bar baz'
+    ];
+
+    var timeJune = [
+      '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo', '9 foo',
+      '1 bar baz', '2 bar baz', '3 bar baz'
+    ];
+
+    it('by author', function() {
+      var e1 = utils.setFilter({ author: 'philip' });
+      var e2 = clickAndExpectFrom(
+        by.buttonText('Grab Batch'), 10, authorPhilip);
+      return promise.all([e1, e2]);
+    });
+
+    it('by author twice', function() {
+      var e1 = utils.setFilter({ author: 'philip' });
+      var e2 = clickAndExpectFrom(
+        by.buttonText('Grab Batch'), 10, authorPhilip);
+      var e3 = clickAndExpectFrom(
+        by.buttonText('Mark All Read & Grab Another'), 4, authorPhilip);
+      return promise.all([e1, e2, e3]);
+    });
+
+    it('by time', function() {
+      var e1 = utils.setFilter({ time: { after: '05/30/2016 12:00:00',
+                                         before: '06/3/2016 12:00:00' } });
+      var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 10, timeJune);
+      return promise.all([e1, e2]);
+    });
+
+    it('by time twice', function() {
+      var e1 = utils.setFilter({ time: { after: '05/30/2016 12:00:00',
+                                         before: '06/3/2016 12:00:00' } });
+      var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 10, timeJune);
+      var e3 = clickAndExpectFrom(
+        by.buttonText('Mark All Read & Grab Another'), 2, timeJune);
+      return promise.all([e1, e2, e3]);
+    });
+
+    it('by keyword', function() {
+      var e1 = utils.setFilter({ keywords: 'bar' });
+      var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 8, keywordBar);
+      return promise.all([e1, e2]);
+    });
+  });
 });
