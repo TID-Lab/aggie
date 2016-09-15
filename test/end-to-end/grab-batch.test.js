@@ -22,9 +22,13 @@ describe('grab batch', function() {
   beforeEach(utils.initAdmin.bind({}, 'asdfasdf'));
   afterEach(utils.resetBrowser);
 
-  var getReports = function() {
-    return element.all(
-      by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'"));
+  var getReports = function(pluckContent) {
+    var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
+    return element.all(pluckContent ? x.column('r.content') : x);
+  };
+
+  var getText = function(elm) {
+    return elm.getText();
   };
 
   it('should not have a batch at first', function() {
@@ -40,4 +44,34 @@ describe('grab batch', function() {
       expect(getReports().count()).to.eventually.equal(10)
     ]);
   });
+
+  it('should keep the batch around', function() {
+    this.slow(10000);
+    element(by.buttonText('Grab Batch')).click();
+    var firstSet = getReports(true).map(getText);
+    browser.get(browser.baseUrl + 'incidents');
+    browser.get(browser.baseUrl + 'reports');
+    element(by.buttonText('Grab Batch')).click();
+    var secondSet = getReports(true).map(getText);
+    return expect(firstSet).to.eventually.eql(secondSet);
+  });
+
+  it('should mark all and grab another', function() {
+    this.slow(5000);
+    element(by.buttonText('Grab Batch')).click();
+    var firstSet = getReports(true).map(getText);
+    element(by.buttonText('Mark All Read & Grab Another')).click();
+    var secondSet = getReports(true).map(getText);
+    return expect(firstSet).to.eventually.not.eql(secondSet);
+  });
+
+});
+
+describe('grab batch with filter', function() {
+
+  it('by keyword');
+  it('by author');
+  it('by author twice');
+  it('by time');
+  it('by time twice');
 });
