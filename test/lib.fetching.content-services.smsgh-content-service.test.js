@@ -118,43 +118,6 @@ describe('SMSGhana content service', function() {
         done();
       });
     
-    
-    /*
-      service.once(dummyEventName, function(reportData) {
-      
-        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
-        expect(reportData.content).to.equal('lorem ipsum dolor');
-        expect(reportData.author).to.equal('9845098450');
-      
-        service_counter += 1;
-        if (service_counter === 3) {
-          done();
-        }
-      });
-
-      service.once(dodoEventName, function(reportData) {
-      
-        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
-        expect(reportData.content).to.equal('lorem ipsum dolor');
-        expect(reportData.author).to.equal('1234567890');
-        service_counter += 1;
-        if (service_counter === 3) {
-          done();
-        }
-      });
-      service.once(bozoEventName, function(reportData) {
-      
-        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
-        expect(reportData.content).to.equal('lorem ipsum dolor');
-        expect(reportData.author).to.equal('9876543210');
-        service_counter += 1;
-        if (service_counter === 3) {
-          done();
-        }
-
-      });
-    */
-    
       request('http://localhost:1111')
         .get('/smsghana')
         .query(req_params)
