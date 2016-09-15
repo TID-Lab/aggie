@@ -159,15 +159,5 @@ module.exports.deleteSource = function(sourceName, nickname) {
   browser.get(browser.baseUrl + 'sources');
   element(by.linkText(nickname)).click();
   element(by.buttonText('Delete')).click();
-  element(by.buttonText('Confirm')).click();
-  return;
-};
-
-module.exports.makeReports = function(n, done) {
-  Report.create(_.map(_.range(n), function(i) {
-    return {
-      authoredAt: new Date(),
-      content: i
-    };
-  }), done);
+  return element(by.buttonText('Confirm')).click();
 };
