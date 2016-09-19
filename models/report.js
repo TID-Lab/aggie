@@ -88,47 +88,16 @@ Report.queryReports = function(query, page, callback) {
   }
   if (page < 0) page = 0;
 
-  query.limit = 100;
-  query.filter = {};
-
-  // Determine inclusive date filters
-  if (query.after || query.before) {
-    query.filter.storedAt = {};
-    if (query.after) query.filter.storedAt.$gte = query.after;
-    if (query.before) query.filter.storedAt.$lte = query.before;
-  }
-
-  // Convert reference fields for Report compatibility
-  if (query.sourceId) query.filter._source = query.sourceId;
-  if (query.media) query.filter._media = query.media;
-  if (query.incidentId) query.filter._incident = query.incidentId;
-
-  if (_.isBoolean(query.read)) query.filter.read = query.read;
-  if (_.isBoolean(query.flagged)) query.filter.flagged = query.flagged;
-
-  // Determine author filter
-  if (query.author) {
-    query.filter.author = {};
-    query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author) {
-      // Use case-insensitive matching with anchors so mongo index is still used.
-      return new RegExp('^' + author + '$', 'i');
-    });
-  }
-
-  // Return only newer results
-  if (query.since) {
-    query.filter.storedAt = query.filter.storedAt || {};
-    query.filter.storedAt.$gte = query.since;
-  }
+  var filter = query.toMongooseFilter();
 
   // Re-set search timestamp
   query.since = new Date();
 
   if (!query.keywords) {
     // Just use filters when no keywords are provided
-    Report.findSortedPage(query.filter, page, callback);
+    Report.findSortedPage(filter, page, callback);
   } else {
-    Report.textSearch(query.keywords, _.pick(query, ['filter', 'limit']), function(err, reports) {
+    Report.textSearch(query.keywords, { filter: filter, limit: 100 }, function(err, reports) {
       if (err) return callback(err);
       var result = {
         total: reports.stats.n ? reports.stats.nscannedObjects : 0,

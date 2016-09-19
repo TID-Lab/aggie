@@ -4,7 +4,7 @@
 var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
-var _ = require('underscore');
+var _ = require('lodash');
 
 function ReportQuery(options) {
   options = options || {};
@@ -36,6 +36,42 @@ ReportQuery.prototype.run = function(callback) {
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
   return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author']);
+};
+
+ReportQuery.prototype.toMongooseFilter = function() {
+  var filter = {
+    _source: this.sourceId,
+    _media: this.media,
+    _incident: this.incidentId,
+    read: this.read,
+    flagged: this.flagged
+  };
+
+  filter = _.omitBy(filter, _.isNil);
+
+  // Determine inclusive date filters
+  if (this.after || this.before) {
+    filter.storedAt = {};
+    if (this.after) filter.storedAt.$gte = this.after;
+    if (this.before) filter.storedAt.$lte = this.before;
+  }
+
+  // Return only newer results
+  if (this.since) {
+    filter.storedAt = filter.storedAt || {};
+    filter.storedAt.$gte = this.since;
+  }
+
+  // Determine author filter
+  if (this.author) {
+    filter.author = {};
+    filter.author.$in = this.author.trim().split(/\s*,\s*/).sort().map(function(author) {
+      // Use case-insensitive matching with anchors so mongo index is still used.
+      return new RegExp('^' + author + '$', 'i');
+    });
+  }
+
+  return filter;
 };
 
 ReportQuery.prototype._parseStatus = function(status) {
