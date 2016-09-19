@@ -18,8 +18,9 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, mediaOptions,
-           incidents, statusOptions, linkedtoIncidentOptions, Report, Incident, Batch, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
+           mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
+           Report, Incident, Batch, Socket, Queue, paginationOptions) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -114,7 +115,7 @@ angular.module('Aggie')
         perPage = $scope.pagination.perPage,
         total = $scope.pagination.total,
         start = (page - 1) * perPage,
-        end = (page * perPage) - 1;
+        end = page * perPage - 1;
 
       $scope.pagination.start = Math.min(start + 1, total);
       $scope.pagination.end = Math.min(end + 1, total);
@@ -122,9 +123,8 @@ angular.module('Aggie')
       if ($scope.searchParams.keywords) {
         $scope.pagination.visibleTotal = items.length;
         return items.slice(start, end);
-      } else {
-        return items;
       }
+      return items;
     };
 
     $scope.filterSelected = function(items) {
@@ -156,7 +156,7 @@ angular.module('Aggie')
 
     $scope.updateReport = function(report) {
       var foundReport = $scope.visibleReports.find(function(item) {
-        return item._id == report._id;
+        return item._id === report._id;
       });
 
       if (!foundReport) return;
@@ -207,7 +207,7 @@ angular.module('Aggie')
         return total;
       }, 0);
 
-      return total == $scope.reports.length;
+      return total === $scope.reports.length;
     };
 
     $scope.noFilters = function() {
@@ -298,7 +298,7 @@ angular.module('Aggie')
     $scope.someSelected = function() {
 
       return $scope.reports.some(function(report) {
-        return (report.selected);
+        return report.selected;
       });
     };
 
@@ -317,7 +317,7 @@ angular.module('Aggie')
         if (!resource.results || !resource.results.length) {
           var message = 'No more unread reports found.';
 
-          if ($scope.currentPath == 'batch') {
+          if ($scope.currentPath === 'batch') {
             flash.setNotice(message);
             $rootScope.$state.go('reports', {});
           } else {

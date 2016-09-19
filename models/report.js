@@ -1,14 +1,12 @@
 // A report is a single post/comment/article or other chunk of data from a source.
 // This class is responsible for executing ReportQuerys.
+'use strict';
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
 var listenTo = require('mongoose-listento');
-var Source = require('./source');
-var Query = require('./query');
 var _ = require('underscore');
-var async = require('async');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({

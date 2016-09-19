@@ -1,10 +1,13 @@
+'use strict';
+
 var Report = require('./report');
 var async = require('async');
+var _ = require('lodash');
 
 var ITEMS_PER_BATCH = 10; // 10 items per batch
 var BATCH_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 
-function Batch() {}
+function Batch() { /* empty constructor */ }
 
 // checkout new batch
 Batch.prototype.checkout = function(userId, callback) {
@@ -49,7 +52,7 @@ Batch.prototype.lock = function(userId, callback) {
     .limit(ITEMS_PER_BATCH)
     .exec(function(err, reports) {
       if (err) return callback(err);
-      var ids = reports.map(function(report) { return report._id; });
+      var ids = _.map(reports, '_id');
       var update = { checkedOutBy: userId, checkedOutAt: new Date() };
       Report.update({ _id: { $in: ids } }, update, { multi: true }, callback);
     }
@@ -71,9 +74,9 @@ Batch.prototype.load = function(userId, callback) {
 
 // helpers
 
-function timeAgo(miliseconds) {
+function timeAgo(milliseconds) {
   var now = new Date();
-  return new Date(now.getTime() - miliseconds);
+  return new Date(now.getTime() - milliseconds);
 }
 
 module.exports = new Batch();

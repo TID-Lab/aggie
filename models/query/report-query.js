@@ -1,11 +1,12 @@
 // Subclass of Query. Represents a query of the report collection.
+'use strict';
 
 var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
 var _ = require('underscore');
 
-var ReportQuery = function(options) {
+function ReportQuery(options) {
   options = options || {};
   this.keywords = options.keywords;
 
@@ -21,7 +22,7 @@ var ReportQuery = function(options) {
   this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
-};
+}
 
 _.extend(ReportQuery, Query);
 util.inherits(ReportQuery, Query);
@@ -59,9 +60,9 @@ ReportQuery.prototype._parseStatus = function(status) {
 };
 
 ReportQuery.prototype._parseIncidentId = function(incidentId) {
-  if (incidentId == 'any') {
+  if (incidentId === 'any') {
     this.incidentId = { $nin: [null, ''] };
-  } else if (incidentId == 'none') {
+  } else if (incidentId === 'none') {
     this.incidentId = { $in: [null, ''] };
   } else {
     this.incidentId = incidentId;
