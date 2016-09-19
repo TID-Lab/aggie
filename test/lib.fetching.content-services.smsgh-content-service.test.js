@@ -8,27 +8,27 @@ var SMSGhContentService = require('../lib/fetching/content-services/smsgh-conten
 
 // This can be modified as more fields are added
 // Req corresponding to source 1
-var req_params = {
-  'from': '9845098450',
-  'fulltext': 'lorem ipsum dolor',
-  'date': '2016-09-01',
-  'keyword': 'dummy'
+var reqParams = {
+  from: '9845098450',
+  fulltext: 'lorem ipsum dolor',
+  date: '2016-09-01',
+  keyword: 'dummy'
 };
 
 // Req corresponding to source 2
-var req_params_2 = {
-  'from': '1234567890',
-  'fulltext': 'lorem ipsum dolor',
-  'date': '2016-09-01',
-  'keyword': 'dodo'
+var reqParams2 = {
+  from: '1234567890',
+  fulltext: 'lorem ipsum dolor',
+  date: '2016-09-01',
+  keyword: 'dodo'
 };
 
 // Req corresponding to source 3
-var req_params_3 = {
-  'from': '9876543210',
-  'fulltext': 'lorem ipsum dolor',
-  'date': '2016-09-01',
-  'keyword': 'bozo'
+var reqParams3 = {
+  from: '9876543210',
+  fulltext: 'lorem ipsum dolor',
+  date: '2016-09-01',
+  keyword: 'bozo'
 };
 
 describe('SMSGhana content service', function() {
@@ -50,25 +50,24 @@ describe('SMSGhana content service', function() {
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params)
+        .query(reqParams)
         .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
           return done();
         });
     });
-    
     it('should be able to add new source correctly', function(done) {
       dodoEventName = service.subscribe('dodo');
       bozoEventName = service.subscribe('bozo');
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params_2)
+        .query(reqParams2)
         .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
@@ -82,8 +81,6 @@ describe('SMSGhana content service', function() {
     it('should generate reports for each new source correctly', function(done) {
       dodoEventName = service.subscribe('dodo');
       bozoEventName = service.subscribe('bozo');
-      var service_counter = 0;
-      
       async.parallel([
         function(callback) {
           service.once(dummyEventName, function(reportData) {
@@ -110,30 +107,17 @@ describe('SMSGhana content service', function() {
             callback();
           });
         }
-      ], function(error, results) {
-      
+      ], function(error) {
         if (error) {
           done(error);
         }
         done();
       });
-    
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params)
+        .query(reqParams)
         .expect(200)
-        .end(function (err,res) {
-          if (err) {
-            return done(err);
-          }
-        });
-    
-
-      request('http://localhost:1111')
-        .get('/smsghana')
-        .query(req_params_2)
-        .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
@@ -141,9 +125,19 @@ describe('SMSGhana content service', function() {
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params_3)
+        .query(reqParams2)
         .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(reqParams3)
+        .expect(200)
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
@@ -160,7 +154,7 @@ describe('SMSGhana content service', function() {
 
 
       async.parallel([
-        function (callback) {
+        function(callback) {
           service.once(dummyEventName, function(reportData) {
             expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
             expect(reportData.content).to.equal('lorem ipsum dolor');
@@ -177,8 +171,7 @@ describe('SMSGhana content service', function() {
           callback();
         });
         }
-      ], function(error, results) {
-      
+      ], function(error) {
         if (error) {
           done(error);
         }
@@ -187,9 +180,9 @@ describe('SMSGhana content service', function() {
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params)
+        .query(reqParams)
         .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
@@ -197,9 +190,9 @@ describe('SMSGhana content service', function() {
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params_3)
+        .query(reqParams3)
         .expect(200)
-        .end(function (err,res) {
+        .end(function(err, res) {
           if (err) {
             return done(err);
           }
@@ -230,8 +223,8 @@ describe('SMSGhana content service', function() {
 
       request('http://localhost:1111')
         .get('/smsghana')
-        .query(req_params)
-        .end(function (err,res) {
+        .query(reqParams)
+        .end(function(err, res) {
           if (err) {
             utils.expectToNotEmitReport(service, done);
             return done();
