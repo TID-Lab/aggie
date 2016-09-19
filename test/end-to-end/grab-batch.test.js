@@ -81,21 +81,22 @@ describe('grab batch', function() {
     };
 
     var authorPhilip = [
-      '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo', '9 foo',
-      '1 bar', '2 bar', '3 bar', '4 bar', '5 bar'
+      '0 foo', '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo',
+      '0 bar', '1 bar', '2 bar', '3 bar', '4 bar'
     ];
 
     var keywordBar = [
-      '1 bar', '2 bar', '3 bar', '4 bar', '5 bar',
-      '1 bar baz', '2 bar baz', '3 bar baz'
+      '0 bar', '1 bar', '2 bar', '3 bar', '4 bar',
+      '0 bar baz', '1 bar baz', '2 bar baz'
     ];
 
     var timeJune = [
-      '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo', '9 foo',
-      '1 bar baz', '2 bar baz', '3 bar baz'
+      '0 foo', '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo',
+      '0 bar baz', '1 bar baz', '2 bar baz'
     ];
 
     it('by author', function() {
+      this.slow(4000);
       var e1 = utils.setFilter({ author: 'philip' });
       var e2 = clickAndExpectFrom(
         by.buttonText('Grab Batch'), 10, authorPhilip);

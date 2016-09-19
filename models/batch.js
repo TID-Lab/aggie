@@ -3,6 +3,7 @@
 var Report = require('./report');
 var async = require('async');
 var _ = require('lodash');
+var ReportQuery = require('./query/report-query');
 
 var ITEMS_PER_BATCH = 10; // 10 items per batch
 var BATCH_TIMEOUT = 5 * 60 * 1000; // 5 minutes
@@ -40,12 +41,12 @@ Batch.prototype.cancel = function(userId, callback) {
 
 // lock a new batch for given user
 Batch.prototype.lock = function(userId, query, callback) {
-  // Ignore query for now
-  var filter = {
+  var filter = query instanceof ReportQuery ? query.toMongooseFilter() : {};
+  filter = _.extend(filter, {
     checkedOutAt: null,
     checkedOutBy: null,
     read: false
-  };
+  });
 
   Report
     .find(filter)
