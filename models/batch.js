@@ -10,11 +10,11 @@ var BATCH_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 function Batch() { /* empty constructor */ }
 
 // checkout new batch
-Batch.prototype.checkout = function(userId, callback) {
+Batch.prototype.checkout = function(userId, query, callback) {
   async.series([
     this.releaseOld,
     this.cancel.bind(this, userId),
-    this.lock.bind(this, userId),
+    this.lock.bind(this, userId, query),
     this.load.bind(this, userId)
   ], function(err, results) {
     if (err) return callback(err);
@@ -39,15 +39,16 @@ Batch.prototype.cancel = function(userId, callback) {
 },
 
 // lock a new batch for given user
-Batch.prototype.lock = function(userId, callback) {
-  var conditions = {
+Batch.prototype.lock = function(userId, query, callback) {
+  // Ignore query for now
+  var filter = {
     checkedOutAt: null,
     checkedOutBy: null,
     read: false
   };
 
   Report
-    .find(conditions)
+    .find(filter)
     .sort({ storedAt: -1 })
     .limit(ITEMS_PER_BATCH)
     .exec(function(err, reports) {

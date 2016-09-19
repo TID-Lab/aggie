@@ -312,7 +312,7 @@ angular.module('Aggie')
     };
 
     $scope.grabBatch = function() {
-      Batch.checkout({}, function(resource) {
+      Batch.checkout($scope.searchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
           var message = 'No more unread reports found.';

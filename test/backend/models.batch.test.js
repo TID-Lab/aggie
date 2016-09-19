@@ -44,7 +44,7 @@ describe('Report', function() {
 
   it('should lock a batch', function(done) {
     async.series([
-      batch.lock.bind(batch, user._id),
+      batch.lock.bind(batch, user._id, null),
       Report.find.bind(Report, {})
     ], function(err, result) {
       var reports = result[1];
@@ -76,7 +76,7 @@ describe('Report', function() {
 
   it('should load a batch', function(done) {
     async.series([
-      batch.lock.bind(Report, user._id),
+      batch.lock.bind(Report, user._id, null),
       batch.load.bind(Report, user._id)
     ], function(err, result) {
       var reports = result[1];
@@ -86,7 +86,7 @@ describe('Report', function() {
   });
 
   it('should checkout a new batch', function(done) {
-    batch.checkout(user._id, function(err, reports) {
+    batch.checkout(user._id, null, function(err, reports) {
       expect(reports.length).to.eq(5);
 
       reports.forEach(function(report) {
