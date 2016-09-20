@@ -63,8 +63,8 @@ The following need to be installed.
     1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
     2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
   3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
-3. **JDK**
-  - Install from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or your package manager
+3. **JRE**
+  - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
   - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
 
 

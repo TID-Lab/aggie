@@ -24,7 +24,7 @@ process.argv.forEach(function(arg) {
 
 var paths = {
   js: ['lib/**/*.js', 'models/*.js'],
-  test: ['test/*.test.js'],
+  backend: ['test/backend/*.test.js'],
   angular: ['public/angular/**/*.js',
     'public/angular/**/*.html',
     '!public/angular/js/app.min.js'
@@ -64,17 +64,19 @@ gulp.task('angular.watch', function() {
   gulp.watch(paths.angular, ['watchAngular']);
 });
 
-gulp.task('test', function() {
+gulp.task('backend', function() {
   // Prefer cli argument, default to all test files
-  gulp.src(testFile || paths.test)
+  gulp.src(testFile || paths.backend)
     .pipe(mocha({ reporter: 'spec' }))
     .on('error', _.identity);
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.js, ['lint', 'test']);
-  gulp.watch(paths.test, ['lint', 'test']);
+  gulp.watch(paths.js, ['lint', 'backend']);
+  gulp.watch(paths.backend, ['lint', 'backend']);
 });
+
+gulp.task('test', ['backend']);
 
 gulp.task('default', ['lint', 'test', 'watch']);
 
