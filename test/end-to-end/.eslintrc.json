@@ -1,0 +1,8 @@
+{
+  "env": {
+    "protractor": true
+  },
+  "globals": {
+    "expect": false
+  }
+}

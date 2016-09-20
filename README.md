@@ -56,13 +56,16 @@ The following need to be installed.
       - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
       - After installing nvm:
       1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-      2. use this command: `nvm use` to install the version specified in `.nvmrc`.
+      2. use this command: `nvm use 0.10` to install the version specified in `.nvmrc`.
 2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
   1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
   2. Stop and restart Mongo DB.
     1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
     2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
   3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+3. **JRE**
+  - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+  - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
 
 
 ### Installation
@@ -78,8 +81,9 @@ The following need to be installed.
   - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
   - This installs all dependencies and concatenates the angular application.
-1. Run `npm install -g gulp mocha karma-cli`.
-  - This installs gulp, mocha, and karma globally so they can be run from the command line for testing.
+1. Run `npm install -g gulp mocha karma-cli protractor@2`.
+  - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
+  - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. Run `npm install -g migrate`.
   - This installs node-migrate globally.
 1. To start server, run `npm start`.
@@ -90,10 +94,13 @@ The following need to be installed.
 
 ## Maintenance
 1. To run migrations run `migrate`.
-2. To run tests, run `npm test`.
-  - Calling `mocha` will run just the backend tests
-  - `karma start` will run just the frontend tests
+2. To run unit tests, run `npm test`.
+  - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
+  - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+4. To run end-to-end tests:
+  1. first start Aggie on the test database with `npm run testrun`
+  2. then run protractor with `npm run protractor`
 
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.

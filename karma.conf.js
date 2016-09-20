@@ -11,11 +11,11 @@ module.exports = function(karma) {
     },
 
     files: [
-      'test/public/vendor/jquery-1.11.0.min.js',
+      'test/frontend/vendor/jquery-1.11.0.min.js',
       'public/angular/js/app.js',
       'public/angular/templates/**/*.html',
       'node_modules/angular-mocks/angular-mocks.js',
-      'test/public/**/*.test.js'
+      'test/frontend/**/*.test.js'
     ],
 
     reporters: ['dots'],
