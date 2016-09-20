@@ -60,8 +60,8 @@ describe('SMSGhana content service', function() {
         });
     });
     it('should be able to add new source correctly', function(done) {
-      dodoEventName = service.subscribe('dodo');
-      bozoEventName = service.subscribe('bozo');
+      service.subscribe('dodo');
+      service.subscribe('bozo');
 
       request('http://localhost:1111')
         .get('/smsghana')
@@ -206,16 +206,16 @@ describe('SMSGhana content service', function() {
 
   describe('testing stop', function() {
 
-    var service, dummyEventName, dodoEventName, bozoEventName;
+    var service;
 
     before(function() {
       service = SMSGhContentService;
-      dummyEventName = service.subscribe('dummy');
+      service.subscribe('dummy');
     });
 
     it('should stop listening on server after all unsubscribe', function(done) {
-      dodoEventName = service.subscribe('dodo');
-      bozoEventName = service.subscribe('bozo');
+      service.subscribe('dodo');
+      service.subscribe('bozo');
 
       service.unsubscribe();
       service.unsubscribe();
