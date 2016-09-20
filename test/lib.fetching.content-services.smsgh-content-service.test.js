@@ -34,7 +34,7 @@ var reqParams3 = {
 describe('SMSGhana content service', function() {
   describe('Testing start and receive message', function() {
 
-    var service, dummyEventName, dodoEventName, bozoEventName;
+    var service, dummyEventName;
 
     beforeEach(function() {
       service = SMSGhContentService;
@@ -45,9 +45,7 @@ describe('SMSGhana content service', function() {
       service.unsubscribe();
     });
 
-
     it('should start the server and send 200 code', function(done) {
-
       request('http://localhost:1111')
         .get('/smsghana')
         .query(reqParams)
@@ -59,6 +57,7 @@ describe('SMSGhana content service', function() {
           return done();
         });
     });
+
     it('should be able to add new source correctly', function(done) {
       service.subscribe('dodo');
       service.subscribe('bozo');
@@ -79,15 +78,14 @@ describe('SMSGhana content service', function() {
     });
 
     it('should generate reports for each new source correctly', function(done) {
-      dodoEventName = service.subscribe('dodo');
-      bozoEventName = service.subscribe('bozo');
+      var dodoEventName = service.subscribe('dodo');
+      var bozoEventName = service.subscribe('bozo');
       async.parallel([
         function(callback) {
           service.once(dummyEventName, function(reportData) {
             expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
             expect(reportData.content).to.equal('lorem ipsum dolor');
             expect(reportData.author).to.equal('9845098450');
-
             callback();
           });
         },
@@ -107,12 +105,8 @@ describe('SMSGhana content service', function() {
             callback();
           });
         }
-      ], function(error) {
-        if (error) {
-          done(error);
-        }
-        done();
-      });
+      ], done);
+
       request('http://localhost:1111')
         .get('/smsghana')
         .query(reqParams)
@@ -147,11 +141,10 @@ describe('SMSGhana content service', function() {
     });
 
     it('should remove one source but still listen to other sources', function(done) {
-      dodoEventName = service.subscribe('dodo');
-      bozoEventName = service.subscribe('bozo');
+      service.subscribe('dodo');
+      var bozoEventName = service.subscribe('bozo');
 
       service.unsubscribe();
-
 
       async.parallel([
         function(callback) {
@@ -171,12 +164,7 @@ describe('SMSGhana content service', function() {
           callback();
         });
         }
-      ], function(error) {
-        if (error) {
-          done(error);
-        }
-        done();
-      });
+      ], done);
 
       request('http://localhost:1111')
         .get('/smsghana')
@@ -205,7 +193,6 @@ describe('SMSGhana content service', function() {
   });
 
   describe('testing stop', function() {
-
     var service;
 
     before(function() {
@@ -229,7 +216,7 @@ describe('SMSGhana content service', function() {
             utils.expectToNotEmitReport(service, done);
             return done();
           }
-          done(err);
+          done(new Error('Expected server to be off'));
         });
     });
   });
