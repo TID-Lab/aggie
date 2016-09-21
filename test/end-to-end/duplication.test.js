@@ -6,7 +6,7 @@ var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
-// var promise = protractor.promise;
+var promise = protractor.promise;
 
 
 describe('test duplication of reports with different settings', function() {
@@ -33,9 +33,8 @@ describe('test duplication of reports with different settings', function() {
   it('should listen with fetching:on and source:enabled', function(done) {
     utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
     utils.toggleFetching('On');
-    utils.toggleSource('SMS GH', 'On');
-    // Sleep before this is sent.
-    request('http://localhost:1111')
+    utils.toggleSource('SMS GH', 'On').then(function() {
+      request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
       .expect(200)
@@ -44,7 +43,8 @@ describe('test duplication of reports with different settings', function() {
           return done(err);
         }
       });
-    browser.get(browser.baseUrl + 'reports');
+    });
+    var reports = utils.getReports();
     // Check if there is only one. If not, throw error.
     utils.toggleSource('SMS GH', 'Off');
     utils.toggleFetching('Off');
@@ -54,9 +54,8 @@ describe('test duplication of reports with different settings', function() {
   it('should not listen with fetching:on and source:disabled', function(done) {
     utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
     utils.toggleFetching('On');
-    utils.toggleSource('SMS GH', 'Off');
-    // Sleep before this is sent.
-    request('http://localhost:1111')
+    utils.toggleSource('SMS GH', 'Off').then(function() {
+      request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
       .expect(200)
@@ -65,7 +64,8 @@ describe('test duplication of reports with different settings', function() {
           return done(err);
         }
       });
-    browser.get(browser.baseUrl + 'reports');
+    });
+    var reports = utils.getReports();
     // Check if there is any report. If there is, throw error.
     utils.toggleFetching('Off');
     done();
@@ -74,9 +74,8 @@ describe('test duplication of reports with different settings', function() {
   it('should not listening wtih fetching:off and source:enabled', function(done) {
     utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
     utils.toggleFetching('Off');
-    utils.toggleSource('SMS GH', 'On');
-    // Sleep before this is sent.
-    request('http://localhost:1111')
+    utils.toggleSource('SMS GH', 'On').then(function() {
+      request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
       .expect(200)
@@ -85,7 +84,8 @@ describe('test duplication of reports with different settings', function() {
           return done(err);
         }
       });
-    browser.get(browser.baseUrl + 'reports');
+    });
+    var reports = utils.getReports();
     // Check if there is any report. If there is, throw error.
     utils.toggleSource('SMS GH', 'Off');
     done();
@@ -94,9 +94,8 @@ describe('test duplication of reports with different settings', function() {
   it('should not listen with fetching:off and source:disabled', function(done) {
     utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
     utils.toggleFetching('Off');
-    utils.toggleSource('SMS GH', 'Off');
-    // Sleep before this is sent.
-    request('http://localhost:1111')
+    utils.toggleSource('SMS GH', 'Off').then(function() {
+      request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
       .expect(200)
@@ -105,7 +104,8 @@ describe('test duplication of reports with different settings', function() {
           return done(err);
         }
       });
-    browser.get(browser.baseUrl + 'reports');
+    });
+    var reports = utils.getReports();
     // Check if there is any report. If there is, throw error.
     done();
   });

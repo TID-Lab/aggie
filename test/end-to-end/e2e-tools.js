@@ -134,3 +134,14 @@ module.exports.toggleSource = function(sourceName, state) {
     .element(by.xpath('.//*[.="' + state + '"]')).click();
   return;
 };
+
+module.exports.getReports = function(pluckColumn) {
+  browser.get(browser.baseUrl + 'reports');
+  var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
+  if (!pluckColumn) {
+    return element.all(x);
+  }
+  return element.all(x.column(pluckColumn)).map(function(elem) {
+    return elem.getText();
+  });
+};
