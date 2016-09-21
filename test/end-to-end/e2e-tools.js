@@ -56,12 +56,18 @@ module.exports.makeReports = function(n, author, time, content) {
     Report.create(_.map(_.range(n), function(i) {
       return {
         author: author,
-        authoredAt: time ? new Date(time) : new Date(),
+        storedAt: time ? new Date(time) : new Date(),
         content: content ? i + ' ' + content : i
       };
     }), done);
   };
 };
+
+function clickClearSend(clickBy, keys) {
+  element(clickBy).click();
+  element(clickBy).clear();
+  element(clickBy).sendKeys(keys);
+}
 
 module.exports.setFilter = function(filter) {
   var e = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
@@ -79,8 +85,8 @@ module.exports.setFilter = function(filter) {
     // Also, it's important to do the 'before' time which is on the right of
     // the modal, before the 'after' time, so that when we click Submit there
     // isn't a dropdown covering the button.
-    element(by.model('times.before')).sendKeys(filter.time.before);
-    element(by.model('times.after')).sendKeys(filter.time.after);
+    clickClearSend(by.model('times.before'), filter.time.before);
+    clickClearSend(by.model('times.after'), filter.time.after);
     element(by.buttonText('Submit')).click();
   }
   element(by.buttonText('Go')).click();
