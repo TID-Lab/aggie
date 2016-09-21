@@ -97,7 +97,7 @@ module.exports.addSource = function(sourceName, params) {
   };
   browser.get(browser.baseUrl + 'sources');
   element(by.buttonText('Create Source')).click();
-  element(by.model('source.media')).$('[value="' + sourceList.sourceName + '"]').click();
+  element(by.model('source.media')).$('[value="' + sourceList[sourceName] + '"]').click();
   if (sourceName !== 'Twitter') {
     element(by.model('source.nickname')).sendKeys(params.nickname ? params.nickname : 'blank');
   }
@@ -106,5 +106,31 @@ module.exports.addSource = function(sourceName, params) {
   } else {
     element(by.model('source.url')).sendKeys(params.url);
   }
-  element(by.css('[type="submit"]')).click();
+  element(by.buttonText('Submit')).click();
+  return;
+};
+
+module.exports.toggleFetching = function(state) {
+  var stateMapping = {
+    On: true,
+    Off: false
+  };
+  browser.get(browser.baseUrl + 'settings');
+  element(by.css('[ng-click="toggle(' + stateMapping[state] + ')"]')).click();
+  return;
+};
+
+module.exports.toggleSource = function(sourceName, state) {
+  var sourceIconMapping = {
+    Twitter: 'twitter-source',
+    Facebook: 'facebook-source',
+    RSS: 'rss-source',
+    Elmo: 'elmo-source',
+    'SMS GH': 'smsgh-source'
+  };
+  browser.get(browser.baseUrl + 'sources');
+  element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
+    .element(by.xpath('..'))
+    .element(by.xpath('.//*[.="' + state + '"]')).click();
+  return;
 };
