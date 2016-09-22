@@ -18,11 +18,16 @@ describe('test duplication of reports with different settings', function() {
   afterEach(utils.resetBrowser);
   var reqParams = {
   from: '9845098450',
-  fulltext: 'lorem ipsum dolor',
+  fulltext: 'loremipsumdolor',
   date: '2016-09-01',
   keyword: 'test'
   };
 
+  var chain = function() {
+    var defer = promise.defer();
+    defer.fulfill(true);
+    return defer.promise;
+  };
 /*
   it('should add SMS Ghana source with keyword: test', function(done) {
     utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
@@ -31,9 +36,17 @@ describe('test duplication of reports with different settings', function() {
   });
 */
   it('should listen with fetching:on and source:enabled', function(done) {
-    utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
-    utils.toggleFetching('On');
-    utils.toggleSource('SMS GH', 'On').then(function() {
+    chain()
+    .then(function() {
+      utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
+    })
+    .then(function() {
+      utils.toggleFetching('On');
+    })
+    .then(function() {
+      utils.toggleSource('SMS GH', 'On');
+    })
+    .then(function() {
       request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
@@ -44,17 +57,25 @@ describe('test duplication of reports with different settings', function() {
         }
       });
     });
-    var reports = utils.getReports();
-    // Check if there is only one. If not, throw error.
+    browser.get(browser.baseUrl + 'reports');
+    expect(utils.getReports().count()).to.eventually.equal(1);
     utils.toggleSource('SMS GH', 'Off');
     utils.toggleFetching('Off');
+    utils.deleteSource('SMS GH', 'hello');
     done();
   });
-
   it('should not listen with fetching:on and source:disabled', function(done) {
-    utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
-    utils.toggleFetching('On');
-    utils.toggleSource('SMS GH', 'Off').then(function() {
+    chain()
+    .then(function() {
+      utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
+    })
+    .then(function() {
+      utils.toggleFetching('On');
+    })
+    .then(function() {
+      utils.toggleSource('SMS GH', 'Off');
+    })
+    .then(function() {
       request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
@@ -65,36 +86,47 @@ describe('test duplication of reports with different settings', function() {
         }
       });
     });
-    var reports = utils.getReports();
-    // Check if there is any report. If there is, throw error.
+    expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleFetching('Off');
+    utils.deleteSource('SMS GH', 'hello');
     done();
   });
 
   it('should not listening wtih fetching:off and source:enabled', function(done) {
-    utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
-    utils.toggleFetching('Off');
-    utils.toggleSource('SMS GH', 'On').then(function() {
+    chain()
+    .then(function() {
+      utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
+    })
+    .then(function() {
+      utils.toggleFetching('Off');
+    })
+    .then(function() {
+      utils.toggleSource('SMS GH', 'On');
+    })
+    .then(function() {
       request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
-      .expect(200)
-      .end(function(err, res) {
-        if (err) {
-          return done(err);
-        }
-      });
+      .expect(200);
     });
-    var reports = utils.getReports();
-    // Check if there is any report. If there is, throw error.
+    expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleSource('SMS GH', 'Off');
+    utils.deleteSource('SMS GH', 'hello');
     done();
   });
 
   it('should not listen with fetching:off and source:disabled', function(done) {
-    utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
-    utils.toggleFetching('Off');
-    utils.toggleSource('SMS GH', 'Off').then(function() {
+    chain()
+    .then(function() {
+      utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
+    })
+    .then(function() {
+      utils.toggleFetching('Off');
+    })
+    .then(function() {
+      utils.toggleSource('SMS GH', 'Off');
+    })
+    .then(function() {
       request('http://localhost:1111')
       .get('/smsghana')
       .query(reqParams)
@@ -105,8 +137,8 @@ describe('test duplication of reports with different settings', function() {
         }
       });
     });
-    var reports = utils.getReports();
-    // Check if there is any report. If there is, throw error.
+    expect(utils.getReports().count()).to.eventually.equal(0);
+    utils.deleteSource('SMS GH', 'hello');
     done();
   });
 });
