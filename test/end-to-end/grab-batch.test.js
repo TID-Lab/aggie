@@ -95,6 +95,10 @@ describe('grab batch', function() {
       '0 bar baz', '1 bar baz', '2 bar baz'
     ];
 
+    var philipJune = [
+      '0 foo', '1 foo', '2 foo', '3 foo', '4 foo', '5 foo', '6 foo', '7 foo', '8 foo',
+    ];
+
     it('by author', function() {
       this.slow(4000);
       var e1 = utils.setFilter({ author: 'philip' });
@@ -104,6 +108,7 @@ describe('grab batch', function() {
     });
 
     it('by author twice', function() {
+      this.slow(5500);
       var e1 = utils.setFilter({ author: 'philip' });
       var e2 = clickAndExpectFrom(
         by.buttonText('Grab Batch'), 10, authorPhilip);
@@ -113,6 +118,7 @@ describe('grab batch', function() {
     });
 
     it('by time', function() {
+      this.slow(8000);
       var e1 = utils.setFilter({ time: { after: '05/30/2016 12:00:00',
                                          before: '06/3/2016 12:00:00' } });
       var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 10, timeJune);
@@ -120,6 +126,7 @@ describe('grab batch', function() {
     });
 
     it('by time twice', function() {
+      this.slow(9000);
       var e1 = utils.setFilter({ time: { after: '05/30/2016 12:00:00',
                                          before: '06/3/2016 12:00:00' } });
       var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 10, timeJune);
@@ -129,9 +136,37 @@ describe('grab batch', function() {
     });
 
     it('by keyword', function() {
+      this.slow(4000);
       var e1 = utils.setFilter({ keywords: 'bar' });
       var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 8, keywordBar);
       return promise.all([e1, e2]);
     });
+
+    // A long name for a function. This function is the next three tests
+    // It sets a filter, grabs a batch, then returns to /reports by clicking
+    // the specified button
+    var testFilteredBatchAndReturn = function(clickBy) {
+      return function() {
+        this.slow(10000);
+        var e1 = utils.setFilter({ time: { after: '05/30/2016 12:00:00',
+                                           before: '06/3/2016 12:00:00' },
+                                   author: 'philip' });
+        var e2 = clickAndExpectFrom(by.buttonText('Grab Batch'), 9, philipJune);
+        var e3 = clickAndExpectFrom(clickBy, 9, philipJune);
+        // The URL should start with https://localhost:3000/reports, but it
+        // probably also has a query string appended
+        var urlRegExp = new RegExp('^' + browser.baseUrl + 'reports');
+        var e4 = expect(browser.getCurrentUrl()).to.eventually.match(urlRegExp);
+        return promise.all([e1, e2, e3, e4]);
+      };
+    };
+
+    it('and cancel', testFilteredBatchAndReturn(by.buttonText('Cancel')));
+
+    it('and mark and done', testFilteredBatchAndReturn(
+      by.buttonText('Mark All Read & Done')));
+
+    it('and grab another which fails', testFilteredBatchAndReturn(
+      by.buttonText('Mark All Read & Grab Another')));
   });
 });
