@@ -120,10 +120,6 @@ angular.module('Aggie')
       $scope.pagination.start = Math.min(start + 1, total);
       $scope.pagination.end = Math.min(end + 1, total);
 
-      if ($scope.searchParams.keywords) {
-        $scope.pagination.visibleTotal = items.length;
-        return items.slice(start, end);
-      }
       return items;
     };
 
@@ -174,9 +170,6 @@ angular.module('Aggie')
       var uniqueReports = removeDuplicates(reports);
       $scope.pagination.total += uniqueReports.length;
       $scope.pagination.visibleTotal += uniqueReports.length;
-      if ($scope.searchParams.keywords) {
-        $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100);
-      }
       $scope.newReports.addMany(uniqueReports);
     };
 

@@ -71,6 +71,11 @@ ReportQuery.prototype.toMongooseFilter = function() {
     });
   }
 
+  // Search by keyword
+  if (this.keywords) {
+    filter.$text = { $search: this.keywords };
+  }
+
   return filter;
 };
 

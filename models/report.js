@@ -6,7 +6,6 @@ var database = require('../lib/database');
 var mongoose = database.mongoose;
 var textSearch = require('mongoose-text-search');
 var listenTo = require('mongoose-listento');
-var _ = require('underscore');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -93,19 +92,7 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
-  if (!query.keywords) {
-    // Just use filters when no keywords are provided
-    Report.findSortedPage(filter, page, callback);
-  } else {
-    Report.textSearch(query.keywords, { filter: filter, limit: 100 }, function(err, reports) {
-      if (err) return callback(err);
-      var result = {
-        total: reports.stats.n ? reports.stats.nscannedObjects : 0,
-        results: _.chain(reports.results).pluck('obj').sortBy('storedAt').value().reverse()
-      };
-      callback(null, result);
-    });
-  }
+  Report.findSortedPage(filter, page, callback);
 };
 
 Report.findSortedPage = function(filter, page, callback) {
