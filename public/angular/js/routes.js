@@ -70,11 +70,11 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('batch', {
-      url: '/reports/batch',
+      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author',
       templateUrl: '/templates/reports/batch.html',
       controller: 'ReportsIndexController',
       resolve: {
-        reports: ['Batch', '$stateParams', function(Batch, params) {
+        reports: ['Batch', function(Batch) {
           if (Batch.resource) return Batch.resource;
           return Batch.load({}).$promise;
         }],

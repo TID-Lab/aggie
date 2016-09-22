@@ -328,7 +328,7 @@ angular.module('Aggie')
         }
 
         Batch.resource = resource;
-        $rootScope.$state.go('batch', {}, { reload: true });
+        $rootScope.$state.go('batch', $scope.searchParams, { reload: true });
       });
     };
 
