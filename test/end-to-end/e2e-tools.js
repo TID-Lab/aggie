@@ -5,6 +5,7 @@ var _ = require('lodash');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var Report = require('../../models/report');
+var request = require('supertest');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -144,4 +145,12 @@ module.exports.getReports = function(pluckColumn) {
   return element.all(x.column(pluckColumn)).map(function(elem) {
     return elem.getText();
   });
+};
+
+module.exports.deleteSource = function(sourceName, nickname) {
+  browser.get(browser.baseUrl + 'sources');
+  element(by.linkText(nickname)).click();
+  element(by.buttonText('Delete')).click();
+  element(by.buttonText('Confirm')).click();
+  return;
 };
