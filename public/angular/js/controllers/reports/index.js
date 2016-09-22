@@ -319,7 +319,7 @@ angular.module('Aggie')
 
           if ($scope.currentPath === 'batch') {
             flash.setNotice(message);
-            $rootScope.$state.go('reports', {});
+            $rootScope.$state.go('reports', $scope.searchParams);
           } else {
             flash.setNoticeNow(message);
           }
@@ -334,7 +334,7 @@ angular.module('Aggie')
 
     $scope.cancelBatch = function() {
       Batch.cancel({}, function() {
-        $rootScope.$state.go('reports', {});
+        $rootScope.$state.go('reports', $scope.searchParams);
       });
     };
 
@@ -353,12 +353,12 @@ angular.module('Aggie')
       var ids = getIds($scope.reports);
 
       Report.toggleRead({ ids: ids, read: true }, function() {
-        $rootScope.$state.go('reports', {}, { reload: true });
+        $rootScope.$state.go('reports', $scope.searchParams, { reload: true });
       });
     };
 
     $scope.viewReport = function(event, report) {
-      if (angular.element(event.target)[0].tagName == 'TD') {
+      if (angular.element(event.target)[0].tagName === 'TD') {
         $state.go('report', { id: report._id });
       }
     };
@@ -367,9 +367,8 @@ angular.module('Aggie')
       var source = $scope.sourcesById[report._source];
       if (source && $scope.mediaOptions[source.media] !== -1) {
         return source.media + '-source';
-      } else {
-        return 'unknown-source';
       }
+      return 'unknown-source';
     };
 
     $scope.$on('$destroy', function() {
