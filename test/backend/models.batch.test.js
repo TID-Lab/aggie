@@ -5,14 +5,16 @@ var expect = require('chai').expect;
 var Report = require('../../models/report');
 var User = require('../../models/user');
 var batch = require('../../models/batch');
+var ReportQuery = require('../../models/query/report-query');
 var async = require('async');
+var _ = require('lodash');
 
-var user;
+var user, t;
 
 // helpers
-function timeAgo(miliseconds) {
+function timeAgo(milliseconds) {
   var now = new Date();
-  return new Date(now.getTime() - miliseconds);
+  return new Date(now.getTime() - milliseconds);
 }
 
 function loadUser(done) {
@@ -23,7 +25,7 @@ function loadUser(done) {
 }
 
 function createReport(done) {
-  var t = new Date();
+  t = new Date();
 
   Report.create([
     { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true,
@@ -107,9 +109,25 @@ describe('Report', function() {
     });
   });
 
-  it('should not have a batch if none was checked out');
+  describe('should check out batch with filter', function() {
+    function testCheckoutFilter(filter, resultContent, done) {
+      var query = new ReportQuery(filter);
+      batch.checkout(user._id, query, function(err, reports) {
+        expect(_.map(reports, 'content').sort()).to.eql(resultContent.sort());
+        done(err);
+      });
+    }
 
-  it('should apply a filter when checking out a batch');
+    it('by time', function(done) {
+      var filter = {
+        after: new Date(t.getTime() - 13500)
+      };
+      testCheckoutFilter(filter, ['one', 'two', 'three'], done);
+    });
+
+    it('by keyword', testCheckoutFilter.bind({}, { keywords: 'five two' },
+                                             ['two', 'five']));
+  });
 
   after(utils.expectModelsEmpty);
 });
