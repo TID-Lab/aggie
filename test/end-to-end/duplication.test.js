@@ -141,4 +141,33 @@ describe('test duplication of reports with different settings', function() {
     utils.deleteSource('SMS GH', 'hello');
     done();
   });
+  it('should not listen with fetching toggled from on to off and source:disabled', function(done) {
+    chain()
+    .then(function() {
+      utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
+    })
+    .then(function() {
+      utils.toggleFetching('On');
+    })
+    .then(function() {
+      utils.toggleFetching('Off');
+    })
+    .then(function() {
+      utils.toggleSource('SMS GH', 'Off');
+    })
+    .then(function() {
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) {
+          return done(err);
+        }
+      });
+    });
+    expect(utils.getReports().count()).to.eventually.equal(0);
+    utils.deleteSource('SMS GH', 'hello');
+    done();
+  });
 });
