@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var Report = require('../../models/report');
@@ -24,7 +26,8 @@ function createReport(done) {
   var t = new Date();
 
   Report.create([
-    { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60) },
+    { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true,
+      checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60) },
     { storedAt: new Date(t.getTime() - 12000), content: 'two', flagged: false },
     { storedAt: new Date(t.getTime() - 13000), content: 'three', flagged: false },
     { storedAt: new Date(t.getTime() - 14000), content: 'four', flagged: false },
@@ -52,14 +55,13 @@ describe('Report', function() {
         if (report.read) {
           expect(report.checkedOutAt).not.exist;
           expect(report.checkedOutBy).not.exist;
-        }
-        else {
+        } else {
           expect(report.checkedOutAt).to.exist;
           expect(report.checkedOutBy).to.exist;
         }
       });
 
-      done();
+      done(err);
     });
   });
 
@@ -70,7 +72,7 @@ describe('Report', function() {
         expect(report.checkedOutAt).not.exist;
         expect(report.checkedOutBy).not.exist;
       });
-      done();
+      done(err);
     });
   });
 
@@ -81,7 +83,7 @@ describe('Report', function() {
     ], function(err, result) {
       var reports = result[1];
       expect(reports.length).to.eq(5);
-      done();
+      done(err);
     });
   });
 
@@ -94,14 +96,14 @@ describe('Report', function() {
         expect(report.checkedOutBy).to.exist;
       });
 
-      done();
+      done(err);
     });
   });
 
   it('should cancel batch', function(done) {
     batch.cancel(user._id, function(err, num) {
       expect(num).to.eq(1);
-      done();
+      done(err);
     });
   });
 
