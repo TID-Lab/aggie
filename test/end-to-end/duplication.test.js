@@ -28,13 +28,6 @@ describe('test duplication of reports with different settings', function() {
     defer.fulfill(true);
     return defer.promise;
   };
-/*
-  it('should add SMS Ghana source with keyword: test', function(done) {
-    utils.addSource('SMS GH', { nickname: 'hello', keywords: 'test' });
-    utils.toggleSource('SMS GH', 'Off');
-    done();
-  });
-*/
   it('should listen with fetching:on and source:enabled', function(done) {
     chain()
     .then(function() {
