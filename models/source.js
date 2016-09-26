@@ -44,7 +44,6 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('unreadErrorCount')) {
     this._sourceErrorCountUpdated = true;
   }
-  
   if (!this.isNew && this.isModified('enabled')) {
     this._sourceStatusChanged = true;
   }
