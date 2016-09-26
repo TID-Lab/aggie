@@ -13,6 +13,7 @@ exports.config = {
 
   framework: 'mocha',
   mochaOpts: {
-    timeout: 20000
+    timeout: 20000,
+    slow: 2000
   }
 };
