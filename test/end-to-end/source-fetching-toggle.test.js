@@ -62,6 +62,7 @@ describe('test duplication of reports with different settings', function() {
     utils.deleteSource('SMS GH', 'hello');
     done();
   });
+  
   it('should not listen with fetching:on and source:disabled', function(done) {
     chain()
     .then(function() {
