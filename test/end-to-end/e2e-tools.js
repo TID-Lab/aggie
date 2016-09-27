@@ -5,7 +5,6 @@ var _ = require('lodash');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var Report = require('../../models/report');
-var request = require('supertest');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
