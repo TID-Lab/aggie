@@ -42,7 +42,7 @@ describe('SMSGhana content service', function() {
     });
 
     afterEach(function() {
-      service.unsubscribe();
+      service.unsubscribe('dummy');
     });
 
     it('should start the server and send 200 code', function(done) {
@@ -73,8 +73,8 @@ describe('SMSGhana content service', function() {
           return done();
         });
 
-      service.unsubscribe();
-      service.unsubscribe();
+      service.unsubscribe('dodo');
+      service.unsubscribe('bozo');
     });
 
     it('should generate reports for each new source correctly', function(done) {
@@ -136,15 +136,15 @@ describe('SMSGhana content service', function() {
             return done(err);
           }
         });
-        service.unsubscribe();
-        service.unsubscribe();
+        service.unsubscribe('dodo');
+        service.unsubscribe('bozo');
     });
 
     it('should remove one source but still listen to other sources', function(done) {
       service.subscribe('dodo');
       var bozoEventName = service.subscribe('bozo');
 
-      service.unsubscribe();
+      service.unsubscribe('bozo');
 
       async.parallel([
         function(callback) {
@@ -186,7 +186,7 @@ describe('SMSGhana content service', function() {
           }
         });
 
-      service.unsubscribe();
+      service.unsubscribe('dodo');
     });
 
 
@@ -204,9 +204,9 @@ describe('SMSGhana content service', function() {
       service.subscribe('dodo');
       service.subscribe('bozo');
 
-      service.unsubscribe();
-      service.unsubscribe();
-      service.unsubscribe();
+      service.unsubscribe('dummy');
+      service.unsubscribe('dodo');
+      service.unsubscribe('bozo');
 
       request('http://localhost:1111')
         .get('/smsghana')
