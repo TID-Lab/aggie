@@ -28,19 +28,6 @@ describe('test duplication of reports with different settings', function() {
     defer.fulfill(true);
     return defer.promise;
   };
-
-  var sendRequest = function() {
-    request('http://localhost:1111')
-    .get('/smsghana')
-    .query(reqParams)
-    .expect(200)
-    .end(function(err, res) {
-      if (err) {
-        return done(err);
-      }
-    });
-  };
-
   it('should listen with fetching:on and source:enabled', function(done) {
     chain()
     .then(function() {
@@ -53,7 +40,15 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'On');
     })
     .then(function() {
-      sendRequest();
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) {
+          return done(err);
+        }
+      });
     });
     browser.get(browser.baseUrl + 'reports');
     expect(utils.getReports().count()).to.eventually.equal(1);
@@ -74,7 +69,15 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) {
+          return done(err);
+        }
+      });
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleFetching('Off');
@@ -94,7 +97,10 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'On');
     })
     .then(function() {
-      sendRequest();
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200);
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleSource('SMS GH', 'Off');
@@ -114,13 +120,20 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) {
+          return done(err);
+        }
+      });
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.deleteSource('SMS GH', 'hello');
     done();
   });
-
   it('should not listen with fetching toggled from on to off and source:disabled', function(done) {
     chain()
     .then(function() {
@@ -136,10 +149,18 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      request('http://localhost:1111')
+      .get('/smsghana')
+      .query(reqParams)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) {
+          return done(err);
+        }
+      });
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.deleteSource('SMS GH', 'hello');
     done();
-});
+  });
 });
