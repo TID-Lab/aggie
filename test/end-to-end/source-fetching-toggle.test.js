@@ -29,7 +29,7 @@ describe('test duplication of reports with different settings', function() {
     return defer.promise;
   };
 
-  var sendRequest = function() {
+  var sendRequest = function(done) {
     request('http://localhost:1111')
     .get('/smsghana')
     .query(reqParams)
@@ -53,7 +53,7 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'On');
     })
     .then(function() {
-      sendRequest();
+      sendRequest(done);
     });
     browser.get(browser.baseUrl + 'reports');
     expect(utils.getReports().count()).to.eventually.equal(1);
@@ -74,7 +74,7 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      sendRequest(done);
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleFetching('Off');
@@ -94,7 +94,7 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'On');
     })
     .then(function() {
-      sendRequest();
+      sendRequest(done);
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.toggleSource('SMS GH', 'Off');
@@ -114,7 +114,7 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      sendRequest(done);
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.deleteSource('SMS GH', 'hello');
@@ -136,7 +136,7 @@ describe('test duplication of reports with different settings', function() {
       utils.toggleSource('SMS GH', 'Off');
     })
     .then(function() {
-      sendRequest();
+      sendRequest(done);
     });
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.deleteSource('SMS GH', 'hello');
