@@ -4,7 +4,7 @@ var utils = require('./init');
 var request = require('supertest');
 var expect = require('chai').expect;
 var async = require('async');
-var SMSGhContentService = require('../lib/fetching/content-services/smsgh-content-service');
+var SMSGhContentService = require('../../lib/fetching/content-services/smsgh-content-service');
 
 // This can be modified as more fields are added
 // Req corresponding to source 1
