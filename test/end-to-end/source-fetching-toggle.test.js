@@ -17,10 +17,10 @@ describe('test duplication of reports with different settings', function() {
   beforeEach(utils.initAdmin.bind({}, 'asdfasdf'));
   afterEach(utils.resetBrowser);
   var reqParams = {
-  from: '9845098450',
-  fulltext: 'loremipsumdolor',
-  date: '2016-09-01',
-  keyword: 'test'
+    from: '9845098450',
+    fulltext: 'loremipsumdolor',
+    date: '2016-09-01',
+    keyword: 'test'
   };
 
   var chain = function() {
@@ -141,5 +141,5 @@ describe('test duplication of reports with different settings', function() {
     expect(utils.getReports().count()).to.eventually.equal(0);
     utils.deleteSource('SMS GH', 'hello');
     done();
-});
+  });
 });
