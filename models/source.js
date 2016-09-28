@@ -44,9 +44,14 @@ sourceSchema.pre('save', function(next) {
   if (!this.isNew && this.isModified('unreadErrorCount')) {
     this._sourceErrorCountUpdated = true;
   }
-
+  // This is the code that says that if source is enabled, set true
+  // This does not handle if source is disabled
   if (!this.isNew && this.isModified('enabled')) {
     this._sourceStatusChanged = true;
+  }
+  // May be unnecessary if I check for fetching elsewhere
+  if(!this.isNew && this.isModified('disabled')) {
+    this._sourceStatusChanged = false;
   }
 
   // Only allow a single Twitter source
@@ -62,6 +67,7 @@ sourceSchema.pre('save', function(next) {
 
 sourceSchema.post('save', function() {
   if (this._sourceStatusChanged) {
+    // Maybe return here if fetching is disabled
     var event = (this.enabled) ? 'source:enable' : 'source:disable';
     sourceSchema.emit(event, {_id: this._id.toString()});
   }
