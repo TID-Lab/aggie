@@ -4,6 +4,7 @@ angular.module('Aggie')
   var Fetching = $resource('/api/v1/settings/fetching/:op', {}, {
     toggle: { method: 'PUT' },
   });
+  var state = null;
 
   return {
     get: function(success, failure) {
@@ -13,6 +14,10 @@ angular.module('Aggie')
     },
 
     set: function(enabled, success, failure) {
+      if (enabled === state) {
+        return;
+      }
+      state = enabled;
       return Fetching.toggle({ op: enabled ? 'on' : 'off' }, {}, success, failure);
     }
   };
