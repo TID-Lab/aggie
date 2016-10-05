@@ -1,0 +1,61 @@
+<div>
+  <form name="settingsForm" class="form-horizontal" novalidate>
+    <div class="modal-header">
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
+      <h4 class="modal-title">
+        <div class="icon-left" translate="api_settings_modal.title" translate-value-api="{{ api }}"></div>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <alert type="info" ng-show="success">{{ "api_settings_modal.success" | translate }}</alert>
+      <alert type="danger" ng-show="failure">{{ message }}</alert>
+
+      <ol ng-if="api === 'twitter'">
+        <li translate>api_settings_modal.twitter.p1</li>
+        <li translate>api_settings_modal.twitter.p2</li>
+      </ol>
+      <ol ng-if="api === 'facebook'">
+        <li translate>api_settings_modal.facebook.p1</li>
+        <li translate>api_settings_modal.facebook.p2</li>
+        <li translate>api_settings_modal.facebook.p3</li>
+        <li translate>api_settings_modal.facebook.p4</li>
+      </ol>
+      <ol ng-if="api === 'elmo'">
+        <li translate>api_settings_modal.elmo.p1</li>
+        <li translate>api_settings_modal.elmo.p2</li>
+        <li translate>api_settings_modal.elmo.p3</li>
+        <li translate>api_settings_modal.elmo.p4</li>
+      </ol>
+      <ol ng-if="api === 'gplaces'">
+        <li translate>api_settings_modal.gplaces.p1</li>
+        <li translate>api_settings_modal.gplaces.p2</li>
+      </ol>
+      <p ng-show="settingsForm.$invalid" translate>api_settings_modal.field_required</p>
+      <div class="well bs-component">
+        <fieldset>
+          <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
+            <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
+            <div class="col-lg-8">
+              <input type="text" ng-model="settings[settingName]" class="form-control"
+                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(api, settings)" ng-if="api !== 'elmo' && api !== 'gplaces'">
+        <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
+        <span ng-hide="loading">Test</span>
+        <span ng-show="loading">Testing</span></button>
+      <button class="btn btn-default" aggie-confirm="{{ api_settings_modal.confirm_delete | translate }}"
+              on-confirm="delete(api, settings)">
+        {{ 'Delete' | translate }}
+      </button>
+      <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, api, settings)" translate>
+        Save &amp; Close
+      </button>
+    </div>
+  </form>
+</div>

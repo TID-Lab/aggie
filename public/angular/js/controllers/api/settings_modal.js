@@ -1,32 +1,32 @@
 angular.module('Aggie')
 
-.controller('MediaSettingsModalInstanceController', [
+.controller('APISettingsModalInstanceController', [
   '$scope',
   '$modalInstance',
   'Settings',
   'FlashService',
   'settingsValues',
-  'media',
+  'api',
   '$filter',
-  function($scope, $modalInstance, Settings, flash, settings, media, $filter) {
+  function($scope, $modalInstance, Settings, flash, settings, api, $filter) {
 
     $scope.settings = settings;
-    $scope.media = media;
+    $scope.api = api;
     $scope._showErrors = false;
     $scope.loading = false;
 
-    $scope.save = function(form, mediaName, settings) {
-      Settings.set(mediaName, settings, success(mediaName, 'saved'), failure);
+    $scope.save = function(form, apiName, settings) {
+      Settings.set(apiName, settings, success(apiName, 'saved'), failure);
       $modalInstance.close();
     };
 
-    $scope.delete = function(mediaName, settings) {
+    $scope.delete = function(apiName, settings) {
 
       for (var setting in settings) {
         settings[setting] = '';
       }
 
-      Settings.set(mediaName, settings, success(mediaName, 'deleted'), failure);
+      Settings.set(apiName, settings, success(apiName, 'deleted'), failure);
       $modalInstance.close();
     };
 
@@ -34,14 +34,14 @@ angular.module('Aggie')
       $modalInstance.dismiss('cancel');
     };
 
-    function success(mediaName, verb) {
-      flash.setNoticeNow('settings.media.settingsModal.success',
-                         { mediaName: $filter('capitalize')(mediaName),
+    function success(apiName, verb) {
+      flash.setNoticeNow('settings.api.settingsModal.success',
+                         { apiName: $filter('capitalize')(apiName),
                            verb: verb });
     };
 
     function failure(data) {
-      flash.setAlertNow('settings.media.settingsModal.error');
+      flash.setAlertNow('settings.api.settingsModal.error');
       console.log('failure: ', data);
     };
 
