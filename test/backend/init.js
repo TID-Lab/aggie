@@ -75,3 +75,12 @@ function expectToEmitError(listener, message, done) {
   });
 }
 module.exports.expectToEmitError = expectToEmitError;
+
+// Expect listener to emit warnings
+function expectToEmitWarning(listener, done) {
+  listener.once('warning', function(err) {
+    expect(err).to.be.an.instanceof(Error);
+    done();
+  });
+}
+module.exports.expectToEmitWarning = expectToEmitWarning;

@@ -5,13 +5,14 @@ var ContentService = require('../../lib/fetching/content-service');
 
 // Stubs the _doRequest method of the content service to return the data in the given fixture file.
 // If service is null, creates a dummy FacebookContentService
-function stubWithFixture(fixtureFile, service) {
+function stubWithFixture(fixtureFile, service, fixtureErrorFile) {
   // Create service if not provided.
   service = service || new FacebookContentService({ url: 'http://example.com' });
 
   // Make the stub function return the expected args (err, data).
   fixtureFile = './fixtures/' + fixtureFile;
-  service._doRequest = function(queries, callback) { callback(null, require(fixtureFile)); };
+  var fixtureError = fixtureErrorFile ? require('./fixtures/' + fixtureErrorFile) : null;
+  service._doRequest = function(queries, callback) { callback(fixtureError, require(fixtureFile)); };
 
   return service;
 }
@@ -121,6 +122,12 @@ describe('Facebook content service', function() {
       utils.expectToNotEmitReport(service, done);
       utils.expectToEmitError(service, 'Missing Facebook URL', done);
       service.fetch({ maxCount: 50 }, function() {});
+    });
+
+    it('should emit a warning when a transient error happens', function(done) {
+      var service = stubWithFixture('facebook-1.json', null, 'facebook-3.json');
+      service.fetch({ maxCount: 50 }, function() {});
+      utils.expectToEmitWarning(service, done);
     });
   });
 
