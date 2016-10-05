@@ -37,8 +37,8 @@
   "passwordReset": {
     "noMatch": "Passwords do not match",
     "tooShort": "Password is not long enough",
-    "success": "An error has occurred when resetting your password",
-    "error": "Your password has been successfully reset.",
+    "error": "An error has occurred when resetting your password",
+    "success": "Your password has been successfully reset.",
     "admin": {
       "success": "The admin password was changed successfully.",
       "error": "There was an error setting the new admin password."
