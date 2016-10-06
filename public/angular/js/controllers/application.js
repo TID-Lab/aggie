@@ -7,9 +7,8 @@ angular.module('Aggie')
   '$sce',
   function($scope, Settings, flash, $sce) {
     $scope.flash = flash;
-
-    Settings.get('google', function success(data) {
-      var src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + data[data.setting].key;
+    Settings.get('gplaces', function success(data) {
+      var src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + data.gplaces.key;
       $scope.gPlaces = $sce.trustAsResourceUrl(src);
       });
   }
