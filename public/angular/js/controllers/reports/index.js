@@ -55,7 +55,7 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
-      if ($scope.currentPath === 'reports') {
+      if ($scope.currentPath === 'reports' || $scope.currentPath === 'batch') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
         if ($scope.isFirstPage()) {
