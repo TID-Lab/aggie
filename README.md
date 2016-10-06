@@ -126,6 +126,10 @@ Set `config.adminParty=true` if you want to run tests.
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
 1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
 
+### Google Places
+Aggie uses Google Places for guessing locations in the application. To make it work:
+  1. You will need to get an API key from [Google API console](https://console.developers.google.com/) for [Google Places API](https://developers.google.com/places/documentation/).
+  1. Then go to Settings > Settings and edit the Google Places settings and add the key.
 
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.

@@ -57,7 +57,7 @@
             <label for="location" class="col-lg-2 control-label" translate>Location</label>
             <div class="col-lg-9">
               <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
-              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = !minimalLatLng" translate>Edit coordinates...</button>
+              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
             </div>
           </div>
 

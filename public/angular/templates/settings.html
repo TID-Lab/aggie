@@ -25,15 +25,15 @@
   </tbody>
 </table>
 
-<h4 translate>Media Authentication</h4>
-<table class="table table-settings" ng-controller="MediaSettingsController">
-  <tr ng-repeat="mediaOption in mediaOptions">
+<h4 translate>API Authentication</h4>
+<table class="table table-settings" ng-controller="APISettingsController">
+  <tr ng-repeat="settingOption in settingOptions">
     <td>
-      <label class="settings-label">{{ mediaOption | capitalize }}</label>
+      <label class="settings-label">{{ settingOption | translate }}</label>
     </td>
     <td class="action">
       <div class="ng-scope">
-        <button class="btn btn-info ng-scope" ng-click="edit(mediaOption)" translate>Edit</button>
+        <button class="btn btn-info ng-scope" ng-click="edit(settingOption)" translate>Edit</button>
       </div>
     </td>
   </tr>
