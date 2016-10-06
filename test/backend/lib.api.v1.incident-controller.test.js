@@ -3,7 +3,7 @@ var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
 var incidentController = require('../../lib/api/v1/incident-controller')();
-
+var Incident = require('../../models/incident');
 var incident;
 describe('Incident controller', function() {
   before(function(done) {
@@ -106,8 +106,24 @@ describe('Incident controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/incident/:_id', function() {
-    it('should delete incident', function(done) {
+  describe('DELETE /api/v1/incident/', function(done) {
+    beforeEach(function(done) {
+      Incident.create([
+        { authoredAt: new Date(), title: 'First incident' },
+        { authoredAt: new Date(), title: 'Second incident' },
+        { authoredAt: new Date(), title: 'Third incident' }
+      ], function() {
+        Incident.findOne({title: 'First incident'}, function(err, inc) {
+          incident = inc;
+          done();
+        });
+      });
+    });
+    afterEach(function(done) {
+      Incident.remove({}, done);
+    });
+
+    it(':id should delete incident with id', function(done) {
       request(incidentController)
         .del('/api/v1/incident/' + incident._id)
         .expect(200)
@@ -117,10 +133,8 @@ describe('Incident controller', function() {
             .expect(404, done);
         });
     });
-  });
 
-  describe('DELETE /api/v1/incident/_all', function() {
-    it('should delete all incidents', function(done) {
+    it('_all should delete all incidents', function(done) {
       request(incidentController)
         .del('/api/v1/incident/_all')
         .expect(200)
@@ -130,10 +144,8 @@ describe('Incident controller', function() {
             .expect(200, { total: 0, results: [] }, done);
         });
     });
-  });
 
-  describe('POST /api/v1/incident/_selected', function() {
-    it('should delete all incidents', function(done) {
+    it('_selected should delete selected incidents', function(done) {
       request(incidentController)
         .post('/api/v1/incident/_selected')
         .send({ ids: [incident._id] })
@@ -141,7 +153,12 @@ describe('Incident controller', function() {
         .end(function(err, res) {
           request(incidentController)
             .get('/api/v1/incident')
-            .expect(200, { total: 0, results: [] }, done);
+            .expect(200)
+            .end(function(err, res) {
+              expect(res.body.total).to.equal(2);
+              done();
+            });
+
         });
     });
   });
