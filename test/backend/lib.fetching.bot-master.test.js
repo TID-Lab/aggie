@@ -5,6 +5,7 @@ var expect = require('chai').expect;
 var botMaster = require('../../lib/fetching/bot-master');
 var Report = require('../../models/report');
 var Source = require('../../models/source');
+var async = require('async');
 
 describe('BotMaster', function() {
   before(utils.expectModelsEmpty);
@@ -20,15 +21,26 @@ describe('BotMaster', function() {
   });
 
   beforeEach(function(done) {
-    botMaster.kill();
-    Source.schema.removeAllListeners('source:save');
-    Source.schema.removeAllListeners('source:remove');
-    Source.schema.removeAllListeners('source:enable');
-    Source.schema.removeAllListeners('source:disable');
-    botMaster.init(function() {
-      botMaster.addListeners('source', Source.schema);
-      done();
-    });
+    async.series([
+      function(callback) {
+        setTimeout(function() {}, 100);
+        botMaster.kill();
+        setTimeout(callback, 100);
+      },
+      function(callback) {
+        Source.schema.removeAllListeners('source:save');
+        Source.schema.removeAllListeners('source:remove');
+        Source.schema.removeAllListeners('source:enable');
+        Source.schema.removeAllListeners('source:disable');
+        setTimeout(callback, 100);
+      },
+      function(callback) {
+        botMaster.init(function() {
+          botMaster.addListeners('source', Source.schema);
+        });
+        setTimeout(callback, 100);
+      }
+    ], done);
   });
 
   it('should track all instantiated bots', function(done) {
@@ -54,20 +66,37 @@ describe('BotMaster', function() {
   });
 
   it('should start all bots', function(done) {
-    expect(botMaster.bots[0].enabled).to.be.false;
-    expect(botMaster.bots[1].enabled).to.be.false;
-    botMaster.start();
-    expect(botMaster.bots[0].enabled).to.be.true;
-    expect(botMaster.bots[1].enabled).to.be.true;
-    done();
+    async.series([
+      function(callback) {
+        expect(botMaster.bots[0].enabled).to.be.false;
+        expect(botMaster.bots[1].enabled).to.be.false;
+        callback();
+      },
+      function(callback) {
+        botMaster.start();
+        setTimeout(callback, 100);
+      },
+      function(callback) {
+        expect(botMaster.bots[0].enabled).to.be.true;
+        expect(botMaster.bots[1].enabled).to.be.true;
+        callback();
+      }
+    ], done);
   });
 
   it('should stop all bots', function(done) {
-    botMaster.start();
-    botMaster.stop();
-    expect(botMaster.bots[0].enabled).to.be.false;
-    expect(botMaster.bots[1].enabled).to.be.false;
-    done();
+    async.series([
+      function(callback) {
+        botMaster.start();
+        botMaster.stop();
+        setTimeout(callback, 200);
+      },
+      function(callback) {
+        expect(botMaster.bots[0].enabled).to.be.false;
+        expect(botMaster.bots[1].enabled).to.be.false;
+        setTimeout(callback, 200);
+      }
+    ], done);
   });
 
   it('should kill a single bot', function(done) {

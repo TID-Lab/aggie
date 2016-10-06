@@ -51,6 +51,6 @@ describe('Bot', function() {
     });
     bot.clearQueue();
   });
-
+  after(utils.wipeModels([Report]));
   after(utils.expectModelsEmpty);
 });
