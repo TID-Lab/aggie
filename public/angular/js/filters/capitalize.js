@@ -2,6 +2,7 @@ angular.module('Aggie')
 
 .filter('capitalize', function() {
   return function(string) {
+    if (!string) return;
     if (string === 'elmo') {
       return 'ELMO';
     } else {
