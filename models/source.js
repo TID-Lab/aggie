@@ -10,6 +10,7 @@ var mongoose = database.mongoose;
 var validate = require('mongoose-validator');
 var _ = require('underscore');
 require('../lib/error');
+var logger = require('../lib/logger');
 
 var EVENTS_TO_RETURN = 50;
 
@@ -53,6 +54,11 @@ sourceSchema.pre('save', function(next) {
   // Only allow a single Twitter source
   if (this.isNew && this.media === 'twitter') {
     Source.findOne({ media: 'twitter' }, function(err, source) {
+      // Should never error here. Unable to reproduce on normal usage.
+      // So, if it errors, it is serious enough to report an 'error'
+      if (err) {
+        logger.error(err);
+      }
       if (source) return next(new Error.Validation('only_one_twitter_allowed'));
       else next();
     });

@@ -11,6 +11,7 @@ var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 var listenTo = require('mongoose-listento');
 var Report = require('./report');
+var logger = require('../lib/logger');
 
 require('../lib/error');
 
@@ -57,6 +58,9 @@ schema.post('save', function() {
 schema.post('remove', function() {
   // Unlink removed incident from reports
   Report.find({ _incident: this._id.toString() }, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
     reports.forEach(function(report) {
       report._incident = null;
       report.save();
@@ -71,14 +75,17 @@ schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
     // Callbacks added to execute query immediately
-    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {
-      if (err) return schema.emit('error', err);
-      schema.emit('incident:update');
+    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {
+      if (err) {
+        logger.error(err);
+      }
     });
   }
-  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err) {
-    if (err) return schema.emit('error', err);
-    schema.emit('incident:update');
+
+  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err, incident) {
+    if (err) {
+      logger.error(err);
+    }
   });
 
 });

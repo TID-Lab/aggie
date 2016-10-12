@@ -6,6 +6,7 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
 var _ = require('underscore');
+var logger = require('../lib/logger')
 
 var SALT_WORK_FACTOR = 10;
 
@@ -95,6 +96,9 @@ User.checkUnique = function(user, callback) {
   var remaining = queries.length;
   _.each(queries, function(query) {
     User.count(query, function(err, count) {
+      if (err) {
+        logger.warning(err);
+      }
       if (count) errors.push(_.keys(_.last(query.$and))[0] + '_not_unique');
       if (--remaining === 0) callback(!errors.length, errors);
     });
