@@ -2,6 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var FacebookContentService = require('../../lib/fetching/content-services/facebook-content-service');
 var ContentService = require('../../lib/fetching/content-service');
+var _ = require('lodash');
 
 // Stubs the _doRequest method of the content service to return the data in the given fixture file.
 // If service is null, creates a dummy FacebookContentService
@@ -12,7 +13,9 @@ function stubWithFixture(fixtureFile, service, fixtureErrorFile) {
   // Make the stub function return the expected args (err, data).
   fixtureFile = './fixtures/' + fixtureFile;
   var fixtureError = fixtureErrorFile ? require('./fixtures/' + fixtureErrorFile) : null;
-  service._doRequest = function(queries, callback) { callback(fixtureError, require(fixtureFile)); };
+  service._doRequest = function(queries, callback) {
+    callback(fixtureError, require(fixtureFile));
+  };
 
   return service;
 }
@@ -121,12 +124,12 @@ describe('Facebook content service', function() {
       var service = new FacebookContentService({ url: '' });
       utils.expectToNotEmitReport(service, done);
       utils.expectToEmitError(service, 'Missing Facebook URL', done);
-      service.fetch({ maxCount: 50 }, function() {});
+      service.fetch({ maxCount: 50 }, _.noop);
     });
 
     it('should emit a warning when a transient error happens', function(done) {
       var service = stubWithFixture('facebook-1.json', null, 'facebook-3.json');
-      service.fetch({ maxCount: 50 }, function() {});
+      service.fetch({ maxCount: 50 }, _.noop);
       utils.expectToEmitWarning(service, done);
     });
   });
