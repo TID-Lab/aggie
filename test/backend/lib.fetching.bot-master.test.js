@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var botMaster = require('../../lib/fetching/bot-master');
@@ -12,7 +14,7 @@ describe('BotMaster', function() {
       Source.create(
         { nickname: 'one', media: 'dummy', keywords: 'one' },
         { nickname: 'two', media: 'dummy', keywords: 'two' },
-        function(err) { done(err); }
+        done
       );
     });
   });
@@ -38,6 +40,9 @@ describe('BotMaster', function() {
     expect(botMaster.bots).to.have.length(2);
     // Change the source to force reload.
     Source.findOne({}, function(err, source) {
+      if (err) {
+        return done(err);
+      }
       botMaster.once('botMaster:addedBot', function() {
         expect(botMaster.bots).to.have.length(2);
         expect(botMaster._getBot(source._id).source.keywords).to.equal('foo');

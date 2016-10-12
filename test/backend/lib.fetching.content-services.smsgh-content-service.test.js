@@ -51,10 +51,7 @@ describe('SMSGhana content service', function() {
         .query(reqParams)
         .expect(200)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          return done();
+          return done(err);
         });
     });
 
@@ -67,10 +64,7 @@ describe('SMSGhana content service', function() {
         .query(reqParams2)
         .expect(200)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          return done();
+          return done(err);
         });
 
       service.unsubscribe('dodo');
