@@ -101,6 +101,10 @@ The following need to be installed.
 4. To run end-to-end tests:
   1. first start Aggie on the test database with `npm run testrun`
   2. then run protractor with `npm run protractor`
+5. To run end-to-end tests with external APIs
+  1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+  2. start Aggie on the test database with `npm run testrun`
+  3. run protractor with `npm run protractor-with-apis`
 
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
