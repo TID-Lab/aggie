@@ -135,6 +135,9 @@ module.exports.toggleSource = function(sourceName, state) {
   return;
 };
 
+// Returns an array for the first page of reports. If `pluckColumn` is set,
+// the elements of the array are just the text from that column. Otherwise, they
+// are the WebDriver elements for each row.
 module.exports.getReports = function(pluckColumn) {
   browser.get(browser.baseUrl + 'reports');
   var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
@@ -144,6 +147,15 @@ module.exports.getReports = function(pluckColumn) {
   return element.all(x.column(pluckColumn)).map(function(elem) {
     return elem.getText();
   });
+};
+
+// Get the text from first span of the yellow stats bar
+module.exports.countAllReports = function() {
+  return element(by.css('.navbar-text > span'))
+           .getText()
+           .then(function(text) {
+             return Number(text);
+            });
 };
 
 module.exports.deleteSource = function(sourceName, nickname) {
