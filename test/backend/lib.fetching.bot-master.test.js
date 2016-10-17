@@ -10,7 +10,8 @@ describe('BotMaster', function() {
   before(utils.expectModelsEmpty);
 
   before(function(done) {
-    Source.remove({}, function() {
+    Source.remove({}, function(err) {
+      if (err) return done(err);
       Source.create(
         { nickname: 'one', media: 'dummy', keywords: 'one' },
         { nickname: 'two', media: 'dummy', keywords: 'two' },
@@ -56,18 +57,22 @@ describe('BotMaster', function() {
   it('should start all bots', function(done) {
     expect(botMaster.bots[0].enabled).to.be.false;
     expect(botMaster.bots[1].enabled).to.be.false;
-    botMaster.start();
-    expect(botMaster.bots[0].enabled).to.be.true;
-    expect(botMaster.bots[1].enabled).to.be.true;
-    done();
+    botMaster.start(function(err) {
+      if (err) return done(err);
+      expect(botMaster.bots[0].enabled).to.be.true;
+      expect(botMaster.bots[1].enabled).to.be.true;
+      done();
+    });
   });
 
   it('should stop all bots', function(done) {
-    botMaster.start();
-    botMaster.stop();
-    expect(botMaster.bots[0].enabled).to.be.false;
-    expect(botMaster.bots[1].enabled).to.be.false;
-    done();
+    botMaster.start(function(err) {
+      if (err) return done(err);
+      botMaster.stop();
+      expect(botMaster.bots[0].enabled).to.be.false;
+      expect(botMaster.bots[1].enabled).to.be.false;
+      done();
+    });
   });
 
   it('should kill a single bot', function(done) {

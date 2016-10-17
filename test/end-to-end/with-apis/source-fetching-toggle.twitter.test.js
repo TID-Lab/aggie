@@ -48,7 +48,7 @@ describe('Fetching toggle', function() {
   });
 
   it('should not collect reports when sources are off and fetching is flipped', function() {
-    this.slow(15000);
+    this.slow(17000);
     utils.toggleFetching('On');
     browser.sleep(1000);
     utils.toggleSource('Twitter', 'Off');
