@@ -31,7 +31,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 1. Install **docker** (version >= 1.0.0, such as 1.11.0).
   - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
-  - Linux installations require to install **[docker-compose](https://docs.docker.com/compose/install/)** separetedly 
+  - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately
 2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
   - In your terminal, navigate to your main projects folder (e.g. Documents).
   - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
@@ -56,13 +56,16 @@ The following need to be installed.
       - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
       - After installing nvm:
       1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-      2. use this command: `nvm use 0.10`.
+      2. use this command: `nvm use` to install the version specified in `.nvmrc`.
 2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
   1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
   2. Stop and restart Mongo DB.
     1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
     2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
   3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+3. **JRE**
+  - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+  - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
 
 
 ### Installation
@@ -78,8 +81,9 @@ The following need to be installed.
   - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
   - This installs all dependencies and concatenates the angular application.
-1. Run `npm install -g gulp mocha`.
-  - This installs gulp and mocha globally so they can be run from the command line for testing.
+1. Run `npm install -g gulp mocha karma-cli protractor@2`.
+  - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
+  - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. Run `npm install -g migrate`.
   - This installs node-migrate globally.
 1. To start server, run `npm start`.
@@ -90,8 +94,17 @@ The following need to be installed.
 
 ## Maintenance
 1. To run migrations run `migrate`.
-2. To run tests, run `npm test`.
+2. To run unit tests, run `npm test`.
+  - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
+  - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+4. To run end-to-end tests:
+  1. first start Aggie on the test database with `npm run testrun`
+  2. then run protractor with `npm run protractor`
+5. To run end-to-end tests with external APIs
+  1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+  2. start Aggie on the test database with `npm run testrun`
+  3. run protractor with `npm run protractor-with-apis`
 
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
@@ -106,18 +119,22 @@ Set `config.adminParty=true` if you want to run tests.
   1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
-  1. Known issue: The current Facebook API is not compatible with Aggie. Please see https://github.com/TID-Lab/aggie/issues/139 for more information.
   1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
   1. Inside your Facebook app, obtain `client_id` and `client_secret`.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
-  
+
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
 1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
 
+### Google Places
+Aggie uses Google Places for guessing locations in the application. To make it work:
+  1. You will need to get an API key from [Google API console](https://console.developers.google.com/) for [Google Places API](https://developers.google.com/places/documentation/).
+  1. Read about [Google API usage](https://developers.google.com/places/web-service/usage) limits and consider [whitelisting](https://support.google.com/googleapi/answer/6310037) your Aggie deployment to avoid surprises.
+  1. Go to Settings > Settings and edit the Google Places settings and add the key.
 
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.

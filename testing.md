@@ -19,13 +19,14 @@ Logging in
 2. Log in as `admin` with default password [goes to `/reset_admin_password`]
 3. Reset admin password [goes to `/reports`]
 
-Sources and fetching
+Sources, APIs, and fetching
 --------------------
 
-1. Add Facebook API token and turn fetching on
-2. Create Facebook source `https://www.facebook.com/nytimes` [at least 50
+1. Add Google Places API and refresh the page
+. Add Facebook API token and turn fetching on
+3. Create Facebook source `https://www.facebook.com/nytimes` [at least 50
 reports show up, and no warnings]
-3. Create Facebook source `https://www.facebook.com/err102398-023894-1239084`
+4. Create Facebook source `https://www.facebook.com/err102398-023894-1239084`
 [this source gets an error and appears as `OFF` in `/sources`]
 
 Incidents
@@ -44,10 +45,13 @@ with the previously created incident]
 8. Add the reports to that incident [incident column updates]
 9. Go to `/incidents` [in `Title` column incident shows correct number of
 reports]
-10. Click `Create Incident` [modal appears]
-11. Begin typing `mac` in the location field [locations starting with `mac`
+10. View the incident you have just created [incident shows the 3 reports that were added]
+11. Flag one report in the incident view page [the report is flagged]
+12. Click `Create Incident` [modal appears]
+13. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
-12. Pick a a location, enter a title and save the incident [incident is saved successfully]
+14. Pick a a location, enter a title and save the incident [incident is saved successfully]
+
 
 Users and emails
 ----------------

@@ -29,7 +29,7 @@ angular.module('Aggie')
             };
           },
           reports: function() {
-            return reports;
+            return reports || [];
           }
         }
       });
@@ -113,7 +113,7 @@ angular.module('Aggie')
     $scope.veracity = veracityOptions;
     $scope.showErrors = false;
     $scope.reports = reports;
-    $scope.minimal = Boolean(reports);
+    $scope.minimal = reports.length > 0;
     $scope.minimalLatLng = true;
 
     $scope.save = function(form) {

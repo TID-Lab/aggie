@@ -2,7 +2,7 @@ var request = require('request');
 var _ = require('underscore');
 var chance = new require('chance')();
 
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Notes:
 // * Aggie needs to be running for these tests to work.
 // * The test uses a dummy-bot that will output all dropped reports to STDOUT.
@@ -17,7 +17,7 @@ var chance = new require('chance')();
 // --interval=n                 [number of milliseconds between reports on each source]
 // --buffer=n                   [size of buffer for each source]
 // --baseurl=http://server:port [base url where server is running]
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 var args = {
   sources: 1, // number of sources
@@ -47,7 +47,7 @@ describe('Fetching load test', function() {
     };
     var remaining = args.sources;
     _.times(args.sources, function(i) {
-      request.post(args.baseurl + '/api/v1/source', {form: {nickname: chance.word(), media: 'dummy-fast', keywords: JSON.stringify(options)}}, function(err, res, body) {
+      request.post(args.baseurl + '/api/v1/source', { form: { nickname: chance.word(), media: 'dummy-fast', keywords: JSON.stringify(options) } }, function(err, res, body) {
         if (err) return done(err);
         if (--remaining === 0) done();
       });

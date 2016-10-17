@@ -4,7 +4,6 @@ angular.module('Aggie')
   '$state',
   '$scope',
   '$rootScope',
-  '$timeout',
   '$stateParams',
   'FlashService',
   'incidents',
@@ -16,7 +15,7 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, incidents, users, incidentStatusOptions, veracityOptions, escalatedOptions, Incident, Socket, Queue, paginationOptions) {
+  function($state, $scope, $rootScope, $stateParams, flash, incidents, users, incidentStatusOptions, veracityOptions, escalatedOptions, Incident, Socket, Queue, paginationOptions) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -207,10 +206,6 @@ angular.module('Aggie')
     $scope.viewProfile = function (user) {
       $state.go('profile', {userName: user.username});
     };
-
-    (fireDigestEveryThirtySeconds = function() {
-      $timeout(fireDigestEveryThirtySeconds, 30 * 1000);
-    })();
 
     $scope.$on('$destroy', function() {
       Socket.removeAllListeners('incidents');

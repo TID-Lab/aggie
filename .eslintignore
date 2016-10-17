@@ -3,6 +3,7 @@
 
 # Don't lint vendor/
 public/angular/vendor
+test/public/vendor
 
 # Ignore imported client-side modules
 public/angular/js/Autolinker.min.js

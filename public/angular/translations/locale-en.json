@@ -19,6 +19,8 @@
   "rss": "RSS",
   "elmo": "Elmo",
   "facebook": "Facebook",
+  "smsgh": "SMS GH",
+  "Smsgh": "SMS GH",
   "new": "New",
   "working": "Working",
   "alert": "Alert",
@@ -35,8 +37,8 @@
   "passwordReset": {
     "noMatch": "Passwords do not match",
     "tooShort": "Password is not long enough",
-    "success": "An error has occurred when resetting your password",
-    "error": "Your password has been successfully reset.",
+    "error": "An error has occurred when resetting your password",
+    "success": "Your password has been successfully reset.",
     "admin": {
       "success": "The admin password was changed successfully.",
       "error": "There was an error setting the new admin password."
@@ -56,10 +58,10 @@
         "error": "An error has occurred"
       }
     },
-    "media": {
-      "error": "An error has occurred setting the media status",
+    "api": {
+      "error": "An error has occurred setting the API credentials",
       "settingsModal": {
-        "success": "{{mediaName}} settings has been successfully {{verb}}.",
+        "success": "{{apiName}} settings has been successfully {{verb}}.",
         "error": "An error has occurred"
       }
     }
@@ -144,6 +146,7 @@
   "From:": "From:",
   "To:": "To:",
   "Clear": "Clear",
+  "API Authentication": "API Authentication",
   "Edit Email Transport Settings": "Edit Email Transport Settings",
   "Transport": "Transport",
   "Choose transport method": "Choose transport method",
@@ -253,8 +256,8 @@
   "Flag": "Flag",
   "Unflag": "Unflag",
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
-  "media_settings_modal": {
-    "title": "&nbsp;Edit {{ media | capitalize }} Settings Source",
+  "api_settings_modal": {
+    "title": "&nbsp;Edit {{ api | capitalize }} Settings",
     "success": "The credentials are valid. You need to save them before continuing.",
     "twitter": {
       "p1": "Follow <a href=\"https://dev.twitter.com/oauth/overview/application-owner-access-tokens\" target=\"_blank\"> these instructions</a> to generate tokens to use the Twitter API.",
@@ -271,6 +274,10 @@
       "p2": "In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in <code>/m/mymission/forms/123</code>, the ID is <code>123</code>).",
       "p3": "Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).",
       "p4": "Set the value of <code>authToken</code> to the API key you obtained above."
+    },
+    "gplaces": {
+      "p1": "If you do not have a API key for Google Places you can get one from <a href=\"https://console.developers.google.com/apis/credentials?\">Google's API console</a>.",
+      "p2": "You need to reload the page after saving the key for the changes to have effect."
     },
     "field_required": "The field is required.",
     "confirm_delete": "Are you sure you want to delete the settings for this source?"
@@ -353,8 +360,10 @@
   "You must be logged in before accessing that page.": "You must be logged in before accessing that page.",
   "ELMO": "ELMO",
   "Facebook": "Facebook",
-  "Rss": "Rss",
+  "Rss": "RSS",
   "Twitter": "Twitter",
+  "SMSGh": "SMS GH",
+  "gplaces": "Google Places",
   "Mark all Read": "Mark all Read",
   "Confirmed true": "Confirmed true",
   "Confirmed false": "Confirmed false",

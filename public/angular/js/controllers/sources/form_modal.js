@@ -86,8 +86,8 @@ angular.module('Aggie')
 
     $scope.$watch('source.media', function(sourceMedia) {
       var url = $scope.source.url;
-      if (sourceMedia == 'facebook') {
-        if (!url || url == '') {
+      if (sourceMedia === 'facebook') {
+        if (!url || url === '') {
           url = 'https://www.facebook.com/';
         }
       } else {

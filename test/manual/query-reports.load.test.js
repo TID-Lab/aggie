@@ -46,9 +46,9 @@ function fireRequest(cb) {
 // simulate a client by firing requests at frequent intervals
 function simulateClient(cb) {
   (function loop(n) {
-    setTimeout(function(){
+    setTimeout(function() {
       var start = moment();
-      fireRequest(function(err, res, body){
+      fireRequest(function(err, res, body) {
         if (err || res.statusCode !== 200) {
           errors++;
         }
@@ -66,7 +66,7 @@ function simulateClient(cb) {
 // log progress
 function logProgress() {
   (function repeat() {
-    setTimeout(function(){
+    setTimeout(function() {
       if (finished) return;
 
       var averageResponseTime = totalResponseTime / requestCount;
@@ -96,8 +96,8 @@ describe('Fetching load test', function() {
     logProgress();
 
     (function loop(n) {
-      setTimeout(function(){
-        simulateClient(function(){
+      setTimeout(function() {
+        simulateClient(function() {
           if (--n) return loop(n);
 
 

@@ -6,13 +6,24 @@ angular.module('Aggie').controller('PasswordResetController', [
   '$http',
   'AuthService',
   'FlashService',
-  function($rootScope, $scope, $state, $stateParams, $http, AuthService, flash) {
+  'shared',
+  function($rootScope, $scope, $state, $stateParams, $http, AuthService, flash, shared) {
+    $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
+
     $scope.passwordsMatch = function() {
-      return $scope.user.password ==
+      return $scope.user.password ===
         $scope.user.password_confirmation;
     };
 
+    $scope.isPasswordLongEnough = function() {
+      return $scope.user.password.length >= $scope.passwordMinLength;
+    };
+
     $scope.resetPassword = function() {
+      if (!$scope.isPasswordLongEnough()) {
+        return flash.setAlertNow('passwordReset.tooShort');
+      }
+
       if (!$scope.passwordsMatch()) {
         return flash.setAlertNow('passwordReset.noMatch');
       }

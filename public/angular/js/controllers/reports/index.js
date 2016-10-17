@@ -4,7 +4,6 @@ angular.module('Aggie')
   '$state',
   '$scope',
   '$rootScope',
-  '$timeout',
   '$stateParams',
   'FlashService',
   'reports',
@@ -19,7 +18,7 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $timeout, $stateParams, flash, reports, sources, mediaOptions,
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, mediaOptions,
            incidents, statusOptions, linkedtoIncidentOptions, Report, Incident, Batch, Socket, Queue, paginationOptions) {
 
     $scope.searchParams = $stateParams;
@@ -56,7 +55,7 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
-      if ($scope.currentPath === 'reports') {
+      if ($scope.currentPath === 'reports' || $scope.currentPath === 'batch') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
         if ($scope.isFirstPage()) {
@@ -372,10 +371,6 @@ angular.module('Aggie')
         return 'unknown-source';
       }
     };
-
-    (fireDigestEveryThirtySeconds = function() {
-      $timeout(fireDigestEveryThirtySeconds, 30 * 1000);
-    })();
 
     $scope.$on('$destroy', function() {
       Socket.leave('reports');

@@ -90,7 +90,7 @@ require('./services/trend');
 require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
-require('./services/media_modal');
+require('./services/api_modal');
 
 // Controllers
 require('./controllers/application');
@@ -108,8 +108,8 @@ require('./controllers/reports/show');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
-require('./controllers/media/settings');
-require('./controllers/media/settings/settings_modal');
+require('./controllers/api/settings');
+require('./controllers/api/settings_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');

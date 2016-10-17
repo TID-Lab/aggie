@@ -3,6 +3,6 @@
     "mocha": true
   },
   "rules": {
-    "global-require": "off"
+    "no-invalid-this": "off"
   }
 }
