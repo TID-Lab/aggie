@@ -10,7 +10,6 @@ describe('Pull bot', function() {
     var source = new Source({ nickname: 'dummy-pull', media: 'dummy-pull' });
     source.save();
     var contentService = contentServiceFactory.create(source);
-    console.log("this worked, making new pull bot");
     pullBot = new PullBot({ source: source, contentService: contentService, interval: 100 });
     done();
   });
@@ -31,6 +30,7 @@ describe('Pull bot', function() {
     });
     pullBot.start();
   });
+
   after(utils.wipeModels([Source]));
   after(utils.expectModelsEmpty);
 });
