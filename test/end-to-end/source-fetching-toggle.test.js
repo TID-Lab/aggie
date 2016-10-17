@@ -51,6 +51,7 @@ describe('test duplication of reports with different settings', function() {
     })
     .then(function() {
       utils.toggleSource('SMS GH', 'On');
+      browser.sleep(500);
     })
     .then(function() {
       sendRequest(done);
@@ -73,6 +74,7 @@ describe('test duplication of reports with different settings', function() {
     })
     .then(function() {
       utils.toggleSource('SMS GH', 'Off');
+      browser.sleep(500);
     })
     .then(function() {
       sendRequest(done);
@@ -93,6 +95,7 @@ describe('test duplication of reports with different settings', function() {
     })
     .then(function() {
       utils.toggleSource('SMS GH', 'On');
+      browser.sleep(500);
     })
     .then(function() {
       sendRequest(done);
@@ -113,6 +116,7 @@ describe('test duplication of reports with different settings', function() {
     })
     .then(function() {
       utils.toggleSource('SMS GH', 'Off');
+      browser.sleep(500);
     })
     .then(function() {
       sendRequest(done);
@@ -135,6 +139,7 @@ describe('test duplication of reports with different settings', function() {
     })
     .then(function() {
       utils.toggleSource('SMS GH', 'Off');
+      browser.sleep(500);
     })
     .then(function() {
       sendRequest(done);
