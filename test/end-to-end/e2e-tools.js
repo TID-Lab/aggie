@@ -106,8 +106,7 @@ module.exports.addSource = function(sourceName, params) {
   } else {
     element(by.model('source.url')).sendKeys(params.url);
   }
-  element(by.buttonText('Submit')).click();
-  return;
+  return element(by.buttonText('Submit')).click();
 };
 
 module.exports.toggleFetching = function(state) {
@@ -116,8 +115,7 @@ module.exports.toggleFetching = function(state) {
     Off: false
   };
   browser.get(browser.baseUrl + 'settings');
-  element(by.css('[ng-click="toggle(' + stateMapping[state] + ')"]')).click();
-  return;
+  return element(by.css('[ng-click="toggle(' + stateMapping[state] + ')"]')).click();
 };
 
 module.exports.toggleSource = function(sourceName, state) {
@@ -129,10 +127,9 @@ module.exports.toggleSource = function(sourceName, state) {
     'SMS GH': 'smsgh-source'
   };
   browser.get(browser.baseUrl + 'sources');
-  element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
+  return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
     .element(by.xpath('..'))
     .element(by.xpath('.//*[.="' + state + '"]')).click();
-  return;
 };
 
 // Returns an array for the first page of reports. If `pluckColumn` is set,
