@@ -24,7 +24,7 @@ angular.module('Aggie')
     };
 
     $scope.target = function(source) {
-      return source.media == 'twitter' ? source.keywords : source.url;
+      return source.media == 'twitter' || source.media == 'smsgh' ? source.keywords : source.url;
     };
 
     $scope.sourceClass = function(source) {
