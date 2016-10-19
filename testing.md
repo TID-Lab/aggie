@@ -81,7 +81,8 @@ the incidents already created]
 incident]
 4. Click `Mark All and Done` [goes back to /reports and the reports from the
 batch are marked as read]
-5. Navigate to `/reports/batch` [no reports are displayed]
+5. Navigate to `/reports/batch` [the previous batch is displayed, and the
+reports are marked as read]
 6. Navigate to `/reports` and click `Grab Batch` again [goes to `/reports/batch`
 and populates with some reports]
 7. Log in as a different user in a different tab/window

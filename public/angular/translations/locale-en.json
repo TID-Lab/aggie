@@ -248,7 +248,11 @@
   "Add": "Add",
   "Batch Mode": "Batch Mode",
   "new reports available.": "new reports available.",
-  "The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.": "The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.",
+  "batch": {
+    "intro": "The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.",
+    "reportsAreFiltered": "Below are <em>unread</em> reports matching your filter.",
+    "noReports": "Sorry, but we couldn't find any reports assigned to you."
+  },
   "Mark All Read &amp; Grab Another": "Mark All Read &amp; Grab Another",
   "Mark All Read &amp; Done": "Mark All Read &amp; Done",
   "Mark as Read": "Mark as Read",
