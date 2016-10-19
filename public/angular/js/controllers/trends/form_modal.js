@@ -48,7 +48,7 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.incidents = incidents.results;
     $scope.trend = angular.copy(trend);
-    $scope._showErrors = false
+    $scope._showErrors = false;
 
     $scope.showErrors = function() {
       return $scope._showErrors;

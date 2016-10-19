@@ -4,15 +4,15 @@ function isEmpty(value) {
 
 angular.module('Aggie')
 
-.directive('ngMin', function () {
+.directive('ngMin', function() {
   return {
     restrict: 'A',
     require: 'ngModel',
-    link: function (scope, elem, attr, ctrl) {
-      scope.$watch(attr.ngMin, function () {
+    link: function(scope, elem, attr, ctrl) {
+      scope.$watch(attr.ngMin, function() {
         ctrl.$setViewValue(ctrl.$viewValue);
       });
-      var minValidator = function (value) {
+      var minValidator = function(value) {
         var min = scope.$eval(attr.ngMin) || 0;
         if (!isEmpty(value) && value < min) {
           ctrl.$setValidity('ngMin', false);
@@ -28,15 +28,15 @@ angular.module('Aggie')
     }
   };
 })
-.directive('ngMax', function () {
+.directive('ngMax', function() {
   return {
     restrict: 'A',
     require: 'ngModel',
-    link: function (scope, elem, attr, ctrl) {
-      scope.$watch(attr.ngMax, function () {
+    link: function(scope, elem, attr, ctrl) {
+      scope.$watch(attr.ngMax, function() {
         ctrl.$setViewValue(ctrl.$viewValue);
       });
-      var maxValidator = function (value) {
+      var maxValidator = function(value) {
         var max = scope.$eval(attr.ngMax) || Infinity;
         if (!isEmpty(value) && value > max) {
           ctrl.$setValidity('ngMax', false);

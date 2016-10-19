@@ -4,7 +4,7 @@ angular.module('Aggie')
   '$scope',
   'Fetching',
   'FlashService',
-  function ($scope, Fetching, flash) {
+  function($scope, Fetching, flash) {
 
     Fetching.get(function success(data) {
       $scope.on = data;
@@ -16,11 +16,11 @@ angular.module('Aggie')
 
     function success(data) {
       $scope.on = data;
-    };
+    }
 
     function failure(data) {
       flash.setAlertNow('An error has occurred setting the fetching status');
       console.log('failure: ', data);
-    };
+    }
   }
 ]);

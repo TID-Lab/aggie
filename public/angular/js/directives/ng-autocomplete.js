@@ -29,7 +29,7 @@
  *    }
 **/
 
-angular.module( "ngAutocomplete", [])
+angular.module('ngAutocomplete', [])
 
 .directive('ngAutocomplete', function() {
   return {
@@ -43,7 +43,7 @@ angular.module( "ngAutocomplete", [])
     link: function(scope, element, attrs, controller) {
 
       var watchEnter = false;
-      //convert options provided to opts
+      // convert options provided to opts
       var initOpts = function() {
 
         var opts = {};
@@ -79,7 +79,7 @@ angular.module( "ngAutocomplete", [])
             scope.gPlace.setComponentRestrictions(null);
           }
         }
-      }
+      };
 
       if (scope.gPlace == undefined) {
         scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
@@ -98,9 +98,9 @@ angular.module( "ngAutocomplete", [])
             getPlace(result);
           }
         }
-      })
+      });
 
-      //function to get retrieve the autocompletes first result using the AutocompleteService 
+      // function to get retrieve the autocompletes first result using the AutocompleteService
       var getPlace = function(result) {
         var autocompleteService = new google.maps.places.AutocompleteService();
         if (result.name.length > 0) {
@@ -113,7 +113,7 @@ angular.module( "ngAutocomplete", [])
               scope.$apply(function() {
                 scope.details = null;
               });
-            } 
+            }
             else {
               var placesService = new google.maps.places.PlacesService(element[0]);
               placesService.getDetails(
@@ -124,7 +124,7 @@ angular.module( "ngAutocomplete", [])
                       controller.$setViewValue(detailsResult.formatted_address);
                       element.val(detailsResult.formatted_address);
                       scope.details = detailsResult;
-                      //on focusout the value reverts, need to set it again.
+                      // on focusout the value reverts, need to set it again.
                       var watchFocusOut = element.on('focusout', function(event) {
                         element.val(detailsResult.formatted_address);
                         element.unbind('focusout');
@@ -136,14 +136,14 @@ angular.module( "ngAutocomplete", [])
             }
           });
         }
-      }
+      };
 
       controller.$render = function() {
         var location = controller.$viewValue;
         element.val(location);
       };
 
-      //watch options provided to directive
+      // watch options provided to directive
       scope.watchOptions = function() {
         return scope.options;
       };

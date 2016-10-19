@@ -18,22 +18,22 @@ function enableIndexing(callback) {
   });
   database.mongoose.connection.once('open', function() {
     // Enable database-level text search
-    database.mongoose.connections[0].db.admin().command({setParameter: 1, textSearchEnabled: true}, function(err, res) {
+    database.mongoose.connections[0].db.admin().command({ setParameter: 1, textSearchEnabled: true }, function(err, res) {
       if (err) console.error(err);
       else console.log('Text search has been enabled for MongoDB.');
       Report.ensureIndexes(function(err) {
         if (err) console.error(err);
-        else console.log('Full-text indexing is enabled for Reports.')
+        else console.log('Full-text indexing is enabled for Reports.');
         callback();
       });
     });
   });
-};
+}
 tasks.push(enableIndexing);
 
 // Verify that an admin user exists
 function createAdminUser(callback) {
-  User.findOne({role: 'admin'}, function(err, user) {
+  User.findOne({ role: 'admin' }, function(err, user) {
     if (!user) {
       var userData = {
         provider: 'aggie',
@@ -51,7 +51,7 @@ function createAdminUser(callback) {
       });
     } else callback();
   });
-};
+}
 tasks.push(createAdminUser);
 
 var remaining = tasks.length;

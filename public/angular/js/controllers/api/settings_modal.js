@@ -38,12 +38,12 @@ angular.module('Aggie')
       flash.setNoticeNow('settings.api.settingsModal.success',
                          { apiName: $filter('capitalize')(apiName),
                            verb: verb });
-    };
+    }
 
     function failure(data) {
       flash.setAlertNow('settings.api.settingsModal.error');
       console.log('failure: ', data);
-    };
+    }
 
     $scope.test = function(mediaName, settings) {
       $scope.success = false;
@@ -61,13 +61,13 @@ angular.module('Aggie')
         $scope.failure = true;
         $scope.message = response.message;
       }
-    };
+    }
 
     function failureTest(data) {
       $scope.loading = false;
 
       $scope.failure = true;
       $scope.message = data.message;
-    };
-  },
+    }
+  }
 ]);

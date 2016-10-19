@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .factory('Fetching', function($resource) {
   var Fetching = $resource('/api/v1/settings/fetching/:op', {}, {
-    toggle: { method: 'PUT' },
+    toggle: { method: 'PUT' }
   });
 
   return {

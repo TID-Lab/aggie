@@ -42,7 +42,7 @@ describe('Incident query attributes', function() {
   });
 
   it('should query by title substring', function(done) {
-    (new IncidentQuery({ title: 'The Quick Brown', status: "closed" })).run(function(err, incidents) {
+    (new IncidentQuery({ title: 'The Quick Brown', status: 'closed' })).run(function(err, incidents) {
       if (err) return done(err);
 
       expect(incidents).to.have.keys(['total', 'results']);

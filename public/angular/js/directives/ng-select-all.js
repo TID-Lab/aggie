@@ -4,13 +4,13 @@ angular.module('Aggie')
   return {
     restrict: 'A',
     scope: {
-      items: "="
+      items: '='
     },
-    
+
     link: function($scope, $el, attrs) {
       $el.on('click', function() {
         var checked = $el[0].checked;
-        
+
         angular.forEach($scope.items, function(item) {
           item.selected = checked;
         });

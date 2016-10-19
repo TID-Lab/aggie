@@ -54,7 +54,7 @@ angular.module('Aggie')
     };
 
     $scope.viewProfile = function(user) {
-      $state.go('profile', {userName: user.username});
+      $state.go('profile', { userName: user.username });
     };
 
     $rootScope.$watch('currentUser', init);

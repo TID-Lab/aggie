@@ -29,7 +29,7 @@ angular.module('Aggie')
           $modal.open({
             controller: modalInstanceController,
             scope: $scope,
-            templateUrl: '/templates/confirm_modal.html',
+            templateUrl: '/templates/confirm_modal.html'
           }).result.then(function() {
             $scope.onConfirm();
           });
@@ -40,5 +40,5 @@ angular.module('Aggie')
     link: function($scope, $el) {
       $el.on('click', $scope.openModal);
     }
-  }
+  };
 }]);

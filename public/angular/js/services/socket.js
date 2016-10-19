@@ -1,10 +1,10 @@
 angular.module('Aggie')
 
-.factory('Socket', function ($rootScope) {
+.factory('Socket', function($rootScope) {
   var socket = io.connect('/');
 
   return {
-    on: function (eventName, callback) {
+    on: function(eventName, callback) {
       socket.on(eventName, function() {
         var args = arguments;
         $rootScope.$apply(function() {
@@ -13,10 +13,10 @@ angular.module('Aggie')
       });
     },
 
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
+    emit: function(eventName, data, callback) {
+      socket.emit(eventName, data, function() {
         var args = arguments;
-        $rootScope.$apply(function () {
+        $rootScope.$apply(function() {
           if (callback) {
             callback.apply(socket, args);
           }
@@ -24,11 +24,11 @@ angular.module('Aggie')
       });
     },
 
-    join: function (room) {
+    join: function(room) {
       socket.emit('join', room);
     },
 
-    leave: function (room) {
+    leave: function(room) {
       socket.emit('leave', room);
     },
 

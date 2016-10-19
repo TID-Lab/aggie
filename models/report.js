@@ -14,18 +14,18 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
-  storedAt: {type: Date, index: true},
+  storedAt: { type: Date, index: true },
   content: String,
-  author: {type: String, index: true},
+  author: { type: String, index: true },
   url: String,
-  read: {type: Boolean, default: false, required: true, index: true},
-  flagged: {type: Boolean, default: false, required: true, index: true},
-  _source: {type: String, ref: 'Source', index: true},
-  _media: {type: String, index: true},
+  read: { type: Boolean, default: false, required: true, index: true },
+  flagged: { type: Boolean, default: false, required: true, index: true },
+  _source: { type: String, ref: 'Source', index: true },
+  _media: { type: String, index: true },
   _sourceNickname: String,
-  _incident: {type: String, ref: 'Incident', index: true},
-  checkedOutBy : {type: Schema.ObjectId, ref: 'User', index: true},
-  checkedOutAt: {type: Date, index: true}
+  _incident: { type: String, ref: 'Incident', index: true },
+  checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
+  checkedOutAt: { type: Date, index: true }
 });
 
 // Give the report schema text search capabilities
@@ -33,7 +33,7 @@ schema.plugin(textSearch);
 schema.plugin(listenTo);
 
 // Add fulltext index to the `content` field.
-schema.index({content: 'text'});
+schema.index({ content: 'text' });
 
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
@@ -59,7 +59,7 @@ schema.pre('save', function(next) {
 
 // Emit information about updates after saving report
 schema.post('save', function() {
-  if (this._wasNew) schema.emit('report:new', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('report:new', { _id: this._id.toString() });
   if (!this._wasNew) schema.emit('report:updated', this);
 
   if (this._incidentWasModified) {
@@ -111,7 +111,7 @@ Report.queryReports = function(query, page, callback) {
   // Determine author filter
   if (query.author) {
     query.filter.author = {};
-    query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author){
+    query.filter.author.$in = query.author.trim().split(/\s*,\s*/).sort().map(function(author) {
       // Use case-insensitive matching with anchors so mongo index is still used.
       return new RegExp('^' + author + '$', 'i');
     });
@@ -142,7 +142,7 @@ Report.queryReports = function(query, page, callback) {
 };
 
 Report.findSortedPage = function(filter, page, callback) {
-  Report.findPage(filter, page, {sort: '-storedAt'}, function(err, reports) {
+  Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });

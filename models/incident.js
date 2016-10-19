@@ -20,7 +20,7 @@ var length_validator = validate({
 });
 
 var schema = new mongoose.Schema({
-  title: {type: String, required: true, validate: length_validator},
+  title: { type: String, required: true, validate: length_validator },
   locationName: String,
   latitude: Number,
   longitude: Number,
@@ -28,13 +28,13 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  status: {type: String, default: 'new', required: true},
-  veracity: {type: Boolean, default: null },
-  escalated: {type: Boolean, default: false, required: true},
-  closed: {type: Boolean, default: false, required: true},
-  idnum: {type: Number, required: true},
-  totalReports: {type: Number, default: 0, min: 0},
-  notes: String,
+  status: { type: String, default: 'new', required: true },
+  veracity: { type: Boolean, default: null },
+  escalated: { type: Boolean, default: false, required: true },
+  closed: { type: Boolean, default: false, required: true },
+  idnum: { type: Number, required: true },
+  totalReports: { type: Number, default: 0, min: 0 },
+  notes: String
 });
 
 schema.plugin(listenTo);
@@ -51,11 +51,11 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  schema.emit('incident:save', {_id: this._id.toString()});
+  schema.emit('incident:save', { _id: this._id.toString() });
 });
 
 schema.post('remove', function() {
-  //Unlink removed incident from reports
+  // Unlink removed incident from reports
   Report.find({ _incident: this._id.toString() }, function(err, reports) {
     reports.forEach(function(report) {
       report._incident = null;
@@ -70,7 +70,7 @@ schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
-    //Callbacks added to execute query immediately
+    // Callbacks added to execute query immediately
     Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {});
   }
 

@@ -11,29 +11,29 @@ var fs = require('fs-extra');
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
 
-nconf.add('secrets', {type: 'file', file: secretsFile});
+nconf.add('secrets', { type: 'file', file: secretsFile });
 
 // load server preferences
 var prefsFile = path.resolve(__dirname, 'server-prefs.json');
-nconf.add('prefs', {type: 'file', file: prefsFile});
+nconf.add('prefs', { type: 'file', file: prefsFile });
 
 // get all configuration
 var _configuration = nconf.get();
 
 // set defaults
-_.defaults(_configuration, {api_request_timeout: 60, logger: {}});
-_.defaults(_configuration.logger, {SES: {}, file: {}, master: {}, api: {},
-                                   fetching: {}, analytics: {}});
-_.defaults(_configuration.logger.SES, {level: 'error', silent: false});
-_.defaults(_configuration.logger.file, {level: 'debug', silent: false,
+_.defaults(_configuration, { api_request_timeout: 60, logger: {} });
+_.defaults(_configuration.logger, { SES: {}, file: {}, master: {}, api: {},
+                                   fetching: {}, analytics: {} });
+_.defaults(_configuration.logger.SES, { level: 'error', silent: false });
+_.defaults(_configuration.logger.file, { level: 'debug', silent: false,
                                         colorize: true, timestamp: true,
                                         maxsize: 5242880, maxFiles: 10,
-                                        json: false, prettyPrint: true});
-_.defaults(_configuration.logger.master, {filename: 'logs/master.log'});
-_.defaults(_configuration.logger.api, {filename: 'logs/api.log', log_requests: false,
-                                       log_responses: false});
-_.defaults(_configuration.logger.fetching, {filename: 'logs/fetching.log'});
-_.defaults(_configuration.logger.analytics, {filename: 'logs/analytics.log'});
+                                        json: false, prettyPrint: true });
+_.defaults(_configuration.logger.master, { filename: 'logs/master.log' });
+_.defaults(_configuration.logger.api, { filename: 'logs/api.log', log_requests: false,
+                                       log_responses: false });
+_.defaults(_configuration.logger.fetching, { filename: 'logs/fetching.log' });
+_.defaults(_configuration.logger.analytics, { filename: 'logs/analytics.log' });
 
 // ensure directories exist
 fs.ensureFileSync(_configuration.logger.master.filename);
@@ -56,7 +56,7 @@ module.exports.get = function(options) {
 module.exports.updateFetching = function(flag, cb) {
   cb = cb || function() {};
   nconf.set('fetching', S(flag).toBoolean());
-  nconf.save(function(err){
+  nconf.save(function(err) {
     return cb(err);
   });
 };

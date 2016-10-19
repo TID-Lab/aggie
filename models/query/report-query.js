@@ -62,7 +62,7 @@ ReportQuery.prototype._parseIncidentId = function(incidentId) {
   if (incidentId == 'any') {
     this.incidentId = { $nin: [null, ''] };
   } else if (incidentId == 'none') {
-    this.incidentId = {$in: [null, '']};
+    this.incidentId = { $in: [null, ''] };
   } else {
     this.incidentId = incidentId;
   }

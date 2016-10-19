@@ -38,7 +38,7 @@ angular.module('Aggie')
           return report._id;
         });
 
-        Report.linkToIncident({ids: ids, incident: incidentId});
+        Report.linkToIncident({ ids: ids, incident: incidentId });
       });
     };
   }
@@ -57,7 +57,7 @@ angular.module('Aggie')
     $scope._showErrors = false;
 
     $scope.select = function(incident) {
-      //report._incident = incident._id;
+      // report._incident = incident._id;
       $modalInstance.close(incident._id);
     };
 

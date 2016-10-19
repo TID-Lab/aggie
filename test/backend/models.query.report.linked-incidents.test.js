@@ -11,7 +11,7 @@ var id2;
 function createIncidents(done) {
   Incident.create([
     { title: 'Not so important incident', veracity: null, closed: true },
-    { title: 'Very important incident', veracity: null, closed: true },
+    { title: 'Very important incident', veracity: null, closed: true }
   ], function(err, incident1, incident2) {
     id1 = incident1._id.toString();
     id2 = incident2._id.toString();
@@ -26,7 +26,7 @@ function createReports(done) {
     { _incident: id2 },
     { _incident: id2 },
     { _incident: '' },
-    {}, // incident: null
+    {} // incident: null
   ], done);
 }
 
@@ -34,8 +34,8 @@ var queryNone;
 var queryAny;
 
 function createQueries(done) {
-  queryNone = new ReportQuery({ incidentId:'none' });
-  queryAny = new ReportQuery({ incidentId:'any' });
+  queryNone = new ReportQuery({ incidentId: 'none' });
+  queryAny = new ReportQuery({ incidentId: 'any' });
   done();
 }
 

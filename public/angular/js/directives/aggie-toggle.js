@@ -21,7 +21,7 @@ angular.module('Aggie')
         $scope.toggleStatus = function(status) {
           var originalStatus = $scope.currentStatus();
           if ($scope.allowBlank == 'true') {
-            $scope.toggle = $scope.isStatus(status) ? '' : processStatus(status)
+            $scope.toggle = $scope.isStatus(status) ? '' : processStatus(status);
           } else {
             $scope.toggle = processStatus(status);
           }
@@ -40,7 +40,7 @@ angular.module('Aggie')
 
         $scope.currentStatus = function() {
           var toggle = $scope.toggle;
-          if (toggle == undefined) { toggle = '' }
+          if (toggle == undefined) { toggle = ''; }
           return processStatus(toggle.toString());
         };
 

@@ -6,4 +6,4 @@ angular.module('Aggie')
       string.replace('\n', '<br/>');
     }
   };
-})
+});

@@ -10,12 +10,12 @@ var _ = require('underscore');
 var SALT_WORK_FACTOR = 10;
 
 var userSchema = new mongoose.Schema({
-  provider: {type: String, default: 'local'},
-  username: {type: String, required: true, unique: true},
-  email: {type: String, required: true, unique: true},
-  password: {type: String},
-  hasDefaultPassword: {type: Boolean, default: true},
-  role: {type: String, default: 'viewer'}
+  provider: { type: String, default: 'local' },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String },
+  hasDefaultPassword: { type: Boolean, default: true },
+  role: { type: String, default: 'viewer' }
 });
 
 userSchema.pre('save', function(next) {
@@ -84,9 +84,9 @@ User.checkUnique = function(user, callback) {
   var errors = [];
   var queries = [];
   _.each(userSchema.tree, function(meta, field) {
-    var query = {$and: [{
+    var query = { $and: [{
       _id: { $ne: user._id }
-    }]};
+    }] };
     var filter = {};
     filter[field] = user[field];
     query.$and.push(filter);

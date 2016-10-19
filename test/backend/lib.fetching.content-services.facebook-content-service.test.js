@@ -36,7 +36,7 @@ describe('Facebook content service', function() {
   });
 
   it('should grab the correct source given multiple url types', function() {
-    var service = new FacebookContentService({ url: "http://test.com/" });
+    var service = new FacebookContentService({ url: 'http://test.com/' });
     expect(service._getSourceFromUrl('http://facebook.com/cocacola')).to.equal('cocacola');
     expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
         .to.equal('CocaColaUnitedStates');

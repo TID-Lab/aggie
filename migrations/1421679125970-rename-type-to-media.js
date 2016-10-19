@@ -1,7 +1,7 @@
 var Report = require('../models/report');
 var each = require('async').eachSeries;
 
-exports.up = function(next) { 
+exports.up = function(next) {
   Report.find({}, function(err, reports) {
     if (err || !reports) return;
     each(reports, function(report, done) {

@@ -12,7 +12,7 @@ angular.module('Aggie')
     Source.resetUnreadErrorCount({ id: source._id }, source);
 
     $scope.delete = function() {
-      Source.delete({id: $scope.source._id}, function(){
+      Source.delete({ id: $scope.source._id }, function() {
         flash.setNotice('source.delete.success');
         $rootScope.$state.go('sources');
       }, function() {

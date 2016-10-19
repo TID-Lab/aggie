@@ -2,14 +2,14 @@ var human = require('interval-to-human');
 var abbreviatedHuman = function(time, unit) {
   var str = human(time, unit);
   var regex = (str.match('month')) ? /(\w\w)\w+$/ : /(\w)\w+$/;
-  return str.replace(regex, "$1");
-}
+  return str.replace(regex, '$1');
+};
 
 var timeDiff = function(time) {
   var now = new Date().getTime();
   var then = new Date(time).getTime();
   return now - then;
-}
+};
 
 angular.module('Aggie')
 

@@ -9,12 +9,12 @@ var _ = require('underscore');
 require('../lib/error');
 
 var schema = new mongoose.Schema({
-  _query: {type: String, required: true},
-  timebox: {type: Number, default: 300},
-  createdAt: {type: Date},
-  counts: {type: Array, default: []},
-  enabled: {type: Boolean, default: true},
-  lastEnabledAt: {type: Date}
+  _query: { type: String, required: true },
+  timebox: { type: Number, default: 300 },
+  createdAt: { type: Date },
+  counts: { type: Array, default: [] },
+  enabled: { type: Boolean, default: true },
+  lastEnabledAt: { type: Date }
 });
 
 schema.pre('save', function(next) {
@@ -29,11 +29,11 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  if (this._wasNew) schema.emit('trend:save', {_id: this._id.toString()});
+  if (this._wasNew) schema.emit('trend:save', { _id: this._id.toString() });
 });
 
 schema.pre('remove', function(next) {
-  schema.emit('trend:remove', {_id: this._id.toString()});
+  schema.emit('trend:remove', { _id: this._id.toString() });
   next();
 });
 
@@ -62,7 +62,7 @@ schema.methods.toggle = function(status, callback) {
   this.save(function(err, trend) {
     if (err) return callback(err);
     if (!trend) return callback(new Error.NotFound());
-    schema.emit('trend:' + event, {_id: trend._id.toString()});
+    schema.emit('trend:' + event, { _id: trend._id.toString() });
     callback();
   });
 };
@@ -86,7 +86,7 @@ Trend.findPaginatedCounts = function(filters, page, options, callback) {
   if (page < 1) page = 1;
   var limit = 48;
   var skip = (page - 1) * limit;
-  options.counts = {$slice: [skip, limit]};
+  options.counts = { $slice: [skip, limit] };
 
   Trend.find(filters, options, function(err, trends) {
     if (err) return callback(err);
@@ -106,7 +106,7 @@ Trend.findPageById = function(_id, page, callback) {
   if (page < 1) page = 1;
   var limit = 48;
   var skip = (page - 1) * limit;
-  Trend.findOne({_id: _id}, {counts: {$slice: [skip, limit]}}, function(err, trend) {
+  Trend.findOne({ _id: _id }, { counts: { $slice: [skip, limit] } }, function(err, trend) {
     if (err) return callback(err);
     callback(null, trend);
   });
@@ -116,21 +116,21 @@ Trend.findPageById = function(_id, page, callback) {
 Trend.addTrend = function(_id, trend, callback) {
   // Find corresponding trend and increment the counts
   Trend.findOneAndUpdate(
-    {_id: _id, 'counts.timebox': trend.timebox},
-    {$inc: {'counts.$.counts': trend.counts}},
+    { _id: _id, 'counts.timebox': trend.timebox },
+    { $inc: { 'counts.$.counts': trend.counts } },
     function(err, result) {
       if (err) return callback(err);
       if (result) {
         // Return updated trend
-        callback(null, _.findWhere(result.counts, {timebox: trend.timebox}));
+        callback(null, _.findWhere(result.counts, { timebox: trend.timebox }));
       } else {
         // If no prior trend found, add it to the array
-        Trend.findByIdAndUpdate(_id, {$push: {counts: {$each: [trend], $sort: {timebox: -1}}}},
+        Trend.findByIdAndUpdate(_id, { $push: { counts: { $each: [trend], $sort: { timebox: -1 } } } },
           function(err, result) {
             if (err) return callback(err);
             if (!result) return callback(new Error.NotFound());
             // Return updated trend
-            callback(null, _.findWhere(result.counts, {timebox: trend.timebox}));
+            callback(null, _.findWhere(result.counts, { timebox: trend.timebox }));
           });
       }
     });

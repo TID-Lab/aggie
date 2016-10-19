@@ -105,8 +105,8 @@ angular.module('Aggie')
 
         // REFACTOR: These populations should really happen in the model.
         var x;
-        trend.query.sourceNickname = (x = $scope.sourcesById[trend.query.sourceId]) ? x.nickname : "[Unknown]"
-        trend.query.incidentTitle = (x = $scope.incidentsById[trend.query.incidentId]) ? x.title : "[Unknown]"
+        trend.query.sourceNickname = (x = $scope.sourcesById[trend.query.sourceId]) ? x.nickname : '[Unknown]';
+        trend.query.incidentTitle = (x = $scope.incidentsById[trend.query.incidentId]) ? x.title : '[Unknown]';
       });
 
       // Let Angular know our secrets...
@@ -115,7 +115,7 @@ angular.module('Aggie')
       $scope.trends = trends;
     };
 
-    var renderChart = function () {
+    var renderChart = function() {
       $scope.chart = new CanvasJS.Chart('chartContainer', {
         data: buildDataSeries(),
         axisX: {
@@ -123,7 +123,7 @@ angular.module('Aggie')
           labelFontFamily: FONTS,
           lineThickness: 1,
           tickThickness: 1,
-          valueFormatString: "h:mmTT" // Should match aggie date format short_time
+          valueFormatString: 'h:mmTT' // Should match aggie date format short_time
         },
         axisY: {
           labelFontSize: 11,
@@ -167,7 +167,7 @@ angular.module('Aggie')
           y: c.counts,
           color: trend.color,
           click: function() { gotoReports(q, c); },
-          toolTipContent: "<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}",
+          toolTipContent: '<p>{y} Reports</p><p>{x}</p>{keywords}{media}{source}{incident}',
           keywords: q.keywords ? '<p>Keywords: ' + q.keywords + '</p>' : '',
           media: q.media ? '<p>Media: ' + q.media + '</p>' : '',
           source: q.sourceId ? '<p>Source: ' + q.sourceNickname + '</p>' : '',
@@ -195,7 +195,7 @@ angular.module('Aggie')
     };
 
     $scope.deleteTrend = function(trend) {
-      Trend.delete({id: trend._id}, function(){
+      Trend.delete({ id: trend._id }, function() {
         flash.setNotice('trend.delete.success');
         $rootScope.$state.go('analysis.trend-lines', {}, { reload: true });
       }, function() {
@@ -234,7 +234,7 @@ angular.module('Aggie')
 
     $scope.trendClass = function(trend) {
       var enabled;
-      if (typeof(trend.enabled) == 'boolean') {
+      if (typeof (trend.enabled) == 'boolean') {
         enabled = trend.enabled;
       } else {
         enabled = trend.enabled == 'true';
@@ -242,7 +242,7 @@ angular.module('Aggie')
       return enabled ? 'trend' : 'trend-disabled';
     };
 
-    $scope.$on('$destroy', function(){
+    $scope.$on('$destroy', function() {
       Socket.removeAllListeners('trend');
     });
 

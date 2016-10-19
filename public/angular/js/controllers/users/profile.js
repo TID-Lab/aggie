@@ -11,10 +11,10 @@ angular.module('Aggie')
   function($scope, $rootScope, stateParams, users, User) {
     $scope.users = users;
 
-    function init () {
+    function init() {
       if ($rootScope.currentUser) {
         $scope.currentUser = $rootScope.currentUser;
-        $scope.user = _.find($scope.users, function (u) {
+        $scope.user = _.find($scope.users, function(u) {
           return u.username === stateParams.userName;
         });
       }

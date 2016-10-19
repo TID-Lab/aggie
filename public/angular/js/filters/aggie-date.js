@@ -6,9 +6,9 @@ angular.module('Aggie')
     var formats = {
       short_time: 'h:mma',
       time: 'h:mm:ssa',
-      date: "yyyy-MM-dd",
-      datetime: "yyyy-MM-dd h:mm:ssa",
-      datepicker: "yyyy-MM-dd h:mma",
+      date: 'yyyy-MM-dd',
+      datetime: 'yyyy-MM-dd h:mm:ssa',
+      datepicker: 'yyyy-MM-dd h:mma',
       timestamp: 'yyyy-MM-ddTHH:mm:ssZ'
     };
 

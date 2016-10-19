@@ -127,7 +127,7 @@ Source.resetUnreadErrorCount = function(_id, callback) {
 // Determine total number of errors
 Source.countAllErrors = function(callback) {
   var pipeline = [
-    { $group: { _id: null, unreadErrorCount: { $sum: "$unreadErrorCount" } } }
+    { $group: { _id: null, unreadErrorCount: { $sum: '$unreadErrorCount' } } }
   ];
   Source.aggregate(pipeline, function(err, total) {
     if (err) callback(err);

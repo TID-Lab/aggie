@@ -49,7 +49,7 @@ angular.module('Aggie')
       });
     };
 
-    $scope.view = function (user) {
+    $scope.view = function(user) {
       $state.go('profile', { userName: user.username });
     };
   }

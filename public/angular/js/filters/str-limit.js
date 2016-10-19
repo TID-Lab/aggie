@@ -5,7 +5,7 @@ angular.module('Aggie')
     if (input.length <= limit) {
       return input;
     }
-    
+
     return $filter('limitTo')(input, limit) + '...';
   };
 }]);

@@ -38,7 +38,7 @@ angular.module('Aggie')
     $stateProvider.state('reset_admin_password', {
       url: '/reset_admin_password',
       templateUrl: '/templates/reset-admin-password.html',
-      controller: 'ResetAdminPasswordController',
+      controller: 'ResetAdminPasswordController'
     });
 
     $stateProvider.state('reports', {
@@ -215,7 +215,7 @@ angular.module('Aggie')
           return Incident.query().$promise;
         }],
         trends: ['Trend', function(Trend) {
-          console.log('RESOLVING TRENDS')
+          console.log('RESOLVING TRENDS');
           return Trend.query().$promise;
         }]
       }

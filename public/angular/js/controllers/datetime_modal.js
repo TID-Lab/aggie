@@ -56,7 +56,7 @@ angular.module('Aggie')
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.clear = function () {
+    $scope.clear = function() {
       $scope.times = {};
       $state.params.before = null;
       $state.params.after = null;
