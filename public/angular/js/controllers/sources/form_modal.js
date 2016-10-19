@@ -57,7 +57,7 @@ angular.module('Aggie')
           flash.setNotice('source.update.success');
           $rootScope.$state.go('source', { id: source._id }, { reload: true });
         }, function() {
-            flash.setAlertNow('source.update.error');
+          flash.setAlertNow('source.update.error');
         });
       });
     };

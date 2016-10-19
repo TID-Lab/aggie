@@ -51,17 +51,17 @@ describe('ELMO content service', function() {
       expect(reportData).to.have.property('content');
       expect(reportData).to.have.property('author');
       switch (++fetched) {
-        case 1:
-          expect(reportData.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
-          expect(reportData.author).to.equal('Sue');
-          break;
-        case 2:
-          expect(reportData.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
-          expect(reportData.author).to.equal('Joe');
-          expect(service._lastReportDate.getTime()).to.equal((new Date('2014-06-17T11:00:00Z')).getTime());
-          break;
-        case 3:
-          return done(new Error('Unexpected report'));
+      case 1:
+        expect(reportData.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
+        expect(reportData.author).to.equal('Sue');
+        break;
+      case 2:
+        expect(reportData.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
+        expect(reportData.author).to.equal('Joe');
+        expect(service._lastReportDate.getTime()).to.equal((new Date('2014-06-17T11:00:00Z')).getTime());
+        break;
+      case 3:
+        return done(new Error('Unexpected report'));
       }
     });
 

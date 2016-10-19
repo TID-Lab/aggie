@@ -41,20 +41,20 @@ describe('RSS content service', function() {
       expect(reportData).to.have.property('author');
       expect(reportData).to.have.property('url');
       switch (++fetched) {
-        case 1:
-          expect(reportData.content).to.contain('River'); // Title should be concatted to content
-          expect(reportData.content).to.contain('Stormwater');
-          expect(reportData.author).to.equal('Jupiter');
-          expect(reportData.url).to.contain('river');
-          break;
-        case 2:
-          expect(reportData.content).to.contain('Elected');
-          expect(reportData.content).to.contain('CoC professor');
-          expect(reportData.author).to.equal('Jupiter');
-          expect(reportData.url).to.contain('lipton');
-          break;
-        case 3:
-          return done(new Error('Unexpected report'));
+      case 1:
+        expect(reportData.content).to.contain('River'); // Title should be concatted to content
+        expect(reportData.content).to.contain('Stormwater');
+        expect(reportData.author).to.equal('Jupiter');
+        expect(reportData.url).to.contain('river');
+        break;
+      case 2:
+        expect(reportData.content).to.contain('Elected');
+        expect(reportData.content).to.contain('CoC professor');
+        expect(reportData.author).to.equal('Jupiter');
+        expect(reportData.url).to.contain('lipton');
+        break;
+      case 3:
+        return done(new Error('Unexpected report'));
       }
     });
 
@@ -77,14 +77,14 @@ describe('RSS content service', function() {
 
       service.on('report', function(reportData) {
         switch (++fetched) {
-          case 1:
-            expect(reportData.content).to.contain('fracture toughness');
-            break;
-          case 2:
-            expect(reportData.content).to.contain('earn funding');
-            break;
-          case 3:
-            return done(new Error('Unexpected report'));
+        case 1:
+          expect(reportData.content).to.contain('fracture toughness');
+          break;
+        case 2:
+          expect(reportData.content).to.contain('earn funding');
+          break;
+        case 3:
+          return done(new Error('Unexpected report'));
         }
       });
 

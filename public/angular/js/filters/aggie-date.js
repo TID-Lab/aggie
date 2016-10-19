@@ -14,7 +14,7 @@ angular.module('Aggie')
 
     var date = new Date(data),
 
-    type = typeof type !== 'undefined' ? type : 'datetime';
+      type = typeof type !== 'undefined' ? type : 'datetime';
 
     if (type == 'datetime' && date.getHours() + date.getMinutes() + date.getSeconds() == 0) {
       type = 'date';

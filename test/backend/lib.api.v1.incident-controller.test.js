@@ -117,7 +117,7 @@ describe('Incident controller', function() {
         function(err, inc1, inc2, inc3) {
           incidents = [inc1, inc2, inc3];
           done(err);
-      });
+        });
     });
 
     afterEach(function(done) {

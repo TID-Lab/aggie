@@ -152,7 +152,7 @@ module.exports.countAllReports = function() {
            .getText()
            .then(function(text) {
              return Number(text);
-            });
+           });
 };
 
 module.exports.deleteSource = function(sourceName, nickname) {

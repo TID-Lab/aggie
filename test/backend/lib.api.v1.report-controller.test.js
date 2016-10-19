@@ -218,9 +218,9 @@ describe('Report controller', function() {
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
-            Incident.findById(incidents[0]._id, function(err, incident) {
-              expect(incident.totalReports).to.equal(2);
-              request(reportController)
+          Incident.findById(incidents[0]._id, function(err, incident) {
+            expect(incident.totalReports).to.equal(2);
+            request(reportController)
                 .patch('/api/v1/report/_link')
                 .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
                 .expect(200)
@@ -231,7 +231,7 @@ describe('Report controller', function() {
                     done(err);
                   });
                 });
-            });
+          });
         });
     });
   });

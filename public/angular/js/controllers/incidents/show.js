@@ -98,13 +98,13 @@ angular.module('Aggie')
     $scope.delete = function() {
       Incident.delete({id: $scope.incident._id}, function(){
         flash.setNotice('incident.delete.success');
-         $rootScope.$state.go('incidents');
+        $rootScope.$state.go('incidents');
       }, function() {
         flash.setAlertNow('incident.delete.error');
       });
     };
 
-     $scope.toggleFlagged = function(report) {
+    $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
 
       if (report.flagged) {

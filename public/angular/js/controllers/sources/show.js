@@ -14,7 +14,7 @@ angular.module('Aggie')
     $scope.delete = function() {
       Source.delete({id: $scope.source._id}, function(){
         flash.setNotice('source.delete.success');
-         $rootScope.$state.go('sources');
+        $rootScope.$state.go('sources');
       }, function() {
         flash.setAlertNow('source.delete.error');
       });

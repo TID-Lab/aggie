@@ -130,8 +130,8 @@ describe('SMSGhana content service', function() {
             return done(err);
           }
         });
-        service.unsubscribe('dodo');
-        service.unsubscribe('bozo');
+      service.unsubscribe('dodo');
+      service.unsubscribe('bozo');
     });
 
     it('should remove one source but still listen to other sources', function(done) {
@@ -147,16 +147,16 @@ describe('SMSGhana content service', function() {
             expect(reportData.content).to.equal('lorem ipsum dolor');
             expect(reportData.author).to.equal('9845098450');
 
-          callback();
-        });
+            callback();
+          });
         },
         function(callback) {
           service.once(bozoEventName, function(reportData) {
             expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
             expect(reportData.content).to.equal('lorem ipsum dolor');
             expect(reportData.author).to.equal('9876543210');
-          callback();
-        });
+            callback();
+          });
         }
       ], done);
 

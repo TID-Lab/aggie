@@ -25,15 +25,15 @@ var suffix = '.json';
 var debugFile = prefix + 'debug' + suffix;
 
 function getTranslations(dirname, callback) {
-   fs.readdir(dirname, function(err, filenames) {
-     if (err) return callback(err);
-     filenames = _.filter(filenames, function(filename) {
-       return _.startsWith(filename, prefix) && _.endsWith(filename, suffix);
-     });
-     async.map(filenames, function(filename, mapCallback) {
-       fs.readFile(path.join(dirname, filename), 'utf8', function(err, json) {
-         if (err) return mapCallback(err);
-         mapCallback(null, [filename, json]);
+  fs.readdir(dirname, function(err, filenames) {
+    if (err) return callback(err);
+    filenames = _.filter(filenames, function(filename) {
+      return _.startsWith(filename, prefix) && _.endsWith(filename, suffix);
+    });
+    async.map(filenames, function(filename, mapCallback) {
+      fs.readFile(path.join(dirname, filename), 'utf8', function(err, json) {
+        if (err) return mapCallback(err);
+        mapCallback(null, [filename, json]);
       });
     }, function(err, allLanguages) {
       if (err) return callback(err);
@@ -46,18 +46,18 @@ function testTranslationDir(dirname) {
   describe('Translations files ' + dirname, function() {
     it('debug language should contain the union of the other languages',
        function(done) {
-      getTranslations(dirname, function(err, allLanguages) {
-        if (err) return done(err);
-        var knownStrings = _.map(_.values(allLanguages), function(json) {
-          return deepKeys(JSON.parse(json));
-        });
-        var allKnownStrings = _.union.apply({}, knownStrings);
-        expect(allLanguages).to.have.property(debugFile);
-        var debugTranslations = JSON.parse(allLanguages[debugFile]);
-        expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
-        done();
-      });
-    });
+         getTranslations(dirname, function(err, allLanguages) {
+           if (err) return done(err);
+           var knownStrings = _.map(_.values(allLanguages), function(json) {
+             return deepKeys(JSON.parse(json));
+           });
+           var allKnownStrings = _.union.apply({}, knownStrings);
+           expect(allLanguages).to.have.property(debugFile);
+           var debugTranslations = JSON.parse(allLanguages[debugFile]);
+           expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
+           done();
+         });
+       });
 
     it("dictionaries shouldn't have duplicate keys", function(done) {
       function check(json, filename) {

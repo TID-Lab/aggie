@@ -197,7 +197,7 @@ angular.module('Aggie')
     $scope.deleteTrend = function(trend) {
       Trend.delete({id: trend._id}, function(){
         flash.setNotice('trend.delete.success');
-         $rootScope.$state.go('analysis.trend-lines', {}, { reload: true });
+        $rootScope.$state.go('analysis.trend-lines', {}, { reload: true });
       }, function() {
         flash.setAlertNow('trend.delete.error');
       });
