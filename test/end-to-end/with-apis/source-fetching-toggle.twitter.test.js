@@ -35,7 +35,7 @@ describe('Fetching toggle', function() {
   it('should collect reports when fetching is on', function() {
     this.slow(7000);
     utils.toggleFetching('On');
-    browser.sleep(1000);
+    browser.sleep(3000);
     return expect(utils.countAllReports()).to.eventually.be.at.least(1);
   });
 
