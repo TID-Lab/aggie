@@ -60,7 +60,6 @@
     "mongoose": "~3.8.23",
     "mongoose-auto-increment": "^3.2.0",
     "mongoose-listento": "0.0.4",
-    "mongoose-text-search": "0.0.2",
     "mongoose-validator": "^1.2.4",
     "nconf": "~0.7.1",
     "node-sass": "~0.8.6",

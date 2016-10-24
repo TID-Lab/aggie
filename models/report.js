@@ -4,7 +4,6 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var textSearch = require('mongoose-text-search');
 var listenTo = require('mongoose-listento');
 var Schema = mongoose.Schema;
 
@@ -26,7 +25,6 @@ var schema = new Schema({
 });
 
 // Give the report schema text search capabilities
-schema.plugin(textSearch);
 schema.plugin(listenTo);
 
 // Add fulltext index to the `content` field.
