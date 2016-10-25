@@ -3100,11 +3100,6 @@
         }
       }
     },
-    "mongoose-text-search": {
-      "version": "0.0.2",
-      "from": "mongoose-text-search@0.0.2",
-      "resolved": "https://registry.npmjs.org/mongoose-text-search/-/mongoose-text-search-0.0.2.tgz"
-    },
     "mongoose-validator": {
       "version": "1.2.5",
       "from": "mongoose-validator@>=1.2.4 <2.0.0",
