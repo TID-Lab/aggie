@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
 var _ = require('underscore');
-var logger = require('../lib/logger')
+var logger = require('../lib/logger');
 
 var SALT_WORK_FACTOR = 10;
 
