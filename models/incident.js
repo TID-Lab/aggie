@@ -26,6 +26,7 @@ var schema = new mongoose.Schema({
   longitude: Number,
   updatedAt: Date,
   storedAt: Date,
+  tags: { type: [String], default: [] },
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
