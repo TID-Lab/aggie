@@ -122,7 +122,6 @@ angular.module('Aggie')
       var uniqueIncidents = removeDuplicates(incidents);
       $scope.pagination.total += uniqueIncidents.length;
       $scope.pagination.visibleTotal += uniqueIncidents.length;
-      $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100);
       $scope.newIncidents.addMany(uniqueIncidents);
     };
 
