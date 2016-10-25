@@ -10,7 +10,7 @@ var promise = protractor.promise;
 
 // Allow chai to wait for promises on the right-hand-side
 chaiAsPromised.transformAsserterArgs = function(args) {
- return promise.all(args);
+  return promise.all(args);
 };
 
 describe('SMS GH', function() {
