@@ -17,12 +17,6 @@ angular.module('Aggie')
       });
     };
 
-    $scope.refresh = function() {
-      Source.query(function(sources) {
-        $scope.sources = sources;
-      });
-    };
-
     $scope.target = function(source) {
       return source.media == 'twitter' || source.media == 'smsgh' ? source.keywords : source.url;
     };

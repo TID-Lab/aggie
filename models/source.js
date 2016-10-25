@@ -68,11 +68,13 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
+  if (!this._silent) {
+    sourceSchema.emit('source:save', { _id: this._id.toString() });
+  }
+
   if (this._sourceStatusChanged) {
-    var event = (this.enabled) ? 'source:enable' : 'source:disable';
+    var event = this.enabled ? 'source:enable' : 'source:disable';
     sourceSchema.emit(event, { _id: this._id.toString() });
-  } else {
-    if (!this._silent) sourceSchema.emit('source:save', { _id: this._id.toString() });
   }
 
   if (this._sourceErrorCountUpdated) {
