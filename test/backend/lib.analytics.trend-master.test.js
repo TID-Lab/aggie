@@ -8,10 +8,9 @@ var ReportQuery = require('../../models/query/report-query');
 var _ = require('underscore');
 
 describe('Trend master', function() {
-  before(function(done) {
+  before(function() {
     trendMaster.addListeners('trend', Trend.schema);
     trendMaster.addListeners('report', Report.schema);
-    done();
   });
 
   it('should track all trends', function(done) {
@@ -168,17 +167,13 @@ describe('Trend master', function() {
   });
 
   // Clean up
-  after(function(done) {
+  after(function() {
     trendMaster.trends = [];
     trendMaster.disable();
-    Trend.remove(function(err) {
-      if (err) return done(err);
-      Report.remove(function(err) {
-        if (err) return done(err);
-        done();
-      });
-    });
+    trendMaster.removeListeners('trend', Trend.schema);
+    trendMaster.removeListeners('report', Report.schema);
   });
 
+  after(utils.wipeModels([Trend, Report]));
   after(utils.expectModelsEmpty);
 });

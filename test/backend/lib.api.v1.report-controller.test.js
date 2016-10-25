@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
@@ -18,7 +20,7 @@ describe('Report controller', function() {
   function createSource(done) {
     Source.create({ nickname: 'test', media: 'dummy', keywords: 'e' }, function(err, src) {
       source = src;
-      done();
+      done(err);
     });
   }
 
@@ -47,14 +49,14 @@ describe('Report controller', function() {
   function loadReports(done) {
     Report.find({}, function(err, results) {
       reports = results;
-      done();
+      done(err);
     });
   }
 
   function loadIncidents(done) {
     Incident.find({}, function(err, results) {
       incidents = results;
-      done();
+      done(err);
     });
   }
 
@@ -73,7 +75,7 @@ describe('Report controller', function() {
         { authoredAt: new Date(), content: 'one', _source: source._id },
         { authoredAt: new Date(), content: 'two', _source: source._id },
         { storedAt: past, authoredAt: past, content: 'three', _source: source._id }
-      ], function() { done(); });
+      ], done);
     });
 
     it('should get a list of all reports', function(done) {
@@ -146,7 +148,7 @@ describe('Report controller', function() {
       Report.create([
         { authoredAt: new Date(), content: 'one', _source: source._id },
         { authoredAt: new Date(), content: 'two', _source: source._id }
-      ], function() { done(); });
+      ], done);
     });
 
     it('should delete all reports', function(done) {
@@ -196,6 +198,7 @@ describe('Report controller', function() {
           .get('/api/v1/report/' + reports[0]._id)
           .expect(200)
           .end(function(err, res) {
+            if (err) return done(err);
             expect(res.body).to.have.property('_incident');
             expect(res.body._incident).to.equal(String(incidents[0]._id));
 
@@ -203,6 +206,7 @@ describe('Report controller', function() {
             .get('/api/v1/report/' + reports[1]._id)
             .expect(200)
             .end(function(err, res) {
+              if (err) return done(err);
               expect(res.body).to.have.property('_incident');
               expect(res.body._incident).to.equal(String(incidents[0]._id));
               done();
@@ -212,27 +216,45 @@ describe('Report controller', function() {
     });
 
     it('should update the totalReports field in incident', function(done) {
-      request(reportController)
-        .patch('/api/v1/report/_link')
-        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
-        .expect(200)
-        .end(function(err) {
-          if (err) return done(err);
-          Incident.findById(incidents[0]._id, function(err, incident) {
-            expect(incident.totalReports).to.equal(2);
-            request(reportController)
-                .patch('/api/v1/report/_link')
-                .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
-                .expect(200)
-                .end(function(err) {
-                  if (err) return done(err);
-                  Incident.findById(incidents[0]._id, function(err, inc) {
-                    expect(inc.totalReports).to.equal(0);
-                    done(err);
-                  });
-                });
-          });
-        });
+      var incidentChanges = new utils.EventCounter(Incident.schema,
+                                                   'incident:update');
+      async.waterfall([
+        function(callback) {
+          request(reportController)
+            .patch('/api/v1/report/_link')
+            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+            .expect(200)
+            .end(callback);
+        },
+        function(res, callback) {
+          // Wait for incident to be updated in the database
+          incidentChanges.waitForEvents(2, callback);
+        },
+        function(callback) {
+          Incident.findById(incidents[0]._id, callback);
+        },
+        function(incident, callback) {
+          expect(incident.totalReports).to.equal(2);
+          request(reportController)
+            .patch('/api/v1/report/_link')
+            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
+            .expect(200)
+            .end(callback);
+        },
+        function(res, callback) {
+          // Incident 0 has two reports removed and incident 1 has two added,
+          // for a total of 4 additional events, plus the 2 we already had
+          incidentChanges.waitForEvents(6, callback);
+        },
+        function(callback) {
+          Incident.findById(incidents[0]._id, callback);
+        },
+        function(incident, callback) {
+          expect(incident.totalReports).to.equal(0);
+          setImmediate(callback);
+          incidentChanges.kill();
+        }
+      ], done);
     });
   });
 

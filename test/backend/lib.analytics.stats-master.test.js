@@ -6,7 +6,6 @@ var statsMaster = require('../../lib/analytics/stats-master');
 var Report = require('../../models/report');
 var Incident = require('../../models/incident');
 var async = require('async');
-var _ = require('lodash');
 
 describe('StatsMaster', function() {
   function createReports(done) {
@@ -30,12 +29,15 @@ describe('StatsMaster', function() {
     statsMaster.addListeners('incident', Incident.schema);
   });
 
+  var stats;
   beforeEach(function(done) {
+    stats = new utils.EventCounter(statsMaster, 'stats');
     async.parallel([createReports, createIncidents], function(err) {
-      // Call done on just the third 'stats' event
-      var finished = _.after(3, _.once(done.bind({}, err)));
-      statsMaster.on('stats', finished);
+      stats.waitForEvents(3, done.bind({}, err));
     });
+  });
+  afterEach(function() {
+    stats.kill();
   });
 
   afterEach(function(done) {
