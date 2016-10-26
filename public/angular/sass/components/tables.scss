@@ -223,27 +223,26 @@ table, .table {
 .table-filters {
   width: 100%;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 5px;
   background-color: #bfbfbf;
   font-size: 12px;
-  display: table;
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    .td {
+      padding: 5px;
+    }
+    .filter {
+      vertical-align: top;
+    }
+    .search {
+      flex-grow: 1;
+      width: 150px;
+    }
+  }
   label {
     font-weight: bold;
-  }
-  select {
-    width: auto;
-    max-width: 100px;
-  }
-  .filter {
-    vertical-align: top;
-    display: table-cell;
-    padding: 0 8px;
-    &:first-child {
-      padding-left: 0;
-    }
-    &:last-child {
-      padding-right: 0;
-    }
   }
   .form-control {
     font-size: 12px;
@@ -254,7 +253,6 @@ table, .table {
       margin-right: 4px;
     }
     input {
-      width: auto;
       line-height: 1;
       height: 25px;
     }
