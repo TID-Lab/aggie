@@ -9,7 +9,7 @@ var expect = chai.expect;
 var promise = protractor.promise;
 
 
-describe('test duplication of reports with different settings', function() {
+describe('test generation of reports', function() {
   before(utils.initDb);
   after(utils.disconnectDropDb);
 
@@ -54,19 +54,19 @@ describe('test duplication of reports with different settings', function() {
     };
   };
 
-  it('should listen with fetching:on and source:enabled',
+  it('with fetching:on and source:enabled',
      setAndExpect(true, true, 1));
 
-  it('should not listen with fetching:on and source:disabled',
+  it('with fetching:on and source:disabled',
      setAndExpect(true, false, 0));
 
-  it('should not listening wtih fetching:off and source:enabled',
+  it('wtih fetching:off and source:enabled',
      setAndExpect(false, true, 0));
 
-  it('should not listen with fetching:off and source:disabled',
+  it('with fetching:off and source:disabled',
      setAndExpect(false, false, 0));
 
-  it('should not listen with fetching toggled from on to off and source:disabled', function() {
+  it('with fetching toggled from on to off and source:disabled', function() {
     utils.toggleFetching('On');
     setAndExpect(false, false, 0)();
   });
