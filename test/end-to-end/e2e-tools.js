@@ -40,7 +40,7 @@ module.exports.initAdmin = function(password) {
 module.exports.logOut = function() {
   // Note: it would be nice if there were a more reliable way to get the logout
   // button.
-  element(by.cssContainingText('li a', 'Log out')).click();
+  element.all(by.cssContainingText('li a', 'Log out')).first().click();
   return expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'login');
 };
 
@@ -89,7 +89,7 @@ module.exports.setFilter = function(filter) {
     clickClearSend(by.model('times.after'), filter.time.after);
     element(by.buttonText('Submit')).click();
   }
-  element(by.buttonText('Go')).click();
+  element.all(by.buttonText('Go')).first().click();
   return e;
 };
 
@@ -103,7 +103,7 @@ module.exports.addSource = function(sourceName, params) {
   };
   browser.get(browser.baseUrl + 'sources');
   element(by.buttonText('Create Source')).click();
-  element(by.model('source.media')).$('[value="' + sourceList[sourceName] + '"]').click();
+  element.all(by.model('source.media')).first().$('[value="' + sourceList[sourceName] + '"]').click();
   if (sourceName !== 'Twitter') {
     element(by.model('source.nickname')).sendKeys(params.nickname ? params.nickname : 'blank');
   }
@@ -154,7 +154,7 @@ module.exports.getReports = function(pluckColumn) {
 
 // Get the text from first span of the yellow stats bar
 module.exports.countAllReports = function() {
-  return element(by.css('.navbar-text > span'))
+  return element.all(by.css('.navbar-text > span')).first()
            .getText()
            .then(function(text) {
              return Number(text);
