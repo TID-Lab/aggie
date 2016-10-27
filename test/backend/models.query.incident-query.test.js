@@ -106,30 +106,8 @@ describe('Incident query attributes', function() {
     });
   });
 
-  it('should query by single partial tag', function(done) {
-    (new IncidentQuery({ veracity: 'Confirmed false', status: 'closed', tags: ['ell'] })).run(function(err, incidents) {
-      if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(3);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(3);
-      done();
-    });
-  });
-
-    it('should query by multiple full tags', function(done) {
+  it('should query by multiple full tags', function(done) {
     (new IncidentQuery({ veracity: 'Confirmed false', status: 'closed', tags: ['wellohorld', 'foobar'] })).run(function(err, incidents) {
-      if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(3);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(3);
-      done();
-    });
-  });
-
-  it('should query by multiple partial tags', function(done) {
-    (new IncidentQuery({ veracity: 'Confirmed false', status: 'closed', tags: ['llo', 'ooba'] })).run(function(err, incidents) {
       if (err) return done(err);
       expect(incidents).to.have.keys(['total', 'results']);
       expect(incidents.total).to.equal(3);

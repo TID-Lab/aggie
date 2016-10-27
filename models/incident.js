@@ -2,10 +2,10 @@
 // It is generally associated with one or more reports.
 // Other metadata is stored with the incident to assist tracking.
 // This class is responsible for executing IncidentQuerys.
+'use strict';
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var Schema = mongoose.Schema;
 var validate = require('mongoose-validator');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
@@ -15,13 +15,13 @@ var logger = require('../lib/logger');
 
 require('../lib/error');
 
-var length_validator = validate({
+var lengthValidator = validate({
   validator: 'isLength',
   arguments: [0, 32]
 });
 
 var schema = new mongoose.Schema({
-  title: { type: String, required: true, validate: length_validator },
+  title: { type: String, required: true, validate: lengthValidator },
   locationName: String,
   latitude: Number,
   longitude: Number,
@@ -123,18 +123,18 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-  if (query.veracity == 'confirmed true') filter.veracity = true;
-  if (query.veracity == 'confirmed false') filter.veracity = false;
-  if (query.veracity == 'unconfirmed') filter.veracity = null;
+  if (query.veracity === 'confirmed true') filter.veracity = true;
+  if (query.veracity === 'confirmed false') filter.veracity = false;
+  if (query.veracity === 'unconfirmed') filter.veracity = null;
   if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
-  if (query.status == 'open') filter.closed = false;
-  if (query.status == 'closed') filter.closed = true;
+  if (query.status === 'open') filter.closed = false;
+  if (query.status === 'closed') filter.closed = true;
   delete filter.status;
   if (_.isBoolean(query.closed)) filter.closed = query.closed;
 
-  if (query.escalated == 'escalated') filter.escalated = true;
-  if (query.escalated == 'unescalated') filter.escalated = false;
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
 
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
@@ -144,14 +144,13 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Checking for multiple tags in incident
   if (query.tags) {
-    tags = [];
+    var tags = [];
     for (var i = 0; i < query.tags.length; i++) {
-      tags[i] = new RegExp(query.tags[i], 'i');
+      tags[i] = query.tags[i];
     }
     filter.tags = {};
     filter.tags.$in = tags;
-  }
-  else delete filter.tags;
+  } else delete filter.tags;
 
   // Re-set search timestamp
   query.since = new Date();
@@ -162,7 +161,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
 // Mixin shared incident methods
 var Shared = require('../shared/incident');
-for (var static in Shared) Incident[static] = Shared[static];
+for (var staticVar in Shared) Incident[staticVar] = Shared[staticVar];
 for (var proto in Shared.prototype) schema.methods[proto] = Shared[proto];
 
 module.exports = Incident;
