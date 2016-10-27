@@ -151,11 +151,21 @@ angular.module('Aggie')
         $scope.searchParams.assignedTo === null &&
         $scope.searchParams.status === null &&
         $scope.searchParams.veracity === null &&
+        $scope.searchParams.tags === null &&
         $scope.searchParams.escalated === null;
     };
 
     $scope.clearFilters = function() {
-      $scope.search({ page: null, title: null, locationName: null, assignedTo: null, status: null, veracity: null, escalated: null });
+      $scope.search({
+        page: null,
+        title: null,
+        locationName: null,
+        assignedTo: null,
+        status: null,
+        veracity: null,
+        tags: null,
+        escalated: null
+      });
     };
 
     $scope.isFirstPage = function() {
