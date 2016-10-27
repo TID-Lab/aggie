@@ -124,14 +124,16 @@ module.exports.toggleFetching = function(state) {
   return element(by.css('[ng-click="toggle(' + stateMapping[state] + ')"]')).click();
 };
 
+var sourceIconMapping = {
+  Twitter: 'twitter-source',
+  Facebook: 'facebook-source',
+  RSS: 'rss-source',
+  Elmo: 'elmo-source',
+  'SMS GH': 'smsgh-source'
+};
+module.exports.sourceIconMapping = sourceIconMapping;
+
 module.exports.toggleSource = function(sourceName, state) {
-  var sourceIconMapping = {
-    Twitter: 'twitter-source',
-    Facebook: 'facebook-source',
-    RSS: 'rss-source',
-    Elmo: 'elmo-source',
-    'SMS GH': 'smsgh-source'
-  };
   browser.get(browser.baseUrl + 'sources');
   return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
     .element(by.xpath('..'))
@@ -169,13 +171,6 @@ module.exports.deleteSource = function(sourceName, nickname) {
 };
 
 module.exports.getWarningCount = function(sourceName) {
-  var sourceIconMapping = {
-    Twitter: 'twitter-source',
-    Facebook: 'facebook-source',
-    RSS: 'rss-source',
-    Elmo: 'elmo-source',
-    'SMS GH': 'smsgh-source'
-  };
   browser.get(browser.baseUrl + 'sources');
   return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
            .element(by.xpath('..'))
@@ -187,20 +182,9 @@ module.exports.getWarningCount = function(sourceName) {
 };
 
 module.exports.checkSourceState = function(sourceName) {
-  var sourceIconMapping = {
-    Twitter: 'twitter-source',
-    Facebook: 'facebook-source',
-    RSS: 'rss-source',
-    Elmo: 'elmo-source',
-    'SMS GH': 'smsgh-source'
-  };
   browser.get(browser.baseUrl + 'sources');
   return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
            .element(by.xpath('..'))
            .element(by.css('[class="toggle-item ng-scope ng-binding selected"]'))
-           .getText()
-           .then(function(text) {
-             return text;
-           });
-
+           .getText();
 };
