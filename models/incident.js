@@ -142,6 +142,17 @@ Incident.queryIncidents = function(query, page, options, callback) {
   if (query.locationName) filter.locationName = new RegExp(query.locationName, 'i');
   else delete filter.locationName;
 
+  // Checking for multiple tags in incident
+  if (query.tags) {
+    tags = [];
+    for (var i = 0; i < query.tags.length; i++) {
+      tags[i] = new RegExp(query.tags[i], 'i');
+    }
+    filter.tags = {};
+    filter.tags.$in = tags;
+  }
+  else delete filter.tags;
+
   // Re-set search timestamp
   query.since = new Date();
 
