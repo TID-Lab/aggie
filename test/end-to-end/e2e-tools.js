@@ -188,3 +188,12 @@ module.exports.checkSourceState = function(sourceName) {
            .element(by.css('[class="toggle-item ng-scope ng-binding selected"]'))
            .getText();
 };
+
+module.exports.setIncidentFilter = function(filter) {
+  browser.get(browser.baseUrl + 'incidents');
+  if (filter.tags) {
+    var text = filter.tags.join(', ');
+    element(by.model('searchParams.tags')).sendKeys(text);
+  }
+  element.all(by.buttonText('Go')).first().click();
+};
