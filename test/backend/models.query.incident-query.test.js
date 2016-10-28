@@ -15,15 +15,62 @@ describe('Incident query attributes', function() {
     Incident.remove(function(err) {
       if (err) return done(err);
       async.each([
-        { title: 'The quick brown fox', veracity: null, closed: true, tags: ['hello', 'world'] },
-        { title: 'The slow white fox', veracity: true, closed: false, tags: ['hello'] },
-        { title: 'The quick brown chicken', veracity: null, closed: false, tags: ['world'] },
-        { title: 'The brown quick fox', veracity: false, closed: true, tags: ['helloworld', 'wellohorld', 'foobar'] },
-        { title: 'The fox that was slow and brown', veracity: false, closed: true, tags: ['foobar', 'hello'] },
-        { title: 'The slow that was fox and brown', veracity: false, closed: true, tags: ['wellohorld', 'hello'] }
+        {
+          title: 'The quick brown fox',
+          veracity: null,
+          closed: true,
+          tags: ['hello', 'world']
+        },
+        {
+          title: 'The slow white fox',
+          veracity: true,
+          closed: false,
+          tags: ['hello']
+        },
+        {
+          title: 'The quick brown chicken',
+          veracity: null,
+          closed: false,
+          tags: ['world']
+        },
+        {
+          title: 'The brown quick fox',
+          veracity: false,
+          closed: true,
+          tags: ['helloworld', 'wellohorld', 'foobar']
+        },
+        {
+          title: 'The fox that was slow and brown',
+          veracity: false,
+          closed: true,
+          tags: ['foobar', 'hello']
+        },
+        {
+          title: 'The slow that was fox and brown',
+          veracity: false,
+          closed: true,
+          tags: ['wellohorld', 'hello']
+        }
       ], Incident.create.bind(Incident), done);
     });
   });
+
+  var incidentTagTester = function(tags, n) {
+    return function(done) {
+      new IncidentQuery({
+        veracity: 'Confirmed false',
+        status: 'closed',
+        tags: tags
+      }).run(function(err, incidents) {
+        if (err) return done(err);
+        expect(incidents).to.have.keys(['total', 'results']);
+        expect(incidents.total).to.equal(n);
+        expect(incidents.results).to.be.an.instanceof(Array);
+        expect(incidents.results).to.have.length(n);
+        done();
+      });
+    };
+  };
 
   it('should normalize query', function() {
     var normalized = query.normalize();
@@ -95,27 +142,9 @@ describe('Incident query attributes', function() {
     });
   });
 
-  it('should query by single full tag', function(done) {
-    (new IncidentQuery({ veracity: 'Confirmed false', status: 'closed', tags: ['foobar'] })).run(function(err, incidents) {
-      if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(2);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(2);
-      done();
-    });
-  });
+  it('should query by single full tag', incidentTagTester(['foobar'], 2));
 
-  it('should query by multiple full tags', function(done) {
-    (new IncidentQuery({ veracity: 'Confirmed false', status: 'closed', tags: ['wellohorld', 'foobar'] })).run(function(err, incidents) {
-      if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(3);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(3);
-      done();
-    });
-  });
+  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 3));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);

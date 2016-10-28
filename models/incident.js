@@ -144,12 +144,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Checking for multiple tags in incident
   if (query.tags) {
-    var tags = [];
-    for (var i = 0; i < query.tags.length; i++) {
-      tags[i] = query.tags[i];
-    }
-    filter.tags = {};
-    filter.tags.$in = tags;
+    filter.tags = { $in: query.tags };
   } else delete filter.tags;
 
   // Re-set search timestamp
