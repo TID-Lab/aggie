@@ -197,3 +197,24 @@ module.exports.setIncidentFilter = function(filter) {
   }
   element.all(by.buttonText('Go')).first().click();
 };
+module.exports.createIncident = function(params) {
+  browser.get(browser.baseUrl + 'incidents');
+  element(by.buttonText('Create Incident')).click();
+  element(by.model('incident.title')).sendKeys(params.title ? params.title : 'blank');
+  element(by.model('incident.tags')).sendKeys(params.tags ? params.tags : '');
+  element(by.model('incident.locationName')).sendKeys(params.location ? params.location : '');
+  return element(by.buttonText('Submit')).click();
+}
+
+module.exports.addReportToIncident = function(reportParams, incidentParams) {
+  browser.get(browser.baseUrl + 'reports');
+  element(by.id('addIdentifier')).click();
+  element(by.cssContainingText('tr td', incidentParams.title)).click();
+}
+
+module.exports.filterByTag = function(tags) {
+  browser.get(browser.baseUrl + 'incidents');
+  element.all(by.model('searchParams.tags')).first().sendKeys(tags);
+  return
+
+}
