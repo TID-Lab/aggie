@@ -2,6 +2,7 @@
 // It is generally associated with one or more reports.
 // Other metadata is stored with the incident to assist tracking.
 // This class is responsible for executing IncidentQuerys.
+/* eslint-disable no-invalid-this */
 'use strict';
 
 var database = require('../lib/database');
