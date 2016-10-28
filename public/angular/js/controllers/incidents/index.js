@@ -220,6 +220,10 @@ angular.module('Aggie')
       Socket.removeAllListeners('incidents');
     });
 
+    $scope.tagsToString = function(tags) {
+      return tags.join(', ');
+    };
+
     init();
   }
 ]);
