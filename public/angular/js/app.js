@@ -91,6 +91,7 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/api_modal');
+require('./services/tags');
 
 // Controllers
 require('./controllers/application');

@@ -107,7 +107,9 @@ angular.module('Aggie')
   'users',
   'incident',
   'reports',
-  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, reports) {
+  'Tags',
+  function($scope, $modalInstance, incidentStatusOptions, veracityOptions,
+           users, incident, reports, Tags) {
     $scope.incident = angular.copy(incident);
     $scope.users = users;
     $scope.veracity = veracityOptions;
@@ -126,6 +128,7 @@ angular.module('Aggie')
 
       // Only send assignedTo _id, not whole object.
       $scope.incident.assignedTo = ($scope.incident.assignedTo || { _id: null })['_id'];
+      $scope.incident.tags = Tags.stringToTags($scope.incident.tags);
 
       $modalInstance.close($scope.incident);
     };
