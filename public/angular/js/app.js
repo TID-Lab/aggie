@@ -149,7 +149,7 @@ require('./directives/aggie-sparkline');
 require('./directives/aggie-username');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
-require('./directives/ng-autocomplete');
+require('ng-autocomplete');
 require('./directives/ng-minmax');
 require('./directives/ng-round');
 require('./directives/ng-select-all');
