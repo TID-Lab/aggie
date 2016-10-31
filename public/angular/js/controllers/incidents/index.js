@@ -15,7 +15,10 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $stateParams, flash, incidents, users, incidentStatusOptions, veracityOptions, escalatedOptions, Incident, Socket, Queue, paginationOptions) {
+  'Tags',
+  function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
+           incidentStatusOptions, veracityOptions, escalatedOptions, Incident,
+           Socket, Queue, paginationOptions, Tags) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -220,9 +223,7 @@ angular.module('Aggie')
       Socket.removeAllListeners('incidents');
     });
 
-    $scope.tagsToString = function(tags) {
-      return tags.join(', ');
-    };
+    $scope.tagsToString = Tags.tagsToString;
 
     init();
   }

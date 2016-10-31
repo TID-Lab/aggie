@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .config([
   '$stateProvider',
-  function($stateProvider, tz) {
+  function($stateProvider) {
     var lastAnalysis;
 
     $stateProvider.state('home', {
@@ -109,21 +109,13 @@ angular.module('Aggie')
       }
     });
 
-    var tokenize = function(tags) {
-      if (typeof tags === 'string') {
-        return tags.split(',').map(function(tag) {
-          return tag.trim();
-        });
-      }
-      return tags;
-    };
 
     $stateProvider.state('incidents', {
       url: '/incidents?page&title&locationName&assignedTo&status&veracity&tags&escalated',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
-        incidents: ['Incident', '$stateParams', function(Incident, params) {
+        incidents: ['Incident', '$stateParams', 'Tags', function(Incident, params, Tags) {
           var page = params.page || 1;
           return Incident.query({
             page: page - 1,
@@ -132,7 +124,7 @@ angular.module('Aggie')
             assignedTo: params.assignedTo,
             status: params.status,
             veracity: params.veracity,
-            tags: tokenize(params.tags),
+            tags: Tags.stringToTags(params.tags),
             escalated: params.escalated
           }).$promise;
         }],
