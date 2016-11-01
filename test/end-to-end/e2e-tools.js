@@ -204,17 +204,24 @@ module.exports.createIncident = function(params) {
   element(by.model('incident.tags')).sendKeys(params.tags ? params.tags : '');
   element(by.model('incident.locationName')).sendKeys(params.location ? params.location : '');
   return element(by.buttonText('Submit')).click();
-}
+};
 
 module.exports.addReportToIncident = function(reportParams, incidentParams) {
   browser.get(browser.baseUrl + 'reports');
-  element(by.id('addIdentifier')).click();
-  element(by.cssContainingText('tr td', incidentParams.title)).click();
-}
+  element.all(by.css('.addIdentifier')).first().click();
+  return element(by.cssContainingText('tr td', incidentParams.location)).click();
+};
 
 module.exports.filterByTag = function(tags) {
-  browser.get(browser.baseUrl + 'incidents');
-  element.all(by.model('searchParams.tags')).first().sendKeys(tags);
-  return
-
-}
+  this.setIncidentFilter({ tags: tags });
+  var x = by.repeater("i in incidents | orderBy:['closed','idnum']");
+  return element.all(x.column('title'))
+          .map(function(elem) {
+            return elem.getText();
+          })
+          .then(function(titles) {
+            return titles.filter(function(text) {
+              return text !== '';
+            });
+          });
+};

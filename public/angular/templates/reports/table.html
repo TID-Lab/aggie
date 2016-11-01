@@ -40,7 +40,7 @@
         <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong id="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
+            <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
           </a>
         </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>

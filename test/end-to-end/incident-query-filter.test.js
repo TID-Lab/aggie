@@ -37,27 +37,27 @@ describe.only('Incident query filter', function() {
   var reqParams2 = {
     from: '12345678',
     fulltext: 'foobarbaz',
-    date: '2016-09-01',
+    date: '2016-09-02',
     keyword: 'test'
   };
 
   var reqParams3 = {
     from: '987654321',
     fulltext: 'world',
-    date: '2016-09-01',
+    date: '2016-09-03',
     keyword: 'test'
   };
 
   var reqParams4 = {
     from: '0864213579',
     fulltext: 'whatwhat',
-    date: '2016-09-01',
+    date: '2016-09-04',
     keyword: 'test'
   };
 
   var incident1 = {
     title: 'hello',
-    tags: 'hello, there, how, do, you, do',
+    tags: 'hello, there, how, do, you, doo',
     location: 'macau'
   };
 
@@ -80,36 +80,25 @@ describe.only('Incident query filter', function() {
     return defer;
   };
 
-  var makeReport = function() {
-    var count1 = utils.getReports().count();
-    utils.toggleFetching('On');
-    browser.sleep(500)
-      .then(sendRequest);
-    browser.sleep(500);
-    utils.toggleSource('SMS GH', 'Off');
-    utils.toggleFetching('Off');
-    var count2 = utils.getReports().count();
-    return expect(count2).to.eventually.be.above(count1);
-  };
-
   it('should filter incidents by single tag', function() {
-    // generate some 2 reports
+    // generate 2 reports
     browser.sleep(500)
       .then(sendRequest(reqParams1))
-      .then(sendRequest(reqParams2))
+      .then(sendRequest(reqParams2));
     // generate 2 incidents
     utils.createIncident(incident1);
     utils.createIncident(incident2);
     // add 1 report to each incident
     utils.addReportToIncident(reqParams1, incident1);
     utils.addReportToIncident(reqParams2, incident2);
-    // filter by tag
-    // var res1 = utils.filterByTag('');
-    // expect the right report, and the right count of reports
+    // filter by tag (from the first incident)
+    var res1 = utils.filterByTag(['doo']);
+    // expect the results to be of incident `hello`
+    expect(res1).to.eventually.have.length(1);
   });
 
   it('should filter incidents by multiple tags', function() {
-    // generate some 4 reports
+    // generate 4 reports
     browser.sleep(500)
       .then(sendRequest(reqParams1))
       .then(sendRequest(reqParams2))
@@ -123,8 +112,9 @@ describe.only('Incident query filter', function() {
     utils.addReportToIncident(reqParams2, incident2);
     utils.addReportToIncident(reqParams3, incident1);
     utils.addReportToIncident(reqParams4, incident2);
-    // filter by tags (such that there are one each from each report)
-    // var res1 = utils.filterByTag('');
-    // expect the right reports, right incident, and the right count of reports
+    // filter by tags (such that there are from the second incident)
+    var res2 = utils.filterByTag(['thank, you']);
+    // expect the results to be details of incident `response`
+    expect(res2).to.eventually.have.length(1);
   });
 });
