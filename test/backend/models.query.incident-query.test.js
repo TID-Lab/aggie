@@ -74,7 +74,7 @@ describe('Incident query attributes', function() {
 
   it('should normalize query', function() {
     var normalized = query.normalize();
-    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity']);
+    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity', 'tags']);
     expect(normalized.title).to.equal('quick brown');
   });
 
