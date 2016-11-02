@@ -144,7 +144,7 @@ describe('Incident query attributes', function() {
 
   it('should query by single full tag', incidentTagTester(['foobar'], 2));
 
-  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 3));
+  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 1));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);
