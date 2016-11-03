@@ -5,6 +5,7 @@ var _ = require('lodash');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var Report = require('../../models/report');
+var request = require('supertest');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -163,6 +164,20 @@ module.exports.countAllReports = function() {
            });
 };
 
+module.exports.sendSmsghRequest = function(requestParams) {
+  var defer = promise.defer();
+  browser.call(function() {
+    request('http://localhost:1111')
+      .get('/smsghana')
+      .query(requestParams)
+      .end(function(err, res) {
+        if (err) defer.fulfill(err);
+        defer.fulfill(res);
+      });
+  });
+  return defer.promise;
+};
+
 module.exports.deleteSource = function(sourceName, nickname) {
   browser.get(browser.baseUrl + 'sources');
   element(by.linkText(nickname)).click();
@@ -196,4 +211,37 @@ module.exports.setIncidentFilter = function(filter) {
     element(by.model('searchParams.tags')).sendKeys(text);
   }
   element.all(by.buttonText('Go')).first().click();
+};
+
+module.exports.createIncident = function(params) {
+  browser.get(browser.baseUrl + 'incidents');
+  element(by.buttonText('Create Incident')).click();
+  element(by.model('incident.title')).sendKeys(params.title ? params.title : 'blank');
+  element(by.model('incident.tags')).sendKeys(params.tags ? params.tags : '');
+  element(by.model('incident.locationName')).sendKeys(params.location ? params.location : '');
+  return element(by.buttonText('Submit')).click();
+};
+
+module.exports.addFirstReportToIncident = function(incidentParams) {
+  browser.get(browser.baseUrl + 'reports');
+  element.all(by.css('.addIdentifier')).first().click();
+  return element(by.cssContainingText('tr td', incidentParams.location)).click();
+};
+
+module.exports.getIncidentTitles = function() {
+  var x = by.repeater("i in incidents | orderBy:['closed','idnum']");
+  return element.all(x.column('title'))
+          .map(function(elem) {
+            return elem.getText();
+          })
+          .then(function(titles) {
+            return titles.filter(function(text) {
+              return text !== '';
+            });
+          });
+};
+
+module.exports.filterByTag = function(tags) {
+  this.setIncidentFilter({ tags: tags });
+  return this.getIncidentTitles();
 };

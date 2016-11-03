@@ -1,12 +1,10 @@
 'use strict';
 
 var utils = require('./e2e-tools');
-var request = require('supertest');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
-var promise = protractor.promise;
 
 
 describe('test generation of reports', function() {
@@ -28,26 +26,12 @@ describe('test generation of reports', function() {
     keyword: 'test'
   };
 
-  var sendRequest = function() {
-    var defer = promise.defer();
-    browser.sleep(500);
-    browser.call(function() {
-      request('http://localhost:1111')
-        .get('/smsghana')
-        .query(reqParams)
-        .end(function(err, res) {
-          if (err) defer.fulfill(err);
-          defer.fulfill(res);
-        });
-    });
-    return defer.promise;
-  };
-
   var setAndExpect = function(fetchingOn, sourceOn, numExpect) {
     return function() {
       fetchingOn && utils.toggleFetching('On');
       !sourceOn && utils.toggleSource('SMS GH', 'Off');
-      browser.wait(sendRequest());
+      browser.sleep(500);
+      browser.wait(utils.sendSmsghRequest(reqParams));
       expect(utils.getReports().count()).to.eventually.equal(numExpect);
       fetchingOn && utils.toggleFetching('Off');
       sourceOn && utils.toggleSource('SMS GH', 'Off');
