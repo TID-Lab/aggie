@@ -150,6 +150,7 @@ require('./directives/aggie-username');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
 require('ng-autocomplete');
+require('ng-tags-input');
 require('./directives/ng-minmax');
 require('./directives/ng-round');
 require('./directives/ng-select-all');

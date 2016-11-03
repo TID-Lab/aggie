@@ -60,6 +60,7 @@
     "mongoose-validator": "^1.2.4",
     "nconf": "~0.7.1",
     "ng-autocomplete": "^1.0.0",
+    "ng-tags-input": "^3.1.1",
     "node-sass": "~0.8.6",
     "nodemailer": "~2.3.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
