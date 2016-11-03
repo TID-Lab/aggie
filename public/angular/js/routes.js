@@ -115,7 +115,7 @@ angular.module('Aggie')
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
-        incidents: ['Incident', '$stateParams', 'Tags', function(Incident, params, Tags) {
+        incidents: ['Incident', '$stateParams', function(Incident, params) {
           var page = params.page || 1;
           return Incident.query({
             page: page - 1,
@@ -124,7 +124,7 @@ angular.module('Aggie')
             assignedTo: params.assignedTo,
             status: params.status,
             veracity: params.veracity,
-            tags: Tags.stringToTags(params.tags),
+            tags: params.tags,
             escalated: params.escalated
           }).$promise;
         }],

@@ -74,7 +74,7 @@ describe('Incident query attributes', function() {
 
   it('should normalize query', function() {
     var normalized = query.normalize();
-    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity']);
+    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity', 'tags']);
     expect(normalized.title).to.equal('quick brown');
   });
 
@@ -144,7 +144,7 @@ describe('Incident query attributes', function() {
 
   it('should query by single full tag', incidentTagTester(['foobar'], 2));
 
-  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 3));
+  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 1));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);
