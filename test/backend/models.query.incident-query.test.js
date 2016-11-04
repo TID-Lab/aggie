@@ -15,17 +15,66 @@ describe('Incident query attributes', function() {
     Incident.remove(function(err) {
       if (err) return done(err);
       async.each([
-        { title: 'The quick brown fox', veracity: null, closed: true },
-        { title: 'The slow white fox', veracity: true, closed: false },
-        { title: 'The quick brown chicken', veracity: null, closed: false },
-        { title: 'The brown quick fox', veracity: false, closed: true }
+        {
+          title: 'The quick brown fox',
+          veracity: null,
+          closed: true,
+          tags: ['hello', 'world']
+        },
+        {
+          title: 'The slow white fox',
+          veracity: true,
+          closed: false,
+          tags: ['hello']
+        },
+        {
+          title: 'The quick brown chicken',
+          veracity: null,
+          closed: false,
+          tags: ['world']
+        },
+        {
+          title: 'The brown quick fox',
+          veracity: false,
+          closed: true,
+          tags: ['helloworld', 'wellohorld', 'foobar']
+        },
+        {
+          title: 'The fox that was slow and brown',
+          veracity: false,
+          closed: true,
+          tags: ['foobar', 'hello']
+        },
+        {
+          title: 'The slow that was fox and brown',
+          veracity: false,
+          closed: true,
+          tags: ['wellohorld', 'hello']
+        }
       ], Incident.create.bind(Incident), done);
     });
   });
 
+  var incidentTagTester = function(tags, n) {
+    return function(done) {
+      new IncidentQuery({
+        veracity: 'Confirmed false',
+        status: 'closed',
+        tags: tags
+      }).run(function(err, incidents) {
+        if (err) return done(err);
+        expect(incidents).to.have.keys(['total', 'results']);
+        expect(incidents.total).to.equal(n);
+        expect(incidents.results).to.be.an.instanceof(Array);
+        expect(incidents.results).to.have.length(n);
+        done();
+      });
+    };
+  };
+
   it('should normalize query', function() {
     var normalized = query.normalize();
-    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity']);
+    expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity', 'tags']);
     expect(normalized.title).to.equal('quick brown');
   });
 
@@ -42,7 +91,7 @@ describe('Incident query attributes', function() {
   });
 
   it('should query by title substring', function(done) {
-    (new IncidentQuery({ title: 'The Quick Brown', status: "closed" })).run(function(err, incidents) {
+    (new IncidentQuery({ title: 'The Quick Brown', status: 'closed' })).run(function(err, incidents) {
       if (err) return done(err);
 
       expect(incidents).to.have.keys(['total', 'results']);
@@ -92,6 +141,10 @@ describe('Incident query attributes', function() {
       done();
     });
   });
+
+  it('should query by single full tag', incidentTagTester(['foobar'], 2));
+
+  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 1));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);

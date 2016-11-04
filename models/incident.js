@@ -2,39 +2,42 @@
 // It is generally associated with one or more reports.
 // Other metadata is stored with the incident to assist tracking.
 // This class is responsible for executing IncidentQuerys.
+/* eslint-disable no-invalid-this */
+'use strict';
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var Schema = mongoose.Schema;
 var validate = require('mongoose-validator');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 var listenTo = require('mongoose-listento');
 var Report = require('./report');
+var logger = require('../lib/logger');
 
 require('../lib/error');
 
-var length_validator = validate({
+var lengthValidator = validate({
   validator: 'isLength',
   arguments: [0, 32]
 });
 
 var schema = new mongoose.Schema({
-  title: {type: String, required: true, validate: length_validator},
+  title: { type: String, required: true, validate: lengthValidator },
   locationName: String,
   latitude: Number,
   longitude: Number,
   updatedAt: Date,
   storedAt: Date,
+  tags: { type: [String], default: [] },
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  status: {type: String, default: 'new', required: true},
-  veracity: {type: Boolean, default: null },
-  escalated: {type: Boolean, default: false, required: true},
-  closed: {type: Boolean, default: false, required: true},
-  idnum: {type: Number, required: true},
-  totalReports: {type: Number, default: 0, min: 0},
-  notes: String,
+  status: { type: String, default: 'new', required: true },
+  veracity: { type: Boolean, default: null },
+  escalated: { type: Boolean, default: false, required: true },
+  closed: { type: Boolean, default: false, required: true },
+  idnum: { type: Number, required: true },
+  totalReports: { type: Number, default: 0, min: 0 },
+  notes: String
 });
 
 schema.plugin(listenTo);
@@ -51,12 +54,15 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  schema.emit('incident:save', {_id: this._id.toString()});
+  schema.emit('incident:save', { _id: this._id.toString() });
 });
 
 schema.post('remove', function() {
-  //Unlink removed incident from reports
+  // Unlink removed incident from reports
   Report.find({ _incident: this._id.toString() }, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
     reports.forEach(function(report) {
       report._incident = null;
       report.save();
@@ -70,11 +76,21 @@ schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt
 
 schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
-    //Callbacks added to execute query immediately
-    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err, incident) {});
+    // Callbacks added to execute query immediately
+    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {
+      if (err) {
+        logger.error(err);
+      }
+      schema.emit('incident:update');
+    });
   }
 
-  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err, incident) {});
+  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err) {
+    if (err) {
+      logger.error(err);
+    }
+    schema.emit('incident:update');
+  });
 
 });
 
@@ -108,24 +124,29 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-  if (query.veracity == 'confirmed true') filter.veracity = true;
-  if (query.veracity == 'confirmed false') filter.veracity = false;
-  if (query.veracity == 'unconfirmed') filter.veracity = null;
+  if (query.veracity === 'confirmed true') filter.veracity = true;
+  if (query.veracity === 'confirmed false') filter.veracity = false;
+  if (query.veracity === 'unconfirmed') filter.veracity = null;
   if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
-  if (query.status == 'open') filter.closed = false;
-  if (query.status == 'closed') filter.closed = true;
+  if (query.status === 'open') filter.closed = false;
+  if (query.status === 'closed') filter.closed = true;
   delete filter.status;
   if (_.isBoolean(query.closed)) filter.closed = query.closed;
 
-  if (query.escalated == 'escalated') filter.escalated = true;
-  if (query.escalated == 'unescalated') filter.escalated = false;
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
 
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
   else delete filter.title;
   if (query.locationName) filter.locationName = new RegExp(query.locationName, 'i');
   else delete filter.locationName;
+
+  // Checking for multiple tags in incident
+  if (query.tags) {
+    filter.tags = { $all: query.tags };
+  } else delete filter.tags;
 
   // Re-set search timestamp
   query.since = new Date();
@@ -136,7 +157,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
 // Mixin shared incident methods
 var Shared = require('../shared/incident');
-for (var static in Shared) Incident[static] = Shared[static];
+for (var staticVar in Shared) Incident[staticVar] = Shared[staticVar];
 for (var proto in Shared.prototype) schema.methods[proto] = Shared[proto];
 
 module.exports = Incident;

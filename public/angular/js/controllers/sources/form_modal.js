@@ -57,7 +57,7 @@ angular.module('Aggie')
           flash.setNotice('source.update.success');
           $rootScope.$state.go('source', { id: source._id }, { reload: true });
         }, function() {
-            flash.setAlertNow('source.update.error');
+          flash.setAlertNow('source.update.error');
         });
       });
     };
@@ -74,7 +74,7 @@ angular.module('Aggie')
     $scope.sources = sources;
     $scope.mediaOptions = mediaOptions;
     $scope.source = angular.copy(locals.source);
-    $scope._showErrors = false
+    $scope._showErrors = false;
 
     $scope.sourceClass = function(source) {
       if (source && mediaOptions.indexOf(source.media) !== -1) {
@@ -99,10 +99,10 @@ angular.module('Aggie')
     });
 
     $scope.validSourceMedia = function(formSource) {
-      if (formSource.media != 'twitter') { return true }
+      if (formSource.media != 'twitter') { return true; }
       var valid = true;
       $scope.sources.forEach(function(source) {
-        valid = valid && (source._id == formSource._id || source.media != 'twitter')
+        valid = valid && (source._id == formSource._id || source.media != 'twitter');
       });
       return valid;
     };

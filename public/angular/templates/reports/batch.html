@@ -2,8 +2,11 @@
 
 <div class="batch-mode">
   <div class="pull-left">
-    <p class="nomargin title" translate>Batch Mode</p>
-    <p class="nomargin" translate>The reports below have been assigned to you for review. When you are finished, click one of the buttons to the right.</p>
+    <p class="title" translate>Batch Mode</p>
+    <p translate>batch.intro</p>
+    <div ng-if="searchParams">
+      <p translate>batch.reportsAreFiltered</p>
+    </div>
   </div>
 
   <div class="pull-right">
@@ -40,6 +43,6 @@
 
 <div class="clearfix"></div>
 
-<p ng-hide="pagination.total > 0 " translate>Sorry, but we couldn't find any reports assigned to you.</p>
+<p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
 
 <div ng-include="'/templates/reports/table.html'"></div>

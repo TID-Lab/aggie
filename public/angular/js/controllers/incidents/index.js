@@ -15,7 +15,10 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
-  function($state, $scope, $rootScope, $stateParams, flash, incidents, users, incidentStatusOptions, veracityOptions, escalatedOptions, Incident, Socket, Queue, paginationOptions) {
+  'Tags',
+  function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
+           incidentStatusOptions, veracityOptions, escalatedOptions, Incident,
+           Socket, Queue, paginationOptions, Tags) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -27,7 +30,7 @@ angular.module('Aggie')
     $rootScope.$watch('currentUser', function(user) {
       if (user) {
         // Add a 'me' option for 'assigned to' filter.
-        $scope.users.unshift({_id: user._id, username: '[Me]'});
+        $scope.users.unshift({ _id: user._id, username: '[Me]' });
       }
     });
 
@@ -109,20 +112,19 @@ angular.module('Aggie')
       } else {
         return items;
       }
-    }
+    };
 
     var filterSelected = function(items) {
       return items.reduce(function(memo, item) {
         if (item.selected) memo.push(item._id);
         return memo;
       }, []);
-    }
+    };
 
     $scope.handleNewIncidents = function(incidents) {
       var uniqueIncidents = removeDuplicates(incidents);
       $scope.pagination.total += uniqueIncidents.length;
       $scope.pagination.visibleTotal += uniqueIncidents.length;
-      $scope.pagination.visibleTotal = Math.min($scope.pagination.visibleTotal, 100)
       $scope.newIncidents.addMany(uniqueIncidents);
     };
 
@@ -138,7 +140,7 @@ angular.module('Aggie')
       var ids = filterSelected($scope.incidents);
       if (!ids.length) return;
 
-      Incident.removeSelected({ids: ids}, function() {
+      Incident.removeSelected({ ids: ids }, function() {
         flash.setNotice('incident.deleteMultiple.success');
         $rootScope.$state.go('incidents', {}, { reload: true });
       }, function() {
@@ -152,11 +154,21 @@ angular.module('Aggie')
         $scope.searchParams.assignedTo === null &&
         $scope.searchParams.status === null &&
         $scope.searchParams.veracity === null &&
+        $scope.searchParams.tags === null &&
         $scope.searchParams.escalated === null;
     };
 
     $scope.clearFilters = function() {
-      $scope.search({ page: null, title: null, locationName: null, assignedTo: null, status: null, veracity: null, escalated: null});
+      $scope.search({
+        page: null,
+        title: null,
+        locationName: null,
+        assignedTo: null,
+        status: null,
+        veracity: null,
+        tags: null,
+        escalated: null
+      });
     };
 
     $scope.isFirstPage = function() {
@@ -176,7 +188,7 @@ angular.module('Aggie')
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
         search($scope.currentPage - 1);
-      };
+      }
     };
 
     $scope.isUnassigned = function(incident) {
@@ -195,7 +207,7 @@ angular.module('Aggie')
     };
 
     $scope.delete = function(incident) {
-      Incident.delete({id: incident._id}, function(){
+      Incident.delete({ id: incident._id }, function() {
         flash.setNotice('incident.delete.success');
         $rootScope.$state.go('incidents', {}, { reload: true });
       }, function() {
@@ -203,13 +215,15 @@ angular.module('Aggie')
       });
     };
 
-    $scope.viewProfile = function (user) {
-      $state.go('profile', {userName: user.username});
+    $scope.viewProfile = function(user) {
+      $state.go('profile', { userName: user.username });
     };
 
     $scope.$on('$destroy', function() {
       Socket.removeAllListeners('incidents');
     });
+
+    $scope.tagsToString = Tags.tagsToString;
 
     init();
   }

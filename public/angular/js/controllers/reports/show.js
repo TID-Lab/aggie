@@ -12,7 +12,7 @@ angular.module('Aggie')
       if (report.read) return;
       report.read = true;
       Report.save({ id: report._id }, report);
-    }
+    };
 
     $scope.markAsRead(data.report);
   }

@@ -1,15 +1,13 @@
 'use strict';
 
 var utils = require('./e2e-tools');
-var request = require('supertest');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
-var promise = protractor.promise;
 
 
-describe('test duplication of reports with different settings', function() {
+describe('test generation of reports', function() {
   before(utils.initDb);
   after(utils.disconnectDropDb);
 
@@ -28,45 +26,31 @@ describe('test duplication of reports with different settings', function() {
     keyword: 'test'
   };
 
-  var sendRequest = function() {
-    var defer = promise.defer();
-    browser.sleep(500);
-    browser.call(function() {
-      request('http://localhost:1111')
-        .get('/smsghana')
-        .query(reqParams)
-        .end(function(err, res) {
-          if (err) defer.fulfill(err);
-          defer.fulfill(res);
-        });
-    });
-    return defer.promise;
-  };
-
   var setAndExpect = function(fetchingOn, sourceOn, numExpect) {
     return function() {
       fetchingOn && utils.toggleFetching('On');
       !sourceOn && utils.toggleSource('SMS GH', 'Off');
-      browser.wait(sendRequest());
+      browser.sleep(500);
+      browser.wait(utils.sendSmsghRequest(reqParams));
       expect(utils.getReports().count()).to.eventually.equal(numExpect);
       fetchingOn && utils.toggleFetching('Off');
       sourceOn && utils.toggleSource('SMS GH', 'Off');
     };
   };
 
-  it('should listen with fetching:on and source:enabled',
+  it('with fetching:on and source:enabled',
      setAndExpect(true, true, 1));
 
-  it('should not listen with fetching:on and source:disabled',
+  it('with fetching:on and source:disabled',
      setAndExpect(true, false, 0));
 
-  it('should not listening wtih fetching:off and source:enabled',
+  it('wtih fetching:off and source:enabled',
      setAndExpect(false, true, 0));
 
-  it('should not listen with fetching:off and source:disabled',
+  it('with fetching:off and source:disabled',
      setAndExpect(false, false, 0));
 
-  it('should not listen with fetching toggled from on to off and source:disabled', function() {
+  it('with fetching toggled from on to off and source:disabled', function() {
     utils.toggleFetching('On');
     setAndExpect(false, false, 0)();
   });

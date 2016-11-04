@@ -10,6 +10,6 @@ angular.module('Aggie')
     Settings.get('gplaces', function success(data) {
       var src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + data.gplaces.key;
       $scope.gPlaces = $sce.trustAsResourceUrl(src);
-      });
+    });
   }
 ]);

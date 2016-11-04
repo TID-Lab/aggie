@@ -58,7 +58,7 @@ angular.module('Aggie')
       $scope.pagination.end = Math.min(end + 1, total);
 
       return items;
-    }
+    };
 
     $scope.isFirstPage = function() {
       return $scope.pagination.page == 1;
@@ -77,7 +77,7 @@ angular.module('Aggie')
     $scope.prevPage = function() {
       if (!$scope.isFirstPage()) {
         search($scope.currentPage - 1);
-      };
+      }
     };
 
     $scope.viewReport = function(event, report) {
@@ -96,15 +96,15 @@ angular.module('Aggie')
     };
 
     $scope.delete = function() {
-      Incident.delete({id: $scope.incident._id}, function(){
+      Incident.delete({ id: $scope.incident._id }, function() {
         flash.setNotice('incident.delete.success');
-         $rootScope.$state.go('incidents');
+        $rootScope.$state.go('incidents');
       }, function() {
         flash.setAlertNow('incident.delete.error');
       });
     };
 
-     $scope.toggleFlagged = function(report) {
+    $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
 
       if (report.flagged) {
@@ -128,8 +128,8 @@ angular.module('Aggie')
       $state.go('incident', { id: $scope.incident._id }, { reload: true });
     };
 
-    $scope.viewProfile = function (user) {
-      $state.go('profile', {userName: user.username});
+    $scope.viewProfile = function(user) {
+      $state.go('profile', { userName: user.username });
     };
 
     init();

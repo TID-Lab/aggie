@@ -12,3 +12,6 @@ engines:
     enabled: true
   nodesecurity:
     enabled: true
+ratings:
+  paths:
+    - "**/*.js"

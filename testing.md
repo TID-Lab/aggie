@@ -68,3 +68,23 @@ Users and emails
 10. Select new password and login
 11. Click Settings [Users and not Settings appears in dropdown]
 12. Go to Settings > Users [only this user appears, cannot create new users]
+
+Batches
+-------
+
+Prerequisites: at least 1 incident, 2 users, and 21 reports.
+1. With at least 11 reports and at least 1 incident, go to `reports` and click
+`Grab Batch` [goes to /reports/batch]
+2. Click `Add` in the incident column of one report [modal appears showing
+the incidents already created]
+3. Click an incident [modal closes, text `Add` is updated to the name of the
+incident]
+4. Click `Mark All and Done` [goes back to /reports and the reports from the
+batch are marked as read]
+5. Navigate to `/reports/batch` [the previous batch is displayed, and the
+reports are marked as read]
+6. Navigate to `/reports` and click `Grab Batch` again [goes to `/reports/batch`
+and populates with some reports]
+7. Log in as a different user in a different tab/window
+8. Navigate to `/reports` as the second user and click `Grab Batch`. [reports
+are populated, and none of them are reports the other user has in their batch]

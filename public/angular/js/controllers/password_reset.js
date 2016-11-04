@@ -34,7 +34,7 @@ angular.module('Aggie').controller('PasswordResetController', [
       };
 
       $http.put('/reset-password', params).success(function(userData) {
-        AuthService.login({username: userData.username, password: params.password}, function(err) {
+        AuthService.login({ username: userData.username, password: params.password }, function(err) {
           if (err) {
             flash.setAlertNow('passwordReset.error');
             $state.go('login');

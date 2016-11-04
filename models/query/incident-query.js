@@ -13,6 +13,7 @@ var IncidentQuery = function(options) {
   this.closed = options.status == 'closed';
   this.veracity = options.veracity == 'Confirmed true' ? true : (options.veracity == 'Confirmed false' ? false : null);
   this.event = 'incidents';
+  this.tags = options.tags;
 };
 
 _.extend(IncidentQuery, Query);

@@ -8,7 +8,8 @@
       <th ng-show="currentUser.can('view other users')" class="compact" translate>Assigned To</th>
       <th class="compact" translate>Status</th>
       <th class="compact" translate>Veracity</th>
-      <th class="compact translate">Escalated?</th>
+      <th class="compact" translate>Escalated?</th>
+      <th class="compact" translate>Tags</th>
       <th class="compact" translate>Last Updated</th>
       <th ng-hide="modal || !currentUser.can('edit data')" class="compact"></th>
     </tr>
@@ -40,6 +41,7 @@
         </div>
       </td>
       <td class="compact content">{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</td>
+      <td class="compact content">{{ tagsToString(i.tags) }}</td>
       <td class="compact">
         <div class="interval">
           <span class="interval-amount">{{ i.updatedAt | interval }}</span>

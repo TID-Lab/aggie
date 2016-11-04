@@ -28,7 +28,7 @@ angular.module('Aggie').factory('FlashService', [
         flash = { notice: message,
                   params: params
                 };
-     },
+      },
 
       setAlertNow: function(message, params) {
         currentFlash = { alert: message,

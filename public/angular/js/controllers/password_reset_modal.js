@@ -9,7 +9,7 @@ angular.module('Aggie').controller('PasswordResetModalController', [
     $scope.open = function() {
       var modalInstance = $modal.open({
         controller: 'PasswordResetModalInstanceController',
-        templateUrl: 'templates/password_reset_modal.html',
+        templateUrl: 'templates/password_reset_modal.html'
       });
 
       modalInstance.result.then(function(email) {

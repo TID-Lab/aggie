@@ -42,7 +42,7 @@ angular.module('Aggie')
               return report._id;
             });
 
-            Report.linkToIncident({ids: ids, incident: inc._id}, function () {
+            Report.linkToIncident({ ids: ids, incident: inc._id }, function() {
               if (batchMode) {
                 $rootScope.$state.go('batch', {}, { reload: true });
               } else {
@@ -107,7 +107,8 @@ angular.module('Aggie')
   'users',
   'incident',
   'reports',
-  function($scope, $modalInstance, incidentStatusOptions, veracityOptions, users, incident, reports) {
+  function($scope, $modalInstance, incidentStatusOptions, veracityOptions,
+           users, incident, reports) {
     $scope.incident = angular.copy(incident);
     $scope.users = users;
     $scope.veracity = veracityOptions;
@@ -125,7 +126,8 @@ angular.module('Aggie')
       delete $scope.incident.creator;
 
       // Only send assignedTo _id, not whole object.
-      $scope.incident.assignedTo = ($scope.incident.assignedTo || {_id: null})['_id'];
+      $scope.incident.assignedTo = ($scope.incident.assignedTo || { _id: null })['_id'];
+      $scope.incident.tags = $scope.incident.tags;
 
       $modalInstance.close($scope.incident);
     };

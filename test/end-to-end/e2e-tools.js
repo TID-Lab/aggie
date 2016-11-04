@@ -5,6 +5,7 @@ var _ = require('lodash');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var Report = require('../../models/report');
+var request = require('supertest');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -40,7 +41,7 @@ module.exports.initAdmin = function(password) {
 module.exports.logOut = function() {
   // Note: it would be nice if there were a more reliable way to get the logout
   // button.
-  element(by.cssContainingText('li a', 'Log out')).click();
+  element.all(by.cssContainingText('li a', 'Log out')).first().click();
   return expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'login');
 };
 
@@ -56,12 +57,18 @@ module.exports.makeReports = function(n, author, time, content) {
     Report.create(_.map(_.range(n), function(i) {
       return {
         author: author,
-        authoredAt: time ? new Date(time) : new Date(),
+        storedAt: time ? new Date(time) : new Date(),
         content: content ? i + ' ' + content : i
       };
     }), done);
   };
 };
+
+function clickClearSend(clickBy, keys) {
+  element(clickBy).click();
+  element(clickBy).clear();
+  element(clickBy).sendKeys(keys);
+}
 
 module.exports.setFilter = function(filter) {
   var e = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
@@ -79,11 +86,11 @@ module.exports.setFilter = function(filter) {
     // Also, it's important to do the 'before' time which is on the right of
     // the modal, before the 'after' time, so that when we click Submit there
     // isn't a dropdown covering the button.
-    element(by.model('times.before')).sendKeys(filter.time.before);
-    element(by.model('times.after')).sendKeys(filter.time.after);
+    clickClearSend(by.model('times.before'), filter.time.before);
+    clickClearSend(by.model('times.after'), filter.time.after);
     element(by.buttonText('Submit')).click();
   }
-  element(by.buttonText('Go')).click();
+  element.all(by.buttonText('Go')).first().click();
   return e;
 };
 
@@ -97,7 +104,7 @@ module.exports.addSource = function(sourceName, params) {
   };
   browser.get(browser.baseUrl + 'sources');
   element(by.buttonText('Create Source')).click();
-  element(by.model('source.media')).$('[value="' + sourceList[sourceName] + '"]').click();
+  element.all(by.model('source.media')).first().$('[value="' + sourceList[sourceName] + '"]').click();
   if (sourceName !== 'Twitter') {
     element(by.model('source.nickname')).sendKeys(params.nickname ? params.nickname : 'blank');
   }
@@ -118,14 +125,16 @@ module.exports.toggleFetching = function(state) {
   return element(by.css('[ng-click="toggle(' + stateMapping[state] + ')"]')).click();
 };
 
+var sourceIconMapping = {
+  Twitter: 'twitter-source',
+  Facebook: 'facebook-source',
+  RSS: 'rss-source',
+  Elmo: 'elmo-source',
+  'SMS GH': 'smsgh-source'
+};
+module.exports.sourceIconMapping = sourceIconMapping;
+
 module.exports.toggleSource = function(sourceName, state) {
-  var sourceIconMapping = {
-    Twitter: 'twitter-source',
-    Facebook: 'facebook-source',
-    RSS: 'rss-source',
-    Elmo: 'elmo-source',
-    'SMS GH': 'smsgh-source'
-  };
   browser.get(browser.baseUrl + 'sources');
   return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
     .element(by.xpath('..'))
@@ -148,17 +157,91 @@ module.exports.getReports = function(pluckColumn) {
 
 // Get the text from first span of the yellow stats bar
 module.exports.countAllReports = function() {
-  return element(by.css('.navbar-text > span'))
+  return element.all(by.css('.navbar-text > span')).first()
            .getText()
            .then(function(text) {
              return Number(text);
-            });
+           });
+};
+
+module.exports.sendSmsghRequest = function(requestParams) {
+  var defer = promise.defer();
+  browser.call(function() {
+    request('http://localhost:1111')
+      .get('/smsghana')
+      .query(requestParams)
+      .end(function(err, res) {
+        if (err) defer.fulfill(err);
+        defer.fulfill(res);
+      });
+  });
+  return defer.promise;
 };
 
 module.exports.deleteSource = function(sourceName, nickname) {
   browser.get(browser.baseUrl + 'sources');
   element(by.linkText(nickname)).click();
   element(by.buttonText('Delete')).click();
-  element(by.buttonText('Confirm')).click();
-  return;
+  return element(by.buttonText('Confirm')).click();
+};
+
+module.exports.getWarningCount = function(sourceName) {
+  browser.get(browser.baseUrl + 'sources');
+  return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
+           .element(by.xpath('..'))
+           .element(by.css('[ng-class="{ \'multiple-errors\': s.unreadErrorCount > 0 }"]'))
+           .getText()
+           .then(function(text) {
+             return Number(text);
+           });
+};
+
+module.exports.checkSourceState = function(sourceName) {
+  browser.get(browser.baseUrl + 'sources');
+  return element(by.css('[class="compact source ' + sourceIconMapping[sourceName] + '"]'))
+           .element(by.xpath('..'))
+           .element(by.css('[class="toggle-item ng-scope ng-binding selected"]'))
+           .getText();
+};
+
+module.exports.setIncidentFilter = function(filter) {
+  browser.get(browser.baseUrl + 'incidents');
+  if (filter.tags) {
+    var text = filter.tags.join(', ');
+    element(by.model('searchParams.tags')).sendKeys(text);
+  }
+  element.all(by.buttonText('Go')).first().click();
+};
+
+module.exports.createIncident = function(params) {
+  browser.get(browser.baseUrl + 'incidents');
+  element(by.buttonText('Create Incident')).click();
+  element(by.model('incident.title')).sendKeys(params.title ? params.title : 'blank');
+  element(by.model('incident.tags')).sendKeys(params.tags ? params.tags : '');
+  element(by.model('incident.locationName')).sendKeys(params.location ? params.location : '');
+  return element(by.buttonText('Submit')).click();
+};
+
+module.exports.addFirstReportToIncident = function(incidentParams) {
+  browser.get(browser.baseUrl + 'reports');
+  element.all(by.css('.addIdentifier')).first().click();
+  return element(by.cssContainingText('tr td', incidentParams.location)).click();
+};
+
+module.exports.getIncidentTitles = function() {
+  var x = by.repeater("i in incidents | orderBy:['closed','idnum']");
+  return element.all(x.column('title'))
+          .map(function(elem) {
+            return elem.getText();
+          })
+          .then(function(titles) {
+            return titles.filter(function(text) {
+              return text !== '';
+            });
+          });
+};
+
+module.exports.filterByTag = function(tags) {
+  this.setIncidentFilter({ tags: tags });
+  return this.getIncidentTitles();
 };

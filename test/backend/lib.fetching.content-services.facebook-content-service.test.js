@@ -36,7 +36,7 @@ describe('Facebook content service', function() {
   });
 
   it('should grab the correct source given multiple url types', function() {
-    var service = new FacebookContentService({ url: "http://test.com/" });
+    var service = new FacebookContentService({ url: 'http://test.com/' });
     expect(service._getSourceFromUrl('http://facebook.com/cocacola')).to.equal('cocacola');
     expect(service._getSourceFromUrl('https://www.facebook.com/CocaColaUnitedStates/?brand_redir=40796308305&test=2'))
         .to.equal('CocaColaUnitedStates');
@@ -57,21 +57,21 @@ describe('Facebook content service', function() {
       expect(reportData).to.have.property('author');
       expect(reportData).to.have.property('url');
       switch (++fetched) {
-        case 1:
-          expect(reportData.content).to.contain('The ACC Champion');
-          expect(reportData.author).to.equal('Georgia Tech');
-          expect(reportData.url).to.contain('https');
-          break;
-        case 2:
-          expect(reportData.content).to.contain('Bioengineers at');
-          expect(reportData.author).to.equal('Georgia Tech');
-          break;
-        case 3:
-          expect(reportData.content).to.contain('Amazing');
-          expect(reportData.author).to.equal('Test User 1');
-          break;
-        case 4:
-          return done(new Error('Unexpected report'));
+      case 1:
+        expect(reportData.content).to.contain('The ACC Champion');
+        expect(reportData.author).to.equal('Georgia Tech');
+        expect(reportData.url).to.contain('https');
+        break;
+      case 2:
+        expect(reportData.content).to.contain('Bioengineers at');
+        expect(reportData.author).to.equal('Georgia Tech');
+        break;
+      case 3:
+        expect(reportData.content).to.contain('Amazing');
+        expect(reportData.author).to.equal('Test User 1');
+        break;
+      case 4:
+        return done(new Error('Unexpected report'));
       }
     });
 
@@ -92,23 +92,23 @@ describe('Facebook content service', function() {
     var fetched = 0;
     service.on('report', function(reportData) {
       switch (++fetched) {
-        case 1:
-          expect(reportData.content).to.contain('Totez cool');
-          expect(reportData.author).to.equal('Test User 2');
-          expect(reportData.url).to.contain('https');
-          break;
-        case 2:
-          expect(reportData.content).to.contain('Best');
-          expect(reportData.author).to.equal('Test User 3');
-          expect(reportData.url).to.contain('https');
-          break;
-        case 3:
-          expect(reportData.content).to.contain('ranked');
-          expect(reportData.author).to.equal('Test User 4');
-          expect(reportData.url).to.contain('https');
-          break;
-        case 4:
-          return done(new Error('Unexpected report'));
+      case 1:
+        expect(reportData.content).to.contain('Totez cool');
+        expect(reportData.author).to.equal('Test User 2');
+        expect(reportData.url).to.contain('https');
+        break;
+      case 2:
+        expect(reportData.content).to.contain('Best');
+        expect(reportData.author).to.equal('Test User 3');
+        expect(reportData.url).to.contain('https');
+        break;
+      case 3:
+        expect(reportData.content).to.contain('ranked');
+        expect(reportData.author).to.equal('Test User 4');
+        expect(reportData.url).to.contain('https');
+        break;
+      case 4:
+        return done(new Error('Unexpected report'));
       }
     });
 

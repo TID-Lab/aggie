@@ -17,7 +17,7 @@ initLogger(masterLoggerName);
 log(masterLoggerName, 'debug', 'Aggie started');
 
 // handle uncaught exceptions
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', function(err) {
   log(masterLoggerName, 'error', err.message);
   log(masterLoggerName, 'debug', err.stack);
 });

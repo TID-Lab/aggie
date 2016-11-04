@@ -1,0 +1,26 @@
+[
+	{
+    "from": "9845098450",
+    "fulltext": "loremipsumdolor",
+    "date": "2016-09-01",
+    "keyword": "test"
+  },
+  {
+    "from": "12345678",
+    "fulltext": "foobarbaz",
+    "date": "2016-09-02",
+    "keyword": "test"
+  },
+  {
+    "from": "987654321",
+    "fulltext": "world",
+    "date": "2016-09-03",
+    "keyword": "test"
+  },
+  {
+    "from": "0864213579",
+    "fulltext": "whatwhat",
+    "date": "2016-09-04",
+    "keyword": "test"
+  }
+]

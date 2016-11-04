@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.directive("aggieSparkline", ['aggieDateFilter', function(aggieDateFilter) {
+.directive('aggieSparkline', ['aggieDateFilter', function(aggieDateFilter) {
   return {
     restrict: 'E',
     scope: {

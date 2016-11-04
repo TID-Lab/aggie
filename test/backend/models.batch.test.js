@@ -1,16 +1,20 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var Report = require('../../models/report');
 var User = require('../../models/user');
 var batch = require('../../models/batch');
+var ReportQuery = require('../../models/query/report-query');
 var async = require('async');
+var _ = require('lodash');
 
-var user;
+var user, t;
 
 // helpers
-function timeAgo(miliseconds) {
+function timeAgo(milliseconds) {
   var now = new Date();
-  return new Date(now.getTime() - miliseconds);
+  return new Date(now.getTime() - milliseconds);
 }
 
 function loadUser(done) {
@@ -21,10 +25,11 @@ function loadUser(done) {
 }
 
 function createReport(done) {
-  var t = new Date();
+  t = new Date();
 
   Report.create([
-    { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true, checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60) },
+    { storedAt: new Date(t.getTime() - 11000), content: 'one', flagged: true,
+      checkedOutBy: user.id, checkedOutAt: timeAgo(6 * 1000 * 60) },
     { storedAt: new Date(t.getTime() - 12000), content: 'two', flagged: false },
     { storedAt: new Date(t.getTime() - 13000), content: 'three', flagged: false },
     { storedAt: new Date(t.getTime() - 14000), content: 'four', flagged: false },
@@ -44,7 +49,7 @@ describe('Report', function() {
 
   it('should lock a batch', function(done) {
     async.series([
-      batch.lock.bind(batch, user._id),
+      batch.lock.bind(batch, user._id, null),
       Report.find.bind(Report, {})
     ], function(err, result) {
       var reports = result[1];
@@ -52,14 +57,13 @@ describe('Report', function() {
         if (report.read) {
           expect(report.checkedOutAt).not.exist;
           expect(report.checkedOutBy).not.exist;
-        }
-        else {
+        } else {
           expect(report.checkedOutAt).to.exist;
           expect(report.checkedOutBy).to.exist;
         }
       });
 
-      done();
+      done(err);
     });
   });
 
@@ -70,23 +74,23 @@ describe('Report', function() {
         expect(report.checkedOutAt).not.exist;
         expect(report.checkedOutBy).not.exist;
       });
-      done();
+      done(err);
     });
   });
 
   it('should load a batch', function(done) {
     async.series([
-      batch.lock.bind(Report, user._id),
+      batch.lock.bind(Report, user._id, null),
       batch.load.bind(Report, user._id)
     ], function(err, result) {
       var reports = result[1];
       expect(reports.length).to.eq(5);
-      done();
+      done(err);
     });
   });
 
   it('should checkout a new batch', function(done) {
-    batch.checkout(user._id, function(err, reports) {
+    batch.checkout(user._id, null, function(err, reports) {
       expect(reports.length).to.eq(5);
 
       reports.forEach(function(report) {
@@ -94,15 +98,35 @@ describe('Report', function() {
         expect(report.checkedOutBy).to.exist;
       });
 
-      done();
+      done(err);
     });
   });
 
   it('should cancel batch', function(done) {
     batch.cancel(user._id, function(err, num) {
       expect(num).to.eq(1);
-      done();
+      done(err);
     });
+  });
+
+  describe('should check out batch with filter', function() {
+    function testCheckoutFilter(filter, resultContent, done) {
+      var query = new ReportQuery(filter);
+      batch.checkout(user._id, query, function(err, reports) {
+        expect(_.map(reports, 'content').sort()).to.eql(resultContent.sort());
+        done(err);
+      });
+    }
+
+    it('by time', function(done) {
+      var filter = {
+        after: new Date(t.getTime() - 13500)
+      };
+      testCheckoutFilter(filter, ['one', 'two', 'three'], done);
+    });
+
+    it('by keyword', testCheckoutFilter.bind({}, { keywords: 'five two' },
+                                             ['two', 'five']));
   });
 
   after(utils.expectModelsEmpty);

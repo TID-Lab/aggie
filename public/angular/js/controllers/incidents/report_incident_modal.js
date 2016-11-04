@@ -38,7 +38,7 @@ angular.module('Aggie')
           return report._id;
         });
 
-        Report.linkToIncident({ids: ids, incident: incidentId});
+        Report.linkToIncident({ ids: ids, incident: incidentId });
       });
     };
   }
@@ -50,14 +50,15 @@ angular.module('Aggie')
   '$modalInstance',
   'incidents',
   'reports',
-  function($rootScope, $scope, $modalInstance, incidents, reports) {
+  'Tags',
+  function($rootScope, $scope, $modalInstance, incidents, reports, Tags) {
     $scope.reports = angular.copy(reports);
     $scope.incidents = incidents.results;
     $scope.modal = $modalInstance;
     $scope._showErrors = false;
 
     $scope.select = function(incident) {
-      //report._incident = incident._id;
+      // report._incident = incident._id;
       $modalInstance.close(incident._id);
     };
 
@@ -73,6 +74,8 @@ angular.module('Aggie')
 
       $modalInstance.close($scope.reports);
     };
+
+    $scope.tagsToString = Tags.tagsToString;
 
     $scope.close = function() {
       $modalInstance.dismiss('cancel');

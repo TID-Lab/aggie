@@ -6,16 +6,17 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var email = require('email');
 var _ = require('underscore');
+var logger = require('../lib/logger');
 
 var SALT_WORK_FACTOR = 10;
 
 var userSchema = new mongoose.Schema({
-  provider: {type: String, default: 'local'},
-  username: {type: String, required: true, unique: true},
-  email: {type: String, required: true, unique: true},
-  password: {type: String},
-  hasDefaultPassword: {type: Boolean, default: true},
-  role: {type: String, default: 'viewer'}
+  provider: { type: String, default: 'local' },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String },
+  hasDefaultPassword: { type: Boolean, default: true },
+  role: { type: String, default: 'viewer' }
 });
 
 userSchema.pre('save', function(next) {
@@ -84,9 +85,9 @@ User.checkUnique = function(user, callback) {
   var errors = [];
   var queries = [];
   _.each(userSchema.tree, function(meta, field) {
-    var query = {$and: [{
+    var query = { $and: [{
       _id: { $ne: user._id }
-    }]};
+    }] };
     var filter = {};
     filter[field] = user[field];
     query.$and.push(filter);
@@ -95,6 +96,9 @@ User.checkUnique = function(user, callback) {
   var remaining = queries.length;
   _.each(queries, function(query) {
     User.count(query, function(err, count) {
+      if (err) {
+        logger.warning(err);
+      }
       if (count) errors.push(_.keys(_.last(query.$and))[0] + '_not_unique');
       if (--remaining === 0) callback(!errors.length, errors);
     });

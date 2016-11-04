@@ -8,7 +8,7 @@ angular.module('Aggie')
         login: function(credentials, callback) {
           var cb = callback || angular.noop;
           $http.post('/login', credentials)
-            .then(function (res) {
+            .then(function(res) {
               $rootScope.currentUser = new shared.User(res.data);
               return cb();
             }, function(err) {

@@ -18,12 +18,12 @@ angular.module('Aggie')
     // add the markers and keep expanding the bounding rectangle
     var bounds = new google.maps.LatLngBounds();
     self.markers = [];
-    self.params.locations.forEach(function(l){
+    self.params.locations.forEach(function(l) {
       // get float values from string
       var lat = parseFloat(l.latitude);
       var lng = parseFloat(l.longitude);
 
-      if (isNaN(lat) || isNaN(lng)) { return }
+      if (isNaN(lat) || isNaN(lng)) { return; }
 
       // create marker and add to map
       var p = new google.maps.LatLng(lat, lng);
@@ -54,9 +54,9 @@ angular.module('Aggie')
       //
       // so wait for event, check if zoomed in too much, if so,
       // zoom to a reasonable level (11 is city-ish level)
-      var zoomChangeBoundsListener = 
+      var zoomChangeBoundsListener =
         google.maps.event.addListenerOnce(self.map, 'bounds_changed', function(event) {
-          if (self.map.zoom && self.map.zoom > 11){
+          if (self.map.zoom && self.map.zoom > 11) {
             self.map.setZoom(11);
             google.maps.event.removeListener(zoomChangeBoundsListener);
           }

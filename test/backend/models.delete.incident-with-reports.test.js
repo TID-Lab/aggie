@@ -10,7 +10,7 @@ var id2;
 function createIncidents(done) {
   Incident.create([
     { title: 'Not so important incident', veracity: null, closed: true },
-    { title: 'Very important incident', veracity: null, closed: true },
+    { title: 'Very important incident', veracity: null, closed: true }
   ], function(err, incident1, incident2) {
     id1 = incident1._id.toString();
     id2 = incident2._id.toString();
@@ -24,7 +24,7 @@ function createReports(done) {
     { _incident: id1 },
     { _incident: id2 },
     { _incident: id2 },
-    { _incident: id2 },
+    { _incident: id2 }
   ], done);
 }
 

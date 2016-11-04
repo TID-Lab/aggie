@@ -37,12 +37,12 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 .run([
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
   'FlashService', '$cookies', '$translate',
-  function ($rootScope, $urlRouter, $location, AuthService, $state, flash,
+  function($rootScope, $urlRouter, $location, AuthService, $state, flash,
             $cookies, $translate) {
     $rootScope.$state = $state;
 
     var publicRoute = function(state) {
-      return !!(state.data && state.data.public === true)
+      return !!(state.data && state.data.public === true);
     };
 
     $rootScope.$on('$stateChangeSuccess', function(e, toState) {
@@ -91,6 +91,7 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/api_modal');
+require('./services/tags');
 
 // Controllers
 require('./controllers/application');

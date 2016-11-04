@@ -2,7 +2,7 @@ angular.module('Aggie')
 
 .config([
   '$stateProvider',
-  function($stateProvider, tz) {
+  function($stateProvider) {
     var lastAnalysis;
 
     $stateProvider.state('home', {
@@ -38,7 +38,7 @@ angular.module('Aggie')
     $stateProvider.state('reset_admin_password', {
       url: '/reset_admin_password',
       templateUrl: '/templates/reset-admin-password.html',
-      controller: 'ResetAdminPasswordController',
+      controller: 'ResetAdminPasswordController'
     });
 
     $stateProvider.state('reports', {
@@ -70,11 +70,11 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('batch', {
-      url: '/reports/batch',
+      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author',
       templateUrl: '/templates/reports/batch.html',
       controller: 'ReportsIndexController',
       resolve: {
-        reports: ['Batch', '$stateParams', function(Batch, params) {
+        reports: ['Batch', function(Batch) {
           if (Batch.resource) return Batch.resource;
           return Batch.load({}).$promise;
         }],
@@ -109,8 +109,9 @@ angular.module('Aggie')
       }
     });
 
+
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&veracity&escalated',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity&tags&escalated',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -123,6 +124,7 @@ angular.module('Aggie')
             assignedTo: params.assignedTo,
             status: params.status,
             veracity: params.veracity,
+            tags: params.tags,
             escalated: params.escalated
           }).$promise;
         }],
@@ -215,7 +217,7 @@ angular.module('Aggie')
           return Incident.query().$promise;
         }],
         trends: ['Trend', function(Trend) {
-          console.log('RESOLVING TRENDS')
+          console.log('RESOLVING TRENDS');
           return Trend.query().$promise;
         }]
       }

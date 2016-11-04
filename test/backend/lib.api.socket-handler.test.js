@@ -20,7 +20,7 @@ function createServer(app) {
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
   return https.createServer({
     key: fs.readFileSync(keyFile),
-    cert: fs.readFileSync(certFile),
+    cert: fs.readFileSync(certFile)
   }, app);
 }
 
@@ -39,7 +39,7 @@ describe('Socket handler', function() {
     client = io.connect('https://localhost:3000', {
       transports: ['websocket'],
       'force new connection': true,
-      agent: https.globalAgent,
+      agent: https.globalAgent
     });
     done();
   });

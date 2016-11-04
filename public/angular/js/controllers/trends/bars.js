@@ -60,8 +60,8 @@ angular.module('Aggie')
       // Determine minimum startTime and maximum endTime
       trends.forEach(function(trend) {
         var counts = trend.counts.reverse();
-        if (!counts.length) { return }
-        startTime = Math.min(parseInt(counts[0].timebox), startTime || Infinity)
+        if (!counts.length) { return; }
+        startTime = Math.min(parseInt(counts[0].timebox), startTime || Infinity);
         endTime = Math.max(parseInt(counts[counts.length - 1].timebox), endTime);
       });
 
@@ -85,12 +85,12 @@ angular.module('Aggie')
           if (countsByTimebox[t])
             trend.max = Math.max(trend.max, countsByTimebox[t].counts);
           else
-            countsByTimebox[t] = {counts: null, timebox: t};
-          counts.push(countsByTimebox[t])
+            countsByTimebox[t] = { counts: null, timebox: t };
+          counts.push(countsByTimebox[t]);
         }
 
         trend.counts = counts;
-        trend.minmax = Math.min(300, trend.max/2);
+        trend.minmax = Math.min(300, trend.max / 2);
       });
 
       // Let Angular know our secrets...
@@ -106,9 +106,9 @@ angular.module('Aggie')
     };
 
     $scope.deleteTrend = function(trend) {
-      Trend.delete({id: trend._id}, function(){
+      Trend.delete({ id: trend._id }, function() {
         flash.setNotice('trend.delete.success');
-         $rootScope.$state.go('analysis.trend-bars', {}, { reload: true });
+        $rootScope.$state.go('analysis.trend-bars', {}, { reload: true });
       }, function() {
         flash.setAlertNow('trend.delete.error');
       });
@@ -144,7 +144,7 @@ angular.module('Aggie')
 
     $scope.trendClass = function(trend) {
       var enabled;
-      if (typeof(trend.enabled) == 'boolean') {
+      if (typeof (trend.enabled) == 'boolean') {
         enabled = trend.enabled;
       } else {
         enabled = trend.enabled == 'true';
@@ -152,7 +152,7 @@ angular.module('Aggie')
       return enabled ? 'trend' : 'trend-disabled';
     };
 
-    $scope.$on('$destroy', function(){
+    $scope.$on('$destroy', function() {
       Socket.removeAllListeners('trend');
     });
 

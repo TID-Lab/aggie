@@ -24,6 +24,7 @@ describe('Incident controller', function() {
           expect(res.body).to.have.property('updatedAt');
           expect(res.body).to.have.property('status');
           expect(res.body).to.have.property('veracity');
+          expect(res.body).to.have.property('tags');
           incident._id = res.body._id;
           utils.compare(res.body, incident);
           done();
@@ -117,7 +118,7 @@ describe('Incident controller', function() {
         function(err, inc1, inc2, inc3) {
           incidents = [inc1, inc2, inc3];
           done(err);
-      });
+        });
     });
 
     afterEach(function(done) {
