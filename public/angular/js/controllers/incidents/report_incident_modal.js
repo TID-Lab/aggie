@@ -50,7 +50,8 @@ angular.module('Aggie')
   '$modalInstance',
   'incidents',
   'reports',
-  function($rootScope, $scope, $modalInstance, incidents, reports) {
+  'Tags',
+  function($rootScope, $scope, $modalInstance, incidents, reports, Tags) {
     $scope.reports = angular.copy(reports);
     $scope.incidents = incidents.results;
     $scope.modal = $modalInstance;
@@ -73,6 +74,8 @@ angular.module('Aggie')
 
       $modalInstance.close($scope.reports);
     };
+
+    $scope.tagsToString = Tags.tagsToString;
 
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
