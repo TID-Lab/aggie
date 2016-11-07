@@ -141,18 +141,42 @@ module.exports.toggleSource = function(sourceName, state) {
     .element(by.xpath('.//*[.="' + state + '"]')).click();
 };
 
-// Returns an array for the first page of reports. If `pluckColumn` is set,
-// the elements of the array are just the text from that column. Otherwise, they
-// are the WebDriver elements for each row.
-module.exports.getReports = function(pluckColumn) {
-  browser.get(browser.baseUrl + 'reports');
-  var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
+// Returns (a promise that resolves to) an array of the elements visible in a
+// table. If `pluckColumn` is set the elements of the array are just the text
+// from that column. Otherwise, they are the WebDriver elements for each row.
+function _getTable(url, repeater, pluckColumn) {
+  browser.get(url);
+  var x = by.repeater(repeater);
   if (!pluckColumn) {
     return element.all(x);
   }
   return element.all(x.column(pluckColumn)).map(function(elem) {
     return elem.getText();
   });
+}
+
+// Returns an array for the first page of reports.
+module.exports.getReports = function(pluckColumn) {
+  return _getTable(browser.baseUrl + 'reports',
+                   "r in visibleReports.toArray() | orderBy:'-storedAt'",
+                   pluckColumn);
+};
+
+module.exports.getSources = function(pluckColumn) {
+  return _getTable(browser.baseUrl + 'sources',
+                   "s in sources | orderBy:'+nickname'",
+                   pluckColumn);
+};
+
+module.exports.getIncidentTitles = function() {
+  return _getTable(browser.baseUrl + 'incidents',
+                   "i in incidents | orderBy:['closed','idnum']",
+                   'title')
+           .then(function(titles) {
+             return titles.filter(function(text) {
+               return text !== '';
+             });
+           });
 };
 
 // Get the text from first span of the yellow stats bar
@@ -226,19 +250,6 @@ module.exports.addFirstReportToIncident = function(incidentParams) {
   browser.get(browser.baseUrl + 'reports');
   element.all(by.css('.addIdentifier')).first().click();
   return element(by.cssContainingText('tr td', incidentParams.location)).click();
-};
-
-module.exports.getIncidentTitles = function() {
-  var x = by.repeater("i in incidents | orderBy:['closed','idnum']");
-  return element.all(x.column('title'))
-          .map(function(elem) {
-            return elem.getText();
-          })
-          .then(function(titles) {
-            return titles.filter(function(text) {
-              return text !== '';
-            });
-          });
 };
 
 module.exports.filterByTag = function(tags) {
