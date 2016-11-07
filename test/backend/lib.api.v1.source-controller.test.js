@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
@@ -54,8 +56,10 @@ describe('Source controller', function() {
     it('should get latest logged events', function(done) {
       // Make sure we use the correct model instance
       Source.findById(source._id, function(err, foundSource) {
+        if (err) return done(err);
         // Log a new event
         foundSource.logEvent('warning', 'This is a test', function(err) {
+          if (err) return done(err);
           request(sourceController)
             .get('/api/v1/source/' + source._id)
             .expect(200)
@@ -143,6 +147,7 @@ describe('Source controller', function() {
         .del('/api/v1/source/' + source._id)
         .expect(200)
         .end(function(err, res) {
+          if (err) return done(err);
           request(sourceController)
             .get('/api/v1/source/' + source._id)
             .expect(404, done);
@@ -156,6 +161,7 @@ describe('Source controller', function() {
         .del('/api/v1/source/_all')
         .expect(200)
         .end(function(err, res) {
+          if (err) return done(err);
           request(sourceController)
             .get('/api/v1/source')
             .expect(200, [], done);
