@@ -7,15 +7,12 @@
   },
   "scripts": {
     "postinstall": "gulp build",
-
     "prestart": "node install.js",
     "start": "node app.js",
-
     "premocha": "node install.js",
     "mocha": "mocha test/backend",
     "karma": "karma start --single-run",
     "test": "npm run mocha && npm run karma",
-
     "testrun": "MONGO_AGGIE_DB=aggie-test node app.js",
     "preprotractor": "webdriver-manager update",
     "protractor": "protractor test/end-to-end/protractor.conf.js",
@@ -53,6 +50,7 @@
     "gulp-rename": "^1.2.2",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
+    "jsonstream": "^1.0.3",
     "locale": "0.0.20",
     "lodash": "^4.15.0",
     "migrate": "^0.2.3",
