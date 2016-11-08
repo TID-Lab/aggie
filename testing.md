@@ -1,6 +1,12 @@
 Manual End-to-end Testing
 =========================
 
+Prerequisites
+-------------
+
+1. Use default `secrets.json`, but set `adminParty` to false
+2. Run Aggie with `npm start`
+
 Internationalization
 --------------------
 
@@ -15,9 +21,10 @@ angular.element(document.querySelector('html')).injector().get('$translate').use
 Logging in
 ----------
 
-1. Drop aggie database and run `npm install`
-2. Log in as `admin` with default password [goes to `/reset_admin_password`]
-3. Reset admin password [goes to `/reports`]
+1. Make sure `adminParty` is false
+2. Drop aggie database and run `npm install`
+3. Log in as `admin` with default password [goes to `/reset_admin_password`]
+4. Reset admin password [goes to `/reports`]
 
 Sources, APIs, and fetching
 --------------------
