@@ -7,6 +7,26 @@ var mongoose = database.mongoose;
 var listenTo = require('mongoose-listento');
 var Schema = mongoose.Schema;
 
+/*
+var metadata = new Schema({
+  // Facebook
+  likeCount: { type: Number, default:0 },
+  reactionCount: { type: Number, default:0 },
+  commentCount: { type: Number, default:0 },
+  latitude: { type: Number, default: 0 },
+  longitude: { type: Number, default:0 },
+  //Twitter
+  replyTo: { type: String, default: '' },
+  location: { type: String, default: '' },
+  verified: { type: Boolean, default: false },
+  followerCount: { type: Number, default: 0 },
+  friendCount: { type: Number, default: 0 },
+  geoEnabled: { type: Boolean, default: false },
+  retweetCount: {type: Number, default: 0},
+  favouriteCount: {type: Number, default: 0}
+});
+*/
+
 var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
@@ -14,6 +34,7 @@ var schema = new Schema({
   content: String,
   author: { type: String, index: true },
   url: String,
+  metadata: Schema.Types.Mixed,
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
   _source: { type: String, ref: 'Source', index: true },
