@@ -88,3 +88,17 @@ and populates with some reports]
 7. Log in as a different user in a different tab/window
 8. Navigate to `/reports` as the second user and click `Grab Batch`. [reports
 are populated, and none of them are reports the other user has in their batch]
+
+Experimental feature
+------------
+See experiment.md
+
+Prerequisites: 
+1. Set secrets.json variables: `"experimental": true`, and `"experimentFile": "test/end_to_end/fixtures/experiment_reports.json"`
+2. Set fetching off
+3. Stop Aggie
+Start "experiment"
+1. Start Aggie
+1. Set fetching on
+1. Navigate to `/reports` [50 reports have appeared on the page, the last one with a 
+bit of delay]
