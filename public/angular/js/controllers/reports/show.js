@@ -8,7 +8,7 @@ angular.module('Aggie')
   'Tags',
   function($scope, $stateParams, data, Report, Tags) {
     $scope.report = data.report;
-    $scope.source = data.source;
+    $scope.sources = data.sources;
     $scope.markAsRead = function(report) {
       if (report.read) return;
       report.read = true;

@@ -4,7 +4,7 @@
       <th ng-show="currentUser.can('edit data')"></th>
       <th translate>Time</th>
       <th translate>Media</th>
-      <th translate>Source</th>
+      <th translate>Sources</th>
       <th translate>Author</th>
       <th translate>Content</th>
       <th translate>Tags</th>
@@ -29,7 +29,9 @@
         <div class="icon-left"></div>
       </td>
       <td class="compact source" ng-class="{ strong: !isRead(r) }">
-        {{ sourcesById[r._source].nickname || '[Deleted]' }}
+        <span ng-repeat="s in r._sources">
+          {{ sourcesById[s].nickname || '[Deleted]' }}
+        </span>
       </td>
       <td class="compact author" ng-class="{ strong: !isRead(r) }">
         {{ r.author }}

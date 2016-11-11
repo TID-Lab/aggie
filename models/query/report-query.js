@@ -41,7 +41,8 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
-    _source: this.sourceId,
+    // TODO this will work if sourceId is just one source id
+    _sources: this.sourceId,
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,
