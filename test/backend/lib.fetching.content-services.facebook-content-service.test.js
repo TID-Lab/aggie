@@ -47,12 +47,10 @@ describe('Facebook content service', function() {
   it('should fetch mock content from Facebook', function(done) {
     var service = stubWithFixture('facebook-1.json');
     var fetched = 0;
-    console.log("before error");
+
     service.once('error', function(err) { done(err); });
-    console.log("before report");
+
     service.on('report', function(reportData) {
-      console.log('entered this');
-      console.log(reportData);
       expect(reportData).to.have.property('fetchedAt');
       expect(reportData).to.have.property('authoredAt');
       expect(reportData).to.have.property('content');
@@ -76,12 +74,11 @@ describe('Facebook content service', function() {
         return done(new Error('Unexpected report'));
       }
     });
-    console.log('At the end of this');
+
     // Give enough time for extra report to appear.
-    setTimeout(function() { console.log('fetched'); console.log(fetched); if (fetched == 3) done(); }, 100);
-    console.log('before service.fetch');
+    setTimeout(function() { if (fetched == 3) done(); }, 100);
+
     service.fetch({ maxCount: 50 }, function() {});
-    console.log('after service.fetch');
   });
 
   it('should get new comments from old posts, excluding already added posts', function(done) {
