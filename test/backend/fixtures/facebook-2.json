@@ -22,6 +22,21 @@
           "created_time": "2015-11-10T20:43:14+0000"
         }
       ]
+    },
+    "place": "Area 52",
+    "likes": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
+    },
+    "reactions": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
     }
   },
   {
@@ -48,6 +63,21 @@
 
         }
       ]
+    },
+    "place": "Area 52",
+    "likes": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
+    },
+    "reactions": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
     }
   },
   {
@@ -72,6 +102,21 @@
           "created_time": "2015-09-10T20:43:14+0000"
         }
       ]
+    },
+    "place": "Area 52",
+    "likes": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
+    },
+    "reactions": {
+      "data": [],
+      "total_count": 42,
+      "summary": {
+        "total_count": 42
+      }
     }
   }
 ]
