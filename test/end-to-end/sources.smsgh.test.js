@@ -2,16 +2,8 @@
 
 var utils = require('./e2e-tools');
 var request = require('supertest');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-var expect = chai.expect;
+var expect = utils.expect;
 var promise = protractor.promise;
-
-// Allow chai to wait for promises on the right-hand-side
-chaiAsPromised.transformAsserterArgs = function(args) {
-  return promise.all(args);
-};
 
 describe('SMS GH', function() {
   before(utils.initDb);

@@ -2,9 +2,7 @@
 
 var utils = require('./e2e-tools');
 var incidents = require('./fixtures/incidents.json');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
+var expect = utils.expect;
 
 describe('/incidents', function() {
   before(utils.initDb);

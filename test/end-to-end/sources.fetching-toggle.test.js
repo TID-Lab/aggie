@@ -1,11 +1,7 @@
 'use strict';
 
 var utils = require('./e2e-tools');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-var expect = chai.expect;
-
+var expect = utils.expect;
 
 describe('test generation of reports', function() {
   before(utils.initDb);
