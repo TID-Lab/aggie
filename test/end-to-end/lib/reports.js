@@ -1,6 +1,6 @@
 'use strict';
 
-var Report = require('../../models/report');
+var Report = require('../../../models/report');
 var _ = require('lodash');
 
 module.exports.makeReports = function(n, author, time, content) {
@@ -22,7 +22,7 @@ function clickClearSend(clickBy, keys) {
 }
 
 module.exports.setFilter = function(filter) {
-  var e = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
+  var e = this.expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
   if (filter.keywords) {
     element(by.model('searchParams.keywords')).sendKeys(filter.keywords);
   }

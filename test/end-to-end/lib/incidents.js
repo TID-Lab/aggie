@@ -9,12 +9,22 @@ module.exports.setIncidentFilter = function(filter) {
   element.all(by.buttonText('Go')).first().click();
 };
 
-module.exports.createIncident = function(params) {
-  browser.get(browser.baseUrl + 'incidents');
-  element(by.buttonText('Create Incident')).click();
+function sendToIncidentModal(params) {
   element(by.model('incident.title')).sendKeys(params.title ? params.title : 'blank');
   element(by.model('incident.tags')).sendKeys(params.tags ? params.tags : '');
   element(by.model('incident.locationName')).sendKeys(params.location ? params.location : '');
+}
+
+function clearIncidentModal(params) {
+  if (params.title) element(by.model('incident.title')).clear();
+  if (params.tags) element(by.model('incident.tags')).clear();
+  if (params.location) element(by.model('incident.locationName')).clear();
+}
+
+module.exports.createIncident = function(params) {
+  browser.get(browser.baseUrl + 'incidents');
+  element(by.buttonText('Create Incident')).click();
+  sendToIncidentModal(params);
   return element(by.buttonText('Submit')).click();
 };
 
@@ -40,4 +50,13 @@ module.exports.getIncidentTitles = function() {
 module.exports.filterByTag = function(tags) {
   this.setIncidentFilter({ tags: tags });
   return this.getIncidentTitles();
+};
+
+module.exports.editIncident = function(name, params) {
+  browser.get(browser.baseUrl + 'incidents');
+  element(by.cssContainingText('strong', name)).click();
+  element(by.buttonText('Edit')).click();
+  clearIncidentModal(params);
+  sendToIncidentModal(params);
+  return element(by.buttonText('Submit')).click();
 };

@@ -9,14 +9,19 @@ var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var request = require('supertest');
 
-chai.use(chaiAsPromised);
-var expect = chai.expect;
-var promise = protractor.promise;
-
 module.exports = _.assign(_.clone(dbTools),
                           incidentTools,
                           sourceTools,
                           reportTools);
+
+var promise = protractor.promise;
+// Allow chai to wait for promises on the right-hand-side
+chaiAsPromised.transformAsserterArgs = function(args) {
+  return promise.all(args);
+};
+chai.use(chaiAsPromised);
+var expect = chai.expect;
+module.exports.expect = expect;
 
 module.exports.resetBrowser = function() {
   browser.manage().deleteAllCookies();
