@@ -53,11 +53,13 @@ with the previously created incident]
 9. Go to `/incidents` [in `Title` column incident shows correct number of
 reports]
 10. View the incident you have just created [incident shows the 3 reports that were added]
-11. Flag one report in the incident view page [the report is flagged]
-12. Click `Create Incident` [modal appears]
-13. Begin typing `mac` in the location field [locations starting with `mac`
+11. Click the `Edit` button [edit modal appears]
+12. Add one tag and save the incident [incident is updated]
+13. Flag one report in the incident view page [the report is flagged]
+14. Click `Create Incident` [modal appears]
+15. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
-14. Pick a a location, enter a title and save the incident [incident is saved successfully]
+16. Pick a a location, enter a title and save the incident [incident is saved successfully]
 
 
 Users and emails
