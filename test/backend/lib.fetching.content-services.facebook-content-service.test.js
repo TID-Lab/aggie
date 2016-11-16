@@ -56,19 +56,27 @@ describe('Facebook content service', function() {
       expect(reportData).to.have.property('content');
       expect(reportData).to.have.property('author');
       expect(reportData).to.have.property('url');
+      expect(reportData).to.have.property('metadata');
       switch (++fetched) {
       case 1:
         expect(reportData.content).to.contain('The ACC Champion');
         expect(reportData.author).to.equal('Georgia Tech');
         expect(reportData.url).to.contain('https');
+        expect(reportData.metadata.likeCount).to.equal(41);
+        expect(reportData.metadata.reactionCount).to.equal(42);
+        expect(reportData.metadata.place).to.equal('Area 51');
         break;
       case 2:
         expect(reportData.content).to.contain('Bioengineers at');
         expect(reportData.author).to.equal('Georgia Tech');
+        expect(reportData.metadata.likeCount).to.equal(43);
+        expect(reportData.metadata.reactionCount).to.equal(44);
+        expect(reportData.metadata.place).to.equal('Area 52');
         break;
       case 3:
         expect(reportData.content).to.contain('Amazing');
         expect(reportData.author).to.equal('Test User 1');
+        expect(reportData.metadata.likeCount).to.equal(0);
         break;
       case 4:
         return done(new Error('Unexpected report'));
