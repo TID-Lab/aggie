@@ -8,7 +8,20 @@
     "message": "The ACC Champion Georgia Tech Yellow Jackets take on Washington today in the Oxford,MS regional at 4:00 p.m. \n\nThe Jackets have played in 28 of the last 30 NCAA baseball tournaments. Can we get a #GoJackets??? -- http://c.gatech.edu/1kcD0c6",
     "link": "https://www.facebook.com/photo.php?fbid=10154233081380228&set=a.261947725227.302128.251841205227&type=1",
     "created_time": "2015-09-09T20:43:14+0000",
-    "type": "link"
+    "type": "link",
+    "place": "Area 51",
+    "likes": {
+      "data": [],
+      "summary": {
+        "total_count": 41
+      }
+    },
+    "reactions": {
+      "data": [],
+      "summary": {
+        "total_count": 42
+      }
+    }
   },
   {
     "id": 123143123123,
@@ -32,6 +45,19 @@
           "created_time": "2015-09-10T20:43:14+0000"
         }
       ]
+    },
+    "place": "Area 52",
+    "likes": {
+      "data": [],
+      "summary": {
+        "total_count": 43
+      }
+    },
+    "reactions": {
+      "data": [],
+      "summary": {
+        "total_count": 44
+      }
     }
   }
 ]

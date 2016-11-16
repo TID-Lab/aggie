@@ -14,6 +14,7 @@ var schema = new Schema({
   content: String,
   author: { type: String, index: true },
   url: String,
+  metadata: Schema.Types.Mixed,
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
   _source: { type: String, ref: 'Source', index: true },
