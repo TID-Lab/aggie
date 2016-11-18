@@ -98,14 +98,6 @@ angular.module('Aggie')
       $scope.source.url = url;
     });
 
-    $scope.$watch('source.media', function(newMedia, oldMedia) {
-      if (newMedia == 'twitter') {
-        $scope.source.nickname = 'Twitter Search';
-      } else if (oldMedia == 'twitter') {
-        $scope.source.nickname = '';
-      }
-    });
-
     $scope.showErrors = function() {
       return $scope._showErrors;
     };
