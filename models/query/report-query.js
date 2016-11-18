@@ -22,6 +22,7 @@ function ReportQuery(options) {
   this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
+  this.tags = options.tags;
 }
 
 _.extend(ReportQuery, Query);
@@ -44,7 +45,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,
-    flagged: this.flagged
+    flagged: this.flagged,
+    tags: this.tags
   };
 
   filter = _.omitBy(filter, _.isNil);
@@ -70,6 +72,9 @@ ReportQuery.prototype.toMongooseFilter = function() {
       return new RegExp('^' + author + '$', 'i');
     });
   }
+  if (this.tags) {
+    filter.tags = { $all: this.tags };
+  } else delete filter.tags;
 
   // Search by keyword
   if (this.keywords) {

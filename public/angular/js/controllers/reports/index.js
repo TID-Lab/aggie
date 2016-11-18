@@ -195,6 +195,10 @@ angular.module('Aggie')
       $scope.search({ author: null });
     };
 
+    $scope.clearTags = function() {
+      $scope.search({ tags: null });
+    };
+
     $scope.countAndCheck = function(key, value) {
       var total = $scope.reports.reduce(function(total, report) {
         if (report[key] === value) total += 1;
@@ -212,6 +216,7 @@ angular.module('Aggie')
         $scope.searchParams.sourceId === null &&
         $scope.searchParams.incidentId === null &&
         $scope.searchParams.author === null &&
+        $scope.searchParams.tags === null &&
         $scope.searchParams.keywords === null;
     };
 
@@ -224,6 +229,7 @@ angular.module('Aggie')
         media: null,
         incidentId: null,
         author: null,
+        tags: null,
         keywords: null
       });
     };
