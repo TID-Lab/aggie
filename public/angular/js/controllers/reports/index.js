@@ -17,10 +17,11 @@ angular.module('Aggie')
   'Batch',
   'Socket',
   'Queue',
+  'Tags',
   'paginationOptions',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, paginationOptions) {
+           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -368,6 +369,8 @@ angular.module('Aggie')
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
     });
+
+    $scope.tagsToString = Tags.tagsToString;
 
     init();
   }
