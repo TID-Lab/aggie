@@ -79,7 +79,7 @@ schema.methods.toggleRead = function(read) {
 
 var Report = mongoose.model('Report', schema);
 
-// Query reports based on passed query data
+// queryReports reports based on passed query data
 Report.queryReports = function(query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);
   if (typeof page === 'function') {

@@ -42,7 +42,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
+      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -57,7 +57,8 @@ angular.module('Aggie')
             media: params.media,
             incidentId: params.incidentId,
             status: params.status,
-            author: params.author
+            author: params.author,
+            tags: params.tags
           }).$promise;
         }],
         sources: ['Source', function(Source) {
