@@ -1,5 +1,4 @@
 // Represents a single source of data, e.g. a single Facebook page or RSS feed.
-// Only one Twitter source should exist due to rate limiting. Only one is needed since OR queries can be used.
 // Sources keep track of any errors or warnings that are encountered during fetching.
 // They also track how many of these errors have been 'read' so that the user can be notified if new errors
 // have occurred since they last checked.
@@ -52,20 +51,7 @@ sourceSchema.pre('save', function(next) {
     this._sourceStatusChanged = true;
   }
 
-  // Only allow a single Twitter source
-  if (this.isNew && this.media === 'twitter') {
-    Source.findOne({ media: 'twitter' }, function(err, source) {
-      // Should never error here. Unable to reproduce on normal usage.
-      // So, if it errors, it is serious enough to report an 'error'
-      if (err) {
-        logger.error(err);
-      }
-      if (source) return next(new Error.Validation('only_one_twitter_allowed'));
-      else next();
-    });
-  } else {
-    process.nextTick(next);
-  }
+  process.nextTick(next);
 });
 
 sourceSchema.post('save', function() {

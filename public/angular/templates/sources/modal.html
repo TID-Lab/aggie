@@ -23,11 +23,7 @@
             </div>
           </div>
 
-          <div class="alert alert-danger col-lg-10 col-lg-offset-1" ng-hide="validSourceMedia(source)" translate>
-            Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.
-          </div>
-
-          <div class="form-group" ng-show="source.media && validSourceMedia(source)" ng-class="{ 'read-only': source.media == 'twitter' }">
+          <div class="form-group" ng-show="source.media" ng-class="{ 'read-only': source.media == 'twitter' }">
             <label for="nickname" class="col-lg-2 control-label" translate>Nickname</label>
             <div class="col-lg-8">
               <div class="input-group">
@@ -41,7 +37,7 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media == 'smsgh' || (source.media == 'twitter' && validSourceMedia(source))">
+          <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter'">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
               <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}" ng-required="source.media == 'twitter'">
@@ -53,7 +49,7 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && validSourceMedia(source)">
+          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh'">
             <label for="url" class="col-lg-2 control-label" translate>URL</label>
             <div class="col-lg-8">
               <div class="input-group">
