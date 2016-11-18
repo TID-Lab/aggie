@@ -20,6 +20,11 @@
         <div ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</td>
     </tr>
     <tr>
+      <td class="detail-key" translate>Tags</td>
+      <td class="detail-value">{{ tagsToString(incident.tags) }}</td>
+    </tr>
+
+    <tr>
       <td class="detail-key" translate>Creator</td>
       <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
     </tr>

@@ -16,7 +16,8 @@ angular.module('Aggie')
   'Incident',
   'FlashService',
   'Report',
-  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
+  'Tags',
+  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -131,7 +132,7 @@ angular.module('Aggie')
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };
-
+    $scope.tagsToString = Tags.tagsToString;
     init();
   }
 ]);
