@@ -116,3 +116,30 @@ EventCounter.prototype.kill = function() {
 };
 
 module.exports.EventCounter = EventCounter;
+
+function tagQueryTester(model, tags, n) {
+  return function(done) {
+    var query;
+    if (model === 'report') {
+      var ReportQuery = require('../../models/query/report-query');
+      query = new ReportQuery({ tags: tags });
+    } else { // model === 'incident'
+      var IncidentQuery = require('../../models/query/incident-query');
+      query = new IncidentQuery({
+        veracity: 'Confirmed false',
+        status: 'closed',
+        tags: tags
+      });
+    }
+    query.run(function(err, records) {
+      if (err) return done(err);
+      expect(records).to.have.keys(['total', 'results']);
+      expect(records.total).to.equal(n);
+      expect(records.results).to.be.an.instanceof(Array);
+      expect(records.results).to.have.length(n);
+      done();
+    });
+  };
+}
+
+module.exports.tagQueryTester = tagQueryTester;

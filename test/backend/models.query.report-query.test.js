@@ -4,6 +4,7 @@ var async = require('async');
 var ReportQuery = require('../../models/query/report-query');
 var Report = require('../../models/report');
 
+var query;
 describe('Query attributes', function() {
   before(function(done) {
     query = new ReportQuery({ keywords: 'zero one two three' });
@@ -29,7 +30,7 @@ describe('Query attributes', function() {
           authoredAt: new Date(),
           content: 'Fast',
           tags: ['fast']
-        },
+        }
       ], Report.create.bind(Report), done);
     });
   });
@@ -50,24 +51,10 @@ describe('Query attributes', function() {
     var similar = ReportQuery.compare(otherQuery, query);
     expect(similar).to.be.true;
   });
+  
+  it('should query by single full tag', utils.tagQueryTester('report', ['RT'], 2));
 
-  var reportTagTester = function(tags, n) {
-    return function(done) {
-      new ReportQuery({
-        tags: tags
-      }).run(function(err, incidents) {
-        if (err) return done(err);
-        expect(incidents).to.have.keys(['total', 'results']);
-        expect(incidents.total).to.equal(n);
-        expect(incidents.results).to.be.an.instanceof(Array);
-        expect(incidents.results).to.have.length(n);
-        done();
-      });
-    };
-  };
-  it('should query by single full tag', reportTagTester(['RT'], 2));
-
-  it('should query by multiple full tags', reportTagTester(['NO_RT', 'fast'], 1));
+  it('should query by multiple full tags', utils.tagQueryTester('report', ['NO_RT', 'fast'], 1));
   after(utils.wipeModels([Report]));
   after(utils.expectModelsEmpty);
 });
