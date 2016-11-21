@@ -4,7 +4,6 @@
 var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
-var tags = require('../../shared/tags');
 var _ = require('lodash');
 
 function ReportQuery(options) {
@@ -74,7 +73,6 @@ ReportQuery.prototype.toMongooseFilter = function() {
     });
   }
   if (this.tags) {
-    if (this.tags) this.tags = tags.toArray(this.tags);
     filter.tags = { $all: this.tags };
   } else delete filter.tags;
 
