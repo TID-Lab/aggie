@@ -38,7 +38,7 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = SMSGhContentService;
-      dummyEventName = service.subscribe('foo123', { keywords: 'dummy' });
+      dummyEventName = service.subscribe('foo123', { keywords: 'DuMmY' });
     });
 
     afterEach(function() {
@@ -146,7 +146,6 @@ describe('SMSGhana content service', function() {
             expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
             expect(reportData.content).to.equal('lorem ipsum dolor');
             expect(reportData.author).to.equal('9845098450');
-
             callback();
           });
         },
@@ -183,6 +182,46 @@ describe('SMSGhana content service', function() {
       service.unsubscribe('id_dodo123');
     });
 
+    it('should be case-insensitive', function(done) {
+      var expectReport = function(callback, reportData) {
+        expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
+        expect(reportData.content).to.equal('lorem ipsum dolor');
+        expect(reportData.author).to.equal('9845098450');
+        expect(reportData.keyword).to.equal('dummy');
+        callback();
+      };
+      async.parallel([
+        function(callback) {
+          service.once(dummyEventName, expectReport.bind({}, callback));
+        },
+        function(callback) {
+          service.once(dummyEventName, expectReport.bind({}, callback));
+        }
+      ], done);
+
+      reqParams.keyword = 'Dummy';
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(reqParams)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+
+      reqParams.keyword = 'DUMMY';
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(reqParams)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+
+    });
 
   });
 
