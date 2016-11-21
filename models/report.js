@@ -40,9 +40,6 @@ schema.path('_incident').set(function(_incident) {
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
-    if (this._media === 'twitter') {
-      this.metadata.retweet ? this.tags.push('RT') : this.tags.push('NO_RT');
-    }
     // Set default storedAt.
     if (!this.storedAt) this.storedAt = new Date();
 
