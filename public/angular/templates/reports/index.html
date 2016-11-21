@@ -16,6 +16,18 @@
       </div>
       <div class="td search">
         <div class="input-group">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Tags' | translate}}">
+          <a href class="input-group-addon" ng-click="clearTags()" ng-show="searchParams.tags">×</a>
+          <div class="input-group-btn">
+            <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+          </div>
+        </div>
+      </div>
+      <div class="td search">
+        <div class="input-group">
           <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter author' | translate }}">
           <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
           <div class="input-group-btn">

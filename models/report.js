@@ -15,6 +15,7 @@ var schema = new Schema({
   author: { type: String, index: true },
   url: String,
   metadata: Schema.Types.Mixed,
+  tags: { type: [String], default: [] },
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
   _source: { type: String, ref: 'Source', index: true },
@@ -39,7 +40,9 @@ schema.path('_incident').set(function(_incident) {
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
-
+    if (this._media === 'twitter') {
+      this.metadata.retweet ? this.tags.push('RT') : this.tags.push('NO_RT');
+    }
     // Set default storedAt.
     if (!this.storedAt) this.storedAt = new Date();
 
@@ -57,7 +60,6 @@ schema.pre('save', function(next) {
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:new', { _id: this._id.toString() });
   if (!this._wasNew) schema.emit('report:updated', this);
-
   if (this._incidentWasModified) {
     schema.emit('change:incident', this._prevIncident, this._incident);
   }
@@ -77,7 +79,7 @@ schema.methods.toggleRead = function(read) {
 
 var Report = mongoose.model('Report', schema);
 
-// Query reports based on passed query data
+// queryReports reports based on passed query data
 Report.queryReports = function(query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);
   if (typeof page === 'function') {
