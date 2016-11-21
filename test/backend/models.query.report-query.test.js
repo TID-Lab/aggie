@@ -51,7 +51,7 @@ describe('Query attributes', function() {
     var similar = ReportQuery.compare(otherQuery, query);
     expect(similar).to.be.true;
   });
-  
+
   it('should query by single full tag', utils.tagQueryTester('report', ['RT'], 2));
 
   it('should query by multiple full tags', utils.tagQueryTester('report', ['NO_RT', 'fast'], 1));

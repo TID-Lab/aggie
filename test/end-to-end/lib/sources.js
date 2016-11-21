@@ -19,6 +19,9 @@ module.exports.addSource = function(sourceName, params) {
   } else {
     element(by.model('source.url')).sendKeys(params.url);
   }
+  if (params.tags) {
+    element(by.model('source.tags')).sendKeys(params.tags);
+  }
   return element(by.buttonText('Submit')).click();
 };
 
