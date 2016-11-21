@@ -33,7 +33,6 @@ module.exports.setFilter = function(filter) {
     var text = filter.tags.join(', ');
     element(by.model('searchParams.tags')).sendKeys(text);
   }
-  element.all(by.buttonText('Go')).first().click();
   if (filter.time) {
     // This will only work once: if you want to then change the filter the
     // button will have different text and you'll have to select it some other
