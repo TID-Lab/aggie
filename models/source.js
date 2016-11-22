@@ -9,7 +9,6 @@ var mongoose = database.mongoose;
 var validate = require('mongoose-validator');
 var _ = require('underscore');
 require('../lib/error');
-var logger = require('../lib/logger');
 
 var EVENTS_TO_RETURN = 50;
 
@@ -87,7 +86,7 @@ sourceSchema.methods.disable = function() {
 // Log events in source
 sourceSchema.methods.logEvent = function(level, message, callback) {
   this.events.push({ datetime: new Date(), type: level, message: message });
-  if (level == 'error') this.disable();
+  if (level === 'error') this.disable();
   this.unreadErrorCount++;
   this._silent = true;
   this.save(callback);

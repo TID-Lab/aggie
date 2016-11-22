@@ -1,0 +1,1280 @@
+diff --git a/README.md b/README.md
+index f7484a5..4347cc2 100644
+--- a/README.md
++++ b/README.md
+@@ -74,6 +74,7 @@ The following need to be installed.
+   - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+ 1. Copy `config/secrets.json.example` to `config/secrets.json`.
+   1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
++  1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+ 1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+   - If you do not have the certificate you can create a new self-signed certificate with the following command:
+   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
+diff --git a/config/secrets.json.example b/config/secrets.json.example
+index 7cea604..9e2d6ab 100644
+--- a/config/secrets.json.example
++++ b/config/secrets.json.example
+@@ -55,6 +55,7 @@
+     "api": {
+       "log_requests": true,
+       "log_responses": true,
++      "log_user_activity": false,
+       "filename": "logs/api.log"
+     },
+     "master": {
+diff --git a/lib/api/v1/incident-controller.js b/lib/api/v1/incident-controller.js
+index c041876..7170f13 100644
+--- a/lib/api/v1/incident-controller.js
++++ b/lib/api/v1/incident-controller.js
+@@ -1,8 +1,11 @@
+ // Handles CRUD requests for incidents.
++'use strict';
+ 
+ var express = require('express');
+ var Incident = require('../../../models/incident');
+ var _ = require('lodash');
++var writelog = require('../../writeLog');
++var tags = require('../../../shared/tags');
+ 
+ module.exports = function(app, user) {
+   app = app || express();
+@@ -15,8 +18,12 @@ module.exports = function(app, user) {
+   app.post('/api/v1/incident', user.can('edit incidents'), function(req, res) {
+     req.body.creator = req.user;
+     Incident.create(req.body, function(err, incident) {
+-      if (err) res.send(err.status, err.message);
+-      else res.send(200, incident);
++      if (err) {
++        res.send(err.status, err.message);
++      } else {
++        writelog.writeIncident(req, incident, 'createIncident');
++        res.send(200, incident);
++      }
+     });
+   });
+ 
+@@ -34,6 +41,7 @@ module.exports = function(app, user) {
+ 
+   // Get an Incident by _id
+   app.get('/api/v1/incident/:_id', user.can('view data'), function(req, res) {
++    var referer = req.headers.referer || '';
+     Incident
+       .findById(req.params._id)
+       .populate({ path: 'creator', select: 'username' })
+@@ -41,7 +49,12 @@ module.exports = function(app, user) {
+       .exec(function(err, incident) {
+         if (err) res.send(err.status, err.message);
+         else if (!incident) res.send(404);
+-        else res.send(200, incident);
++        else {
++          if (!(referer.split('/')[referer.split('/').length - 1] === 'reports')) {
++            writelog.writeIncident(req, incident, 'viewIncident');
++          }
++          res.send(200, incident);
++        }
+       }
+     );
+   });
+@@ -57,9 +70,14 @@ module.exports = function(app, user) {
+ 
+       // Save incident
+       incident.save(function(err, numberAffected) {
+-        if (err) res.send(err.status, err.message);
+-        else if (!numberAffected) res.send(404);
+-        else res.send(200);
++        if (err) {
++          res.send(err.status, err.message);
++        } else if (!numberAffected) {
++          res.send(404);
++        } else {
++          writelog.writeIncident(req, incident, 'editIncident');
++          res.send(200);
++        }
+       });
+     });
+   });
+@@ -68,7 +86,6 @@ module.exports = function(app, user) {
+   // Delete selected Incidents
+   app.post('/api/v1/incident/_selected', user.can('edit data'), function(req, res) {
+     if (!req.body.ids || !req.body.ids.length) return res.send(200);
+-
+     Incident.find({ '_id': { $in: req.body.ids } }, function(err, incidents) {
+       if (err) return res.send(err.status, err.message);
+       if (incidents.length === 0) return res.send(200);
+@@ -77,7 +94,10 @@ module.exports = function(app, user) {
+         // Delete each incident explicitly to catch it in model
+         incident.remove(function(err) {
+           if (err) return res.send(err.status, err.message);
+-          if (--remaining === 0) return res.send(200);
++          writelog.writeIncident(req, incident, 'deleteIncident');
++          if (--remaining === 0) {
++            return res.send(200);
++          }
+         });
+       });
+     });
+@@ -90,7 +110,10 @@ module.exports = function(app, user) {
+       if (err) return res.send(err.status, err.message);
+       if (!incident) return res.send(404);
+       incident.remove(function(err) {
+-        if (err) return res.send(err.status, err.message);
++        if (err) {
++          return res.send(err.status, err.message);
++        }
++        writelog.writeIncident(req, incident, 'deleteIncident');
+         res.send(200);
+       });
+     });
+@@ -106,6 +129,7 @@ module.exports = function(app, user) {
+         // Delete each incident explicitly to catch it in model
+         incident.remove(function(err) {
+           if (err) return res.send(err.status, err.message);
++          writelog.writeIncident(req, incident, 'deleteIncident');
+           if (--remaining === 0) return res.send(200);
+         });
+       });
+@@ -118,6 +142,6 @@ module.exports = function(app, user) {
+ function parseQueryData(queryString) {
+   if (!queryString) return {};
+   var query = _.pick(queryString, Incident.filterAttributes);
+-  if (query.tags) query.tags = query.tags.split(',').map(_.trim);
++  if (query.tags) query.tags = tags.toArray(query.tags);
+   return query;
+ }
+diff --git a/lib/api/v1/report-controller.js b/lib/api/v1/report-controller.js
+index 7895eaa..86376f8 100644
+--- a/lib/api/v1/report-controller.js
++++ b/lib/api/v1/report-controller.js
+@@ -6,6 +6,8 @@ var Report = require('../../../models/report');
+ var batch = require('../../../models/batch');
+ var ReportQuery = require('../../../models/query/report-query');
+ var _ = require('underscore');
++var writelog = require('../../writeLog');
++var tags = require('../../../shared/tags');
+ 
+ module.exports = function(app, user) {
+   app = app || express();
+@@ -64,7 +66,10 @@ module.exports = function(app, user) {
+     Report.findById(req.params._id, function(err, report) {
+       if (err) res.send(err.status, err.message);
+       else if (!report) res.send(404);
+-      else res.send(200, report);
++      else {
++        writelog.writeReport(req, report, 'viewReport');
++        res.send(200, report);
++      }
+     });
+   });
+ 
+@@ -82,7 +87,10 @@ module.exports = function(app, user) {
+       report.save(function(err, numberAffected) {
+         if (err) res.send(err.status, err.message);
+         else if (!numberAffected) res.send(404);
+-        else res.send(200);
++        else {
++          writelog.writeReport(req, report, 'flag/unflag/removeFromIncident');
++          res.send(200);
++        }
+       });
+     });
+   });
+@@ -91,14 +99,16 @@ module.exports = function(app, user) {
+   app.delete('/api/v1/report/_all', user.can('edit data'), function(req, res) {
+     Report.remove(function(err) {
+       if (err) res.send(err.status, err.message);
+-      else res.send(200);
++      else {
++        writelog.writeReport(req, {}, 'deleteAllReports');
++        res.send(200);
++      }
+     });
+   });
+ 
+   // Mark selected reports as read
+   app.patch('/api/v1/report/_read', user.can('edit data'), function(req, res) {
+     if (!req.body.ids || !req.body.ids.length) return res.send(200);
+-
+     Report.find({ _id: { $in: req.body.ids } }, function(err, reports) {
+       if (err) return res.send(err.status, err.message);
+       if (reports.length === 0) return res.send(200);
+@@ -108,6 +118,7 @@ module.exports = function(app, user) {
+         report.toggleRead(req.body.read);
+         report.save(function(err) {
+           if (err) return res.send(err.status, err.message);
++          writelog.writeReport(req, report, 'markAsRead');
+           if (--remaining === 0) return res.send(200);
+         });
+       });
+@@ -117,7 +128,6 @@ module.exports = function(app, user) {
+   // Flag selected reports
+   app.patch('/api/v1/report/_flag', user.can('edit data'), function(req, res) {
+     if (!req.body.ids || !req.body.ids.length) return res.send(200);
+-
+     Report.find({ _id: { $in: req.body.ids } }, function(err, reports) {
+       if (err) return res.send(err.status, err.message);
+       if (reports.length === 0) return res.send(200);
+@@ -127,6 +137,7 @@ module.exports = function(app, user) {
+         report.toggleFlagged(req.body.flagged);
+         report.save(function(err) {
+           if (err) return res.send(err.status, err.message);
++          writelog.writeReport(req, report, 'flagReport');
+           if (--remaining === 0) return res.send(200);
+         });
+       });
+@@ -136,7 +147,6 @@ module.exports = function(app, user) {
+   // Link selected reports to one incident
+   app.patch('/api/v1/report/_link', user.can('edit data'), function(req, res) {
+     if (!req.body.ids || !req.body.ids.length) return res.send(200);
+-
+     Report.find({ _id: { $in: req.body.ids } }, function(err, reports) {
+       if (err) return res.send(err.status, err.message);
+       if (reports.length === 0) return res.send(200);
+@@ -146,6 +156,7 @@ module.exports = function(app, user) {
+         report._incident = req.body.incident;
+         report.save(function(err) {
+           if (err) return res.send(err.status, err.message);
++          writelog.writeReport(req, report, 'addToIncident');
+           if (--remaining === 0) return res.send(200);
+         });
+       });
+@@ -156,10 +167,11 @@ module.exports = function(app, user) {
+ };
+ 
+ // Determine the search keywords
+-function parseQueryData(queryData) {
+-  if (!queryData) return;
+-
++function parseQueryData(queryString) {
++  if (!queryString) return {};
+   // Data passed through URL parameters
+-  return _.pick(queryData, ['keywords', 'status', 'after', 'before', 'media',
+-                            'sourceId', 'incidentId', 'author']);
++  var query = _.pick(queryString, ['keywords', 'status', 'after', 'before', 'media',
++                                   'sourceId', 'incidentId', 'author', 'tags']);
++  if (query.tags) query.tags = tags.toArray(query.tags);
++  return query;
+ }
+diff --git a/lib/api/v1/source-controller.js b/lib/api/v1/source-controller.js
+index 78cc4c2..a7b2532 100644
+--- a/lib/api/v1/source-controller.js
++++ b/lib/api/v1/source-controller.js
+@@ -1,8 +1,10 @@
+ // Handles CRUD requests for sources.
++'use strict';
+ 
+ var express = require('express');
+ var Source = require('../../../models/source');
+ var _ = require('underscore');
++var writelog = require('../../writeLog');
+ 
+ module.exports = function(app, user) {
+   app = app || express();
+@@ -17,17 +19,20 @@ module.exports = function(app, user) {
+     if (req.user) req.body.user = req.user._id;
+ 
+     Source.create(req.body, function(err, source) {
+-      if (err) return res.send(err.status, err.message);
+-      else res.send(200, source);
++      if (err) {
++        return res.send(err.status, err.message);
++      }
++      writelog.writeSource(req, source, 'createSource');
++      res.send(200, source);
+     });
+   });
+ 
+   // Get a list of all Sources
+   app.get('/api/v1/source', user.can('view data'), function(req, res) {
+     // Find all, exclude `events` field, populate user
+-    Source.find({}, '-events', { sort: 'nickname' }).
+-            populate({ path: 'user', select: 'username' }).
+-            exec(function(err, sources) {
++    Source.find({}, '-events', { sort: 'nickname' })
++            .populate({ path: 'user', select: 'username' })
++            .exec(function(err, sources) {
+               if (err) res.send(err.status, err.message);
+               else res.send(200, sources);
+             });
+@@ -57,22 +62,24 @@ module.exports = function(app, user) {
+       _.each(_.omit(req.body, ['_id', 'user', 'events']), function(val, key) {
+         source[key] = val;
+       });
+-
+       // Save source
+       source.save(function(err, numberAffected) {
+         if (err) res.send(err.status, err.message);
+         else if (!numberAffected) res.send(404);
+-        else res.send(200);
++        else {
++          writelog.writeSource(req, source, 'enable/disable/editSource');
++          res.send(200);
++        }
+       });
+     });
+   });
+ 
+   // Reset unread error count
+   app.put('/api/v1/source/_events/:_id', user.can('edit data'), function(req, res) {
+-    Source.resetUnreadErrorCount(req.params._id, function(err, source, numberAffected) {
++    Source.resetUnreadErrorCount(req.params._id, function(err, source) {
+       if (err) return res.send(err.status, err.message);
+       else if (!source) return res.send(404);
+-      else res.send(200, source);
++      res.send(200, source);
+     });
+   });
+ 
+@@ -84,6 +91,7 @@ module.exports = function(app, user) {
+       if (!source) return res.send(404);
+       source.remove(function(err) {
+         if (err) return res.send(err.status, err.message);
++        writelog.writeSource(req, source, 'deleteSource');
+         res.send(200);
+       });
+     });
+@@ -99,6 +107,7 @@ module.exports = function(app, user) {
+         // Delete each source explicitly to catch it in model
+         source.remove(function(err) {
+           if (err) return res.send(err.status, err.message);
++          writelog.writeSource(req, source, 'deleteSource');
+           if (--remaining === 0) return res.send(200);
+         });
+       });
+diff --git a/lib/fetching/bot.js b/lib/fetching/bot.js
+index dedfd87..6fc747a 100644
+--- a/lib/fetching/bot.js
++++ b/lib/fetching/bot.js
+@@ -94,6 +94,14 @@ Bot.prototype._reportListener = function(reportData) {
+     reportData._source = reportData._source || this.source._id;
+     reportData._media = reportData._media || this.source.media;
+     reportData._sourceNickname = reportData._sourceNickname || this.source.nickname;
++    // We initialize the report tags with the ones associated to its source
++    if (!reportData.tags) {
++      reportData.tags = _.clone(this.source.tags);
++      if (reportData._media === 'twitter') {
++        reportData.metadata.retweet ? reportData.tags.push('RT') : reportData.tags.push('NO_RT');
++      }
++    }
++
+ 
+     var drops = this.queue.drops;
+     this.queue.add(reportData);
+diff --git a/lib/logger.js b/lib/logger.js
+index 5d83a9f..0c40157 100644
+--- a/lib/logger.js
++++ b/lib/logger.js
+@@ -1,8 +1,7 @@
+ // Logger for the child processes
+ 
+ var childProcess = require('./child-process');
+-
+-var logger = function() {};
++var logger = {};
+ 
+ // Log debug message, or an object, or both
+ logger.debug = function(message, metadata) {
+@@ -37,8 +36,7 @@ logger.error = function(error, metadata) {
+   if (typeof error === 'object') {
+     message = error.message;
+     stacktrace = error.stack;
+-  }
+-  else {
++  } else {
+     message = error;
+   }
+ 
+diff --git a/lib/userLogger.js b/lib/userLogger.js
+new file mode 100644
+index 0000000..6de25cb
+--- /dev/null
++++ b/lib/userLogger.js
+@@ -0,0 +1,25 @@
++// This file will be called only by logger.js
++// This will write the user log object into the corresponding collection
++'use strict';
++
++var database = require('./database');
++var mongoose = database.mongoose;
++
++var logSchema = new mongoose.Schema({
++  timestamp: Date,
++  userID: String,
++  username: String,
++  action: String,
++  actionRef: mongoose.Schema.Types.Mixed
++});
++
++logSchema.index({ timestamp: 1, userID: 1 }, { unique: true });
++var UserLog = mongoose.model('UserLog', logSchema);
++
++UserLog.writeToCollection = function(logItem, callback) {
++  logItem.timestamp = new Date();
++  var singleLog = new UserLog(logItem);
++  singleLog.save(callback);
++};
++
++module.exports = UserLog;
+diff --git a/lib/writeLog.js b/lib/writeLog.js
+new file mode 100644
+index 0000000..1f63c9b
+--- /dev/null
++++ b/lib/writeLog.js
+@@ -0,0 +1,79 @@
++'use strict';
++
++var config = require('../config/secrets');
++var logger = require('./logger');
++var userLogger = require('./userLogger');
++
++var logFlag = config.get().logger.api.log_user_activity;
++
++var writer = {};
++
++writer.writeIncident = function(req, incident, action) {
++  if (!logFlag) return;
++  var logDetails = {
++    userID: req.user._id,
++    username: req.user.username,
++    action: action,
++    actionRef: {
++      incidentTitle: incident.title,
++      incidentID: incident._id,
++      referer: req.headers ? req.headers.referer : ''
++    }
++  };
++  userLogger.writeToCollection(logDetails, function(err) {
++    if (err) logger.error(err);
++  });
++};
++
++writer.writeSource = function(req, source, action) {
++  if (!logFlag) return;
++  var logDetails = {
++    userID: req.user._id,
++    username: req.user.username,
++    action: action,
++    actionRef: {
++      sourceNickname: source.nickname,
++      sourceID: source._id,
++      sourceURI: source.keywords ? source.keywords : source.url
++    }
++  };
++  if (action === 'enable/disable/editSource') {
++    logDetails.actionRef.sourceFlags = {
++      enabled: source.enabled
++    };
++  }
++  userLogger.writeToCollection(logDetails, function(err) {
++    if (err) logger.error(err);
++  });
++};
++
++writer.writeReport = function(req, report, action) {
++  if (!logFlag) return;
++  var logDetails = {
++    userID: req.user._id,
++    username: req.user.username,
++    action: action
++  };
++  if (action !== 'deleteAllReports') {
++    logDetails.actionRef = {
++      reportContent: report.content,
++      reporttID: report._id,
++      referer: req.headers ? req.headers.referer : ''
++    };
++  } else logDetails.actionRef = {};
++  if (action === 'flag/unflag/removeFromIncident') {
++    logDetails.actionRef.reportFlags = {
++      flagged: report.flagged,
++      read: report.read,
++      linkedToIncident: report._incident ? true : false
++    };
++  }
++  if (action === 'addToIncident') {
++    logDetails.actionRef.incidentID = report._incident;
++  }
++  userLogger.writeToCollection(logDetails, function(err) {
++    if (err) logger.error(err);
++  });
++};
++
++module.exports = writer;
+diff --git a/models/query/report-query.js b/models/query/report-query.js
+index 00f6306..74c6f44 100644
+--- a/models/query/report-query.js
++++ b/models/query/report-query.js
+@@ -22,6 +22,7 @@ function ReportQuery(options) {
+   this.media = options.media;
+   this.author = options.author;
+   this.event = 'reports';
++  this.tags = options.tags;
+ }
+ 
+ _.extend(ReportQuery, Query);
+@@ -44,7 +45,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
+     _media: this.media,
+     _incident: this.incidentId,
+     read: this.read,
+-    flagged: this.flagged
++    flagged: this.flagged,
++    tags: this.tags
+   };
+ 
+   filter = _.omitBy(filter, _.isNil);
+@@ -70,6 +72,9 @@ ReportQuery.prototype.toMongooseFilter = function() {
+       return new RegExp('^' + author + '$', 'i');
+     });
+   }
++  if (this.tags) {
++    filter.tags = { $all: this.tags };
++  } else delete filter.tags;
+ 
+   // Search by keyword
+   if (this.keywords) {
+diff --git a/models/report.js b/models/report.js
+index 052be3f..8dc005a 100644
+--- a/models/report.js
++++ b/models/report.js
+@@ -15,6 +15,7 @@ var schema = new Schema({
+   author: { type: String, index: true },
+   url: String,
+   metadata: Schema.Types.Mixed,
++  tags: { type: [String], default: [] },
+   read: { type: Boolean, default: false, required: true, index: true },
+   flagged: { type: Boolean, default: false, required: true, index: true },
+   _source: { type: String, ref: 'Source', index: true },
+@@ -39,7 +40,6 @@ schema.path('_incident').set(function(_incident) {
+ schema.pre('save', function(next) {
+   if (this.isNew) {
+     this._wasNew = true;
+-
+     // Set default storedAt.
+     if (!this.storedAt) this.storedAt = new Date();
+ 
+@@ -57,7 +57,6 @@ schema.pre('save', function(next) {
+ schema.post('save', function() {
+   if (this._wasNew) schema.emit('report:new', { _id: this._id.toString() });
+   if (!this._wasNew) schema.emit('report:updated', this);
+-
+   if (this._incidentWasModified) {
+     schema.emit('change:incident', this._prevIncident, this._incident);
+   }
+@@ -77,7 +76,7 @@ schema.methods.toggleRead = function(read) {
+ 
+ var Report = mongoose.model('Report', schema);
+ 
+-// Query reports based on passed query data
++// queryReports reports based on passed query data
+ Report.queryReports = function(query, page, callback) {
+   if (typeof query === 'function') return Report.findPage(query);
+   if (typeof page === 'function') {
+diff --git a/models/source.js b/models/source.js
+index 327a1f0..d7c903c 100644
+--- a/models/source.js
++++ b/models/source.js
+@@ -36,7 +36,8 @@ var sourceSchema = new mongoose.Schema({
+   events: { type: Array, default: [] },
+   unreadErrorCount: { type: Number, default: 0 },
+   lastReportDate: Date,
+-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
++  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
++  tags: { type: [String], default: [] }
+ });
+ 
+ sourceSchema.pre('save', function(next) {
+diff --git a/public/angular/js/app.js b/public/angular/js/app.js
+index 4f53e96..ec4c257 100644
+--- a/public/angular/js/app.js
++++ b/public/angular/js/app.js
+@@ -27,6 +27,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
+ .factory('shared', function() {
+   var shared = {};
+   shared.User = require('../../../shared/user');
++  shared.Tags = require('../../../shared/tags');
+   return shared;
+ })
+ 
+diff --git a/public/angular/js/controllers/incidents/show.js b/public/angular/js/controllers/incidents/show.js
+index c6baae1..9283c08 100644
+--- a/public/angular/js/controllers/incidents/show.js
++++ b/public/angular/js/controllers/incidents/show.js
+@@ -16,7 +16,8 @@ angular.module('Aggie')
+   'Incident',
+   'FlashService',
+   'Report',
+-  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report) {
++  'Tags',
++  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags) {
+     $scope.incident = incident;
+     $scope.reports = reports.results;
+     $scope.statusOptions = incidentStatusOptions;
+@@ -131,7 +132,7 @@ angular.module('Aggie')
+     $scope.viewProfile = function(user) {
+       $state.go('profile', { userName: user.username });
+     };
+-
++    $scope.tagsToString = Tags.tagsToString;
+     init();
+   }
+ ]);
+diff --git a/public/angular/js/controllers/reports/index.js b/public/angular/js/controllers/reports/index.js
+index 15b6189..1875d65 100644
+--- a/public/angular/js/controllers/reports/index.js
++++ b/public/angular/js/controllers/reports/index.js
+@@ -17,10 +17,11 @@ angular.module('Aggie')
+   'Batch',
+   'Socket',
+   'Queue',
++  'Tags',
+   'paginationOptions',
+   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
+            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
+-           Report, Incident, Batch, Socket, Queue, paginationOptions) {
++           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions) {
+ 
+     $scope.searchParams = $stateParams;
+     $scope.reports = reports.results;
+@@ -194,6 +195,10 @@ angular.module('Aggie')
+       $scope.search({ author: null });
+     };
+ 
++    $scope.clearTags = function() {
++      $scope.search({ tags: null });
++    };
++
+     $scope.countAndCheck = function(key, value) {
+       var total = $scope.reports.reduce(function(total, report) {
+         if (report[key] === value) total += 1;
+@@ -211,6 +216,7 @@ angular.module('Aggie')
+         $scope.searchParams.sourceId === null &&
+         $scope.searchParams.incidentId === null &&
+         $scope.searchParams.author === null &&
++        $scope.searchParams.tags === null &&
+         $scope.searchParams.keywords === null;
+     };
+ 
+@@ -223,6 +229,7 @@ angular.module('Aggie')
+         media: null,
+         incidentId: null,
+         author: null,
++        tags: null,
+         keywords: null
+       });
+     };
+@@ -369,6 +376,8 @@ angular.module('Aggie')
+       Socket.removeAllListeners('reports');
+     });
+ 
++    $scope.tagsToString = Tags.tagsToString;
++
+     init();
+   }
+ ]);
+diff --git a/public/angular/js/controllers/reports/show.js b/public/angular/js/controllers/reports/show.js
+index bdf6a65..d364a5c 100644
+--- a/public/angular/js/controllers/reports/show.js
++++ b/public/angular/js/controllers/reports/show.js
+@@ -5,7 +5,8 @@ angular.module('Aggie')
+   '$stateParams',
+   'data',
+   'Report',
+-  function($scope, $stateParams, data, Report) {
++  'Tags',
++  function($scope, $stateParams, data, Report, Tags) {
+     $scope.report = data.report;
+     $scope.source = data.source;
+     $scope.markAsRead = function(report) {
+@@ -13,7 +14,7 @@ angular.module('Aggie')
+       report.read = true;
+       Report.save({ id: report._id }, report);
+     };
+-
++    $scope.tagsToString = Tags.tagsToString;
+     $scope.markAsRead(data.report);
+   }
+ ]);
+diff --git a/public/angular/js/controllers/sources/index.js b/public/angular/js/controllers/sources/index.js
+index 6dc5683..1024a80 100644
+--- a/public/angular/js/controllers/sources/index.js
++++ b/public/angular/js/controllers/sources/index.js
+@@ -6,7 +6,8 @@ angular.module('Aggie')
+   'FlashService',
+   'sources',
+   'Source',
+-  function($scope, $rootScope, flash, sources, Source) {
++  'Tags',
++  function($scope, $rootScope, flash, sources, Source, Tags) {
+     $scope.sources = sources;
+ 
+     $scope.saveSource = function(source) {
+@@ -33,5 +34,7 @@ angular.module('Aggie')
+     $scope.viewSource = function(event, source) {
+       $rootScope.$state.go('source', { id: source._id });
+     };
++
++    $scope.tagsToString = Tags.tagsToString;
+   }
+ ]);
+diff --git a/public/angular/js/controllers/sources/show.js b/public/angular/js/controllers/sources/show.js
+index c96a8ff..e31935b 100644
+--- a/public/angular/js/controllers/sources/show.js
++++ b/public/angular/js/controllers/sources/show.js
+@@ -6,8 +6,9 @@ angular.module('Aggie')
+   '$stateParams',
+   'Source',
+   'source',
++  'Tags',
+   'FlashService',
+-  function($scope, $rootScope, $stateParams, Source, source, flash) {
++  function($scope, $rootScope, $stateParams, Source, source, Tags, flash) {
+     $scope.source = source;
+     Source.resetUnreadErrorCount({ id: source._id }, source);
+ 
+@@ -19,5 +20,7 @@ angular.module('Aggie')
+         flash.setAlertNow('source.delete.error');
+       });
+     };
++
++    $scope.tagsToString = Tags.tagsToString;
+   }
+ ]);
+diff --git a/public/angular/js/routes.js b/public/angular/js/routes.js
+index 459add2..d0d60d6 100644
+--- a/public/angular/js/routes.js
++++ b/public/angular/js/routes.js
+@@ -42,7 +42,7 @@ angular.module('Aggie')
+     });
+ 
+     $stateProvider.state('reports', {
+-      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
++      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags',
+       templateUrl: '/templates/reports/index.html',
+       controller: 'ReportsIndexController',
+       resolve: {
+@@ -57,7 +57,8 @@ angular.module('Aggie')
+             media: params.media,
+             incidentId: params.incidentId,
+             status: params.status,
+-            author: params.author
++            author: params.author,
++            tags: params.tags
+           }).$promise;
+         }],
+         sources: ['Source', function(Source) {
+diff --git a/public/angular/js/services/tags.js b/public/angular/js/services/tags.js
+index 268ce37..026939f 100644
+--- a/public/angular/js/services/tags.js
++++ b/public/angular/js/services/tags.js
+@@ -1,18 +1,8 @@
+ 'use strict';
+ 
+-angular.module('Aggie')
+-.factory('Tags', function() {
++angular.module('Aggie').factory('Tags', ['shared', function(shared) {
+   return {
+-    tagsToString: function(tags) {
+-      return tags.join(', ');
+-    },
+-    stringToTags: function(tags) {
+-      if (typeof tags === 'string') {
+-        return tags.split(',').map(function(tag) {
+-          return tag.trim();
+-        });
+-      }
+-      return tags;
+-    }
++    tagsToString: shared.Tags.toCSV,
++    stringToTags: shared.Tags.toArray
+   };
+-});
++}]);
+diff --git a/public/angular/templates/incidents/show.html b/public/angular/templates/incidents/show.html
+index ae1dca8..16e39e6 100644
+--- a/public/angular/templates/incidents/show.html
++++ b/public/angular/templates/incidents/show.html
+@@ -20,6 +20,11 @@
+         <div ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</td>
+     </tr>
+     <tr>
++      <td class="detail-key" translate>Tags</td>
++      <td class="detail-value">{{ tagsToString(incident.tags) }}</td>
++    </tr>
++
++    <tr>
+       <td class="detail-key" translate>Creator</td>
+       <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
+     </tr>
+diff --git a/public/angular/templates/reports/index.html b/public/angular/templates/reports/index.html
+index d372a70..4930500 100644
+--- a/public/angular/templates/reports/index.html
++++ b/public/angular/templates/reports/index.html
+@@ -16,6 +16,18 @@
+       </div>
+       <div class="td search">
+         <div class="input-group">
++          <span class="input-group-addon">
++            <i class="fa fa-search"></i>
++          </span>
++          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Tags' | translate}}">
++          <a href class="input-group-addon" ng-click="clearTags()" ng-show="searchParams.tags">×</a>
++          <div class="input-group-btn">
++            <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
++          </div>
++        </div>
++      </div>
++      <div class="td search">
++        <div class="input-group">
+           <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter author' | translate }}">
+           <a href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</a>
+           <div class="input-group-btn">
+diff --git a/public/angular/templates/reports/show.html b/public/angular/templates/reports/show.html
+index 0e3bf84..884efc7 100644
+--- a/public/angular/templates/reports/show.html
++++ b/public/angular/templates/reports/show.html
+@@ -34,6 +34,10 @@
+       <td class="detail-value">{{ report.author }}</td>
+     </tr>
+     <tr>
++      <td class="detail-key" translate>Tags</td>
++      <td class="detail-value">{{ tagsToString(report.tags) }}</td>
++    </tr>
++    <tr>
+       <td class="detail-key" translate>Content</td>
+       <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
+     </tr>
+diff --git a/public/angular/templates/reports/table.html b/public/angular/templates/reports/table.html
+index c939e9e..2039fe5 100644
+--- a/public/angular/templates/reports/table.html
++++ b/public/angular/templates/reports/table.html
+@@ -7,6 +7,7 @@
+       <th translate>Source</th>
+       <th translate>Author</th>
+       <th translate>Content</th>
++      <th translate>Tags</th>
+       <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
+       <th translate>Flagged</th>
+     </tr>
+@@ -36,6 +37,9 @@
+       <td class="expand content" ng-class="{ strong: !isRead(r) }">
+         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+       </td>
++      <td class="compact tag" ng-class="{ strong: !isRead(r) }">
++        {{ tagsToString(r.tags) }}
++      </td>
+       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
+         <div>
+           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
+diff --git a/public/angular/templates/sources/index.html b/public/angular/templates/sources/index.html
+index 4b3a31c..c863620 100644
+--- a/public/angular/templates/sources/index.html
++++ b/public/angular/templates/sources/index.html
+@@ -14,6 +14,7 @@
+       <th class="compact" translate>Name</th>
+       <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
+       <th class="expand" translate>Target</th>
++      <th class="expand" translate>Tags</th>
+       <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
+       <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
+     </tr>
+@@ -32,6 +33,7 @@
+         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
+       </td>
+       <td class="expand content">{{ target(s) }}</td>
++      <td class="expand content">{{ tagsToString(s.tags) }}</td>
+       <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
+           ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+       <td class="compact status" ng-show="currentUser.can('edit data')">
+diff --git a/public/angular/templates/sources/modal.html b/public/angular/templates/sources/modal.html
+index cec8d3b..e5a739b 100644
+--- a/public/angular/templates/sources/modal.html
++++ b/public/angular/templates/sources/modal.html
+@@ -74,6 +74,14 @@
+               </div>
+             </div>
+           </div>
++          <div class="form-group" ng-show="source.media">
++            <label for="tags" class="col-lg-2 control-label" translate>Tags</label>
++            <div class="col-lg-8">
++              <input ng-model="source.tags" ng-list class="form-control" id="tags" name="tags" placeholder="{{ 'Enter tags' | translate }}">
++              </input>
++              <div class="help-block" translate="sources_modal.tags"></div>
++            </div>
++          </div>
+         </fieldset>
+       </form>
+     </div>
+diff --git a/public/angular/templates/sources/show.html b/public/angular/templates/sources/show.html
+index a2d4958..620ad4e 100644
+--- a/public/angular/templates/sources/show.html
++++ b/public/angular/templates/sources/show.html
+@@ -31,6 +31,10 @@
+       </td>
+     </tr>
+     <tr>
++      <td class="detail-key" translate>Tags</td>
++      <td class="detail-value">{{ tagsToString(source.tags) }}</td>
++    </tr>
++    <tr>
+       <td class="detail-key" translate>Enabled</td>
+       <td class="detail-value">{{ source.enabled ? 'Yes' : 'No' | translate }}</td>
+     </tr>
+diff --git a/public/angular/translations/locale-en.json b/public/angular/translations/locale-en.json
+index 5319ad4..9414dec 100644
+--- a/public/angular/translations/locale-en.json
++++ b/public/angular/translations/locale-en.json
+@@ -316,6 +316,7 @@
+   "sources_modal": {
+     "help": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>. Note that <strong>passion fruit</strong> will match tweets containing both passion and fruit in any order. See <a href=\"https://dev.twitter.com/streaming/overview/request-parameters#track\">here</a> for details.",
+     "rss_url": "The URL of the RSS feed, e.g. <strong>http://example.com/rss.xml</strong>",
++    "tags": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>",
+     "facebook_url": "The URL of the Facebook page or group, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
+     "elmo_url": "The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong>"
+   },
+diff --git a/shared/tags.js b/shared/tags.js
+new file mode 100644
+index 0000000..bfc40d1
+--- /dev/null
++++ b/shared/tags.js
+@@ -0,0 +1,21 @@
++// Library for handling tags
++'use strict';
++
++// Tags are string comma separated in the front end
++var toArray = function(tags) {
++  if (typeof tags === 'string') {
++    return tags.split(',').map(function(tag) {
++      return tag.trim();
++    });
++  }
++  return tags;
++};
++
++var toCSV = function(tags) {
++  return tags.join(', ');
++};
++
++module.exports = {
++  toArray: toArray,
++  toCSV: toCSV
++};
+diff --git a/test/backend/init.js b/test/backend/init.js
+index f5bc396..3f3e6c7 100644
+--- a/test/backend/init.js
++++ b/test/backend/init.js
+@@ -116,3 +116,30 @@ EventCounter.prototype.kill = function() {
+ };
+ 
+ module.exports.EventCounter = EventCounter;
++
++function tagQueryTester(model, tags, n) {
++  return function(done) {
++    var query;
++    if (model === 'report') {
++      var ReportQuery = require('../../models/query/report-query');
++      query = new ReportQuery({ tags: tags });
++    } else { // model === 'incident'
++      var IncidentQuery = require('../../models/query/incident-query');
++      query = new IncidentQuery({
++        veracity: 'Confirmed false',
++        status: 'closed',
++        tags: tags
++      });
++    }
++    query.run(function(err, records) {
++      if (err) return done(err);
++      expect(records).to.have.keys(['total', 'results']);
++      expect(records.total).to.equal(n);
++      expect(records.results).to.be.an.instanceof(Array);
++      expect(records.results).to.have.length(n);
++      done();
++    });
++  };
++}
++
++module.exports.tagQueryTester = tagQueryTester;
+diff --git a/test/backend/models.query.incident-query.test.js b/test/backend/models.query.incident-query.test.js
+index d682c79..3153a17 100644
+--- a/test/backend/models.query.incident-query.test.js
++++ b/test/backend/models.query.incident-query.test.js
+@@ -55,23 +55,6 @@ describe('Incident query attributes', function() {
+     });
+   });
+ 
+-  var incidentTagTester = function(tags, n) {
+-    return function(done) {
+-      new IncidentQuery({
+-        veracity: 'Confirmed false',
+-        status: 'closed',
+-        tags: tags
+-      }).run(function(err, incidents) {
+-        if (err) return done(err);
+-        expect(incidents).to.have.keys(['total', 'results']);
+-        expect(incidents.total).to.equal(n);
+-        expect(incidents.results).to.be.an.instanceof(Array);
+-        expect(incidents.results).to.have.length(n);
+-        done();
+-      });
+-    };
+-  };
+-
+   it('should normalize query', function() {
+     var normalized = query.normalize();
+     expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity', 'tags']);
+@@ -142,9 +125,9 @@ describe('Incident query attributes', function() {
+     });
+   });
+ 
+-  it('should query by single full tag', incidentTagTester(['foobar'], 2));
++  it('should query by single full tag', utils.tagQueryTester('incident', ['foobar'], 2));
+ 
+-  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 1));
++  it('should query by multiple full tags', utils.tagQueryTester('incident', ['wellohorld', 'foobar'], 1));
+ 
+   after(utils.wipeModels([Incident]));
+   after(utils.expectModelsEmpty);
+diff --git a/test/backend/models.query.report-query.test.js b/test/backend/models.query.report-query.test.js
+index 7502755..0acb8d9 100644
+--- a/test/backend/models.query.report-query.test.js
++++ b/test/backend/models.query.report-query.test.js
+@@ -1,10 +1,38 @@
+ var utils = require('./init');
+ var expect = require('chai').expect;
++var async = require('async');
+ var ReportQuery = require('../../models/query/report-query');
++var Report = require('../../models/report');
+ 
++var query;
+ describe('Query attributes', function() {
+-  before(function() {
++  before(function(done) {
+     query = new ReportQuery({ keywords: 'zero one two three' });
++    Report.remove(function(err) {
++      if (err) return done(err);
++      async.each([
++        {
++          authoredAt: new Date(),
++          content: 'Retweet!',
++          tags: ['RT']
++        },
++        {
++          authoredAt: new Date(),
++          content: 'Retweet from fast source!',
++          tags: ['RT']
++        },
++        {
++          authoredAt: new Date(),
++          content: 'Original',
++          tags: ['NO_RT', 'fast']
++        },
++        {
++          authoredAt: new Date(),
++          content: 'Fast',
++          tags: ['fast']
++        }
++      ], Report.create.bind(Report), done);
++    });
+   });
+ 
+   it('should normalize query', function() {
+@@ -24,5 +52,9 @@ describe('Query attributes', function() {
+     expect(similar).to.be.true;
+   });
+ 
++  it('should query by single full tag', utils.tagQueryTester('report', ['RT'], 2));
++
++  it('should query by multiple full tags', utils.tagQueryTester('report', ['NO_RT', 'fast'], 1));
++  after(utils.wipeModels([Report]));
+   after(utils.expectModelsEmpty);
+ });
+diff --git a/test/end-to-end/fixtures/smsgh_reports2.json b/test/end-to-end/fixtures/smsgh_reports2.json
+new file mode 100644
+index 0000000..c975d96
+--- /dev/null
++++ b/test/end-to-end/fixtures/smsgh_reports2.json
+@@ -0,0 +1,26 @@
++[
++	{
++    "from": "9845098450",
++    "fulltext": "loremipsumdolor",
++    "date": "2016-09-01",
++    "keyword": "test"
++  },
++  {
++    "from": "12345678",
++    "fulltext": "foobarbaz",
++    "date": "2016-09-02",
++    "keyword": "test"
++  },
++  {
++    "from": "0864213579",
++    "fulltext": "whatwhat",
++    "date": "2016-09-04",
++    "keyword": "test"
++  },
++  {
++    "from": "0864213512",
++    "fulltext": "from the trenches",
++    "date": "2016-09-04",
++    "keyword": "ppb"
++  }
++]
+diff --git a/test/end-to-end/incidents.query-filter.test.js b/test/end-to-end/incidents.query-filter.test.js
+index 4db91e3..88b03b6 100644
+--- a/test/end-to-end/incidents.query-filter.test.js
++++ b/test/end-to-end/incidents.query-filter.test.js
+@@ -30,7 +30,7 @@ describe('Incident query filter', function() {
+     utils.addFirstReportToIncident(incidents[0]);
+     utils.addFirstReportToIncident(incidents[1]);
+     // filter by tag (from the first incident)
+-    var res1 = utils.filterByTag(['doo']);
++    var res1 = utils.filterIncidentsByTag(['doo']);
+     // expect the results to be of incident `hello`
+     return expect(res1).to.eventually.have.length(1);
+   });
+@@ -51,7 +51,7 @@ describe('Incident query filter', function() {
+     utils.addFirstReportToIncident(incidents[0]);
+     utils.addFirstReportToIncident(incidents[1]);
+     // filter by tags (such that they are from the second incident)
+-    var res2 = utils.filterByTag(['thank', 'you']);
++    var res2 = utils.filterIncidentsByTag(['thank', 'you']);
+     // expect the results to be details of incident `response`
+     return expect(res2).to.eventually.have.length(1);
+   });
+diff --git a/test/end-to-end/lib/incidents.js b/test/end-to-end/lib/incidents.js
+index c65969c..a37e186 100644
+--- a/test/end-to-end/lib/incidents.js
++++ b/test/end-to-end/lib/incidents.js
+@@ -47,7 +47,7 @@ module.exports.getIncidentTitles = function() {
+           });
+ };
+ 
+-module.exports.filterByTag = function(tags) {
++module.exports.filterIncidentsByTag = function(tags) {
+   this.setIncidentFilter({ tags: tags });
+   return this.getIncidentTitles();
+ };
+diff --git a/test/end-to-end/lib/reports.js b/test/end-to-end/lib/reports.js
+index b8732a2..0425463 100644
+--- a/test/end-to-end/lib/reports.js
++++ b/test/end-to-end/lib/reports.js
+@@ -29,6 +29,10 @@ module.exports.setFilter = function(filter) {
+   if (filter.author) {
+     element(by.model('searchParams.author')).sendKeys(filter.author);
+   }
++  if (filter.tags) {
++    var text = filter.tags.join(', ');
++    element(by.model('searchParams.tags')).sendKeys(text);
++  }
+   if (filter.time) {
+     // This will only work once: if you want to then change the filter the
+     // button will have different text and you'll have to select it some other
+@@ -45,11 +49,15 @@ module.exports.setFilter = function(filter) {
+   return e;
+ };
+ 
++module.exports.filterReportsByTag = function(tags) {
++  browser.get(browser.baseUrl + 'reports');
++  this.setFilter({ tags: tags });
++  return this.getReports();
++};
+ // Returns an array for the first page of reports. If `pluckColumn` is set,
+ // the elements of the array are just the text from that column. Otherwise, they
+ // are the WebDriver elements for each row.
+ module.exports.getReports = function(pluckColumn) {
+-  browser.get(browser.baseUrl + 'reports');
+   var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
+   if (!pluckColumn) {
+     return element.all(x);
+diff --git a/test/end-to-end/lib/sources.js b/test/end-to-end/lib/sources.js
+index 4a5cafe..ec81797 100644
+--- a/test/end-to-end/lib/sources.js
++++ b/test/end-to-end/lib/sources.js
+@@ -19,6 +19,9 @@ module.exports.addSource = function(sourceName, params) {
+   } else {
+     element(by.model('source.url')).sendKeys(params.url);
+   }
++  if (params.tags) {
++    element(by.model('source.tags')).sendKeys(params.tags);
++  }
+   return element(by.buttonText('Submit')).click();
+ };
+ 
+diff --git a/test/end-to-end/reports.query-filter.test.js b/test/end-to-end/reports.query-filter.test.js
+new file mode 100644
+index 0000000..8747aea
+--- /dev/null
++++ b/test/end-to-end/reports.query-filter.test.js
+@@ -0,0 +1,49 @@
++'use strict';
++
++var utils = require('./e2e-tools');
++var reports = require('./fixtures/smsgh_reports2.json');
++var expect = utils.expect;
++
++describe(' query report filter', function() {
++  before(utils.initDb);
++  after(utils.disconnectDropDb);
++
++  beforeEach(utils.resetDb);
++  beforeEach(utils.initAdmin.bind({}, 'asdfasdf'));
++  beforeEach(utils.toggleFetching.bind({}, 'Off'));
++  beforeEach(utils.addSource.bind({}, 'SMS GH', { nickname: 'public', keywords: 'test', tags: 'sms, public' }));
++  beforeEach(utils.addSource.bind({}, 'SMS GH', { nickname: 'monitor', keywords: 'ppb', tags: 'sms, monitor' }));
++  beforeEach(utils.toggleFetching.bind({}, 'On'));
++
++  afterEach(utils.deleteSource.bind({}, 'SMS GH', 'public'));
++  afterEach(utils.deleteSource.bind({}, 'SMS GH', 'monitor'));
++  afterEach(utils.toggleFetching.bind({}, 'Off'));
++  afterEach(utils.resetBrowser);
++
++  it('should filter reports by single tag', function() {
++    // generate 2 reports
++    browser.wait(utils.sendSmsghRequest(reports[0]));
++    browser.wait(utils.sendSmsghRequest(reports[1]));
++    browser.wait(utils.sendSmsghRequest(reports[2]));
++    browser.wait(utils.sendSmsghRequest(reports[3]));
++
++    browser.get(browser.baseUrl + 'reports');
++    // filter by tag (from the first
++    var res1 = utils.filterReportsByTag(['sms']);
++    return expect(res1).to.eventually.have.length(4);
++  });
++
++  it('should filter reports by multiple tags', function() {
++    // generate 4 reports
++    browser.wait(utils.sendSmsghRequest(reports[0]));
++    browser.wait(utils.sendSmsghRequest(reports[1]));
++    browser.wait(utils.sendSmsghRequest(reports[2]));
++    browser.wait(utils.sendSmsghRequest(reports[3]));
++
++    browser.get(browser.baseUrl + 'reports');
++    // filter by tags (such that they are from the second incident)
++    var res2 = utils.filterReportsByTag(['sms', 'monitor']);
++    // expect the results to be details of incident `response`
++    return expect(res2).to.eventually.have.length(1);
++  });
++});
+diff --git a/test/end-to-end/sources.fetching-toggle.test.js b/test/end-to-end/sources.fetching-toggle.test.js
+index 413ae87..a4291f8 100644
+--- a/test/end-to-end/sources.fetching-toggle.test.js
++++ b/test/end-to-end/sources.fetching-toggle.test.js
+@@ -28,6 +28,7 @@ describe('test generation of reports', function() {
+       !sourceOn && utils.toggleSource('SMS GH', 'Off');
+       browser.sleep(500);
+       browser.wait(utils.sendSmsghRequest(reqParams));
++      browser.get(browser.baseUrl + 'reports');
+       expect(utils.getReports().count()).to.eventually.equal(numExpect);
+       fetchingOn && utils.toggleFetching('Off');
+       sourceOn && utils.toggleSource('SMS GH', 'Off');
+diff --git a/test/end-to-end/sources.smsgh.test.js b/test/end-to-end/sources.smsgh.test.js
+index 8366601..12ed181 100644
+--- a/test/end-to-end/sources.smsgh.test.js
++++ b/test/end-to-end/sources.smsgh.test.js
+@@ -46,6 +46,7 @@ describe('SMS GH', function() {
+     browser.sleep(500);
+     utils.toggleSource('SMS GH', 'Off');
+     utils.toggleFetching('Off');
++    browser.get(browser.baseUrl + 'reports');
+     var count2 = utils.getReports().count();
+     return expect(count2).to.eventually.be.above(count1);
+   };
