@@ -28,6 +28,7 @@ describe('test generation of reports', function() {
       !sourceOn && utils.toggleSource('SMS GH', 'Off');
       browser.sleep(500);
       browser.wait(utils.sendSmsghRequest(reqParams));
+      browser.get(browser.baseUrl + 'reports');
       expect(utils.getReports().count()).to.eventually.equal(numExpect);
       fetchingOn && utils.toggleFetching('Off');
       sourceOn && utils.toggleSource('SMS GH', 'Off');

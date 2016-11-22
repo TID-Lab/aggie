@@ -46,6 +46,7 @@ describe('SMS GH', function() {
     browser.sleep(500);
     utils.toggleSource('SMS GH', 'Off');
     utils.toggleFetching('Off');
+    browser.get(browser.baseUrl + 'reports');
     var count2 = utils.getReports().count();
     return expect(count2).to.eventually.be.above(count1);
   };

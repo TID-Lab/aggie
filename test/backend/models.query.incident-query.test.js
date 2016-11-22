@@ -55,23 +55,6 @@ describe('Incident query attributes', function() {
     });
   });
 
-  var incidentTagTester = function(tags, n) {
-    return function(done) {
-      new IncidentQuery({
-        veracity: 'Confirmed false',
-        status: 'closed',
-        tags: tags
-      }).run(function(err, incidents) {
-        if (err) return done(err);
-        expect(incidents).to.have.keys(['total', 'results']);
-        expect(incidents.total).to.equal(n);
-        expect(incidents.results).to.be.an.instanceof(Array);
-        expect(incidents.results).to.have.length(n);
-        done();
-      });
-    };
-  };
-
   it('should normalize query', function() {
     var normalized = query.normalize();
     expect(normalized).to.have.keys(['title', 'locationName', 'assignedTo', 'veracity', 'tags']);
@@ -142,9 +125,9 @@ describe('Incident query attributes', function() {
     });
   });
 
-  it('should query by single full tag', incidentTagTester(['foobar'], 2));
+  it('should query by single full tag', utils.tagQueryTester('incident', ['foobar'], 2));
 
-  it('should query by multiple full tags', incidentTagTester(['wellohorld', 'foobar'], 1));
+  it('should query by multiple full tags', utils.tagQueryTester('incident', ['wellohorld', 'foobar'], 1));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);

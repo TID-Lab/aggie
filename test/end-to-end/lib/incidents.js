@@ -47,7 +47,7 @@ module.exports.getIncidentTitles = function() {
           });
 };
 
-module.exports.filterByTag = function(tags) {
+module.exports.filterIncidentsByTag = function(tags) {
   this.setIncidentFilter({ tags: tags });
   return this.getIncidentTitles();
 };

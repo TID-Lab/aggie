@@ -6,8 +6,9 @@ angular.module('Aggie')
   '$stateParams',
   'Source',
   'source',
+  'Tags',
   'FlashService',
-  function($scope, $rootScope, $stateParams, Source, source, flash) {
+  function($scope, $rootScope, $stateParams, Source, source, Tags, flash) {
     $scope.source = source;
     Source.resetUnreadErrorCount({ id: source._id }, source);
 
@@ -19,5 +20,7 @@ angular.module('Aggie')
         flash.setAlertNow('source.delete.error');
       });
     };
+
+    $scope.tagsToString = Tags.tagsToString;
   }
 ]);

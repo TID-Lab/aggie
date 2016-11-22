@@ -14,6 +14,7 @@
       <th class="compact" translate>Name</th>
       <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
       <th class="expand" translate>Target</th>
+      <th class="expand" translate>Tags</th>
       <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
       <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
     </tr>
@@ -32,6 +33,7 @@
         <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
       </td>
       <td class="expand content">{{ target(s) }}</td>
+      <td class="expand content">{{ tagsToString(s.tags) }}</td>
       <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
           ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
       <td class="compact status" ng-show="currentUser.can('edit data')">

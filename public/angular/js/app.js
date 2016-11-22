@@ -27,6 +27,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 .factory('shared', function() {
   var shared = {};
   shared.User = require('../../../shared/user');
+  shared.Tags = require('../../../shared/tags');
   return shared;
 })
 

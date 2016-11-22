@@ -29,6 +29,10 @@ module.exports.setFilter = function(filter) {
   if (filter.author) {
     element(by.model('searchParams.author')).sendKeys(filter.author);
   }
+  if (filter.tags) {
+    var text = filter.tags.join(', ');
+    element(by.model('searchParams.tags')).sendKeys(text);
+  }
   if (filter.time) {
     // This will only work once: if you want to then change the filter the
     // button will have different text and you'll have to select it some other
@@ -45,11 +49,15 @@ module.exports.setFilter = function(filter) {
   return e;
 };
 
+module.exports.filterReportsByTag = function(tags) {
+  browser.get(browser.baseUrl + 'reports');
+  this.setFilter({ tags: tags });
+  return this.getReports();
+};
 // Returns an array for the first page of reports. If `pluckColumn` is set,
 // the elements of the array are just the text from that column. Otherwise, they
 // are the WebDriver elements for each row.
 module.exports.getReports = function(pluckColumn) {
-  browser.get(browser.baseUrl + 'reports');
   var x = by.repeater("r in visibleReports.toArray() | orderBy:'-storedAt'");
   if (!pluckColumn) {
     return element.all(x);

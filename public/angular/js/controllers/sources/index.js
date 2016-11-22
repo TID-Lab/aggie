@@ -6,7 +6,8 @@ angular.module('Aggie')
   'FlashService',
   'sources',
   'Source',
-  function($scope, $rootScope, flash, sources, Source) {
+  'Tags',
+  function($scope, $rootScope, flash, sources, Source, Tags) {
     $scope.sources = sources;
 
     $scope.saveSource = function(source) {
@@ -33,5 +34,7 @@ angular.module('Aggie')
     $scope.viewSource = function(event, source) {
       $rootScope.$state.go('source', { id: source._id });
     };
+
+    $scope.tagsToString = Tags.tagsToString;
   }
 ]);
