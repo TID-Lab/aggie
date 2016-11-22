@@ -38,11 +38,11 @@ describe('SMSGhana content service', function() {
 
     beforeEach(function() {
       service = SMSGhContentService;
-      dummyEventName = service.subscribe('dummy');
+      dummyEventName = service.subscribe('DuMmY');
     });
 
     afterEach(function() {
-      service.unsubscribe('dummy');
+      service.unsubscribe('DuMmY');
     });
 
     it('should start the server and send 200 code', function(done) {
@@ -146,7 +146,6 @@ describe('SMSGhana content service', function() {
             expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
             expect(reportData.content).to.equal('lorem ipsum dolor');
             expect(reportData.author).to.equal('9845098450');
-
             callback();
           });
         },
@@ -183,6 +182,51 @@ describe('SMSGhana content service', function() {
       service.unsubscribe('dodo');
     });
 
+    it('should be case-insensitive', function(done) {
+      async.parallel([
+        function(callback) {
+          service.once(dummyEventName, function(reportData) {
+            expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
+            expect(reportData.content).to.equal('lorem ipsum dolor');
+            expect(reportData.author).to.equal('9845098450');
+            expect(reportData.keyword).to.equal('dummy');
+            callback();
+          });
+        },
+        function(callback) {
+          service.once(dummyEventName, function(reportData) {
+            expect(reportData.authoredAt).to.eql(new Date('2016-09-01'));
+            expect(reportData.content).to.equal('lorem ipsum dolor');
+            expect(reportData.author).to.equal('9845098450');
+            expect(reportData.keyword).to.equal('dummy');
+            callback();
+          });
+        }
+      ], done);
+
+      reqParams.keyword = 'Dummy';
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(reqParams)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+
+      reqParams.keyword = 'DUMMY';
+      request('http://localhost:1111')
+        .get('/smsghana')
+        .query(reqParams)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+
+    });
 
   });
 
