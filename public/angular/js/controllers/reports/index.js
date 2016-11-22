@@ -364,8 +364,9 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(report) {
-      // TODO this behavior is unclear. For now we'll just pick one of the
-      // sources that has a media type.
+      // Pick one of the sources that has a media type. For now, it happens that
+      // if a report has multiple sources, they all have the same type, or are
+      // deleted
       for (var i = 0; i < report._sources.length; i++) {
         var sourceId = report._sources[i];
         var source = $scope.sourcesById[sourceId];
