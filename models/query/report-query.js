@@ -41,7 +41,7 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
-    _source: this.sourceId,
+    _sources: this.sourceId,
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,

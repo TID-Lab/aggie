@@ -23,25 +23,21 @@
             </div>
           </div>
 
-          <div class="alert alert-danger col-lg-10 col-lg-offset-1" ng-hide="validSourceMedia(source)" translate>
-            Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.
-          </div>
-
-          <div class="form-group" ng-show="source.media && validSourceMedia(source)" ng-class="{ 'read-only': source.media == 'twitter' }">
+          <div class="form-group" ng-show="source.media">
             <label for="nickname" class="col-lg-2 control-label" translate>Nickname</label>
             <div class="col-lg-8">
               <div class="input-group">
-                <input type="text" ng-model="source.nickname" ng-readonly="source.media == 'twitter'" class="form-control" id="nickname" name="nickname" placeholder="{{ 'Enter a nickname' | translate }}" required maxlength="20" ng-focus>
+                <input type="text" ng-model="source.nickname" class="form-control" id="nickname" name="nickname" placeholder="{{ 'Enter a nickname' | translate }}" required maxlength="20" ng-focus>
                 <span class="input-group-addon"><span ng-show="source.nickname.length && form.nickname.$focused">{{20 - source.nickname.length}}</span></span>
               </div>
-              <div class="help-block" ng-hide="source.media == 'twitter'" translate>A short name for this source.</div>
+              <div class="help-block" translate>A short name for this source.</div>
               <div class="has-error" ng-show="showErrors() && form.nickname.$invalid">
                 <div class="help-block" ng-show="form.nickname.$error.required" translate>Nickname is required.</div>
               </div>
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media == 'smsgh' || (source.media == 'twitter' && validSourceMedia(source))">
+          <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter'">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
               <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}" ng-required="source.media == 'twitter'">
@@ -53,7 +49,7 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && validSourceMedia(source)">
+          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh'">
             <label for="url" class="col-lg-2 control-label" translate>URL</label>
             <div class="col-lg-8">
               <div class="input-group">

@@ -31,12 +31,6 @@ describe('Source controller', function() {
           done();
         });
     });
-    it('should not allow the creation of multiple twitter sources', function(done) {
-      request(sourceController)
-        .post('/api/v1/source')
-        .send({ nickname: 'test', media: 'twitter', keywords: 'test2' })
-        .expect(422, 'only_one_twitter_allowed', done);
-    });
   });
 
   describe('GET /api/v1/source/:_id', function() {

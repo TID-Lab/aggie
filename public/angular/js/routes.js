@@ -99,8 +99,16 @@ angular.module('Aggie')
             report.content = Autolinker.link(report.content);
             var data = { report: report };
 
-            Source.get({ id: report._source }, function(source) {
-              data.source = source;
+            var sourcePromises = report._sources.map(function(sourceId) {
+              var promise = $q.defer();
+              Source.get({ id: sourceId }, function(source) {
+                promise.resolve(source);
+              });
+              return promise.promise;
+            });
+
+            $q.all(sourcePromises).then(function(sources) {
+              data.sources = sources;
               deferred.resolve(data);
             });
           });
@@ -218,7 +226,6 @@ angular.module('Aggie')
           return Incident.query().$promise;
         }],
         trends: ['Trend', function(Trend) {
-          console.log('RESOLVING TRENDS');
           return Trend.query().$promise;
         }]
       }

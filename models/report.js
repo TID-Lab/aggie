@@ -18,9 +18,9 @@ var schema = new Schema({
   tags: { type: [String], default: [] },
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
-  _source: { type: String, ref: 'Source', index: true },
+  _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: String, index: true },
-  _sourceNickname: String,
+  _sourceNicknames: [String],
   _incident: { type: String, ref: 'Incident', index: true },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true }
