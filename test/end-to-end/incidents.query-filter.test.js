@@ -1,18 +1,9 @@
 'use strict';
 
 var utils = require('./e2e-tools');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-var expect = chai.expect;
-var promise = protractor.promise;
 var reports = require('./fixtures/smsgh_reports.json');
 var incidents = require('./fixtures/incidents.json');
-
-// Allow chai to wait for promises on the right-hand-side
-chaiAsPromised.transformAsserterArgs = function(args) {
-  return promise.all(args);
-};
+var expect = utils.expect;
 
 describe('Incident query filter', function() {
   before(utils.initDb);
@@ -39,7 +30,7 @@ describe('Incident query filter', function() {
     utils.addFirstReportToIncident(incidents[0]);
     utils.addFirstReportToIncident(incidents[1]);
     // filter by tag (from the first incident)
-    var res1 = utils.filterByTag(['doo']);
+    var res1 = utils.filterIncidentsByTag(['doo']);
     // expect the results to be of incident `hello`
     return expect(res1).to.eventually.have.length(1);
   });
@@ -60,7 +51,7 @@ describe('Incident query filter', function() {
     utils.addFirstReportToIncident(incidents[0]);
     utils.addFirstReportToIncident(incidents[1]);
     // filter by tags (such that they are from the second incident)
-    var res2 = utils.filterByTag(['thank', 'you']);
+    var res2 = utils.filterIncidentsByTag(['thank', 'you']);
     // expect the results to be details of incident `response`
     return expect(res2).to.eventually.have.length(1);
   });

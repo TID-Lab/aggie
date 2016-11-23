@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('Aggie')
-.factory('Tags', function() {
+angular.module('Aggie').factory('Tags', ['shared', function(shared) {
   return {
-    tagsToString: function(tags) {
-      return tags.join(', ');
-    }
+    tagsToString: shared.Tags.toCSV,
+    stringToTags: shared.Tags.toArray
   };
-});
+}]);

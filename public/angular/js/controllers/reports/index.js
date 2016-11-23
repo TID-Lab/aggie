@@ -17,10 +17,11 @@ angular.module('Aggie')
   'Batch',
   'Socket',
   'Queue',
+  'Tags',
   'paginationOptions',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, paginationOptions) {
+           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -194,6 +195,10 @@ angular.module('Aggie')
       $scope.search({ author: null });
     };
 
+    $scope.clearTags = function() {
+      $scope.search({ tags: null });
+    };
+
     $scope.countAndCheck = function(key, value) {
       var total = $scope.reports.reduce(function(total, report) {
         if (report[key] === value) total += 1;
@@ -211,6 +216,7 @@ angular.module('Aggie')
         $scope.searchParams.sourceId === null &&
         $scope.searchParams.incidentId === null &&
         $scope.searchParams.author === null &&
+        $scope.searchParams.tags === null &&
         $scope.searchParams.keywords === null;
     };
 
@@ -223,6 +229,7 @@ angular.module('Aggie')
         media: null,
         incidentId: null,
         author: null,
+        tags: null,
         keywords: null
       });
     };
@@ -357,9 +364,15 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(report) {
-      var source = $scope.sourcesById[report._source];
-      if (source && $scope.mediaOptions[source.media] !== -1) {
-        return source.media + '-source';
+      // Pick one of the sources that has a media type. For now, it happens that
+      // if a report has multiple sources, they all have the same type, or are
+      // deleted
+      for (var i = 0; i < report._sources.length; i++) {
+        var sourceId = report._sources[i];
+        var source = $scope.sourcesById[sourceId];
+        if (source && $scope.mediaOptions[source.media] !== -1) {
+          return source.media + '-source';
+        }
       }
       return 'unknown-source';
     };
@@ -368,6 +381,8 @@ angular.module('Aggie')
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
     });
+
+    $scope.tagsToString = Tags.tagsToString;
 
     init();
   }

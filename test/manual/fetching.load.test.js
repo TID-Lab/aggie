@@ -55,7 +55,7 @@ describe('Fetching load test', function() {
   });
 
   it('should start fetching data', function(done) {
-    request.put(args.baseurl + '/api/v1/fetching/on', function() {
+    request.put(args.baseurl + '/api/v1/settings/fetching/on', function() {
       done();
     });
   });

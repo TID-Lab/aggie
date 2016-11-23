@@ -1,6 +1,12 @@
 Manual End-to-end Testing
 =========================
 
+Prerequisites
+-------------
+
+1. Use default `secrets.json`, but set `adminParty` to false
+2. Run Aggie with `npm start`
+
 Internationalization
 --------------------
 
@@ -12,12 +18,18 @@ angular.element(document.querySelector('html')).injector().get('$translate').use
 
 [all constant string should appear in `__ALL_CAPS`]
 
+User Activity Logging
+---------------------
+
+1. Do all of the below with `api.log_user_activity: true` in `config/secrets.json`.
+
 Logging in
 ----------
 
-1. Drop aggie database and run `npm install`
-2. Log in as `admin` with default password [goes to `/reset_admin_password`]
-3. Reset admin password [goes to `/reports`]
+1. Make sure `adminParty` is false
+2. Drop aggie database and run `npm install`
+3. Log in as `admin` with default password [goes to `/reset_admin_password`]
+4. Reset admin password [goes to `/reports`]
 
 Sources, APIs, and fetching
 --------------------
@@ -46,11 +58,13 @@ with the previously created incident]
 9. Go to `/incidents` [in `Title` column incident shows correct number of
 reports]
 10. View the incident you have just created [incident shows the 3 reports that were added]
-11. Flag one report in the incident view page [the report is flagged]
-12. Click `Create Incident` [modal appears]
-13. Begin typing `mac` in the location field [locations starting with `mac`
+11. Click the `Edit` button [edit modal appears]
+12. Add one tag and save the incident [incident is updated]
+13. Flag one report in the incident view page [the report is flagged]
+14. Click `Create Incident` [modal appears]
+15. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
-14. Pick a a location, enter a title and save the incident [incident is saved successfully]
+16. Pick a a location, enter a title and save the incident [incident is saved successfully]
 
 
 Users and emails
@@ -88,3 +102,17 @@ and populates with some reports]
 7. Log in as a different user in a different tab/window
 8. Navigate to `/reports` as the second user and click `Grab Batch`. [reports
 are populated, and none of them are reports the other user has in their batch]
+
+Experimental feature
+------------
+See experiment.md
+
+Prerequisites:
+1. Set secrets.json variables: `"experimental": true`, and `"experimentFile": "test/end_to_end/fixtures/experiment_reports.json"`
+2. Set fetching off
+3. Stop Aggie
+Start "experiment"
+1. Start Aggie
+1. Set fetching on
+1. Navigate to `/reports` [50 reports have appeared on the page, the last one with a
+bit of delay]

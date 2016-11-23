@@ -308,7 +308,6 @@
   "Close": "Close",
   "Choose source media": "Choose source media",
   "Media is required.": "Media is required.",
-  "Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.": "Only one Twitter source is allowed. Instead of adding another one, you should just add keywords to the first.",
   "Nickname": "Nickname",
   "A short name for this source.": "A short name for this source.",
   "Nickname is required.": "Nickname is required.",
@@ -316,6 +315,7 @@
   "sources_modal": {
     "help": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>. Note that <strong>passion fruit</strong> will match tweets containing both passion and fruit in any order. See <a href=\"https://dev.twitter.com/streaming/overview/request-parameters#track\">here</a> for details.",
     "rss_url": "The URL of the RSS feed, e.g. <strong>http://example.com/rss.xml</strong>",
+    "tags": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>",
     "facebook_url": "The URL of the Facebook page or group, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
     "elmo_url": "The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong>"
   },

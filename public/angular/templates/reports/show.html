@@ -19,11 +19,9 @@
       <td class="detail-key" translate>Stored Time</td>
       <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
     </tr>
-    <tr>
-      <td class="detail-key" translate>Source</td>
-      <td class="detail-value">
-        <span ng-show="source">{{ source.nickname }}</span>
-      </td>
+    <tr ng-repeat="source in sources">
+      <td class="detail-key" translate>Sources</td>
+      <td class="detail-value">{{ source.nickname }}</td>
     </tr>
     <tr>
       <td class="detail-key" translate>URL</td>
@@ -32,6 +30,10 @@
     <tr>
       <td class="detail-key" translate>Author</td>
       <td class="detail-value">{{ report.author }}</td>
+    </tr>
+    <tr>
+      <td class="detail-key" translate>Tags</td>
+      <td class="detail-value">{{ tagsToString(report.tags) }}</td>
     </tr>
     <tr>
       <td class="detail-key" translate>Content</td>

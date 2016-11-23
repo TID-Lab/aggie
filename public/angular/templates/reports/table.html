@@ -4,9 +4,10 @@
       <th ng-show="currentUser.can('edit data')"></th>
       <th translate>Time</th>
       <th translate>Media</th>
-      <th translate>Source</th>
+      <th translate>Sources</th>
       <th translate>Author</th>
       <th translate>Content</th>
+      <th translate>Tags</th>
       <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
       <th translate>Flagged</th>
     </tr>
@@ -28,13 +29,18 @@
         <div class="icon-left"></div>
       </td>
       <td class="compact source" ng-class="{ strong: !isRead(r) }">
-        {{ sourcesById[r._source].nickname || '[Deleted]' }}
+        <span ng-repeat="s in r._sources">
+          {{ sourcesById[s].nickname || '[Deleted]' }}
+        </span>
       </td>
       <td class="compact author" ng-class="{ strong: !isRead(r) }">
         {{ r.author }}
       </td>
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+      </td>
+      <td class="compact tag" ng-class="{ strong: !isRead(r) }">
+        {{ tagsToString(r.tags) }}
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
         <div>

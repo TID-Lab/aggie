@@ -74,6 +74,7 @@ The following need to be installed.
   - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
   1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+  1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
 1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
   - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`

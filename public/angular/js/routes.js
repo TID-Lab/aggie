@@ -42,7 +42,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author',
+      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -57,7 +57,8 @@ angular.module('Aggie')
             media: params.media,
             incidentId: params.incidentId,
             status: params.status,
-            author: params.author
+            author: params.author,
+            tags: params.tags
           }).$promise;
         }],
         sources: ['Source', function(Source) {
@@ -98,8 +99,16 @@ angular.module('Aggie')
             report.content = Autolinker.link(report.content);
             var data = { report: report };
 
-            Source.get({ id: report._source }, function(source) {
-              data.source = source;
+            var sourcePromises = report._sources.map(function(sourceId) {
+              var promise = $q.defer();
+              Source.get({ id: sourceId }, function(source) {
+                promise.resolve(source);
+              });
+              return promise.promise;
+            });
+
+            $q.all(sourcePromises).then(function(sources) {
+              data.sources = sources;
               deferred.resolve(data);
             });
           });
@@ -217,7 +226,6 @@ angular.module('Aggie')
           return Incident.query().$promise;
         }],
         trends: ['Trend', function(Trend) {
-          console.log('RESOLVING TRENDS');
           return Trend.query().$promise;
         }]
       }

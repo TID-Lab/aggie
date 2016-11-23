@@ -1,17 +1,8 @@
 'use strict';
 
 var utils = require('./e2e-tools');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-
-chai.use(chaiAsPromised);
-var expect = chai.expect;
 var promise = protractor.promise;
-
-// Allow chai to wait for promises on the right-hand-side
-chaiAsPromised.transformAsserterArgs = function(args) {
-  return promise.all(args);
-};
+var expect = utils.expect;
 
 describe('grab batch', function() {
   before(utils.initDb);
