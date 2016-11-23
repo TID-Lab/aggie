@@ -107,12 +107,12 @@ Experimental feature
 ------------
 See experiment.md
 
-Prerequisites: 
+Prerequisites:
 1. Set secrets.json variables: `"experimental": true`, and `"experimentFile": "test/end_to_end/fixtures/experiment_reports.json"`
 2. Set fetching off
 3. Stop Aggie
 Start "experiment"
 1. Start Aggie
 1. Set fetching on
-1. Navigate to `/reports` [50 reports have appeared on the page, the last one with a 
+1. Navigate to `/reports` [50 reports have appeared on the page, the last one with a
 bit of delay]
