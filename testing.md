@@ -18,6 +18,11 @@ angular.element(document.querySelector('html')).injector().get('$translate').use
 
 [all constant string should appear in `__ALL_CAPS`]
 
+User Activity Logging
+---------------------
+
+1. Do all of the below with `api.log_user_activity: true` in `config/secrets.json`.
+
 Logging in
 ----------
 
