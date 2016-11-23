@@ -20,9 +20,12 @@ describe('Fetching toggle', function() {
   beforeEach(utils.resetDb);
   beforeEach(utils.initAdmin.bind({}, 'asdfasdf'));
   beforeEach(utils.toggleFetching.bind({}, 'Off'));
-  beforeEach(utils.addSource.bind({}, 'Twitter', { keywords: 'twitter' }));
+  beforeEach(utils.addSource.bind({}, 'Twitter', {
+    keywords: 'twitter',
+    nickname: 'twit toot'
+  }));
 
-  afterEach(utils.deleteSource.bind({}, 'Twitter', 'Twitter Search'));
+  afterEach(utils.deleteSource.bind({}, 'Twitter', 'twit toot'));
   afterEach(utils.toggleFetching.bind({}, 'Off'));
   afterEach(utils.resetBrowser);
 

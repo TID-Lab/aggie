@@ -11,9 +11,7 @@ module.exports.addSource = function(sourceName, params) {
   browser.get(browser.baseUrl + 'sources');
   element(by.buttonText('Create Source')).click();
   element.all(by.model('source.media')).first().$('[value="' + sourceList[sourceName] + '"]').click();
-  if (sourceName !== 'Twitter') {
-    element(by.model('source.nickname')).sendKeys(params.nickname ? params.nickname : 'blank');
-  }
+  element(by.model('source.nickname')).sendKeys(params.nickname ? params.nickname : 'blank');
   if (sourceName === 'SMS GH' || sourceName === 'Twitter') {
     element(by.model('source.keywords')).sendKeys(params.keywords);
   } else {
