@@ -1,0 +1,28 @@
+diff --git a/lib/fetching/content-services/twitter-content-service.js b/lib/fetching/content-services/twitter-content-service.js
+index 7761a58..3af24e7 100644
+--- a/lib/fetching/content-services/twitter-content-service.js
++++ b/lib/fetching/content-services/twitter-content-service.js
+@@ -20,6 +20,7 @@ function TwitterContentService() {
+ util.inherits(TwitterContentService, ContentService);
+ 
+ TwitterContentService.prototype.subscribe = function(id, info) {
+-  console.log('bot', id, 'subscribing with keywords', info.keywords);
+   this._connectedSources[id] = info;
+   this._compiledQueries[id] = tweetMatches.compile(info.keywords);
+   this._keywords = getQuery(this._connectedSources);
+@@ -68,6 +69,7 @@ TwitterContentService.prototype._addListeners = function() {
+     // Bail if stream has not been started
+     return;
+   }
+-  console.log('Adding listeners');
+   var self = this;
+   this._stream.on('tweet', function(tweet) {
+     self._makeReport(tweet);
+@@ -101,6 +103,7 @@ TwitterContentService.prototype._makeReport = function(tweet) {
+   if (botIds.length === 0) {
+     throw new Error('tweet-matches failed with keywords ' + this._keywords);
+   }
+-  console.log('emitting tweet:' + botIds[0]);
+   this.emit('tweet:' + botIds[0], this._parse(tweet));
+ };
+ 
