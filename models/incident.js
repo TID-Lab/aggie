@@ -13,6 +13,7 @@ var autoIncrement = require('mongoose-auto-increment');
 var listenTo = require('mongoose-listento');
 var Report = require('./report');
 var logger = require('../lib/logger');
+var toRegexp = require('./to-regexp');
 
 require('../lib/error');
 
@@ -145,7 +146,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Checking for multiple tags in incident
   if (query.tags) {
-    filter.tags = { $all: query.tags };
+    filter.tags = { $all: toRegexp.allCaseInsensitive(query.tags) };
   } else delete filter.tags;
 
   // Re-set search timestamp
