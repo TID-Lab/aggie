@@ -27,11 +27,11 @@ function streamingUpdate(Model, throttle, which, editFn, next) {
 exports.up = function(next) {
   streamingUpdate(Report, THROTTLE, {}, function(report) {
     var reportRaw = report.toObject();
-    if (!report._sources) {
-      report._sources = report._source ? [reportRaw._source] : [];
+    if (!report._sources || !report._sources.length) {
+      report._sources = reportRaw._source ? [reportRaw._source] : [];
     }
-    if (!report._sourceNicknames) {
-      report._sourceNicknames = report._sourceNickname ? [reportRaw._sourceNickname] : [];
+    if (!report._sourceNicknames || !report._sourceNicknames.length) {
+      report._sourceNicknames = reportRaw._sourceNickname ? [reportRaw._sourceNickname] : [];
     }
     return report;
   }, next);
