@@ -1,6 +1,6 @@
 {
   "name": "aggie",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "dependencies": {
     "Base64": {
       "version": "0.2.1",
