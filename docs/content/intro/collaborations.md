@@ -1,8 +1,11 @@
 # Aggie Contributions and Collaborations
 
-**Managing Institution:**  United Nations University-Institute for Computing and Society Research
+## Managing Institution
 
-**Code Contributors (2011 – June, 2016)**
+United Nations University-Institute for Computing and Society Research
+
+## Code Contributors (2011–2016)
+
 1. Victor Kareh
 2. Thomas Smyth
 3. Cory Kaufman-Schofield
