@@ -15,6 +15,7 @@ module.exports = function(karma) {
       'public/angular/js/app.js',
       'public/angular/templates/**/*.html',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/socket.io-client/dist/socket.io.js',
       'test/frontend/**/*.test.js'
     ],
 

@@ -33,6 +33,10 @@ angular.module('Aggie')
     },
 
     off: socket.removeListener.bind(socket),
-    removeAllListeners: socket.removeAllListeners.bind(socket)
+    removeAllListeners: socket.removeAllListeners.bind(socket),
+
+    recreateConnection: function() {
+      socket = io.connect('/', { 'force new connection': true });
+    }
   };
 });
