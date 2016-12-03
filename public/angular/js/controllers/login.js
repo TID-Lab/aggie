@@ -6,7 +6,8 @@ angular.module('Aggie')
     'AuthService',
     '$location',
     'FlashService',
-    function($scope, $state, $rootScope, AuthService, $location, flash) {
+    'Socket',
+    function($scope, $state, $rootScope, AuthService, $location, flash, Socket) {
       $scope.login = function(form) {
         AuthService.login({
           username: $scope.user.username,
@@ -14,6 +15,9 @@ angular.module('Aggie')
         },
           function(err) {
             if (!err) {
+              // Before login, socket should have failed to be created
+              // completely
+              Socket.recreateConnection();
               $state.go('reports');
             } else {
               flash.setAlertNow(err.data);
