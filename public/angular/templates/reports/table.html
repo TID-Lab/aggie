@@ -39,7 +39,7 @@
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
       </td>
-      <td class="compact tag" ng-class="{ strong: !isRead(r) }">
+      <td class="expand tag" ng-class="{ strong: !isRead(r) }">
         {{ tagsToString(r.tags) }}
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
