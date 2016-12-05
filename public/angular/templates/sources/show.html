@@ -5,7 +5,7 @@
   </ul>
 </div>
 
-<div class="button-row">
+<div ng-show="currentUser.can('edit sources')" class="button-row">
   <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="edit()" translate>Edit</button>
   <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this source?' | translate }}" on-confirm="delete()">{{ 'Delete' | translate }}</button>
 </div>

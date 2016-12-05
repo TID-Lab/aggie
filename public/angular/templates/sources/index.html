@@ -1,5 +1,5 @@
 <div class="button-row">
-  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
+  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit sources')"
           class="btn btn-info" ng-click="create()" translate>Create Source</button>
 </div>
 
@@ -15,8 +15,8 @@
       <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
       <th class="expand" translate>Target</th>
       <th class="expand" translate>Tags</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
+      <th class="compact" ng-show="currentUser.can('view data')" translate>New Warnings</th>
+      <th class="compact" ng-show="currentUser.can('edit sources')" translate>Enabled</th>
     </tr>
   </thead>
   <tbody>
@@ -34,9 +34,9 @@
       </td>
       <td class="expand content">{{ target(s) }}</td>
       <td class="expand content">{{ tagsToString(s.tags) }}</td>
-      <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
+      <td class="compact content zero-errors" ng-show="currentUser.can('view data')"
           ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status" ng-show="currentUser.can('edit data')">
+      <td class="compact status" ng-show="currentUser.can('edit sources')">
         <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
       </td>
     </tr>
