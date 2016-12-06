@@ -71,7 +71,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('batch', {
-      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author',
+      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author&tags',
       templateUrl: '/templates/reports/batch.html',
       controller: 'ReportsIndexController',
       resolve: {
