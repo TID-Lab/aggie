@@ -332,3 +332,8 @@ td.content {
   box-sizing: border-box;
 }
 
+td {
+  span.source {
+    display: block;
+  }
+}
