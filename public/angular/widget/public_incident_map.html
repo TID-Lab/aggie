@@ -1,0 +1,76 @@
+<style>
+  #map-canvas {
+    height: 500px;
+  }
+  .gm-style-iw{ /* infowindow */
+    width: 200px;
+  }
+</style>
+<div id="map-canvas"></div>
+<script type="text/javascript" src="///ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCMPZIgBMRB0reH6qNktY5bPe5nSB10SMw"></script>
+<script>
+ $(document).ready(function () {
+     //Ghana
+     var defaultLatLng = new google.maps.LatLng(7.946527, -1.023194); // Default
+     drawMap(defaultLatLng);
+     /* if (navigator.geolocation) {
+        function success(pos) {
+        // Location found, show map with these coordinates
+        drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        }
+        function fail(error) {
+        drawMap(defaultLatLng); // Failed to find location, show default map
+        }
+        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+        navigator.geolocation.getCurrentPosition(success, fail, {
+        maximumAge: 500000,
+        enableHighAccuracy: true,
+        timeout: 6000
+        });
+        } else {
+        drawMap(defaultLatLng); // No geolocation support, show default map
+      }*/
+    function drawMap(latlng) {
+        var myOptions = {
+            zoom: 7,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        // place the infowindow.  Invisible, without content.
+        var infowindow = new google.maps.InfoWindow({
+            content: '',
+        });
+        //READ FROM JSON
+        //$.getJSON('https://aggie.africanelections.org/api/v1/incident/public', function (data) {
+        $.getJSON('https://localhost:3000/api/v1/incident/public', function (data) {
+            //TOOD Find out why these icons are not loading
+            var icon = { verified: './marker-blue.png',
+                         refuted: './marker-red.png',
+                         unverified: './marker-black.png'
+            };
+            $.each(data, function (i, incident) {
+                var selectedIcon;
+                if (incident.verified == true) selectedIcon = icon.verified;
+                if (incident.verified == false) selectedIcon = icon.refuted;
+                if (incident.verified == null) selectedIcon = icon.unverfied;
+
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(incident.latitude, incident.longitude),
+                    map: map,
+                    title: incident.title,
+                    icon: selectedIcon
+                });
+                // when the client clicks on a marker we set the content and bind the position to the marker
+                google.maps.event.addListener(marker, 'click', function() {
+                    //TODO Compose info box with fields from incident
+                  infowindow.setContent('Verified: ' + incident.verified);
+                  infowindow.setPosition(this.getPosition())
+                  infowindow.setMap(map);
+                });
+            });
+        });
+    }
+  });
+</script>
