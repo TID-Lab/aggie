@@ -33,7 +33,9 @@ _.defaults(_configuration.logger.master, { filename: 'logs/master.log' });
 _.defaults(_configuration.logger.api, { filename: 'logs/api.log', log_requests: false,
                                        log_responses: false });
 _.defaults(_configuration.logger.fetching, { filename: 'logs/fetching.log' });
-_.defaults(_configuration.logger.analytics, { filename: 'logs/analytics.log' });
+_.defaults(_configuration.logger.analytics, { level: 'debug',
+                                              filestamp: 'true',
+                                              filename: 'logs/analytics.log' });
 
 // ensure directories exist
 fs.ensureFileSync(_configuration.logger.master.filename);
