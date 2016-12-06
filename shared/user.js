@@ -14,6 +14,7 @@
     'manage trends': ['admin'],
     'view data': ['viewer', 'monitor', 'admin'],
     'edit data': ['monitor', 'admin'],
+    'edit sources': ['admin'],
     'change settings': ['admin'],
     'view users': ['viewer', 'monitor', 'admin'],
     'view other users': ['manager', 'admin'],
