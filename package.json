@@ -76,7 +76,7 @@
     "string": "~3.0.0",
     "timekeeper": "0.0.4",
     "timezone": "0.0.32",
-    "tweet-matches": "^1.0.0",
+    "tweet-matches": "^1.0.1",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1",
