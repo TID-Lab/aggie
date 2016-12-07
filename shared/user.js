@@ -17,7 +17,7 @@
     'edit sources': ['admin'],
     'change settings': ['admin'],
     'view users': ['viewer', 'monitor', 'admin'],
-    'view other users': ['manager', 'admin'],
+    'view other users': ['monitor', 'admin'],
     'update users': ['viewer', 'monitor', 'admin'],
     'admin users': ['admin'],
     'change admin password': ['admin']
