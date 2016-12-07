@@ -5405,9 +5405,9 @@
       "resolved": "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.4.3.tgz"
     },
     "tweet-matches": {
-      "version": "1.0.1",
-      "from": "tweet-matches@1.0.1",
-      "resolved": "https://registry.npmjs.org/tweet-matches/-/tweet-matches-1.0.1.tgz"
+      "version": "1.0.2",
+      "from": "tweet-matches@1.0.2",
+      "resolved": "https://registry.npmjs.org/tweet-matches/-/tweet-matches-1.0.2.tgz"
     },
     "tweetnacl": {
       "version": "0.13.3",
