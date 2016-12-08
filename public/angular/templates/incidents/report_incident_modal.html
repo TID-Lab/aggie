@@ -12,6 +12,19 @@
 
       <p class='info'>{{'Click an incident below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
 
+      <div class="pull-right padding-top-bottom pagination">
+        <ul class="pager">
+          <li class="pager-label">
+            {{ pagination.start }} - {{ pagination.end }}
+          </li>
+          <li>
+            <button ng-class="{disabled: isFirstPage() }" ng-click="getPage(pagination.page - 1)" class="btn btn-info">&lsaquo;</button>
+          </li>
+          <li>
+            <button ng-class="{disabled: isLastPage() }" ng-click="getPage(pagination.page + 1)" class="btn btn-info">&rsaquo;</button>
+          </li>
+        </ul>
+      </div>
       <div ng-include="'/templates/incidents/table.html'"></div>
 
     </div>
