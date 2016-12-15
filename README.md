@@ -107,6 +107,19 @@ The following need to be installed.
   2. start Aggie on the test database with `npm run testrun`
   3. run protractor with `npm run protractor-with-apis`
 
+### Intructions on Building and Publishing Aggie's documentation.
+The documentation is in the `docs` directory. These are automatically built and
+pushed to
+[http://aggie.readthedocs.io/en/<your-branch>](http://aggie.readthedocs.io/en/latest/)
+on each commit.
+
+To build the docs locally, do the following:
+1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
+2. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
+3. Install `recommonmark`: `pip install recommonmark`
+4. From the `docs` directory in Aggie, run `make html`
+5. The compiled documentation has its root at `docs/_build/html/index.html`
+
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
 
