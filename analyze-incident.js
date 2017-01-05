@@ -2,6 +2,7 @@
 'use strict';
 
 var Report = require('./models/report');
+var _ = require('lodash');
 
 var incidents = {};
 
@@ -10,7 +11,7 @@ Report.find({ _incident: { $exists: true } }, function(err, reports) {
     console.error(err.message);
     return process.exit(1);
   }
-  console.log(reports);
+
   reports.forEach(function(report) {
     var i = report._incident;
     var m = report._media;
@@ -19,6 +20,10 @@ Report.find({ _incident: { $exists: true } }, function(err, reports) {
     incidents[i][m] += 1;
   });
 
-  console.log(incidents);
+  var multiReportIncidents = _.filter(incidents, function(i) {
+    return _.keys(i).length > 1 || i[_.keys(i)[0]] > 1;
+  });
+
+  console.log(multiReportIncidents);
   process.exit(0);
 });
