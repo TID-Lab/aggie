@@ -20,10 +20,21 @@ Report.find({ _incident: { $exists: true } }, function(err, reports) {
     incidents[i][m] += 1;
   });
 
-  var multiReportIncidents = _.filter(incidents, function(i) {
-    return _.keys(i).length > 1 || i[_.keys(i)[0]] > 1;
-  });
+  var sortedIncidents = _.sortBy(_.toPairs(incidents), [
+    function(i) {
+      i = i[1];
+      return _.sum(_.values(i));
+    },
+    function(i) {
+      i = i[1];
+      return _.keys(i).length;
+    },
+    function(i) {
+      i = i[1];
+      return _.keys(i).sort().toString();
+    }
+  ]);
+  console.log(sortedIncidents);
 
-  console.log(multiReportIncidents);
   process.exit(0);
 });
