@@ -117,8 +117,9 @@ To build the docs locally, do the following:
 1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
 2. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
 3. Install `recommonmark`: `pip install recommonmark`
-4. From the `docs` directory in Aggie, run `make html`
-5. The compiled documentation has its root at `docs/_build/html/index.html`
+4. Install Read The Docs theme: `pip install sphinx_rtd_theme`
+5. From the `docs` directory in Aggie, run `make html`
+6. The compiled documentation has its root at `docs/_build/html/index.html`
 
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
