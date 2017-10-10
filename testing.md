@@ -35,7 +35,7 @@ Sources, APIs, and fetching
 --------------------
 
 1. Add Google Places API and refresh the page
-. Add Facebook API token and turn fetching on
+2. Add Facebook API token and turn fetching on
 3. Create Facebook source `https://www.facebook.com/nytimes` [at least 50
 reports show up, and no warnings]
 4. Create Facebook source `https://www.facebook.com/err102398-023894-1239084`
