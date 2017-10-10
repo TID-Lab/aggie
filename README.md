@@ -30,17 +30,17 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 ## Deployment Installation via Docker
 
 1. Install **docker** (version >= 1.0.0, such as 1.11.0).
-  - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
-  - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately
+    - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
+    - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately
 2. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
-  - In your terminal, navigate to your main projects folder (e.g. Documents).
-  - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
+    - In your terminal, navigate to your main projects folder (e.g. Documents).
+    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
 3. Start aggie
-  - Navigate to the `docker` directory in aggie: `cd aggie/docker`
-  - run `docker-compose up`
-  - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+    - Navigate to the `docker` directory in aggie: `cd aggie/docker`
+    - run `docker-compose up`
+    - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 4. Navigate to `https://localhost` in your browser.
-  - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
 
 ## Development Installation
 
@@ -49,63 +49,63 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 The following need to be installed.
 
 1. **node.js** (v.0.10.*, such as 0.10.32)
-  - There are two ways to install/update node.js.
-    1. Install a specific version of node.js.
-      - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
-    2. Use [Node Version Manager](https://github.com/creationix/nvm).
-      - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
-      - After installing nvm:
-      1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-      2. use this command: `nvm use` to install the version specified in `.nvmrc`.
+    - There are two ways to install/update node.js.
+       1. Install a specific version of node.js.
+          - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
+       2. Use [Node Version Manager](https://github.com/creationix/nvm).
+          - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
+          - After installing nvm:
+              1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
+              2. use this command: `nvm use` to install the version specified in `.nvmrc`.
 2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
-  1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
-  2. Stop and restart Mongo DB.
-    1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
-    2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
-  3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+    1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
+    2. Stop and restart Mongo DB.
+        1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
+        2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
+    3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 3. **JRE**
-  - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
-  - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
+    - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+    - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
 
 
 ### Installation
 1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
-  - In your terminal, navigate to your main projects folder (e.g. Documents).
-  - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+    - In your terminal, navigate to your main projects folder (e.g. Documents).
+    - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
-  1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-  1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+    1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+    1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
 1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
-  - If you do not have the certificate you can create a new self-signed certificate with the following command:
+    - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
-  - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
-  - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
+    - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
+    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
-  - This installs all dependencies and concatenates the angular application.
+    - This installs all dependencies and concatenates the angular application.
 1. Run `npm install -g gulp mocha karma-cli protractor@2`.
-  - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
-  - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
+    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
+    - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. Run `npm install -g migrate`.
-  - This installs node-migrate globally.
+    - This installs node-migrate globally.
 1. To start server, run `npm start`.
-  - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+    - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Navigate to `https://localhost:3000` in your browser.
-  - This will show you the running site. Login with the user name and password from your terminal mentioned above.
-  - If you did not set up the SSL certificate, use `http://localhost:3000` instead
+    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+    - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
 ## Maintenance
 1. To run migrations run `migrate`.
 2. To run unit tests, run `npm test`.
-  - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
-  - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
+    - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
+    - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 4. To run end-to-end tests:
-  1. first start Aggie on the test database with `npm run testrun`
-  2. then run protractor with `npm run protractor`
+    1. first start Aggie on the test database with `npm run testrun`
+    2. then run protractor with `npm run protractor`
 5. To run end-to-end tests with external APIs
-  1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
-  2. start Aggie on the test database with `npm run testrun`
-  3. run protractor with `npm run protractor-with-apis`
+    1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+    2. start Aggie on the test database with `npm run testrun`
+    3. run protractor with `npm run protractor-with-apis`
 
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
@@ -129,7 +129,7 @@ Set `config.adminParty=true` if you want to run tests.
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
-1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+  1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
 
 ### Google Places
 Aggie uses Google Places for guessing locations in the application. To make it work:
@@ -145,23 +145,24 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 ### Fetching
   1. Set `fetching` value to enable/disable fetching for all sources at global level.
-    - This is also changed during runtime based on user choice.
+      - This is also changed during runtime based on user choice.
 
 ### Logging
   Set various logging options in `logger` section:
+  
   - `console` section is for console logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
   - `file` section is for file logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
   - `SES` section is for email notifications. For various options, see [winston-amazon-ses](see https://www.npmjs.com/package/winston-amazon-ses).
-    - Set appropriate AWS key and secret values.
-    - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
-    - **DO NOT** set `level` to *debug*. Recommended value is *error*.
+      - Set appropriate AWS key and secret values.
+      - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
+  - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
 ## Using the Application
 ### Sources
 #### Adding Sources
   1. Inside the application, go to `Sources > Create Source`.
   1. To add a Twitter search, add all relevant keywords.
-    - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
+      - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
   1. To add a Facebook source, copy and paste the URL of the Facebook group or page you want to follow (e.g. `https://www.facebook.com/nigerianforum`).
   1. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`).
   1. To add an ELMO source to track responses for a particular ELMO form, enter a URL like this: `https://yourdomain.com/api/v1/m/yourmission/responses.json?form_id=123`, where `123` is the ID of the form you noted above. The user associated with your API key must have permission to view responses on the mission in order for this to work.
