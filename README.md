@@ -84,6 +84,7 @@ The following need to be installed.
     - This installs all dependencies and concatenates the angular application.
 1. Run `npm install -g gulp mocha karma-cli protractor@2`.
     - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
+    - We are using an old version of protractor so that it works with Node 0.10. If your protractor test fails abruptly, download an updated chromedriver and replace the one found in `aggie/node_modules/protractor/selenium` with the newer one.
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. Run `npm install -g migrate`.
     - This installs node-migrate globally.
