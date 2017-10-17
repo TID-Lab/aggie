@@ -29,7 +29,8 @@ Logging in
 1. Make sure `adminParty` is false
 2. Drop aggie database and run `npm install`
 3. Log in as `admin` with default password [goes to `/reset_admin_password`]
-4. Reset admin password [goes to `/reports`]
+4. Reset admin password [goes to `/login`]
+5. Log in with new password
 
 Sources, APIs, and fetching
 --------------------
@@ -40,6 +41,8 @@ Sources, APIs, and fetching
 reports show up, and no warnings]
 4. Create Facebook source `https://www.facebook.com/err102398-023894-1239084`
 [this source gets an error and appears as `OFF` in `/sources`]
+
+
 
 Incidents
 ---------
