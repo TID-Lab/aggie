@@ -43,9 +43,14 @@ module.exports.initAdmin = function(password) {
   element(by.model('user.password')).sendKeys(password);
   element(by.model('user.passwordConfirmation')).sendKeys(password);
   element(by.css('[type="submit"]')).click();
-  var e3 = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
+  var e3 = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'login');
 
-  return promise.all([e1, e2, e3]);
+  element(by.model('user.username')).sendKeys('admin');
+  element(by.model('user.password')).sendKeys(password);
+  element(by.css('[type="submit"]')).click();
+  var e4 = expect(browser.getCurrentUrl()).to.eventually.equal(browser.baseUrl + 'reports');
+
+  return promise.all([e1, e2, e3, e4]);
 };
 
 module.exports.logOut = function() {

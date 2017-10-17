@@ -46,7 +46,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
       return !!(state.data && state.data.public === true);
     };
 
-    $rootScope.$on('$stateChangeSuccess', function(e, toState) {
+    var checkStateChange = function(e, toState) {
       if (!publicRoute(toState) && !$rootScope.currentUser) {
         e.preventDefault();
         res = AuthService.getCurrentUser().then(function() {
@@ -61,7 +61,11 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
           $state.go('login');
         });
       }
-    });
+    };
+
+    $rootScope.$on('$stateChangeSuccess', checkStateChange.bind(this));
+
+    $rootScope.$on('$stateChangeError', checkStateChange.bind(this));
 
     $rootScope.$watch(function getLangCookie() {
       return $cookies['aggie-lang'];

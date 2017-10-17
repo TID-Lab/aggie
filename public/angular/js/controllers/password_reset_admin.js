@@ -3,10 +3,11 @@ angular.module('Aggie')
 .controller('ResetAdminPasswordController', [
   '$scope',
   '$http',
-  '$state',
+  '$location',
+  'AuthService',
   'shared',
   'FlashService',
-  function($scope, $http, $state, shared, flash) {
+  function($scope, $http, $location, AuthService, shared, flash) {
     $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
     $scope.user = {};
     $scope.user.password = '';
@@ -32,7 +33,14 @@ angular.module('Aggie')
       $http.put('/reset-admin-password', { password: $scope.user.password })
         .success(function(response) {
           flash.setNotice('passwordReset.admin.success');
-          $state.go('reports');
+          AuthService.logout(function(err) {
+            if (!err) {
+              flash.setNotice('passwordReset.admin.success');
+              $location.url('/login');
+            } else {
+              console.log('Error', err);
+            }
+          });
         })
         .error(function(mesg, status) {
           flash.setAlertNow('passwordReset.admin.error');
