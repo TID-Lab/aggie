@@ -35,6 +35,8 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="filter-row">
       <div class="td filter status-filter">
         <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
           <option value="" translate>Status</option>

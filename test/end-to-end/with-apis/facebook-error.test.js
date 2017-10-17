@@ -20,7 +20,7 @@ describe('Facebook source error', function() {
   beforeEach(utils.resetDb);
   beforeEach(utils.initAdmin.bind({}, 'asdfasdf'));
   beforeEach(utils.toggleFetching.bind({}, 'Off'));
-  beforeEach(utils.addSource.bind({}, 'Facebook', { nickname: 'test', url: 'https://www.facebook.com/jkfajklwertwerja' }));
+  beforeEach(utils.addSource.bind({}, 'Facebook', { nickname: 'test', url: 'jkfajklwertwerja' }));
   beforeEach(utils.toggleFetching.bind({}, 'On'));
 
   afterEach(utils.deleteSource.bind({}, 'Facebook', 'test'));

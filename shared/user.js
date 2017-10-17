@@ -11,6 +11,7 @@
   User.PASSWORD_MIN_LENGTH = 8;
 
   User.permissions = {
+    'manage trends': ['admin'],
     'view data': ['viewer', 'monitor', 'admin'],
     'edit data': ['monitor', 'admin'],
     'change settings': ['admin'],

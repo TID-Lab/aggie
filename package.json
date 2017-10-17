@@ -1,6 +1,6 @@
 {
   "name": "aggie",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/TID-Lab/aggie.git"
@@ -50,7 +50,7 @@
     "gulp-rename": "^1.2.2",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
-    "jsonstream": "^1.0.3",
+    "JSONStream": "~0.7.4",
     "locale": "0.0.20",
     "lodash": "^4.15.0",
     "migrate": "^0.2.3",
@@ -58,7 +58,7 @@
     "mongoose": "~3.8.23",
     "mongoose-auto-increment": "^3.2.0",
     "mongoose-listento": "0.0.4",
-    "mongoose-validator": "^1.2.4",
+    "mongoose-validator": "~1.2.4",
     "nconf": "~0.7.1",
     "node-sass": "~0.8.6",
     "node-uuid": "^1.4.7",
@@ -76,7 +76,7 @@
     "string": "~3.0.0",
     "timekeeper": "0.0.4",
     "timezone": "0.0.32",
-    "tweet-matches": "^1.0.0",
+    "tweet-matches": "^1.0.1",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1",

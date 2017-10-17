@@ -18,6 +18,7 @@ var _ = require('lodash');
 module.exports = _.clone(dbTools);
 
 before(function(done) {
+  this.timeout(4000);
   dbTools.initDb(function(err) {
     if (err) return done(err);
     dbTools.resetDb(done);

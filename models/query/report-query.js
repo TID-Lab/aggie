@@ -5,6 +5,7 @@ var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
+var toRegexp = require('../to-regexp');
 
 function ReportQuery(options) {
   options = options || {};
@@ -67,13 +68,10 @@ ReportQuery.prototype.toMongooseFilter = function() {
   // Determine author filter
   if (this.author) {
     filter.author = {};
-    filter.author.$in = this.author.trim().split(/\s*,\s*/).sort().map(function(author) {
-      // Use case-insensitive matching with anchors so mongo index is still used.
-      return new RegExp('^' + author + '$', 'i');
-    });
+    filter.author.$in = toRegexp.alli(this.author.trim().split(/\s*,\s*/).sort());
   }
   if (this.tags) {
-    filter.tags = { $all: this.tags };
+    filter.tags = { $all: toRegexp.allCaseInsensitive(this.tags) };
   } else delete filter.tags;
 
   // Search by keyword

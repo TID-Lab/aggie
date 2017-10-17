@@ -1,5 +1,9 @@
 # Contributing to Aggie
 
+Aggie development work is mainly coordinated on a private redmine instance. Contact
+@hooverlunch or another maintainer to get access. Using the github issue tracker is
+also acceptable.
+
 Please create separate branches for any bug fixes/features that cannot be
 considered trivial. For trivial bug fixes/features, commit directly to develop.
 

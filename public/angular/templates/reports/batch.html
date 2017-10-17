@@ -1,5 +1,3 @@
-<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
-
 <div class="batch-mode">
   <div class="pull-left">
     <p class="title" translate>Batch Mode</p>
@@ -46,3 +44,17 @@
 <p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
 
 <div ng-include="'/templates/reports/table.html'"></div>
+
+<div class="pull-right">
+  <div class="batch-actions">
+    <div class="pull-left margin-left">
+      <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
+    </div>
+    <div class="pull-left margin-left">
+      <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
+    </div>
+    <div class="pull-left margin-left">
+      <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
+    </div>
+  </div>
+</div>

@@ -18,10 +18,13 @@
         }
         &.incident {
           vertical-align: middle;
-          min-width: 150px;
+          min-width: 130px;
         }
         &.flagged {
           vertical-align: middle;
+        }
+        &.tag {
+         min-width: 130px
         }
       }
     }
@@ -326,3 +329,8 @@ td.content {
   box-sizing: border-box;
 }
 
+td {
+  span.source {
+    display: block;
+  }
+}
