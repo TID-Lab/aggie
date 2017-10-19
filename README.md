@@ -126,6 +126,18 @@ Set `config.adminParty=true` if you want to run tests.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
+#### WhatsApp
+The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
+  1. Install Firefox in Linux using your distribution preferred method.
+  1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
+  1. Configure the add-on [about:addons](about:addons):
+       * Set Notification Engine to Custom command
+       * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
+           * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source.
+           * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
+  1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
+  1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
+           
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
@@ -159,6 +171,7 @@ Aggie uses Google Places for guessing locations in the application. To make it w
   - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
 ## Using the Application
+Extensive documentation about using the application can be found in [ReadTheDocs page](http://aggie.readthedocs.io/en/stable/).
 ### Sources
 #### Adding Sources
   1. Inside the application, go to `Sources > Create Source`.
@@ -166,9 +179,10 @@ Aggie uses Google Places for guessing locations in the application. To make it w
       - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
   1. To add a Facebook source, copy and paste the URL of the Facebook group or page you want to follow (e.g. `https://www.facebook.com/nigerianforum`).
   1. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`).
+  1. To add a WhatsApp source, in the field `keywords` enter the value you selected when setting up GNotifier as `keyword` as explained [here](#whatsapp).
   1. To add an ELMO source to track responses for a particular ELMO form, enter a URL like this: `https://yourdomain.com/api/v1/m/yourmission/responses.json?form_id=123`, where `123` is the ID of the form you noted above. The user associated with your API key must have permission to view responses on the mission in order for this to work.
   1. To add an SMSGH source, enter the keyword that the messages are being sent with. SMSGH will forward the messages to Aggie.
-  1. To add a WhatsApp source, check the instructions [here](https://github.com/TID-Lab/aggie/pull/241).
+
 
 #### Warnings
   As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
