@@ -1,3 +1,33 @@
+Table of Contents
+=================
+
+   * [Aggie](#aggie)
+      * [Deployment Installation via Docker](#deployment-installation-via-docker)
+      * [Development Installation](#development-installation)
+         * [System requirements](#system-requirements)
+         * [Installation](#installation)
+      * [Maintenance](#maintenance)
+      * [Project Configuration](#project-configuration)
+         * [Tests](#tests)
+         * [Social Media and Feeds](#social-media-and-feeds)
+            * [Twitter](#twitter)
+            * [Facebook](#facebook)
+            * [WhatsApp](#whatsapp)
+            * [ELMO](#elmo)
+         * [Google Places](#google-places)
+         * [Emails](#emails)
+         * [Fetching](#fetching)
+         * [Logging](#logging)
+      * [Using the Application](#using-the-application)
+         * [Sources](#sources)
+            * [Adding Sources](#adding-sources)
+            * [Warnings](#warnings)
+      * [Deployment](#deployment)
+      * [Architecture](#architecture)
+         * [Backend](#backend)
+         * [Frontend](#frontend)
+
+
 # Aggie
 
 Aggie is a web application for using social media and other resources to track incidents around real-time events such as elections or natural disasters.
