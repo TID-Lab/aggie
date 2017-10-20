@@ -21,17 +21,7 @@
                 <div class="help-block" ng-show="form.media.$error.required" translate>Media is required.</div>
               </div>
               <div ng-show="source.media == 'whatsapp'">
-                <div class="help-block" translate>
-                  For WhatsApp sources, ensure that the Keyword entered is the same
-                  as that provided to the GNotifier extension on Firefox.
-                </div>
-                <div class="help-block" translate>
-                  An acceptable convention would be having the Phone Number of the receiver, without any '+' or spaces.
-                </div>
-                <div class="help-block" translate>
-                  In the GNotifier preferences, make sure to select Custom Command as the notification engine. Below, in the Custom command box, enter:
-                  curl --data-urlencode "receiver=phone number here" --data-urlencode "from=%title" --data-urlencode "text=%text" http://aggie.africanelections.org:2222/whatsapp
-                </div>
+                <div class="help-block" translate="sources_modal.whatsapp_help"></div>
               </div>
             </div>
           </div>
