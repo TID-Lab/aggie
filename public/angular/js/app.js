@@ -17,10 +17,14 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
   'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete',
   'angular-loading-bar', 'ngCookies'])
 
-.config(['$urlRouterProvider', '$locationProvider',
-  function($urlRouterProvider, $locationProvider) {
+.config(['$urlRouterProvider', '$locationProvider', '$sceDelegateProvider',
+  function($urlRouterProvider, $locationProvider, $sceDelegateProvider) {
     $locationProvider.html5Mode(true);
     $urlRouterProvider.otherwise('/404');
+    $sceDelegateProvider.resourceUrlWhitelist([
+      'self',                    // trust all resources from the same origin
+      '*://maps.googleapis.com/**'   // trust all resources from Google Maps API
+    ]);
   }
 ])
 
@@ -97,6 +101,7 @@ require('./services/map');
 require('./services/batch');
 require('./services/api_modal');
 require('./services/tags');
+require('./services/gplaces_src');
 
 // Controllers
 require('./controllers/application');

@@ -2,14 +2,18 @@ angular.module('Aggie')
 
 .controller('ApplicationController', [
   '$scope',
-  'Settings',
+  'GPlacesSrc',
   'FlashService',
-  '$sce',
-  function($scope, Settings, flash, $sce) {
+  function($scope, GPlacesSrc, flash) {
     $scope.flash = flash;
-    Settings.get('gplaces', function success(data) {
-      var src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + data.gplaces.key;
-      $scope.gPlaces = $sce.trustAsResourceUrl(src);
-    });
+    $scope.gPlaces = '';
+
+    $scope.$watch(GPlacesSrc.getSrc, function(newVal, oldVal, scope) {
+      if (newVal) {
+        scope.gPlaces = newVal;
+      }
+    }, true);
+
+    GPlacesSrc.updateSrc();
   }
 ]);
