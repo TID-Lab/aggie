@@ -4,6 +4,7 @@ var expect = chai.expect;
 
 describe('LoginController', function() {
   var scope, httpBackend;
+  var googleAPIKey = 'sd;gijelgj344323fg';
 
   beforeEach(module('Aggie'));
   beforeEach(module('aggie.templates'));
@@ -21,6 +22,8 @@ describe('LoginController', function() {
     httpBackend.when('GET', '/session').respond(200, {});
     httpBackend.when('GET', '/translations/locale-en.json').respond(200, {});
     httpBackend.when('GET', '/translations/locale-debug.json').respond(200, {});
+    httpBackend.when('GET', '/api/v1/settings/gplaces')
+      .respond(200, { gplaces: { key: googleAPIKey } });
   }));
 
   afterEach(function() {
