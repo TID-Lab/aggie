@@ -6,9 +6,17 @@ angular.module('Aggie')
     test: { method: 'POST', ignoreLoadingBar: true }
   });
 
+  var SettingsPublic = $resource('/api/v1/public/settings/:type/:item/:action', {}, {});
+
   return {
     get: function(item, success, failure) {
-      return Settings.get({ item: item }, function(data) {
+      var resource;
+      if (item === 'gplaces') {
+        resource = SettingsPublic;
+      } else {
+        resource = Settings;
+      }
+      return resource.get({ item: item }, function(data) {
         success(data);
       }, failure);
     },

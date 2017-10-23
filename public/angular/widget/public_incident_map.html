@@ -39,7 +39,7 @@
             content: '',
         });
         //READ FROM JSON
-        $.getJSON('/api/v1/incident/public', function (data) {
+        $.getJSON('/api/v1/public/incident', function (data) {
 
             $.each(data, function (i, incident) {
                 var verified;
