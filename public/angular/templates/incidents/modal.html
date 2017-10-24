@@ -48,7 +48,7 @@
 
           <div class="form-group" ng-hide="minimal">
             <label for="escalated" class="col-lg-2 control-label" translate>Escalated</label>
-            <div class="col-lg-9">
+            <div class="col-lg-4">
               <input type="checkbox" id="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
             </div>
           </div>
@@ -103,6 +103,18 @@
             <label for="notes" class="col-lg-2 control-label" translate>Notes</label>
             <div class="col-lg-9 notes-text">
               <textarea id="notes" name="notes" class="form-control" ng-model="incident.notes"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="public" class="col-lg-2 control-label" translate>Public</label>
+            <div class="col-lg-9">
+              <input type="checkbox" id="public" name="public" ng-model="incident.public" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="public" class="col-lg-2 control-label" translate>Public Description</label>
+            <div class="col-lg-9 description-text">
+              <textarea id="publicDescription" name="publicDescription" class="form-control" ng-model="incident.publicDescription"></textarea>
             </div>
           </div>
         </fieldset>

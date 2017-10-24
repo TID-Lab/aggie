@@ -17,6 +17,8 @@ angular.module('Aggie')
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
 
+.value('publicOptions', ['public', 'private'])
+
 .value('paginationOptions', { perPage: 25 })
 
 .value('emailTransportOptions', {

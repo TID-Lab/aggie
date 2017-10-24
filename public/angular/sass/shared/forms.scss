@@ -116,13 +116,20 @@ label + aggie-toggle {
   }
 }
 
-.notes-text {
-  textarea {
-    height: 200px;
-  }
+.form-group textarea {
+    width: 100%;
+    height:175px;
 }
 
-.form-group textarea {
-  width: 100%;
-  height:175px;
+.notes-text {
+    textarea {
+        height: 175px;
+    }
 }
+
+.description-text {
+    textarea {
+        height: 70px;
+    }
+}
+

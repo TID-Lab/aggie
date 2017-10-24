@@ -50,7 +50,12 @@
       </div>
       <div class="td filter">
         <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Escalated?</option>
+            <option value="" translate>Escalated?</option>
+        </select>
+      </div>
+      <div class="td filter">
+        <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
+          <option value="" translate>Public?</option>
         </select>
       </div>
       <div class="td" ng-hide="noFilters()">

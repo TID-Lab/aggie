@@ -10,12 +10,12 @@ describe('Public controller', function() {
   before(function(done) {
     incident1 = {
       title: 'test',
-      tags: ['public']
+      public: true
     };
 
     incident2 = {
       title: 'test',
-      tags: ['other', 'test']
+      public: false
     };
     Incident.create(incident1);
     Incident.create(incident2);

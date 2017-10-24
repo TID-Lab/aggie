@@ -36,6 +36,8 @@ var schema = new mongoose.Schema({
   veracity: { type: Boolean, default: null },
   escalated: { type: Boolean, default: false, required: true },
   closed: { type: Boolean, default: false, required: true },
+  public: { type: Boolean, default: false, required: true },
+  publicDescription: String,
   idnum: { type: Number, required: true },
   totalReports: { type: Number, default: 0, min: 0 },
   notes: String
@@ -137,6 +139,9 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   if (query.escalated === 'escalated') filter.escalated = true;
   if (query.escalated === 'unescalated') filter.escalated = false;
+
+  if (query.public === 'public') filter.public = true;
+  if (query.public === 'private') filter.public = false;
 
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');

@@ -18,15 +18,6 @@
                             { message: 'Confirmed false', icon: '/widget/marker-green.png'}];
 
      drawMap(defaultLatLng);
-     function getDescription(tags) {
-         for (index in tags) {
-             console.log(tags[index]);
-             if (tags[index].substr(0, 3) === "'d:") {
-                 //We return the clean string
-                 return tags[index].substr(3, tags[index].length -4);
-             }
-         }
-     };
      function drawMap(latlng) {
         var myOptions = {
             zoom: 7,
@@ -54,20 +45,20 @@
                     icon: verified.icon
                 });
                 // when the client clicks on a marker we set the content and bind the position to the marker
+                var description = incident.publicDescription || '';
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.setContent(
                         '<b>' + incident.title + '</b><br/>' +
                         incident.locationName + '<br/>' +
                         verified.message + '<br/>' +
                         '<b>Status </b>' + incident.status + '<br/>' +
-                        getDescription(incident.tags) + '<br/>'
-
-                    );
-                  infowindow.setPosition(this.getPosition());
-                  infowindow.setMap(map);
+                        description + '<br/>'
+                      );
+                    infowindow.setPosition(this.getPosition());
+                    infowindow.setMap(map);
                 });
             });
         });
-    }
-  });
+     }
+ });
 </script>
