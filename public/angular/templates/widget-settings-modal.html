@@ -1,0 +1,81 @@
+<div>
+  <form name="settingsForm" class="form-horizontal" novalidate>
+    <div class="modal-header">
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
+      <h4 class="modal-title">
+        <div class="icon-left" translate="widget_settings_modal.title" translate-value-api="{{ widget }}"></div>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <ol ng-if="widget === 'incident map'">
+          <li translate>widget_settings_modal.incident_map.p1</li>
+          <li translate>widget_settings_modal.incident_map.p2</li>
+          <li translate>widget_settings_modal.incident_map.p3</li>
+      </ol>
+      <p ng-show="settingsForm.$invalid" translate>widget_settings_modal.field_required</p>
+      <div class="well bs-component">
+          <fieldset>
+              <div class="form-group">
+                  <label for="center" class="col-lg-2 control-label" translate>Center</label>
+                  <div class="col-lg-9">
+                      <input id="center" ng-autocomplete name="center" type="text" class="form-control" details="details" ng-model="settings['center']">
+                      <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
+                  </div>
+              </div>
+
+              <div class="form-group" ng-hide="minimalLatLng">
+                  <label for="latitude" class="col-lg-2 control-label inline" translate>Latitude</label>
+                  <div class="col-lg-3 inline">
+                      <input id="latitude" ng-required="settings['longitude']" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="settings['latitude']">
+                      <div class="has-error" ng-show="showErrors">
+                          <div class="help-block" ng-show="form.latitude.$error.pattern" translate>Latitude is invalid.</div>
+                          <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin">Latitude is invalid.</div>
+                          <div class="help-block" ng-show="form.latitude.$error.required" translate>Latitude is required if longitude is entered.</div>
+                      </div>
+                  </div>
+                  <div class="col-lg-1 inline"></div>
+                  <label for="longitude" class="col-lg-2 control-label inline" translate>Longitude</label>
+                  <div class="col-lg-3 inline">
+                      <input id="longitude" ng-required="settings['latitude']" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-180" ng-max="180" name="longitude" type="text" class="form-control" ng-round="6" ng-model="settings['longitude']">
+                      <div class="has-error" ng-show="showErrors">
+                          <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin" translate>Longitude is invalid.</div>
+                          <div class="help-block" ng-show="form.longitude.$error.required" translate>Longitude is required if latitude is entered.</div>
+                          <div class="help-block" ng-show="form.longitude.$error.pattern" translate>Longitude is invalid.</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="zoom" class="col-lg-2 control-label">Zoom</label>
+                  <div class="col-lg-9">
+                      <input type="text" ng-model="settings['zoom']" class="form-control" id="zoom" name="zoom" required />
+                  </div>
+              </div>
+        </fieldset>
+      </div>
+    </div>
+    <div ng-if="widget !== 'incident map'" class="modal-body">
+        <p ng-show="settingsForm.$invalid" translate>widget_settings_modal.field_required</p>
+        <div class="well bs-component">
+            <fieldset>
+                <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
+                    <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
+                    <div class="col-lg-8">
+                        <input type="text" ng-model="settings[settingName]" class="form-control"
+                               id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" aggie-confirm="{{ widget_settings_modal.confirm_delete | translate }}"
+              on-confirm="delete(widget, settings)">
+        {{ 'Delete' | translate }}
+      </button>
+      <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, widget, settings)" translate>
+        Save &amp; Close
+      </button>
+    </div>
+  </form>
+</div>
