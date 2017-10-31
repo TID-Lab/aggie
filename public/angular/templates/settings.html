@@ -67,3 +67,17 @@
     </td>
   </tr>
 </table>
+
+<h4 translate>Widget</h4>
+<table class="table table-settings" ng-controller="WidgetSettingsController">
+    <tr ng-repeat="settingOption in settingOptions">
+        <td>
+            <label class="settings-label">{{ settingOption | capitalize | translate }}</label>
+        </td>
+        <td class="action">
+            <div class="ng-scope">
+                <button class="btn btn-info ng-scope" ng-click="edit(settingOption)" translate>Edit</button>
+            </div>
+        </td>
+    </tr>
+</table>

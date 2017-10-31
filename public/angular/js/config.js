@@ -4,6 +4,8 @@ angular.module('Aggie')
 
 .value('apiSettingsOptions', ['twitter', 'facebook', 'elmo', 'gplaces'])
 
+.value('widgetSettingsOptions', ['incident map'])
+
 .value('statusOptions', ['Read', 'Unread', 'Flagged', 'Unflagged', 'Read & Unflagged'])
 
 .value('linkedtoIncidentOptions', [{ _id: 'any', title: '* Any Incident' },

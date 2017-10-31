@@ -264,6 +264,17 @@
   "Flag": "Flag",
   "Unflag": "Unflag",
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
+  "Widget": "Widget",
+  "Incident map": "Incident map",
+  "enter": "center",
+  "Zoom": "Zoom",
+  "widget_settings_modal": {
+    "incident_map": {
+      "p1": "Set the center of the map and the zoom level for the map widget here.",
+      "p2": "Save the settings and see the map in action here <a href=\"/widget/public_incident_map.html\"",
+      "p3": "Read the documentation to find out how to add the map widget to your site,"
+    }
+  },
   "api_settings_modal": {
     "title": "&nbsp;Edit {{ api | capitalize }} Settings",
     "success": "The credentials are valid. You need to save them before continuing.",

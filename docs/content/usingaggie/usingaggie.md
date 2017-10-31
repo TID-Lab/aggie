@@ -10,7 +10,7 @@ Sources can also be services that send reports directly to Aggie. Currently, we 
 
 ### Adding Sources to Aggie
 
-1.  Click on **Sources** on the Header Menu of the Aggie API.
+1.  Click on **Sources** on the Header Menu of Aggie's main page.
 
     ![Sources](sources1.png)
 
@@ -116,7 +116,9 @@ When trackers come across reports that, if verified, require action, they create
 
     ![Adding Incident](create_incident.png)
 
-5.  Type in the *Title* of the incident (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the incident and a brief *note* describing the incident. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new incident.
+5.  Type in the *Title* of the incident (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the incident and a brief *note* describing the incident. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new incident. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken. 
+
+6.  The *Public* and *Public Description* fields are used by the escalation team to add the incident to the list of public incidents. The *Public Description* will appear attached to the incident, for example, in the [Public Incident Map](#public_incident_map).
 
 ### Filtering Reports
 

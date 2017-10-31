@@ -96,6 +96,7 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/api_modal');
+require('./services/widgets_modal');
 require('./services/tags');
 
 // Controllers
@@ -116,6 +117,8 @@ require('./controllers/sources/index');
 require('./controllers/sources/show');
 require('./controllers/api/settings');
 require('./controllers/api/settings_modal');
+require('./controllers/widgets/settings');
+require('./controllers/widgets/settings_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');
