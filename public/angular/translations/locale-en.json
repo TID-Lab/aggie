@@ -64,6 +64,19 @@
         "success": "{{apiName}} settings has been successfully {{verb}}.",
         "error": "An error has occurred"
       }
+    },
+    "widget": {
+      "settingsModal": {
+        "success": "The widget settings have been saved",
+        "error": "There was a problem saving the widget settings, try again.",
+        "title": "Edit Widget Settings",
+        "field_required": "This field is required",
+        "incident_map": {
+          "p1": "Set the center of the map and the zoom level for the map widget here.",
+          "p2": "Save the settings and see the map in action <a target=\"_blank\" href=\"widget/public_incident_map.html\">here</a>",
+          "p3": "Read the documentation to find out how to add the map widget to your site,"
+        }
+      }
     }
   },
   "An error has occurred setting the fetching status": "An error has occurred setting the fetching status",
@@ -266,15 +279,8 @@
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
   "Widget": "Widget",
   "Incident map": "Incident map",
-  "enter": "center",
+  "Center": "Center",
   "Zoom": "Zoom",
-  "widget_settings_modal": {
-    "incident_map": {
-      "p1": "Set the center of the map and the zoom level for the map widget here.",
-      "p2": "Save the settings and see the map in action here <a href=\"/widget/public_incident_map.html\"",
-      "p3": "Read the documentation to find out how to add the map widget to your site,"
-    }
-  },
   "api_settings_modal": {
     "title": "&nbsp;Edit {{ api | capitalize }} Settings",
     "success": "The credentials are valid. You need to save them before continuing.",
@@ -301,7 +307,7 @@
     "field_required": "The field is required.",
     "confirm_delete": "Are you sure you want to delete the settings for this source?"
   },
-  "Save &amp; Close": "Save &amp; Close",
+  "Save & Close": "Save &amp; Close",
   "Create Trend": "Create Trend",
   "Sorry, but we couldn't find any results.": "Sorry, but we couldn't find any results.",
   "Query": "Query",

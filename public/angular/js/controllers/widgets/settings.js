@@ -21,12 +21,7 @@ angular.module('Aggie')
 
     $scope.inHttp = $window.location.protocol === 'http:';
     $scope.settingOptions = widgetSettingsOptions;
-    $scope.$watch('details.geometry.location', function(newVal, oldVal) {
-      if (oldVal === newVal) return;
-      console.log('changes in details at modal');
-      //$scope.settings['latitude'] = $scope.details.geometry.location.lat();
-      //$scope.settings['longitude'] = $scope.details.geometry.location.lng();
-    });
+
     function getSetting(name) {
       Settings.get(name, function success(data) {
         $scope.widget[data.setting] = angular.copy(data[data.setting]);
@@ -34,7 +29,7 @@ angular.module('Aggie')
     }
 
     function failure(data) {
-      flash.setAlertNow('settings.widget.error');
+      flash.setAlertNow('settings.widget.settingsModal.error');
       console.log('failure: ', data);
     }
   }

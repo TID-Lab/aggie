@@ -11,14 +11,12 @@ angular.module('Aggie')
   function($scope, $modalInstance, Settings, flash, settings, widget, $filter) {
 
     $scope.settings = settings;
-    console.log(settings);
     $scope.widget = widget;
     $scope._showErrors = false;
     $scope.loading = false;
     $scope.minimalLatLng = true;
-    console.log('before');
+
     $scope.$watch('details.geometry.location', function(newVal, oldVal) {
-      console.log('changes in details');
       if (oldVal === newVal) return;
       $scope.settings['latitude'] = $scope.details.geometry.location.lat();
       $scope.settings['longitude'] = $scope.details.geometry.location.lng();
