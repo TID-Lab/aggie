@@ -73,8 +73,8 @@
         "field_required": "This field is required",
         "incident_map": {
           "p1": "Set the center of the map and the zoom level for the map widget here.",
-          "p2": "Save the settings and see the map in action <a target=\"_blank\" href=\"widget/public_incident_map.html\">here</a>",
-          "p3": "Read the documentation to find out how to add the map widget to your site,"
+          "p2": "Save the settings and see the map in action <a target=\"_blank\" href=\"widget/public_incident_map.html\">here</a>.",
+          "p3": "Read the <a href=\"http://aggie.readthedocs.io/en/stable/content/settings/settings.html#widgets\">documentation</a> to find out how to add the map widget to your site."
         },
         "confirm_delete": "Are you sure you want to delete the settings for this widget?"
       }

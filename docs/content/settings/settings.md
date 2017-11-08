@@ -187,3 +187,7 @@ The Public Incident Map displays those [incidents](#incidents) that have been ma
 ```
 <iframe src="https://<your-domain>/widget/public_incident_map.html" width="xxx" height="yyy"></iframe>
 ```
+
+1. Markers in the map have different meanings according to the their color, as shown in the image below. You can copy that image for your site if needed.
+
+![Incident Map Key](incident_map_key.png)
