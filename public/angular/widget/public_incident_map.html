@@ -8,57 +8,58 @@
 </style>
 <div id="map-canvas"></div>
 <script type="text/javascript" src="///ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="///maps.googleapis.com/maps/api/js?key=AIzaSyCMPZIgBMRB0reH6qNktY5bPe5nSB10SMw"></script>
+<script src="///maps.googleapis.com/maps/api/js?key=<%= gPlaces.key %>"></script>
 <script>
  $(document).ready(function () {
-     //Ghana
-     var defaultLatLng = new google.maps.LatLng(7.946527, -1.023194); // Default
-     var veracityOptions = [{ message: 'Unconfirmed', icon: '/widget/marker-yellow.png'},
-                            { message: 'Confirmed true', icon: '/widget/marker-blue.png'},
-                            { message: 'Confirmed false', icon: '/widget/marker-green.png'}];
+   //Ghana
+   var defaultLatLng = new google.maps.LatLng(<%= map.latitude %>, <%= map.longitude %>); // Default
+   var veracityOptions = [{ message: 'Unconfirmed', icon: '/widget/marker-yellow.png'},
+                          { message: 'Confirmed true', icon: '/widget/marker-blue.png'},
+                          { message: 'Confirmed false', icon: '/widget/marker-green.png'}];
 
-     drawMap(defaultLatLng);
-     function drawMap(latlng) {
-        var myOptions = {
-            zoom: 7,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-        // place the infowindow.  Invisible, without content.
-        var infowindow = new google.maps.InfoWindow({
-            content: '',
-        });
-        //READ FROM JSON
-        $.getJSON('/api/v1/public/incident', function (data) {
+   drawMap(defaultLatLng);
+   function drawMap(latlng) {
+     var myOptions = {
+       zoom: <%= map.zoom %>,
+       center: latlng,
+       mapTypeId: google.maps.MapTypeId.ROADMAP
+     };
+     var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+     // place the infowindow.  Invisible, without content.
+     var infowindow = new google.maps.InfoWindow({
+       content: '',
+     });
+     //READ FROM JSON
+     $.getJSON('/api/v1/public/incident', function (data) {
 
-            $.each(data, function (i, incident) {
-                var verified;
-                if (incident.veracity === true) verified = veracityOptions[1];
-                if (incident.veracity === false) verified = veracityOptions[2];
-                if (incident.veracity === null) verified = veracityOptions[0];
+       $.each(data, function (i, incident) {
+         var verified;
+         if (incident.veracity === true) verified = veracityOptions[1];
+         if (incident.veracity === false) verified = veracityOptions[2];
+         if (incident.veracity === null) verified = veracityOptions[0];
 
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(incident.latitude, incident.longitude),
-                    map: map,
-                    title: incident.title,
-                    icon: verified.icon
-                });
-                // when the client clicks on a marker we set the content and bind the position to the marker
-                var description = incident.publicDescription || '';
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.setContent(
-                        '<b>' + incident.title + '</b><br/>' +
-                        incident.locationName + '<br/>' +
-                        verified.message + '<br/>' +
-                        '<b>Status </b>' + incident.status + '<br/>' +
-                        description + '<br/>'
-                      );
-                    infowindow.setPosition(this.getPosition());
-                    infowindow.setMap(map);
-                });
-            });
-        });
-     }
+         var marker = new google.maps.Marker({
+           position: new google.maps.LatLng(incident.latitude, incident.longitude),
+           map: map,
+           title: incident.title,
+           icon: verified.icon
+         });
+         // when the client clicks on a marker we set the content and bind the position to the marker
+         var description = incident.publicDescription || '';
+         google.maps.event.addListener(marker, 'click', function() {
+           infowindow.setContent(
+             '<b>' + incident.title + '</b><br/>' +
+             incident.locationName + '<br/>' +
+             verified.message + '<br/>' +
+             '<b>Status </b>' + incident.status + '<br/>' +
+             description + '<br/>'
+           );
+           infowindow.setPosition(this.getPosition());
+           infowindow.setMap(map);
+         });
+       });
+     });
+   }
  });
 </script>
+
