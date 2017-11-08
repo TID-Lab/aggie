@@ -24,7 +24,6 @@ angular.module('Aggie')
 
     $scope.save = function(form, widgetName, settings) {
       Settings.set(widgetName, settings, success(widgetName, 'saved'), failure);
-      $modalInstance.close();
     };
 
     $scope.delete = function(widgetName, settings) {

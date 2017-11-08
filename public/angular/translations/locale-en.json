@@ -69,13 +69,14 @@
       "settingsModal": {
         "success": "The widget settings have been saved",
         "error": "There was a problem saving the widget settings, try again.",
-        "title": "Edit Widget Settings",
+        "title": "Edit {{ widget | capitalize }} Settings",
         "field_required": "This field is required",
         "incident_map": {
           "p1": "Set the center of the map and the zoom level for the map widget here.",
           "p2": "Save the settings and see the map in action <a target=\"_blank\" href=\"widget/public_incident_map.html\">here</a>",
           "p3": "Read the documentation to find out how to add the map widget to your site,"
-        }
+        },
+        "confirm_delete": "Are you sure you want to delete the settings for this widget?"
       }
     }
   },
@@ -201,6 +202,7 @@
   "Public?": "Public?",
   "Private": "Private",
   "Public": "Public",
+  "Public Description": "Public Description",
   "Delete": "Delete",
   "Create Incident": "Create Incident",
   "Sorry, but we couldn't find any incidents.": "Sorry, but we couldn't find any incidents.",
