@@ -167,6 +167,8 @@ Aggie uses Google Places for guessing locations in the application. To make it w
   1. To add a Facebook source, copy and paste the URL of the Facebook group or page you want to follow (e.g. `https://www.facebook.com/nigerianforum`).
   1. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`).
   1. To add an ELMO source to track responses for a particular ELMO form, enter a URL like this: `https://yourdomain.com/api/v1/m/yourmission/responses.json?form_id=123`, where `123` is the ID of the form you noted above. The user associated with your API key must have permission to view responses on the mission in order for this to work.
+  1. To add an SMSGH source, enter the keyword that the messages are being sent with. SMSGH will forward the messages to Aggie.
+  1. To add a WhatsApp source, check the instructions [here](https://github.com/TID-Lab/aggie/pull/241).
 
 #### Warnings
   As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
