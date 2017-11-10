@@ -87,12 +87,11 @@ angular.module('Aggie')
       page: 1,
       perPage: paginationOptions.perPage,
       start: 1,
-      end: $scope.incidents.length
+      end: $scope.incidents.length,
+      total: incidents.total
     };
 
     $scope.getPage = function(page) {
-      console.log($scope.incidents);
-      console.log(page);
 
       Incident.query({ page: page - 1 }).$promise
         .then(function(incidents) {
@@ -103,6 +102,7 @@ angular.module('Aggie')
           $scope.pagination.start = start + 1;
           $scope.pagination.end = (page - 1) * perPage + l;
           $scope.pagination.page = page;
+
         });
     };
 
