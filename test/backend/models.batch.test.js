@@ -138,9 +138,7 @@ describe('Report', function() {
   it('should not give same reports to different users', function(done) {
     createReports(function() {
       async.map([user._id, user2._id], function(user, cb) {
-        batch.checkout(user, {}, function(err, reports) {
-          cb(err, reports);
-        });
+        batch.checkout(user, {}, cb);
       }, function(err, batches) {
         if (err) done(err);
         expect(batches[0].length).to.eq(10);
