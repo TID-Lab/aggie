@@ -51,7 +51,9 @@ angular.module('Aggie')
   'incidents',
   'reports',
   'Tags',
-  function($rootScope, $scope, $modalInstance, incidents, reports, Tags) {
+  'Incident',
+  'paginationOptions',
+  function($rootScope, $scope, $modalInstance, incidents, reports, Tags, Incident, paginationOptions) {
     $scope.reports = angular.copy(reports);
     $scope.incidents = incidents.results;
     $scope.modal = $modalInstance;
@@ -81,5 +83,35 @@ angular.module('Aggie')
       $modalInstance.dismiss('cancel');
     };
 
+    $scope.pagination = {
+      page: 1,
+      perPage: paginationOptions.perPage,
+      start: 1,
+      end: $scope.incidents.length,
+      total: incidents.total
+    };
+
+    $scope.getPage = function(page) {
+
+      Incident.query({ page: page - 1 }).$promise
+        .then(function(incidents) {
+          $scope.incidents = incidents.results;
+          var perPage = $scope.pagination.perPage;
+          var start = (page - 1) * perPage;
+          var l = $scope.incidents.length;
+          $scope.pagination.start = start + 1;
+          $scope.pagination.end = (page - 1) * perPage + l;
+          $scope.pagination.page = page;
+
+        });
+    };
+
+    $scope.isFirstPage = function() {
+      return $scope.pagination.page === 1;
+    };
+
+    $scope.isLastPage = function() {
+      return $scope.pagination.end === incidents.total;
+    };
   }
 ]);
