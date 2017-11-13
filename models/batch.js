@@ -3,10 +3,12 @@
 var Report = require('./report');
 var async = require('async');
 var _ = require('lodash');
+var ReadWriteLock = require('rwlock');
 var ReportQuery = require('./query/report-query');
 
 var ITEMS_PER_BATCH = 10; // 10 items per batch
 var BATCH_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+var lock = new ReadWriteLock();
 
 function Batch() { /* empty constructor */ }
 
@@ -48,17 +50,25 @@ Batch.prototype.lock = function(userId, query, callback) {
     read: false
   });
 
-  Report
-    .find(filter)
-    .sort({ storedAt: -1 })
-    .limit(ITEMS_PER_BATCH)
-    .exec(function(err, reports) {
-      if (err) return callback(err);
-      var ids = _.map(reports, '_id');
-      var update = { checkedOutBy: userId, checkedOutAt: new Date() };
-      Report.update({ _id: { $in: ids } }, update, { multi: true }, callback);
-    }
-  );
+  lock.writeLock(function(release) {
+    Report
+      .find(filter)
+      .sort({ storedAt: -1 })
+      .limit(ITEMS_PER_BATCH)
+      .exec(function(err, reports) {
+        if (err) {
+          release();
+          return callback(err);
+        }
+        var ids = _.map(reports, '_id');
+        var update = { checkedOutBy: userId, checkedOutAt: new Date() };
+        Report.update({ _id: { $in: ids } }, update, { multi: true }, function() {
+          release();
+          callback();
+        });
+
+      });
+  });
 },
 
 // load a batch for user
