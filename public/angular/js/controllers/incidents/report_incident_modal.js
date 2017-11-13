@@ -111,8 +111,7 @@ angular.module('Aggie')
     };
 
     $scope.isLastPage = function() {
-      // Horrible hack
-      return $scope.pagination.end % $scope.pagination.perPage !== 0;
+      return $scope.pagination.end === incidents.total;
     };
   }
 ]);
