@@ -240,6 +240,7 @@
   "Fetched Time": "Fetched Time",
   "Stored Time": "Stored Time",
   "Source": "Source",
+
   "URL": "URL",
   "Author": "Author",
   "Content": "Content",
@@ -312,12 +313,14 @@
   "A short name for this source.": "A short name for this source.",
   "Nickname is required.": "Nickname is required.",
   "Keywords": "Keywords",
+  "Enter tags": "Enter tags",
   "sources_modal": {
     "help": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>. Note that <strong>passion fruit</strong> will match tweets containing both passion and fruit in any order. See <a href=\"https://dev.twitter.com/streaming/overview/request-parameters#track\">here</a> for details.",
     "rss_url": "The URL of the RSS feed, e.g. <strong>http://example.com/rss.xml</strong>",
     "tags": "Separated by commas, e.g. <strong>apple, passion fruit, banana</strong>",
     "facebook_url": "The URL of the Facebook page or group, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
-    "elmo_url": "The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong>"
+    "elmo_url": "The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong>",
+    "whatsapp_help": "Check <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp_messages\">Aggie documentation</a> for instructions on how to set the keyword and WhatsApp forwarding in Firefox"
   },
   "URL is required.": "URL is required.",
   "URL is invalid.": "URL is invalid.",
@@ -367,6 +370,8 @@
   "Rss": "RSS",
   "Twitter": "Twitter",
   "SMSGh": "SMS GH",
+  "Whatsapp": "WhatsApp",
+  "whatsapp": "WhatsApp",
   "gplaces": "Google Places",
   "Mark all Read": "Mark all Read",
   "Confirmed true": "Confirmed true",

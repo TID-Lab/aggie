@@ -90,6 +90,24 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
 10.  Hit the return key to show your access token.  
 11.  With this access token,fellow the instructions from [Adding Media Feeds to Aggie](#adding-media-feeds-to-aggie) section and edit the Facebook settings on Aggie.
 
+### WhatsApp messages
+
+The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
+
+  1. Install Firefox in Linux using your distribution preferred method.
+  1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
+  1. Configure the add-on [about:addons](about:addons):
+       * Set Notification Engine to Custom command
+       * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
+           * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. _This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source_.
+           * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
+           
+     ![GNotifier Add-on for Firefox](gnotifier.png)
+     
+  1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
+  1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
+
+
 ### ELMO Tokens
 
 1.  Log into your *ELMO* instance with an account having *coordinator* or higher privileges on the mission you want to track.
