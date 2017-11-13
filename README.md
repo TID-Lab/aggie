@@ -109,11 +109,15 @@ The following need to be installed.
 
 ### Intructions on Building and Publishing Aggie's documentation.
 The documentation is in the `docs` directory. These are automatically built and
-pushed to
-[http://aggie.readthedocs.io/en/<your-branch>](http://aggie.readthedocs.io/en/latest/)
-on each commit.
+pushed on each commit for the `master` and `develop` branches in Github:
+
+
+* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
+* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
+
 
 To build the docs locally, do the following:
+
 1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
 2. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
 3. Install `recommonmark`: `pip install recommonmark`
