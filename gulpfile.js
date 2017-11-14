@@ -5,6 +5,10 @@ var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
+var ngAnnotate = require('gulp-ng-annotate');
+var sourcemaps = require('gulp-sourcemaps');
 var plumber = require('gulp-plumber');
 var livereload = require('gulp-livereload');
 var jsoncombine = require('gulp-jsoncombine');
@@ -44,13 +48,26 @@ gulp.task('lint', function() {
 pipes.buildAngular = function() {
   return gulp.src('public/angular/js/app.js')
     .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(browserify())
+    .pipe(ngAnnotate())
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(rename('app.min.js'))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('public/angular/js'));
+};
+
+pipes.debugAngular = function() {
+  return gulp.src('public/angular/js/app.js')
+    .pipe(plumber())
     .pipe(browserify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
 };
 
 gulp.task('watchAngular', function() {
-  pipes.buildAngular()
+  pipes.debugAngular()
     .pipe(livereload());
 });
 
