@@ -3,7 +3,7 @@ Table of Contents
 
    * [Aggie](#aggie)
       * [Deployment Installation via Docker](#deployment-installation-via-docker)
-      * [Development Installation](#development-installation)
+      * [Source Installation](#source-installation)
          * [System requirements](#system-requirements)
          * [Installation](#installation)
       * [Maintenance](#maintenance)
@@ -72,7 +72,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 4. Navigate to `https://localhost` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
 
-## Development Installation
+## Source Installation
 
 ### System requirements
 
@@ -241,11 +241,13 @@ Extensive documentation about using the application can be found in [ReadTheDocs
 
 
 ## Deployment
-Internally, we use [forever](https://github.com/nodejitsu/forever) to keep Aggie
-running. Since this is a multi-process application, the forever monitor will
+Internally, we use [pm2](https://www.npmjs.com/package/pm2) to keep Aggie
+running. Since this is a multi-process application, the pm2 monitor will
 sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
+
+We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/nginx-aggie), which enables https, cache, compression and http2.
 
 ## Architecture
 

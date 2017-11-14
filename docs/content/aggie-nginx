@@ -1,0 +1,68 @@
+# worker_processes auto;
+
+# the IP(s) on which your node server is running, usually on port 3000.
+upstream app_aggie {
+  server 127.0.0.1:3000;
+}
+
+#Redirect to https
+server {
+    listen 80;
+    location / {
+    return 301 https://$host$request_uri;
+   }
+}
+
+# The Aggie server instance
+server {
+     listen              443 ssl http2;
+     # Point to where Aggie will be served from
+     server_name         <your-ip-here> <your-server-name> localhost;
+     ssl_certificate     <path to ssl certificate e.g. /etc/ssl/certs/cert.org.pem>;
+     ssl_certificate_key <path to ssl key e.g. /etc/ssl/private/privkey.org.key>;
+     ssl_session_cache   shared:SSL:2m;
+     ssl_session_timeout 10m;
+     index index.html
+     access_log /var/log/nginx/aggie.log;
+     #nginx to serve static files rather than Aggie
+     location ~ ^/(js|templates|translations) {
+         # Modify /etc/nginx/nginx.conf to enable the the compression of js, css and other file types
+         sendfile    on;
+         expires     24h;
+         add_header Cache-Control public;
+         root        /home/ubuntu/aggie/public/angular;
+     }
+     location / {
+        if ($request_method = 'OPTIONS') {
+             add_header 'Access-Control-Allow-Origin' '*';
+             add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+             #
+             # Custom headers and headers various browsers *should* be OK with but aren't
+             #
+             add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+             #
+             # Tell client that this pre-flight info is valid for 20 days
+             #
+             add_header 'Access-Control-Max-Age' 1728000;
+             add_header 'Content-Type' 'text/plain charset=UTF-8';
+             add_header 'Content-Length' 0;
+             return 204;
+        }
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With' always;
+         # pass the request to the node.js server with the correct headers and much more can be added, see nginx config options
+         proxy_ssl_session_reuse off;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header Host $http_host;
+         proxy_set_header X-NginX-Proxy true;
+         proxy_pass http://app_aggie/;
+         proxy_redirect off;
+         proxy_http_version 1.1;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+     }
+  }
