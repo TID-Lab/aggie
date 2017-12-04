@@ -7,17 +7,37 @@
   }
 </style>
 <div id="map-canvas"></div>
-<script type="text/javascript" src="///ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" Src="///ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="///maps.googleapis.com/maps/api/js?key=<%= gPlaces.key %>"></script>
+<script type="text/javascript" src="oms.min.js"></script>
 <script>
  $(document).ready(function () {
-   //Ghana
-   var defaultLatLng = new google.maps.LatLng(<%= map.latitude %>, <%= map.longitude %>); // Default
-   var veracityOptions = [{ message: 'Unconfirmed', icon: '/widget/marker-yellow.png'},
-                          { message: 'Confirmed true', icon: '/widget/marker-blue.png'},
-                          { message: 'Confirmed false', icon: '/widget/marker-green.png'}];
+   var defaultLatLng = new google.maps.LatLng(<%= map.latitude %>, <%= map.longitude %>);
 
-   drawMap(defaultLatLng);
+   var veracityOptions = {
+     unverified: { message: 'Unconfirmed', icon: '/widget/images/marker-magenta.png'},
+     verifiedTrue: { message: 'Confirmed true', icon: '/widget/images/marker-blue.png'},
+     verifiedFalse: { message: 'Confirmed false', icon: '/widget/images/marker-green.png'}
+   };
+
+   function getVeracity(veracity) {
+     if (veracity === null) return veracityOptions.unverified;
+
+     if (veracity) return veracityOptions.verifiedTrue;
+     else return veracityOptions.verifiedFalse;
+   }
+
+   function setIcon(veracity, marker, status) {
+     var icon;
+     if (status === OverlappingMarkerSpiderfier.markerStatus.SPIDERFIABLE)
+       icon = '/widget/images/marker-orange-plus.png';
+     else {
+       icon = getVeracity(veracity).icon;
+     }
+
+     marker.setIcon({ url: icon });
+   }
+
    function drawMap(latlng) {
      var myOptions = {
        zoom: <%= map.zoom %>,
@@ -27,39 +47,50 @@
      var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
      // place the infowindow.  Invisible, without content.
      var infowindow = new google.maps.InfoWindow({
-       content: '',
+       content: ''
      });
-     //READ FROM JSON
+
+     var oms = new OverlappingMarkerSpiderfier(map, {
+       markersWontMove: true,
+       markersWontHide: true,
+       basicFormatEvents: false
+     });
+
      $.getJSON('/api/v1/public/incident', function (data) {
 
        $.each(data, function (i, incident) {
-         var verified;
-         if (incident.veracity === true) verified = veracityOptions[1];
-         if (incident.veracity === false) verified = veracityOptions[2];
-         if (incident.veracity === null) verified = veracityOptions[0];
 
          var marker = new google.maps.Marker({
            position: new google.maps.LatLng(incident.latitude, incident.longitude),
            map: map,
-           title: incident.title,
-           icon: verified.icon
+           title: incident.title
          });
-         // when the client clicks on a marker we set the content and bind the position to the marker
+
+         google.maps.event.addListener(marker, 'spider_format', function(status) {
+           setIcon(incident.veracity, marker, status);
+         });
+
+         oms.addMarker(marker);
+
+         // When the client clicks on a marker we set the content and
+         // bind the position to the marker
          var description = incident.publicDescription || '';
-         google.maps.event.addListener(marker, 'click', function() {
+         google.maps.event.addListener(marker, 'spider_click', function() {
            infowindow.setContent(
              '<b>' + incident.title + '</b><br/>' +
              incident.locationName + '<br/>' +
-             verified.message + '<br/>' +
+             getVeracity(incident.veracity).message + '<br/>' +
              '<b>Status </b>' + incident.status + '<br/>' +
              description + '<br/>'
            );
+
            infowindow.setPosition(this.getPosition());
            infowindow.setMap(map);
          });
        });
      });
    }
+
+   drawMap(defaultLatLng);
  });
 </script>
-
