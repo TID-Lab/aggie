@@ -5,15 +5,15 @@ var human = require('interval-to-human'),
 
 angular.module('Aggie')
 
-.filter('delay', function() {
+  .filter('delay', ['$translate', function($translate) {
   return function(record) {
     var stored = new Date(record.storedAt).getTime();
     var authored = new Date(record.authoredAt).getTime();
     var delay = stored - authored;
     var minute = 60 * 1000;
     if (delay > minute) {
-      return 'Created +' + abbreviatedHuman(delay);
+      return $translate.instant('entry.created') + ' + ' + abbreviatedHuman(delay);
     }
     return '';
   };
-});
+}]);

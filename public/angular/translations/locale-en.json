@@ -187,6 +187,7 @@
   "Off": "Off",
   "Media Authentication": "Media Authentication",
   "Edit": "Edit",
+  "edit": "edit",
   "App Email Address": "App Email Address",
   "Save": "Save",
   "Email Transport": "Email Transport",
@@ -268,8 +269,8 @@
     "reportsAreFiltered": "Below are <em>unread</em> reports matching your filter.",
     "noReports": "Sorry, but we couldn't find any reports assigned to you."
   },
-  "Mark All Read &amp; Grab Another": "Mark All Read &amp; Grab Another",
-  "Mark All Read &amp; Done": "Mark All Read &amp; Done",
+  "Mark All Read & Grab Another": "Mark All Read &amp; Grab Another",
+  "Mark All Read & Done": "Mark All Read &amp; Done",
   "Mark as Read": "Mark as Read",
   "Mark as Unread": "Mark as Unread",
   "Flag": "Flag",
@@ -396,5 +397,6 @@
   "Confirmed false": "Confirmed false",
   "Unescalated": "Unescalated",
   "Tags": "Tags",
-  "Assign To": "Assign To"
+  "Assign To": "Assign To",
+  "entry.created": "Created"
 }
