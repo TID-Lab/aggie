@@ -1,0 +1,21 @@
+<div class="form-group" ng-hide="minimalLatLng">
+  <label for="latitude" class="col-lg-2 control-label inline" translate>Latitude</label>
+  <div class="col-lg-3 inline">
+    <input id="latitude" ng-required="model.longitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="model.latitude">
+    <div class="has-error" ng-show="showErrors">
+      <div class="help-block" ng-show="form.latitude.$error.pattern" translate>Latitude is invalid.</div>
+      <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin" translate>Latitude is invalid.</div>
+      <div class="help-block" ng-show="form.latitude.$error.required" translate>Latitude is required if longitude is entered.</div>
+    </div>
+  </div>
+  <div class="col-lg-1 inline"></div>
+  <label for="longitude" class="col-lg-2 control-label inline" translate>Longitude</label>
+  <div class="col-lg-3 inline">
+    <input id="longitude" ng-required="model.latitude" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-180" ng-max="180" name="longitude" type="text" class="form-control" ng-round="6" ng-model="model.longitude">
+    <div class="has-error" ng-show="showErrors">
+      <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin" translate>Longitude is invalid.</div>
+      <div class="help-block" ng-show="form.longitude.$error.required" translate>Longitude is required if latitude is entered.</div>
+      <div class="help-block" ng-show="form.longitude.$error.pattern" translate>Longitude is invalid.</div>
+    </div>
+  </div>
+</div>

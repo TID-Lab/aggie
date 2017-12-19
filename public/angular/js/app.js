@@ -153,6 +153,7 @@ require('./directives/aggie-table');
 require('./directives/aggie-toggle');
 require('./directives/aggie-sparkline');
 require('./directives/aggie-username');
+require('./directives/aggie-location');
 require('./directives/ng-focus');
 require('./directives/ng-password-match');
 require('./directives/ng-autocomplete');
