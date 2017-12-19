@@ -29,7 +29,7 @@
               <input id="latitude" ng-required="settings['longitude']" ng-pattern="/^-?[0-9]\d*(\.\d+)?$/" ng-min="-90" ng-max="90" name="latitude" type="text" class="form-control" ng-round="6" ng-model="settings['latitude']">
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.latitude.$error.pattern" translate>Latitude is invalid.</div>
-                <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin">Latitude is invalid.</div>
+                <div class="help-block" ng-show="form.latitude.$error.ngMax || form.latitude.$error.ngMin" translate>Latitude is invalid.</div>
                 <div class="help-block" ng-show="form.latitude.$error.required" translate>Latitude is required if longitude is entered.</div>
               </div>
             </div>

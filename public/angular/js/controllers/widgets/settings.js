@@ -4,23 +4,21 @@ angular.module('Aggie')
   '$scope',
   '$window',
   'Settings',
-  '$timeout',
-  '$filter',
   'FlashService',
   'widgetSettingsOptions',
   'WidgetsSettingsModal',
-  function($scope, $window, Settings, $timeout, $filter, flash, widgetSettingsOptions, modal) {
+  function($scope, $window, Settings, flash, widgetSettingsOptions, modal) {
 
     $scope.widget = {};
 
     widgetSettingsOptions.forEach(getSetting);
 
+    $scope.inHttp = $window.location.protocol === 'http:';
+    $scope.settingOptions = widgetSettingsOptions;
+
     $scope.edit = function(widget) {
       var modalInstance = modal.create(widget, $scope.widget[widget]);
     };
-
-    $scope.inHttp = $window.location.protocol === 'http:';
-    $scope.settingOptions = widgetSettingsOptions;
 
     function getSetting(name) {
       Settings.get(name, function success(data) {

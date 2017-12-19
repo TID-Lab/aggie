@@ -48,7 +48,7 @@
 
           <div class="form-group" ng-hide="minimal">
             <label for="escalated" class="col-lg-2 control-label" translate>Escalated</label>
-            <div class="col-lg-4">
+            <div class="col-lg-9">
               <input type="checkbox" id="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
             </div>
           </div>
@@ -78,7 +78,7 @@
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.longitude.$error.ngMax || form.longitude.$error.ngMin" translate>Longitude is invalid.</div>
                 <div class="help-block" ng-show="form.longitude.$error.required" translate>Longitude is required if latitude is entered.</div>
-                    <div class="help-block" ng-show="form.longitude.$error.pattern" translate>Longitude is invalid.</div>
+                <div class="help-block" ng-show="form.longitude.$error.pattern" translate>Longitude is invalid.</div>
               </div>
             </div>
           </div>

@@ -4,23 +4,30 @@ var publicController = require('../../lib/api/v1/public-controller');
 var Incident = require('../../models/incident');
 
 describe('Public controller', function() {
-  var incident1, incident2;
+  var incident = [];
 
   before(function(done) {
-    incident1 = {
+    incident.push({
       title: 'test',
       public: true
-    };
+    });
 
-    incident2 = {
+    incident.push({
       title: 'test',
       public: false
-    };
-    Incident.create(incident1);
-    Incident.create(incident2);
+    });
+
+    incident.push({
+      title: 'test',
+      public: true
+    });
+
+    incident.forEach(function(item) {
+      Incident.create(item);
+    });
+
     done();
   });
-
 
   after(function(done) {
     Incident.remove({}, done);
@@ -34,10 +41,9 @@ describe('Public controller', function() {
         .end(function(err, res) {
           if (err) return done(err);
           expect(res.body).to.be.an.instanceof(Array);
-          expect(res.body).to.have.length(1);
+          expect(res.body).to.have.length(2);
           done();
         });
     });
   });
-
 });
