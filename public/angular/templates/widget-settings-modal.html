@@ -2,12 +2,12 @@
   <div class="modal-header">
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title">
-      <div class="icon-left" translate="settings.widget.settingsModal.title" translate-value-widget="{{ widget }}"></div>
+      <div class="icon-left" translate="settings.widget.settingsModal.title" translate-value-widget="{{ item }}"></div>
     </h4>
   </div>
   <div class="modal-body">
     <form name="settingsForm" class="form-horizontal" novalidate>
-      <ol ng-if="widget === 'incident map'">
+      <ol ng-if="item === 'incident map'">
         <li translate>settings.widget.settingsModal.incident_map.p1</li>
         <li translate>settings.widget.settingsModal.incident_map.p2</li>
         <li translate>settings.widget.settingsModal.incident_map.p3</li>
@@ -53,7 +53,7 @@
         </fieldset>
       </div>
 
-      <div ng-if="widget !== 'incident map'" class="modal-body">
+      <div ng-if="item !== 'incident map'" class="modal-body">
         <p ng-show="settingsForm.$invalid" translate>settings.widget.settingsMdal.field_required</p>
         <div class="well bs-component">
           <fieldset>
@@ -70,12 +70,12 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" aggie-confirm="{{ settings.widget.settingsModal.confirm_delete | translate }}"
-            on-confirm="delete(widget, settings)">
+    <button class="btn btn-default" aggie-confirm="settings.widget.settingsModal.confirm_delete"
+            on-confirm="delete(item, settings)">
       {{ 'Delete' | translate }}
     </button>
     <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
-    <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, widget, settings)" translate>
+    <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, item, settings)" translate>
       Save
     </button>
   </div>

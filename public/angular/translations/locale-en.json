@@ -58,17 +58,13 @@
         "error": "An error has occurred"
       }
     },
-    "api": {
-      "error": "An error has occurred setting the API credentials",
-      "settingsModal": {
-        "success": "{{apiName}} settings has been successfully {{verb}}.",
-        "error": "An error has occurred"
-      }
+    "error": "An error has occurred saving the setting",
+    "settingsModal": {
+      "success": "{{itemName}} settings has been successfully {{verb}}.",
+      "error": "An error has occurred"
     },
     "widget": {
       "settingsModal": {
-        "success": "The widget settings have been saved",
-        "error": "There was a problem saving the widget settings, try again.",
         "title": "Edit {{ widget | capitalize }} Settings",
         "field_required": "This field is required",
         "incident_map": {
@@ -279,7 +275,7 @@
   "Flag": "Flag",
   "Unflag": "Unflag",
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
-  "Widget": "Widget",
+  "Widgets": "Widgets",
   "Incident map": "Incident map",
   "Center": "Center",
   "Zoom": "Zoom",
