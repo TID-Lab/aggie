@@ -1,6 +1,6 @@
 # Settings
 
-After a successful login, you will see Aggies's front end interface as below.  
+After a successful login, you will see Aggies's front end interface as below.
 
 ![Main Menu](main_menu.png)
 
@@ -25,13 +25,13 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
 
 1.  From the header menu, click on **Settings**.
 
-    ![Settings Menu](settings.png)   
+    ![Settings Menu](settings.png)
 
 2.  From the dropdown list, click on **Settings**.
 
     ![Media Authentication](toggle3.png)
 
-3. Click on **Edit** to authenticate the Twitter, Facebook or Elmo feed settings.  
+3. Click on **Edit** to authenticate the Twitter, Facebook or Elmo feed settings.
 
     ![Media Authentication](social_media_feed_authentication.png)
 
@@ -87,7 +87,7 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
     ![Facebook App](facebook_app5.png)
 
 9.  Now with your Facebook *App ID* and *App Secret*, copy **https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials** into your web browser, replacing the (**xxx**) in **secret = xxx** and **id=xxx** with your *App Secret* and *App ID* respectively.
-10.  Hit the return key to show your access token.  
+10.  Hit the return key to show your access token.
 11.  With this access token,fellow the instructions from [Adding Media Feeds to Aggie](#adding-media-feeds-to-aggie) section and edit the Facebook settings on Aggie.
 
 ### WhatsApp messages
@@ -101,7 +101,7 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
        * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
            * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. _This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source_.
            * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
-           
+
      ![GNotifier Add-on for Firefox](gnotifier.png)
      
   1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
@@ -188,6 +188,31 @@ The Public Incident Map displays those [incidents](#incidents) that have been ma
 <iframe src="https://<your-domain>/widget/public_incident_map.html" width="xxx" height="yyy"></iframe>
 ```
 
-1. Markers in the map have different meanings according to the their color, as shown in the image below. You can copy that image for your site if needed.
+1. Markers in the map have different meanings according to the their color, as shown in the table below. You can copy this table for your site if needed.
 
-![Incident Map Key](incident_map_key.png)
+<table>
+<thead>
+<tr class="header">
+<th>Map Key</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="marker-green.png" alt="Verified true" /></td>
+<td>confirmed <strong>true</strong> incident</td>
+</tr>
+<tr class="even">
+<td><img src="marker-orange.png" alt="Verified false" /></td>
+<td>confirmed <strong>false</strong> incident</td>
+</tr>
+<tr class="odd">
+<td><img src="marker-blue.png" alt="Unverified" /></td>
+<td>unconfirmed incident</td>
+</tr>
+<tr class="even">
+<td><img src="marker-black-plus.png" alt="Click to expand" /></td>
+<td>click to expand incidents</td>
+</tr>
+</tbody>
+</table>
