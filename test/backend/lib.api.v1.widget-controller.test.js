@@ -1,7 +1,6 @@
 var request = require('supertest');
 var widgetController = require('../../lib/api/v1/widget-controller')();
 
-
 describe('Widget controller', function() {
   describe('GET /widget/public_incident.map.html', function() {
     it('should return html of the map', function(done) {

@@ -70,7 +70,7 @@ angular.module('Aggie')
       Settings.test('media', mediaName, settings, successTest, failureTest);
     };
 
-    function successTest(response, responseHeaders) {
+    function successTest(response) {
       $scope.loading = false;
 
       if (response.success) {
