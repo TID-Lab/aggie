@@ -15,9 +15,9 @@
    var defaultLatLng = new google.maps.LatLng(<%= map.latitude %>, <%= map.longitude %>);
 
    var veracityOptions = {
-     unverified: { message: 'Unconfirmed', icon: '/widget/images/marker-magenta.png'},
+     unverified: { message: 'Unconfirmed', icon: '/widget/images/marker-green.png'},
      verifiedTrue: { message: 'Confirmed true', icon: '/widget/images/marker-blue.png'},
-     verifiedFalse: { message: 'Confirmed false', icon: '/widget/images/marker-green.png'}
+     verifiedFalse: { message: 'Confirmed false', icon: '/widget/images/marker-orange.png'}
    };
 
    function getVeracity(veracity) {
@@ -30,7 +30,7 @@
    function setIcon(veracity, marker, status) {
      var icon;
      if (status === OverlappingMarkerSpiderfier.markerStatus.SPIDERFIABLE)
-       icon = '/widget/images/marker-orange-plus.png';
+       icon = '/widget/images/marker-black-plus.png';
      else {
        icon = getVeracity(veracity).icon;
      }
