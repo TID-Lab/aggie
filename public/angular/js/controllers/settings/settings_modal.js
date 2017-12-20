@@ -27,7 +27,6 @@ angular.module('Aggie')
   'item',
   '$filter',
   function($scope, $modalInstance, Settings, flash, settings, item, $filter) {
-    console.log(item);
     $scope.settings = settings;
     $scope.item = item;
     $scope._showErrors = false;

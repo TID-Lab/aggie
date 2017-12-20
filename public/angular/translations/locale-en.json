@@ -60,7 +60,7 @@
     },
     "error": "An error has occurred saving the setting",
     "settingsModal": {
-      "success": "{{itemName}} settings has been successfully {{verb}}.",
+      "success": "{{itemName}} settings have been successfully {{verb}}.",
       "error": "An error has occurred"
     },
     "widget": {
