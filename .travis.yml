@@ -1,6 +1,12 @@
 language: node_js
-services: mongodb
+addons:
+  sources:
+    - mongodb-3.2-trusty
+  packages:
+    - mongodb-org
 
 before_script:
+  - sleep 15
+  - mongod --version
   - cp config/secrets.json.example config/secrets.json
   - openssl req -x509 -newkey rsa:2048 -keyout config/key.pem -out config/cert.pem -days 365 -nodes -subj "/O=Aggie"
