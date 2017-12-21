@@ -1,8 +1,9 @@
 language: node_js
 addons:
-  sources:
+  apt:
+    sources:
     - mongodb-3.2-trusty
-  packages:
+    packages:
     - mongodb-org
 
 before_script:
