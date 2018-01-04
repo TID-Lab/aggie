@@ -1,0 +1,96 @@
+<style>
+  #map-canvas {
+    height: 584px;
+  }
+  .gm-style-iw{ /* infowindow */
+    width: 200px;
+  }
+</style>
+<div id="map-canvas"></div>
+<script type="text/javascript" Src="///ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="///maps.googleapis.com/maps/api/js?key=<%= gPlaces.key %>"></script>
+<script type="text/javascript" src="oms.min.js"></script>
+<script>
+ $(document).ready(function () {
+   var defaultLatLng = new google.maps.LatLng(<%= map.latitude %>, <%= map.longitude %>);
+
+   var veracityOptions = {
+     unverified: { message: 'Unconfirmed', icon: '/widget/images/marker-green.png'},
+     verifiedTrue: { message: 'Confirmed true', icon: '/widget/images/marker-blue.png'},
+     verifiedFalse: { message: 'Confirmed false', icon: '/widget/images/marker-orange.png'}
+   };
+
+   function getVeracity(veracity) {
+     if (veracity === null) return veracityOptions.unverified;
+
+     if (veracity) return veracityOptions.verifiedTrue;
+     else return veracityOptions.verifiedFalse;
+   }
+
+   function setIcon(veracity, marker, status) {
+     var icon;
+     if (status === OverlappingMarkerSpiderfier.markerStatus.SPIDERFIABLE)
+       icon = '/widget/images/marker-black-plus.png';
+     else {
+       icon = getVeracity(veracity).icon;
+     }
+
+     marker.setIcon({ url: icon });
+   }
+
+   function drawMap(latlng) {
+     var myOptions = {
+       zoom: <%= map.zoom %>,
+       center: latlng,
+       mapTypeId: google.maps.MapTypeId.ROADMAP
+     };
+     var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+     // place the infowindow.  Invisible, without content.
+     var infowindow = new google.maps.InfoWindow({
+       content: ''
+     });
+
+     var oms = new OverlappingMarkerSpiderfier(map, {
+       markersWontMove: true,
+       markersWontHide: true,
+       basicFormatEvents: false
+     });
+
+     $.getJSON('/api/v1/public/incident', function (data) {
+
+       $.each(data, function (i, incident) {
+
+         var marker = new google.maps.Marker({
+           position: new google.maps.LatLng(incident.latitude, incident.longitude),
+           map: map,
+           title: incident.title
+         });
+
+         google.maps.event.addListener(marker, 'spider_format', function(status) {
+           setIcon(incident.veracity, marker, status);
+         });
+
+         oms.addMarker(marker);
+
+         // When the client clicks on a marker we set the content and
+         // bind the position to the marker
+         var description = incident.publicDescription || '';
+         google.maps.event.addListener(marker, 'spider_click', function() {
+           infowindow.setContent(
+             '<b>' + incident.title + '</b><br/>' +
+             incident.locationName + '<br/>' +
+             getVeracity(incident.veracity).message + '<br/>' +
+             '<b>Status </b>' + incident.status + '<br/>' +
+             description + '<br/>'
+           );
+
+           infowindow.setPosition(this.getPosition());
+           infowindow.setMap(map);
+         });
+       });
+     });
+   }
+
+   drawMap(defaultLatLng);
+ });
+</script>

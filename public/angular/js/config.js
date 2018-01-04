@@ -1,8 +1,10 @@
 angular.module('Aggie')
 
-.value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo', 'smsgh'])
+.value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp'])
 
 .value('apiSettingsOptions', ['twitter', 'facebook', 'elmo', 'gplaces'])
+
+.value('widgetSettingsOptions', ['incident map'])
 
 .value('statusOptions', ['Read', 'Unread', 'Flagged', 'Unflagged', 'Read & Unflagged'])
 
@@ -16,6 +18,8 @@ angular.module('Aggie')
 .value('veracityOptions', ['unconfirmed', 'confirmed true', 'confirmed false'])
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
+
+.value('publicOptions', ['public', 'private'])
 
 .value('paginationOptions', { perPage: 25 })
 

@@ -9,7 +9,7 @@ var ReportQuery = require('../../models/query/report-query');
 var async = require('async');
 var _ = require('lodash');
 
-var user, t;
+var user, user2, t;
 
 // helpers
 function timeAgo(milliseconds) {
@@ -22,6 +22,30 @@ function loadUser(done) {
     user = u;
     done(err);
   });
+}
+
+function createUser2(done) {
+  User.create({ provider: 'test', email: 'batch@example.com', username: 'batchTest', password: 'batchbatch' },
+              function(err, u) {
+                user2 = u;
+                done(err);
+              });
+}
+
+function removeUser2(done) {
+  User.remove({ username: 'batchTest' }, function(err) {
+    done(err);
+  });
+}
+
+function createReports(done) {
+  var reports = [];
+  var totalReports = 50;
+
+  for (var i = 0; i < totalReports; i++) {
+    reports.push({ storedAt: new Date(t.getTime()), content: i });
+  }
+  Report.create(reports, done);
 }
 
 function createReport(done) {
@@ -40,11 +64,13 @@ function createReport(done) {
 
 describe('Report', function() {
   beforeEach(function(done) {
-    async.series([loadUser, createReport], done);
+    async.series([loadUser, createReport, createUser2], done);
   });
 
   afterEach(function(done) {
-    Report.remove({}, done);
+    async.series([removeUser2, function(done) {
+      Report.remove({}, done);
+    }], done);
   });
 
   it('should lock a batch', function(done) {
@@ -106,6 +132,20 @@ describe('Report', function() {
     batch.cancel(user._id, function(err, num) {
       expect(num).to.eq(1);
       done(err);
+    });
+  });
+
+  it('should not give same reports to different users', function(done) {
+    createReports(function() {
+      async.map([user._id, user2._id], function(user, cb) {
+        batch.checkout(user, {}, cb);
+      }, function(err, batches) {
+        if (err) done(err);
+        expect(batches[0].length).to.eq(10);
+        expect(batches[1].length).to.eq(10);
+        expect(_.intersection(batches[0], batches[1]).length).to.eq(0);
+        done();
+      });
     });
   });
 

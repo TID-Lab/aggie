@@ -26,14 +26,14 @@
 </table>
 
 <h4 translate>API Authentication</h4>
-<table class="table table-settings" ng-controller="APISettingsController">
-  <tr ng-repeat="settingOption in settingOptions">
+<table class="table table-settings" ng-controller="SettingsController">
+  <tr ng-repeat="settingOption in apiSettingOptions">
     <td>
       <label class="settings-label">{{ settingOption | translate }}</label>
     </td>
     <td class="action">
       <div class="ng-scope">
-        <button class="btn btn-info ng-scope" ng-click="edit(settingOption)" translate>Edit</button>
+        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
       </div>
     </td>
   </tr>
@@ -63,6 +63,20 @@
     <td class="action">
       <div class="ng-scope">
         <button class="btn btn-info ng-scope" ng-click="editTransport()" translate>Edit</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<h4 translate>Widgets</h4>
+<table class="table table-settings" ng-controller="SettingsController">
+  <tr ng-repeat="settingOption in widgetSettingOptions">
+    <td>
+      <label class="settings-label">{{ settingOption | capitalize | translate }}</label>
+    </td>
+    <td class="action">
+      <div class="ng-scope">
+        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
       </div>
     </td>
   </tr>

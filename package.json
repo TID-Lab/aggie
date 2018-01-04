@@ -1,6 +1,6 @@
 {
   "name": "aggie",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/TID-Lab/aggie.git"
@@ -19,6 +19,7 @@
     "protractor-with-apis": "protractor test/end-to-end/with-apis/protractor.conf.js"
   },
   "dependencies": {
+    "JSONStream": "~0.7.4",
     "angular-cookies": "~1.2.29",
     "angular-translate": "^2.11.1",
     "angular-translate-handler-log": "^2.11.1",
@@ -50,7 +51,6 @@
     "gulp-rename": "^1.2.2",
     "interval-to-human": "~0.1.1",
     "jsmin": "~1.0.1",
-    "JSONStream": "~0.7.4",
     "locale": "0.0.20",
     "lodash": "^4.15.0",
     "migrate": "^0.2.3",
@@ -70,13 +70,14 @@
     "passport.socketio": "~3.0.1",
     "request": "~2.34.0",
     "resanitize": "~0.3.0",
+    "rwlock": "^5.0.0",
     "single-line-log": "~0.4.1",
     "socket.io": "~0.9.16",
     "strformat": "0.0.3",
     "string": "~3.0.0",
     "timekeeper": "0.0.4",
     "timezone": "0.0.32",
-    "tweet-matches": "^1.0.1",
+    "tweet-matches": "^1.0.2",
     "twit": "~1.1.12",
     "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1",
@@ -92,6 +93,9 @@
     "dateformat": "^1.0.11",
     "deep-keys": "^0.3.0",
     "gulp-jsoncombine": "^1.0.3",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-uglify": "^3.0.0",
     "karma": "^1.1.2",
     "karma-browserify": "^4.0.0",
     "karma-chai-plugins": "^0.7.0",
@@ -104,7 +108,8 @@
     "protractor": "^2.5.1",
     "socket.io": "^0.9.17",
     "socket.io-client": "^0.9.16",
-    "supertest": "^2.0.0"
+    "supertest": "^2.0.0",
+    "vinyl-buffer": "^1.0.0"
   },
   "subdomain": "aggie",
   "engines": {

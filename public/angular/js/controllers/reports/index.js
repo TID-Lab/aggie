@@ -19,9 +19,11 @@ angular.module('Aggie')
   'Queue',
   'Tags',
   'paginationOptions',
+  '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions) {
+           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
+           $translate) {
 
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -37,6 +39,8 @@ angular.module('Aggie')
     $scope.currentPath = $rootScope.$state.current.name;
 
     // We add options to search reports with any or none incidents linked
+    linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
+    linkedtoIncidentOptions[1].title = $translate.instant(linkedtoIncidentOptions[1].title);
     $scope.incidents.push(linkedtoIncidentOptions[0]);
     $scope.incidents.push(linkedtoIncidentOptions[1]);
 

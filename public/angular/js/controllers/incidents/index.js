@@ -11,19 +11,21 @@ angular.module('Aggie')
   'incidentStatusOptions',
   'veracityOptions',
   'escalatedOptions',
+  'publicOptions',
   'Incident',
   'Socket',
   'Queue',
   'paginationOptions',
   'Tags',
   function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
-           incidentStatusOptions, veracityOptions, escalatedOptions, Incident,
-           Socket, Queue, paginationOptions, Tags) {
+           incidentStatusOptions, veracityOptions, escalatedOptions, publicOptions,
+           Incident, Socket, Queue, paginationOptions, Tags) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.escalatedOptions = escalatedOptions;
+    $scope.publicOptions = publicOptions;
 
     $scope.users = users;
 
@@ -155,6 +157,7 @@ angular.module('Aggie')
         $scope.searchParams.status === null &&
         $scope.searchParams.veracity === null &&
         $scope.searchParams.tags === null &&
+        $scope.searchParams.public === null &&
         $scope.searchParams.escalated === null;
     };
 
@@ -167,7 +170,8 @@ angular.module('Aggie')
         status: null,
         veracity: null,
         tags: null,
-        escalated: null
+        escalated: null,
+        public: null
       });
     };
 

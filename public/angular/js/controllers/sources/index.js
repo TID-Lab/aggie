@@ -19,11 +19,11 @@ angular.module('Aggie')
     };
 
     $scope.target = function(source) {
-      return source.media == 'twitter' || source.media == 'smsgh' ? source.keywords : source.url;
+      return source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp' ? source.keywords : source.url;
     };
 
     $scope.sourceClass = function(source) {
-      var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh'];
+      var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp'];
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
       } else {

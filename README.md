@@ -1,3 +1,33 @@
+Table of Contents
+=================
+
+   * [Aggie](#aggie)
+      * [Deployment Installation via Docker](#deployment-installation-via-docker)
+      * [Source Installation](#source-installation)
+         * [System requirements](#system-requirements)
+         * [Installation](#installation)
+      * [Maintenance](#maintenance)
+      * [Project Configuration](#project-configuration)
+         * [Tests](#tests)
+         * [Social Media and Feeds](#social-media-and-feeds)
+            * [Twitter](#twitter)
+            * [Facebook](#facebook)
+            * [WhatsApp](#whatsapp)
+            * [ELMO](#elmo)
+         * [Google Places](#google-places)
+         * [Emails](#emails)
+         * [Fetching](#fetching)
+         * [Logging](#logging)
+      * [Using the Application](#using-the-application)
+         * [Sources](#sources)
+            * [Adding Sources](#adding-sources)
+            * [Warnings](#warnings)
+      * [Deployment](#deployment)
+      * [Architecture](#architecture)
+         * [Backend](#backend)
+         * [Frontend](#frontend)
+
+
 # Aggie
 
 Aggie is a web application for using social media and other resources to track incidents around real-time events such as elections or natural disasters.
@@ -42,7 +72,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 4. Navigate to `https://localhost` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
 
-## Development Installation
+## Source Installation
 
 ### System requirements
 
@@ -108,6 +138,24 @@ The following need to be installed.
     2. start Aggie on the test database with `npm run testrun`
     3. run protractor with `npm run protractor-with-apis`
 
+### Intructions on Building and Publishing Aggie's documentation.
+The documentation is in the `docs` directory. These are automatically built and
+pushed on each commit for the `master` and `develop` branches in Github:
+
+
+* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
+* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
+
+
+To build the docs locally, do the following:
+
+1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
+2. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
+3. Install `recommonmark`: `pip install recommonmark`
+4. Install Read The Docs theme: `pip install sphinx_rtd_theme`
+5. From the `docs` directory in Aggie, run `make html`
+6. The compiled documentation has its root at `docs/_build/html/index.html`
+
 ## Project Configuration
 You can adjust the settings in the `config/secrets.json` file to configure the application.
 
@@ -126,6 +174,18 @@ Set `config.adminParty=true` if you want to run tests.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
+#### WhatsApp
+The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
+  1. Install Firefox in Linux using your distribution preferred method.
+  1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
+  1. Configure the add-on [about:addons](about:addons):
+       * Set Notification Engine to Custom command
+       * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
+           * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source.
+           * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
+  1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
+  1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
+           
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
@@ -159,6 +219,7 @@ Aggie uses Google Places for guessing locations in the application. To make it w
   - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
 ## Using the Application
+Extensive documentation about using the application can be found in [ReadTheDocs page](http://aggie.readthedocs.io/en/stable/).
 ### Sources
 #### Adding Sources
   1. Inside the application, go to `Sources > Create Source`.
@@ -166,7 +227,10 @@ Aggie uses Google Places for guessing locations in the application. To make it w
       - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
   1. To add a Facebook source, copy and paste the URL of the Facebook group or page you want to follow (e.g. `https://www.facebook.com/nigerianforum`).
   1. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`).
+  1. To add a WhatsApp source, in the field `keywords` enter the value you selected when setting up GNotifier as `keyword` as explained [here](#whatsapp).
   1. To add an ELMO source to track responses for a particular ELMO form, enter a URL like this: `https://yourdomain.com/api/v1/m/yourmission/responses.json?form_id=123`, where `123` is the ID of the form you noted above. The user associated with your API key must have permission to view responses on the mission in order for this to work.
+  1. To add an SMSGH source, enter the keyword that the messages are being sent with. SMSGH will forward the messages to Aggie.
+
 
 #### Warnings
   As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
@@ -177,11 +241,13 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 
 ## Deployment
-Internally, we use [forever](https://github.com/nodejitsu/forever) to keep Aggie
-running. Since this is a multi-process application, the forever monitor will
+Internally, we use [pm2](https://www.npmjs.com/package/pm2) to keep Aggie
+running. Since this is a multi-process application, the pm2 monitor will
 sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
+
+We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/nginx-aggie), which enables https, cache, compression and http2.
 
 ## Architecture
 

@@ -7,13 +7,14 @@ lib-cov
 *.gz
 *.swp
 *.swo
+*.map
 
 pids
 logs
 results
 tmp
 
-npm-debug.log
+npm-debug*
 node_modules
 fiddle
 .idea
