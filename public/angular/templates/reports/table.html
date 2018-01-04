@@ -17,7 +17,7 @@
       <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
         <div class="interval">
-          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative">ago</span>
+          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative" translate>ago</span>
         </div>
         <div class="date-and-time">
           <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
@@ -46,7 +46,7 @@
         <div>
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')">Add</strong>
+            <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
           </a>
         </div>
         <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>

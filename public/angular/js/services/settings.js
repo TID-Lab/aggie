@@ -8,6 +8,7 @@ angular.module('Aggie')
 
   return {
     get: function(item, success, failure) {
+
       return Settings.get({ item: item }, function(data) {
         success(data);
       }, failure);

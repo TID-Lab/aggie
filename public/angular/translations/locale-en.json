@@ -58,11 +58,21 @@
         "error": "An error has occurred"
       }
     },
-    "api": {
-      "error": "An error has occurred setting the API credentials",
+    "error": "An error has occurred saving the setting",
+    "settingsModal": {
+      "success": "{{itemName}} settings have been successfully {{verb}}.",
+      "error": "An error has occurred"
+    },
+    "widget": {
       "settingsModal": {
-        "success": "{{apiName}} settings has been successfully {{verb}}.",
-        "error": "An error has occurred"
+        "title": "Edit {{ widget | capitalize }} Settings",
+        "field_required": "This field is required",
+        "incident_map": {
+          "p1": "Set the center of the map and the zoom level for the map widget here.",
+          "p2": "Save the settings and see the map in action <a target=\"_blank\" href=\"widget/public_incident_map.html\">here</a>.",
+          "p3": "Read the <a href=\"http://aggie.readthedocs.io/en/stable/content/settings/settings.html#widgets\">documentation</a> to find out how to add the map widget to your site."
+        },
+        "confirm_delete": "Are you sure you want to delete the settings for this widget?"
       }
     }
   },
@@ -177,6 +187,7 @@
   "Off": "Off",
   "Media Authentication": "Media Authentication",
   "Edit": "Edit",
+  "edit": "edit",
   "App Email Address": "App Email Address",
   "Save": "Save",
   "Email Transport": "Email Transport",
@@ -185,6 +196,10 @@
   "Status": "Status",
   "Veracity": "Veracity",
   "Escalated?": "Escalated?",
+  "Public?": "Public?",
+  "Private": "Private",
+  "Public": "Public",
+  "Public Description": "Public Description",
   "Delete": "Delete",
   "Create Incident": "Create Incident",
   "Sorry, but we couldn't find any incidents.": "Sorry, but we couldn't find any incidents.",
@@ -254,13 +269,17 @@
     "reportsAreFiltered": "Below are <em>unread</em> reports matching your filter.",
     "noReports": "Sorry, but we couldn't find any reports assigned to you."
   },
-  "Mark All Read &amp; Grab Another": "Mark All Read &amp; Grab Another",
-  "Mark All Read &amp; Done": "Mark All Read &amp; Done",
+  "Mark All Read & Grab Another": "Mark All Read &amp; Grab Another",
+  "Mark All Read & Done": "Mark All Read &amp; Done",
   "Mark as Read": "Mark as Read",
   "Mark as Unread": "Mark as Unread",
   "Flag": "Flag",
   "Unflag": "Unflag",
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
+  "Widgets": "Widgets",
+  "Incident map": "Incident map",
+  "Center": "Center",
+  "Zoom": "Zoom",
   "api_settings_modal": {
     "title": "&nbsp;Edit {{ api | capitalize }} Settings",
     "success": "The credentials are valid. You need to save them before continuing.",
@@ -287,7 +306,7 @@
     "field_required": "The field is required.",
     "confirm_delete": "Are you sure you want to delete the settings for this source?"
   },
-  "Save &amp; Close": "Save &amp; Close",
+  "Save & Close": "Save &amp; Close",
   "Create Trend": "Create Trend",
   "Sorry, but we couldn't find any results.": "Sorry, but we couldn't find any results.",
   "Query": "Query",
@@ -378,5 +397,6 @@
   "Confirmed false": "Confirmed false",
   "Unescalated": "Unescalated",
   "Tags": "Tags",
-  "Assign To": "Assign To"
+  "Assign To": "Assign To",
+  "entry.created": "Created"
 }

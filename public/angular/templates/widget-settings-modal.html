@@ -1,0 +1,62 @@
+<div>
+  <div class="modal-header">
+    <button class="close" ng-click="close()" aria-hidden="true">×</button>
+    <h4 class="modal-title">
+      <div class="icon-left" translate="settings.widget.settingsModal.title" translate-value-widget="{{ item }}"></div>
+    </h4>
+  </div>
+  <div class="modal-body">
+    <form name="settingsForm" class="form-horizontal" novalidate>
+      <ol ng-if="item === 'incident map'">
+        <li translate>settings.widget.settingsModal.incident_map.p1</li>
+        <li translate>settings.widget.settingsModal.incident_map.p2</li>
+        <li translate>settings.widget.settingsModal.incident_map.p3</li>
+      </ol>
+      <p ng-show="settingsForm.$invalid" translate>settings.widget.settingsModal.field_required</p>
+      <div class="well bs-component">
+        <fieldset>
+          <div class="form-group">
+
+            <label for="center" class="col-lg-2 control-label" translate>Center</label>
+            <div class="col-lg-9">
+              <input id="center" ng-autocomplete name="center" type="text" class="form-control" details="$parent.details" ng-model="settings.center">
+              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
+            </div>
+          </div>
+          <aggie-location show-errors="showErrors" model="settings" form="settingsForm" minimal-lat-lng="minimalLatLng"></aggie-location>
+          <div class="form-group">
+            <label for="zoom" class="col-lg-2 control-label">Zoom</label>
+            <div class="col-lg-9">
+              <input type="text" ng-model="settings['zoom']" class="form-control" id="zoom" name="zoom" required />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div ng-if="item !== 'incident map'" class="modal-body">
+        <p ng-show="settingsForm.$invalid" translate>settings.widget.settingsMdal.field_required</p>
+        <div class="well bs-component">
+          <fieldset>
+            <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
+              <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
+              <div class="col-lg-8">
+                <input type="text" ng-model="settings[settingName]" class="form-control"
+                       id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" aggie-confirm="settings.widget.settingsModal.confirm_delete"
+            on-confirm="delete(item, settings)">
+      {{ 'Delete' | translate }}
+    </button>
+    <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+    <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, item, settings)" translate>
+      Save
+    </button>
+  </div>
+</div>

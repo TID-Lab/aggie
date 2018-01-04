@@ -1,9 +1,403 @@
 {
+  "username_not_unique": "Ese nombre de usuario ya existe en nuestra base de datos. Por favor, escoja otro nombre.",
+  "email_not_unique": "Esa dirección de email ya existe en nuestra base de datos. Por favor, escoja otra dirección.",
+  "email_invalid": "Esa dirección de correo no es válida. Elija otra.",
+  "password_too_short": "La contraseña es muy corta. Use una más larga.",
+  "notice": {
+    "report": {
+      "unlinked": "El informe ha sido desconectado del incidente"
+    }
+  },
+  "relevant": "Relevante",
+  "irrelevant": "Irrelevante",
+  "assigned": "Assignado",
+  "unassigned": "Sin asignar",
   "viewer": "Espectador",
-  "monitor": "Escucha",
-  "admin": "Administración",
+  "monitor": "Monitor",
+  "admin": "Admin",
+  "twitter": "Twitter",
+  "rss": "RSS",
+  "elmo": "Elmo",
+  "facebook": "Facebook",
+  "smsgh": "SMS GH",
+  "Smsgh": "SMS GH",
   "new": "Nuevo",
-  "working": "Trabajando",
-  "alert": "Aviso",
-  "closed": "Cerrado"
+  "working": "En proceso",
+  "alert": "Alerta",
+  "closed": "Cerrado",
+  "veracity": {
+    "true": "Corroborado",
+    "false": "Refutado"
+  },
+  "keywords": "Palabras Clave",
+  "media": "Medios",
+  "sourceId": "Fuente",
+  "* Any Incident": "* Cualquier incidente",
+  "* Without Incident": "* Sin incidentes",
+  "passwordReset": {
+    "noMatch": "Las contraseñas no coinciden",
+    "tooShort": "La contraseña es muy corta",
+    "error": "Ocurrió un error al cambiar la contraseña",
+    "success": "Se cambió la contraseña con éxito",
+    "admin": {
+      "success": "La contraseña del administrador se cambió con éxito. Vuelva a iniciar sesión con la nueva contraseña.",
+      "error": "Ocurrión un error al cambiar la contraseña del administrador."
+    },
+    "email": {
+      "success": "Se ha enviado un email a la direccion {{email}} con instrucciones para cambiar la contraseña.",
+      "noUser": "No existe ningún usuario con el la direccion {{email}}.",
+      "error": "Ocurrió un error al enviar el correo para cambiar la contraseña. Por favor, contacte con el equipo técnico."
+    }
+  },
+  "settings": {
+    "email": {
+      "success": "La dirección de correo se ha guardado correctamente",
+      "error": "Ocurrió un error al guardar la contraseña!",
+      "settingsModal": {
+        "success": "El método {{method}} ha sido guardado correctamente.",
+        "error": "Ocurrió un error!"
+      }
+    },
+    "error": "Ocurrió un error al guardar los ajustes",
+    "settingsModal": {
+      "success": "Los ajustes de {{itenName}} han sido guardados correctamente.",
+        "error": "Ocurrió un error!"
+    },
+    "widget": {
+      "settingsModal": {
+        "title": "Editar los ajustes de {{ widget | capitalize }}",
+        "field_required": "Este campo es necesario",
+        "incident_map": {
+          "p1": "Aquí puede elegir el centro y el nivel de zoom para el mapa de incidentes.",
+          "p2": "Guarde los ajustes y observe los cambios <a target=\"_blank\" href=\"widget/public_incident_map.html\">aquí</a>.",
+          "p3": "Lea la <a href=\"http://aggie.readthedocs.io/en/stable/content/settings/settings.html#widgets\">documentación</a> para ver como puede añadir el mapa a su sitio web."
+        },
+        "confirm_delete": "Esta seguro de borrar los ajustes para este widget?"
+      }
+    }
+  },
+  "An error has occurred setting the fetching status": "Ocurrió un error al cambiar el estado de recolección",
+  "incident": {
+    "create": {
+      "success": "El incidente se creó con éxito.",
+      "error": "El incidente no se pudo crear. Contacte con el équipo técnico."
+    },
+    "update": {
+      "success": "El incidente se ha actualizado con éxito.",
+      "error": "El incidente no se ha podido actualizar."
+    },
+    "delete": {
+      "success": "El incidente ha sido borrado.",
+      "error": "El incidente no se pudo borrar."
+    },
+    "deleteMultiple": {
+      "success": "Los incidentes han sido borrados",
+      "error": "Los incidentes no pudieron ser borrados."
+    },
+    "save": {
+      "error": "Lo sentimos, pero no ha sido posible guardar el incidente,"
+    }
+  },
+  "Sorry, but that report couldn't be saved for some reason": "Lo sentimos, pero no ha sido posible guardar el informe.",
+  "No more unread reports found.": "No quedan más informes sin leer.",
+  "You have been successfully logged out.": "Sesión cerrada con éxito.",
+  "source": {
+    "create": {
+      "success": "La fuente ha sido creada con éxito.",
+      "error": "No ha sido posible crear la fuente. Por favor, contacte con el équipo técnico."
+    },
+    "update": {
+      "success": "La fuente ha sido actualizada con éxito.",
+      "error": "La fuente no se ha podido actualizar."
+    },
+    "save": {
+      "error": "Lo sentimos, pero no ha sido posible guardar la fuente."
+    },
+    "delete": {
+      "success": "La fuente ha sido borrada, pero los informes provenientes de esta fuente siguen estando disponibles.",
+      "error": "La fuente no se ha podido borrar."
+    }
+  },
+  "trend": {
+    "create": {
+      "error": "No se pudo crear la tendencia. Por favor, contacte con el équipo técnico."
+    },
+    "delete": {
+      "success": "La tendencia ha sido borrada.",
+      "error": "No ha sido posible borrar la tendencia."
+    }
+  },
+  "user": {
+    "create": {
+      "success": "El usuario ha sido creado y se le ha enviado un email con instrucciones para iniciar la sessión.",
+      "error": "No ha sido posible crear el usuario. Por favor, contacte con el équipo técnico."
+    },
+    "update": {
+      "success": "Se ha actualizado la información del usuario.",
+      "error": "No ha sido posible actualizar la información del usuario. Por favor, contacte con el équipo técnico."
+    },
+    "delete": {
+      "success": "El usuario ha sido borrado.",
+      "error": "El usuario no ha podido ser borrado."
+    }
+  },
+  "Uh oh!": "Uh oh!",
+  "Sorry, but that page could not be found.": "Lo sentimos, pero la página no existe.",
+  "Trends (Lines)": "Tendencias (Líneas)",
+  "Trends (Bars)": "Tendencias (Barras)",
+  "Incident Map": "Mapa de incidentes",
+  "Set a password for your account": "Elija una contraseña para su cuenta",
+  "Password": "Contraseña",
+  "Password Confirmation": "Confirme la contraseña",
+  "Cancel": "Cancelar",
+  "Submit": "Enviar",
+  "Confirm": "Confirmar",
+  "Date Filters": "Filtros de fecha",
+  "From:": "De:",
+  "To:": "Hasta:",
+  "Clear": "Limpiar",
+  "API Authentication": "Autenticación de la API",
+  "Edit Email Transport Settings": "Editar ajustes del transporte de email",
+  "Transport": "Transporte",
+  "Choose transport method": "Elija el método de transporte",
+  "Select transport first": "Elija el método primero",
+  "Aggie Homepage": "Aggie : Página Principal",
+  "Username": "Nombre de usuario",
+  "Enter username": "Introduzca su nombre de usuario",
+  "Enter password": "Introduzca su contraseña",
+  "Forgot password?": "¿Se olvidó de la contraseña?",
+  "Reports": "Informes",
+  "Incidents": "Incidentes",
+  "Sources": "Fuentes",
+  "Analysis": "Análisis",
+  "Users": "Usuarios",
+  "Settings": "Ajustes",
+  "Log in": "Iniciar sesión",
+  "Log out": "Cerrar sesión",
+  "Warnings": "Advertencias",
+  "Reset Password": "Restablecer la contraseña",
+  "Email": "Email",
+  "Enter email": "Introduzca la dirección de email",
+  "Set New Admin Password": "Cambiar la contraseña del administrador",
+  "The admin password must be changed after installation of Aggie. Please do so before continuing.": "Hace falta cambiar la contraseña del administrador. Hágalo antes de poder continuar.",
+  "Remember that the password has to be at least 8 characters long.": "La contraseña ha de ser de al menos 8 caracteres.",
+  "By default there is no email address associated with your admin account. If you forget your password, you may be unable to recover your account. Please add an email under Settings &gt; Users &gt; admin.": "Por defecto no hay direccion de correo del administrador. Por favor cambiela en Ajustes &gt; Usuarios &gt; admin. La dirección de email es necesaria i olvida la contraseña.",
+  "Fetching": "Recolección",
+  "On": "On",
+  "Off": "Off",
+  "Media Authentication": "Autenticación en los medios",
+  "Edit": "Editar",
+  "edit": "editar",
+  "App Email Address": "Dirección de correo de la aplicación",
+  "Save": "Guardar",
+  "Email Transport": "Transporte de email",
+  "Go": "Ir",
+  "Assigned To": "Asignado a",
+  "Status": "Estado",
+  "Veracity": "Veracidad",
+  "Escalated?": "¿Elevado?",
+  "Public?": "¿Público?",
+  "Private": "Privado",
+  "Public": "Público",
+  "Public Description": "Descripción pública",
+  "Delete": "Borrar",
+  "Create Incident": "Crear incidente",
+  "Sorry, but we couldn't find any incidents.": "No ha sido posible encontrar ningún incidente.",
+  "Edit Incident": "Editar incidente",
+  "Enter the incident details below": "Introduzca la información del incidente a continuación",
+  "Or you can": "O usted puede",
+  "choose an existing incident": "elegir un incidente ya creado",
+  "Title": "Título",
+  "Title is required.": "El título es obligatorio.",
+  "User is required.": "El usuario es obligatorio.",
+  "Escalated": "Elevado",
+  "Location": "Ubicación",
+  "Edit coordinates...": "Editar coordenadas...",
+  "Latitude": "Latitud",
+  "Latitude is invalid.": "La latitud no es válida.",
+  "Latitude is required if longitude is entered.": "Es necesario introducir la latitud si la longitud ha sido introducida.",
+  "Longitude": "Longitud",
+  "Longitude is invalid.": "La longitude no es válida.",
+  "Longitude is required if latitude is entered.": "Es necesario introducir la latitud si la longitud ha sido introducida..",
+  "Select User": "Seleccione el usuario",
+  "Notes": "Notas",
+  "Add report to incident": "Añadir informe al incidente",
+  "Sorry, but we couldn't find any incidents. You can": "Lo sentimos, pero no encotramos ningún incidente. Usted puede",
+  "create a new incident": "crear un incidente nuevo",
+  "Click an incident below to which you would like to add the report. Or you can": "Haga clic en el incidente al que quiere añadir el informe. También puede ",
+  "Creator": "Creador",
+  "Closed": "Cerrado",
+  "Open": "Abierto",
+  "Confirmed True": "Corroborado",
+  "Confirmed False": "Refutado",
+  "Unconfirmed": "Sin verificar",
+  "There are no reports to display.": "No hay informes que mostrar.",
+  "of": "de",
+  "Are you sure you want to delete selected incidents?": "Esta seguro de querer borrar los incidentes seleccionados?",
+  "ID#": "ID#",
+  "Last Updated": "Última actualización",
+  "reports": "Informe",
+  "Confirmed": "Confirmado",
+  "True": "Verdarero",
+  "False": "Falso",
+  "ago": "atrás",
+  "Are you sure you want to delete this incident?": "Esta seguro de querer borrar este incidente?",
+  "No": "No",
+  "Yes": "Si",
+  "Sorry, but we couldn't find any sources.": "Lo sentimos, pero no fue posible encontrar ninguna fuente.",
+  "Media": "Medio",
+  "Name": "Nombre",
+  "Target": "Objetivo",
+  "New Warnings": "Nuevas advertencias",
+  "Enabled": "Habilitado",
+  "Report": "Informe",
+  "Authored Time": "Momento de creación",
+  "Fetched Time": "Momento de recolección",
+  "Stored Time": "Momento de almacenaje",
+  "Source": "Fuente",
+
+  "URL": "URL",
+  "Author": "Autor",
+  "Content": "Contenido",
+  "Time": "Momento",
+  "Incident": "Incidente",
+  "Batch Mode": "Por lotes",
+  "new reports available.": "nuevos informes disponibles.",
+  "batch": {
+    "intro": "Los siguientes informes le han sido asignados para que los revise. Cuando acabe, haga clic en uno de los botones de la derecha.",
+    "reportsAreFiltered": "A continuación puede encontrar informes <em>sin leer</em> que cumplen sus filtros de búsqueda.",
+    "noReports": "Lo sentimos, peron no fue posible encontrar ningún informe asignado a usted."
+  },
+  "Mark All Read & Grab Another": "Marcar todos como leídos, revisar otro lote",
+  "Mark All Read & Done": "Marcar todos como leídos y acabar",
+  "Mark as Read": "Marcar como leídos",
+  "Mark as Unread": "Marcar como no leído",
+  "Flag": "Señalar",
+  "Unflag": "Quitar la señal",
+  "Sorry, but we couldn't find any reports assigned to you.": "Lo sentimos, peron no fue posible encontrar ningún informe asignado a usted.",
+  "Widgets": "Widgets",
+  "Incident map": "Mapa de incidentes",
+  "Center": "Centro",
+  "Zoom": "Zoom",
+  "api_settings_modal": {
+    "title": "&nbsp;Editar los ajustes de {{ api | capitalize }}",
+    "success": "Las credenciales son válidas. Guárdelas antes de continuar",
+    "twitter": {
+      "p1": "Siga las <a href=\"https://dev.twitter.com/oauth/overview/application-owner-access-tokens\" target=\"_blank\">instrucciones</a> para generas los tokens de Twitter necesarios.",
+      "p2": "Reemplace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, y <code>access_token_secret</code> con la información de <a href=\"https://apps.twitter.com\" target=\"_blank\"> su app</a> en Twitter."
+    },
+    "facebook": {
+      "p1": "Visite <a href=\"https://developers.facebook.com/apps/\" target=\"_blank\">sus aplicaciones</a> en Facebook, seleccione la app para Aggie, o cree una nueva si no hay.",
+      "p2": "Puede obtener el <code>client_id</code> y el <code>client_secret</code> dentro de los ajustes de la app de Facebook.",
+      "p3": "Para obtener el token de acceso visite <code>https://graph.facebook.com/oauth/access_token?client_secret=xxx&amp;client_id=xxx&amp;grant_type=client_credentials</code> en su navegador, usando su <code>client_id</code> y su <code>client_secret</code>.",
+      "p4": "Reemplace el <code>accessToken</code> con su token de acceso."
+    },
+    "elmo": {
+      "p1": "Inicie sesión en su instancia de ELMO con una cuenta con privilegios de coordinador o más altos en la misión que quiere usted monitorizar.",
+      "p2": "En su instancia de ELMO marque uno o más formularios como públicos. Apunte el número de identificación en la barra de direcciones (e.g. si la dirección acaba en <code>/m/mymission/forms/123</code>, el número es <code>123</code>).",
+      "p3": "Visite su página de perfil en ELMO y copie su clave para acceder a la API (haga clic en 'Regenerar' si es necesario).",
+      "p4": "Cambie el valor de <code>authToken</code> con la clave obtenida en su perfil de ELMO."
+    },
+    "gplaces": {
+      "p1": "Si no tiene una clave para Google Places puede obtenerla en <a href=\"https://console.developers.google.com/apis/credentials?\">la consola de Google para APIs</a>.",
+      "p2": "Una vez que ha introducido y guardado la clave aquí, necesita recargar la página de Aggie para que tenga efecto en su sesión."
+    },
+    "field_required": "Este campo es obligatorio.",
+    "confirm_delete": "¿Está seguro de que quiere borrar los ajustes para esta fuente?"
+  },
+  "Save & Close": "Guardar y cerrar",
+  "Create Trend": "Crear tendencia",
+  "Sorry, but we couldn't find any results.": "Lo sentimos, pero no fue posible encontrar ningún resultado",
+  "Query": "Consulta",
+  "Actions": "Acciones",
+  "Keywords:": "Palabras clave:",
+  "Media:": "Medio:",
+  "Source:": "Fuente:",
+  "Incident:": "Incidentw:",
+  "Linked Incident": "Incidente conectado",
+  "Date/Time": "Fecha/Hora",
+  "Add to Incident": "Añadir a incidente",
+  "Grab Batch": "Coger lote",
+"There are currently no trends. Click 'Create Trend' to make one.": "No hay tendencias de momento. Haga clic en 'Crear tendencia' parar crear una.",
+  "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.": "Los datos se actualizan cada 10 segundos. Datos agrupados en intervalos de 5 minutos. Haga click en los los círculos para ver los informes de ese momento,",
+  "trends_modal_help": "e.g. <strong>manzana \"maracuyá\" plátano</strong>",
+  "Choose media": "Elija el medio",
+  "Choose source": "Elija la fuente",
+  "Choose incident": "Elija el incidente",
+  "Close": "Cerrar",
+  "Choose source media": "Elija el medio de la fuente",
+  "Media is required.": "El medio es obligatorio.",
+  "Nickname": "Apodo",
+  "A short name for this source.": "Un nombre corto para esta fuente.",
+  "Nickname is required.": "El apodo es obligatorio.",
+  "Keywords": "Palabras clave",
+  "Enter tags": "Introduzca etiquetas",
+  "sources_modal": {
+    "help": "Separe los términos con comas, e.g. <strong>manzana, fruta de la pasión, plátano</strong>. Tenga en cuenta que si introduce <strong>fruta de la pasión</strong>, Aggie recolectará twits que contengan todas las palabras pero en cualquier orden. Puede ver más detalles <a href=\"https://dev.twitter.com/streaming/overview/request-parameters#track\">aquí</a>.",
+    "rss_url": "La URL del RSS, e.g. <strong>http://example.com/rss.xml</strong>",
+    "tags": "Separadas por comas, e.g. <strong>manzana, fruta de la pasión, plátano</strong>",
+    "facebook_url": "La URL de la página o grupo de Facebook, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
+    "elmo_url": "La URL de la instancia de ELMO, e.g. <strong>https://abc.getelmo.org</strong>",
+    "whatsapp_help": "Lea la <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp_messages\">documentación</a> de Aggie para instrucciones de que como ajustar la palabra clave y como preparar Firefox para que reenvie los mensajes de WhatsApp"
+  },
+  "URL is required.": "La URL es obligatoria.",
+  "URL is invalid.": "La URL no es válida.",
+  "Create": "Crear",
+  "There are no events to display.": "No hay eventos que mostrar.",
+  "Level": "Nivel",
+  "Message": "Mensaje",
+  "Create User": "Crear usuario",
+  "Sorry, but we couldn't find any users.": "Lo sentimos, pero no fue posible encontrar ningún usuario.",
+  "Role": "Rol",
+  "Are you sure you want to delete this user?": "¿Está seguro de querer borrar este usuario?",
+  "Are you sure you want to delete this source?": "¿Está seguro de querer borrar esta fuente?",
+  "Are you sure you want to delete this trend? (All historical data will be lost)": "¿Está seguro de quere borrar esta tendencia? (Todos los valores históricos se perderan también)",
+  "Recent Events": "Eventos recientes",
+  "Enter keywords": "Introduzca las palabras clave",
+  "Enter a nickname": "Introduzca un apodo",
+  "Enter url": "Introduzca una URL",
+  "Enter author": "Introduzca un autor",
+  "Enter location": "Introduzca una ubicación",
+  "Enter title": "Introduzca un título",
+  "Start date / time": "Fecha/hora de comienzo",
+  "End date / time": "Fecha/hora de finalización",
+  "Create Source": "Crear fuente",
+  "User": "Usuario",
+  "Profile": "Perfil",
+  "Username is required.": "El nombre de usuario es obligatorio.",
+  "Username should be less than 15 characters and should contain letters, numbers, and underscores only.": "El nombre de usuario debe tener menos de 15 caracteres, y solo puede incluir letras, números y guion bajo.",
+  "Email is invalid.": "La dirección de email no es válida.",
+  "Email is required.": "La dirección de email es obligatoria.",
+  "Role is required.": "El rol es obligatorio.",
+  "Change password": "Cambiar contraseña",
+  "password_min_length": "La contraseña debe tener un mínimo de {{passwordMinLength}} caracteres.",
+  "Passwords don't match.": "Las contraseñas no coinciden.",
+  "Read": "Leídos",
+  "Unread": "No leídos",
+  "Flagged": "Señalados",
+  "Unflagged": "No señalados",
+  "Read & Unflagged": "Leídos y no señalados",
+  "Total Reports": "Informes totales",
+  "Reports/min": "Informes/min",
+  "Escalated Incidents": "Incidentes elevados",
+  "Mark all Unread": "Marcar todos como no leídos",
+  "Sorry, we had some trouble finding your user account. Please log in again.": "Lo sentimos, pero tenemos problemas para encontrar su cuenta de usuario. Intente iniciar sesión de nuevo.",
+  "You must be logged in before accessing that page.": "Necesita haber iniciado sesión para acceder a esa página.",
+  "ELMO": "ELMO",
+  "Facebook": "Facebook",
+  "Rss": "RSS",
+  "Twitter": "Twitter",
+  "SMSGh": "SMS GH",
+  "Whatsapp": "WhatsApp",
+  "whatsapp": "WhatsApp",
+  "gplaces": "Google Places",
+  "Mark all Read": "Marcar todos como leídos",
+  "Confirmed true": "Corroborado",
+  "Confirmed false": "Refutado",
+  "Unescalated": "No elevados",
+  "Tags": "Etiquetas",
+  "Assign To": "Asignado a",
+  "Add": "Añadir",
+  "entry.created": "Creado"
+
 }

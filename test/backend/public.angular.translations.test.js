@@ -23,6 +23,7 @@ var clarinet = require('clarinet').parser();
 var prefix = 'locale-';
 var suffix = '.json';
 var debugFile = prefix + 'debug' + suffix;
+var englishFile = prefix + 'en' + suffix;
 
 function getTranslations(dirname, callback) {
   fs.readdir(dirname, function(err, filenames) {
@@ -55,6 +56,22 @@ function testTranslationDir(dirname) {
            expect(allLanguages).to.have.property(debugFile);
            var debugTranslations = JSON.parse(allLanguages[debugFile]);
            expect(deepKeys(debugTranslations)).to.include.members(allKnownStrings);
+           done();
+         });
+       });
+
+    it('all languages should contain the keys included in the English locale',
+       function(done) {
+         this.timeout(4000);
+         getTranslations(dirname, function(err, allLanguages) {
+           if (err) return done(err);
+           expect(allLanguages).to.have.property(englishFile);
+           var englishKeys = deepKeys(JSON.parse(allLanguages[englishFile]));
+           _.each(allLanguages, function(language) {
+             var languageKeys = deepKeys(JSON.parse(language));
+             var missingKeys = _.difference(englishKeys, languageKeys);
+             expect(missingKeys).to.be.empty;
+           });
            done();
          });
        });

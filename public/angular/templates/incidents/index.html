@@ -53,6 +53,11 @@
           <option value="" translate>Escalated?</option>
         </select>
       </div>
+      <div class="td filter">
+        <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
+          <option value="" translate>Public?</option>
+        </select>
+      </div>
       <div class="td" ng-hide="noFilters()">
         <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
       </div>
