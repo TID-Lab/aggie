@@ -132,3 +132,7 @@ label + aggie-toggle {
     height: 70px;
   }
 }
+
+[dir="rtl"] input[type="checkbox"] {
+  width: fit-content;
+}

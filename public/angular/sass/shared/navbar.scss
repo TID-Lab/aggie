@@ -52,12 +52,16 @@
   background-color: $navbar-yellow;
   .navbar-text {
     line-height: 26px;
+    list-style: none;
+    display: inline-flex;
+
   }
   .container {
     height: 44px;
     position: relative;
     padding-top: 8px;
   }
+
   .navbar-nav > li {
     > a:hover,
     > a:focus,
@@ -100,5 +104,10 @@
 */
 
 [dir="rtl"] .navbar-right {
-    float: left !important;
+  float: left !important;
+}
+
+[dir="rtl"] .nav-bar-label {
+  margin-left: 12px;
+  margin-right: 2px;
 }

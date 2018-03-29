@@ -48,3 +48,16 @@
   height: 35px;
   width: 100px;
 }
+
+/* Overriding bootstrap for RTL aggie specific purpose not supported in
+   bootstrap-rtl-ondemands.css
+*/
+
+[dir="rtl"] .button-row .pull-left {
+  float: right !important;
+}
+
+[dir="rtl"] .button-row .margin-left {
+  margin-right: 10px;
+  margin-left: 0px;
+}

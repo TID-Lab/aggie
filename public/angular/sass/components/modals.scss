@@ -64,3 +64,9 @@
     color: #000;
   }
 }
+
+[dir="rtl"] .modal-header {
+  .close {
+    left: 15px;
+  }
+}
