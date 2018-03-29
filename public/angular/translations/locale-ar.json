@@ -398,5 +398,6 @@
   "Unescalated": "Unescalated",
   "Tags": "Tags",
   "Assign To": "Assign To",
-  "entry.created": "Created"
+  "entry.created": "Created",
+  "text-direction": "rtl"
 }
