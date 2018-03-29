@@ -94,3 +94,11 @@
     color: #333;
   }
 }
+
+/* Overriding bootstrap for RTL aggie specific purpose not supported in
+   bootstrap-rtl-ondemands.css
+*/
+
+[dir="rtl"] .navbar-right {
+    float: left !important;
+}
