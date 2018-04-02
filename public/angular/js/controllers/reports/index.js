@@ -163,7 +163,7 @@ angular.module('Aggie')
       if (!foundReport) return;
 
       angular.extend(foundReport, report);
-      if (!$scope.incidentsById[report._incident]) {
+      if (report._incident && !$scope.incidentsById[report._incident]) {
         Incident.get({ id: report._incident }, function(inc) {
           incidents.results.push(inc);
           $scope.incidentsById[report._incident] = inc;
