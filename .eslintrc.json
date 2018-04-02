@@ -105,6 +105,6 @@
     "space-infix-ops": "error",
     "spaced-comment": "error",
 
-    "indent": ["error", 2]
+    "indent": ["error", 2, { "MemberExpression": "off" }]
   }
 }
