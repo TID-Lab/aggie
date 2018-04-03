@@ -52,12 +52,20 @@ schema.pre('save', function(next) {
   if (!_.contains(Incident.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
-
+  if (!this.isNew && this.isModified('title')) {
+    this._titleWasModified = true;
+  }
   next();
 });
 
 schema.post('save', function() {
   schema.emit('incident:save', { _id: this._id.toString() });
+  // We do a cascade update of Report when incident title changes
+  if (this._titleWasModified) {
+    Report.update({ _incident: this._id }, { _incidentTitle: this.title }, { multi: true }, function(err) {
+      logger.error(err);
+    });
+  }
 });
 
 schema.post('remove', function() {
