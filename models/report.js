@@ -22,6 +22,7 @@ var schema = new Schema({
   _media: { type: String, index: true },
   _sourceNicknames: [String],
   _incident: { type: String, ref: 'Incident', index: true },
+  _incidentTitle: { type: String },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true }
 });

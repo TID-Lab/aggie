@@ -33,12 +33,13 @@ angular.module('Aggie')
         }
       });
 
-      modalInstance.result.then(function(incidentId) {
+      modalInstance.result.then(function(incident) {
         var ids = reports.map(function(report) {
           return report._id;
         });
+        console.log(incident.title);
 
-        Report.linkToIncident({ ids: ids, incident: incidentId });
+        Report.linkToIncident({ ids: ids, incident: incident.id, incidentTitle: incident.title });
       });
     };
   }
@@ -61,7 +62,7 @@ angular.module('Aggie')
 
     $scope.select = function(incident) {
       // report._incident = incident._id;
-      $modalInstance.close(incident._id);
+      $modalInstance.close({ id: incident._id, title: incident.title });
     };
 
     $scope.showErrors = function() {
