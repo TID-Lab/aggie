@@ -31,7 +31,6 @@ angular.module('Aggie')
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.incidents = incidents.results;
-    $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.mediaOptions = mediaOptions;
@@ -56,7 +55,6 @@ angular.module('Aggie')
     var init = function() {
       $scope.reportsById = $scope.reports.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
-      $scope.incidentsById = $scope.incidents.reduce(groupById, {});
 
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
@@ -163,12 +161,6 @@ angular.module('Aggie')
       if (!foundReport) return;
 
       angular.extend(foundReport, report);
-      if (!$scope.incidentsById[report._incident]) {
-        Incident.get({ id: report._incident }, function(inc) {
-          incidents.results.push(inc);
-          $scope.incidentsById[report._incident] = inc;
-        });
-      }
     };
 
     $scope.handleNewReports = function(reports) {
@@ -180,6 +172,7 @@ angular.module('Aggie')
 
     $scope.unlinkIncident = function(report) {
       report._incident = '';
+      report._incidentTitle = '';
       Report.update({ id: report._id }, report);
     };
 

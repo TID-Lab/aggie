@@ -37,7 +37,6 @@ angular.module('Aggie')
         var ids = reports.map(function(report) {
           return report._id;
         });
-        console.log(incident.title);
 
         Report.linkToIncident({ ids: ids, incident: incident.id, incidentTitle: incident.title });
       });
