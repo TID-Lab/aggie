@@ -69,7 +69,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
     - Navigate to the `docker` directory in aggie: `cd aggie/docker`
     - run `docker-compose up`
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-4. Navigate to `https://localhost` in your browser.
+4. Navigate to the IP address of your docker machine in your browser, e.g. typing `http://192.168.99.100`. You can get the IP address of your docker machine running `docker-machine ip`.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
 
 ## Source Installation
@@ -185,7 +185,7 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
            * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
   1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
   1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
-           
+
 #### ELMO
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
@@ -210,7 +210,7 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 ### Logging
   Set various logging options in `logger` section:
-  
+
   - `console` section is for console logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
   - `file` section is for file logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
   - `SES` section is for email notifications. For various options, see [winston-amazon-ses](see https://www.npmjs.com/package/winston-amazon-ses).
