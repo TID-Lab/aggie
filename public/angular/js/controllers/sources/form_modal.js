@@ -103,6 +103,7 @@ angular.module('Aggie')
     };
 
     $scope.save = function(form) {
+      console.log(form);
       if (form.$invalid) {
         $scope._showErrors = true;
         return;

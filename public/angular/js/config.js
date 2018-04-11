@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp'])
+  .value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp', 'ushahidi'])
 
 .value('apiSettingsOptions', ['twitter', 'facebook', 'elmo', 'gplaces'])
 
@@ -27,4 +27,3 @@ angular.module('Aggie')
   SES: ['accessKeyId', 'secretAccessKey', 'region'],
   SMTP: ['host', 'port', 'secure', 'user', 'pass'],
   SendGrid: ['api_key'] });
-
