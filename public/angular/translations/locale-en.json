@@ -38,7 +38,7 @@
     "noMatch": "Passwords do not match",
     "tooShort": "Password is not long enough",
     "error": "An error has occurred when resetting your password",
-    "token": "There was an error with your reset link. Probably, the link has expired. Press 'Forgot Password?' again, or ask the admin to recreate your account."
+    "token": "There was an error with your reset link. Probably, the link has expired. Press 'Forgot Password?' again, or ask the admin to recreate your account.",
     "success": "Your password has been successfully reset.",
     "admin": {
       "success": "The admin password was changed successfully. Log in again with the new password.",
