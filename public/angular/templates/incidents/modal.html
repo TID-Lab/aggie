@@ -29,7 +29,7 @@
             <div class="col-lg-4">
               <select ng-model="incident.veracity"
                       class="form-control"
-                      ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
+                      ng-options="v.value as v.label | translate for v in [{label: 'Report Confirmed', value: true}, {label: 'Report Uncorfirmed', value: false}]">
               </select>
             </div>
 

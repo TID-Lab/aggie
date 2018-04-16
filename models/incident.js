@@ -33,7 +33,7 @@ var schema = new mongoose.Schema({
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
-  veracity: { type: Boolean, default: null },
+  veracity: { type: Boolean, default: false },
   escalated: { type: Boolean, default: false, required: true },
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
@@ -135,9 +135,8 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-  if (query.veracity === 'confirmed true') filter.veracity = true;
-  if (query.veracity === 'confirmed false') filter.veracity = false;
-  if (query.veracity === 'unconfirmed') filter.veracity = null;
+  if (query.veracity === 'Report Confirmed') filter.veracity = true;
+  if (query.veracity === 'Report Unconfirmed') filter.veracity = false;
   if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
   if (query.status === 'open') filter.closed = false;

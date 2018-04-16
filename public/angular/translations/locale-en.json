@@ -407,5 +407,7 @@
   "Kirkuk" : "Kirkuk",
   "Nineveh": "Nineveh",
   "Select Governorate": "Select Governorate",
-  "Governorate is required": "Governorate field is required"
+  "Governorate is required": "Governorate field is required",
+  "Report Confirmed": "Report Confirmed",
+  "Report Unconfirmed": "Report Unconfirmed"
 }

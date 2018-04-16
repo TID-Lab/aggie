@@ -15,7 +15,7 @@ angular.module('Aggie')
 
 .value('incidentStatusOptions', ['open', 'closed'])
 
-.value('veracityOptions', ['unconfirmed', 'confirmed true', 'confirmed false'])
+.value('veracityOptions', ['Report Confirmed', 'Report Unconfirmed'])
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
 

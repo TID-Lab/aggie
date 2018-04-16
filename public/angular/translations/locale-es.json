@@ -407,6 +407,7 @@
   "Kirkuk" : "Kirkuk",
   "Nineveh": "Nineveh",
   "Select Governorate": "Seleccione gobernación",
-  "Governorate is required": "Es necesario seleccionar la gobernación"
-
+  "Governorate is required": "Es necesario seleccionar la gobernación",
+  "Report Confirmed": "Confirmado",
+  "Report Unconfirmed": "Sin confirmar"
 }

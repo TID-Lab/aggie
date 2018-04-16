@@ -407,5 +407,7 @@
   "Kirkuk" : "كركوك",
   "Nineveh": "نينوى",
   "Select Governorate": "Select Governorate",
-  "Governorate is required": "Governorate field is required"
+  "Governorate is required": "Governorate field is required",
+  "Report Confirmed": "تأكيد التقرير",
+  "Report Unconfirmed": "عدم تأكيد التقرير"
 }
