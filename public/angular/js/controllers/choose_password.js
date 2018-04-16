@@ -45,7 +45,8 @@ angular.module('Aggie').controller('ChoosePasswordController', [
           }
         });
       }).error(function(message, respStatus) {
-        flash.setAlertNow(message);
+        console.log(message);
+        flash.setAlertNow('passwordReset.token');
       });
     };
 

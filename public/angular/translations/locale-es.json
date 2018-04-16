@@ -38,6 +38,7 @@
     "noMatch": "Las contraseñas no coinciden",
     "tooShort": "La contraseña es muy corta",
     "error": "Ocurrió un error al cambiar la contraseña",
+    "token": "Ocurrió un error con el enlace para cambiar la clave. Probablemente el enlance ha expirado. Pinche de nuevo en el enlace de ¿Se olvidó de la contraseña? o pida al administrador que recree su cuenta.",
     "success": "Se cambió la contraseña con éxito",
     "admin": {
       "success": "La contraseña del administrador se cambió con éxito. Vuelva a iniciar sesión con la nueva contraseña.",
