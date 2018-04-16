@@ -16,16 +16,18 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'paginationOptions',
+  'governorateOptions',
   'Tags',
   function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
            incidentStatusOptions, veracityOptions, escalatedOptions, publicOptions,
-           Incident, Socket, Queue, paginationOptions, Tags) {
+           Incident, Socket, Queue, paginationOptions, governorateOptions, Tags) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.escalatedOptions = escalatedOptions;
     $scope.publicOptions = publicOptions;
+    $scope.governorateOptions = governorateOptions;
 
     $scope.users = users;
 

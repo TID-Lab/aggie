@@ -104,15 +104,17 @@ angular.module('Aggie')
   '$modalInstance',
   'incidentStatusOptions',
   'veracityOptions',
+  'governorateOptions',
   'users',
   'incident',
   'reports',
   'Tags',
   function($scope, $modalInstance, incidentStatusOptions, veracityOptions,
-           users, incident, reports, Tags) {
+           governorateOptions, users, incident, reports, Tags) {
     $scope.incident = angular.copy(incident);
     $scope.users = users;
     $scope.veracity = veracityOptions;
+    $scope.governorateOptions = governorateOptions;
     $scope.showErrors = false;
     $scope.reports = reports;
     $scope.minimal = reports.length > 0;

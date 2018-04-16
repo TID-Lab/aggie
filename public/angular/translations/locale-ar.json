@@ -398,5 +398,14 @@
   "Tags": "علامات",
   "Assign To": "خصص ل",
   "entry.created": "تم الادخال",
-  "text-direction": "rtl"
+  "text-direction": "rtl",
+  "Governorate" : "محافظة",
+  "Anbar": "أنبار",
+  "Diyala": "ديالا",
+  "Kurdistan": "كوردستان",
+  "Basra" : "البصرة",
+  "Kirkuk" : "كركوك",
+  "Nineveh": "نينوى",
+  "Select Governorate": "Select Governorate",
+  "Governorate is required": "Governorate field is required"
 }

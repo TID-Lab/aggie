@@ -398,6 +398,15 @@
   "Tags": "Etiquetas",
   "Assign To": "Asignado a",
   "Add": "Añadir",
-  "entry.created": "Creado"
+  "entry.created": "Creado",
+  "Governorate" : "Gobernación",
+  "Anbar": "Anbar",
+  "Diyala": "Diyala",
+  "Kurdistan": "Kurdistan",
+  "Basra" : "Basra",
+  "Kirkuk" : "Kirkuk",
+  "Nineveh": "Nineveh",
+  "Select Governorate": "Seleccione gobernación",
+  "Governorate is required": "Es necesario seleccionar la gobernación"
 
 }

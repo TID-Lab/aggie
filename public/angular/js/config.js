@@ -21,10 +21,11 @@ angular.module('Aggie')
 
 .value('publicOptions', ['public', 'private'])
 
+.value('governorateOptions', ['Anbar', 'Diyala', 'Kurdistan', 'Basra', 'Kirkuk', 'Nineveh'])
+
 .value('paginationOptions', { perPage: 25 })
 
 .value('emailTransportOptions', {
   SES: ['accessKeyId', 'secretAccessKey', 'region'],
   SMTP: ['host', 'port', 'secure', 'user', 'pass'],
   SendGrid: ['api_key'] });
-

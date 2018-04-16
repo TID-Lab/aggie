@@ -61,9 +61,15 @@
           </div>
           <aggie-location show-errors="showErrors" model="incident" form="form" minimal-lat-lng="minimalLatLng"></aggie-location>
           <div class="form-group">
-            <label for="tags" class="col-lg-2 control-label" translate>Tags</label>
+            <label for="tags" class="col-lg-2 control-label" translate>Governorate</label>
             <div class="col-lg-9">
-              <input id="tags" name="tags" type="text" class="form-control" ng-model="incident.tags" ng-focus>
+              <select id="tags" name="tags" ng-model="incident.tags" class="form-control"
+                      ng-options = "governorate | translate for governorate in governorateOptions" required>
+                <option value="" translate>Select Governorate</option>
+              </select>
+              <div class="has-error" ng-show="showErrors">
+                <div class="help-block" ng-show="form.tags.$error.required" translate>Governorate is required.</div>
+              </div>
             </div>
           </div>
 
@@ -71,7 +77,7 @@
             <label for="user" class="col-lg-2 control-label" translate>Assign To</label>
             <div class="col-lg-9">
               <select id="user" name="user" ng-model="incident.assignedTo"
-                ng-options="user as user.username for user in users track by user._id" class="form-control">
+                      ng-options="user as user.username for user in users track by user._id" class="form-control">
                 <option value="" translate>Select User</option>
               </select>
             </div>

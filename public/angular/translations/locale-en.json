@@ -398,5 +398,14 @@
   "Unescalated": "Unescalated",
   "Tags": "Tags",
   "Assign To": "Assign To",
-  "entry.created": "Created"
+  "entry.created": "Created",
+  "Governorate" : "Governorate",
+  "Anbar": "Anbar",
+  "Diyala": "Diyala",
+  "Kurdistan": "Kurdistan",
+  "Basra" : "Basra",
+  "Kirkuk" : "Kirkuk",
+  "Nineveh": "Nineveh",
+  "Select Governorate": "Select Governorate",
+  "Governorate is required": "Governorate field is required"
 }
