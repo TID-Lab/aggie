@@ -29,7 +29,7 @@
             <div class="col-lg-4">
               <select ng-model="incident.veracity"
                       class="form-control"
-                      ng-options="v.value as v.label for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
+                      ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
               </select>
             </div>
 
@@ -37,7 +37,7 @@
             <div class="col-lg-3">
               <select ng-model="incident.closed"
                       class="form-control"
-                      ng-options="v.value as v.label for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
+                      ng-options="v.value as v.label | translate for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
               </select>
               <div class="has-error" ng-show="showErrors">
                 <div class="help-block" ng-show="form.user.$error.required" translate>User is required.</div>
