@@ -42,13 +42,8 @@ angular.module('Aggie')
               return report._id;
             });
 
-            Report.linkToIncident({ ids: ids, incident: inc._id, incidentTitle: inc.title }, function() {
-              if (batchMode) {
-                $rootScope.$state.go('batch', {}, { reload: true });
-              } else {
-                $rootScope.$state.go('reports', { r: reports[0] }, { reload: false });
-              }
-            });
+            Report.linkToIncident({ ids: ids, incident: inc._id,
+                                    incidentTitle: inc.title });
           } else {
             flash.setNotice('incident.create.success');
             $rootScope.$state.go('incidents', {}, { reload: true });
