@@ -68,11 +68,13 @@ angular.module('Aggie')
   '$scope',
   '$modalInstance',
   'mediaOptions',
+  'twitterLanguageOptions',
   'sources',
   'locals',
-  function($scope, $modalInstance, mediaOptions, sources, locals) {
+  function($scope, $modalInstance, mediaOptions, twitterLanguageOptions, sources, locals) {
     $scope.sources = sources;
     $scope.mediaOptions = mediaOptions;
+    $scope.twitterLanguageOptions = twitterLanguageOptions;
     $scope.source = angular.copy(locals.source);
     $scope._showErrors = false;
 
