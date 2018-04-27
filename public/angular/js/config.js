@@ -95,4 +95,4 @@ angular.module('Aggie')
     'ug': 'Uyghur',
     'vi': 'Vietnamese',
     'cy': 'Welsh'
-  });
+});
