@@ -4,11 +4,13 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   '$stateParams',
+  '$translate',
   'Source',
   'source',
   'Tags',
+  'twitterLanguageOptions',
   'FlashService',
-  function($scope, $rootScope, $stateParams, Source, source, Tags, flash) {
+  function($scope, $rootScope, $stateParams, $translate, Source, source, Tags, twitterLanguageOptions, flash) {
     $scope.source = source;
     Source.resetUnreadErrorCount({ id: source._id }, source);
 
@@ -20,6 +22,15 @@ angular.module('Aggie')
         flash.setAlertNow('source.delete.error');
       });
     };
+
+    $scope.acceptedLanguages = '';
+
+    if (source.media === 'twitter') {
+      for (var i = 0; i < source.acceptedLanguages.length; i++) {
+        var lang = source.acceptedLanguages[i];
+        $scope.acceptedLanguages += ' ' + $translate.instant(twitterLanguageOptions[lang]);
+      }
+    }
 
     $scope.tagsToString = Tags.tagsToString;
   }

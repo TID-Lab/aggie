@@ -16,7 +16,8 @@ describe('Twitter content service', function() {
     fakeStream.start = _.noop;
     fakeStream.stop = _.noop;
     service._getStream = function() { return fakeStream; };
-    var eventName = service.subscribe('bot_id123', { keywords: 'baz foo' });
+    var eventName = service.subscribe('bot_id123', { keywords: 'baz foo',
+                                                     acceptedLanguages: ['en', 'es'] });
 
     // Setup handler.
     service.once(eventName, function(reportData) {
@@ -27,6 +28,7 @@ describe('Twitter content service', function() {
       expect(reportData.content).to.equal('foo bar baz');
       expect(reportData.author).to.equal('bozo');
       expect(reportData.url).to.equal('https://twitter.com/bozo/status/123');
+      expect(reportData.metadata.language).to.equal('en');
 
       service.unsubscribe('bot_id123');
       done();
@@ -36,7 +38,8 @@ describe('Twitter content service', function() {
       created_at: new Date(2012, 3, 4, 12, 0, 0),
       text: 'foo bar baz',
       user: { screen_name: 'bozo' },
-      id_str: '123'
+      id_str: '123',
+      lang: 'en'
     });
   });
 
