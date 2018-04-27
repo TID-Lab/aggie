@@ -8,7 +8,7 @@ exports.up = function(next) {
     if (err || !sources) return;
     each(sources, function(source, done) {
       if (source.media === 'twitter') {
-        source.acceptedLanguages = '';
+        source.acceptedLanguages = [];
         source.save(function(err) {
           done();
         });
