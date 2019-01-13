@@ -21,7 +21,7 @@ angular.module('Aggie')
 
 .value('publicOptions', ['public', 'private'])
 
-.value('governorateOptions', ['Anbar', 'Diyala', 'Kurdistan', 'Basra', 'Kirkuk', 'Nineveh'])
+.value('governorateOptions', ['Misrata-Ajdabiya','Tripoli','Zawiya','Zintan','Benghazi','Bedha-Marj','Tobroq-Derna','Sabha', 'Marzooq'])
 
 .value('paginationOptions', { perPage: 25 })
 
