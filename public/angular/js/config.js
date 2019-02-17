@@ -15,13 +15,37 @@ angular.module('Aggie')
 
 .value('incidentStatusOptions', ['open', 'closed'])
 
-.value('veracityOptions', ['Report Confirmed', 'Report Unconfirmed'])
+  .value('veracityOptions', ['Confirmed true', 'Confirmed false', 'Unconfirmed'])
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
 
 .value('publicOptions', ['public', 'private'])
 
-.value('governorateOptions', ['Misrata-Ajdabiya','Tripoli','Zawiya','Zintan','Benghazi','Bedha-Marj','Tobroq-Derna','Sabha', 'Marzooq'])
+  .value('governorateOptions', [
+    'Derna',
+    'Almarj',
+    'Benghazi',
+    'Tobruk',
+    'Ejdabia',
+    'Al Jabal Al Akhdar ',
+    'Alkufra',
+    'Sirt',
+    'Nalut',
+    'Almargeb',
+    'Tripoli',
+    'Aljfara',
+    'Azzawya',
+    'Misrata',
+    'Zwara',
+    'Al Jabal Al Gharbi',
+    'Aljufra',
+    'Wadi Ashshati',
+    'Sebha',
+    'Ubari',
+    'Ghat',
+    'Murzuq'
+    //'Polling Station Code',
+    ])
 
 .value('paginationOptions', { perPage: 25 })
 

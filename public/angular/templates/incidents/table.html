@@ -34,8 +34,9 @@
       <td ng-show="currentUser.can('view other users')" class="compact"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
       <td class="compact content">{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
       <td class="compact content">
-          <span ng-if="i.veracity" class="text-green" translate>Report Confirmed</span>
-          <span ng-if="!i.veracity && i.veracity != null" class="text-red" translate>Report Unconfirmed</span>
+        <span ng-if="i.veracity" class="text-green" translate>Confirmed true</span>
+        <span ng-if="i.veracity === false" class="text-green" translate>Confirmed false</span>
+        <span ng-if="i.veracity === null" class="text-red" translate>Report Unconfirmed</span>
       </td>
       <td class="compact content">{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</td>
       <td class="compact content" translate>{{ tagsToString(i.tags) }}</td>

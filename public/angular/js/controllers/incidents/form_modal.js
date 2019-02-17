@@ -24,7 +24,7 @@ angular.module('Aggie')
           }],
           incident: function() {
             return {
-              veracity: false,
+              veracity: null,
               closed: false
             };
           },
@@ -131,7 +131,7 @@ angular.module('Aggie')
       // Only send assignedTo _id, not whole object.
       $scope.incident.assignedTo = ($scope.incident.assignedTo || { _id: null })['_id'];
       $scope.incident.tags = Tags.stringToTags($scope.incident.tags);
-
+      
       $modalInstance.close($scope.incident);
     };
 

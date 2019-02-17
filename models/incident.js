@@ -135,8 +135,9 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-  if (query.veracity === 'Report Confirmed') filter.veracity = true;
-  if (query.veracity === 'Report Unconfirmed') filter.veracity = false;
+  if (query.veracity === 'Confirmed true') filter.veracity = true;
+  if (query.veracity === 'Confirmed false') filter.veracity = false;
+  if (query.veracity === 'Unconfirmed') filter.veracity = null;
   if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
   if (query.status === 'open') filter.closed = false;
