@@ -34,11 +34,11 @@
           <option value="" translate>Assigned To</option>
         </select>
       </div>
-      <div class="td filter">
-        <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Status</option>
-        </select>
-      </div>
+      <!-- <div class="td filter">
+           <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
+           <option value="" translate>Status</option>
+           </select>
+           </div> -->
       <div class="td filter">
         <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
           <option value="" translate>Veracity</option>
