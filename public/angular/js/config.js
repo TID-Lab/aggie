@@ -15,13 +15,13 @@ angular.module('Aggie')
 
 .value('incidentStatusOptions', ['open', 'closed'])
 
-  .value('veracityOptions', ['Confirmed true', 'Confirmed false', 'Unconfirmed'])
+.value('veracityOptions', ['Confirmed true', 'Confirmed false', 'Unconfirmed'])
 
 .value('escalatedOptions', ['escalated', 'unescalated'])
 
 .value('publicOptions', ['public', 'private'])
 
-  .value('governorateOptions', [
+.value('governorateOptions', [
     'Derna',
     'Almarj',
     'Benghazi',
