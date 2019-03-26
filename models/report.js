@@ -12,7 +12,6 @@ var schema = new Schema({
   fetchedAt: Date,
   storedAt: { type: Date, index: true },
   content: String,
-  author: { type: String, index: true },
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
