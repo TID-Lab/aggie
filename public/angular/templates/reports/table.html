@@ -5,7 +5,6 @@
       <th translate>Time</th>
       <th translate>Media</th>
       <th translate>Sources</th>
-      <th translate>Author</th>
       <th translate>Content</th>
       <th translate>Tags</th>
       <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
@@ -32,9 +31,6 @@
         <span ng-repeat="s in r._sources" class="source">
           {{ sourcesById[s].nickname || '[Deleted]' }}
         </span>
-      </td>
-      <td class="compact author" ng-class="{ strong: !isRead(r) }">
-        {{ r.author }}
       </td>
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
         <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
