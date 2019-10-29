@@ -55,7 +55,7 @@
     "lodash": "^4.15.0",
     "migrate": "^0.2.3",
     "moment": "~2.8.4",
-    "mongoose": "~3.8.23",
+    "mongoose": "~5.7.5",
     "mongoose-auto-increment": "^3.2.0",
     "mongoose-listento": "0.0.4",
     "mongoose-validator": "~1.2.4",
