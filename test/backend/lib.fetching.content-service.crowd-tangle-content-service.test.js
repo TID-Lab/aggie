@@ -41,55 +41,56 @@ describe('CrowdTangle content service', function() {
 
 
   // TODO 1
-  // it('should fetch mock content from CrowdTangle', function(done) {
-  //   var service = stubWithFixture('elmo-1.json');
+  it('should fetch mock content from CrowdTangle', function(done) {
+    var service = stubWithFixture('facebook-1.json');
+    var fetched = 0;
 
-  //   service.once('error', function(err) { done(err); });
+    service.once('error', function(err) { done(err); });
 
-  //   var fetched = 0;
-  //   service.on('report', function(reportData) {
-  //     expect(reportData).to.have.property('fetchedAt');
-  //     expect(reportData).to.have.property('authoredAt');
-  //     expect(reportData).to.have.property('content');
-  //     expect(reportData).to.have.property('author');
-  //     expect(reportData).to.have.property('metadata');
-  //     switch (++fetched) {
-  //     case 1:
-  //       expect(reportData.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
-  //       expect(reportData.author).to.equal('Sue');
-  //       break;
-  //     case 2:
-  //       expect(reportData.content).to.contain('[FOO2: Yes] [BAR2: No] [BAZ2: Maybe]');
-  //       expect(reportData.author).to.equal('Joe');
-  //       expect(service._lastReportDate.getTime()).to.equal((new Date('2014-06-17T11:00:00Z')).getTime());
-  //       break;
-  //     case 3:
-  //       return done(new Error('Unexpected report'));
-  //     }
-  //   });
+    service.on('report', function(reportData) {
+      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData).to.have.property('authoredAt');
+      expect(reportData).to.have.property('content');
+      expect(reportData).to.have.property('author');
+      expect(reportData).to.have.property('url');
+      expect(reportData).to.have.property('metadata');
+      switch (++fetched) {
+      case 1:
+        expect(reportData.content).to.contain('The ACC Champion');
+        expect(reportData.author).to.equal('Georgia Tech');
+        expect(reportData.url).to.contain('https');
+        expect(reportData.metadata.likeCount).to.equal(41);
+        expect(reportData.metadata.reactionCount).to.equal(42);
+        expect(reportData.metadata.place).to.equal('Area 51');
+        break;
+      case 2:
+        expect(reportData.content).to.contain('Bioengineers at');
+        expect(reportData.author).to.equal('Georgia Tech');
+        expect(reportData.metadata.likeCount).to.equal(43);
+        expect(reportData.metadata.reactionCount).to.equal(44);
+        expect(reportData.metadata.place).to.equal('Area 52');
+        break;
+      case 3:
+        expect(reportData.content).to.contain('Amazing');
+        expect(reportData.author).to.equal('Test User 1');
+        expect(reportData.metadata.likeCount).to.equal(0);
+        break;
+      case 4:
+        return done(new Error('Unexpected report'));
+      }
+    });
 
-  //   // Give enough time for extra report to appear.
-  //   setTimeout(function() { if (fetched == 2) done(); }, 100);
+    // Give enough time for extra report to appear.
+    setTimeout(function() { if (fetched == 3) done(); }, 100);
 
-  //   // Run fetch
-  //   service.fetch({ maxCount: 50 }, function() {});
-  //});
+    service.fetch({ maxCount: 50 }, function() {});
+  });
 
   describe('errors', function() {
 
-
-    // TODO 2
-    // it('should emit a missing parameter error', function(done) {
-    //   var service = new ELMOContentService({});
-    //   utils.expectToNotEmitReport(service, done);
-    //   utils.expectToEmitError(service, 'Missing ELMO URL', done);
-    //   service.fetch({ maxCount: 50 }, function() {});
-    // });
-
-
     // test for bad data
     it('should emit json parse error', function(done) {
-      var service = stubWithFixture('ct-3.json');
+      var service = stubWithFixture('ct-2.json');
       utils.expectToNotEmitReport(service, done);
       utils.expectToEmitError(service, 'Parse error: Unexpected end of input', done);
       service.fetch({ maxCount: 50 }, function() {});
