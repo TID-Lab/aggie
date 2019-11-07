@@ -6,10 +6,11 @@ var CrowdTangleContentService = require('../../lib/fetching/content-services/cro
 var ContentService = require('../../lib/fetching/content-service');
 var contentServiceFactory = require('../../lib/fetching/content-service-factory');
 
+
 // Stubs the _httpRequest method of the content service to return the data in the given fixture file.
-// If service is null, creates an CrowdTangleContentService
 function stubWithFixture(fixtureFile, service) {
-  // Create service if not provided.
+
+  // If service is null, creates a CrowdTangleContentService
   service = service || new CrowdTangleContentService({});
 
   // Make the stub function return the expected args (err, res, body).

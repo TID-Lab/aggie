@@ -45,5 +45,3 @@ config/cert.pem
 config/key.pem
 
 docs/_build
-
-test/backend/fixtures/ct-3.json

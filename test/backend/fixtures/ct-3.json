@@ -1,0 +1,8 @@
+{
+	"author" : "tester",
+	"options" : {
+		"apiToken" : "enter_token_here",
+		"keywords" : "",
+		"listIds": []
+	}
+}
