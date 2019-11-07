@@ -39,7 +39,9 @@ describe('CrowdTangle content service', function() {
     setTimeout(done, 500);
   });
 
-  // it('should fetch mock content from ELMO', function(done) {
+
+  // TODO 1
+  // it('should fetch mock content from CrowdTangle', function(done) {
   //   var service = stubWithFixture('elmo-1.json');
 
   //   service.once('error', function(err) { done(err); });
@@ -50,6 +52,7 @@ describe('CrowdTangle content service', function() {
   //     expect(reportData).to.have.property('authoredAt');
   //     expect(reportData).to.have.property('content');
   //     expect(reportData).to.have.property('author');
+  //     expect(reportData).to.have.property('metadata');
   //     switch (++fetched) {
   //     case 1:
   //       expect(reportData.content).to.contain('[FOO: Certainly] [BAR: Nope] [BAZ: Perhaps]');
@@ -70,36 +73,28 @@ describe('CrowdTangle content service', function() {
 
   //   // Run fetch
   //   service.fetch({ maxCount: 50 }, function() {});
-  // });
+  });
 
-  // describe('errors', function() {
+  describe('errors', function() {
 
-  //   it('should emit a missing URL error', function(done) {
-  //     var service = new ELMOContentService({});
-  //     utils.expectToNotEmitReport(service, done);
-  //     utils.expectToEmitError(service, 'Missing ELMO URL', done);
-  //     service.fetch({ maxCount: 50 }, function() {});
-  //   });
 
-  //   it('should emit an unauthorized token error', function(done) {
-  //     var service = new ELMOContentService({ url: 'https://example.com', authToken: '123' });
+    // TODO 2
+    // it('should emit a missing parameter error', function(done) {
+    //   var service = new ELMOContentService({});
+    //   utils.expectToNotEmitReport(service, done);
+    //   utils.expectToEmitError(service, 'Missing ELMO URL', done);
+    //   service.fetch({ maxCount: 50 }, function() {});
+    // });
 
-  //     // Stub the content service to return 403
-  //     service._httpRequest = function(params, callback) {
-  //       process.nextTick(function() { callback({ message: 'Unauthorized' }); });
-  //     };
-  //     utils.expectToNotEmitReport(service, done);
-  //     utils.expectToEmitError(service, 'Unauthorized', done);
-  //     service.fetch({ maxCount: 50 }, function() {});
-  //   });
 
-  //   it('should emit json parse error', function(done) {
-  //     var service = stubWithFixture('elmo-bad.json');
-  //     utils.expectToNotEmitReport(service, done);
-  //     utils.expectToEmitError(service, 'Parse error: Unexpected end of input', done);
-  //     service.fetch({ maxCount: 50 }, function() {});
-  //   });
-  // });
+    // test for bad data
+    it('should emit json parse error', function(done) {
+      var service = stubWithFixture('ct-03.json');
+      utils.expectToNotEmitReport(service, done);
+      utils.expectToEmitError(service, 'Parse error: Unexpected end of input', done);
+      service.fetch({ maxCount: 50 }, function() {});
+    });
+  });
 
   after(utils.expectModelsEmpty);
 });
