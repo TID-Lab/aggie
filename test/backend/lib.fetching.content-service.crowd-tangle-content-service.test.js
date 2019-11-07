@@ -73,7 +73,7 @@ describe('CrowdTangle content service', function() {
 
   //   // Run fetch
   //   service.fetch({ maxCount: 50 }, function() {});
-  });
+  //});
 
   describe('errors', function() {
 
