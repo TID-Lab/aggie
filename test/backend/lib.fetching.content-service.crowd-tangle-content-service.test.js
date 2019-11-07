@@ -7,7 +7,7 @@ var ContentService = require('../../lib/fetching/content-service');
 var contentServiceFactory = require('../../lib/fetching/content-service-factory');
 
 // Stubs the _httpRequest method of the content service to return the data in the given fixture file.
-// If service is null, creates an ElmoContentService
+// If service is null, creates an CrowdTangleContentService
 function stubWithFixture(fixtureFile, service) {
   // Create service if not provided.
   service = service || new CrowdTangleContentService({});
@@ -37,6 +37,21 @@ describe('CrowdTangle content service', function() {
       done(err);
     });
     setTimeout(done, 500);
+  });
+
+  it('should return status 200 from CrowdTangle', function(done) {
+    var service = stubWithFixture('ct-3.json');
+    service.once('error', function(err) {
+      done(err);
+    });
+    
+    service.on('report', function(reportData) {
+      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData).to.have.property('authoredAt');
+      expect(reportData).to.have.property('content');
+      expect(reportData).to.have.property('author');
+      expect(reportData).to.have.property('url');
+    }
   });
 
 
