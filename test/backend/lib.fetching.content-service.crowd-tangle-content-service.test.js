@@ -10,7 +10,7 @@ var contentServiceFactory = require('../../lib/fetching/content-service-factory'
 // If service is null, creates an ElmoContentService
 function stubWithFixture(fixtureFile, service) {
   // Create service if not provided.
-  service = service || new ELMOContentService({ url: 'http://example.com' });
+  service = service || new CrowdTangleContentService({});
 
   // Make the stub function return the expected args (err, res, body).
   fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
@@ -29,15 +29,15 @@ describe('CrowdTangle content service', function() {
     expect(service).to.be.instanceOf(CrowdTangleContentService);
   });
 
-  // it('should fetch empty content', function(done) {
-  //   var service = stubWithFixture('elmo-0.json');
-  //   utils.expectToNotEmitReport(service, done);
-  //   expect(service._lastReportDate).to.be.undefined;
-  //   service.once('error', function(err) {
-  //     done(err);
-  //   });
-  //   setTimeout(done, 500);
-  // });
+  it('should fetch empty content', function(done) {
+    var service = stubWithFixture('ct-0.json');
+    utils.expectToNotEmitReport(service, done);
+    expect(service._lastReportDate).to.be.undefined;
+    service.once('error', function(err) {
+      done(err);
+    });
+    setTimeout(done, 500);
+  });
 
   // it('should fetch mock content from ELMO', function(done) {
   //   var service = stubWithFixture('elmo-1.json');
