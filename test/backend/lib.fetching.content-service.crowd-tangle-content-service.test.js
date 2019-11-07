@@ -45,8 +45,7 @@ describe('CrowdTangle content service', function() {
     service.once('error', function(err) { done(err); });
 
     service.on('report', function(reportData) {
-      console.log(reportData);
-      expect(reportData).to.have.property('fetchedAt');
+      expect(reportData.metadata.crowdtangleId).to.not.be.undefined;
     });
     setTimeout(done, 500);
   });
