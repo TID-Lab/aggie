@@ -89,7 +89,7 @@ describe('CrowdTangle content service', function() {
 
     // test for bad data
     it('should emit json parse error', function(done) {
-      var service = stubWithFixture('ct-03.json');
+      var service = stubWithFixture('ct-3.json');
       utils.expectToNotEmitReport(service, done);
       utils.expectToEmitError(service, 'Parse error: Unexpected end of input', done);
       service.fetch({ maxCount: 50 }, function() {});
