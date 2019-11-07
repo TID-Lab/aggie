@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var fs = require('fs');
 var path = require('path');
-var CrowdTangleContentService = require('../../lib/fetching/content-services/crwod-tangle-content-service');
+var CrowdTangleContentService = require('../../lib/fetching/content-services/crowd-tangle-content-service');
 var ContentService = require('../../lib/fetching/content-service');
 var contentServiceFactory = require('../../lib/fetching/content-service-factory');
 
