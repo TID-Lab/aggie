@@ -41,7 +41,7 @@ describe('CrowdTangle content service', function() {
 
   it('should return status 200 from CrowdTangle', function(done) {
     var service = stubWithFixture('ct-3.json');
-    expect(service._lastReportDate).not.to.be.undefined;
+    expect(service._lastReportDate).to.not.be.undefined;
     service.once('error', function(err) {
       done(err);
     });
