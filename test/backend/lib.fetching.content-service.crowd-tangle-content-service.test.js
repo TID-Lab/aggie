@@ -41,17 +41,11 @@ describe('CrowdTangle content service', function() {
 
   it('should return status 200 from CrowdTangle', function(done) {
     var service = stubWithFixture('ct-3.json');
+    expect(service._lastReportDate).not.to.be.undefined;
     service.once('error', function(err) {
       done(err);
     });
-    
-    service.on('report', function(reportData) {
-      expect(reportData).to.have.property('fetchedAt');
-      expect(reportData).to.have.property('authoredAt');
-      expect(reportData).to.have.property('content');
-      expect(reportData).to.have.property('author');
-      expect(reportData).to.have.property('url');
-    }
+    setTimeout(done, 500);
   });
 
 
