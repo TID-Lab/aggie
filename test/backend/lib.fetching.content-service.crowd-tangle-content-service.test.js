@@ -47,12 +47,6 @@ describe('CrowdTangle content service', function() {
 
     service.on('report', function(reportData) {
       expect(reportData.metadata.crowdtangleId).to.not.be.undefined;
-      expect(reportData).to.have.property('fetchedAt');
-      expect(reportData).to.have.property('authoredAt');
-      expect(reportData).to.have.property('content');
-      expect(reportData).to.have.property('author');
-      expect(reportData).to.have.property('url');
-      expect(reportData).to.have.property('metadata');
     });
     setTimeout(done, 500);
   });
