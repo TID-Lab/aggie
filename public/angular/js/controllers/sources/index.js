@@ -23,7 +23,7 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(source) {
-      var mediaOptions = ['twitter', 'facebooker', 'rss', 'elmo', 'smsgh'];
+      var mediaOptions = ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp'];
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
       } else {
