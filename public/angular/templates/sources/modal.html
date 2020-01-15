@@ -14,7 +14,7 @@
             <label for="media" class="col-lg-2 control-label" translate>Media</label>
             <div class="col-lg-8">
               <select name="media" class="form-control" ng-model="source.media" ng-options="media as media | translate for media in mediaOptions" required ng-hide="source._id">
-                <option value="" translate>Choose source media</option>
+                <option value="" translate>Choosing source media</option>
               </select>
               <input type="text" class="form-control" ng-model="source.media" ng-show="source._id" readonly>
               <div class="has-error" ng-show="showErrors()">
