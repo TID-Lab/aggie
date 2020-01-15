@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.value('mediaOptions', ['twitter', 'facebook', 'rss', 'elmo', 'smsgh']) 
+.value('mediaOptions', ['twitter', 'facebooker', 'rss', 'elmo', 'smsgh']) 
 
 .value('apiSettingsOptions', ['twitter', 'facebook', 'elmo', 'gplaces'])
 
