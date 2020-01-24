@@ -14,7 +14,7 @@
             <label for="media" class="col-lg-2 control-label" translate>Media</label>
             <div class="col-lg-8">
               <select name="media" class="form-control" ng-model="source.media" ng-options="media as media | translate for media in mediaOptions" required ng-hide="source._id">
-                <option value="" translate>Choosing source media</option>
+                <option value="" translate>Choose source media</option>
               </select>
               <input type="text" class="form-control" ng-model="source.media" ng-show="source._id" readonly>
               <div class="has-error" ng-show="showErrors()">
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="form-group" ng-show="source.media">
-            <label for="nickname" class="col-lg-2 control-label" translate>Name</label>
+            <label for="nickname" class="col-lg-2 control-label" translate>Source Name</label>
             <div class="col-lg-8">
               <div class="input-group">
                 <input type="text" ng-model="source.nickname" class="form-control" id="nickname" name="nickname" placeholder="{{ 'Enter a nickname' | translate }}" required maxlength="20" ng-focus>
@@ -34,7 +34,7 @@
               </div>
               <div class="help-block" translate>A short name for this source.</div>
               <div class="has-error" ng-show="showErrors() && form.nickname.$invalid">
-                <div class="help-block" ng-show="form.nickname.$error.required" translate>Name is required.</div>
+                <div class="help-block" ng-show="form.nickname.$error.required" translate>Source Name is required.</div>
               </div>
             </div>
           </div>
