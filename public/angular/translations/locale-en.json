@@ -399,5 +399,9 @@
   "Unescalated": "Unescalated",
   "Tags": "Tags",
   "Assign To": "Assign To",
-  "entry.created": "Created"
+  "entry.created": "Created",
+  "API Key": "API Key",
+  "Enter dashboard key" : "Enter dashboard key",
+  "Dashboard API Key is required": "Dashboard API Key is required",
+  "The Dashboard API Key for this source.": "The Dashboard API Key for this source"
 }
