@@ -38,6 +38,8 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
 
+    console.log($scope.reports);
+
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
     linkedtoIncidentOptions[1].title = $translate.instant(linkedtoIncidentOptions[1].title);

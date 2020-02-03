@@ -29,7 +29,6 @@ var sourceSchema = new mongoose.Schema({
   nickname: { type: String, required: true, validate: lengthValidator },
   resource_id: String,
   url: { type: String, validate: urlValidator },
-  apikey: {type: String, default: null},
   keywords: String,
   enabled: { type: Boolean, default: true },
   events: { type: Array, default: [] },

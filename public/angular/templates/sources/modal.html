@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media == 'crowdtangle'">
+          <!-- <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media == 'crowdtangle'">
             <label for="apikey" class="col-lg-2 control-label" translate>API Key</label>
             <div class="col-lg-8">
                 <input type="text" ng-model="source.apikey" class="form-control" id="apikey" name="apikey" placeholder="{{ 'Enter dashboard key' | translate }}" ng-required="source.media == 'crowdtangle'">
@@ -48,7 +48,7 @@
                 <div class="help-block" ng-show="form.apikey.$error.required" translate>Dashboard API Key is required.</div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter' || source.media == 'crowdtangle' || source.media == 'whatsapp' ">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'crowdtangle' && source.media != 'smsgh' && source.media != 'whatsapp'">
+          <!-- <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'crowdtangle' && source.media != 'smsgh' && source.media != 'whatsapp'">
             <label for="url" class="col-lg-2 control-label" translate>URL</label>
             <div class="col-lg-8">
               <div class="input-group">
@@ -82,7 +82,7 @@
                 <div class="help-block" ng-show="form.url.$dirty && !form.url.$error.required" translate>URL is invalid.</div>
               </div>
             </div>
-          </div>
+          </div> -->
           
           <div class="form-group" ng-show="source.media">
             <label for="tags" class="col-lg-2 control-label" translate>Tags</label>
