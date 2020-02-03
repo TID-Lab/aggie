@@ -22,13 +22,14 @@ var urlValidator = validate({
   passIfEmpty: true
 });
 
-var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
+var mediaValues = ['facebook', 'crowdtangle', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
 
 var sourceSchema = new mongoose.Schema({
   media: { type: String, enum: mediaValues },
   nickname: { type: String, required: true, validate: lengthValidator },
   resource_id: String,
   url: { type: String, validate: urlValidator },
+  apikey: {type: String, default: null},
   keywords: String,
   enabled: { type: Boolean, default: true },
   events: { type: Array, default: [] },
