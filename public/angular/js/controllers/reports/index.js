@@ -38,7 +38,7 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
 
-    console.log($scope.reports);
+    console.log($scope);
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -54,6 +54,7 @@ angular.module('Aggie')
       start: 0,
       end: 0
     };
+
 
     var init = function() {
       $scope.reportsById = $scope.reports.reduce(groupById, {});
@@ -77,7 +78,9 @@ angular.module('Aggie')
     };
 
     var linkify = function(report) {
-      report.content = Autolinker.link(report.content);
+      if (report.content !== null) {
+        report.content = Autolinker.link(report.content);
+      }
       return report;
     };
 
