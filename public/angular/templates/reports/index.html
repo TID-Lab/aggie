@@ -48,7 +48,7 @@
         </select>
       </div>
       <div class="td filter source-type-filter">
-        <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname' | filter:{media: searchParams.media}" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
           <option value="" translate>Source</option>
         </select>
       </div>
