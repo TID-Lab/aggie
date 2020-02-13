@@ -38,8 +38,6 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
 
-    console.log($scope);
-
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
     linkedtoIncidentOptions[1].title = $translate.instant(linkedtoIncidentOptions[1].title);
@@ -377,14 +375,19 @@ angular.module('Aggie')
       // Pick one of the sources that has a media type. For now, it happens that
       // if a report has multiple sources, they all have the same type, or are
       // deleted
-      for (var i = 0; i < report._sources.length; i++) {
-        var sourceId = report._sources[i];
-        var source = $scope.sourcesById[sourceId];
-        if (source && $scope.mediaOptions[source.media] !== -1) {
-          return source.media + '-source';
+
+      if (report.metadata.platform === "Facebook") {
+          return 'facebook-source';
+      } else {
+        for (var i = 0; i < report._sources.length; i++) {
+          var sourceId = report._sources[i];
+          var source = $scope.sourcesById[sourceId];
+          if (source && $scope.mediaOptions[source.media] !== -1) {
+            return source.media + '-source';
+          }
         }
+        return 'unknown-source';
       }
-      return 'unknown-source';
     };
 
     $scope.$on('$destroy', function() {
