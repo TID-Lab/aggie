@@ -26,10 +26,24 @@
 </table>
 
 <h4 translate>API Authentication</h4>
+
 <table class="table table-settings" ng-controller="SettingsController">
   <tr ng-repeat="settingOption in apiSettingOptions">
     <td>
-      <label class="settings-label">{{ settingOption | translate }}</label>
+      <label class="settings-label">Twitter</label>
+    </td>
+    <td class="action">
+      <div class="ng-scope">
+        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table class="table table-settings" ng-controller="SettingsController">
+  <tr ng-repeat="settingOption in apiSettingOptions">
+    <td>
+      <label class="settings-label">CrowdTangle(Facebook)</label>
     </td>
     <td class="action">
       <div class="ng-scope">
