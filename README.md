@@ -78,7 +78,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 The following need to be installed.
 
-1. **node.js** (v.0.10.*, such as 0.10.32)
+1. **node.js** (version 0.10.*, such as 0.10.32)
     - There are two ways to install/update node.js.
        1. Install a specific version of node.js.
           - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
@@ -86,17 +86,18 @@ The following need to be installed.
           - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
           - After installing nvm:
               1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-              2. use this command: `nvm use` to install the version specified in `.nvmrc`.
-2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
+              2. use this command: `nvm install` to install the version specified in `.nvmrc`.
+2. **Mongo DB** (version 2.6.*, such as 2.6.9)
     1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
+        - If necessary: `sudo mkdir -p /data/db/ && sudo chown $USER /data/db/`
     2. Stop and restart Mongo DB.
-        1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
-        2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
+        - On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
+        - On Mac run `mongod`.
+        - Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
     3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
-3. **JRE**
-    - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+3. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
-
+    - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
 
 ### Installation
 1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
@@ -105,18 +106,19 @@ The following need to be installed.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
     1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
     1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
-1. To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+1. (optional) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-1. Run `npm install -g gulp mocha karma-cli protractor@2`.
+    - On MacOS Mojave v10.14, this command fixed most errors: `env LDFLAGS="-mmacosx-version-min=10.9" CXXFLAGS="-mmacosx-version-min=10.9" npm install`
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor@2`.
     - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
     - We are using an old version of protractor so that it works with Node 0.10. If your protractor test fails abruptly, download an updated chromedriver and replace the one found in `aggie/node_modules/protractor/selenium` with the newer one.
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
-1. Run `npm install -g migrate`.
+1. (optional) Run `npm install -g migrate`.
     - This installs node-migrate globally.
 1. To start server, run `npm start`.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
