@@ -1,0 +1,26 @@
+{
+  "name": "aggie",
+  "version": "2.6.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TID-Lab/aggie.git"
+  },
+  "scripts": {
+    "postinstall": "gulp build",
+    "prestart": "node install.js",
+    "start": "node app.js",
+    "premocha": "node install.js",
+    "mocha": "mocha test/backend",
+    "karma": "karma start --single-run",
+    "test": "npm run mocha && npm run karma",
+    "testrun": "MONGO_AGGIE_DB=aggie-test node app.js",
+    "preprotractor": "webdriver-manager update",
+    "protractor": "protractor test/end-to-end/protractor.conf.js",
+    "protractor-with-apis": "protractor test/end-to-end/with-apis/protractor.conf.js"
+  },
+  "subdomain": "aggie",
+  "engines": {
+    "node": "~12.16.3"
+  },
+  "license": "MIT"
+}
