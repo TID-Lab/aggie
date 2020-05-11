@@ -27,6 +27,7 @@
     "bcrypt": "^4.0.1",
     "mkdirp": "^1.0.4",
     "mongoose-sequence": "^5.2.2",
+    "sanitize-html": "^1.23.0",
     "validator": "^13.0.0"
   }
 }
