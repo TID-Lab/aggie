@@ -4,7 +4,6 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var listenTo = require('mongoose-listento');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -25,9 +24,6 @@ var schema = new Schema({
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true }
 });
-
-// Give the report schema text search capabilities
-schema.plugin(listenTo);
 
 // Add fulltext index to the `content` field.
 schema.index({ content: 'text' });
