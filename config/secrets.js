@@ -3,10 +3,8 @@
 
 var nconf = require('nconf');
 var path = require('path');
-var S = require('string');
-var jsmin = require('jsmin').jsmin;
 var _ = require('underscore');
-var fs = require('fs-extra');
+var mkdirp = require('mkdirp')
 
 // load server config, synchronously, so that its immediately available
 var secretsFile = path.resolve(__dirname, 'secrets.json');
@@ -36,10 +34,10 @@ _.defaults(_configuration.logger.fetching, { filename: 'logs/fetching.log' });
 _.defaults(_configuration.logger.analytics, { filename: 'logs/analytics.log' });
 
 // ensure directories exist
-fs.ensureFileSync(_configuration.logger.master.filename);
-fs.ensureFileSync(_configuration.logger.api.filename);
-fs.ensureFileSync(_configuration.logger.fetching.filename);
-fs.ensureFileSync(_configuration.logger.analytics.filename);
+mkdirp.sync(path.dirname(_configuration.logger.master.filename));
+mkdirp.sync(path.dirname(_configuration.logger.api.filename));
+mkdirp.sync(path.dirname(_configuration.logger.fetching.filename));
+mkdirp.sync(path.dirname(_configuration.logger.analytics.filename));
 
 // return configuration
 module.exports.get = function(options) {
@@ -55,7 +53,7 @@ module.exports.get = function(options) {
 // update fetching flag
 module.exports.updateFetching = function(flag, cb) {
   cb = cb || function() {};
-  nconf.set('fetching', S(flag).toBoolean());
+  nconf.set('fetching', !!flag);
   nconf.save(function(err) {
     return cb(err);
   });
