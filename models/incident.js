@@ -7,7 +7,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var validate = require('mongoose-validator');
+var validator = require('validator');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 var Report = require('./report');
@@ -16,10 +16,10 @@ var toRegexp = require('./to-regexp');
 
 require('../lib/error');
 
-var lengthValidator = validate({
-  validator: 'isLength',
-  arguments: [0, 32]
-});
+var lengthValidator = function(str) {
+  return validator.isLength(str, {min: 0, max: 32})
+}
+
 
 var schema = new mongoose.Schema({
   title: { type: String, required: true, validate: lengthValidator },
