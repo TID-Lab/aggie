@@ -24,6 +24,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "mkdirp": "^1.0.4"
   }
 }

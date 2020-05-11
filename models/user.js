@@ -2,7 +2,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 var email = require('email');
 var _ = require('underscore');
@@ -50,7 +50,7 @@ userSchema.methods.hashPassword = function(callback) {
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return callback(err);
 
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
+    bcrypt.hash(user.password, salt, function(err, hash) {
       if (err) return callback(err);
       user.password = hash;
       callback();
