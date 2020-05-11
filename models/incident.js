@@ -7,20 +7,19 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var validate = require('mongoose-validator');
+var validator = require('validator');
 var _ = require('underscore');
-var autoIncrement = require('mongoose-auto-increment');
-var listenTo = require('mongoose-listento');
+var AutoIncrement = require('mongoose-sequence')(mongoose);
 var Report = require('./report');
 var logger = require('../lib/logger');
 var toRegexp = require('./to-regexp');
 
 require('../lib/error');
 
-var lengthValidator = validate({
-  validator: 'isLength',
-  arguments: [0, 32]
-});
+var lengthValidator = function(str) {
+  return validator.isLength(str, {min: 0, max: 32})
+}
+
 
 var schema = new mongoose.Schema({
   title: { type: String, required: true, validate: lengthValidator },
@@ -42,9 +41,6 @@ var schema = new mongoose.Schema({
   totalReports: { type: Number, default: 0, min: 0 },
   notes: String
 });
-
-schema.plugin(listenTo);
-autoIncrement.initialize(mongoose.connection);
 
 schema.pre('save', function(next) {
   if (this.isNew) this.storedAt = new Date();
@@ -74,10 +70,10 @@ schema.post('remove', function() {
 
 });
 
+schema.plugin(AutoIncrement, { inc_field: 'idnum' });
 var Incident = mongoose.model('Incident', schema);
-schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
 
-schema.listenTo(Report, 'change:incident', function(prevIncident, newIncident) {
+Report.schema.on('change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
     // Callbacks added to execute query immediately
     Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {

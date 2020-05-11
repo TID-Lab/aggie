@@ -7,7 +7,6 @@ var Report = require('../models/report');
 var Source = require('../models/source');
 var Trend = require('../models/trend');
 var Incident = require('../models/incident');
-var autoIncrement = require('mongoose-auto-increment');
 
 exports.initDb = function(callback) {
   async.series([
@@ -55,9 +54,8 @@ exports.resetDb = function(callback) {
         hasDefaultPassword: true,
         role: 'admin'
       }, next);
-      // Recreate identitycounters collection
-      autoIncrement.initialize(database.mongoose.connection);
-      Incident.schema.plugin(autoIncrement.plugin, { model: 'Incident', field: 'idnum', startAt: 1 });
+      // Reset Incident counter
+      Incident.counterReset('idnum')
     }
   ], callback);
 };
