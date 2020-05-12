@@ -24,10 +24,13 @@
   },
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.674.0",
     "bcrypt": "^4.0.1",
     "mkdirp": "^1.0.4",
     "moment": "^2.25.3",
     "mongoose-sequence": "^5.2.2",
+    "nodemailer": "^6.4.6",
+    "nodemailer-sendgrid": "^1.0.3",
     "sanitize-html": "^1.23.0",
     "uuid": "^8.0.0",
     "validator": "^13.0.0"
