@@ -4,7 +4,8 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var ngAnnotate = require('gulp-ng-annotate');
@@ -46,7 +47,11 @@ gulp.task('lint', function() {
 });
 
 pipes.buildAngular = function() {
-  return gulp.src('public/angular/js/app.js')
+  var b = browserify({
+    entries: 'public/angular/js/app.js'
+  }).bundle();
+  return b
+    .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(browserify())
@@ -59,7 +64,11 @@ pipes.buildAngular = function() {
 };
 
 pipes.debugAngular = function() {
-  return gulp.src('public/angular/js/app.js')
+  var b = browserify({
+    entries: 'public/angular/js/app.js'
+  }).bundle();
+  return b
+    .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
     .pipe(browserify())
     .pipe(rename('app.min.js'))
