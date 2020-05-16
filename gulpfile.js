@@ -87,7 +87,7 @@ gulp.task('angular', function() {
 // Reload browser
 gulp.task('angular.watch', function() {
   livereload.listen();
-  gulp.watch(paths.angular, gulp.parallel(['watchAngular']));
+  gulp.watch(paths.angular, gulp.parallel('watchAngular'));
 });
 
 gulp.task('backend', function() {
@@ -102,9 +102,9 @@ gulp.task('watch', function() {
   gulp.watch(paths.backend, gulp.parallel('lint', 'backend'));
 });
 
-gulp.task('test', gulp.parallel['backend']);
+gulp.task('test', gulp.parallel('backend'));
 
-gulp.task('default', gulp.parallel['lint', 'test', 'watch']);
+gulp.task('default', gulp.parallel('lint', 'test', 'watch'));
 
 /*
  * Takes a directory of translation dictionaries named locale-foo.json and
@@ -120,7 +120,7 @@ pipes.debugTranslations = function(dirname) {
   ])
     .pipe(jsoncombine(debugFilename, function(data) {
       var result = makeDebugDict(_.values(data));
-      return new Buffer(JSON.stringify(result, null, 2));
+      return new Buffer.from(JSON.stringify(result, null, 2));
     }))
     .pipe(gulp.dest(dirname));
 };
@@ -131,4 +131,5 @@ gulp.task('debugTranslations', function() {
   return merge(stream1, stream2);
 });
 
-gulp.task('build', gulp.parallel(['debugTranslations', 'angular']));
+gulp.task('build', gulp.parallel('debugTranslations', 'angular'));
+//TO DO: Code updated assuming the purpose is to run multiple tasks in parallel. Need to Verify this.
