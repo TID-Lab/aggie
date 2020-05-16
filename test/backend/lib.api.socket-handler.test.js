@@ -18,9 +18,11 @@ function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../../config/key.pem');
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
+  var passFile = path.resolve(__dirname, '../../config/passphrase.txt');
   return https.createServer({
     key: fs.readFileSync(keyFile),
-    cert: fs.readFileSync(certFile)
+    cert: fs.readFileSync(certFile),
+    passphrase: fs.readFileSync(passFile,'utf8')
   }, app);
 }
 
