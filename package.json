@@ -25,6 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "gulp": "^4.0.2",
     "mkdirp": "^1.0.4",
     "moment": "^2.25.3",
     "mongoose-sequence": "^5.2.2",

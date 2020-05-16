@@ -78,7 +78,7 @@ gulp.task('angular', function() {
 // Reload browser
 gulp.task('angular.watch', function() {
   livereload.listen();
-  gulp.watch(paths.angular, ['watchAngular']);
+  gulp.watch(paths.angular, gulp.parallel(['watchAngular']));
 });
 
 gulp.task('backend', function() {
@@ -89,13 +89,13 @@ gulp.task('backend', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.js, ['lint', 'backend']);
-  gulp.watch(paths.backend, ['lint', 'backend']);
+  gulp.watch(paths.js, gulp.parallel('lint', 'backend'));
+  gulp.watch(paths.backend, gulp.parallel('lint', 'backend'));
 });
 
-gulp.task('test', ['backend']);
+gulp.task('test', gulp.parallel['backend']);
 
-gulp.task('default', ['lint', 'test', 'watch']);
+gulp.task('default', gulp.parallel['lint', 'test', 'watch']);
 
 /*
  * Takes a directory of translation dictionaries named locale-foo.json and
@@ -122,4 +122,4 @@ gulp.task('debugTranslations', function() {
   return merge(stream1, stream2);
 });
 
-gulp.task('build', ['debugTranslations', 'angular']);
+gulp.task('build', gulp.parallel(['debugTranslations', 'angular']));
