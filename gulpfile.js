@@ -47,14 +47,13 @@ gulp.task('lint', function() {
 });
 
 pipes.buildAngular = function() {
-  var b = browserify({
+  var bundle = browserify({
     entries: 'public/angular/js/app.js'
   }).bundle();
-  return b
+  return bundle
     .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(browserify())
     .pipe(ngAnnotate())
     .pipe(buffer())
     .pipe(uglify())
@@ -64,13 +63,12 @@ pipes.buildAngular = function() {
 };
 
 pipes.debugAngular = function() {
-  var b = browserify({
+  var bundle = browserify({
     entries: 'public/angular/js/app.js'
   }).bundle();
-  return b
+  return bundle
     .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
-    .pipe(browserify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
 };
