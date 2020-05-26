@@ -38,9 +38,9 @@ describe('Socket handler', function() {
     socketHandler.server.listen(3000);
 
     https.globalAgent.options.rejectUnauthorized = false;
-    client = io.connect('https://localhost:3000', {
+    client = io('https://localhost:3000', {
       transports: ['websocket'],
-      'force new connection': true,
+      forceNew: true,
       agent: https.globalAgent
     });
     done();

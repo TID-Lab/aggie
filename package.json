@@ -96,6 +96,7 @@
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "mocha": "^7.1.2",
+    "socket.io-client": "^2.3.0",
     "supertest": "^4.0.2",
     "vinyl-buffer": "^1.0.1"
   }
