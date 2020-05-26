@@ -17,14 +17,7 @@ exports.initDb = function(callback) {
       // Change database before starting any test
       var host = process.env.MONGO_HOST || 'localhost';
       var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://' + host + '/aggie-test';
-      database.mongoose.connect(dbConnectURL, next);
-    },
-    function(next) {
-      // Enable database-level text search
-      database.mongoose.connections[0].db.admin().command({
-        setParameter: 1,
-        textSearchEnabled: true
-      }, next);
+      database.mongoose.connect(dbConnectURL, {useNewUrlParser: true, useUnifiedTopology: true}, next);
     },
     function(next) {
       // Enable full-text indexing for Reports
