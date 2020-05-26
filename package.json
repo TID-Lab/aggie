@@ -34,7 +34,7 @@
     "bcrypt": "^4.0.1",
     "browserify": "^16.5.1",
     "chance": "^1.1.5",
-    "connect-mongo": "^0.4.0",
+    "connect-mongo": "^3.2.0",
     "connect-roles": "^3.1.2",
     "deepmerge": "^0.2.10",
     "ejs": "^3.1.3",
