@@ -117,7 +117,7 @@ describe('Socket handler', function() {
 
   // Disconnect socket
   after(function(done) {
-    if (client.socket.connected) {
+    if (client.connected) {
       client.on('disconnect', function() {
         done();
       });
