@@ -11,8 +11,8 @@ describe('User controller', function() {
     User.create([
       { provider: 'test', email: 'foo@example.com', username: 'foo', password: 'letmein2' },
       { provider: 'test', email: 'bar@example.com', username: 'bar', password: 'letmein3' }
-    ], function(err, u1, u2) {
-      users = [u1, u2];
+    ], function(err, _users) {
+      users = _users;
       done(err);
     });
   });
