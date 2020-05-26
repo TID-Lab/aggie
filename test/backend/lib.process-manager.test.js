@@ -38,14 +38,14 @@ var Report = require('../../models/report');
  */
 describe('Process manager', function() {
   before('Let API server start listening', function(done) {
-    processManager.fork('/lib/api');
+    processManager.fork('../../lib/api');
     setTimeout(done, 500);
   });
 
   it('should fork a process', function() {
     expect(processManager.children).to.be.an.instanceOf(Array);
     var children = processManager.children.length;
-    var child = processManager.fork('/lib/fetching');
+    var child = processManager.fork('../../lib/fetching');
     expect(child).to.have.property('pid');
     expect(child.pid).to.be.above(process.pid);
     expect(processManager.children).to.have.length(children + 1);
@@ -76,7 +76,7 @@ describe('Process manager', function() {
       done();
     });
     // "API" module to send
-    var api = processManager.fork('/lib/api');
+    var api = processManager.fork('../../lib/api');
     process.nextTick(function() {
       api.send('ping');
     });

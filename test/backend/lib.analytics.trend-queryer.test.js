@@ -7,6 +7,7 @@ var Query = require('../../models/query');
 var ReportQuery = require('../../models/query/report-query');
 var Report = require('../../models/report');
 var timekeeper = require('timekeeper');
+//TO DO: Issue with timekeeper. Fix interaction with Mongoose Date schema
 var _ = require('underscore');
 var async = require('async');
 
@@ -67,7 +68,7 @@ describe('Trend queryer', function() {
           { content: 'baz', _media: 'test' }
         ], next);
       },
-      function(doc1, doc2, next) {
+      function(_, next) {
         trendQueryer.runQuery(next);
       },
       function(counts, next) {
@@ -101,7 +102,7 @@ describe('Trend queryer', function() {
           { content: 'qwerty' }
         ], next);
       },
-      function(doc1, doc2, next) {
+      function(_, next) {
         // Create three reports 10 minutes in the future
         timekeeper.travel(new Date(Date.now() + 600000));
         Report.create([
@@ -110,7 +111,7 @@ describe('Trend queryer', function() {
           { content: 'qwerty' }
         ], next);
       },
-      function(doc1, doc2, doc3, next) {
+      function(_, next) {
         // Run trend analytics
         trendQueryer.runQuery(next);
       },
@@ -137,7 +138,7 @@ describe('Trend queryer', function() {
           { content: 'backfill' }
         ], next);
       },
-      function(doc1, doc2, doc3, next) {
+      function(_, next) {
         // Travel 10 minutes into the future
         timekeeper.travel(new Date(Date.now() + 300000));
         Report.create([
@@ -145,7 +146,7 @@ describe('Trend queryer', function() {
           { content: 'backfill' }
         ], next);
       },
-      function(doc1, doc2, next) {
+      function(_, next) {
         // Travel 10 minutes into the future
         timekeeper.travel(new Date(Date.now() + 600000));
         // Create a new trend
