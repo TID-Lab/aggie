@@ -21,10 +21,13 @@ exports.initDb = function(callback) {
     },
     function(next) {
       // Enable database-level text search
-      database.mongoose.connections[0].db.admin().command({
-        setParameter: 1,
-        textSearchEnabled: true
-      }, next);
+      // TODO textSearchEnabled seems deprecated, needs a replacement
+      // // Enable database-level text search
+      // database.mongoose.connections[0].db.admin().command({
+      //   setParameter: 1,
+      //   textSearchEnabled: true
+      // }, next);
+      next() // temporary (see TODO notice above)
     },
     function(next) {
       // Enable full-text indexing for Reports
