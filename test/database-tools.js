@@ -11,13 +11,22 @@ var Incident = require('../models/incident');
 exports.initDb = function(callback) {
   async.series([
     function(next) {
-      database.mongoose.disconnect(next);
+      if (database.mongoose.connection.readyState == 1) {
+        database.mongoose.disconnect(next)
+      } else {
+        next()
+      }
     },
     function(next) {
       // Change database before starting any test
       var host = process.env.MONGO_HOST || 'localhost';
       var dbConnectURL = process.env.MONGO_CONNECTION_URL = 'mongodb://' + host + '/aggie-test';
-      database.mongoose.connect(dbConnectURL, {useNewUrlParser: true, useUnifiedTopology: true}, next);
+      database.mongoose.connect(dbConnectURL,
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useCreateIndex: true,
+        }, next);
     },
     function(next) {
       // Enable full-text indexing for Reports
