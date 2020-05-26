@@ -43,7 +43,9 @@ describe('Socket handler', function() {
       forceNew: true,
       agent: https.globalAgent
     });
-    done();
+    client.on('connect', () => {
+      done()
+    })
   });
 
   it('should establish a socket connection', function(done) {
@@ -52,7 +54,6 @@ describe('Socket handler', function() {
       expect(data.unreadErrorCount).to.equal(0);
       done();
     });
-    client.on('connect');
   });
 
   it('should establish connections with a query', function(done) {
