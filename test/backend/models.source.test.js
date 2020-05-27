@@ -35,8 +35,6 @@ describe('Source attributes', function() {
     });
   });
 
-  after(() => {
-    Source.remove.bind(Source, {});
-    utils.expectModelsEmpty;
-  });
+  after(Source.remove.bind(Source, {}));
+  after(utils.expectModelsEmpty);
 });

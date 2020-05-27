@@ -51,8 +51,6 @@ describe('User attributes', function() {
     });
   });
 
-  after(() => {
-    utils.removeUsersExceptAdmin;
-    utils.expectModelsEmpty;
-  });
+  after(utils.removeUsersExceptAdmin);
+  after(utils.expectModelsEmpty);
 });
