@@ -94,7 +94,7 @@ describe('Trend queryer', function() {
         // Create one report now
         Report.create({ content: 'qwerty' }, next);
       },
-      function(doc, next) {
+      function(_, next) {
         // Create two reports 5 minutes in the future
         timekeeper.travel(new Date(Date.now() + 300000));
         Report.create([

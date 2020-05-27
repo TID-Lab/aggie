@@ -13,19 +13,19 @@ function enableIndexing(callback) {
   database.mongoose.connection.on('error', function(err) {
     console.error('mongoose connection error (retrying): ', err);
     setTimeout(function() {
-      database.mongoose.connect(database.connectURL, {useUnifiedTopology: true, useNewUrlParser: true});
+      database.mongoose.connect(database.connectURL,
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useCreateIndex: true,
+        });
     }, 200);
   });
   database.mongoose.connection.once('open', function() {
-    // Enable database-level text search
-    database.mongoose.connections[0].db.admin().command({ setParameter: 1, textSearchEnabled: true }, function(err, res) {
+    Report.ensureIndexes(function(err) {
       if (err) console.error(err);
-      else console.log('Text search has been enabled for MongoDB.');
-      Report.ensureIndexes(function(err) {
-        if (err) console.error(err);
-        else console.log('Full-text indexing is enabled for Reports.');
-        callback();
-      });
+      else console.log('Indexing is enabled for Reports.');
+      callback();
     });
   });
 }
