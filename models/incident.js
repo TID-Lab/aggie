@@ -20,7 +20,6 @@ var lengthValidator = function(str) {
   return validator.isLength(str, {min: 0, max: 32})
 }
 
-
 var schema = new mongoose.Schema({
   title: { type: String, required: true, validate: lengthValidator },
   locationName: String,
@@ -90,7 +89,6 @@ Report.schema.on('change:incident', function(prevIncident, newIncident) {
     }
     schema.emit('incident:update');
   });
-
 });
 
 // Query incidents based on passed query data

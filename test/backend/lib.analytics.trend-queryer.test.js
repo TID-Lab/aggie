@@ -7,6 +7,7 @@ var Query = require('../../models/query');
 var ReportQuery = require('../../models/query/report-query');
 var Report = require('../../models/report');
 var timekeeper = require('timekeeper');
+//TO DO: Issue with timekeeper. Fix interaction with Mongoose Date schema
 var _ = require('underscore');
 var async = require('async');
 
