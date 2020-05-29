@@ -176,4 +176,5 @@ describe('Trend queryer', function() {
   // Clean up
   after(utils.wipeModels([Trend, Report]));
   after(utils.expectModelsEmpty);
+  after(timekeeper.reset);
 });
