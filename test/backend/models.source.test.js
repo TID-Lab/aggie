@@ -9,7 +9,7 @@ describe('Source attributes', function() {
   it('should return validation errors', function(done) {
     // This shouldn't get saved because it should error
     Source.create({ url: 'hey' }, function(err) {
-      expect(err).to.have.keys(['_message', 'message', 'name', 'errors']);
+      expect(err).to.have.keys(['_message', 'errors']);
       expect(err.errors).to.have.keys(['nickname', 'url']);
       expect(err.errors.url.message).to.contain('Validator failed for path `url` with value `hey`');
       done();
