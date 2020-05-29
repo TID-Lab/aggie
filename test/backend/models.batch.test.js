@@ -129,8 +129,8 @@ describe('Report', function() {
   });
 
   it('should cancel batch', function(done) {
-    batch.cancel(user._id, function(err, num) {
-      expect(num).to.eq(1);
+    batch.cancel(user._id, function(err, res) {
+      expect(res.nModified).to.eq(1);
       done(err);
     });
   });
