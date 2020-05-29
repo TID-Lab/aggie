@@ -22,11 +22,9 @@ describe('Public controller', function() {
       public: true
     });
 
-    incident.forEach(function(item) {
-      Incident.create(item);
+    Incident.create(incident, function(err) {
+      done();
     });
-
-    done();
   });
 
   after(function(done) {
