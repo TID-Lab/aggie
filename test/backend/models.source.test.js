@@ -35,6 +35,9 @@ describe('Source attributes', function() {
     });
   });
 
-  after(Source.remove.bind(Source, {}));
+  after(function(done) {
+    var remove = Source.remove.bind(Source, {});
+    remove(done);
+  });
   after(utils.expectModelsEmpty);
 });
