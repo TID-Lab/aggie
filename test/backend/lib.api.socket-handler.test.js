@@ -13,16 +13,16 @@ var express = require('express');
 var https = require('https');
 var path = require('path');
 var fs = require('fs');
+var readLineSync = require('readline-sync')
 
 function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../../config/key.pem');
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
-  var passFile = path.resolve(__dirname, '../../config/passphrase.txt');
   return https.createServer({
     key: fs.readFileSync(keyFile),
     cert: fs.readFileSync(certFile),
-    passphrase: fs.readFileSync(passFile,'utf8')
+    passphrase: readLineSync.question("Enter PEM passphrase: ")
   }, app);
 }
 
