@@ -6,6 +6,7 @@ var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify')
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var ngAnnotate = require('gulp-ng-annotate');
@@ -53,7 +54,7 @@ pipes.buildAngular = function() {
   return bundle
     .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
-    .pipe(sourcemaps.init())
+    .pipe(streamify(sourcemaps.init()))
     .pipe(ngAnnotate())
     .pipe(buffer())
     .pipe(uglify())

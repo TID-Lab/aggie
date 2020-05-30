@@ -89,6 +89,7 @@
     "gulp-jsoncombine": "^1.0.4",
     "gulp-ng-annotate": "^2.1.0",
     "gulp-sourcemaps": "^2.6.5",
+    "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
     "karma": "^5.0.8",
     "karma-browserify": "^7.0.0",
