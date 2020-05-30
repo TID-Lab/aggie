@@ -31,7 +31,6 @@ describe('User controller', function() {
           // The admin user is always around, so 2+1=3
           expect(res.body.length).to.equal(3);
           expect(res.body.map((item) => item.username)).to.contain('foo');
-          console.log(res.body);
           done();
         });
     });
