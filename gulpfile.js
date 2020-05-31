@@ -97,7 +97,7 @@ gulp.task('backend', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch([paths.js, paths.backend], gulp.parallel('lint', 'backend'));
+  gulp.watch([...paths.js, ...paths.backend], gulp.parallel('lint', 'backend'));
 });
 
 gulp.task('test', gulp.parallel('backend'));
