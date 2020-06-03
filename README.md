@@ -78,20 +78,20 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 The following need to be installed.
 
-1. **node.js** (v.0.10.*, such as 0.10.32)
+1. **node.js** (v.12.16.3 LTS)
     - There are two ways to install/update node.js.
        1. Install a specific version of node.js.
           - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
-       2. Use [Node Version Manager](https://github.com/creationix/nvm).
+       2. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
           - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
           - After installing nvm:
               1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
               2. use this command: `nvm use` to install the version specified in `.nvmrc`.
-2. **Mongo DB** (requires >= 2.6, such as 2.6.9)
-    1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
+2. **Mongo DB** (requires >= 5.7.0)
+    1. Follow the [installation structions](https://docs.mongodb.org/v4.2/) for your operating system.
     2. Stop and restart Mongo DB.
-        1. On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
-        2. Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
+        1. On Linux run `sudo systemctl stop mongod`. Then run `sudo systemctl start mongod`.
+        2. Make sure mongodb is running in the terminal and listening on an appropriate port. Run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 3. **JRE**
     - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
@@ -166,7 +166,7 @@ Set `config.adminParty=true` if you want to run tests.
 ### Social Media and Feeds
 
 #### Twitter
-  1. Follow [these instructions](https://dev.twitter.com/oauth/overview/application-owner-access-tokens) to generate tokens to use the Twitter API.
+  1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
   1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
@@ -202,7 +202,7 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
   1. `email.from` is the address from which application emails will come
-  1. `email.transport` is the set of parameters that will be passed to [NodeMailer 2.1.0](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
+  1. `email.transport` is the set of parameters that will be passed to [NodeMailer 6.4.6](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 
 ### Fetching
@@ -212,9 +212,9 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 ### Logging
   Set various logging options in `logger` section:
 
-  - `console` section is for console logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
-  - `file` section is for file logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
-  - `SES` section is for email notifications. For various options, see [winston-amazon-ses](see https://www.npmjs.com/package/winston-amazon-ses).
+  - `console` section is for console logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+  - `file` section is for file logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+  - `SES` section is for email notifications.
       - Set appropriate AWS key and secret values.
       - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
   - **DO NOT** set `level` to *debug*. Recommended value is *error*.
