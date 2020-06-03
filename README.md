@@ -78,7 +78,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 The following need to be installed.
 
-1. **node.js** (v.12.16.3 LTS)
+1. **node.js** (v.12.16 LTS)
     - There are two ways to install/update node.js.
        1. Install a specific version of node.js.
           - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
