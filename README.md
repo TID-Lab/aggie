@@ -108,7 +108,6 @@ The following need to be installed.
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
-    - Create a passphrase.txt file under config and enter in the PEM passphrase
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without creating the passphrase.txt file
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
