@@ -22,7 +22,7 @@ function createServer(app) {
   return https.createServer({
     key: fs.readFileSync(keyFile),
     cert: fs.readFileSync(certFile),
-    passphrase: readLineSync.question("Enter PEM passphrase: ")
+    passphrase: ''
   }, app);
 }
 
