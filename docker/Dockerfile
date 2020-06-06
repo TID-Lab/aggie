@@ -4,8 +4,8 @@ WORKDIR /usr/src/
 
 #RUN npm --version
 
-# Eventually we can install from master
-RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout docker-test
+# Eventually we can install from master. Change branch when merging to master or develop.
+RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout update-deps
 
 #RUN cd aggie && git checkout master
 WORKDIR aggie
