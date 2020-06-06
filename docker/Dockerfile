@@ -1,4 +1,4 @@
-FROM node:0.10
+FROM node:12.16
 
 WORKDIR /usr/src/
 

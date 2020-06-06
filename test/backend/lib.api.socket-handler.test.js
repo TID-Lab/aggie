@@ -19,11 +19,19 @@ function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../../config/key.pem');
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
-  return https.createServer({
-    key: fs.readFileSync(keyFile),
-    cert: fs.readFileSync(certFile),
-    passphrase: ''
-  }, app);
+  try {
+    server = require('https').createServer({
+      key: fs.readFileSync(keyFile),
+      cert: cert,
+    }, app);
+  } catch {
+    server = require('https').createServer({
+      key: fs.readFileSync(keyFile),
+      cert: cert,
+      passphrase: readLineSync.question("Enter PEM passphrase: ")
+    }, app);
+  }
+  return server
 }
 
 var app = express();
