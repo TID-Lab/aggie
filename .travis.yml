@@ -1,6 +1,12 @@
 language: node_js
 group: deprecated-2017Q4
-services: mongodb
+#services: mongodb
 before_script:
   - cp config/secrets.json.example config/secrets.json
   - openssl req -x509 -newkey rsa:2048 -keyout config/key.pem -out config/cert.pem -days 365 -nodes -subj "/O=Aggie"
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  - echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+  - sudo apt-get update
+  - sudo apt-get install -y mongodb-org=2.6.11 mongodb-org-server=2.6.11 mongodb-org-shell=2.6.11 mongodb-org-mongos=2.6.11 mongodb-org-tools=2.6.11
+  - sleep 15 #mongo may not be responded directly. See http://docs.travis-ci.com/user/database-setup/#MongoDB
+  - mongo --version  
