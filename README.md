@@ -108,14 +108,13 @@ The following need to be installed.
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
-    - Create a passphrase.txt file under config and enter in the PEM passphrase
-    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without creating the passphrase.txt file
+    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
     - On MacOS Mojave v10.14, this command fixed most errors: `env LDFLAGS="-mmacosx-version-min=10.9" CXXFLAGS="-mmacosx-version-min=10.9" npm install`
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor@2`.
-    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
-    - We are using an old version of protractor so that it works with Node 0.10. If your protractor test fails abruptly, download an updated chromedriver and replace the one found in `aggie/node_modules/protractor/selenium` with the newer one.
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor`.
+    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing. You will most likely need Google Chrome installed on your computer for the protractor tests to run.
+    - 
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. (optional) Run `npm install -g migrate`.
     - This installs node-migrate globally.
@@ -128,6 +127,7 @@ The following need to be installed.
 ## Maintenance
 1. To run migrations run `migrate`.
 2. To run unit tests, run `npm test`.
+    - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
     - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
     - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
