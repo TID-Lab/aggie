@@ -3,7 +3,7 @@ FROM node:0.10
 WORKDIR /usr/src/
 
 RUN npm --version
-
+RUN mongod --version
 # Eventually we can install from master
 RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout master
 
