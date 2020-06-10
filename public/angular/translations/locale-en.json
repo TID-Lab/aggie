@@ -7,7 +7,7 @@
     "report": {
       "unlinkMultiple": {
         "success": "Reports have been successfully unlinked",
-        "error": "Reports failed to be unlinked"
+        "error": "An error occurred while unlinking the Reports"
       }
     }
   },
