@@ -5,7 +5,10 @@
   "password_too_short": "That password was too short. Please use a longer one.",
   "notice": {
     "report": {
-      "unlinked": "Report has been successfully unlinked"
+      "unlinkMultiple": {
+        "success": "Reports have been successfully unlinked",
+        "error": "Reports failed to be unlinked"
+      }
     }
   },
   "relevant": "Relevant",
@@ -318,6 +321,7 @@
   "Linked Incident": "Linked Incident",
   "Date/Time": "Date/Time",
   "Add to Incident": "Add to Incident",
+  "Remove from Incident": "Remove from Incident",
   "Grab Batch": "Grab Batch",
 "There are currently no trends. Click 'Create Trend' to make one.": "There are currently no trends. Click 'Create Trend' to make one.",
   "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.": "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.",
