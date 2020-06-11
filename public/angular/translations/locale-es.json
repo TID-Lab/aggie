@@ -7,7 +7,7 @@
     "report": {
       "unlinkMultiple": {
         "success": "El informe ha sido desconectado del incidente",
-        "error": "TODO TODO TODO"
+        "error": "Se produjo un error al desvincular los informes."
       }
     }
   },
