@@ -1,8 +1,8 @@
 language: node_js
 group: deprecated-2017Q4
 services: 
-  #- mongodb
-  - docker
+  - mongodb
+  #- docker
 env:
   global:
     - MONGODB_VERSION=4.2.6
