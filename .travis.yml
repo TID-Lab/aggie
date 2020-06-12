@@ -1,19 +1,18 @@
-sudo : false
 language: node_js
 group: deprecated-2017Q4
 services: 
-  - mongodb
+  #- mongodb
   - docker
 env:
   global:
-    - MONGODB_VERSION=2.6.11
+    - MONGODB_VERSION=4.2.6
 before_script:
   - cp config/secrets.json.example config/secrets.json
   - openssl req -x509 -newkey rsa:2048 -keyout config/key.pem -out config/cert.pem -days 365 -nodes -subj "/O=Aggie"
-  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-$MONGODB_VERSION.tgz
-  - tar xfz mongodb-linux-x86_64-$MONGODB_VERSION.tgz
-  - export PATH=`pwd`/mongodb-linux-x86_64-$MONGODB_VERSION/bin:$PATH
-  - mkdir -p data/db
-  - mongod --dbpath=data/db &
-  - mongod --version
-  - sleep 3
+  #- wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-$MONGODB_VERSION.tgz
+  #- tar xfz mongodb-linux-x86_64-$MONGODB_VERSION.tgz
+  #- export PATH=`pwd`/mongodb-linux-x86_64-$MONGODB_VERSION/bin:$PATH
+  #- mkdir -p data/db
+  #- mongod --dbpath=data/db &
+  #- mongod --version
+  #- sleep 3
