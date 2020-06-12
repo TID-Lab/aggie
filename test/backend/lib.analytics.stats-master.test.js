@@ -51,7 +51,7 @@ describe('StatsMaster', function() {
   it('should count total reports', function() {
     var stats = statsMaster.stats;
     expect(stats).to.have.property('totalReports');
-    expect(stats.totalReports).to.equal(2);
+    expect(stats.totalReports).to.equal(3);
   });
 
   it('should count flagged reports', function() {
