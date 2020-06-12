@@ -1,12 +1,11 @@
-FROM node:0.10
+FROM node:12.16
 
 WORKDIR /usr/src/
 
-RUN npm --version
-RUN mongod --version
-# Eventually we can install from master
-RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout master
+# Eventually we can install from master. Change branch when merging to master or develop.
+RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout update-deps
 
+#RUN cd aggie && git checkout master
 WORKDIR aggie
 
 RUN mv config/secrets.json.example config/secrets.json
@@ -17,4 +16,5 @@ RUN npm install --global gulp@3 forever@0 && npm install --unsafe-perm=true
 
 EXPOSE 3000
 
-CMD forever -c "npm start" .
+CMD npm start
+#CMD forever -c "npm start" .

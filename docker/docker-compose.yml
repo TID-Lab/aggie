@@ -1,12 +1,11 @@
 version: '3'
-
 services:
   db:
     container_name: db
-    image: mongo:2.6.11
+    image: mongo:latest
     ports:
       - '27020:27017'
-    command: "--smallfiles --logpath=/dev/null"
+    command: "--logpath=/dev/null"
   web:
     container_name: web
     links: 

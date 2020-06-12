@@ -57,6 +57,6 @@ describe('Streamer', function() {
     });
   });
 
-  after(utils.wipeModels([Report]));
-  after(utils.expectModelsEmpty);
+    after(utils.wipeModels([Report]));
+    after(utils.expectModelsEmpty);
 });

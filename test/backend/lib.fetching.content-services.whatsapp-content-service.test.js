@@ -244,6 +244,8 @@ describe('WhatsApp content service', function() {
     });
 
     it('should stop listening on server after all unsubscribe', function(done) {
+      this.timeout(3000);
+
       service.subscribe('id_dodo123', { keywords: 'dodo' });
       service.subscribe('id_bozo123', { keywords: 'bozo' });
 

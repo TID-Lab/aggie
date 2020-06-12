@@ -13,15 +13,27 @@ var express = require('express');
 var https = require('https');
 var path = require('path');
 var fs = require('fs');
+var readLineSync = require('readline-sync')
 
 function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../../config/key.pem');
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
-  return https.createServer({
-    key: fs.readFileSync(keyFile),
-    cert: fs.readFileSync(certFile)
-  }, app);
+  try {
+    // No passphrase when cert is generated with -nodes
+    server = require('https').createServer({
+      key: fs.readFileSync(keyFile),
+      cert: fs.readFileSync(certFile),
+    }, app);
+  } catch {
+    // Prompts for passphrase
+    server = require('https').createServer({
+      key: fs.readFileSync(keyFile),
+      cert: fs.readFileSync(certFile),
+      passphrase: readLineSync.question("Enter PEM passphrase: ")
+    }, app);
+  }
+  return server
 }
 
 var app = express();
@@ -36,12 +48,14 @@ describe('Socket handler', function() {
     socketHandler.server.listen(3000);
 
     https.globalAgent.options.rejectUnauthorized = false;
-    client = io.connect('https://localhost:3000', {
+    client = io('https://localhost:3000', {
       transports: ['websocket'],
-      'force new connection': true,
+      forceNew: true,
       agent: https.globalAgent
     });
-    done();
+    client.on('connect', () => {
+      done()
+    })
   });
 
   it('should establish a socket connection', function(done) {
@@ -50,7 +64,6 @@ describe('Socket handler', function() {
       expect(data.unreadErrorCount).to.equal(0);
       done();
     });
-    client.on('connect');
   });
 
   it('should establish connections with a query', function(done) {
@@ -114,7 +127,7 @@ describe('Socket handler', function() {
 
   // Disconnect socket
   after(function(done) {
-    if (client.socket.connected) {
+    if (client.connected) {
       client.on('disconnect', function() {
         done();
       });

@@ -11,8 +11,8 @@ describe('User controller', function() {
     User.create([
       { provider: 'test', email: 'foo@example.com', username: 'foo', password: 'letmein2' },
       { provider: 'test', email: 'bar@example.com', username: 'bar', password: 'letmein3' }
-    ], function(err, u1, u2) {
-      users = [u1, u2];
+    ], function(err, _users) {
+      users = _users;
       done(err);
     });
   });
@@ -30,7 +30,7 @@ describe('User controller', function() {
           if (err) return done(err);
           // The admin user is always around, so 2+1=3
           expect(res.body.length).to.equal(3);
-          expect(res.body[1].username).to.equal('foo');
+          expect(res.body.map((item) => item.username)).to.contain('foo');
           done();
         });
     });

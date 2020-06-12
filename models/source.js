@@ -6,21 +6,23 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var validate = require('mongoose-validator');
+var validator = require('validator');
 var _ = require('underscore');
 require('../lib/error');
 
 var EVENTS_TO_RETURN = 50;
 
-var lengthValidator = validate({
-  validator: 'isLength',
-  arguments: [0, 20]
-});
+var lengthValidator = function(str) {
+  return validator.isLength(str, {min: 0, max: 20})
+}
 
-var urlValidator = validate({
-  validator: 'isURL',
-  passIfEmpty: true
-});
+var urlValidator = function(url) {
+  return (
+    (typeof url === 'undefined' || url === null)
+    || (typeof url === 'string' && url.length === 0)
+    || validator.isURL(url)
+  );
+}
 
 var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
 

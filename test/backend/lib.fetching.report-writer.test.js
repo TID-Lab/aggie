@@ -108,17 +108,18 @@ describe('Report writer', function() {
           return !bot.isEmpty();
         });
         expect(haveData).to.be.false;
-
-        // Let all reports be processed
-        process.nextTick(function() {
-          // Verify that reports were inserted into database
-          Report.find(function(err, reports) {
-            if (err) return done(err);
-            expect(reports.length).to.equal(queueCount + reportCount);
-            done();
-          });
-        });
       });
+
+      // Let all reports be processed
+      reportWriter.on('done', function() {
+        // Verify that reports were inserted into database
+        Report.find(function(err, reports) {
+          if (err) return done(err);
+          expect(reports.length).to.equal(queueCount + reportCount);
+          done();
+        });
+      })
+
       // Start processing of all queued data
       reportWriter.process();
     });

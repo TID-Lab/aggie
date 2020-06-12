@@ -12,11 +12,10 @@ describe('BotMaster', function() {
   before(function(done) {
     Source.remove({}, function(err) {
       if (err) return done(err);
-      Source.create(
+      Source.create([
         { nickname: 'one', media: 'dummy', keywords: 'one' },
         { nickname: 'two', media: 'dummy', keywords: 'two' },
-        done
-      );
+      ], done);
     });
   });
 

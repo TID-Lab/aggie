@@ -125,7 +125,7 @@ Trend.addTrend = function(_id, trend, callback) {
         callback(null, _.findWhere(result.counts, { timebox: trend.timebox }));
       } else {
         // If no prior trend found, add it to the array
-        Trend.findByIdAndUpdate(_id, { $push: { counts: { $each: [trend], $sort: { timebox: -1 } } } },
+        Trend.findByIdAndUpdate(_id, { $push: { counts: { $each: [trend], $sort: { timebox: -1 } } } }, {new: true},
           function(err, result) {
             if (err) return callback(err);
             if (!result) return callback(new Error.NotFound());

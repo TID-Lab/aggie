@@ -12,9 +12,9 @@ function createIncidents(done) {
   Incident.create([
     { title: 'Not so important incident', veracity: null, closed: true },
     { title: 'Very important incident', veracity: null, closed: true }
-  ], function(err, incident1, incident2) {
-    id1 = incident1._id.toString();
-    id2 = incident2._id.toString();
+  ], function(err, incidents) {
+    id1 = incidents[0]._id.toString();
+    id2 = incidents[1]._id.toString();
     done();
   });
 }
