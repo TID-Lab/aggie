@@ -16,5 +16,5 @@ RUN npm install --global gulp@3 forever@0 && npm install --unsafe-perm=true
 
 EXPOSE 3000
 
-CMD npm start
-#CMD forever -c "npm start" .
+#CMD npm start
+CMD forever -c "npm start" .
