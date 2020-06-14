@@ -44,7 +44,5 @@ config/cert.pem
 
 config/key.pem
 
-config/passphrase.txt
-
 docs/_build
 
