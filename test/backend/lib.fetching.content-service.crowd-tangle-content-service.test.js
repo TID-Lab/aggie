@@ -84,7 +84,7 @@ describe('CrowdTangle content service', function() {
     });
 
     // Give enough time for extra report to appear.
-    setTimeout(function() { if (fetched == 2) done(); }, 100);
+    process.nextTick(function() { if (fetched == 2) done(); });
 
     service.fetch({ maxCount: 50 }, function() {});
   });
