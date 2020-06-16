@@ -20,6 +20,7 @@
   "elmo": "Elmo",
   "facebook": "Facebook",
   "smsgh": "SMS GH",
+  "crowdtangle": "CrowdTangle"
   "Smsgh": "SMS GH",
   "new": "New",
   "working": "Working",
@@ -392,10 +393,6 @@
   "Whatsapp": "WhatsApp",
   "whatsapp": "WhatsApp",
   "gplaces": "Google Places",
-  "CrowdTangle": "crowdtangle",
-  "crowdtangle" : "CrowdTangle",
-  "CrowdTangle": "CrowdTangle",
-  "Crowdtangle" : "CrowdTangle",
   "Mark all Read": "Mark all Read",
   "Confirmed true": "Confirmed true",
   "Confirmed false": "Confirmed false",
