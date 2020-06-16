@@ -39,17 +39,6 @@
             </div>
           </div>
 
-          <!-- <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media == 'crowdtangle'">
-            <label for="apikey" class="col-lg-2 control-label" translate>API Key</label>
-            <div class="col-lg-8">
-                <input type="text" ng-model="source.apikey" class="form-control" id="apikey" name="apikey" placeholder="{{ 'Enter dashboard key' | translate }}" ng-required="source.media == 'crowdtangle'">
-              <div class="help-block" translate>The Dashboard API Key for this source.</div>
-              <div class="has-error" ng-show="showErrors() && form.apikey.$invalid">
-                <div class="help-block" ng-show="form.apikey.$error.required" translate>Dashboard API Key is required.</div>
-              </div>
-            </div>
-          </div> -->
-
           <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter' || source.media == 'crowdtangle' || source.media == 'whatsapp' ">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
@@ -61,29 +50,7 @@
               </div>
             </div>
           </div>
-
-          <!-- <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'crowdtangle' && source.media != 'smsgh' && source.media != 'whatsapp'">
-            <label for="url" class="col-lg-2 control-label" translate>URL</label>
-            <div class="col-lg-8">
-              <div class="input-group">
-                <div ng-switch="source.media">
-                  <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\//" class="form-control" id="url" name="url" ng-required="source.media != 'twitter' && source.media != 'crowdtangle' " ng-focus>
-                  <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="{{ 'Enter url' | translate }}" ng-init="sourceUrl(source)" ng-required="!(source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp')" ng-focus>
-                </div>
-                <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
-              </div>
-              <div class="help-block" ng-switch="source.media">
-                <span ng-switch-when="rss" translate="sources_modal.rss_url"></span>
-                <span ng-switch-when="facebook" translate="sources_modal.facebook_url"></span>
-                <span ng-switch-when="elmo" translate="sources_modal.elmo_url"></span>
-              </div>
-              <div class="has-error" ng-show="showErrors() && form.url.$invalid">
-                <div class="help-block" ng-show="form.url.$error.required" translate>URL is required.</div>
-                <div class="help-block" ng-show="form.url.$dirty && !form.url.$error.required" translate>URL is invalid.</div>
-              </div>
-            </div>
-          </div> -->
-          
+        
           <div class="form-group" ng-show="source.media">
             <label for="tags" class="col-lg-2 control-label" translate>Tags</label>
             <div class="col-lg-8">
