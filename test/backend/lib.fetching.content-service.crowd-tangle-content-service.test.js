@@ -52,7 +52,6 @@ describe('CrowdTangle content service', function() {
   });
 
 
-  // TODO 1
   it('should fetch mock content from CrowdTangle', function(done) {
     var service = stubWithFixture('ct-1.json');
     var fetched = 0;
