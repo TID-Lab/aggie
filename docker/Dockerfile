@@ -3,7 +3,7 @@ FROM node:12.16
 WORKDIR /usr/src/
 
 # Eventually we can install from master. Change branch when merging to master or develop.
-RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout harshil_dev_1
+RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout master
 
 #RUN cd aggie && git checkout master
 WORKDIR aggie
