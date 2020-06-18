@@ -1,21 +1,19 @@
 version: '3'
-
 services:
-  mongo:
-    container_name: mongo
-    image: 'mongo:latest'
+  db:
+    container_name: db
+    image: mongo:latest
     ports:
-      - '27017:27017'
-  aggie:
-    container_name: aggie
+      - '27020:27017'
+    command: "--logpath=/dev/null"
+  web:
+    container_name: web
     links: 
-      - 'mongo'
-    depends_on:
-      - 'mongo'
+      - 'db'
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '443:3000'
     environment:
-      - MONGO_CONNECTION_URL=mongodb://mongo:27017/aggie 
+      - MONGO_CONNECTION_URL=mongodb://db:27017/web

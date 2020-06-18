@@ -2,10 +2,8 @@ FROM node:12.16
 
 WORKDIR /usr/src/
 
-#RUN npm --version
-
 # Eventually we can install from master. Change branch when merging to master or develop.
-RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout update-deps
+RUN git clone https://github.com/TID-Lab/aggie.git && cd aggie && git checkout harshil_dev_1
 
 #RUN cd aggie && git checkout master
 WORKDIR aggie
@@ -18,5 +16,5 @@ RUN npm install --global gulp@3 forever@0 && npm install --unsafe-perm=true
 
 EXPOSE 3000
 
-CMD npm start
-#CMD forever -c "npm start" .
+#CMD npm start
+CMD forever -c "npm start" .
