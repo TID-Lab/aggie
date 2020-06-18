@@ -30,7 +30,6 @@ angular.module('Aggie')
           flash.setNotice('source.create.success');
           $rootScope.$state.go('source', { id: response._id }, { reload: true });
         }, function(err) {
-          console.log(err);
           flash.setAlertNow('source.create.error');
         });
       });

@@ -52,7 +52,6 @@ describe('CrowdTangle content service', function() {
   });
 
 
-  // TODO 1
   it('should fetch mock content from CrowdTangle', function(done) {
     var service = stubWithFixture('ct-1.json');
     var fetched = 0;
@@ -85,7 +84,7 @@ describe('CrowdTangle content service', function() {
     });
 
     // Give enough time for extra report to appear.
-    setTimeout(function() { if (fetched == 2) done(); }, 100);
+    process.nextTick(function() { if (fetched == 2) done(); });
 
     service.fetch({ maxCount: 50 }, function() {});
   });
