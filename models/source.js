@@ -18,10 +18,11 @@ var lengthValidator = function(str) {
 
 var urlValidator = function(url) {
   return (
-    (typeof url === 'undefined' || url === null)
-    || (typeof url === 'string' && url.length === 0)
+    url == null
+    || typeof url !== 'string'
+    || url === ''
     || validator.isURL(url)
-  );
+  )
 }
 
 var mediaValues = ['facebook', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
