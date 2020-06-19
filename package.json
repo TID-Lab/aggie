@@ -7,6 +7,7 @@
   },
   "scripts": {
     "postinstall": "gulp build",
+    "dev": "node install.js && DEBUG=socket.io:* node app.js",
     "prestart": "node install.js",
     "start": "node app.js",
     "premocha": "node install.js",
