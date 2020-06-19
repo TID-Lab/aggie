@@ -19,19 +19,17 @@ function createServer(app) {
   // Get full path for certificate files
   var keyFile = path.resolve(__dirname, '../../config/key.pem');
   var certFile = path.resolve(__dirname, '../../config/cert.pem');
+  var options = {
+    key: fs.readFileSync(keyFile),
+    cert: fs.readFileSync(certFile)
+  }
   try {
     // No passphrase when cert is generated with -nodes
-    server = require('https').createServer({
-      key: fs.readFileSync(keyFile),
-      cert: fs.readFileSync(certFile),
-    }, app);
+    server = https.createServer(options, app);
   } catch {
     // Prompts for passphrase
-    server = require('https').createServer({
-      key: fs.readFileSync(keyFile),
-      cert: fs.readFileSync(certFile),
-      passphrase: readLineSync.question("Enter PEM passphrase: ")
-    }, app);
+    options.passphrase = readLineSync.question("Enter PEM passphrase: ")
+    server = https.createServer(options, app);
   }
   return server
 }
