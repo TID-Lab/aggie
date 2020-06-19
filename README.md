@@ -119,7 +119,7 @@ The following need to be installed.
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. (optional) Run `npm install -g migrate`.
     - This installs node-migrate globally.
-1. To start server, run `npm start`.
+1. To start server in production, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
