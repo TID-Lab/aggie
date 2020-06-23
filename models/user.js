@@ -2,13 +2,17 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-var email = require('email');
+var validator = require('validator');
 var _ = require('underscore');
 var logger = require('../lib/logger');
 
 var SALT_WORK_FACTOR = 10;
+
+var isEmail = function(email) {
+  return (typeof email === 'string' && validator.isEmail(email))
+}
 
 var userSchema = new mongoose.Schema({
   provider: { type: String, default: 'local' },
@@ -24,7 +28,7 @@ userSchema.pre('save', function(next) {
 
   if (!user.email) return next(new Error.Validation('email_required'));
   if (!user.username) return next(new Error.Validation('username_required'));
-  if (!email.isValidAddress(user.email)) return next(new Error.Validation('email_invalid'));
+  if (!isEmail(user.email)) return next(new Error.Validation('email_invalid'));
   if (user.password && user.password.length < User.PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
 
   // Check for uniqueness in certain fields
@@ -50,7 +54,7 @@ userSchema.methods.hashPassword = function(callback) {
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) return callback(err);
 
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
+    bcrypt.hash(user.password, salt, function(err, hash) {
       if (err) return callback(err);
       user.password = hash;
       callback();

@@ -319,7 +319,7 @@ To create a trend visualization:
 
 3.  Enter the *keyword(s)* you want to create the trend for. For example *NDC, NPP*.
 
-    ![Trend Keywordss](trends_keywords.png)
+    ![Trend Keywords](trends_keywords.png)
 
 4.  Choose a *Social Media Source* for the trend e.g. Twitter, RSS or Facebook.
 

@@ -1,0 +1,10 @@
+# mocha.opts
+
+# FIXME: The --exit option force-terminates Mocha
+# tests as soon as the last test has completed. This
+# is a temporary fix: without the --exit option, the
+# testing runtime hangs forever because a resource
+# or process is still open or running that we should
+# be terminating ourselves.
+
+  --exit

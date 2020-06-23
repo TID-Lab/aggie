@@ -4,7 +4,9 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify')
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var ngAnnotate = require('gulp-ng-annotate');
@@ -46,10 +48,13 @@ gulp.task('lint', function() {
 });
 
 pipes.buildAngular = function() {
-  return gulp.src('public/angular/js/app.js')
+  var bundle = browserify({
+    entries: 'public/angular/js/app.js'
+  }).bundle();
+  return bundle
+    .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
-    .pipe(sourcemaps.init())
-    .pipe(browserify())
+    .pipe(streamify(sourcemaps.init()))
     .pipe(ngAnnotate())
     .pipe(buffer())
     .pipe(uglify())
@@ -59,9 +64,12 @@ pipes.buildAngular = function() {
 };
 
 pipes.debugAngular = function() {
-  return gulp.src('public/angular/js/app.js')
+  var bundle = browserify({
+    entries: 'public/angular/js/app.js'
+  }).bundle();
+  return bundle
+    .pipe(source('public/angular/js/app.js'))
     .pipe(plumber())
-    .pipe(browserify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('public/angular/js'));
 };
@@ -78,7 +86,7 @@ gulp.task('angular', function() {
 // Reload browser
 gulp.task('angular.watch', function() {
   livereload.listen();
-  gulp.watch(paths.angular, ['watchAngular']);
+  gulp.watch(paths.angular, gulp.parallel('watchAngular'));
 });
 
 gulp.task('backend', function() {
@@ -89,13 +97,12 @@ gulp.task('backend', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.js, ['lint', 'backend']);
-  gulp.watch(paths.backend, ['lint', 'backend']);
+  gulp.watch([...paths.js, ...paths.backend], gulp.parallel('lint', 'backend'));
 });
 
-gulp.task('test', ['backend']);
+gulp.task('test', gulp.parallel('backend'));
 
-gulp.task('default', ['lint', 'test', 'watch']);
+gulp.task('default', gulp.parallel('lint', 'test', 'watch'));
 
 /*
  * Takes a directory of translation dictionaries named locale-foo.json and
@@ -111,7 +118,7 @@ pipes.debugTranslations = function(dirname) {
   ])
     .pipe(jsoncombine(debugFilename, function(data) {
       var result = makeDebugDict(_.values(data));
-      return new Buffer(JSON.stringify(result, null, 2));
+      return new Buffer.from(JSON.stringify(result, null, 2));
     }))
     .pipe(gulp.dest(dirname));
 };
@@ -122,4 +129,5 @@ gulp.task('debugTranslations', function() {
   return merge(stream1, stream2);
 });
 
-gulp.task('build', ['debugTranslations', 'angular']);
+gulp.task('build', gulp.parallel('debugTranslations', 'angular'));
+//TO DO: Code updated assuming the purpose is to run multiple tasks in parallel. Need to Verify this.

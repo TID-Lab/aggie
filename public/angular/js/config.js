@@ -26,5 +26,5 @@ angular.module('Aggie')
 .value('emailTransportOptions', {
   SES: ['accessKeyId', 'secretAccessKey', 'region'],
   SMTP: ['host', 'port', 'secure', 'user', 'pass'],
-  SendGrid: ['api_key'] });
+  SendGrid: ['apiKey'] });
 
