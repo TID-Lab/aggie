@@ -1,32 +1,3 @@
-Table of Contents
-=================
-
-   * [Aggie](#aggie)
-      * [Deployment Installation via Docker](#deployment-installation-via-docker)
-      * [Source Installation](#source-installation)
-         * [System requirements](#system-requirements)
-         * [Installation](#installation)
-      * [Maintenance](#maintenance)
-      * [Project Configuration](#project-configuration)
-         * [Tests](#tests)
-         * [Social Media and Feeds](#social-media-and-feeds)
-            * [Twitter](#twitter)
-            * [Facebook](#facebook)
-            * [WhatsApp](#whatsapp)
-            * [ELMO](#elmo)
-         * [Google Places](#google-places)
-         * [Emails](#emails)
-         * [Fetching](#fetching)
-         * [Logging](#logging)
-      * [Using the Application](#using-the-application)
-         * [Sources](#sources)
-            * [Adding Sources](#adding-sources)
-            * [Warnings](#warnings)
-      * [Deployment](#deployment)
-      * [Architecture](#architecture)
-         * [Backend](#backend)
-         * [Frontend](#frontend)
-
 # Aggie
 
 Aggie is a web application for using social media and other resources to track incidents around real-time events such as elections or natural disasters.
@@ -55,6 +26,17 @@ Aggie is built using Angular.js and Express.js, both state-of-the-art developmen
 Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 [Sassafras Tech Collective](http://sassafras.coop) offers managed instances of Aggie, along with development and support services.
+
+## Table of Contents
+
+* [Deployment Installation via Docker](#deployment-installation-via-docker)
+* [Source Installation](#source-installation)
+* [Maintenance](#maintenance)
+* [Project Configuration](#project-configuration)
+* [Using the Application](#using-the-application)
+* [Deployment](#deployment)
+* [Architecture](#architecture)
+* [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
 
 ## Deployment Installation via Docker
 
