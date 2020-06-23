@@ -1,7 +1,7 @@
 angular.module('Aggie')
 
 .factory('Socket', function($rootScope) {
-  var socket = io.connect('/');
+  var socket = io('/');
 
   return {
     on: function(eventName, callback) {
@@ -36,7 +36,7 @@ angular.module('Aggie')
     removeAllListeners: socket.removeAllListeners.bind(socket),
 
     recreateConnection: function() {
-      socket = io.connect('/', { 'force new connection': true });
+      socket = io('/', { forceNew: true });
     }
   };
 });

@@ -30,7 +30,7 @@ Batch.prototype.releaseOld = function(callback) {
   var conditions = { checkedOutAt: { $lt: timeAgo(BATCH_TIMEOUT) } };
   var update = { checkedOutBy: null, checkedOutAt: null };
 
-  Report.update(conditions, update, { multi: true }, callback);
+  Report.updateMany(conditions, update, callback);
 };
 
 // cancel batch for given user
@@ -38,7 +38,7 @@ Batch.prototype.cancel = function(userId, callback) {
   var conditions = { checkedOutBy: userId };
   var update = { checkedOutBy: null, checkedOutAt: null };
 
-  Report.update(conditions, update, { multi: true }, callback);
+  Report.updateMany(conditions, update, callback);
 },
 
 // lock a new batch for given user

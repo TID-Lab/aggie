@@ -80,22 +80,20 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 The following need to be installed.
 
-1. **node.js** (version 0.10.*, such as 0.10.32)
+1. **node.js** (v.12.16 LTS)
     - There are two ways to install/update node.js.
        1. Install a specific version of node.js.
           - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
-       2. Use [Node Version Manager](https://github.com/creationix/nvm).
+       2. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
           - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
           - After installing nvm:
               1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-              2. use this command: `nvm install` to install the version specified in `.nvmrc`.
-2. **Mongo DB** (version 2.6.*, such as 2.6.9)
-    1. Follow the [installation structions](https://docs.mongodb.org/v2.6/) for your operating system.
-        - If necessary: `sudo mkdir -p /data/db/ && sudo chown $USER /data/db/`
+              2. use this command: `nvm use` to install the version specified in `.nvmrc`.
+2. **Mongo DB** (requires >= 5.7.0)
+    1. Follow the [installation structions](https://docs.mongodb.org/v4.2/) for your operating system.
     2. Stop and restart Mongo DB.
-        - On Linux run `sudo service mongod stop`. Then run `sudo mongod`.
-        - On Mac run `mongod`.
-        - Make sure mongodb is running in the terminal and listening on an appropriate port. Your terminal with the mongo db process running should display something similar to the following: `[initandlisten] waiting for connections on port 27017`.
+        1. On Linux run `sudo systemctl stop mongod`. Then run `sudo systemctl start mongod`.
+        2. Make sure mongodb is running in the terminal and listening on an appropriate port. Run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     3. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 3. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
@@ -112,17 +110,16 @@ The following need to be installed.
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
-    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without going through a password prompt
+    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
     - On MacOS Mojave v10.14, this command fixed most errors: `env LDFLAGS="-mmacosx-version-min=10.9" CXXFLAGS="-mmacosx-version-min=10.9" npm install`
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor@2`.
-    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing.
-    - We are using an old version of protractor so that it works with Node 0.10. If your protractor test fails abruptly, download an updated chromedriver and replace the one found in `aggie/node_modules/protractor/selenium` with the newer one.
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor`.
+    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing. You will most likely need Google Chrome installed on your computer for the protractor tests to run.
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
 1. (optional) Run `npm install -g migrate`.
     - This installs node-migrate globally.
-1. To start server, run `npm start`.
+1. To start server in production, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
@@ -131,6 +128,7 @@ The following need to be installed.
 ## Maintenance
 1. To run migrations run `migrate`.
 2. To run unit tests, run `npm test`.
+    - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
     - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
     - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
 3. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
@@ -169,7 +167,7 @@ Set `config.adminParty=true` if you want to run tests.
 ### Social Media and Feeds
 
 #### Twitter
-  1. Follow [these instructions](https://dev.twitter.com/oauth/overview/application-owner-access-tokens) to generate tokens to use the Twitter API.
+  1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
   1. Go to Settings > Settings and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### Facebook
@@ -205,7 +203,7 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 ### Emails
   1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
   1. `email.from` is the address from which application emails will come
-  1. `email.transport` is the set of parameters that will be passed to [NodeMailer 2.1.0](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
+  1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
   1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 
 ### Fetching
@@ -215,9 +213,9 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 ### Logging
   Set various logging options in `logger` section:
 
-  - `console` section is for console logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
-  - `file` section is for file logging. For various options, see [winston](see https://github.com/flatiron/winston#working-with-transports)
-  - `SES` section is for email notifications. For various options, see [winston-amazon-ses](see https://www.npmjs.com/package/winston-amazon-ses).
+  - `console` section is for console logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+  - `file` section is for file logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+  - `SES` section is for email notifications.
       - Set appropriate AWS key and secret values.
       - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
   - **DO NOT** set `level` to *debug*. Recommended value is *error*.
