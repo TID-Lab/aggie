@@ -72,6 +72,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
     - Some versions of docker may also forward to `https://localhost`.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - To run on startup, you can use `@reboot cd aggie/docker/ && sudo docker-compose up` via `crontab -e`
+1. Continue to read below for configuration and maintenance.
 
 ## Source Installation
 
@@ -140,23 +141,6 @@ The following need to be installed.
     1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
     1. start Aggie on the test database with `npm run testrun`
     1. run protractor with `npm run protractor-with-apis`
-
-### Building and Publishing Aggie's documentation
-
-The documentation is in the `docs` directory. These are automatically built and
-pushed on each commit for the `master` and `develop` branches in Github:
-
-* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
-* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
-
-To build the docs locally, do the following:
-
-1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
-1. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
-1. Install `recommonmark`: `pip install recommonmark`
-1. Install Read The Docs theme: `pip install sphinx_rtd_theme`
-1. From the `docs` directory in Aggie, run `make html`
-1. The compiled documentation has its root at `docs/_build/html/index.html`
 
 ## Project Configuration
 
@@ -285,3 +269,20 @@ The model layer (in `/models`) is shared among all three modules.
 ### Frontend
 
 The frontend is a single-page Angular.js app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It is contained in `/public/angular`.
+
+## Building and Publishing Aggie's documentation
+
+The documentation is in the `docs` directory. These are automatically built and
+pushed on each commit for the `master` and `develop` branches in Github:
+
+* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
+* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
+
+To build the docs locally, do the following:
+
+1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
+1. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
+1. Install `recommonmark`: `pip install recommonmark`
+1. Install Read The Docs theme: `pip install sphinx_rtd_theme`
+1. From the `docs` directory in Aggie, run `make html`
+1. The compiled documentation has its root at `docs/_build/html/index.html`
