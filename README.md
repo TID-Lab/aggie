@@ -1,4 +1,6 @@
-# Aggie
+![Aggie](public/angular/images/logo-green.png)
+
+## Introduction
 
 Aggie is a web application for using social media and other resources to track incidents around real-time events such as elections or natural disasters.
 
