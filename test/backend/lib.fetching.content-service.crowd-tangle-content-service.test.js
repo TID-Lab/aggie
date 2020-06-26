@@ -89,7 +89,7 @@ describe('CrowdTangle content service', function() {
     service.fetch({ maxCount: 50 }, function() {});
   });
 
-  describe('errors', function() {
+  describe('Errors', function() {
 
     // test for bad data
     it('should emit json parse error', function(done) {
