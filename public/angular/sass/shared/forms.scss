@@ -16,6 +16,10 @@ label {
   box-shadow: none;
   background-color: #eaeaea;
   padding: 4px 8px;
+
+  &::placeholder {
+    color: #696969;
+  }
 }
 
 .input-group {

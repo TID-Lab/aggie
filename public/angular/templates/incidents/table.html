@@ -16,7 +16,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
-      <td ng-hide="modal || !currentUser.can('edit data')"><input ng-model="i.selected" type="checkbox" ng-model="i._id" /></td>
+      <td ng-hide="modal || !currentUser.can('edit data')">
+        <input ng-model="i.selected" type="checkbox" ng-model="i._id" aria-label="{{ 'Select Incident' | translate }}" />
+      </td>
       <td class="compact content">
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>

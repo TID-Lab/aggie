@@ -6,7 +6,7 @@
           <span class="input-group-addon">
             <i class="fa fa-search"></i>
           </span>
-          <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter title' | translate}}">
+          <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter title' | translate}}" aria-label="{{ 'Enter title' | translate }}" >
           <a href class="input-group-addon" ng-click="searchParams.title = null" ng-show="searchParams.title">×</a>
         </div>
       </div>
@@ -15,7 +15,7 @@
           <span class="input-group-addon">
             <i class="fa fa-search"></i>
           </span>
-          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Tags' | translate}}">
+          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Tags' | translate}}" aria-label="{{ 'Tags' | translate }}" >
           <a href class="input-group-addon" ng-click="searchParams.tags = null" ng-show="searchParams.tags">×</a>
         </div>
       </div>
@@ -24,7 +24,7 @@
           <span class="input-group-addon">
             <i class="fa fa-search"></i>
           </span>
-          <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter location' | translate }}">
+          <input type="text" ng-autocomplete ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter location' | translate }}" aria-label="{{ 'Enter location' | translate }}" >
           <a href class="input-group-addon" ng-click="searchParams.locationName = null" ng-show="searchParams.locationName">×</a>
           <div class="input-group-btn">
             <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
@@ -34,27 +34,27 @@
     </div>
     <div class="filter-row">
       <div ng-show="currentUser.can('view other users')" class="td filter">
-        <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control" aria-label="{{ 'Assigned To' | translate }}" >
           <option value="" translate>Assigned To</option>
         </select>
       </div>
       <div class="td filter">
-        <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control" aria-label="{{ 'Status' | translate }}" >
           <option value="" translate>Status</option>
         </select>
       </div>
       <div class="td filter">
-        <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control" aria-label="{{ 'Veracity' | translate }}" >
           <option value="" translate>Veracity</option>
         </select>
       </div>
       <div class="td filter">
-        <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control" aria-label="{{ 'Escalated?' | translate }}" >
           <option value="" translate>Escalated?</option>
         </select>
       </div>
       <div class="td filter">
-        <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
+        <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control" aria-label="{{ 'Public?' | translate }}" >
           <option value="" translate>Public?</option>
         </select>
       </div>
@@ -67,7 +67,7 @@
 
 <div ng-show="currentUser.can('edit data')" class="button-row margin-bottom-lg">
   <div class="pull-left checkbox-btn bg-gray">
-    <input ng-select-all items="incidents" type="checkbox" />
+    <input ng-select-all items="incidents" type="checkbox" aria-label="{{ 'Select all Incidents' | translate }}" />
   </div>
   <div class="pull-left margin-right padding">
     <button class="btn btn-default" aggie-confirm="{{'Are you sure you want to delete selected incidents?' | translate}}" on-confirm="removeSelected()">{{'Delete' | translate}}</a>
