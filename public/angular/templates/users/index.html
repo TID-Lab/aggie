@@ -28,8 +28,8 @@
       <td class="compact content">{{ u.email }}</td>
       <td class="compact content">{{ u.role | translate }}</td>
       <td ng-controller="UserFormModalController" class="actions compact">
-        <a href ng-click="edit(u)"><i class="fa fa-pencil text-blue"></i></a>
-        <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
+        <a href ng-click="edit(u)" aria-label="{{ 'Edit' | translate }}"><i class="fa fa-pencil text-blue" aria-hidden="true"></i></a>
+        <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)" aria-label="{{ 'Delete' | translate }}"><i class="fa fa-trash text-blue" aria-hidden="true"></i></a>
       </td>
     </tr>
   </tbody>
