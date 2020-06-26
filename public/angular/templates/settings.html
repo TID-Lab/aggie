@@ -43,10 +43,10 @@
 <table class="table table-settings" ng-controller="EmailSettingsController">
   <tr>
     <td>
-      <label class="settings-label" translate>App Email Address</label>
+      <label for="app_email" class="settings-label" translate>App Email Address</label>
     </td>
     <td class="value text-field">
-      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
+      <input id="app_email" type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
              ng-change="formChanged=true"/>
     </td>
     <td class="action">
