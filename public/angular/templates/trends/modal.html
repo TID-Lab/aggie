@@ -17,7 +17,7 @@
           <div class="form-group">
             <label for="type" class="col-lg-3 control-label" translate>Media</label>
             <div class="col-lg-6">
-              <select name="type" class="form-control" ng-model="trend.media" ng-options="media as media | translate for media in mediaOptions">
+              <select id="type" name="type" class="form-control" ng-model="trend.media" ng-options="media as media | translate for media in mediaOptions">
                 <option value="" translate>Choose media</option>
               </select>
             </div>
@@ -25,7 +25,7 @@
           <div class="form-group">
             <label for="source" class="col-lg-3 control-label" translate>Source</label>
             <div class="col-lg-6">
-              <select ng-model="trend.sourceId" ng-options="value._id as value.nickname for value in sources" class="form-control">
+              <select id="source" ng-model="trend.sourceId" ng-options="value._id as value.nickname for value in sources" class="form-control">
                 <option value="" translate>Choose source</option>
               </select>
             </div>
@@ -33,7 +33,7 @@
           <div class="form-group">
             <label for="incident" class="col-lg-3 control-label" translate>Incident</label>
             <div class="col-lg-6">
-              <select ng-model="trend.incidentId" ng-options="value._id as value.title for value in incidents" class="form-control">
+              <select id="incident" ng-model="trend.incidentId" ng-options="value._id as value.title for value in incidents" class="form-control">
                 <option value="" translate>Choose incident</option>
               </select>
             </div>

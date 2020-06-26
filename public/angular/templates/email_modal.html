@@ -13,7 +13,7 @@
             <div class="form-group">
               <label for="transport" class="col-lg-3 control-label" translate>Transport</label>
               <div class="col-lg-8">
-                <select name="method" class="form-control" ng-model="transport.method"
+                <select id="transport" name="method" class="form-control" ng-model="transport.method"
                           ng-options="name as name for (name, settings) in emailTransportOptions">
                   <option value="" translate>Choose transport method</option>
                 </select>
