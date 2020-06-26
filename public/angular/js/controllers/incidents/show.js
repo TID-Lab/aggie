@@ -91,7 +91,9 @@ angular.module('Aggie')
       // Pick one of the sources that has a media type. For now, it happens that
       // if a report has multiple sources, they all have the same type, or are
       // deleted
+
       if (report.metadata.platform === "Facebook") {
+          // set Facebook as source for CrowdTangle reports
           return 'facebook-source';
       } else {
         for (var i = 0; i < report._sources.length; i++) {
