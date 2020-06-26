@@ -12,7 +12,7 @@
       <form name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group">
-            <label for="Title" class="col-lg-2 control-label" translate>Title</label>
+            <label for="title" class="col-lg-2 control-label" translate>Title</label>
             <div class="col-lg-9">
               <div class="input-group">
                 <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" maxlength="32" required ng-focus>
@@ -28,14 +28,16 @@
             <label for="veracity" class="col-lg-2 control-label" translate>Veracity</label>
             <div class="col-lg-4">
               <select ng-model="incident.veracity"
+                      id="veracity"
                       class="form-control"
                       ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
               </select>
             </div>
 
-            <label class="col-lg-2 control-label" translate>Status</label>
+            <label for="status" class="col-lg-2 control-label" translate>Status</label>
             <div class="col-lg-3">
               <select ng-model="incident.closed"
+                      id="status"
                       class="form-control"
                       ng-options="v.value as v.label | translate for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
               </select>
@@ -89,7 +91,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="public" class="col-lg-2 control-label" translate>Public Description</label>
+            <label for="publicDescription" class="col-lg-2 control-label" translate>Public Description</label>
             <div class="col-lg-9 description-text">
               <textarea id="publicDescription" name="publicDescription" class="form-control" ng-model="incident.publicDescription"></textarea>
             </div>
