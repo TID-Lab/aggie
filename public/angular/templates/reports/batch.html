@@ -26,7 +26,7 @@
 
 <div class="button-row margin-bottom-lg">
   <div class="pull-left checkbox-btn bg-gray">
-    <input ng-select-all items="reports" type="checkbox" />
+    <input ng-select-all items="reports" type="checkbox" aria-label="{{ 'Select all Reports' | translate }}" />
   </div>
   <div class="pull-left margin-left padding-top-bottom">
     <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>

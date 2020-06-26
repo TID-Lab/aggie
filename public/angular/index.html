@@ -15,8 +15,10 @@
   </head>
   <body ng-controller="ApplicationController">
     <div id="wrapper">
-      <ng-include src="'/templates/navbar.html'"></ng-include>
-      <div class="container container-main">
+      <nav>
+        <ng-include src="'/templates/navbar.html'"></ng-include>
+      </nav>
+      <main class="container container-main">
         <ng-include src="'/templates/alerts.html'"></ng-include>
         <div ui-view></div>
         <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -28,7 +30,7 @@
         <script src="/js/bootstrap-datetimepicker.js"></script>
         <script src="/js/Autolinker.min.js"></script>
         <script src="/js/canvasjs.min.js"></script>
-      </div>
+      </main>
       <footer>
         <div class="version">
           <%= version %>

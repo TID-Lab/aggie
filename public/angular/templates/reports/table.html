@@ -14,7 +14,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-      <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
+      <td ng-show="currentUser.can('edit data')">
+        <input ng-model="r.selected" type="checkbox" ng-model="r._id" aria-label="{{ 'Select Report' | translate }}" />
+      </td>
       <td class="compact time">
         <div class="interval">
           <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative" translate>ago</span>

@@ -21,7 +21,9 @@
 }
 
 // This is a secondary weight button. Also defined in bootstrap.
-.btn-info {}
+.btn-info, .btn-info.disabled {
+  background-color: #20809D;
+}
 
 // Overriding the tertiary button to gray color.
 .btn-default {
