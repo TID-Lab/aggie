@@ -4,6 +4,7 @@
   height: 25px;
   padding: 4px 8px;
   font-size: 12px;
+  font-weight: 400;
 
   &.highlight {
     color: #000;
@@ -15,7 +16,9 @@
 }
 
 // This is the primary call to action button. Defined in the bootstrap theme.
-.btn-primary {}
+.btn-primary {
+  background-color: #BE5A16;
+}
 
 // This is a secondary weight button. Also defined in bootstrap.
 .btn-info {}
