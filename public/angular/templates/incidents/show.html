@@ -1,9 +1,9 @@
-<div class="bs-component">
-  <ul class="breadcrumb">
-    <li><a ui-sref="incidents" translate>Incidents</a></li>
-    <li class="active">{{ incident.title }}</li>
-  </ul>
-</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a ui-sref="incidents" translate>Incidents</a></li>
+    <li class="breadcrumb-item active">{{ incident.title }}</li>
+  </ol>
+</nav>
 
 <div ng-show="currentUser.can('edit data')" class="button-row">
   <button ng-controller="IncidentFormModalController" class="btn btn-info margin-right" ng-click="edit(incident)" translate>Edit</button>

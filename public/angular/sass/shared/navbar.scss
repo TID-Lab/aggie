@@ -1,12 +1,8 @@
-.navbar-wrapper {
-  margin-bottom: 21px;
-}
 
 /* Adding all this context so we override the default bootstrap -15 left margin */
-.navbar .container .navbar-brand {
-  margin-top: 7px;
+.navbar-brand {
+  margin-top: 5px;
   margin-right: 20px;
-  margin-left: 0;
   background-image: url(../images/logo-v1.png);
   background-repeat: no-repeat;
   width: 104px;
@@ -19,7 +15,6 @@
 
 .navbar-default {
   background-color: $navbar-green;
-  margin-bottom: 0;
   .navbar-nav > li {
     > a:hover,
     > a:focus,
@@ -29,22 +24,6 @@
       background-color: darken($navbar-green, 10%);
     }
   }
-}
-
-.navbar-nav > li > ul {
-  > li {
-    line-height: 40px;
-    > a {
-      font-size: 14px;
-    }
-  }
-  padding: 0;
-  border: hidden;
-  background-color: darken($navbar-green, 10%);
-}
-
-.navbar-nav.navbar-right:last-child {
-  margin-right: 0;
 }
 
 .navbar-stats {
@@ -83,7 +62,7 @@
   }
 }
 
-.nav li.user {
+li.user {
   font-weight: bold;
 }
 

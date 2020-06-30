@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aggie</title>
-    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-4.5.0.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href="/vendor/select2/select2.css" rel="stylesheet">
     <link href="/vendor/select2/select2-bootstrap.css" rel="stylesheet">
@@ -16,7 +16,7 @@
   <body ng-controller="ApplicationController">
     <div id="wrapper">
       <ng-include src="'/templates/navbar.html'"></ng-include>
-      <div class="container container-main">
+      <div class="main">
         <ng-include src="'/templates/alerts.html'"></ng-include>
         <div ui-view></div>
         <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -24,7 +24,7 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/app.min.js"></script>
         <script src="/js/moment.js"></script>
-        <script src="/js/bootstrap.js"></script>
+        <script src="/js/bootstrap-4.5.0.js"></script>
         <script src="/js/bootstrap-datetimepicker.js"></script>
         <script src="/js/Autolinker.min.js"></script>
         <script src="/js/canvasjs.min.js"></script>

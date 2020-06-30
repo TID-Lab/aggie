@@ -1,50 +1,51 @@
 <div ng-controller="IncidentSelectModalController">
-  <div class="modal-header">
-    <button class="close" ng-click="close()" aria-hidden="true">×</button>
-    <h4 class="modal-title">
-      <div class="icon-left" translate>Add report to incident</div>
-    </h4>
-  </div>
-  <div class="modal-body margin-bottom-lg">
-    <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any incidents. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" ng-click="close()" aria-hidden="true">×</button>
+          <h4 class="modal-title">
+            <div class="icon-left" translate>Add report to incident</div>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any incidents. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
+          <div ng-show="incidents">
+            <p class='info'>{{'Click an incident below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
+            <div class="pull-right padding-top-bottom pagination">
+              <ul class="pager">
+                <li class="pager-label">
+                  {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total}}
+                </li>
+                <li>
+                  <button ng-class="{disabled: isFirstPage() }" ng-click="getPage(pagination.page - 1)" class="btn btn-info">&lsaquo;</button>
+                </li>
+                <li>
+                  <button ng-class="{disabled: isLastPage() }" ng-click="getPage(pagination.page + 1)" class="btn btn-info">&rsaquo;</button>
+                </li>
+              </ul>
+            </div>
+            <div ng-include="'/templates/incidents/table.html'"></div>
 
-    <div ng-show="incidents">
-
-      <p class='info'>{{'Click an incident below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
-
-      <div class="pull-right padding-top-bottom pagination">
-        <ul class="pager">
-          <li class="pager-label">
-            {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total}}
-          </li>
-          <li>
-            <button ng-class="{disabled: isFirstPage() }" ng-click="getPage(pagination.page - 1)" class="btn btn-info">&lsaquo;</button>
-          </li>
-          <li>
-            <button ng-class="{disabled: isLastPage() }" ng-click="getPage(pagination.page + 1)" class="btn btn-info">&rsaquo;</button>
-          </li>
-        </ul>
+            <div class="pull-right pagination">
+              <ul class="pager">
+                <li class="pager-label">
+                  {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}
+                </li>
+                <li>
+                  <button ng-class="{disabled: isFirstPage() }" ng-click="getPage(pagination.page - 1)" class="btn btn-info">&lsaquo;</button>
+                </li>
+                <li>
+                  <button ng-class="{disabled: isLastPage() }" ng-click="getPage(pagination.page + 1)" class="btn btn-info">&rsaquo;</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" ng-click="close()" translate>Close</button>
+        </div>
       </div>
-      <div ng-include="'/templates/incidents/table.html'"></div>
-
-      <div class="pull-right pagination">
-        <ul class="pager">
-          <li class="pager-label">
-            {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}
-          </li>
-          <li>
-            <button ng-class="{disabled: isFirstPage() }" ng-click="getPage(pagination.page - 1)" class="btn btn-info">&lsaquo;</button>
-          </li>
-          <li>
-            <button ng-class="{disabled: isLastPage() }" ng-click="getPage(pagination.page + 1)" class="btn btn-info">&rsaquo;</button>
-          </li>
-        </ul>
-      </div>
-
     </div>
-
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()" translate>Close</button>
   </div>
 </div>

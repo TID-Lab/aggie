@@ -279,27 +279,7 @@ table, .table {
   }
 }
 
-.pagination {
-  margin: 0;
 
-  .btn {
-    width: 25px;
-    font-size: 18px;
-  }
-
-  li {
-    display: inline-block;
-
-    &:not(.pager-label) {
-      margin-left: 5px;
-    }
-
-    &.pager-label {
-      margin-right: 5px;
-      font-size: 13px;
-    }
-  }
-}
 
 .actions {
   width: 50px;

@@ -43,7 +43,7 @@
         {{ tagsToString(r.tags) }}
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
-        <div>
+        <div data-toggle="modal" data-target="#exampleModal">
           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
             <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
             <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
