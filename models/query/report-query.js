@@ -68,7 +68,9 @@ ReportQuery.prototype.toMongooseFilter = function() {
   // Determine author filter
   if (this.author) {
     filter.author = {};
-    filter.author.$in = toRegexp.alli(this.author.trim().split(/\s*,\s*/).sort());
+    // Using regex for the author filter so it can catch substrings ML2020
+    filter.author.$options = 'i';
+    filter.author.$regex = this.author//this.author.trim().split(/\s*,\s*/).sort());
   }
   if (this.tags) {
     filter.tags = { $all: toRegexp.allCaseInsensitive(this.tags) };

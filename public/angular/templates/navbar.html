@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark navbar-default" ng-controller="NavbarController">
+<nav class="navbar navbar-expand-lg navbar-dark bg-default" ng-controller="NavbarController">
   <!--This is the Left Side of the NavBar -->
   <a class="aggie-brand" ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
     <div class="navbar-brand"></div>
@@ -8,7 +8,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarLeft">
-    <ul class="navbar-nav mr-auto" ng-show="currentUser && !$state.includes('reset_admin_password') ">
+    <ul class="navbar-nav nav mr-auto" ng-show="currentUser && !$state.includes('reset_admin_password') ">
       <li class="nav-item" ng-class="{ active: $state.includes('reports') || $state.includes('report') }">
         <a class="nav-link" ui-sref="reports" translate>Reports</a>
       </li>

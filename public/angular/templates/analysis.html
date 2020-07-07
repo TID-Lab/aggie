@@ -1,7 +1,21 @@
-<ul class="nav nav-tabs">
-  <li ui-sref-active="active"><a href ui-sref=".trend-lines" translate>Trends (Lines)</a></li>
-  <li ui-sref-active="active"><a href ui-sref=".trend-bars" translate>Trends (Bars)</a></li>
-  <li ui-sref-active="active"><a href ui-sref=".incidentsMap" translate>Incident Map</a></li>
-</ul>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a ui-sref-active="active" class="nav-link" href ui-sref=".trend-lines" translate>Trends (Lines)</a>
+        </li>
+        <li>
+          <a ui-sref-active="active" class="nav-link" href ui-sref=".trend-bars" translate>Trends (Bars)</a>
+        </li>
+        <li>
+          <a ui-sref-active="active" class="nav-link" href ui-sref=".incidentsMap" translate>Incident Map</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div ui-view></div>
+    </div>
+  </div>
+</div>
 
-<div ui-view></div>

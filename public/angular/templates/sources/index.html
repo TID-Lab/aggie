@@ -1,44 +1,46 @@
-<div class="button-row">
-  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
-          class="btn btn-info" ng-click="create()" translate>Create Source</button>
+<div class="container card">
+  <div class="button-row">
+    <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
+            class="btn btn-info" ng-click="create()" translate>Create Source</button>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
+
+  <table aggie-table ng-show="sources.length > 0">
+    <thead>
+      <tr>
+        <th class="compact" translate>Media</th>
+        <th class="compact" translate>Name</th>
+        <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
+        <th class="expand" translate>Target</th>
+        <th class="expand" translate>Tags</th>
+        <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
+        <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
+        <td class="compact source" ng-class="sourceClass(s)">
+          <div class="icon-left"></div>
+        </td>
+        <td class="compact source content">
+          <a href="sources/{{s._id}}" class="table-primary">
+            {{ s.nickname }}
+          </a>
+        </td>
+        <td class="compact content" ng-show="currentUser.can('view other users')">
+          <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
+        </td>
+        <td class="expand content">{{ target(s) }}</td>
+        <td class="expand tag">{{ tagsToString(s.tags) }}</td>
+        <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
+            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+        <td class="compact status" ng-show="currentUser.can('edit data')">
+          <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
-<div class="clearfix"></div>
-
-<p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
-
-<table aggie-table ng-show="sources.length > 0">
-  <thead>
-    <tr>
-      <th class="compact" translate>Media</th>
-      <th class="compact" translate>Name</th>
-      <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
-      <th class="expand" translate>Target</th>
-      <th class="expand" translate>Tags</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
-      <td class="compact source" ng-class="sourceClass(s)">
-        <div class="icon-left"></div>
-      </td>
-      <td class="compact source content">
-        <a href="sources/{{s._id}}" class="table-primary">
-          {{ s.nickname }}
-        </a>
-      </td>
-      <td class="compact content" ng-show="currentUser.can('view other users')">
-        <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
-      </td>
-      <td class="expand content">{{ target(s) }}</td>
-      <td class="expand tag">{{ tagsToString(s.tags) }}</td>
-      <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
-          ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status" ng-show="currentUser.can('edit data')">
-        <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
-      </td>
-    </tr>
-  </tbody>
-</table>

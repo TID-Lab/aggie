@@ -1,60 +1,68 @@
-<div class="batch-mode">
-  <div class="pull-left">
-    <p class="title" translate>Batch Mode</p>
-    <p translate>batch.intro</p>
-    <div ng-if="searchParams">
-      <p translate>batch.reportsAreFiltered</p>
+<div class="container container-main">
+  <div class="batch-mode">
+    <div class="float-left">
+      <p class="title" translate>Batch Mode</p>
+      <p translate>batch.intro</p>
+      <div ng-if="searchParams">
+        <p translate>batch.reportsAreFiltered</p>
+      </div>
     </div>
+
+    <div class="float-right">
+      <div class="batch-actions">
+        <div class="float-left ml-3">
+          <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
+        </div>
+        <div class="float-left ml-3">
+          <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</button>
+        </div>
+        <div class="float-left ml-3">
+          <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
   </div>
 
-  <div class="pull-right">
+  <div class="button-row mb-4">
+    <div class="float-left checkbox-btn bg-gray">
+      <input ng-select-all items="reports" type="checkbox" />
+    </div>
+    <div class="float-left ml-3 pt-2 pb-2">
+      <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>
+      <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</a>
+    </div>
+    <div class="float-left ml-3 pt-2 pb-2">
+      <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</a>
+      <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</a>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
+
+  <div ng-include="'/templates/reports/table.html'"></div>
+
+  <div class="float-right">
     <div class="batch-actions">
-      <div class="pull-left margin-left">
-        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
+      <div class="float-left ml-2">
+        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>
+          Mark All Read &amp; Grab Another
+        </button>
       </div>
-      <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
+      <div class="float-left ml-2">
+        <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>
+          Mark All Read &amp; Done
+        </button>
       </div>
-      <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
+      <div class="float-left ml-2">
+        <button class="btn btn-default" ng-click="cancelBatch()" translate>
+          Cancel
+        </button>
       </div>
-      <div class="clearfix"></div>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-</div>
-
-<div class="button-row margin-bottom-lg">
-  <div class="pull-left checkbox-btn bg-gray">
-    <input ng-select-all items="reports" type="checkbox" />
-  </div>
-  <div class="pull-left margin-left padding-top-bottom">
-    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>
-    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</a>
-  </div>
-  <div class="pull-left margin-right padding">
-    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</a>
-    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</a>
-  </div>
-  <div class="clearfix"></div>
-</div>
-
-<div class="clearfix"></div>
-
-<p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
-
-<div ng-include="'/templates/reports/table.html'"></div>
-
-<div class="pull-right">
-  <div class="batch-actions">
-    <div class="pull-left margin-left">
-      <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
-    </div>
-    <div class="pull-left margin-left">
-      <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
-    </div>
-    <div class="pull-left margin-left">
-      <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
     </div>
   </div>
 </div>
