@@ -78,15 +78,19 @@ angular.module('Aggie')
     };
 
     var handleError = function(response) {
-      $translate(response.data).then(function(error) {
-        $scope.message = error;
-      }).catch(function() {
-        if ($scope.user._id) {
-          $scope.message = 'user.update.error';
-        } else {
-          $scope.message = 'user.create.error';
-        }
-      });
+      if (response.status == 502) {
+        $scope.message = 'user.create.emailNotConfigured';
+      } else {
+        $translate(response.data).then(function(error) {
+          $scope.message = error;
+        }).catch(function() {
+          if ($scope.user._id) {
+            $scope.message = 'user.update.error';
+          } else {
+            $scope.message = 'user.create.error';
+          }
+        });
+      }
     };
 
     $scope.save = function(form) {

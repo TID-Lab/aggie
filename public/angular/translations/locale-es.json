@@ -131,7 +131,8 @@
   "user": {
     "create": {
       "success": "El usuario ha sido creado y se le ha enviado un email con instrucciones para iniciar la sessión.",
-      "error": "No ha sido posible crear el usuario. Por favor, contacte con el équipo técnico."
+      "error": "No ha sido posible crear el usuario. Por favor, contacte con el équipo técnico.",
+      "emailNotConfigured": "La configuración del correo electrónico no está configurada. Vaya a Configuración> Configuración> Correo electrónico"
     },
     "update": {
       "success": "Se ha actualizado la información del usuario.",
