@@ -39,19 +39,19 @@
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter' || source.media == 'whatsapp' ">
+          <div class="form-group" ng-show="source.media == 'smsgh' || source.media == 'twitter' || source.media == 'crowdtangle' || source.media == 'whatsapp' ">
             <label for="keywords" class="col-lg-2 control-label" translate>Keywords</label>
             <div class="col-lg-8">
               <textarea ng-model="source.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}" ng-required="source.media == 'twitter'">
               </textarea>
               <div ng-show="source.media == 'twitter'" class="help-block" translate="sources_modal.help"></div>
               <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
-                <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required for twitter sources.</div>
+                <div class="help-block" ng-show="form.keywords.$error.required">Keywords are required for Twitter sources.</div>
               </div>
             </div>
           </div>
 
-          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && source.media != 'whatsapp'">
+          <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && source.media != 'whatsapp' && source.media != 'crowdtangle'">
             <label for="url" class="col-lg-2 control-label" translate>URL</label>
             <div class="col-lg-8">
               <div class="input-group">

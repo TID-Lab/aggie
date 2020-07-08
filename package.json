@@ -54,7 +54,6 @@
     "locale": "^0.1.0",
     "lodash": "^4.17.15",
     "merge-stream": "^2.0.0",
-    "migrate": "^1.6.2",
     "mkdirp": "^1.0.4",
     "moment": "^2.25.3",
     "mongoose": "^5.9.16",

@@ -53,6 +53,7 @@ angular.module('Aggie')
       end: 0
     };
 
+
     var init = function() {
       $scope.reportsById = $scope.reports.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
@@ -75,7 +76,9 @@ angular.module('Aggie')
     };
 
     var linkify = function(report) {
-      report.content = Autolinker.link(report.content);
+      if (report.content !== null) {
+        report.content = Autolinker.link(report.content);
+      }
       return report;
     };
 
@@ -372,14 +375,20 @@ angular.module('Aggie')
       // Pick one of the sources that has a media type. For now, it happens that
       // if a report has multiple sources, they all have the same type, or are
       // deleted
-      for (var i = 0; i < report._sources.length; i++) {
-        var sourceId = report._sources[i];
-        var source = $scope.sourcesById[sourceId];
-        if (source && $scope.mediaOptions[source.media] !== -1) {
-          return source.media + '-source';
+
+      if (report.metadata.platform === "Facebook") {
+        // set Facebook as source for CrowdTangle reports
+          return 'facebook-source';
+      } else {
+        for (var i = 0; i < report._sources.length; i++) {
+          var sourceId = report._sources[i];
+          var source = $scope.sourcesById[sourceId];
+          if (source && $scope.mediaOptions[source.media] !== -1) {
+            return source.media + '-source';
+          }
         }
+        return 'unknown-source';
       }
-      return 'unknown-source';
     };
 
     $scope.$on('$destroy', function() {

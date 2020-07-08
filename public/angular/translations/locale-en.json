@@ -20,6 +20,7 @@
   "elmo": "Elmo",
   "facebook": "Facebook",
   "smsgh": "SMS GH",
+  "crowdtangle": "CrowdTangle",
   "Smsgh": "SMS GH",
   "new": "New",
   "working": "Working",
@@ -328,9 +329,9 @@
   "Close": "Close",
   "Choose source media": "Choose source media",
   "Media is required.": "Media is required.",
-  "Nickname": "Nickname",
+  "Source Name": "Source Name",
   "A short name for this source.": "A short name for this source.",
-  "Nickname is required.": "Nickname is required.",
+  "Source Name is required.": "Source Name is required.",
   "Keywords": "Keywords",
   "Enter tags": "Enter tags",
   "sources_modal": {
@@ -355,7 +356,7 @@
   "Are you sure you want to delete this trend? (All historical data will be lost)": "Are you sure you want to delete this trend? (All historical data will be lost)",
   "Recent Events": "Recent Events",
   "Enter keywords": "Enter keywords",
-  "Enter a nickname": "Enter a nickname",
+  "Enter a name": "Enter a name",
   "Enter url": "Enter url",
   "Enter author": "Enter author",
   "Enter location": "Enter location",
@@ -398,5 +399,12 @@
   "Unescalated": "Unescalated",
   "Tags": "Tags",
   "Assign To": "Assign To",
-  "entry.created": "Created"
+  "entry.created": "Created",
+  "API Key" : "API Key",
+  "Enter dashboard key" : "Enter dashboard key",
+  "Dashboard API Key is required": "Dashboard API Key is required",
+  "The Dashboard API Key for this source.": "The Dashboard API Key for this source",
+  "Nickname": "Nickname",
+  "Nickname is required.": "Nickname is required.",
+  "Enter a nickname": "Enter a nickname"
 }
