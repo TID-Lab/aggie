@@ -39,7 +39,7 @@
     "connect-roles": "^3.1.2",
     "deepmerge": "^0.2.10",
     "ejs": "^3.1.3",
-    "express": "^3.4.8",
+    "express": "^3.11.0",
     "express-spa-router": "0.0.8",
     "fbgraph": "^1.4.4",
     "feedparser": "^2.2.10",
