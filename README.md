@@ -42,6 +42,8 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Deployment Installation via Docker
 
+This process may soon be deprecated; we recommend installing from source instead (below).
+
 1. Install **docker** (version >= 1; verified on v1.11.0 and v19.03.5).
     - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
     - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately (version >= 1; verified on v1.26.0)
@@ -64,20 +66,16 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 The following need to be installed.
 
-1. **node.js** (v.12.16 LTS)
-    - There are two ways to install/update node.js.
-       1. Install a specific version of node.js.
-          - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
-       1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
-          - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
-          - After installing nvm:
-              1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-              1. use this command: `nvm use` to install the version specified in `.nvmrc`.
-1. **Mongo DB** (requires >= 5.7.0)
-    1. Follow the [installation structions](https://docs.mongodb.org/v4.2/) for your operating system.
-    1. Stop and restart Mongo DB.
-        1. On Linux run `sudo systemctl stop mongod`. Then run `sudo systemctl start mongod`.
-        1. Make sure mongodb is running in the terminal and listening on an appropriate port. Run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
+1. **node.js** (v12.16 LTS)
+   1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
+      - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
+      - After installing nvm:
+          1. Navigate to the aggie project directory: `cd aggie`.
+          1. Run `nvm install` to install the version specified in `.nvmrc`.
+1. **Mongo DB** (requires >= 4.2.0)
+    1. Follow the [installation structions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
+    1. Make sure MongoDB is running:
+        1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 1. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
@@ -85,9 +83,10 @@ The following need to be installed.
 
 ### Installation
 
-1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
+1. Clone the [aggie repo](https://github.com/TID-Lab/aggie).
     - In your terminal, navigate to your main projects folder (e.g. Documents).
-    - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
+    - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
     1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
     1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
@@ -98,7 +97,6 @@ The following need to be installed.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-    - On MacOS Mojave v10.14, this command fixed most errors: `env LDFLAGS="-mmacosx-version-min=10.9" CXXFLAGS="-mmacosx-version-min=10.9" npm install`
 1. (optional) Run `npm install -g gulp mocha karma-cli protractor`.
     - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing. You will most likely need Google Chrome installed on your computer for the protractor tests to run.
     - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
@@ -115,9 +113,9 @@ The following need to be installed.
 1. To run migrations run `npx migrate`.
 1. To run unit tests, run `npm test`.
     - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
-    - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
-    - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
-1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+    - Calling `npm run mocha` will run just the backend tests
+    - Calling `npm run karma` will run just the frontend tests
+1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To run end-to-end tests:
     1. first start Aggie on the test database with `npm run testrun`
     1. then run protractor with `npm run protractor`
@@ -232,7 +230,7 @@ sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
 
-We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/nginx-aggie), which enables https, cache, compression and http2.
+We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx), which enables https, cache, compression and http2.
 
 ## Architecture
 
