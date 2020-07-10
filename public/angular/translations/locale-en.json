@@ -131,7 +131,8 @@
   "user": {
     "create": {
       "success": "User was successfully created and an email has been sent to them with password instructions.",
-      "error": "User failed to be created. Please contact support."
+      "error": "User failed to be created. Please contact support.",
+      "emailNotConfigured": "Email settings not configured. Go to Settings > Settings > Email"
     },
     "update": {
       "success": "User was successfully updated.",

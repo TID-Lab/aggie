@@ -24,10 +24,7 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(source) {
       
-      // keeping the previous mediaoptions incase any of them makes a comeback
-      //var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp'];
-      
-      var mediaOptions = ['twitter', 'crowdtangle'];
+      var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle'];
       
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
