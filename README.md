@@ -112,7 +112,7 @@ The following need to be installed.
 
 ## Maintenance
 
-1. To run migrations run `migrate`.
+1. To run migrations run `npx migrate`.
 1. To run unit tests, run `npm test`.
     - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
     - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests

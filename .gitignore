@@ -26,6 +26,7 @@ Thumbs.db
 server-prefs.json
 
 migrations/.migrate
+.migrate
 
 public/css/styles.css
 public/angular/css/app.css
