@@ -42,6 +42,7 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
+    content: this.keywords,
     _sources: this.sourceId,
     _media: this.media,
     _incident: this.incidentId,
@@ -73,12 +74,15 @@ ReportQuery.prototype.toMongooseFilter = function() {
     filter.author.$regex = this.author//this.author.trim().split(/\s*,\s*/).sort());
   }
   if (this.tags) {
-    filter.tags = { $all: toRegexp.allCaseInsensitive(this.tags) };
+    filter.tags.$options = 'i';
+    filter.tags.$regex = this.tags//{ $all: toRegexp.allCaseInsensitive(this.tags) };
   } else delete filter.tags;
 
   // Search by keyword
   if (this.keywords) {
-    filter.$text = { $search: this.keywords };
+    filter.content = {};
+    filter.content.$options = 'i';
+    filter.content.$regex = this.keywords;
   }
 
   return filter;
