@@ -31,7 +31,6 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Table of Contents
 
-* [Deployment Installation via Docker](#deployment-installation-via-docker)
 * [Source Installation](#source-installation)
 * [Maintenance](#maintenance)
 * [Project Configuration](#project-configuration)
@@ -39,26 +38,6 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 * [Deployment](#deployment)
 * [Architecture](#architecture)
 * [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
-
-## Deployment Installation via Docker
-
-This process may soon be deprecated; we recommend installing from source instead (below).
-
-1. Install **docker** (version >= 1; verified on v1.11.0 and v19.03.5).
-    - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
-    - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately (version >= 1; verified on v1.26.0)
-1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
-    - In your terminal, navigate to your main projects folder (e.g. Documents).
-    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
-1. Start aggie
-    - Navigate to the `docker` directory in aggie: `cd aggie/docker`
-    - run `docker-compose up` (may require sudo)
-    - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-1. Navigate to the IP address of your docker machine in your browser, e.g. typing `http://192.168.99.100`. You can get the IP address of your docker machine running `docker-machine ip`.
-    - Some versions of docker may also forward to `https://localhost`.
-    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
-    - To run on startup, you can use `@reboot cd aggie/docker/ && sudo docker-compose up` via `crontab -e`
-1. Continue to read below for configuration and maintenance.
 
 ## Source Installation
 
