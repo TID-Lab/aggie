@@ -92,6 +92,8 @@ Again, see below for automated installation.
 
 ### Automated installation script
 
+This is intended for setup on a fresh Ubuntu v18.04 system. Setup may need to be modified for other linux systems.
+
 ```shell script
 # Set up system
 
