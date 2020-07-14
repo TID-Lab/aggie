@@ -41,6 +41,8 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Source Installation
 
+We recommend the [automated installation script](#automated-installation-script) below to install the required components on Ubuntu.
+
 ### System requirements
 
 The following need to be installed.
@@ -52,7 +54,7 @@ The following need to be installed.
           1. Navigate to the aggie project directory: `cd aggie`.
           1. Run `nvm install` to install the version specified in `.nvmrc`.
 1. **Mongo DB** (requires >= 4.2.0)
-    1. Follow the [installation structions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
+    1. Follow the [installation instructions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
     1. Make sure MongoDB is running:
         1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
@@ -86,6 +88,97 @@ The following need to be installed.
 1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - If you did not set up the SSL certificate, use `http://localhost:3000` instead
+
+### Automated installation script
+
+```shell script
+# Set up system
+
+export EDITOR=vim # Option 1
+export EDITOR=nano # Option 2
+
+sudo apt update
+sudo apt install -y ntp nginx software-properties-common
+sudo systemctl enable ntp
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+
+curl https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx > /etc/nginx/sites-available/aggie.conf
+sudo ln -s /etc/nginx/sites-available/aggie.conf /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
+# User input: Customize nginx settings with your domain name.
+$EDITOR /etc/nginx/sites-available/aggie.conf
+
+# User input: Set up SSL with a couple of prompts.
+sudo certbot --nginx
+
+# User input: Set up SSL certificate auto-renewal.
+crontab -e
+# Paste the following line in crontab, replacing `X` with the current minutes + 1
+# (e.g. if it's 12:15pm, write `16` instead of `X`):
+#   X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
+#
+# Then wait a minute and verify that it attempted a renewal: 
+cat ~/certbot-cron.log
+
+# Mongo DB. Source: https://docs.mongodb.com/v4.2/tutorial/install-mongodb-on-ubuntu/
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl enable mongod
+# Optional: Increase ulimits via https://docs.mongodb.com/manual/reference/ulimit/.
+
+# NVM. Source: https://github.com/nvm-sh/nvm#installing-and-updating
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+```
+
+```shell script
+# Set up Aggie
+
+git clone https://github.com/TID-Lab/aggie.git
+cd aggie
+nvm install && npm install
+
+cp config/secrets.json.example config/secrets.json
+# User input: Customize Aggie settings per the README instructions.
+$EDITOR config/secrets.json
+
+# Ready! Test run:
+npm start
+# Verify Aggie is online at your URL, then kill this process.
+```
+
+```shell script
+# Final steps
+
+# User input: Print a script to run that will enable Aggie on startup.
+# Copy/paste the last line of output as instructed.
+npx pm2 startup
+
+# Start (or restart) Aggie in the background; save the PM2 state for startup.
+npm run serve
+npx pm2 save
+
+# User input: Enable log rotation.
+sudo $EDITOR /etc/logrotate.conf
+# Paste the following, changing `ubuntu` to your username:
+/home/ubuntu/aggie/logs/*.log {
+  weekly
+  missingok
+  rotate 12
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+```
 
 ## Maintenance
 
