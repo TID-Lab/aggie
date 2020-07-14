@@ -41,11 +41,11 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Source Installation
 
-We recommend the [automated installation script](#automated-installation-script) below to install the required components on Ubuntu.
+We recommend the **[automated installation script](#automated-installation-script)** below to install the required components on Ubuntu.
 
 ### System requirements
 
-The following need to be installed.
+Again, see below for automated installation.
 
 1. **node.js** (v12.16 LTS)
    1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
@@ -62,7 +62,9 @@ The following need to be installed.
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
     - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
 
-### Installation
+### Installation notes
+
+Again, see below for automated installation.
 
 1. Clone the [aggie repo](https://github.com/TID-Lab/aggie).
     - In your terminal, navigate to your main projects folder (e.g. Documents).
@@ -71,19 +73,18 @@ The following need to be installed.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
     1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
     1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
-1. (optional) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor`.
-    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing. You will most likely need Google Chrome installed on your computer for the protractor tests to run.
-    - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
-1. (optional) Run `npm install -g migrate`.
-    - This installs node-migrate globally.
-1. To start server in production, run `npm start`. Use `npm run dev` for development.
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
+    - This installs some tools globally which can then be run from the command line for testing.
+    - You will most likely need Google Chrome installed on your computer for the protractor tests to run.
+    - This is optional, as `npx` provides easy access to the local copies of these that are installed by `npm install`
+1. To start server in production mode, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
