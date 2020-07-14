@@ -74,21 +74,25 @@ var Incident = mongoose.model('Incident', schema);
 
 Report.schema.on('change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
-    // Callbacks added to execute query immediately
-    Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {
+    if (prevIncident) {
+      // Callbacks added to execute query immediately
+      Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {
+        if (err) {
+          logger.error(err);
+        }
+        schema.emit('incident:update');
+      });
+    }
+  }
+
+  if (newIncident) {
+    Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err) {
       if (err) {
         logger.error(err);
       }
       schema.emit('incident:update');
     });
   }
-
-  Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err) {
-    if (err) {
-      logger.error(err);
-    }
-    schema.emit('incident:update');
-  });
 });
 
 // Query incidents based on passed query data

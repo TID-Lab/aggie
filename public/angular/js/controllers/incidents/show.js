@@ -133,12 +133,37 @@ angular.module('Aggie')
       });
     };
 
-    $scope.unlinkReport = function(report) {
-      report._incident = null;
-      $scope.saveReport(report);
-      flash.setNotice('notice.report.unlinked');
-      $state.go('incident', { id: $scope.incident._id }, { reload: true });
+    $scope.someSelected = function() {
+      return $scope.reports.some(function(report) {
+        return report.selected;
+      });
     };
+
+    $scope.filterSelected = function(items) {
+      return items.reduce(function(memo, item) {
+        if (item.selected) memo.push(item);
+        return memo;
+      }, []);
+    };
+
+    var getIds = function(items) {
+      return items.map(function(item) {
+        return item._id;
+      });
+    };
+
+    $scope.unlinkSelected = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(items);
+      Report.unlinkFromIncident({ ids: ids }, function() {
+        flash.setNotice('notice.report.unlinkMultiple.success');
+        $state.go('incident', { id: $scope.incident._id }, { reload: true });
+      }, function() {
+        flash.setAlertNow('notice.report.unlinkMultiple.error');
+      });
+    }
 
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });

@@ -258,5 +258,85 @@ describe('Report controller', function() {
     });
   });
 
+  describe('PATCH api/v1/report/_unlink', function() {
+    beforeEach(function(done) {
+      async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
+    });
+
+    it('should unlink 2 reports from specific Incident', function(done) {
+      request(reportController)
+        .patch('/api/v1/report/_link')
+        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+        .expect(200)
+        .end(function(err) {
+          if (err) return done(err);
+
+          request(reportController)
+          .patch('/api/v1/report/_unlink')
+          .send({ ids: [reports[0]._id, reports[1]._id] })
+          .expect(200)
+          .end(function(err, res) {
+            if (err) return done(err);
+
+            request(reportController)
+            .get('/api/v1/report/' + reports[0]._id)
+            .expect(200)
+            .end(function(err, res) {
+              if (err) return done(err);
+              expect(res.body).to.have.property('_incident');
+              expect(res.body._incident).to.equal(null);
+
+              request(reportController)
+              .get('/api/v1/report/' + reports[1]._id)
+              .expect(200)
+              .end(function(err, res) {
+                if (err) return done(err);
+                expect(res.body).to.have.property('_incident');
+                expect(res.body._incident).to.equal(null);
+                done();
+              });
+            });
+          });
+        });
+    });
+
+    it('should update the totalReports field in incident', function(done) {
+      var incidentChanges = new utils.EventCounter(Incident.schema,
+                                                   'incident:update');
+      async.waterfall([
+        function(callback) {
+          request(reportController)
+            .patch('/api/v1/report/_link')
+            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+            .expect(200)
+            .end(callback);
+        },
+        function(res, callback) {
+          // Wait for incident to be updated in the database
+          incidentChanges.waitForEvents(2, callback);
+        },
+        function(callback) {
+          request(reportController)
+            .patch('/api/v1/report/_unlink')
+            .send({ ids: [reports[0]._id, reports[1]._id] })
+            .expect(200)
+            .end(callback);
+        },
+        function(res, callback) {
+          // Wait for incident to be updated in the database
+          incidentChanges.waitForEvents(2, callback);
+        },
+        function(callback) {
+          Incident.findById(incidents[0]._id, callback);
+        },
+        function(incident, callback) {
+          expect(incident.totalReports).to.equal(0);
+          setImmediate(callback);
+          incidentChanges.kill();
+        },
+      ], done);
+    });
+  });
+
   after(utils.expectModelsEmpty);
 });
