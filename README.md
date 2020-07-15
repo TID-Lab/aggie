@@ -41,7 +41,7 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Source Installation
 
-We recommend the **[automated installation script](#automated-installation-script)** below to install the required components on Ubuntu.
+We recommend the **[semi-automated installation script](#semi-automated-installation-script)** below to install the required components on Ubuntu.
 
 ### System requirements
 
@@ -90,9 +90,11 @@ Again, see below for automated installation.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
-### Automated installation script
+### Semi-automated installation script
 
 This is intended for setup on a fresh Ubuntu v18.04 system. Setup may need to be modified for other linux systems.
+
+If it says "user input", you won't want to paste anything beyond that until addressing the input.
 
 ```shell script
 # Set up system
