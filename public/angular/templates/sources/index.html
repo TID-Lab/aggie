@@ -1,15 +1,17 @@
-<div class="container card">
-  <div class="button-row">
-    <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
-            class="btn btn-info" ng-click="create()" translate>Create Source</button>
-  </div>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <div class="btn-toolbar float-right">
+        <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
+                class="btn btn-info" ng-click="create()" translate>Create Source</button>
+      </div>
+    </div>
+    <div class="clearfix"></div>
 
-  <div class="clearfix"></div>
+    <p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
 
-  <p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
-
-  <table aggie-table ng-show="sources.length > 0">
-    <thead>
+    <table aggie-table ng-show="sources.length > 0">
+      <thead>
       <tr>
         <th class="compact" translate>Media</th>
         <th class="compact" translate>Name</th>
@@ -19,8 +21,8 @@
         <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
         <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
         <td class="compact source" ng-class="sourceClass(s)">
           <div class="icon-left"></div>
@@ -38,9 +40,11 @@
         <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
             ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
         <td class="compact status" ng-show="currentUser.can('edit data')">
+          <p>sler</p>
           <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
         </td>
       </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

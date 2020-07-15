@@ -16,14 +16,9 @@
     <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
       <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
-        <div class="interval">
-          <span class="interval-amount">{{ r.storedAt | interval }}</span> <span class="interval-relative" translate>ago</span>
-        </div>
-        <div class="date-and-time">
-          <span class="time">{{ r.storedAt | aggieDate:'time' }}</span>
-          <span class="date">{{ r.storedAt | aggieDate:'date' }}</span>
-        </div>
-        <div class="created">{{ r | delay }}</div>
+            <h6><span class="badge badge-info">{{ r.storedAt | interval }} ago</span></h6>
+            <p class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }} {{ r.storedAt | aggieDate:'date' }}</p>
+        <p class="created"><span>{{ r | delay }}</span></p>
       </td>
       <!--
       <td class="compact source" ng-class="sourceClass(r)">

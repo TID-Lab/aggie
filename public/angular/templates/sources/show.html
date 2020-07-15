@@ -1,65 +1,83 @@
-<nav aria-label="breadcrumb">
+<nav class="source-nav" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a ui-sref="sources" translate>Sources</a></li>
     <li class="breadcrumb-item active">{{ source.nickname }}</li>
   </ol>
 </nav>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with edit confirmations" ng-show="currentUser.can('edit data')">
+        <div class="btn-group">
+          <button type="button" ui-sref="sources" class="btn btn-default">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="btn-group">
+          <div class="mr-2">
+            <button type="button" ng-controller="SourceFormModalController" class="btn btn-info" ng-click="edit()" translate>
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this source?' | translate }}" on-confirm="delete()">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table detail-table">
+        <tbody>
+        <tr>
+          <td class="detail-key" translate>Name</td>
+          <td class="detail-value">{{ source.nickname }}</td>
+        </tr>
+        <tr>
+          <td class="detail-key" translate>Media</td>
+          <td class="detail-value">{{source.media | translate}}</td>
+        </tr>
+        <tr>
+          <td class="detail-key" translate>Target</td>
+          <td class="detail-value">
+            <span ng-switch="source.media">
+              <span ng-when="twitter">{{source.keywords}}</span>
+              <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="detail-key" translate>Tags</td>
+          <td class="detail-value">{{ tagsToString(source.tags) }}</td>
+        </tr>
+        <tr>
+          <td class="detail-key" translate>Enabled</td>
+          <td class="detail-value">{{ source.enabled ? 'Yes' : 'No' | translate }}</td>
+        </tr>
+        </tbody>
+      </table>
 
-<div class="button-row" ng-show="currentUser.can('edit data')">
-  <button ng-controller="SourceFormModalController" class="btn btn-info" ng-click="edit()" translate>Edit</button>
-  <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this source?' | translate }}" on-confirm="delete()">{{ 'Delete' | translate }}</button>
-</div>
-
-<br/><br/>
-<table class="table detail-table">
-  <tbody>
-    <tr>
-      <td class="detail-key" translate>Name</td>
-      <td class="detail-value">{{ source.nickname }}</td>
-    </tr>
-    <tr>
-      <td class="detail-key" translate>Media</td>
-      <td class="detail-value">{{source.media | translate}}</td>
-    </tr>
-    <tr>
-      <td class="detail-key" translate>Target</td>
-      <td class="detail-value">
-        <span ng-switch="source.media">
-          <span ng-when="twitter">{{source.keywords}}</span>
-          <span ng-switch-default><a href="{{source.url}}" target="_blank">{{source.url}}</a>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td class="detail-key" translate>Tags</td>
-      <td class="detail-value">{{ tagsToString(source.tags) }}</td>
-    </tr>
-    <tr>
-      <td class="detail-key" translate>Enabled</td>
-      <td class="detail-value">{{ source.enabled ? 'Yes' : 'No' | translate }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 translate>Recent Events</h4>
-
-<p ng-hide="source.events.length > 0" translate>There are no events to display.</p>
-
-<div ng-show="source.events.length > 0">
-  <table class="table events" ng-show="source.events.length > 0">
-    <thead>
-      <tr>
-        <td class="compact" translate>Time</td>
-        <td class="compact" translate>Level</td>
-        <td class="expand" translate>Message</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
-        <td class="time compact">{{ e.datetime | aggieDate:'datetime' }}</td>
-        <td class="type compact">{{ e.type }}</td>
-        <td class="expand">{{ e.message }}</td>
-      </tr>
-    </tbody>
-  </table>
+      <h5 class="card-title" translate>Recent Events</h5>
+      <p ng-hide="source.events.length > 0" translate>There are no events to display.</p>
+      <div ng-show="source.events.length > 0">
+        <table class="table events" ng-show="source.events.length > 0">
+          <thead>
+          <tr>
+            <td class="compact" translate>Time</td>
+            <td class="compact" translate>Level</td>
+            <td class="expand" translate>Message</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
+            <td class="time compact">{{ e.datetime | aggieDate:'datetime' }}</td>
+            <td class="type compact">{{ e.type }}</td>
+            <td class="expand">{{ e.message }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

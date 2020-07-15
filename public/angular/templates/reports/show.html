@@ -1,45 +1,62 @@
-<div class="container container-main">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a ui-sref="reports" translate>Reports</a></li>
-      <li class="breadcrumb-item active" translate>Report</li>
-    </ol>
-  </nav>
-
-  <table class="table detail-table">
-    <tbody>
-      <tr>
-        <td class="detail-key" translate>Authored Time</td>
-        <td class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>Fetched Time</td>
-        <td class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>Stored Time</td>
-        <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
-      </tr>
-      <tr ng-repeat="source in sources">
-        <td class="detail-key" translate>Sources</td>
-        <td class="detail-value">{{ source.nickname }}</td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>URL</td>
-        <td class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>Author</td>
-        <td class="detail-value">{{ report.author }}</td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>Tags</td>
-        <td class="detail-value">{{ tagsToString(report.tags) }}</td>
-      </tr>
-      <tr>
-        <td class="detail-key" translate>Content</td>
-        <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
-      </tr>
-    </tbody>
-  </table>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a ui-sref="reports" translate>Reports</a></li>
+    <li class="breadcrumb-item active" translate>Report Details</li>
+  </ol>
+</nav>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with edit confirmations" ng-show="currentUser.can('edit data')">
+        <div class="btn-group">
+          <button type="button" ui-sref="reports" class="btn btn-default mr-2">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped detail-table">
+          <tbody>
+            <tr>
+              <th scope="row" class="detail-key" translate>Content</th>
+              <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
+            </tr>
+            <tr ng-if="report.metadata.description">
+              <th scope="row" class="detail-key" translate>Shared Content</th>
+              <td class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="detail-key" translate>Author</th>
+              <td class="detail-value">{{ report.author }}</td>
+            </tr>
+              <th scope="row" class="detail-key" translate>Authored Time</th>
+              <td class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="detail-key" translate>Fetched Time</th>
+              <td class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="detail-key" translate>Stored Time</th>
+              <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
+            </tr>
+            <tr ng-repeat="source in sources">
+              <th scope="row" class="detail-key" translate>Sources</th>
+              <td class="detail-value">{{ source.nickname }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="detail-key" translate>URL</th>
+              <td class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row" class="detail-key" translate>Tags</th>
+              <td class="detail-value">{{ tagsToString(report.tags) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

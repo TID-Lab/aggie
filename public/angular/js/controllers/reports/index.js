@@ -1,5 +1,4 @@
 angular.module('Aggie')
-
 .controller('ReportsIndexController', [
   '$state',
   '$scope',
