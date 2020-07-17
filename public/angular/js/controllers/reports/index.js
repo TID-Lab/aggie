@@ -37,7 +37,14 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
-
+    // $scope.stats = {
+    //   totalReports: 0,
+    //   totalReportsUnread: 0,
+    //   totalReportsFlagged: 0,
+    //   totalReportsPerMinute: 0,
+    //   totalIncidents: 0,
+    //   totalEscalatedIncidents: 0
+    // };
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -73,9 +80,19 @@ angular.module('Aggie')
           Socket.on('reports', $scope.handleNewReports.bind($scope));
         }
       }
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+      // if (!$scope.currentUser) {
+      //   Socket.leave('stats');
+      //   Socket.removeAllListeners('stats');
+      // }
 
       // make links clickable
       $scope.reports.forEach(linkify);
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     var linkify = function(report) {

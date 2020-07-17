@@ -203,6 +203,20 @@
       </div>
     </div>
     <div class="col">
+      <p class="navbar-text" ng-if="stats">
+        <div class="nav-bar-number">{{stats.totalReports | number}}</div>
+        <div class="nav-bar-label" translate>Total Reports</div>
+        <div class="nav-bar-number">{{stats.totalReportsPerMinute | number}}</div>
+        <div class="nav-bar-label" translate>Reports/min</div>
+        <div class="nav-bar-number">{{stats.totalReportsUnread | number}}</div>
+        <div class="nav-bar-label" translate>Unread</div>
+        <div class="nav-bar-number">{{stats.totalReportsFlagged | number}}</div>
+        <div class="nav-bar-label" translate>Flagged</div>
+        <div class="nav-bar-number">{{stats.totalIncidents | number}}</div>
+        <div class="nav-bar-label" translate>Incidents</div>
+        <div class="nav-bar-number">{{stats.totalEscalatedIncidents | number}}</div>
+        <div class="nav-bar-label" translate>Escalated Incidents</div>
+      </p>
     </div>
 
   </div>
