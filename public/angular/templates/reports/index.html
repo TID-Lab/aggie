@@ -7,21 +7,19 @@
         <div class="input-group">
           <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-info" ng-click="search()">
-              <i class="fa fa-search text-dark" aria-hidden="true"></i>
+            <button type="reset" title="Search" href class="btn btn-secondary" ng-click="clearSearch()">
+              <span>&times;</span>
             </button>
-            <button type="reset" title="Search" href class="input-group-addon" ng-click="clearSearch()" ng-show="searchParams.keywords">×</button>
           </div>
         </div>
       </div>
       <div class="td search">
         <div class="input-group">
-          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Enter Tags' | translate}}">
+          <input type="text" ng-model="searchParams.tags" aria-label="tagSearch" class="form-control" placeholder="{{'Enter Tags' | translate}}">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-info" ng-click="search()">
-              <i class="fa fa-search text-dark" aria-hidden="true"></i>
+            <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
+              <span>&times;</span>
             </button>
-            <button type="reset" title="Search" href class="input-group-addon" ng-click="clearTags()" ng-show="searchParams.tags">×</button>
           </div>
         </div>
       </div>
@@ -29,12 +27,26 @@
         <div class="input-group">
           <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter Author' | translate }}">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-info" ng-click="search()">
-              <i class="fa fa-search text-dark" aria-hidden="true"></i>
+            <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearAuthor()">
+              <span>&times;</span>
             </button>
-            <button type="reset" title="Search" href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</button>
           </div>
         </div>
+        <button type="reset" title="Search" href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</button>
+      </div>
+      <div class="td filter date-filter">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datetime-modal" translate>
+          <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+            <!-- Made Datepicker the default format because we don't need seconds -->
+            <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
+            <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong></span>
+            <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
+            <span ng-switch-default translate>Date / Time Filter</span>
+          </span>
+        </button>
+        <button type="reset" class="btn btn-info" title="date-filter" href class="input-group-addon" ng-click="search({ after: null, before: null }); searchParams.before = null; searchParams.after = null;" ng-show="searchParams.before || searchParams.after">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="td filter status-filter">
         <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
@@ -56,25 +68,11 @@
           <option value="" translate>Linked Incident</option>
         </select>
       </div>
-
-      <div class="td filter date-filter">
-        <div class="btn-group">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datetime-modal" translate>
-            <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
-              <!-- Made Datepicker the default format because we don't need seconds -->
-              <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
-              <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong></span>
-              <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
-              <span ng-switch-default translate>Date / Time</span>
-            </span>
-          </button>
-          <button type="submit" class="btn btn-info" ng-click="search()">
-            <i class="fa fa-search text-dark" aria-hidden="true"></i>
-          </button>
-          <button type="reset" title="date-filter" href class="input-group-addon" ng-click="search({ after: null, before: null }); searchParams.before = null; searchParams.after = null;" ng-show="searchParams.before || searchParams.after">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+      <div class="td filter">
+        <button type="submit" class="btn btn-info" ng-click="search()">
+          <span class="mr-2" translate> Search </span>
+          <i class="fa fa-search text-dark" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="td" ng-hide="noFilters()">
         <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
@@ -218,6 +216,5 @@
         <div class="nav-bar-label" translate>Escalated Incidents</div>
       </p>
     </div>
-
   </div>
 </div>
