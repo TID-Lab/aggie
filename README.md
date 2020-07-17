@@ -31,7 +31,6 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Table of Contents
 
-* [Deployment Installation via Docker](#deployment-installation-via-docker)
 * [Source Installation](#source-installation)
 * [Maintenance](#maintenance)
 * [Project Configuration](#project-configuration)
@@ -40,84 +39,162 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 * [Architecture](#architecture)
 * [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
 
-## Deployment Installation via Docker
-
-1. Install **docker** (version >= 1; verified on v1.11.0 and v19.03.5).
-    - Follow the installation instructions for [linux](https://docs.docker.com/linux/step_one/), [Mac OS X](https://docs.docker.com/mac/step_one/), or [Windows](https://docs.docker.com/windows/step_one/).
-    - On Linux installations, install **[docker-compose](https://docs.docker.com/compose/install/)** separately (version >= 1; verified on v1.26.0)
-1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
-    - In your terminal, navigate to your main projects folder (e.g. Documents).
-    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
-1. Start aggie
-    - Navigate to the `docker` directory in aggie: `cd aggie/docker`
-    - run `docker-compose up` (may require sudo)
-    - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-1. Navigate to the IP address of your docker machine in your browser, e.g. typing `http://192.168.99.100`. You can get the IP address of your docker machine running `docker-machine ip`.
-    - Some versions of docker may also forward to `https://localhost`.
-    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
-    - To run on startup, you can use `@reboot cd aggie/docker/ && sudo docker-compose up` via `crontab -e`
-1. Continue to read below for configuration and maintenance.
-
 ## Source Installation
+
+We recommend the **[semi-automated installation script](#semi-automated-installation-script)** below to install the required components on Ubuntu.
 
 ### System requirements
 
-The following need to be installed.
+Again, see below for automated installation.
 
-1. **node.js** (v.12.16 LTS)
-    - There are two ways to install/update node.js.
-       1. Install a specific version of node.js.
-          - Documentation and installation instructions can be found on the [node.js site](https://nodejs.org/).
-       1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
-          - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
-          - After installing nvm:
-              1. in your terminal, navigate to the aggie project directory: `cd [aggie]`.
-              1. use this command: `nvm use` to install the version specified in `.nvmrc`.
-1. **Mongo DB** (requires >= 5.7.0)
-    1. Follow the [installation structions](https://docs.mongodb.org/v4.2/) for your operating system.
-    1. Stop and restart Mongo DB.
-        1. On Linux run `sudo systemctl stop mongod`. Then run `sudo systemctl start mongod`.
-        1. Make sure mongodb is running in the terminal and listening on an appropriate port. Run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
+1. **node.js** (v12.16 LTS)
+   1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
+      - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
+      - After installing nvm:
+          1. Navigate to the aggie project directory: `cd aggie`.
+          1. Run `nvm install` to install the version specified in `.nvmrc`.
+1. **Mongo DB** (requires >= 4.2.0)
+    1. Follow the [installation instructions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
+    1. Make sure MongoDB is running:
+        1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 1. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
     - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
 
-### Installation
+### Installation notes
 
-1. Checkout the [aggie repo](https://github.com/TID-Lab/aggie).
+Again, see below for automated installation.
+
+1. Clone the [aggie repo](https://github.com/TID-Lab/aggie).
     - In your terminal, navigate to your main projects folder (e.g. Documents).
-    - Use this command: `git clone git@github.com:TID-Lab/aggie.git`.
+    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
+    - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
     1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
     1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
-1. (optional) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-    - On MacOS Mojave v10.14, this command fixed most errors: `env LDFLAGS="-mmacosx-version-min=10.9" CXXFLAGS="-mmacosx-version-min=10.9" npm install`
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor`.
-    - This installs gulp, mocha, karma, and protractor globally so they can be run from the command line for testing. You will most likely need Google Chrome installed on your computer for the protractor tests to run.
-    - This is optional, as `npm` provides easy access to the local copies of these that are installed by `npm install`
-1. (optional) Run `npm install -g migrate`.
-    - This installs node-migrate globally.
-1. To start server in production, run `npm start`. Use `npm run dev` for development.
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
+    - This installs some tools globally which can then be run from the command line for testing.
+    - You will most likely need Google Chrome installed on your computer for the protractor tests to run.
+    - This is optional, as `npx` provides easy access to the local copies of these that are installed by `npm install`
+1. To start server in production mode, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
 1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - If you did not set up the SSL certificate, use `http://localhost:3000` instead
+
+### Semi-automated installation script
+
+This is intended for setup on a fresh Ubuntu v18.04 system. Setup may need to be modified for other linux systems.
+
+If it says "user input", you won't want to paste anything beyond that until addressing the input.
+
+```shell script
+# Set up system
+
+export EDITOR=vim # Option 1
+export EDITOR=nano # Option 2
+
+sudo apt update
+sudo apt install -y ntp nginx software-properties-common
+sudo systemctl enable ntp
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+
+# Nginx server and SSL.
+sudo curl -o /etc/nginx/sites-available/aggie.conf https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx
+sudo ln -s /etc/nginx/sites-available/aggie.conf /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
+# User input: Customize nginx settings with your domain name.
+sudo $EDITOR /etc/nginx/sites-available/aggie.conf
+# User input: Set up SSL with a couple of prompts.
+sudo certbot --nginx
+
+# User input: Set up SSL certificate auto-renewal.
+crontab -e
+# Paste the following line in crontab, replacing `X` with the current minutes + 1
+# (e.g. if it's 12:15pm, write `16` instead of `X`):
+#   X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
+#
+# Then wait a minute and verify that it attempted a renewal: 
+cat ~/certbot-cron.log
+
+# Mongo DB. Source: https://docs.mongodb.com/v4.2/tutorial/install-mongodb-on-ubuntu/
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl enable mongod
+sudo systemctl start mongod
+# Optional: Increase ulimits via https://docs.mongodb.com/manual/reference/ulimit/.
+# This will affect DB performance in some cases.
+
+# NVM. Source: https://github.com/nvm-sh/nvm#installing-and-updating
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+```
+
+```shell script
+# Set up Aggie
+
+git clone https://github.com/TID-Lab/aggie.git
+cd aggie
+nvm install && npm install
+
+cp config/secrets.json.example config/secrets.json
+# User input: Customize Aggie settings per the README instructions.
+$EDITOR config/secrets.json
+
+# Ready! Test run:
+npm start
+# Now verify Aggie is online at your URL, then kill this process.
+```
+
+```shell script
+# Final steps
+
+# User input: Print a script to run that will enable Aggie on startup.
+# Copy/paste the last line of output as instructed.
+npx pm2 startup
+
+# Start (or restart) Aggie in the background; save the PM2 state for startup.
+npm run serve
+npx pm2 save
+
+# User input: Enable log rotation.
+sudo $EDITOR /etc/logrotate.conf
+# Paste the following, changing `/home/ubuntu` to the location of the `aggie` folder.
+/home/ubuntu/aggie/logs/*.log {
+  weekly
+  missingok
+  rotate 12
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+```
 
 ## Maintenance
 
 1. To run migrations run `npx migrate`.
 1. To run unit tests, run `npm test`.
     - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
-    - Calling `npm run mocha` (or `mocha` if you installed it globally) will run just the backend tests
-    - Calling `npm run karma` (or `karma start --single-run` if installed globally) will run just the frontend tests
-1. To monitor code while developing, run `gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+    - Calling `npm run mocha` will run just the backend tests
+    - Calling `npm run karma` will run just the frontend tests
+1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To run end-to-end tests:
     1. first start Aggie on the test database with `npm run testrun`
     1. then run protractor with `npm run protractor`
@@ -232,7 +309,7 @@ sometimes hang up when restarting the Aggie process after deploying a new
 version of the code. In this case, killing the forever process before deploying
 seems to fix it.
 
-We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/nginx-aggie), which enables https, cache, compression and http2.
+We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx), which enables https, cache, compression and http2.
 
 ## Architecture
 
