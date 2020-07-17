@@ -178,7 +178,7 @@ npx pm2 save
 
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
-# Paste the following, changing `ubuntu` to your username:
+# Paste the following, changing `/home/ubuntu` to the path that the `aggie` folder is located at.
 /home/ubuntu/aggie/logs/*.log {
   weekly
   missingok
