@@ -161,7 +161,11 @@ $EDITOR config/secrets.json
 
 # Ready! Test run:
 npm start
-# Now verify Aggie is online at your URL, then kill this process.
+# Now verify Aggie is online at your URL, then kill this process when you're done.
+# Optional troubleshooting if it doesn't work:
+curl localhost:3000
+# This should return an HTML response starting with something like <html lang="en" ng-app="Aggie">
+# If this works but you can't access Aggie publicly, check your network config to make sure ports 80 and 443 are exposed.
 ```
 
 ```shell script
