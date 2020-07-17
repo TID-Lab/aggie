@@ -110,13 +110,13 @@ sudo add-apt-repository ppa:certbot/certbot
 sudo apt update
 sudo apt install -y certbot python3-certbot-nginx
 
+# Nginx server and SSL.
 sudo curl -o /etc/nginx/sites-available/aggie.conf https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx
 sudo ln -s /etc/nginx/sites-available/aggie.conf /etc/nginx/sites-enabled/
 sudo rm /etc/nginx/sites-enabled/default
 sudo systemctl restart nginx
 # User input: Customize nginx settings with your domain name.
-$EDITOR /etc/nginx/sites-available/aggie.conf
-
+sudo $EDITOR /etc/nginx/sites-available/aggie.conf
 # User input: Set up SSL with a couple of prompts.
 sudo certbot --nginx
 
@@ -175,7 +175,7 @@ npx pm2 save
 
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
-# Paste the following, changing `/home/ubuntu` to the path that the `aggie` folder is located at.
+# Paste the following, changing `/home/ubuntu` to the location of the `aggie` folder.
 /home/ubuntu/aggie/logs/*.log {
   weekly
   missingok

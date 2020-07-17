@@ -2,7 +2,7 @@
 #   sudo ln -s /etc/nginx/sites-available/aggie.conf /etc/nginx/sites-enabled/
 #   sudo rm /etc/nginx/sites-enabled/default
 #
-# You'll need to configure a few values below, including:
+# You may need to configure a few values below, including:
 # server_name, ssl_certificate, location > root
 
 # the IP(s) on which your node server is running, usually on port 3000.
@@ -22,10 +22,11 @@ server {
 server {
   listen 443 ssl http2;
 
-  # Point to where Aggie will be served from
-  server_name <your-server-name> localhost;
+  # XXX NEEDS CUSTOMIZATION.
+  # Point to where Aggie will be served from.
+  server_name aggie.example.com;
 
-  # LetsEncrypt handles this for most folks.
+  # LetsEncrypt configures SSL automatically for most folks.
   #ssl_certificate <path to ssl certificate e.g. /etc/ssl/certs/cert.org.pem>;
   #ssl_certificate_key <path to ssl key e.g. /etc/ssl/private/privkey.org.key>;
   ssl_session_cache shared:SSL:2m;
@@ -40,7 +41,8 @@ server {
     expires 24h;
     add_header Cache-Control public;
 
-    # Your app path.
+    # XXX NEEDS CUSTOMIZATION.
+    # Change `/home/ubuntu` to the location of the `aggie` folder.
     root /home/ubuntu/aggie/public/angular;
   }
 
