@@ -110,11 +110,10 @@ sudo add-apt-repository ppa:certbot/certbot
 sudo apt update
 sudo apt install -y certbot python3-certbot-nginx
 
-# Nginx server and SSL.
+# Nginx server and SSL. Source: https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
 sudo curl -o /etc/nginx/sites-available/aggie.conf https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx
 sudo ln -s /etc/nginx/sites-available/aggie.conf /etc/nginx/sites-enabled/
 sudo rm /etc/nginx/sites-enabled/default
-sudo systemctl restart nginx
 # User input: Customize nginx settings with your domain name.
 sudo $EDITOR /etc/nginx/sites-available/aggie.conf
 # User input: Set up SSL with a couple of prompts.
@@ -124,12 +123,15 @@ sudo certbot --nginx
 crontab -e
 # Paste the following line in crontab, replacing `X` with the current minutes + 1
 # (e.g. if it's 12:15pm, write `16` instead of `X`):
-#   X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
-#
+X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
+
 # Then wait until that time occurs, and verify that it logged a renewal attempt: 
 cat ~/certbot-cron.log
 # You should see something like "Cert not yet due for renewal / No renewals were attempted."
 # which means the certificate is valid and the cron job is running.
+
+# If you make any config changes later, always run this afterward:
+sudo systemctl restart nginx
 
 # Mongo DB. Source: https://docs.mongodb.com/v4.2/tutorial/install-mongodb-on-ubuntu/
 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
@@ -137,11 +139,12 @@ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongod
 sudo apt update
 sudo apt install -y mongodb-org
 sudo systemctl enable mongod
-sudo systemctl start mongod
 # Optional: Increase ulimits via https://docs.mongodb.com/manual/reference/ulimit/.
 # This will affect DB performance in some cases.
+# Finally:
+sudo systemctl restart mongod
 
-# NVM. Source: https://github.com/nvm-sh/nvm#installing-and-updating
+# Node version manager (nvm). Source: https://github.com/nvm-sh/nvm#installing-and-updating
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -161,7 +164,7 @@ $EDITOR config/secrets.json
 
 # Ready! Test run:
 npm start
-# Now verify Aggie is online at your URL, then kill this process when you're done.
+# Now verify Aggie is online at your URL, then kill this process (ctrl+c) when you're done.
 # Optional troubleshooting if it doesn't work:
 curl localhost:3000
 # This should return an HTML response starting with something like <html lang="en" ng-app="Aggie">
