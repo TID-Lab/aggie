@@ -39,5 +39,9 @@
       <td class="detail-key" translate>Content</td>
       <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
     </tr>
+    <tr ng-if="report.metadata.description">
+      <td class="detail-key" translate>Shared Content</th>
+      <td class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
+    </tr>
   </tbody>
 </table>
