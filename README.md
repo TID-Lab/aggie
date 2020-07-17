@@ -135,7 +135,9 @@ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongod
 sudo apt update
 sudo apt install -y mongodb-org
 sudo systemctl enable mongod
+sudo systemctl start mongod
 # Optional: Increase ulimits via https://docs.mongodb.com/manual/reference/ulimit/.
+# This will affect DB performance in some cases.
 
 # NVM. Source: https://github.com/nvm-sh/nvm#installing-and-updating
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
@@ -156,13 +158,8 @@ cp config/secrets.json.example config/secrets.json
 $EDITOR config/secrets.json
 
 # Ready! Test run:
-sudo systemctl start mongod
-
-# Verify Aggie is online at your URL, then kill this process.
 npm start
-
-# Stop mongod for now
-sudo systemctl stop mongod
+# Now verify Aggie is online at your URL, then kill this process.
 ```
 
 ```shell script
