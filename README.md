@@ -126,8 +126,10 @@ crontab -e
 # (e.g. if it's 12:15pm, write `16` instead of `X`):
 #   X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
 #
-# Then wait a minute and verify that it attempted a renewal: 
+# Then wait until that time occurs, and verify that it logged a renewal attempt: 
 cat ~/certbot-cron.log
+# You should see something like "Cert not yet due for renewal / No renewals were attempted."
+# which means the certificate is valid and the cron job is running.
 
 # Mongo DB. Source: https://docs.mongodb.com/v4.2/tutorial/install-mongodb-on-ubuntu/
 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
