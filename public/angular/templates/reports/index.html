@@ -56,20 +56,26 @@
           <option value="" translate>Linked Incident</option>
         </select>
       </div>
-      <!--
+
       <div class="td filter date-filter">
-        <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
-          <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
-            <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-            <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
-            <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-            <span ng-switch-default translate>Date/Time</span>
-          </span>
-        </button>
-      </div> -->
-      <button type="button" classes="btn btn-primary" data-toggle="modal" data-target="#date-filter-modal">
-        Date/Time
-      </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datetime-modal" translate>
+            <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+              <!-- Made Datepicker the default format because we don't need seconds -->
+              <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
+              <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong></span>
+              <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
+              <span ng-switch-default translate>Date / Time</span>
+            </span>
+          </button>
+          <button type="submit" class="btn btn-info" ng-click="search()">
+            <i class="fa fa-search text-dark" aria-hidden="true"></i>
+          </button>
+          <button type="reset" title="date-filter" href class="input-group-addon" ng-click="search({ after: null, before: null }); searchParams.before = null; searchParams.after = null;" ng-show="searchParams.before || searchParams.after">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
       <div class="td" ng-hide="noFilters()">
         <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
       </div>
@@ -77,27 +83,7 @@
   </div>
 </form>
 
-<!-- Date Modal -->
-<div class="modal fade" id="date-filter-modal" tabindex="-1" role="dialog" aria-labelledby="date-filter-form" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Woohoo, you're reading this text in a modal!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+<div ng-include="'/templates/datetime_modal.html'"></div>
 
 <!-- Main Section -->
 <div class="container-fluid">
@@ -170,7 +156,7 @@
         </div>
         <div class="clearfix"></div>
         <!-- If no reports were found, a message is displayed-->
-        <p ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p>
+        <p class="p-2" ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p>
         <div ng-include="'/templates/reports/table.html'"></div>
 
         <!-- Footer Selection Toolbar -->

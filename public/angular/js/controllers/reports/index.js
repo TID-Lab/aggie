@@ -1,3 +1,4 @@
+
 angular.module('Aggie')
 .controller('ReportsIndexController', [
   '$state',
@@ -37,6 +38,7 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
 
+
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
     linkedtoIncidentOptions[1].title = $translate.instant(linkedtoIncidentOptions[1].title);
@@ -57,6 +59,8 @@ angular.module('Aggie')
       $scope.reportsById = $scope.reports.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
+
+
 
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
@@ -137,6 +141,7 @@ angular.module('Aggie')
       }, []);
     };
 
+
     var toggleRead = function(items, read) {
       return items.map(function(item) {
         item.read = read;
@@ -193,6 +198,10 @@ angular.module('Aggie')
       $scope.newReports = new Queue(paginationOptions.perPage);
     };
 
+    $scope.clearDateFilterFields = function() {
+      $scope.searchParams.after = null; $scope.searchParams.before = null;
+    };
+
     $scope.clearSearch = function() {
       $scope.search({ page: null, keywords: null });
     };
@@ -203,6 +212,10 @@ angular.module('Aggie')
 
     $scope.clearTags = function() {
       $scope.search({ tags: null });
+    };
+
+    $scope.clearDateFilter = function() {
+      $scope.search({ after: null, before: null });
     };
 
     $scope.countAndCheck = function(key, value) {

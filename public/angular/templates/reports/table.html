@@ -17,8 +17,8 @@
       <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
       <td class="compact time">
             <h6><span class="badge badge-info">{{ r.storedAt | interval }} ago</span></h6>
-            <p class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }} {{ r.storedAt | aggieDate:'date' }}</p>
-        <p class="created"><span>{{ r | delay }}</span></p>
+            <span class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }} {{ r.storedAt | aggieDate:'date' }}</span>
+        <!--<p class="created"><span>{{ r | delay }}</span></p>-->
       </td>
       <!--
       <td class="compact source" ng-class="sourceClass(r)">

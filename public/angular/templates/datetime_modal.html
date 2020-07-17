@@ -1,33 +1,68 @@
-<div ng-controller="DatetimeModalController">
-  <div class="modal fade" id="datetime-modal" tabindex="-1" role="form" aria-labelledby="datetime-modal-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="datetime-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
       <div class="modal-header">
-        <button class="close" ng-click="close()" aria-hidden="true">×</button>
-        <h4 class="modal-title" translate>Date Filters</h4>
+        <h5 class="modal-title" translate>Date Filters</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        <div class="well bs-component">
-          <form name="form" class="form-horizontal filter-form datetime-form">
-            <fieldset>
-              <div class="form-group">
-                <div>
-                  <label for="type" class="control-label" translate>From:</label>
-                  <input type="text" name="after" aggie-datepicker ng-model="times.after" placeholder="{{ 'Start date / time' | translate }}" data-date-format="MM/DD/YYYY HH:mm:ss">
-                </div>
-                <div>
-                  <label for="type" class="control-label" translate>To:</label>
-                  <input type="text" name="before" aggie-datepicker ng-model="times.before" placeholder="{{ 'End date / time' | translate }}" data-date-format="MM/DD/YYYY HH:mm:ss">
-                </div>
-                <button class="btn btn-default" ng-click="clear()" translate>Clear</button>
-              </div>
-            </fieldset>
-          </form>
+        <div class="form-group">
+          <label class="time-control-label" translate>From:</label>
+          <div class="input-group date" id="datetimepickerAfter" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter" ng-model="searchParams.after"
+              placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
+            <div class="input-group-append" data-target="#datetimepickerAfter" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
         </div>
+        <div class="form-group">
+          <label class="time-control-label" translate>To:</label>
+          <div class="input-group date" id="datetimepickerBefore" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore" ng-model="searchParams.before"
+              placeholder="{{ 'End date / Time' | translate }}" name="before"/>
+            <div class="input-group-append" data-target="#datetimepickerBefore" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary"
+          ng-click="searchParams.after = null; searchParams.before = null;">
+          Clear
+        </button>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
-        <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+        <button type="button" data-dismiss="modal"
+                class="btn btn-primary">
+          Save
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- This allows the datetimepicker to restrict the range of the picked dates-->
+<!-- ML2020 I'm not a fan of <script> tags but I literally don't know how to do this any other way-->
+<script type="text/javascript">
+  $('#datetimepickerAfter').datetimepicker({
+    format: 'YYYY-MM-DDTHH:mm'
+  });
+  $('#datetimepickerBefore').datetimepicker({
+    format: 'YYYY-MM-DDTHH:mm'
+  });
+  $(function () {
+    $('#datetimepickerAfter').datetimepicker();
+    $('#datetimepickerBefore').datetimepicker({
+      useCurrent: false
+    });
+    $("#datetimepickerAfter").on("change.datetimepicker", function (e) {
+      $('#datetimepickerBefore').datetimepicker('minDate', e.date);
+    });
+    $("#datetimepickerBefore").on("change.datetimepicker", function (e) {
+      $('#datetimepickerAfter').datetimepicker('maxDate', e.date);
+    });
+  });
+</script>
+$("#datetimepickerAf
