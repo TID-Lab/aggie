@@ -265,16 +265,21 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 1. Set `fetching` value to enable/disable fetching for all sources at global level.
   - This is also changed during runtime based on user choice.
 
+
 ### Logging
 
-Set various logging options in `logger` section:
+Set various logging options in `logger` section.
 
 - `console` section is for console logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
 - `file` section is for file logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
 - `SES` section is for email notifications.
   - Set appropriate AWS key and secret values.
   - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
+- `Slack` section is for Slack messages.
+  - Set the webhook URL to send logs to a specific Slack channel
 - **DO NOT** set `level` to *debug*. Recommended value is *error*.
+
+Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
 
 ## Using the Application
 
