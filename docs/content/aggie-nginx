@@ -42,8 +42,8 @@ server {
     add_header Cache-Control public;
 
     # XXX NEEDS CUSTOMIZATION.
-    # Change `/home/ubuntu` to the location of the `aggie` folder.
-    root /home/ubuntu/aggie/public/angular;
+    # Change `/home/my_user` to the location of the `aggie` folder.
+    root /home/my_user/aggie/public/angular;
   }
 
   location / {
