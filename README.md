@@ -156,8 +156,13 @@ cp config/secrets.json.example config/secrets.json
 $EDITOR config/secrets.json
 
 # Ready! Test run:
-npm start
+sudo systemctl start mongod
+
 # Verify Aggie is online at your URL, then kill this process.
+npm start
+
+# Stop mongod for now
+sudo systemctl stop mongod
 ```
 
 ```shell script
