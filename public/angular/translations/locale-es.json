@@ -344,7 +344,7 @@
     "tags": "Separadas por comas, e.g. <strong>manzana, fruta de la pasión, plátano</strong>",
     "facebook_url": "La URL de la página o grupo de Facebook, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
     "elmo_url": "La URL de la instancia de ELMO, e.g. <strong>https://abc.getelmo.org</strong>",
-    "whatsapp_help": "Lea la <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp_messages\">documentación</a> de Aggie para instrucciones de que como ajustar la palabra clave y como preparar Firefox para que reenvie los mensajes de WhatsApp"
+    "whatsapp_help": "Lea la <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp-messages\">documentación</a> de Aggie para instrucciones de que como ajustar la palabra clave y como preparar Firefox para que reenvie los mensajes de WhatsApp"
   },
   "URL is required.": "La URL es obligatoria.",
   "URL is invalid.": "La URL no es válida.",
