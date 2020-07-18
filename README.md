@@ -31,13 +31,16 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Table of Contents
 
+* [Using the Application](#using-the-application)
 * [Source Installation](#source-installation)
 * [Maintenance](#maintenance)
 * [Project Configuration](#project-configuration)
-* [Using the Application](#using-the-application)
-* [Deployment](#deployment)
 * [Architecture](#architecture)
 * [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
+
+## Using the Application
+
+Extensive documentation about using the application can be found in [ReadTheDocs page](http://aggie.readthedocs.io/en/stable/).
 
 ## Source Installation
 
@@ -295,41 +298,6 @@ Set various logging options in `logger` section.
 - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
-
-## Using the Application
-
-Extensive documentation about using the application can be found in [ReadTheDocs page](http://aggie.readthedocs.io/en/stable/).
-
-### Sources
-
-#### Adding Sources
-
-1. Inside the application, go to `Sources > Create Source`.
-1. To add a Twitter search, add all relevant keywords.
-  - Twitter has [more information on search terms](https://dev.twitter.com/streaming/overview/request-parameters#track).
-1. To add a Facebook source, copy and paste the URL of the Facebook group or page you want to follow (e.g. `https://www.facebook.com/nigerianforum`).
-1. To add an RSS feed, visit the website or blog you wish to use and find the RSS or other feed. (For example, `https://wordpress.org/news/feed/`).
-1. To add a WhatsApp source, in the field `keywords` enter the value you selected when setting up GNotifier as `keyword` as explained [here](#whatsapp).
-1. To add an ELMO source to track responses for a particular ELMO form, enter a URL like this: `https://yourdomain.com/api/v1/m/yourmission/responses.json?form_id=123`, where `123` is the ID of the form you noted above. The user associated with your API key must have permission to view responses on the mission in order for this to work.
-1. To add an SMSGH source, enter the keyword that the messages are being sent with. SMSGH will forward the messages to Aggie.
-
-#### Warnings
-
-As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
-
-1. Go to `Sources`.
-1. In the `Name` column, click the appropriate source.
-1. Under `Recent Events`, you can see recent warnings for the source.
-
-## Deployment
-
-Internally, we use [pm2](https://www.npmjs.com/package/pm2) to keep Aggie
-running. Since this is a multi-process application, the pm2 monitor will
-sometimes hang up when restarting the Aggie process after deploying a new
-version of the code. In this case, killing the forever process before deploying
-seems to fix it.
-
-We also use [nginx](http://nginx.org/) as a web-server. You can get an example of our config file [here](https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx), which enables https, cache, compression and http2.
 
 ## Architecture
 
