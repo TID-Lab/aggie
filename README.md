@@ -182,6 +182,9 @@ npx pm2 startup
 npm run serve
 npx pm2 save
 
+# If you ever modify secrets.json, restart the app by running (in the `aggie` directory):
+npx pm2 restart aggie
+
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
@@ -194,6 +197,9 @@ sudo $EDITOR /etc/logrotate.conf
   notifempty
   copytruncate
 }
+
+# Whenever you need to, you can view app logs by running (in the `aggie` directory):
+npx pm2 logs
 ```
 
 ## Maintenance
