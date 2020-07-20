@@ -43,12 +43,12 @@ while paginations:
             paginations.append({"list_id": list_id, "request":accounts_response["result"]["pagination"]["nextPage"]})
 
 
-output_dict = {}
+output_dict = {"crowdtangle_list_account_pairs":{}}
 #correcting the format of dict for aggie
 for l_name, l_dict in list_dict.items():
     if "accounts" in l_dict:
         for acc in l_dict["accounts"]:
-            output_dict[str(acc)] = l_dict["title"]
+            output_dict["crowdtangle_list_account_pairs"][str(acc)] = l_dict["title"]
 
 
 
