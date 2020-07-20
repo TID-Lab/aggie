@@ -34,7 +34,7 @@ public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
 lib/translations/locale-debug.json
 config/secrets.json
-
+config/crowdtangle_list.json 
 buildAssets
 
 NOTES

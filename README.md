@@ -250,7 +250,8 @@ Set `config.adminParty=true` if you want to run tests.
   1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable.
 	  ```python
   		headers = {
-	        'x-api-token': "XXYYZZTOKEN",
+		#Add Crowdtangle Dashboard token here
+	         'x-api-token': "YOUR TOKEN",
 		     'Cache-Control': "no-cache",
 		}
 
@@ -261,7 +262,6 @@ Set `config.adminParty=true` if you want to run tests.
 
 
 #### WhatsApp
-
 
 The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
   1. Install Firefox in Linux using your distribution preferred method.
