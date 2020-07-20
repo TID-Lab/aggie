@@ -5,9 +5,10 @@ from collections import defaultdict
 lists_url = "https://api.crowdtangle.com/lists"
 
 headers = {
-    'x-api-token': "" , #Add CT dashboard token here
+    # Add CrowdTangle Dashboard token here.
+    'x-api-token': "YOUR_TOKEN",
     'Cache-Control': "no-cache",
-    }
+}
 
 lists = requests.request("GET", lists_url, headers=headers)
 lists = json.loads(lists.text)
@@ -25,7 +26,6 @@ paginations = []
 for l_name in list_dict.keys():
     paginations.append({"list_id":str(l_name), "request":"https://api.crowdtangle.com/lists/{}/accounts".format(str(l_name))})
 
-
 while paginations:
     acc_obj = paginations.pop(0)
     list_id = acc_obj["list_id"]
@@ -42,7 +42,6 @@ while paginations:
         if "pagination" in accounts_response["result"] and "nextPage" in accounts_response["result"]["pagination"]:
             paginations.append({"list_id": list_id, "request":accounts_response["result"]["pagination"]["nextPage"]})
 
-
 output_dict = {"crowdtangle_list_account_pairs":{}}
 #correcting the format of dict for aggie
 for l_name, l_dict in list_dict.items():
@@ -50,25 +49,12 @@ for l_name, l_dict in list_dict.items():
         for acc in l_dict["accounts"]:
             output_dict["crowdtangle_list_account_pairs"][str(acc)] = l_dict["title"]
 
-
-
 # print(json.dumps(output_dict, indent=4, ensure_ascii=False))
 with open("../config/crowdtangle_list.json", "w") as out:
     json.dump(output_dict, out, indent=4, ensure_ascii=False)
-
-
-
 
 # print(json.dumps(list_dict, indent=4, ensure_ascii=False))
 # with open("new_output1.json", "w") as out:
     # json.dump(list_dict, out, indent=4, ensure_ascii=False)
 
-
 # print(paginations)
-
-
-
-
-
-
-

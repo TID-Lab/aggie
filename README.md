@@ -243,23 +243,21 @@ Set `config.adminParty=true` if you want to run tests.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
-#### Crowdtangle
+#### CrowdTangle
 
-  1. Create a dashboard on Crowdtangle and generate the dashboard token.
+  1. Create a dashboard on CrowdTangle and generate the dashboard token.
   1. `cd scripts`
-  1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable.
-	  ```python
-  		headers = {
-		#Add Crowdtangle Dashboard token here
-	         'x-api-token': "YOUR TOKEN",
-		     'Cache-Control': "no-cache",
-		}
-
-  	   ```  
+  1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable:
+      ```python
+      headers = {
+          # Add CrowdTangle Dashboard token here.
+          'x-api-token': "YOUR_TOKEN",
+          'Cache-Control': "no-cache",
+      }
+      ```
   1. Run `python3 get_ct_accounts_from_lists.py` inside the `scripts` directory.
   1. This will generate a new file `crowdtangle_list.json` in the `config` directory.
-  1. Add the token to the config/secrets.json as well. 
-
+  1. Add your token to `config/secrets.json` as well.
 
 #### WhatsApp
 
