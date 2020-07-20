@@ -5,7 +5,7 @@ from collections import defaultdict
 lists_url = "https://api.crowdtangle.com/lists"
 
 headers = {
-    'x-api-token': "T20RoAVir0jWCmJRYLax2LsGhUfuIptSqyYW6u7l" , #Add CT dashboard token here
+    'x-api-token': "" , #Add CT dashboard token here
     'Cache-Control': "no-cache",
     }
 
