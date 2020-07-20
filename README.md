@@ -250,7 +250,7 @@ Set `config.adminParty=true` if you want to run tests.
   1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable.
 	  ```python
   		headers = {
-	             'x-api-token': "XXYYZZTOKEN",
+	        'x-api-token': "XXYYZZTOKEN",
 		     'Cache-Control': "no-cache",
 		}
 
