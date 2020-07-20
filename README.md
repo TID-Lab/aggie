@@ -248,13 +248,13 @@ Set `config.adminParty=true` if you want to run tests.
   1. Create a dashboard on Crowdtangle and generate the dashboard token.
   1. `cd scripts`
   1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable.
-  ```python
-  headers = {
-     'x-api-token': "XXYYZZTOKEN",
-     'Cache-Control': "no-cache",
-  }
+	  ```python
+  		headers = {
+	             'x-api-token': "XXYYZZTOKEN",
+		     'Cache-Control': "no-cache",
+		}
 
-  ```  
+  	   ```  
   1. Run `python3 get_ct_accounts_from_lists.py` inside the `scripts` directory.
   1. This will generate a new file `crowdtangle_list.json` in the `config` directory.
   1. Add the token to the config/secrets.json as well. 
