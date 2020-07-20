@@ -19,7 +19,8 @@
     'view other users': ['manager', 'admin'],
     'update users': ['viewer', 'monitor', 'admin'],
     'admin users': ['admin'],
-    'change admin password': ['admin']
+    'change admin password': ['admin'],
+    'edit tags': ['manager', 'admin']
   };
 
   // Determine if a user can do a certain action

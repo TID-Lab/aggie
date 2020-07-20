@@ -5,6 +5,9 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var Schema = mongoose.Schema;
+var SchemaTypes = mongoose.SchemaTypes;
+var logger = require('../lib/logger');
+var SMTCTag = require('../models/tag');
 
 var schema = new Schema({
   authoredAt: Date,
@@ -15,6 +18,7 @@ var schema = new Schema({
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
+  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
@@ -71,6 +75,22 @@ schema.methods.toggleRead = function(read) {
 };
 
 var Report = mongoose.model('Report', schema);
+
+SMTCTag.schema.on('tag:removed', function(id) {
+  Report.find({smtcTags: id}, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
+    reports.forEach(function(report) {
+      var i = report.smtcTags.indexOf(id);
+      if (i > -1) {
+        report.smtcTags.splice(i, 1);
+        report.save();
+      }
+    });
+  });
+})
+
 
 // queryReports reports based on passed query data
 Report.queryReports = function(query, page, callback) {
