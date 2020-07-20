@@ -243,7 +243,25 @@ Set `config.adminParty=true` if you want to run tests.
   1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
   1. Go to Settings > Settings and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
+#### Crowdtangle
+
+  1. Create a dashboard on Crowdtangle and generate the dashboard token.
+  1. `cd scripts`
+  1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable.
+  ```python
+  headers = {
+     'x-api-token': "XXYYZZTOKEN",
+     'Cache-Control': "no-cache",
+  }
+
+  ```  
+  1. Run `python3 get_ct_accounts_from_lists.py` inside the `scripts` directory.
+  1. This will generate a new file `crowdtangle_list.json` in the `config` directory.
+  1. Add the token to the config/secrets.json as well. 
+
+
 #### WhatsApp
+
 
 The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
   1. Install Firefox in Linux using your distribution preferred method.
