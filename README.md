@@ -281,10 +281,12 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
 
 #### ELMO
 
-  1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
-  1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
-  1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
-  1. Go to Settings > Settings and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
+1. In ELMO, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
+1. In Aggie, use the url `https://YOUR_ELMO_SERVER.com/api/v1/m/YOUR_MISSION/responses?form_id=123` for your ELMO source
+1. In ELMO, visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
+1. In Aggie, go to **Settings > Settings** and edit the ELMO settings to add your API key.
+    1. Remember to toggle the switch on, once you have saved the settings.
 
 ### Google Places
 
