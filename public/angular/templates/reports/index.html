@@ -1,7 +1,7 @@
 <alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <!-- This is the Search Bar -->
-<form>
-  <div class="table-filters mb-4">
+<form class="mb-4">
+  <div class="table-filters">
     <div class="filter-row mb-0">
       <div class="td search">
         <div class="input-group">
@@ -32,7 +32,6 @@
             </button>
           </div>
         </div>
-        <button type="reset" title="Search" href class="input-group-addon" ng-click="clearAuthor()" ng-show="searchParams.author">×</button>
       </div>
       <div class="td filter date-filter">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datetime-modal" translate>
@@ -109,16 +108,16 @@
         <!-- This is the Toolbar with selection actions -->
         <div class="card-header">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-            <div class="btn-group mt-1 mr-2" role="group" aria-label="Read/Unread Buttons">
+            <div class="mt-1 mr-2" role="group" aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
-              <div class="btn-group mt-1 mr-2" role="group" aria-label="Read/Unread Buttons">
-                <div class="mr-2 form-check">
+              <div class="btn-group" role="group" aria-label="Read/Unread Buttons">
+                <div class="mr-2">
                   <input ng-select-all items="reports" title="Select All" type="checkbox" class="form-check-input"/>
                 </div>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
+                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
@@ -133,7 +132,7 @@
                   Add to Incident
                 </button>
               </div>
-              <div class="mr-4">
+              <div class="btn-group mr-4">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
@@ -161,11 +160,6 @@
         <div class="card-footer">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div class="btn-group mt-1 mr-2" role="group">
-              <div class="btn-group mr-2" role="group" aria-label="Read/Unread Buttons">
-                <div class="mr-2 mt-1 form-check">
-                  <input ng-select-all items="reports" type="checkbox" class="form-check-input"/>
-                </div>
-              </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
@@ -201,20 +195,9 @@
       </div>
     </div>
     <div class="col">
-      <p class="navbar-text" ng-if="stats">
-        <div class="nav-bar-number">{{stats.totalReports | number}}</div>
-        <div class="nav-bar-label" translate>Total Reports</div>
-        <div class="nav-bar-number">{{stats.totalReportsPerMinute | number}}</div>
-        <div class="nav-bar-label" translate>Reports/min</div>
-        <div class="nav-bar-number">{{stats.totalReportsUnread | number}}</div>
-        <div class="nav-bar-label" translate>Unread</div>
-        <div class="nav-bar-number">{{stats.totalReportsFlagged | number}}</div>
-        <div class="nav-bar-label" translate>Flagged</div>
-        <div class="nav-bar-number">{{stats.totalIncidents | number}}</div>
-        <div class="nav-bar-label" translate>Incidents</div>
-        <div class="nav-bar-number">{{stats.totalEscalatedIncidents | number}}</div>
-        <div class="nav-bar-label" translate>Escalated Incidents</div>
-      </p>
+      <div class="sticky-top">
+        <div ng-include="'/templates/statsbar.html'"></div>
+      </div>
     </div>
   </div>
 </div>

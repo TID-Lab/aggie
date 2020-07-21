@@ -2211,17 +2211,8 @@ textarea.form-control {
   padding-left: 5px;
 }
 
-.form-check {
-  position: relative;
-  display: block;
-  padding-left: 1.25rem;
-}
 
-.form-check-input {
-  position: absolute;
-  margin-top: 0.3rem;
-  margin-left: -1.25rem;
-}
+
 
 .form-check-input[disabled] ~ .form-check-label,
 .form-check-input:disabled ~ .form-check-label {

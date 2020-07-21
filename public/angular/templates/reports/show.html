@@ -51,8 +51,8 @@
               <td class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
             </tr>
             <tr>
-              <th scope="row" class="detail-key" translate>Tags</th>
-              <td class="detail-value">{{ tagsToString(report.tags) }}</td>
+              <th scope="row" class="detail-key" ng-show="report.metadata.mediaUrl" translate>Media Content</th>
+              <td class="detail-value"></td>
             </tr>
           </tbody>
         </table>

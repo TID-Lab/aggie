@@ -5,7 +5,6 @@ angular.module('Aggie')
     restrict: 'E',
     replace: false,
     template:
-        '<div class="btn-group"><button role="button" ng-click="toggle(false)" data-toggle="button" class'
         '<div class="toggle-item" ng-repeat="(status, label) in options" ng-click="toggleStatus(status)" ng-class="{ selected: isStatus(status) }">{{label}}</div>',
 
     scope: {

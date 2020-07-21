@@ -60,6 +60,12 @@ angular.module('Aggie')
         Socket.emit('incidentQuery', searchParams());
         Socket.on('incidents', $scope.handleNewIncidents);
       }
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+      // if (!$scope.currentUser) {
+      //   Socket.leave('stats');
+      //   Socket.removeAllListeners('stats');
+      // }
     };
 
     var removeDuplicates = function(incidents) {
@@ -96,6 +102,10 @@ angular.module('Aggie')
         params[key] = newParams[key];
       }
       return params;
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     var paginate = function(items) {
