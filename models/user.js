@@ -11,7 +11,7 @@ var logger = require('../lib/logger');
 var SALT_WORK_FACTOR = 10;
 
 var isEmail = function(email) {
-  return (typeof email === 'string' && validator.isEmail(email))
+  return (typeof email === 'string' && validator.isEmail(email));
 }
 
 var userSchema = new mongoose.Schema({

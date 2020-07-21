@@ -10,7 +10,7 @@ var schema = new Schema({
   authoredAt: Date,
   fetchedAt: Date,
   storedAt: { type: Date, index: true },
-  content: String,
+  content: { type: String, index: true },
   author: { type: String, index: true },
   url: String,
   metadata: Schema.Types.Mixed,
