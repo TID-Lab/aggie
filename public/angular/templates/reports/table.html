@@ -34,7 +34,10 @@
         {{ r.author }}
       </td>
       <td class="expand content" ng-class="{ strong: !isRead(r) }">
-        <a href="/reports/{{r._id}}">{{ (r.content || '[No Content]') | stripHtml }}</a>
+        <a href="/reports/{{r._id}}">
+          <p>{{ (r.content || '[No Content]') | stripHtml }}</p>
+          <p class = "shared-content" ng-if="r.metadata.description"> {{r.metadata.description | stripHtml}} </p>
+        </a>
       </td>
       <td class="expand tag" ng-class="{ strong: !isRead(r) }">
         {{ tagsToString(r.tags) }}

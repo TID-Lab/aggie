@@ -5,7 +5,10 @@
   "password_too_short": "La contraseña es muy corta. Use una más larga.",
   "notice": {
     "report": {
-      "unlinked": "El informe ha sido desconectado del incidente"
+      "unlinkMultiple": {
+        "success": "El informe ha sido desconectado del incidente",
+        "error": "Se produjo un error al desvincular los informes."
+      }
     }
   },
   "relevant": "Relevante",
@@ -319,6 +322,7 @@
   "Linked Incident": "Incidente conectado",
   "Date/Time": "Fecha/Hora",
   "Add to Incident": "Añadir a incidente",
+  "Remove from Incident": "Eliminar del incidente",
   "Grab Batch": "Coger lote",
 "There are currently no trends. Click 'Create Trend' to make one.": "No hay tendencias de momento. Haga clic en 'Crear tendencia' parar crear una.",
   "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.": "Los datos se actualizan cada 10 segundos. Datos agrupados en intervalos de 5 minutos. Haga click en los los círculos para ver los informes de ese momento,",
@@ -340,7 +344,7 @@
     "tags": "Separadas por comas, e.g. <strong>manzana, fruta de la pasión, plátano</strong>",
     "facebook_url": "La URL de la página o grupo de Facebook, e.g. <strong>https://www.facebook.com/i.love.cats.in</strong>",
     "elmo_url": "La URL de la instancia de ELMO, e.g. <strong>https://abc.getelmo.org</strong>",
-    "whatsapp_help": "Lea la <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp_messages\">documentación</a> de Aggie para instrucciones de que como ajustar la palabra clave y como preparar Firefox para que reenvie los mensajes de WhatsApp"
+    "whatsapp_help": "Lea la <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp-messages\">documentación</a> de Aggie para instrucciones de que como ajustar la palabra clave y como preparar Firefox para que reenvie los mensajes de WhatsApp"
   },
   "URL is required.": "La URL es obligatoria.",
   "URL is invalid.": "La URL no es válida.",

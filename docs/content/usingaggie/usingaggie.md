@@ -24,6 +24,13 @@ Sources can also be services that send reports directly to Aggie. Currently, we 
 
     ![Sources](sources3.png)
 
+### Warnings
+
+As the application pulls in data, the app may encounter warnings. These warnings help determine whether or not a feed is pulling in data correctly.
+
+1. Go to `Sources`.
+1. In the `Name` column, click the appropriate source.
+1. Under `Recent Events`, you can see recent warnings for the source.
 
 ## Reports Page Activities
 

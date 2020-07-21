@@ -5,7 +5,7 @@ var Report = require('../models/report');
 var THROTTLE = 20;
 
 function streamingUpdate(Model, throttle, which, editFn, next) {
-  var stream = Model.find(which).stream();
+  var stream = Model.find(which).cursor();
   var running = 0;
 
   stream.on('data', function(doc) {

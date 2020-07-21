@@ -296,6 +296,12 @@ td.content {
     height: 100%;
     width: 100%;
     display: inline-block;
+    .shared-content {
+      border-left: 3px solid #4e5d6c;
+      padding: 0px 10px;
+      margin: 0 0 21px;
+      color: rgb(87, 87, 87);
+    }
   }
 }
 
