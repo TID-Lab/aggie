@@ -168,6 +168,10 @@ cp config/secrets.json.example config/secrets.json
 # This includes adding your SMTP email server credentials.
 $EDITOR config/secrets.json
 
+# User input: Get CrowdTangle sources per the README instructions, if using them.
+# Otherwise:
+echo "{}" > config/crowdtangle_list.json
+
 # Ready! Test run:
 npm start
 # Now verify Aggie is online at your URL, then kill this process (ctrl+c) when you're done.
