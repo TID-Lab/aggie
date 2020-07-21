@@ -73,7 +73,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   }
   if (this.tags) {
     filter.tags.$options = 'i';
-    filter.tags.$regex = this.tags;
+    filter.tags.$all = this.tags;
   } else delete filter.tags;
 
   // Search by keyword
