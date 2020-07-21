@@ -61,6 +61,8 @@ Again, see below for automated installation.
     1. Make sure MongoDB is running:
         1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
     1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+1. (optional) **SMTP email server**
+    1. Required in production for adding new users.
 1. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
     - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
@@ -163,6 +165,7 @@ nvm install && npm install
 
 cp config/secrets.json.example config/secrets.json
 # User input: Customize Aggie settings per the README instructions.
+# This includes adding your SMTP email server credentials.
 $EDITOR config/secrets.json
 
 # Ready! Test run:
@@ -289,6 +292,8 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 ### Emails
 
+Email service is required to create new users.
+
 1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
 1. `email.from` is the address from which application emails will come
 1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
@@ -298,7 +303,6 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 1. Set `fetching` value to enable/disable fetching for all sources at global level.
   - This is also changed during runtime based on user choice.
-
 
 ### Logging
 
