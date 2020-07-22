@@ -1,17 +1,19 @@
-<div class="d-none d-xl-block">
-  <div class="jumbotron-fluid" ng-if="stats">
-    <span title="{{'Total number of Reports' | translate}}" translate>Total Reports</span>
-    <h3>{{stats.totalReports | number}}</h3>
-    <span title="{{'Total number of Reports' | translate}}" translate>Reports/min</span>
-    <h3>{{stats.totalReportsPerMinute | number}}</h3>
-    <span translate>Unread</span>
-    <h3>{{stats.totalReportsUnread | number}}</h3>
-    <span translate>Flagged</span>
-    <h3>{{stats.totalReportsFlagged | number}}</h3>
-    <span translate>Incidents</span>
-    <h3>{{stats.totalIncidents | number}}</h3>
-    <span translate>Escalated Incidents</span>
-    <h3>{{stats.totalEscalatedIncidents | number}}</h3>
+<div class="pt-2">
+  <div class="d-none d-xl-block">
+    <div class="jumbotron-fluid" ng-if="stats">
+      <span title="{{'Total number of Reports' | translate}}" translate>Total Reports</span>
+      <h3>{{stats.totalReports | number}}</h3>
+      <span title="{{'Total number of Reports' | translate}}" translate>Reports/min</span>
+      <h3>{{stats.totalReportsPerMinute | number}}</h3>
+      <span translate>Unread</span>
+      <h3>{{stats.totalReportsUnread | number}}</h3>
+      <span translate>Flagged</span>
+      <h3>{{stats.totalReportsFlagged | number}}</h3>
+      <span translate>Incidents</span>
+      <h3>{{stats.totalIncidents | number}}</h3>
+      <span translate>Escalated Incidents</span>
+      <h3>{{stats.totalEscalatedIncidents | number}}</h3>
+    </div>
   </div>
 </div>
 

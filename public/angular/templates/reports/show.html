@@ -19,66 +19,162 @@
       <div class="table-responsive">
         <table class="table table-hover table-bordered table-striped detail-table">
           <tbody>
+            <!----------------- General Report Information ----------------->
             <tr>
               <th scope="row" class="detail-key" translate>Content</th>
-              <td colspan="5" class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
+              <td colspan="10" class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
             </tr>
             <tr ng-if="report.metadata.description">
               <th scope="row" class="detail-key" translate>Shared Content</th>
-              <td colspan="5" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
+              <td colspan="10" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Author</th>
-              <td colspan="5" class="detail-value">
+              <td colspan="10" class="detail-value">
                 <a ng-href="{{report.metadata.accountUrl}}">{{ report.author }}</a>
               </td>
             </tr>
               <th scope="row" class="detail-key" translate>Authored Time</th>
-              <td colspan="5" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+              <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Fetched Time</th>
-              <td colspan="5" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+              <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Stored Time</th>
-              <td colspan="5" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
+              <td colspan="10" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
             </tr>
             <tr ng-repeat="source in sources">
               <th scope="row" class="detail-key" translate>Sources</th>
-              <td colspan="5" class="detail-value">{{ source.nickname }}</td>
+              <td colspan="10" class="detail-value">{{ source.nickname }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>URL</th>
-              <td colspan="5" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
+              <td colspan="10" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
             </tr>
-            <!-- Crowdtangle Specific Table Elements -->
-            <tr ng-show="report.metadata.crowdtangleId">
-              <th scope="row" class="detail-key" translate>Facebook Report Statistics</th>
-              <td class="detail-value">
-                <span>
-                  {{ "Comment Count:" | translate }} <strong>{{report.metadata.actualStatistics.commentCount}}</strong>
-                </span>
-                <span>
-                  {{ "Like count:" | translate }} <strong>{{report.metadata.actualStatistics.likeCount}}</strong>
-                </span>
-                <span>
-                  {{ ":" | translate }} <strong>{{report.metadata.actualStatistics.likeCount}}</strong>
-                </span>
-              </td>
-              <td class="detail-value">  </td>
-            </tr>
-            <tr ng-show="report.metadata.mediaUrl">
-              <th scope="row" class="detail-key" translate>Media Content</th>
-              <td colspan="5" class="detail-value">
-                <div ng-repeat="photo in report.metadata.mediaUrl">
-                  <img class="img-fluid img-thumbnail" ng-src="{{photo.url}}">
-                </div>
-              </td>
-            </tr>
+            <!-------------- Crowdtangle Specific Table Elements -------------->
+            <div ng-show="report.metadata.crowdtangleId">
+              <!---- Crowdtangle Current Statistics ---->
+              <tr>
+                <th scope="row" class="detail-key" translate>Statistics</th>
+                <td class="detail-value">
+                  <span title="{{'Comments' | translate}}">
+                    <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Shares' | translate}}">
+                    <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.actualStatistics.shareCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Likes' | translate}}">
+                    <b>{{'Likes:' | translate}}</b> {{report.metadata.actualStatistics.likeCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Love Reacts' | translate}}">
+                    <b>❤'s</b> {{report.metadata.actualStatistics.loveCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Haha Reacts' | translate}}">
+                    <b>😂's:</b> {{report.metadata.actualStatistics.hahaCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Wow Reacts' | translate}}">
+                    <b>😯's</b> {{report.metadata.actualStatistics.wowCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Sad Reacts' | translate}}">
+                    <b>😢's: </b>{{report.metadata.actualStatistics.sadCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Angry Reacts' | translate}}">
+                    <b>😡's: </b>{{report.metadata.actualStatistics.angryCount}}
+                  </span>
+                </td>
+              </tr>
+              <!---- Crowdtangle Expected Statistics ---->
+              <tr>
+                <th scope="row" class="detail-key" translate>Expected Statistics</th>
+                <td class="detail-value">
+                  <span title="{{'Comments' | translate}}">
+                    <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.expectedStatistics.commentCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Shares' | translate}}">
+                    <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.expectedStatistics.shareCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Likes' | translate}}">
+                    <b>{{'Likes:' | translate}}</b> {{report.metadata.expectedStatistics.likeCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Love Reacts' | translate}}">
+                    <b>❤'s</b> {{report.metadata.expectedStatistics.loveCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Haha Reacts' | translate}}">
+                    <b>😂's:</b> {{report.metadata.expectedStatistics.hahaCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Wow Reacts' | translate}}">
+                    <b>😯's</b> {{report.metadata.expectedStatistics.wowCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Sad Reacts' | translate}}">
+                    <b>😢's: </b>{{report.metadata.expectedStatistics.sadCount}}
+                  </span>
+                </td>
+                <td class="detail-value">
+                  <span title="{{'Angry Reacts' | translate}}">
+                    <b>😡's: </b>{{report.metadata.expectedStatistics.angryCount}}
+                  </span>
+                </td>
+              </tr>
+              <tr ng-show="report.metadata.mediaUrl">
+                <th scope="row" class="detail-key" translate>Media Content</th>
+                <td colspan="10" class="detail-value">
+                  <div ng-repeat="photo in report.metadata.mediaUrl">
+                    <img ng-if="photo.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{photo.url}}">
+                    <video ng-if="photo.type === 'video'"
+                      id="my-video"
+                      class="video-js"
+                      controls
+                      preload="auto"
+                      width="640"
+                      height="264"
+                      poster="MY_VIDEO_POSTER.jpg"
+                      data-setup="{}">
+                      <source src="MY_VIDEO.mp4" type="video/mp4" />
+                      <source src="MY_VIDEO.webm" type="video/webm" />
+                      <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                        >
+                      </p>
+                    </video>
+                  </div>
+                </td>
+              </tr>
+            </div>
+            <!------------------ End Crowdtangle Data ------------------>
           </tbody>
         </table>
-        <p>{{report.metadata}}</p>
+        <p>{{report.metadata.mediaUrl}}</p>
       </div>
     </div>
   </div>

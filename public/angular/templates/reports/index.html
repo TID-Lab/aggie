@@ -108,12 +108,10 @@
         <!-- This is the Toolbar with selection actions -->
         <div class="card-header">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-            <div class="mt-1 mr-2" role="group" aria-label="Read/Unread Buttons/Selection">
+            <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
-              <div class="btn-group" role="group" aria-label="Read/Unread Buttons">
-                <div class="mr-2">
-                  <input ng-select-all items="reports" title="Select All" type="checkbox" class="form-check-input"/>
-                </div>
+              <div class="btn-group mr-4">
+                <input ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
                 <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
@@ -123,7 +121,7 @@
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
+                <button type="button mr-4" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
                 </button>
               </div>
@@ -132,7 +130,7 @@
                   Add to Incident
                 </button>
               </div>
-              <div class="btn-group mr-4">
+              <div class="btn-group mr-2">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
@@ -143,7 +141,6 @@
                 </li>
                 <li class="page-item" ng-class="{disabled: isFirstPage() }">
                   <a class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
-                </li>
                 <li class="page-item" ng-class="{disabled: isLastPage() }">
                   <a class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
                 </li>

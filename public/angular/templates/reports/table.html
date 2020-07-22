@@ -25,21 +25,21 @@
         <div class="icon-left"></div>
       </td>
       -->
-      <td class="compact source" ng-class="{ strong: !isRead(r) }">
+      <td class="compact source text-wrap" ng-class="{ strong: !isRead(r) }">
         <span ng-repeat="s in r._sources" class="source">
           {{ sourcesById[s].nickname || '[Deleted]' }}
         </span>
       </td>
-      <td class="compact author" ng-class="{ strong: !isRead(r) }">
+      <td class="compact author text-wrap" ng-class="{ strong: !isRead(r) }">
         {{ r.author }}
       </td>
-      <td class="expand content" ng-class="{ strong: !isRead(r) }">
+      <td class="expand content text-wrap" ng-class="{ strong: !isRead(r) }">
         <a href="/reports/{{r._id}}">
           <p>{{ (r.content || '[No Content]') | stripHtml }}</p>
           <p class = "shared-content" ng-if="r.metadata.description"> {{r.metadata.description | stripHtml}} </p>
         </a>
       </td>
-      <td class="expand tag" ng-class="{ strong: !isRead(r) }">
+      <td class="expand tag text-wrap" ng-class="{ strong: !isRead(r) }">
         {{ tagsToString(r.tags) }}
       </td>
       <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
