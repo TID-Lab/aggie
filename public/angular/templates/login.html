@@ -1,29 +1,32 @@
-<h1 translate>Log in</h1>
-
-<div class="well bs-component">
-  <form class="form-horizontal" ng-submit="login(form)">
-    <fieldset>
-      <div class="form-group">
-        <label for="username" class="col-lg-2 control-label" translate>Username</label>
-        <div class="col-lg-3">
-          <input type="text" ng-model="user.username" class="form-control" id="username" placeholder="{{'Enter username' | translate}}">
+<div class="mt-4 container">
+  <div class="row">
+    <div class="mx-auto col-8">
+      <div class="card">
+        <h2 class="card-title text-center p-3" translate>Log In</h2>
+        <div class="well bs-component">
+          <form class="form-" ng-submit="login(form)">
+            <fieldset>
+              <div class="form-group col">
+                <label for="username" translate>Username</label>
+                <input type="text" ng-model="user.username" class="form-control" aria-describedby="usernameInput" id="username" placeholder="{{'Enter username' | translate}}">
+              </div>
+              <div class="form-group col">
+                <label for="password" translate>Password</label>
+                <input type="password" ng-model="user.password" class="form-control" id="password" placeholder="{{'Enter password' | translate}}">
+              </div>
+              <div class="form-group col">
+                <div class="">
+                  <button type="submit" class="btn btn-primary" translate>Log In</button>
+                  <br/><br/>
+                  <a href="#" type="button" data-toggle="modal" data-target="#passwordResetModal" translate>Forgot password?</a>
+                </div>
+              </div>
+            </fieldset>
+          </form>
         </div>
       </div>
-      <div class="form-group">
-        <label for="password" class="col-lg-2 control-label" translate>Password</label>
-        <div class="col-lg-3">
-          <input type="password" ng-model="user.password" class="form-control" id="password" placeholder="{{'Enter password' | translate}}">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-lg-10 col-lg-offset-2">
-          <button type="submit" class="btn btn-primary" translate>Log in</button>
-          <br/><br/>
-          <div ng-controller="PasswordResetModalController">
-            <a href="#" ng-click="open()" translate>Forgot password?</a>
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </form>
+    </div>
+  </div>
 </div>
+
+<div ng-include="'/templates/password_reset_modal.html'"></div>

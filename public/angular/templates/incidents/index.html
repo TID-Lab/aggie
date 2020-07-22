@@ -57,6 +57,12 @@
           <option value="" translate>Public?</option>
         </select>
       </div>
+      <div class="td filter">
+        <button type="submit" class="btn btn-info" ng-click="search()">
+          <span class="mr-2" translate> Search </span>
+          <i class="fa fa-search text-dark" aria-hidden="true"></i>
+        </button>
+      </div>
       <div class="td" ng-hide="noFilters()">
         <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
       </div>

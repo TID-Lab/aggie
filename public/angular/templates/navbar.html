@@ -4,7 +4,7 @@
     <div class="navbar-brand"></div>
   </a>
   <!-- This is the button for the collapsed nav content -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLeft" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler"  ng-show="currentUser" type="button" data-toggle="collapse" data-target="#navbarLeft" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarLeft">
@@ -33,7 +33,7 @@
       </li>
       <li class="nav-item dropdown" ui-sref-active="active">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
+           aria-haspopup="true" aria-expanded="false" >
           Settings
         </a>
         <div class="dropdown-menu" role="menu" aria-labelledby="navbarDropdown">

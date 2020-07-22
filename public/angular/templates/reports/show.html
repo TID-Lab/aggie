@@ -21,41 +21,64 @@
           <tbody>
             <tr>
               <th scope="row" class="detail-key" translate>Content</th>
-              <td class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
+              <td colspan="5" class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
             </tr>
             <tr ng-if="report.metadata.description">
               <th scope="row" class="detail-key" translate>Shared Content</th>
-              <td class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
+              <td colspan="5" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Author</th>
-              <td class="detail-value">{{ report.author }}</td>
+              <td colspan="5" class="detail-value">
+                <a ng-href="{{report.metadata.accountUrl}}">{{ report.author }}</a>
+              </td>
             </tr>
               <th scope="row" class="detail-key" translate>Authored Time</th>
-              <td class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+              <td colspan="5" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Fetched Time</th>
-              <td class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+              <td colspan="5" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>Stored Time</th>
-              <td class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
+              <td colspan="5" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
             </tr>
             <tr ng-repeat="source in sources">
               <th scope="row" class="detail-key" translate>Sources</th>
-              <td class="detail-value">{{ source.nickname }}</td>
+              <td colspan="5" class="detail-value">{{ source.nickname }}</td>
             </tr>
             <tr>
               <th scope="row" class="detail-key" translate>URL</th>
-              <td class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
+              <td colspan="5" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
             </tr>
-            <tr>
-              <th scope="row" class="detail-key" ng-show="report.metadata.mediaUrl" translate>Media Content</th>
-              <td class="detail-value"></td>
+            <!-- Crowdtangle Specific Table Elements -->
+            <tr ng-show="report.metadata.crowdtangleId">
+              <th scope="row" class="detail-key" translate>Facebook Report Statistics</th>
+              <td class="detail-value">
+                <span>
+                  {{ "Comment Count:" | translate }} <strong>{{report.metadata.actualStatistics.commentCount}}</strong>
+                </span>
+                <span>
+                  {{ "Like count:" | translate }} <strong>{{report.metadata.actualStatistics.likeCount}}</strong>
+                </span>
+                <span>
+                  {{ ":" | translate }} <strong>{{report.metadata.actualStatistics.likeCount}}</strong>
+                </span>
+              </td>
+              <td class="detail-value">  </td>
+            </tr>
+            <tr ng-show="report.metadata.mediaUrl">
+              <th scope="row" class="detail-key" translate>Media Content</th>
+              <td colspan="5" class="detail-value">
+                <div ng-repeat="photo in report.metadata.mediaUrl">
+                  <img class="img-fluid img-thumbnail" ng-src="{{photo.url}}">
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+        <p>{{report.metadata}}</p>
       </div>
     </div>
   </div>
