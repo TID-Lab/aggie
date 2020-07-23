@@ -7,7 +7,7 @@ require('./angular-resource');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
-require('./loading-bar');
+require('./loading-bar.min');
 require('angular-translate');
 require('angular-translate-loader-static-files');
 require('angular-translate-handler-log');
@@ -34,6 +34,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 .factory('tz', function() {
   return require('timezone');
 })
+
 
 .run([
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
