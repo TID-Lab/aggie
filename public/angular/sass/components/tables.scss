@@ -234,9 +234,11 @@ table, .table {
 .table-filters {
   width: 100%;
   padding: 5px;
-  background-color: #eaef92;
+  background-color: #f6edd9;
   font-size: 12px;
   .filter-row {
+    padding-left: 10%;
+    padding-right: 10%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
