@@ -160,6 +160,18 @@ angular.module('Aggie')
       });
     };
 
+    $scope.clearTitle = function() {
+      $scope.search({ title: null });
+    }
+
+    $scope.clearTags = function() {
+      $scope.search({ tags: null });
+    }
+
+    $scope.clearLocationName = function() {
+      $scope.search({ locationName: null });
+    }
+
     $scope.noFilters = function() {
       return $scope.searchParams.title === null &&
         $scope.searchParams.locationName === null &&

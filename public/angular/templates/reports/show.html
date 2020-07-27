@@ -4,177 +4,233 @@
     <li class="breadcrumb-item active" translate>Report Details</li>
   </ol>
 </nav>
-<div class="container">
-  <div class="card">
-    <div class="card-header">
-      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with edit confirmations" ng-show="currentUser.can('edit data')">
-        <div class="btn-group">
-          <button type="button" ui-sref="reports" class="btn btn-default mr-2">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-          </button>
-        </div>
-      </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered table-striped detail-table">
-          <tbody>
-            <!----------------- General Report Information ----------------->
-            <tr>
-              <th scope="row" class="detail-key" translate>Content</th>
-              <td colspan="10" class="detail-value" ng-bind-html="report.content">{{ report.content  }}</td>
-            </tr>
-            <tr ng-if="report.metadata.description">
-              <th scope="row" class="detail-key" translate>Shared Content</th>
-              <td colspan="10" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
-            </tr>
-            <tr>
-              <th scope="row" class="detail-key" translate>Author</th>
-              <td colspan="10" class="detail-value">
-                <a ng-href="{{report.metadata.accountUrl}}">{{ report.author }}</a>
-              </td>
-            </tr>
+    <div class="col-xl-8">
+      <div class="card">
+        <div class="card-header">
+          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with edit confirmations" ng-show="currentUser.can('edit data')">
+            <div class="btn-group">
+              <button type="button" ui-sref="reports" class="btn btn-default mr-2">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="right-side">
+              <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
+                <button type="button" class="btn btn-info" ng-click="toggleFlagged(false)">
+                  <span class="mr-2" translate> Un-Flag </span>
+                  <i class="fa fa-flag-o" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="toggleFlagged(true)">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="btn-group" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                  Add to Incident
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped detail-table">
+              <tbody>
+              <!----------------- General Report Information ----------------->
+              <tr>
+                <th scope="row" class="detail-key" translate>Content</th>
+                <td colspan="10" class="detail-value" ng-bind-html="report.content">{{ report.content }}</td>
+              </tr>
+              <tr ng-if="report.metadata.description">
+                <th scope="row" class="detail-key" translate>Shared Content</th>
+                <td colspan="10" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
+              </tr>
+              <tr>
+                <th scope="row" class="detail-key" translate>Author</th>
+                <td colspan="10" class="detail-value">
+                  <a ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
+                </td>
+              </tr>
               <th scope="row" class="detail-key" translate>Authored Time</th>
               <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
-            </tr>
-            <tr>
-              <th scope="row" class="detail-key" translate>Fetched Time</th>
-              <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
-            </tr>
-            <tr>
-              <th scope="row" class="detail-key" translate>Stored Time</th>
-              <td colspan="10" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
-            </tr>
-            <tr ng-repeat="source in sources">
-              <th scope="row" class="detail-key" translate>Sources</th>
-              <td colspan="10" class="detail-value">{{ source.nickname }}</td>
-            </tr>
-            <tr>
-              <th scope="row" class="detail-key" translate>URL</th>
-              <td colspan="10" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
-            </tr>
-            <!-------------- Crowdtangle Specific Table Elements -------------->
-            <div ng-show="report.metadata.crowdtangleId">
-              <!---- Crowdtangle Current Statistics ---->
+              </tr>
               <tr>
-                <th scope="row" class="detail-key" translate>Statistics</th>
-                <td class="detail-value">
+                <th scope="row" class="detail-key" translate>Fetched Time</th>
+                <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+              </tr>
+              <tr>
+                <th scope="row" class="detail-key" translate>Stored Time</th>
+                <td colspan="10" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
+              </tr>
+              <tr ng-repeat="source in sources">
+                <th scope="row" class="detail-key" translate>Sources</th>
+                <td colspan="10" class="detail-value">{{ source.nickname }}</td>
+              </tr>
+              <tr>
+                <th scope="row" class="detail-key" translate>URL</th>
+                <td colspan="10" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
+              </tr>
+              <!-------------- Crowdtangle Specific Table Elements -------------->
+              <div ng-show="report.metadata.crowdtangleId">
+                <!---- Crowdtangle Current Statistics ---->
+                <tr>
+                  <th scope="row" class="detail-key" translate>Content Type</th>
+                  <td colspan="10" class="detail-value">
+                  <span title="{{'Content Type' | translate}}" ng-switch="report.metadata.type">
+                    <span ng-switch-when="link">{{'Link' | translate}}</span>
+                    <span ng-switch-when="native_video">{{'Native Video' | translate}}</span>
+                    <span ng-switch-when="status">{{'Status' | translate}}</span>
+                    <span ng-switch-when="photo">{{'Photo' | translate}}</span>
+                    <span ng-switch-when="episode">{{'Episode' | translate}}</span>
+                    <span ng-switch-when="extra_clip">{{'Extra Clip' | translate}}</span>
+                    <span ng-switch-when="live_video">{{'Live Video' | translate}}</span>
+                    <span ng-switch-when="live_video_complete">{{'Completed Live Video' | translate}}</span>
+                    <span ng-switch-when="live_video_scheduled">{{'Scheduled Live Video' | translate}}</span>
+                    <span ng-switch-when="trailer">{{'Trailer' | translate}}</span>
+                    <span ng-switch-when="video">{{'Non-Native Video' | translate}}</span>
+                    <span ng-switch-when="youtube">{{'Youtube Video' | translate}}</span>
+                    <span ng-switch-default>{{'Unknown Type' | translate}}</span>
+                  </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="detail-key" translate>Group Subscribers</th>
+                  <td colspan="10" class="detail-value">
+                  <span title="{{'Subscriber Count' | translate}}">
+                    {{report.metadata.subscriberCount}}
+                  </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="detail-key" translate>Statistics</th>
+                  <td class="detail-value">
                   <span title="{{'Comments' | translate}}">
                     <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Shares' | translate}}">
                     <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.actualStatistics.shareCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Likes' | translate}}">
                     <b>{{'Likes:' | translate}}</b> {{report.metadata.actualStatistics.likeCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Love Reacts' | translate}}">
                     <b>❤'s</b> {{report.metadata.actualStatistics.loveCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Haha Reacts' | translate}}">
                     <b>😂's:</b> {{report.metadata.actualStatistics.hahaCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Wow Reacts' | translate}}">
                     <b>😯's</b> {{report.metadata.actualStatistics.wowCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Sad Reacts' | translate}}">
                     <b>😢's: </b>{{report.metadata.actualStatistics.sadCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Angry Reacts' | translate}}">
                     <b>😡's: </b>{{report.metadata.actualStatistics.angryCount}}
                   </span>
-                </td>
-              </tr>
-              <!---- Crowdtangle Expected Statistics ---->
-              <tr>
-                <th scope="row" class="detail-key" translate>Expected Statistics</th>
-                <td class="detail-value">
+                  </td>
+                </tr>
+                <!---- Crowdtangle Expected Statistics ---->
+                <tr>
+                  <th scope="row" class="detail-key" translate>Expected Statistics</th>
+                  <td class="detail-value">
                   <span title="{{'Comments' | translate}}">
                     <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.expectedStatistics.commentCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Shares' | translate}}">
                     <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.expectedStatistics.shareCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Likes' | translate}}">
                     <b>{{'Likes:' | translate}}</b> {{report.metadata.expectedStatistics.likeCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Love Reacts' | translate}}">
                     <b>❤'s</b> {{report.metadata.expectedStatistics.loveCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Haha Reacts' | translate}}">
                     <b>😂's:</b> {{report.metadata.expectedStatistics.hahaCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Wow Reacts' | translate}}">
                     <b>😯's</b> {{report.metadata.expectedStatistics.wowCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Sad Reacts' | translate}}">
                     <b>😢's: </b>{{report.metadata.expectedStatistics.sadCount}}
                   </span>
-                </td>
-                <td class="detail-value">
+                  </td>
+                  <td class="detail-value">
                   <span title="{{'Angry Reacts' | translate}}">
                     <b>😡's: </b>{{report.metadata.expectedStatistics.angryCount}}
                   </span>
-                </td>
-              </tr>
-              <tr ng-show="report.metadata.mediaUrl">
-                <th scope="row" class="detail-key" translate>Media Content</th>
-                <td colspan="10" class="detail-value">
-                  <div ng-repeat="photo in report.metadata.mediaUrl">
-                    <img ng-if="photo.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{photo.url}}">
-                    <video ng-if="photo.type === 'video'"
-                      id="my-video"
-                      class="video-js"
-                      controls
-                      preload="auto"
-                      width="640"
-                      height="264"
-                      poster="MY_VIDEO_POSTER.jpg"
-                      data-setup="{}">
-                      <source src="MY_VIDEO.mp4" type="video/mp4" />
-                      <source src="MY_VIDEO.webm" type="video/webm" />
-                      <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank"
-                        >supports HTML5 video</a
-                        >
-                      </p>
-                    </video>
-                  </div>
-                </td>
-              </tr>
-            </div>
-            <!------------------ End Crowdtangle Data ------------------>
-          </tbody>
-        </table>
-        <p>{{report.metadata.mediaUrl}}</p>
+                  </td>
+                </tr>
+                <tr ng-show="report.metadata.mediaUrl">
+                  <th scope="row" class="detail-key" translate>Media Content</th>
+                  <td colspan="10" class="detail-value">
+                    <div ng-repeat="media in report.metadata.mediaUrl">
+                      <a ng-href="{{report.metadata.externalUrl}}" target="_blank"><img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}"></a>
+                      <div ng-if="media.type === 'video'">
+                        <video
+                               id="my-video"
+                               class="video-js"
+                               controls
+                               preload="auto"
+                               width="640"
+                               height="264"
+                               data-setup="{}">
+                          <source ng-src="{{media.url | trusted}}" type="video/mp4" />
+                          <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a
+                            web browser that
+                            <a href="https://videojs.com/html5-video-support/" target="_blank"
+                            >supports HTML5 video</a
+                            >
+                          </p>
+                        </video>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <!------------------ End Crowdtangle Data ------------------>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sticky-top">
+        <div ng-include="'/templates/statsbar.html'"></div>
       </div>
     </div>
   </div>

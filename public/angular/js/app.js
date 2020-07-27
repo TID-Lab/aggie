@@ -1,8 +1,8 @@
 require('./angular', { expose: 'angular' });
 require('./angular-ui-router');
 require('./angular-sanitize');
-require('./ui-bootstrap');
-require('./ui-bootstrap-templates');
+require('./ui-bootstrap-0.12.0');
+require('./ui-bootstrap-tpls-custom');
 require('./angular-resource');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');

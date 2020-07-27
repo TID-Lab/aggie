@@ -1,59 +1,77 @@
-<table aggie-table ng-show="pagination.total > 0">
-  <thead>
-    <tr>
-      <th ng-show="currentUser.can('edit data')"></th>
-      <th translate>Time</th>
-      <!--<th translate>Media</th>-->
-      <th translate>Sources</th>
-      <th translate>Author</th>
-      <th translate>Content</th>
-      <th translate>Tags</th>
-      <th ng-hide="pageType == 'show-incident'" translate>Incident</th><!-- No need to show incident on incident detail page -->
-      <th translate>Flagged</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'" ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-      <td ng-show="currentUser.can('edit data')"><input ng-model="r.selected" type="checkbox" ng-model="r._id" /></td>
-      <td class="compact time">
-            <h6><span class="badge badge-info">{{ r.storedAt | interval }} ago</span></h6>
-            <span class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }} {{ r.storedAt | aggieDate:'date' }}</span>
-        <!--<p class="created"><span>{{ r | delay }}</span></p>-->
-      </td>
-      <!--
-      <td class="compact source" ng-class="sourceClass(r)">
-        <div class="icon-left"></div>
-      </td>
-      -->
-      <td class="compact source text-wrap" ng-class="{ strong: !isRead(r) }">
-        <span ng-repeat="s in r._sources" class="source">
-          {{ sourcesById[s].nickname || '[Deleted]' }}
-        </span>
-      </td>
-      <td class="compact author text-wrap" ng-class="{ strong: !isRead(r) }">
-        {{ r.author }}
-      </td>
-      <td class="expand content text-wrap" ng-class="{ strong: !isRead(r) }">
-        <a href="/reports/{{r._id}}">
-          <p>{{ (r.content || '[No Content]') | stripHtml }}</p>
-          <p class = "shared-content" ng-if="r.metadata.description"> {{r.metadata.description | stripHtml}} </p>
-        </a>
-      </td>
-      <td class="expand tag text-wrap" ng-class="{ strong: !isRead(r) }">
-        {{ tagsToString(r.tags) }}
-      </td>
-      <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
-        <div data-toggle="modal" data-target="#exampleModal">
-          <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary">
-            <strong ng-if="r._incident && incidentsById[r._incident]">{{ incidentsById[r._incident].title | strLimit: 40 }}</strong>
-            <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
+<div class="table-responsive-xl">
+  <table class="table table-bordered" aggie-table ng-show="pagination.total > 0">
+    <thead>
+      <tr>
+        <th scope="col" ng-show="currentUser.can('edit data')"></th>
+        <th scope="col" translate>Time</th>
+        <th scope="col" translate>Thumbnail</th>
+        <th scope="col" translate>Author</th>
+        <th scope="col" translate>Content</th>
+        <th scope="col" translate>Sources</th>
+        <th scope="col" translate>Tags</th>
+        <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
+        <th scope="col" translate>Flagged</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
+          ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+        <td ng-show="currentUser.can('edit data')">
+          <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
+        </td>
+        <td class="time">
+          <h6><span class="badge badge-info">{{ r.storedAt | interval }} ago</span></h6>
+          <span class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</span>
+          <span>{{ r.storedAt | aggieDate:'date' }}</span>
+          <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+        </td>
+        <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
+          <div ng-repeat="media in r.metadata.mediaUrl">
+            <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
+              <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
+            </a>
+          </div>
+        </td>
+        <td class="author" ng-class="{ strong: !isRead(r) }">
+          <span class="text-wrap">
+            {{ r.author }}
+          </span>
+        </td>
+        <td class="content" ng-class="{ strong: !isRead(r) }">
+          <a href="/reports/{{r._id}}">
+            <p class="text-wrap"> {{ (r.content || '[No Content]') | stripHtml }} </p>
+            <p class="text-wrap shared-content" ng-if="r.metadata.description">
+              {{r.metadata.description | stripHtml}}
+            </p>
           </a>
-        </div>
-        <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
-      </td>
-      <td class="flagged text-center">
-        <div ng-click="currentUser.can('edit data') && toggleFlagged(r)" class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"></div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </td>
+        <td class="source" ng-class="{ strong: !isRead(r) }">
+          <span ng-repeat="s in r._sources" class="source text-wrap">
+            {{ sourcesById[s].nickname || '[Deleted]' }}
+          </span>
+          <div class="icon-left" ng-class="sourceClass(r)"></div>
+        </td>
+        <td class="tag" ng-class="{ strong: !isRead(r) }">
+          <span class="text-wrap">
+            {{ tagsToString(r.tags) }}
+          </span>
+        </td>
+        <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
+          <div data-toggle="modal" data-target="#exampleModal">
+            <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
+              <strong class="text-wrap" ng-if="r._incident && incidentsById[r._incident]">
+                {{ incidentsById[r._incident].title | strLimit: 40 }}
+              </strong>
+              <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
+            </a>
+          </div>
+          <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
+        </td>
+        <td class="flagged text-center">
+          <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
+               ng-click="currentUser.can('edit data') && toggleFlagged(r)"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -18,13 +18,17 @@
         }
         &.incident {
           vertical-align: middle;
-          min-width: 130px;
         }
         &.flagged {
           vertical-align: middle;
         }
         &.tag {
-         min-width: 130px
+        }
+        &.author {
+          max-width: 100px;
+        }
+        &.time {
+          max-width: 100px;
         }
       }
     }
@@ -32,14 +36,18 @@
   .compact {
     white-space: nowrap;
   }
-  .expand {
-    width: 100%;
+
+  .thumbnail-image {
+    padding: 0;
+    min-width: 30px;
+    max-width: 200px;
   }
 
   // The main link in the table, which gets special treatment.
-  a.table-primary {
+  a.table-primary-link {
     font-weight: bold;
     color: $link-blue;
+    background-color: transparent;
   }
 }
 
@@ -92,7 +100,6 @@ tbody {
   vertical-align: top;
   font-weight: bold;
   margin-right: 10px;
-  min-width: 31px;
   .interval-amount,
   .interval-relative {
     display: block;
@@ -117,7 +124,6 @@ tbody {
   .icon-left {
     display: inline-block;
     padding-left: 33px;
-    min-height: 33px;
   }
 }
 
@@ -220,9 +226,8 @@ table, .table {
   }
 }
 
-.table-filters {
+. table-filters {
   width: 100%;
-  margin-bottom: 10px;
   padding: 5px;
   background-color: #eaef92;
   font-size: 12px;

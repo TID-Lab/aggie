@@ -1,38 +1,46 @@
-<div class="container mt-2 card">
-  <div class="card-title bs-component">
-    <ul class="breadcrumb">
-      <li class="active" translate>Users</li>
-    </ul>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-xl-8">
+      <div class="card">
+        <h4 class="card-header"> Users </h4>
+        <div class="card-body">
+          <div ng-show="currentUser.can('admin users')" class="button-row">
+            <a href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" data-toggle="collapse" ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
+          </div>
+          <div class="collapse" id="createUserCollapse">
+            <div ng-include="'/templates/users/modal.html'"></div>
+          </div>
+          <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
+
+          <table class="table" ng-show="users.length > 0">
+            <thead>
+            <tr>
+              <th translate>Username</th>
+              <th translate>Email</th>
+              <th translate>Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="u in users">
+              <td class="compact content" ng-controller="UserFormModalController">
+                <a class="table-primary-link"href="/profile/{{u.username}}">{{ u.username }}</a>
+              </td>
+              <td class="compact content">{{ u.email }}</td>
+              <td class="compact content">{{ u.role | translate }}</td>
+              <td ng-controller="UserFormModalController" class="actions compact">
+                <a ng-click="edit(u)" ><i class="fa fa-pencil text-blue"></i></a>
+                <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+
+    </div>
   </div>
-
-  <div ng-show="currentUser.can('admin users')" class="button-row">
-    <button ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
-  </div>
-
-  <div class="clearfix"></div>
-
-  <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
-
-  <table class="table" ng-show="users.length > 0">
-    <thead>
-      <tr>
-        <th translate>Username</th>
-        <th translate>Email</th>
-        <th translate>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="u in users">
-        <td class="compact content" ng-controller="UserFormModalController">
-          <a href="/profile/{{u.username}}" class="table-primary">{{ u.username }}</a>
-        </td>
-        <td class="compact content">{{ u.email }}</td>
-        <td class="compact content">{{ u.role | translate }}</td>
-        <td ng-controller="UserFormModalController" class="actions compact">
-          <a href ng-click="edit(u)"><i class="fa fa-pencil text-blue"></i></a>
-          <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

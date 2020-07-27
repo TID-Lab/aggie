@@ -1,4 +1,3 @@
-<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <!-- This is the Search Bar -->
 <form class="mb-4">
   <div class="table-filters">
@@ -16,8 +15,8 @@
       <div class="td search">
         <div class="input-group">
           <input type="text" ng-model="searchParams.tags" aria-label="tagSearch" class="form-control" placeholder="{{'Enter Tags' | translate}}">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
+          <div class="input-group-append" ng-click="clearTags()">
+            <button class="btn input-group-btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
               <span>&times;</span>
             </button>
           </div>
@@ -27,24 +26,20 @@
         <div class="input-group">
           <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter Author' | translate }}">
           <div class="input-group-append">
-            <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearAuthor()">
+            <button class="btn input-group-btn btn-secondary" type="reset" title="clearAuthor" href ng-click="clearAuthor()">
               <span>&times;</span>
             </button>
           </div>
         </div>
       </div>
       <div class="td filter date-filter">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datetime-modal" translate>
+        <button type="button" class="btn btn-light" ng-controller="DatetimeModalController" ng-click="open()">
           <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
-            <!-- Made Datepicker the default format because we don't need seconds -->
-            <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
-            <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datepicker' }}</strong></span>
-            <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datepicker'}}</strong></span>
-            <span ng-switch-default translate>Date / Time Filter</span>
+            <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+            <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+            <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+            <span ng-switch-default translate>Date/Time</span>
           </span>
-        </button>
-        <button type="reset" class="btn btn-info" title="date-filter" href class="input-group-addon" ng-click="search({ after: null, before: null }); searchParams.before = null; searchParams.after = null;" ng-show="searchParams.before || searchParams.after">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="td filter status-filter">
@@ -80,7 +75,9 @@
   </div>
 </form>
 
-<div ng-include="'/templates/datetime_modal.html'"></div>
+<!-- Alerts Section -->
+<alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
+<ng-include src="'/templates/alerts.html'"></ng-include>
 
 <!-- Main Section -->
 <div class="container-fluid">
@@ -96,17 +93,17 @@
                     (add)="onAdd($event)"
                     (remove)="onRemove($event)">
             </tagify>
-            <button (click)="clearTags()">clear</button>
-            <button (click)="addTags()">add Tags</button>
+            <button ng-click="clearTags()">clear</button>
+            <button ng-click="addTags()">add Tags</button>
           </div>
         </div>
       </div>
     </div>
     <!--This is the centered card-->
-    <div class="col-lg-11 col-xl-9">
+    <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div class="card-header">
+        <div class="card-header bg-light">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
@@ -114,19 +111,21 @@
                 <input ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
+                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-                <button type="button mr-4" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(false)">
+                  <span class="mr-2" translate> Un-Flag </span>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
+                </button>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(true)">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-warning" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
@@ -135,14 +134,19 @@
               </div>
             </div>
             <nav aria-label="Report list page navigation">
-              <ul class="pagination">
-                <li class="pager-label mt-2 mr-2">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
-                </li>
-                <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                  <a class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
-                <li class="page-item" ng-class="{disabled: isLastPage() }">
-                  <a class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                </label></li>
+                <li class="list-inline-item">
+                  <ul class="pagination">
+                    <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                      <a title="Previous Page" aria-label="Previous Page" class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
+                    </li>
+                    <li class="page-item" ng-class="{disabled: isLastPage() }">
+                      <a title="Next Page" class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </nav>
@@ -156,34 +160,43 @@
         <!-- Footer Selection Toolbar -->
         <div class="card-footer">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-            <div class="btn-group mt-1 mr-2" role="group">
+            <div aria-label="Read/Unread Buttons/Selection">
+              <!-- Check all button -->
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light btn-sm" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
+                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" title="Flag Report" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>Flag</button>
-                <button type="button" title="Un-Flag Report" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>Unflag</button>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
+                </button>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
+                  <i class="fa fa-flag-o" aria-hidden="true"></i>
+                </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
-              <div class="mr-4">
+              <div class="btn-group mr-2">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
             <nav aria-label="Report list page navigation">
-              <ul class="pagination">
-                <li class="pager-label mt-2 mr-2">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
-                </li>
-                <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                  <a title="Previous Page" class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item" ng-class="{disabled: isLastPage() }">
-                  <a title="Next Page" class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                </label></li>
+                <li class="list-inline-item">
+                  <ul class="pagination">
+                    <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                      <a title="Previous Page" aria-label="Previous Page" class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
+                    </li>
+                    <li class="page-item" ng-class="{disabled: isLastPage() }">
+                      <a title="Next Page" class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </nav>

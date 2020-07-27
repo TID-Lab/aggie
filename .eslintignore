@@ -18,5 +18,5 @@ public/angular/js/canvasjs.min.js
 public/angular/js/jquery.sparkline.js
 public/angular/js/loading-bar.js
 public/angular/js/moment.js
-public/angular/js/ui-bootstrap-templates.js
-public/angular/js/ui-bootstrap.js
+public/angular/js/ui-bootstrap-tpls-custom.js
+public/angular/js/ui-bootstrap-0.12.0.js

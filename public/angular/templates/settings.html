@@ -1,4 +1,4 @@
-<div class="container-xl">
+<div class="container-xl mt-4">
   <div class="card">
     <h4 class="card-header"> Settings </h4>
     <div class="card-body">
@@ -39,14 +39,11 @@
       </table>
 
       <h4 translate>Email</h4>
-      <table class="table table-settings" ng-controller="EmailSettingsController">
+      <table class="table table-bordered" ng-controller="EmailSettingsController">
         <tr>
-          <td>
-            <label class="settings-label" translate>App Email Address</label>
-          </td>
+          <th scope="row"><label class="settings-label" translate>App Email Address</label></th>
           <td class="value text-field">
-            <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
-                   ng-change="formChanged=true"/>
+            <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}" ng-change="formChanged=true"/>
           </td>
           <td class="action">
             <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()" translate>Save</button>

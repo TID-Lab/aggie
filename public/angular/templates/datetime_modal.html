@@ -1,45 +1,42 @@
-<div class="modal fade" id="datetime-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" translate>Date Filters</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="time-control-label" translate>From:</label>
-          <div class="input-group date" id="datetimepickerAfter" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter" ng-model="searchParams.after"
-              placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
-            <div class="input-group-append" data-target="#datetimepickerAfter" data-toggle="datetimepicker">
-              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+<div ng-controller="DatetimeModalController">
+  <div class="modal-header">
+    <h4 class="modal-title" translate>Date Filters</h4>
+    <button class="close" ng-click="close()" aria-label="Close" aria-hidden="true">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="well bs-component">
+      <form name="form" class="form filter-form datetime-form">
+        <fieldset>
+          <div class="form-group">
+            <label for="afterDate" class="time-control-label" translate>From:</label>
+            <div class="input-group date" id="datetimepickerAfter" data-target-input="nearest">
+              <input id="afterDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter" ng-model="times.after"
+                     placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
+              <div class="input-group-append" data-target="#datetimepickerAfter" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="time-control-label" translate>To:</label>
-          <div class="input-group date" id="datetimepickerBefore" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore" ng-model="searchParams.before"
-              placeholder="{{ 'End date / Time' | translate }}" name="before"/>
-            <div class="input-group-append" data-target="#datetimepickerBefore" data-toggle="datetimepicker">
-              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+          <div class="form-group">
+            <label for="beforeDate" class="time-control-label" translate>To:</label>
+            <div class="input-group date" id="datetimepickerBefore" data-target-input="nearest">
+              <input id="beforeDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore" ng-model="times.before"
+                     placeholder="{{ 'End date / Time' | translate }}" name="before"/>
+              <div class="input-group-append" data-target="#datetimepickerBefore" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
             </div>
           </div>
-        </div>
-        <button type="button" class="btn btn-secondary"
-          ng-click="searchParams.after = null; searchParams.before = null;">
-          Clear
-        </button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-dismiss="modal"
-                class="btn btn-primary">
-          Save
-        </button>
-      </div>
+          <button type='reset' class="btn btn-default" ng-click="clear()" translate>Clear</button>
+        </fieldset>
+      </form>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>
 

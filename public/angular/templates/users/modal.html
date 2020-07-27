@@ -1,10 +1,12 @@
 <div ng-controller="UserFormModalController">
   <div class="modal-header">
-    <button class="close" ng-click="close()" aria-hidden="true">×</button>
-    <h4 class="modal-title">
-      <div class="icon-left" ng-show="currentUser._id != user._id">{{ user._id ? 'Edit' : 'Create' | translate }} {{ 'User' | translate }}</div>
-      <div class="icon-left" ng-show="currentUser._id == user._id">{{ user._id ? 'Edit' : 'Create' | translate }} {{ 'Profile' | translate }}</div>
-    </h4>
+    <h5 class="modal-title">
+      <span class="icon-left" ng-show="currentUser._id != user._id">{{ user._id ? 'Edit' : 'Create' | translate }} {{ 'User' | translate }}</span>
+      <span class="icon-left" ng-show="currentUser._id == user._id">{{ user._id ? 'Edit' : 'Create' | translate }} {{ 'Profile' | translate }}</span>
+    </h5>
+    <button class="close" ng-click="close()" aria-hidden="true">
+      <span>&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <div class="well bs-component">
@@ -12,76 +14,60 @@
       <form novalidate name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group">
-            <label for="username" class="col-lg-3 control-label" translate>Username</label>
-            <div class="col-lg-6">
-              <div class="input-group">
-                <input id="username" name="username" type="text" class="form-control" ng-model="user.username" maxlength="15" required aggieusername ng-focus>
-                <span class="input-group-addon"><span ng-show="user.username.length && form.username.$focused">{{15 - user.username.length}}</span></span>
-              </div>
-            </div>
+            <label for="username" class="control-label" translate>Username</label>
+            <input id="username" name="username" type="text" class="form-control" ng-model="user.username" maxlength="15" required aggieusername ng-focus>
+            <span class="input-group-addon"><span ng-show="user.username.length && form.username.$focused">{{15 - user.username.length}}</span></span>
           </div>
 
           <!-- errors -->
           <div class="form-group">
-            <div class="col-lg-3"></div>
-            <div class="col-lg-6">
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.username.$error.required" translate>
-                  Username is required.
-                </div>
-                <div class="help-block" ng-show="form.username.$error.aggieusername" translate>
-                  Username should be less than 15 characters and should contain letters, numbers, and underscores only.
-                </div>
+            <div class="has-error" ng-show="showErrors">
+              <div class="help-block" ng-show="form.username.$error.required" translate>
+                Username is required.
+              </div>
+              <div class="help-block" ng-show="form.username.$error.aggieusername" translate>
+                Username should be less than 15 characters and should contain letters, numbers, and underscores only.
               </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="email" class="col-lg-3 control-label" translate>Email</label>
-            <div class="col-lg-6">
-              <input id="email" name="email" type="email" class="form-control" ng-model="user.email" required>
-
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.email.$error.required" translate>
-                  Email is required.
-                </div>
-                <div class="help-block" ng-show="form.email.$error.email" translate>
-                  Email is invalid.
-                </div>
+            <label for="email" class="control-label" translate>Email</label>
+            <input id="email" name="email" type="email" class="form-control" ng-model="user.email" required>
+            <div class="has-error" ng-show="showErrors">
+              <div class="help-block" ng-show="form.email.$error.required" translate>
+                Email is required.
               </div>
-
+              <div class="help-block" ng-show="form.email.$error.email" translate>
+                Email is invalid.
+              </div>
             </div>
           </div>
+
           <div class="form-group" ng-hide="user._id == currentUser._id">
-            <label for="role" class="col-lg-3 control-label" translate>Role</label>
-            <div class="col-lg-6">
-              <select id="role" name="role" ng-model="user.role" ng-options="role as role | translate for role in userRoles" class="form-control" required></select>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.role.$error.required" translate>Role is required.</div>
-              </div>
+            <label for="role" class="control-label" translate>Role</label>
+            <select id="role" name="role" ng-model="user.role" ng-options="role as role | translate for role in userRoles" class="form-control" required></select>
+            <div class="has-error" ng-show="showErrors">
+              <div class="help-block" ng-show="form.role.$error.required" translate>Role is required.</div>
             </div>
           </div>
           <div ng-show="user._id == currentUser._id">
             <div class="form-group" ng-hide="model.showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
-              <button type="button" class="btn btn-default col-lg-6 col-lg-offset-3" ng-click="model.showPassword = true" translate>Change password</button>
+              <button type="button" class="btn btn-default" ng-click="model.showPassword = true" translate>Change password</button>
             </div>
             <div ng-show="model.showPassword || form.password.$dirty || form.passwordConfirmation.$dirty">
               <div class="form-group">
-                <label for="password" class="col-lg-3 control-label" translate>Password</label>
-                <div class="col-lg-6">
-                  <input id="password" name="password" type="password" class="form-control" ng-model="user.password" ng-minlength="{{passwordMinLength}}">
-                  <div class="has-error" ng-show="showErrors">
-                    <div class="help-block" ng-show="form.password.$error.minlength" translate="password_min_length" translate-value-passwordMinLength="{{passwordMinLength}}"></div>
-                  </div>
+                <label for="password" class="control-label" translate>Password</label>
+                <input id="password" name="password" type="password" class="form-control" ng-model="user.password" ng-minlength="{{passwordMinLength}}">
+                <div class="has-error" ng-show="showErrors">
+                  <div class="help-block" ng-show="form.password.$error.minlength" translate="password_min_length" translate-value-passwordMinLength="{{passwordMinLength}}"></div>
                 </div>
               </div>
               <div class="form-group">
-                <label for="passwordConfirmation" class="col-lg-3 control-label" translate>Password Confirmation</label>
-                <div class="col-lg-6">
-                  <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
-                  <div class="has-error" ng-show="showErrors || form.passwordConfirmation.$focused">
-                    <div class="help-block" ng-show="form.passwordConfirmation.$invalid" translate>Passwords don't match.</div>
-                  </div>
+                <label for="passwordConfirmation" class="control-label" translate>Password Confirmation</label>
+                <input id="passwordConfirmation" name="passwordConfirmation" type="password" class="form-control" ng-model="passwordConfirmation" ng-password-match="user.password" ng-focus>
+                <div class="has-error" ng-show="showErrors || form.passwordConfirmation.$focused">
+                  <div class="help-block" ng-show="form.passwordConfirmation.$invalid" translate>Passwords don't match.</div>
                 </div>
               </div>
             </div>
@@ -91,7 +77,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()" translate>Close</button>
-    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+    <button type="button" class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button type="button" class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>
