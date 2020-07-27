@@ -17,17 +17,32 @@
 
 .bg-default {
   background-color: $navbar-green;
-  .navbar-nav > li {
-    z-index: 2000;
-    >a {
-      line-height: 40px;
-    }
-    > a:hover,
-    > a:focus,
-    &.active > a,
-    &.active > a:hover,
-    &.active > a:focus {
-      background-color: darken($navbar-green, 10%);
+  .navbar-nav {
+    > li {
+      z-index: 2000;
+      >a {
+        line-height: 30px;
+      }
+      > a:hover,
+      > a:focus,
+      &.active > a,
+      &.active > a:hover,
+      &.active > a:focus {
+        background-color: darken($navbar-green, 10%);
+      }
+      .dropdown-menu {
+        background-color: $navbar-green;
+        .dropdown-item {
+          line-height: 30px;
+        }
+        > .dropdown-item:hover,
+        > .dropdown-item:focus,
+        &.active > .dropdown-item,
+        &.active > .dropdown-item:hover,
+        &.active > .dropdown-item:focus {
+          background-color: darken($navbar-green, 10%);
+        }
+      }
     }
   }
 }
