@@ -14,8 +14,8 @@
     <tbody>
       <tr ng-repeat="s in sources | orderBy:'+nickname'">
 
-        <td class="source" ng-class="sourceClass(s)">
-          <div class="icon-left"></div>
+        <td class="source">
+          <div class="icon-left" ng-class="sourceClass(s)"></div>
         </td>
 
         <td class="source content">

@@ -122,13 +122,43 @@ tbody {
 
 .source {
   .icon-left {
+    width: 33px;
+    height: 33px;
     display: inline-block;
     padding-left: 33px;
   }
-}
-
-.unknown-source {
-  .icon-left {
+  .facebook-source {
+      background: url('/images/facebook.png') no-repeat 0 50%;
+  }
+  .twitter-source {
+    background: transparent url('/images/twitter.png') no-repeat 0 50%;
+    &:before {
+      display: none;
+    }
+  }
+  
+  .elmo-source {
+    background: url('/images/elmo.png') no-repeat 0 50%;
+  }
+  
+  .facebook-source {
+    background: url('/images/facebook.png') no-repeat 0 50%;
+  }
+  
+  .rss-source {
+    background: url('/images/rss.png') no-repeat 0 50%;
+  }
+  .smsgh-source {
+    background: url('/images/smsgh.png') no-repeat 0 50%;
+  }
+  .whatsapp-source {
+    background: url('/images/whatsapp.png') no-repeat 0 50%;
+  }
+  
+  .crowdtangle-source {
+    background: url('/images/crowdtangle.png') no-repeat 0 50%;
+  }
+  .unknown-source {
     position: relative;
     &:before {
       position: absolute;
@@ -145,34 +175,9 @@ tbody {
   }
 }
 
-.twitter-source .icon-left {
-  background: transparent url('/images/twitter.png') no-repeat 0 50%;
-  &:before {
-    display: none;
-  }
-}
 
-.elmo-source .icon-left {
-  background: url('/images/elmo.png') no-repeat 0 50%;
-}
 
-.facebook-source .icon-left {
-  background: url('/images/facebook.png') no-repeat 0 50%;
-}
 
-.rss-source .icon-left {
-  background: url('/images/rss.png') no-repeat 0 50%;
-}
-.smsgh-source .icon-left {
-  background: url('/images/smsgh.png') no-repeat 0 50%;
-}
-.whatsapp-source .icon-left {
-  background: url('/images/whatsapp.png') no-repeat 0 50%;
-}
-
-.crowdtangle-source .icon-left {
-  background: url('/images/crowdtangle.png') no-repeat 0 50%;
-}
 
 .strong {
   font-weight: bold;
