@@ -1,7 +1,7 @@
 <!-- This is the Search Bar -->
 <form>
   <div class="table-filters">
-    <div class="filter-row">
+    <div class="filter-row mb-0 d-flex justify-content-center">
       <div class="td search">
         <div class="input-group">
           <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter Title' | translate}}">
@@ -32,6 +32,8 @@
           </div>
         </div>
       </div>
+      </div>
+    <div class="filter-row mb-0 d-flex justify-content-center">
       <div ng-show="currentUser.can('view other users')" class="td filter">
         <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
           <option value="" translate>Assigned To</option>

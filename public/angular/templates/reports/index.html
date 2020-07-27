@@ -1,7 +1,7 @@
 <!-- This is the Search Bar -->
 <form class="mb-4">
   <div class="table-filters">
-    <div class="filter-row mb-0">
+    <div class="filter-row mb-0 d-flex justify-content-center">
       <div class="td search">
         <div class="input-group">
           <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="filter-row mb-0">
+    <div class="filter-row mb-0 d-flex justify-content-center">
       <div class="td filter date-filter">
         <button type="button" class="btn btn-light" ng-controller="DatetimeModalController" ng-click="open()">
           <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
