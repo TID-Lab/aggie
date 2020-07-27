@@ -36,6 +36,12 @@ angular.module('Aggie')
       processTrends(trends);
 
       Socket.on('trend', onTrend);
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     var onTrend = function(trends) {

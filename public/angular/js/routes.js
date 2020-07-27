@@ -200,7 +200,8 @@ angular.module('Aggie')
 
     $stateProvider.state('analysis', {
       url: '/analysis',
-      templateUrl: '/templates/analysis.html'
+      templateUrl: '/templates/analysis.html',
+      controller: 'AnalysisController'
     });
 
     $stateProvider.state('lastAnalysis', {
