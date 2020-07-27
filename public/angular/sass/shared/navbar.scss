@@ -11,12 +11,17 @@
 
 .navbar {
   font-size: 14px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .bg-default {
   background-color: $navbar-green;
   .navbar-nav > li {
     z-index: 2000;
+    >a {
+      line-height: 40px;
+    }
     > a:hover,
     > a:focus,
     &.active > a,
