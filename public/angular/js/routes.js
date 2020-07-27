@@ -269,7 +269,8 @@ angular.module('Aggie')
 
     $stateProvider.state('settings', {
       url: '/settings',
-      templateUrl: '/templates/settings.html'
+      templateUrl: '/templates/settings.html',
+      controller: 'SettingsController'
     });
 
     $stateProvider.state('password_reset', {
