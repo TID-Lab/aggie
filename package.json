@@ -70,6 +70,7 @@
     "pm2": "^4.4.0",
     "readline-sync": "^1.4.10",
     "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "rwlock": "^5.0.0",
     "sanitize-html": "^1.23.0",
     "single-line-log": "^1.1.2",
