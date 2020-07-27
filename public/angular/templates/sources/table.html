@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table class="table table-bordered" aggie-table ng-show="sources.length > 0">
+  <table class="table" aggie-table ng-show="sources.length > 0">
     <thead>
       <tr>
         <th scope="col" translate>Media</th>
@@ -11,7 +11,7 @@
         <th scope="col" translate ng-show="currentUser.can('edit data')">Enabled</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-bordered">
       <tr ng-repeat="s in sources | orderBy:'+nickname'">
 
         <td class="source" ng-class="sourceClass(s)">
@@ -28,12 +28,17 @@
           <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
         </td>
 
-        <td class="content">{{ target(s) }}</td>
+        <td class="content">
+          <span>{{ target(s) }}</span>
+        </td>
 
-        <td class="tag">{{ tagsToString(s.tags) }}</td>
+        <td class="tag">
+          <span>{{ tagsToString(s.tags) }}</span>
+        </td>
 
         <td class="content zero-errors" ng-show="currentUser.can('edit data')"
-            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
+            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}
+        </td>
 
         <td class="status" ng-show="currentUser.can('edit data')">
           <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">

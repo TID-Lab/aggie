@@ -1,5 +1,5 @@
 <div class="table-responsive-xl">
-  <table class="table table-bordered" aggie-table ng-show="pagination.total > 0">
+  <table class="table" aggie-table ng-show="pagination.total > 0">
     <thead>
       <tr>
         <th scope="col" ng-show="currentUser.can('edit data')"></th>
@@ -13,7 +13,7 @@
         <th scope="col" translate>Flagged</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
           ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
         <td ng-show="currentUser.can('edit data')">
