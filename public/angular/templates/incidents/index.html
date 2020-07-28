@@ -9,7 +9,7 @@
             <div class="input-group input-group-sm">
               <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter Title' | translate}}">
               <div class="input-group-append">
-                <button class="btn btn-secondary" type="reset" title="clearTitle" href ng-click="clearTitle()">
+                <button class="btn btn-transparent button--clearFilter" type="reset" title="clearTitle" href ng-click="clearTitle()">
                   <span>&times;</span>
                 </button>
               </div>
@@ -19,7 +19,7 @@
             <div class="input-group input-group-sm">
               <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Enter Tags' | translate}}">
               <div class="input-group-append">
-                <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
+                <button class="btn btn-transparent button--clearFilter" type="reset" title="clearTags" href ng-click="clearTags()">
                   <span>&times;</span>
                 </button>
               </div>
@@ -29,7 +29,7 @@
             <div class="input-group input-group-sm">
               <input type="text" ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter Location' | translate}}">
               <div class="input-group-append">
-                <button class="btn btn-secondary" type="reset" title="clearLocationName" href ng-click="clearLocationName()">
+                <button class="btn btn-transparent button--clearFilter" type="reset" title="clearLocationName" href ng-click="clearLocationName()">
                   <span>&times;</span>
                 </button>
               </div>
@@ -95,6 +95,7 @@
     <div class="col"></div>
   </div>
 </div>
+
 <!-- Alerts -->
 <ng-include src="'/templates/alerts.html'"></ng-include>
 <div class="mb-4"></div>

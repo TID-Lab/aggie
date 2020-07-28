@@ -1,4 +1,4 @@
-<div class="table-responsive-md">
+<div class="table-responsive-md pt-3">
   <table class="table-sm" aggie-table ng-show="pagination.total > 0">
     <thead>
       <tr>
@@ -19,7 +19,7 @@
         <td class="align-middle text-center" ng-show="currentUser.can('edit data')">
           <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
         </td>
-        <td class="time">
+        <td class="td--time">
           <span class="badge badge-info">{{ r.storedAt | interval }} ago</span>
           <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
           <div>{{ r.storedAt | aggieDate:'date' }}</div>

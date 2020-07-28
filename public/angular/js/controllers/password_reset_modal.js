@@ -6,8 +6,13 @@ angular.module('Aggie').controller('PasswordResetModalController', [
   '$http',
   'FlashService',
   function($rootScope, $scope, $state, $modal, $http, flash) {
-    var init = function() {
-        modalInstance.result.then(function(email) {
+    $scope.open = function() {
+      var modalInstance = $modal.open({
+        controller: 'PasswordResetModalInstanceController',
+        templateUrl: 'templates/password_reset_modal.html'
+      });
+
+      modalInstance.result.then(function(email) {
         $http.post('/reset-password', { email: email })
           .success(function(response) {
             flash.setNoticeNow('passwordReset.email.success', { email: email });
@@ -19,7 +24,23 @@ angular.module('Aggie').controller('PasswordResetModalController', [
               flash.setAlertNow('passwordReset.email.error');
             }
           });
-      });
+        });
     };
   }
 ])
+
+.controller('PasswordResetModalInstanceController', [
+  '$scope',
+  '$modalInstance',
+  function($scope, $modalInstance) {
+    $scope.user = { email: '' };
+
+    $scope.okay = function() {
+      $modalInstance.close($scope.user.email);
+    };
+
+    $scope.close = function() {
+      $modalInstance.dismiss('cancel');
+    };
+  }
+]);

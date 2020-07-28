@@ -4,12 +4,15 @@
     <li class="breadcrumb-item active" translate>Report Details</li>
   </ol>
 </nav>
+
+<ng-include src="'/templates/alerts.html'"></ng-include>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col">
 
     </div>
-    <div class="col-xl-8">
+    <div class="col-lg-8">
       <div class="card">
         <div class="card-header">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with edit confirmations" ng-show="currentUser.can('edit data')">
@@ -230,7 +233,9 @@
     </div>
     <div class="col">
       <div class="sticky-top">
+        <div class="d-none d-xl-block">
         <div ng-include="'/templates/statsbar.html'"></div>
+        </div>
       </div>
     </div>
   </div>

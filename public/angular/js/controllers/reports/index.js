@@ -300,6 +300,11 @@ angular.module('Aggie')
       });
     };
 
+    $scope.addSMTCTags = function(report) {
+
+      report.SMTCtags.push()
+    }
+
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
 

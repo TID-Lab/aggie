@@ -129,7 +129,7 @@
     <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div class="card-header bg-light">
+        <div class="card-header bg-gray">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
@@ -137,21 +137,21 @@
                 <input ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
+                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(false)">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
                   <span class="mr-2" translate> Un-Flag </span>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
                 </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(true)">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-warning" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
@@ -183,7 +183,7 @@
         <div ng-include="'/templates/reports/table.html'"></div>
 
         <!-- Footer Selection Toolbar -->
-        <div class="card-footer">
+        <div class="card-footer bg-gray">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
@@ -192,15 +192,17 @@
                 <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
+                  <span class="mr-2" translate> Un-Flag </span>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
+                </button>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>

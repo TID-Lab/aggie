@@ -14,12 +14,12 @@
           </div>
           <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
 
-          <table class="table" ng-show="users.length > 0">
+          <table class="table mt-2" ng-show="users.length > 0">
             <thead>
             <tr>
-              <th translate>Username</th>
-              <th translate>Email</th>
-              <th translate>Role</th>
+              <th scope="col" translate>Username</th>
+              <th scope="col" translate>Email</th>
+              <th scope="col" translate>Role</th>
             </tr>
             </thead>
             <tbody>

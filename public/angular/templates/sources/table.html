@@ -32,7 +32,7 @@
             ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">
           <span>{{ s.unreadErrorCount }}</span>
         </td>
-        <td class="td--status" ng-show="currentUser.can('edit data')">
+        <td class="td--status text-center align-middle" ng-show="currentUser.can('edit data')">
           <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
         </td>
       </tr>
