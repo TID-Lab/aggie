@@ -11,12 +11,10 @@
     > tr {
       transition: background 0.25s ease-in-out;
       > td {
-        border: solid 1px #e4e4e4;
-        font-weight: normal;
-        &.status {
+        &.td--status {
           vertical-align: middle;
         }
-        &.incident {
+        &.td--errors {
           vertical-align: middle;
         }
         &.flagged {
@@ -28,7 +26,7 @@
           max-width: 100px;
         }
         &.time {
-          max-width: 100px;
+          max-width: 56px;
         }
       }
     }
@@ -40,7 +38,7 @@
   .thumbnail-image {
     padding: 0;
     min-width: 30px;
-    max-width: 200px;
+    max-width: 120px;
   }
 
   // The main link in the table, which gets special treatment.
@@ -136,15 +134,15 @@ tbody {
       display: none;
     }
   }
-  
+
   .elmo-source {
     background: url('/images/elmo.png') no-repeat 0 50%;
   }
-  
+
   .facebook-source {
     background: url('/images/facebook.png') no-repeat 0 50%;
   }
-  
+
   .rss-source {
     background: url('/images/rss.png') no-repeat 0 50%;
   }
@@ -154,7 +152,7 @@ tbody {
   .whatsapp-source {
     background: url('/images/whatsapp.png') no-repeat 0 50%;
   }
-  
+
   .crowdtangle-source {
     background: url('/images/crowdtangle.png') no-repeat 0 50%;
   }
@@ -231,43 +229,8 @@ table, .table {
   }
 }
 
-.table-filters {
-  width: 100%;
-  padding: 5px;
-  background-color: #f6edd9;
-  font-size: 12px;
-  .filter-row {
-    padding-left: 10%;
-    padding-right: 10%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    .td {
-      padding: 5px;
-    }
-    .filter {
-      vertical-align: top;
-    }
-    .search {
-      flex-grow: 1;
-      width: 150px;
-    }
-  }
-  label {
-    font-weight: bold;
-  }
-  .form-control {
-    font-size: 12px;
-  }
-  .date-filter {
-    label {
-      margin-right: 4px;
-    }
-    input {
-      line-height: 1;
-      height: 25px;
-    }
-  }
+.bg-table-filters {
+  background-color: #eaef92;
 }
 
 /*.table-filters,
@@ -327,4 +290,10 @@ td {
   span.source {
     display: block;
   }
+}
+
+.button--clearFilter {
+  margin-left: -30px;
+  z-index: 100;
+  height: 29px;
 }

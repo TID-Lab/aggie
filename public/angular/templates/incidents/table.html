@@ -1,5 +1,5 @@
-<div class="table-responsive-xl">
-  <table class="table table-sm" ng-show="pagination.total > 0 || modal">
+<div class="table-responsive">
+  <table class="table table-sm" ng-show="pagination.total > 0 || modal" ng-class="{'table-hover': modal}">
     <thead>
       <tr>
         <th ng-hide="modal || !currentUser.can('edit data')"></th>
@@ -27,7 +27,7 @@
           <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
           <strong ng-show="modal">{{ i.title }}</strong>
           <br />
-          <span class="text-gray">{{i.totalReports}} {{'reports' | translate}}</span>
+          <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
         </td>
         <td>
           <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>

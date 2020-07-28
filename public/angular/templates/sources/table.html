@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive-sm">
   <table class="table" aggie-table ng-show="sources.length > 0">
     <thead>
       <tr>
@@ -13,34 +13,26 @@
     </thead>
     <tbody class="table-bordered">
       <tr ng-repeat="s in sources | orderBy:'+nickname'">
-
-        <td class="source">
-          <div class="icon-left" ng-class="sourceClass(s)"></div>
+        <td class="td--media">
+          <div class="source mx-auto"><div class="icon-left" ng-class="sourceClass(s)"></div></div>
         </td>
-
-        <td class="source content">
-          <a href="sources/{{s._id}}" class="table-primary-link">
-            {{ s.nickname }}
-          </a>
+        <td class="td--name">
+          <a href="sources/{{s._id}}" class="table-primary-link"> {{ s.nickname }} </a>
         </td>
-
-        <td class="content" ng-show="currentUser.can('view other users')">
+        <td class="td--users" ng-show="currentUser.can('view other users')">
           <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
         </td>
-
-        <td class="content">
+        <td>
           <span>{{ target(s) }}</span>
         </td>
-
-        <td class="tag">
+        <td class="td--tag">
           <span>{{ tagsToString(s.tags) }}</span>
         </td>
-
-        <td class="content zero-errors" ng-show="currentUser.can('edit data')"
-            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}
+        <td class="td--errors zero-errors" ng-show="currentUser.can('edit data')"
+            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">
+          <span>{{ s.unreadErrorCount }}</span>
         </td>
-
-        <td class="status" ng-show="currentUser.can('edit data')">
+        <td class="td--status" ng-show="currentUser.can('edit data')">
           <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
         </td>
       </tr>

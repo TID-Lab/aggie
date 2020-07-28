@@ -1,42 +1,34 @@
 <div ng-controller="TrendFormModalController">
   <div class="modal-header">
-    <button class="close" ng-click="close()" aria-hidden="true">×</button>
     <h4 class="modal-title" translate>Create Trend</h4>
+    <button class="close" ng-click="close()" aria-hidden="true">×</button>
   </div>
   <div class="modal-body">
     <div class="well bs-component">
       <form name="form" class="form-horizontal">
         <fieldset>
           <div class="form-group">
-            <label for="keywords" class="col-lg-3 control-label" translate>Keywords</label>
-            <div class="col-lg-6">
-              <input type="text" ng-model="trend.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}">
-              <div class="help-block" translate="trends_modal_help"></div>
-            </div>
+            <label for="keywords" translate>Keywords</label>
+            <input type="text" ng-model="trend.keywords" class="form-control" id="keywords" name="keywords" placeholder="{{ 'Enter keywords' | translate }}">
+            <small class="help-block form-text text-muted" translate="trends_modal_help"></small>
           </div>
           <div class="form-group">
-            <label for="type" class="col-lg-3 control-label" translate>Media</label>
-            <div class="col-lg-6">
-              <select name="type" class="form-control" ng-model="trend.media" ng-options="media as media | translate for media in mediaOptions">
-                <option value="" translate>Choose media</option>
-              </select>
-            </div>
+            <label for="type" translate>Media</label>
+            <select id="type" class="form-control" ng-model="trend.media" ng-options="media as media | translate for media in mediaOptions">
+              <option value="" translate>Choose media</option>
+            </select>
           </div>
           <div class="form-group">
-            <label for="source" class="col-lg-3 control-label" translate>Source</label>
-            <div class="col-lg-6">
-              <select ng-model="trend.sourceId" ng-options="value._id as value.nickname for value in sources" class="form-control">
-                <option value="" translate>Choose source</option>
-              </select>
-            </div>
+            <label for="source" translate>Source</label>
+            <select id="source" ng-model="trend.sourceId" ng-options="value._id as value.nickname for value in sources" class="form-control">
+              <option value="" translate>Choose source</option>
+            </select>
           </div>
           <div class="form-group">
-            <label for="incident" class="col-lg-3 control-label" translate>Incident</label>
-            <div class="col-lg-6">
-              <select ng-model="trend.incidentId" ng-options="value._id as value.title for value in incidents" class="form-control">
-                <option value="" translate>Choose incident</option>
-              </select>
-            </div>
+            <label for="incident" translate>Incident</label>
+            <select id="incident" ng-model="trend.incidentId" ng-options="value._id as value.title for value in incidents" class="form-control">
+              <option value="" translate>Choose incident</option>
+            </select>
           </div>
         </fieldset>
       </form>

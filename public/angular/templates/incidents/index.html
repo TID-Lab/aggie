@@ -1,76 +1,100 @@
 <!-- This is the Search Bar -->
-<form>
-  <div class="table-filters">
-    <div class="filter-row mb-0 d-flex justify-content-center">
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter Title' | translate}}">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="reset" title="clearTitle" href ng-click="clearTitle()">
-              <span>&times;</span>
-            </button>
+<div class="container-fluid bg-table-filters">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-md-9">
+      <form>
+        <div class="form-row pt-1 pb-1">
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter Title' | translate}}">
+              <div class="input-group-append">
+                <button class="btn btn-secondary" type="reset" title="clearTitle" href ng-click="clearTitle()">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Enter Tags' | translate}}">
+              <div class="input-group-append">
+                <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter Location' | translate}}">
+              <div class="input-group-append">
+                <button class="btn btn-secondary" type="reset" title="clearLocationName" href ng-click="clearLocationName()">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.tags" class="form-control" placeholder="{{'Enter Tags' | translate}}">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
-              <span>&times;</span>
-            </button>
+        <div class="form-row">
+          <div class="form-group col mb-0 pb-1">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
+                <option value="" translate>Assigned To</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-1">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
+                <option value="" translate>Status</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-1">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
+                <option value="" translate>Veracity</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-1">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
+                <option value="" translate>Escalated?</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-1">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
+                <option value="" translate>Public?</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col-md-auto mb-0 pb-1">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item" ng-hide="noFilters()">
+                <div class="input-group input-group-sm">
+                  <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="input-group input-group-sm">
+                  <button type="submit" class="btn btn-info" ng-click="search()">
+                    <span class="mr-2" translate> Search </span>
+                    <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.locationName" class="form-control" placeholder="{{'Enter Location' | translate}}">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="reset" title="clearLocationName" href ng-click="clearLocationName()">
-              <span>&times;</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      </div>
-    <div class="filter-row mb-0 d-flex justify-content-center">
-      <div ng-show="currentUser.can('view other users')" class="td filter">
-        <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
-          <option value="" translate>Assigned To</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Status</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Veracity</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Escalated?</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
-          <option value="" translate>Public?</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <button type="submit" class="btn btn-info" ng-click="search()">
-          <span class="mr-2" translate> Search </span>
-          <i class="fa fa-search text-dark" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div class="td" ng-hide="noFilters()">
-        <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
-      </div>
+      </form>
     </div>
+    <div class="col"></div>
   </div>
-</form>
+</div>
 <!-- Alerts -->
 <ng-include src="'/templates/alerts.html'"></ng-include>
 <div class="mb-4"></div>
@@ -80,7 +104,7 @@
   <div class="row">
     <div class="col">
     </div>
-    <div class="col-xl-9">
+    <div class="col-md-9">
       <div class="card">
         <div class="card-header">
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
@@ -125,9 +149,11 @@
         <div ng-include="'/templates/incidents/table.html'"></div>
       </div>
     </div>
-    <div class="col">
+    <div class="col pl-1">
       <div class="sticky-top">
-        <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-md-block">
+          <div ng-include="'/templates/statsbar.html'"></div>
+        </div>
       </div>
     </div>
   </div>

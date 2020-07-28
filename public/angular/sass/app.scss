@@ -53,10 +53,6 @@ html {
   margin-bottom: 20px;
 }
 
-.well {
-  background-color: #fff;
-}
-
 .toggle-switch {
   display: inline-block;
   font-size: 0;
@@ -68,24 +64,6 @@ html {
 .pointer {
   cursor: pointer;
 }
-
-/*.toggle-item {
-  font-size: 10px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: #808285;
-  font-weight: bold;
-  display: inline-block;
-  text-align: center;
-  line-height: 26px;
-  border: solid 1px #d1d3d4;
-  width: 29px;
-  height: 26px;
-  background-color: #d1d3d4;
-  &.selected {
-    background-color: #92c8dc;
-  }
-}*/
 
 .pager {
   text-align: right;
