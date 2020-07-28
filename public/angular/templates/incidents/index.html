@@ -12,6 +12,7 @@
                 <button class="btn btn-transparent button--clearFilter" type="reset" title="clearTitle" href ng-click="clearTitle()">
                   <span>&times;</span>
                 </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
               </div>
             </div>
           </div>
@@ -22,6 +23,7 @@
                 <button class="btn btn-transparent button--clearFilter" type="reset" title="clearTags" href ng-click="clearTags()">
                   <span>&times;</span>
                 </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
               </div>
             </div>
           </div>
@@ -32,6 +34,7 @@
                 <button class="btn btn-transparent button--clearFilter" type="reset" title="clearLocationName" href ng-click="clearLocationName()">
                   <span>&times;</span>
                 </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
               </div>
             </div>
           </div>
@@ -76,7 +79,7 @@
             <ul class="list-inline mb-0">
               <li class="list-inline-item" ng-hide="noFilters()">
                 <div class="input-group input-group-sm">
-                  <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
+                  <button type="submit" class="btn btn-light" ng-click="clearFilters()" translate>Clear Filters</button>
                 </div>
               </li>
               <li class="list-inline-item">
