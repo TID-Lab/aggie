@@ -11,7 +11,7 @@ module.exports = function(karma) {
     },
 
     files: [
-      'test/frontend/vendor/jquery-1.11.0.min.js',
+      'test/frontend/vendor/jquery-3.5.1.min.js',
       'public/angular/js/app.js',
       'public/angular/templates/**/*.html',
       'node_modules/angular-mocks/angular-mocks.js',
