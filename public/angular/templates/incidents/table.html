@@ -1,65 +1,65 @@
-<div class="table-responsive">
+<div class="table-responsive-lg">
   <table class="table table-sm" ng-show="pagination.total > 0 || modal" ng-class="{'table-hover': modal}">
     <thead>
-      <tr>
-        <th ng-hide="modal || !currentUser.can('edit data')"></th>
-        <th scope="col" translate>ID#</th>
-        <th scope="col" translate>Title</th>
-        <th scope="col" translate>Location</th>
-        <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
-        <th scope="col" translate>Status</th>
-        <th scope="col" translate>Veracity</th>
-        <th scope="col" translate>Escalated?</th>
-        <th scope="col" translate>Tags</th>
-        <th scope="col" translate>Last Updated</th>
-        <th scope="col" ng-hide="modal || !currentUser.can('edit data')"></th>
-      </tr>
+    <tr>
+      <th ng-hide="modal || !currentUser.can('edit data')"></th>
+      <th scope="col" translate>ID#</th>
+      <th scope="col" translate>Title</th>
+      <th scope="col" translate>Location</th>
+      <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
+      <th scope="col" translate>Status</th>
+      <th scope="col" translate>Veracity</th>
+      <th scope="col" translate>Escalated?</th>
+      <th scope="col" translate>Tags</th>
+      <th scope="col" translate>Last Updated</th>
+      <th scope="col" ng-hide="modal || !currentUser.can('edit data')"></th>
+    </tr>
     </thead>
     <tbody class="table-bordered">
-      <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
-        <th scope="row" ng-hide="modal || !currentUser.can('edit data')">
-          <input ng-model="i.selected" type="checkbox" ng-model="i._id"/>
-        </th>
-        <td>
-          <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
-        </td>
-        <td>
-          <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
-          <strong ng-show="modal">{{ i.title }}</strong>
-          <br />
-          <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
-        </td>
-        <td>
-          <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>
-          <span ng-if="i.locationName">{{ i.locationName }}</span>
-          <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
-        </td>
-        <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
-        <td>{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
-        <td>
-          <div ng-if="i.veracity != null">
-            <div translate>Confirmed</div>
-            <span ng-if="i.veracity" class="text-green" translate>True</span>
-            <span ng-if="!i.veracity" class="text-red" translate>False</span>
-          </div>
-        </td>
-        <td>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</td>
-        <td>{{ tagsToString(i.tags) }}</td>
-        <td>
-          <div class="interval">
-            <span class="interval-amount">{{ i.updatedAt | interval }}</span>
-            <span class="interval-relative" translate>ago</span>
-          </div>
-          <div class="date-and-time">
-            <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
-            <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
-          </div>
-        </td>
-        <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions">
-          <div ng-controller="IncidentFormModalController" class="fa pointer fa-pencil text-blue" ng-click="edit(i)"></div>
-          <div class="fa pointer fa-trash text-blue" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
-        </td>
-      </tr>
+    <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
+      <th scope="row" ng-hide="modal || !currentUser.can('edit data')">
+        <input ng-model="i.selected" type="checkbox" ng-model="i._id"/>
+      </th>
+      <td>
+        <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
+      </td>
+      <td>
+        <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
+        <strong ng-show="modal">{{ i.title }}</strong>
+        <br />
+        <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
+      </td>
+      <td>
+        <div class="map-marker pull-left" ng-show="i.latitude && i.longitude"></div>
+        <span ng-if="i.locationName">{{ i.locationName }}</span>
+        <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
+      </td>
+      <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
+      <td>{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
+      <td>
+        <div ng-if="i.veracity != null">
+          <div translate>Confirmed</div>
+          <span ng-if="i.veracity" class="text-green" translate>True</span>
+          <span ng-if="!i.veracity" class="text-red" translate>False</span>
+        </div>
+      </td>
+      <td>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</td>
+      <td>{{ tagsToString(i.tags) }}</td>
+      <td>
+        <div class="interval">
+          <span class="interval-amount">{{ i.updatedAt | interval }}</span>
+          <span class="interval-relative" translate>ago</span>
+        </div>
+        <div class="date-and-time">
+          <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
+          <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
+        </div>
+      </td>
+      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions">
+        <div ng-controller="IncidentFormModalController" class="fa pointer fa-pencil text-blue" ng-click="edit(i)"></div>
+        <div class="fa pointer fa-trash text-blue" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
+      </td>
+    </tr>
     </tbody>
   </table>
 </div>
