@@ -114,6 +114,18 @@
     <div class="col pr-0">
       <!-- This is the tagging sidebar -->
       <div class="sticky-top">
+        <div class="d-none d-xl-block">
+          <h4 class="pt-2"> Tags </h4>
+          <div>
+            testing tagify wrapper
+            <tagify [settings]="settings"
+                    (add)="onAdd($event)"
+                    (remove)="onRemove($event)">
+            </tagify>
+            <button ng-click="clearSMTCTags()">clear</button>
+            <button ng-click="addSMTCTags()">add Tags</button>
+          </div>
+        </div>
       </div>
     </div>
     <!--This is the centered card-->

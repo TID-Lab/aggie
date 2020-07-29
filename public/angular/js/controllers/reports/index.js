@@ -301,7 +301,6 @@ angular.module('Aggie')
     };
 
     $scope.addSMTCTags = function(report) {
-
       report.SMTCtags.push()
     }
 
