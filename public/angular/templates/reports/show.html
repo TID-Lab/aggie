@@ -79,7 +79,7 @@
                 <td colspan="10" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
               </tr>
               <!-------------- Crowdtangle Specific Table Elements -------------->
-              <div ng-show="sourceClass(report) === 'facebook-source'">
+              <div ng-if="report.metadata.platform === 'Facebook'">
                 <!---- Crowdtangle Current Statistics ---->
                 <tr>
                   <th scope="row" class="detail-key" translate>Content Type</th>
