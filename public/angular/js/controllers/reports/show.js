@@ -3,11 +3,12 @@ angular.module('Aggie')
 .controller('ReportsShowController', [
   '$scope',
   '$stateParams',
+  '$window',
   'data',
   'Report',
   'Tags',
   'Socket',
-  function($scope, $stateParams, data, Report, Tags, Socket) {
+  function($scope, $stateParams, $window, data, Report, Tags, Socket) {
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');
@@ -40,6 +41,9 @@ angular.module('Aggie')
       }
 
       $scope.saveReport(report);
+    };
+    $scope.$back = function() {
+      $window.history.back();
     };
 
     init();

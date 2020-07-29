@@ -4,7 +4,7 @@
     <div class="col"></div>
     <div class="col-md-9">
       <form>
-        <div class="form-row pt-1 pb-1">
+        <div class="form-row pt-2 pb-2">
           <div class="form-group col mb-0">
             <div class="input-group input-group-sm">
               <input type="text" ng-model="searchParams.title" class="form-control" placeholder="{{'Enter Title' | translate}}">
@@ -40,42 +40,42 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.assignedTo" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control">
                 <option value="" translate>Assigned To</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions" ng-change="search()" class="form-control">
                 <option value="" translate>Status</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control">
                 <option value="" translate>Veracity</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.escalated" ng-options="option | capitalize | translate for option in escalatedOptions" ng-change="search()" class="form-control">
                 <option value="" translate>Escalated?</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control">
                 <option value="" translate>Public?</option>
               </select>
             </div>
           </div>
-          <div class="form-group col-md-auto mb-0 pb-1">
+          <div class="form-group col-md-auto mb-0 pb-2">
             <ul class="list-inline mb-0">
               <li class="list-inline-item" ng-hide="noFilters()">
                 <div class="input-group input-group-sm">
@@ -153,7 +153,7 @@
         <div ng-include="'/templates/incidents/table.html'"></div>
       </div>
     </div>
-    <div class="col pl-1">
+    <div class="col">
       <div class="sticky-top">
         <div class="d-none d-md-block">
           <div ng-include="'/templates/statsbar.html'"></div>

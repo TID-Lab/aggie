@@ -4,7 +4,7 @@
     <div class="col"></div>
     <div class="col-xl-10">
       <form>
-        <div class="form-row pt-1 pb-1">
+        <div class="form-row pt-2 pb-2">
           <div class="form-group col mb-0">
             <div class="input-group input-group-sm">
               <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
@@ -40,35 +40,35 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
                 <option value="" translate>Status</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.media" ng-options="media | capitalize | translate for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
                 <option value="" translate>Media</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
                 <option value="" translate>Source</option>
               </select>
             </div>
           </div>
-          <div class="form-group col mb-0 pb-1">
+          <div class="form-group col mb-0 pb-2">
             <div class="input-group input-group-sm">
               <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
                 <option value="" translate>Linked Incident</option>
               </select>
             </div>
           </div>
-          <div class="form-group col-md-auto mb-0 pb-1">
+          <div class="form-group col-md-auto mb-0 pb-2">
             <ul class="list-inline mb-0">
               <li class="list-inline-item">
                 <div class="input-group input-group-sm">
@@ -82,9 +82,9 @@
                   </button>
                 </div>
               </li>
-              <li class="list-inline-item">
+              <li class="list-inline-item" ng-hide="noFilters()">
                 <div class="input-group input-group-sm">
-                  <button type="submit" class="btn btn-light" ng-click="clearFilters()" translate>Clear All Filters</button>
+                  <button type="submit" class="btn btn-light" ng-click="clearFilters()" translate>Clear Filters</button>
                 </div>
               </li>
               <li class="list-inline-item">
@@ -103,7 +103,6 @@
     <div class="col"></div>
   </div>
 </div>
-
 <!-- Alerts Section -->
 <alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <ng-include src="'/templates/alerts.html'"></ng-include>
@@ -111,7 +110,7 @@
 <!-- Main Section -->
 <div class="container-fluid mt-4">
   <div class="row">
-    <div class="col pr-0">
+    <div class="col">
       <!-- This is the tagging sidebar -->
       <div class="sticky-top">
         <div class="d-none d-xl-block">
@@ -234,7 +233,7 @@
         </div>
       </div>
     </div>
-    <div class="col pl-1">
+    <div class="col">
       <div class="sticky-top">
         <div class="d-none d-xl-block">
           <div ng-include="'/templates/statsbar.html'"></div>
