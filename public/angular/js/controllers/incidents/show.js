@@ -5,6 +5,7 @@ angular.module('Aggie')
   '$scope',
   '$state',
   '$stateParams',
+  '$window',
   'incident',
   'reports',
   'sources',
@@ -18,7 +19,7 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -179,6 +180,9 @@ angular.module('Aggie')
 
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
+    };
+    $scope.$back = function() {
+      $window.history.back();
     };
     $scope.tagsToString = Tags.tagsToString;
     init();

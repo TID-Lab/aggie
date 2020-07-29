@@ -3,12 +3,12 @@
     <div class="col">
 
     </div>
-    <div class="col-xl-8">
+    <div class="col-md-8">
       <div class="card">
         <h4 class="card-header"> Settings </h4>
         <div class="card-body">
           <div class="row">
-            <div class="col-4">
+            <div class="col-5">
               <div class="table-responsive">
                 <table class="table table-sm table-bordered" ng-controller="FetchingController">
                   <caption>Turn API fetching on or off</caption>
@@ -112,7 +112,9 @@
     </div>
     <div class="col">
       <div class="sticky-top">
-        <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-md-block">
+          <div ng-include="'/templates/statsbar.html'"></div>
+        </div>
       </div>
     </div>
   </div>
