@@ -58,7 +58,10 @@ angular.module('Aggie')
     };
 
     $rootScope.$watch('currentUser', init);
-
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
     init();
   }
 ]);

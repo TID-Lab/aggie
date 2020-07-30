@@ -300,7 +300,7 @@ angular.module('Aggie')
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
     };
-    
+
     $scope.addSMTCTags = function(report) {
       console.log("Clicked add");
       // test saving
@@ -424,10 +424,11 @@ angular.module('Aggie')
     $scope.$on('$destroy', function() {
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
     });
 
     $scope.tagsToString = Tags.tagsToString;
-
     init();
   }
 ]);

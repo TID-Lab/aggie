@@ -181,9 +181,16 @@ angular.module('Aggie')
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };
+
     $scope.$back = function() {
       $window.history.back();
     };
+
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
+
     $scope.tagsToString = Tags.tagsToString;
     init();
   }

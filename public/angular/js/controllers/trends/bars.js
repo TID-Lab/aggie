@@ -160,8 +160,9 @@ angular.module('Aggie')
 
     $scope.$on('$destroy', function() {
       Socket.removeAllListeners('trend');
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
     });
-
     init();
   }
 ]);

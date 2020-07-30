@@ -45,6 +45,10 @@ angular.module('Aggie')
     $scope.$back = function() {
       $window.history.back();
     };
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
 
     init();
   }

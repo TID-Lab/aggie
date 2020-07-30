@@ -13,6 +13,10 @@ angular.module('Aggie')
       $scope.stats = stats;
     };
 
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
     init();
   }
 ]);
