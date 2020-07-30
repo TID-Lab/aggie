@@ -332,7 +332,7 @@ angular.module('Aggie')
 
     $scope.deleteSMTCTags = function(report) {
       // pass in delete parameter through user input. currently has a placeholder
-      SMTCTags.delete({ id: $scope.smtcTags[0]._id}).$promise
+      SMTCTags.delete({ _id: $scope.smtcTags[0]._id}).$promise
         .then(function(tag) {
           // if a tag is successfully deleted, update the $scope.tags by calling SMTCTags.query()
           $scope.updateTags(report);          
