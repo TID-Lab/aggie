@@ -18,11 +18,12 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'Tags',
+  'SMTCTags',
   'paginationOptions',
   '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
+           Report, Incident, Batch, Socket, Queue, Tags, SMTCTags, paginationOptions,
            $translate) {
 
     $scope.searchParams = $stateParams;
@@ -299,9 +300,13 @@ angular.module('Aggie')
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
     };
-
+    
     $scope.addSMTCTags = function(report) {
-      report.SMTCtags.push()
+      console.log("Clicked add");
+      // test saving
+      SMTCTags.save({ name: 'Test'});
+      // test querying
+      console.log(SMTCTags.query());
     }
 
     $scope.toggleFlagged = function(report) {
