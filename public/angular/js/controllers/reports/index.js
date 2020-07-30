@@ -38,6 +38,7 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
+    $scope.smtcTags = [];
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -302,12 +303,45 @@ angular.module('Aggie')
     };
     
     $scope.addSMTCTags = function(report) {
-      console.log("Clicked add");
-      // test saving
-      SMTCTags.save({ name: 'Test'});
-      // test querying
-      console.log(SMTCTags.query());
+      SMTCTags.save({ name: 'Test6'}).$promise
+        .then(function(tag) {
+          // if a new tag is successfully added, update the $scope.tags by calling SMTCTags.query()
+          $scope.updateTags(report);          
+        })
+        .catch(function(error) {
+          // add error handling
+          console.log(error);
+        });
     }
+
+    $scope.updateTags = function (report) {
+      SMTCTags.query().$promise
+        .then(function(allTags) {
+          $scope.smtcTags = [];
+          for (var i = 0; i < allTags.length; i++) {
+            // pushes all queried tags to $scope.smtcTags
+            $scope.smtcTags.push(allTags[i]);
+          }
+          console.log($scope.smtcTags);
+        })
+        .catch(function (error) {
+          // add error handling
+          console.log(error);
+        })
+    }
+
+    $scope.deleteSMTCTags = function(report) {
+      // pass in delete parameter through user input. currently has a placeholder
+      SMTCTags.delete({ id: $scope.smtcTags[0]._id}).$promise
+        .then(function(tag) {
+          // if a tag is successfully deleted, update the $scope.tags by calling SMTCTags.query()
+          $scope.updateTags(report);          
+        })
+        .catch(function(error) {
+          // add error handling
+          console.log(error);
+        });
+      };
 
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
