@@ -201,6 +201,12 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('tags', {
+      url: '/tags',
+      templateUrl: '/templates/tags/index.html',
+      controller: 'TagsIndexController',
+    });
+
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html',
