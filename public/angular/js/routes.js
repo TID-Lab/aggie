@@ -114,6 +114,9 @@ angular.module('Aggie')
           });
 
           return deferred.promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
         }]
       }
     });

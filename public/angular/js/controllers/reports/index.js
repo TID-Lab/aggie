@@ -67,17 +67,14 @@ angular.module('Aggie')
       if ($scope.currentPath === 'reports' || $scope.currentPath === 'batch') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
+        Socket.on('stats', updateStats);
+        Socket.join('stats');
         if ($scope.isFirstPage()) {
           Socket.emit('query', searchParams());
           Socket.on('reports', $scope.handleNewReports.bind($scope));
         }
       }
-      Socket.on('stats', updateStats);
-      Socket.join('stats');
-      // if (!$scope.currentUser) {
-      //   Socket.leave('stats');
-      //   Socket.removeAllListeners('stats');
-      // }
+
 
       // make links clickable
       $scope.reports.forEach(linkify);
@@ -329,7 +326,6 @@ angular.module('Aggie')
     };
 
     $scope.someSelected = function() {
-
       return $scope.reports.some(function(report) {
         return report.selected;
       });
@@ -420,6 +416,8 @@ angular.module('Aggie')
     $scope.$on('$destroy', function() {
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
     });
 
     $scope.tagsToString = Tags.tagsToString;
