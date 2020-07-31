@@ -40,6 +40,21 @@
   </tr>
 </table>
 
+<span class="ng-scope"  ng-controller="SettingsController">
+  <table ng-if="showCTButton" class="table table-settings ">
+    <tr >
+      <td>
+        <label class="settings-label">Update CrowdTangle List</label>
+      </td>
+      <td class="action">
+        <div class="ng-scope" >
+          <button class="btn btn-info ng-scope" ng-click="updateCTList()" translate>Update</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+</span>
+
 <h4 translate>Email</h4>
 <table class="table table-settings" ng-controller="EmailSettingsController">
   <tr>
