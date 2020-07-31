@@ -18,12 +18,12 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'Tags',
-  'SMTCTags',
+  'SMTCTag',
   'paginationOptions',
   '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, Tags, SMTCTags, paginationOptions,
+           Report, Incident, Batch, Socket, Queue, Tags, SMTCTag, paginationOptions,
            $translate) {
 
     $scope.searchParams = $stateParams;
@@ -299,10 +299,10 @@ angular.module('Aggie')
       });
     };
 
-    $scope.addSMTCTags = function(report) {
-      SMTCTags.save({ name: 'Test6'}).$promise
+    $scope.addSMTCTag = function(report) {
+      SMTCTag.save({ name: 'Test6'}).$promise
         .then(function(tag) {
-          // if a new tag is successfully added, update the $scope.tags by calling SMTCTags.query()
+          // if a new tag is successfully added, update the $scope.tags by calling SMTCTag.query()
           $scope.updateTags(report);          
         })
         .catch(function(error) {
@@ -312,7 +312,7 @@ angular.module('Aggie')
     }
 
     $scope.updateTags = function (report) {
-      SMTCTags.query().$promise
+      SMTCTag.query().$promise
         .then(function(allTags) {
           $scope.smtcTags = [];
           for (var i = 0; i < allTags.length; i++) {
@@ -327,11 +327,11 @@ angular.module('Aggie')
         })
     }
 
-    $scope.deleteSMTCTags = function(report) {
+    $scope.deleteSMTCTag = function(report) {
       // pass in delete parameter through user input. currently has a placeholder
-      SMTCTags.delete({ _id: $scope.smtcTags[0]._id}).$promise
+      SMTCTag.delete({ _id: $scope.smtcTags[0]._id}).$promise
         .then(function(tag) {
-          // if a tag is successfully deleted, update the $scope.tags by calling SMTCTags.query()
+          // if a tag is successfully deleted, update the $scope.tags by calling SMTCTag.query()
           $scope.updateTags(report);          
         })
         .catch(function(error) {

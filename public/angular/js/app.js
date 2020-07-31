@@ -95,7 +95,7 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/tags');
-require('./services/smtcTags');
+require('./services/smtcTag');
 
 // Controllers
 require('./controllers/application');

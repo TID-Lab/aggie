@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.factory('SMTCTags', function($resource) {
+.factory('SMTCTag', function($resource) {
   return $resource('/api/v1/tag/:id', null, {
     'query': { method: 'GET', isArray: true },
     'save': { method: 'POST' },
