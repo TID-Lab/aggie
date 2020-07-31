@@ -118,7 +118,13 @@ tbody {
     display: block;
   }
 }
+.bg-flagged {
+  background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 5%);
+    }
 
+}
 .source {
   .icon-left {
     width: 33px;
