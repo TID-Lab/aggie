@@ -45,12 +45,12 @@
             </p>
           </a>
         </td>
-        <td class="source" ng-class="{ strong: !isRead(r) }">
+        <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
+          <div class="icon-left" ng-class="sourceClass(r)">
+          </div>
           <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
             {{ sourcesById[s].nickname || '[Deleted]' }}
           </span>
-          <div class="icon-left" ng-class="sourceClass(r)">
-          </div>
         </td>
         <td class="tag" ng-class="{ strong: !isRead(r) }">
           <span class="text-wrap">
