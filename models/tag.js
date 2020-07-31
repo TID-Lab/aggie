@@ -23,7 +23,7 @@ tagSchema.pre('save', function(next) {
 });
 
 tagSchema.post('save', function() {
-    schema.emit('tag:new', {
+    tagSchema.emit('tag:new', {
         _id: this._id.toString(),
         name: this.name
     });
