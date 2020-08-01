@@ -4,7 +4,7 @@
     <div class="col">
 
     </div>
-    <div class="col-md-8">
+    <div class="col-lg-8">
       <div class="card">
         <h4 class="card-header"> Settings </h4>
         <div class="card-body">
@@ -113,9 +113,16 @@
     </div>
     <div class="col">
       <div class="sticky-top">
-        <div class="d-none d-md-block">
-          <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-lg-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-lg-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
     </div>
   </div>
