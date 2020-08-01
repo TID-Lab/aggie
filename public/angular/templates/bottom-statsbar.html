@@ -1,0 +1,39 @@
+<ul class="list-inline justify-content-between" ng-if="stats">
+  <li class="list-inline-item" id="numTotalReports" translate>
+    <p class="clear"> Total Reports </p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numTotalReports">
+    <h3>{{stats.totalReports | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numTotalReportsPerMinute" translate>
+    <p class="clear"> Reports/min </p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numTotalReportsPerMinute">
+    <h3>{{stats.totalReportsPerMinute | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numUnreadReports" translate>
+    <p class="clear">Unread</p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numUnreadReports">
+    <h3>{{stats.totalReportsUnread | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numFlaggedReports" translate>
+    <p class="clear">Flagged</p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numFlaggedReports">
+    <h3>{{stats.totalReportsFlagged | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numIncidents"translate>
+    <p class="clear">Incidents</p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numIncidents">
+    <h3>{{stats.totalIncidents | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numEscalatedIncidents" translate>
+    <p class="clear">Escalated Incidents</p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numEscalatedIncidents">
+    <h3>{{stats.totalEscalatedIncidents | number}}</h3>
+  </li>
+</ul>
+

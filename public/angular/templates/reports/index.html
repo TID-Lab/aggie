@@ -103,6 +103,7 @@
     <div class="col"></div>
   </div>
 </div>
+
 <!-- Alerts Section -->
 <alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <ng-include src="'/templates/alerts.html'"></ng-include>
@@ -224,9 +225,17 @@
     <div class="col">
       <div class="sticky-top">
         <div class="d-none d-xl-block">
-          <div ng-include="'/templates/statsbar.html'"></div>
+          <div ng-include="'/templates/side-statsbar.html'"></div>
         </div>
       </div>
     </div>
   </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-xl-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
+      </div>
+    </div>
+  </div>
 </div>
+

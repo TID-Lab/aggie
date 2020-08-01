@@ -65,69 +65,70 @@
           <!-- Report view under incidents -->
           <p ng-hide="pagination.total > 0" translate>There are no reports to display.</p>
           <div ng-show="pagination.total > 0">
-              <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-                <div aria-label="Read/Unread Buttons/Selection">
-                  <div class="btn-group ml-2 mr-4">
-                    <input ng-select-all items="reports" type="checkbox" />
-                  </div>
-                  <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+              <div aria-label="Read/Unread Buttons/Selection">
+                <div class="btn-group ml-2 mr-4">
+                  <input ng-select-all items="reports" type="checkbox" />
                 </div>
-                <nav class="Report list page navigation">
-                  <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                      <label>
-                        {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
-                      </label>
-                    </li>
-                    <li class="list-inline-item">
-                      <ul class="pagination">
-                        <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                          <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
-                            <i class="fa fa-chevron-left"></i>
-                          </a>
-                        </li>
-                        <li class="page-item" ng-class="{disabled: isLastPage() }">
-                          <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
-                            <i class="fa fa-chevron-right"></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </nav>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
               </div>
-            <div class="dropdown-divider"></div>
-            <div ng-include="'/templates/reports/table.html'"></div>
-            <div class="dropdown-divider"></div>
-            <div ng-show="pagination.total > 0">
-              <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-                <div aria-label="Read/Unread Buttons/Selection">
-                  <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
-                </div>
-                <nav class="Report list page navigation">
-                  <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                      <label>
-                        {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
-                      </label>
-                    </li>
-                    <li class="list-inline-item">
-                      <ul class="pagination">
-                        <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                          <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
-                            <i class="fa fa-chevron-left"></i>
-                          </a>
-                        </li>
-                        <li class="page-item" ng-class="{disabled: isLastPage() }">
-                          <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
-                            <i class="fa fa-chevron-right"></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </nav>
+              <nav class="Report list page navigation">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <label>
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                    </label>
+                  </li>
+                  <li class="list-inline-item">
+                    <ul class="pagination">
+                      <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                          <i class="fa fa-chevron-left"></i>
+                        </a>
+                      </li>
+                      <li class="page-item" ng-class="{disabled: isLastPage() }">
+                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                          <i class="fa fa-chevron-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div ng-include="'/templates/reports/table.html'"></div>
+          <div class="dropdown-divider"></div>
+          <div ng-show="pagination.total > 0">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+              <div aria-label="Read/Unread Buttons/Selection">
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
               </div>
+              <nav class="Report list page navigation">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <label>
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                    </label>
+                  </li>
+                  <li class="list-inline-item">
+                    <ul class="pagination">
+                      <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                          <i class="fa fa-chevron-left"></i>
+                        </a>
+                      </li>
+                      <li class="page-item" ng-class="{disabled: isLastPage() }">
+                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                          <i class="fa fa-chevron-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
@@ -135,8 +136,15 @@
     <div class="col">
       <div class="sticky-top">
         <div class="d-none d-xl-block">
-          <div ng-include="'/templates/statsbar.html'"></div>
+          <div ng-include="'/templates/side-statsbar.html'"></div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-xl-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
     </div>
   </div>
