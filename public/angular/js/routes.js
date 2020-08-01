@@ -66,6 +66,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -84,6 +87,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -205,6 +211,11 @@ angular.module('Aggie')
       url: '/tags',
       templateUrl: '/templates/tags/index.html',
       controller: 'TagsIndexController',
+      resolve: {
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
+        }]
+      }
     });
 
     $stateProvider.state('analysis', {
