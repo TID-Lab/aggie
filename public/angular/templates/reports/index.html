@@ -116,14 +116,19 @@
         <div class="d-none d-xl-block">
           <h4 class="pt-2"> Tags </h4>
           <div>
-            testing tagify wrapper
             <tagify [settings]="settings"
                     (add)="onAdd($event)"
                     (remove)="onRemove($event)">
             </tagify>
-            <button ng-click="clearSMTCTag()">clear</button>
-            <button ng-click="addSMTCTag()">add Tags</button>
           </div>
+          <tags class="tagify readonlyMix" tabindex="-1">
+            <tag ng-repeat="smtcTag in smtcTags" title="bar" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" __isvalid="true" value="bar">
+              <x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+              <div>
+                <span class="tagify__tag-text">{{smtcTag.name}}</span>
+              </div>
+            </tag>
+          </tags>
         </div>
       </div>
     </div>
