@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "result": {
+      "accounts": [
+          {
+              "id": 0,
+              "name": "account0"
+          },
+          {
+            "id": 1,
+            "name": "account1"
+        }
+        ]
+      }
+    }
