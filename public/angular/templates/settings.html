@@ -1,93 +1,128 @@
+<ng-include src="'/templates/alerts.html'"></ng-include>
 <div class="container-fluid mt-4">
   <div class="row">
     <div class="col">
 
     </div>
-    <div class="col-xl-8">
+    <div class="col-lg-8">
       <div class="card">
         <h4 class="card-header"> Settings </h4>
         <div class="card-body">
-          <table class="table table-settings" ng-controller="FetchingController">
-            <tbody>
-            <tr>
-              <td>
-                <label class="settings-label" translate>Fetching</label>
-              </td>
-              <td class="action">
-                <div class="btn-group">
-                  <button role="button" ng-click="toggle(false)" data-toggle="button" class="btn" ng-class="{
-              'btn-primary':on===false, 'btn-secondary':on===true}" ng-disabled="on===false" translate>
-                    Off
-                  </button>
-                  <button role="button" ng-click="toggle(true)" data-toggle="button" class="btn" ng-class="{
-              'btn-primary':on===true, 'btn-secondary':on===false}" ng-disabled="on===true" translate>
-                    On
-                  </button>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <h4 translate>API Authentication</h4>
-
-          <table class="table table-settings" ng-controller="SettingsController">
-            <tr ng-repeat="settingOption in apiSettingOptions">
-              <td>
-                <label class="settings-label">{{ settingOption | translate }}</label>
-              </td>
-              <td class="action">
-                <div class="ng-scope">
-                  <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
-                </div>
-              </td>
-            </tr>
-          </table>
-
-          <h4 translate>Email</h4>
-          <table class="table table-bordered" ng-controller="EmailSettingsController">
-            <tr>
-              <th scope="row"><label class="settings-label" translate>App Email Address</label></th>
-              <td class="value text-field">
-                <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}" ng-change="formChanged=true"/>
-              </td>
-              <td class="action">
-                <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()" translate>Save</button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label class="settings-label" translate>Email Transport</label>
-              </td>
-              <td class="value">
-                <p>{{ transport.method }}</p>
-              </td>
-              <td class="action">
-                <div class="ng-scope">
-                  <button class="btn btn-info ng-scope" ng-click="editTransport()" translate>Edit</button>
-                </div>
-              </td>
-            </tr>
-          </table>
-
-          <h4 translate>Widgets</h4>
-          <table class="table table-settings" ng-controller="SettingsController">
-            <tr ng-repeat="settingOption in widgetSettingOptions">
-              <td>
-                <label class="settings-label">{{ settingOption | capitalize | translate }}</label>
-              </td>
-              <td class="action">
-                <div class="ng-scope">
-                  <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <div class="row">
+            <div class="col-5">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered" ng-controller="FetchingController">
+                  <caption>Turn API fetching on or off</caption>
+                  <tbody>
+                  <tr>
+                    <td>
+                      <label class="settings-label" translate>Fetching</label>
+                    </td>
+                    <td class="action text-center">
+                      <div class="btn-group">
+                        <button role="button" ng-click="toggle(false)" data-toggle="button" class="btn" ng-class="{
+                'btn-primary':on===false, 'btn-secondary':on===true}" ng-disabled="on===false" translate>
+                          Off
+                        </button>
+                        <button role="button" ng-click="toggle(true)" data-toggle="button" class="btn" ng-class="{
+                'btn-primary':on===true, 'btn-secondary':on===false}" ng-disabled="on===true" translate>
+                          On
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <h5 translate>API Authentication</h5>
+              <table class="table table-sm table-bordered" ng-controller="SettingsController">
+                <caption>Edit API authentication and key settings</caption>
+                <tbody>
+                  <tr ng-repeat="settingOption in apiSettingOptions">
+                    <td>
+                      <label class="settings-label">{{ settingOption | translate }}</label>
+                    </td>
+                    <td class="action text-center">
+                      <div class="ng-scope">
+                        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h5 translate>Email</h5>
+              <table class="table table-sm table-bordered" ng-controller="EmailSettingsController">
+                <caption>Edit system email and transport settings</caption>
+                <tbody>
+                  <tr>
+                    <th scope="row"><label class="settings-label" translate>App Email Address</label></th>
+                    <td class="value text-field">
+                      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}" ng-change="formChanged=true"/>
+                    </td>
+                    <td class="text-center">
+                      <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()" translate>Save</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="settings-label" translate>Email Transport</label>
+                    </td>
+                    <td class="value">
+                      <p>{{ transport.method }}</p>
+                    </td>
+                    <td class="text-center">
+                      <div class="ng-scope">
+                        <button class="btn btn-info ng-scope" ng-click="editTransport()" translate>Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <h5 translate>Widgets</h5>
+              <table class="table table-sm table-bordered" ng-controller="SettingsController">
+                <caption>Edit widget settings</caption>
+                <tbody>
+                <tr ng-repeat="settingOption in widgetSettingOptions">
+                  <td>
+                    <label class="settings-label">{{ settingOption | capitalize | translate }}</label>
+                  </td>
+                  <td class="text-center">
+                    <div class="ng-scope">
+                      <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="sticky-top">
-        <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-lg-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-lg-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
     </div>
   </div>

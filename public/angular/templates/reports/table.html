@@ -1,5 +1,5 @@
-<div class="table-responsive-xl">
-  <table class="table" aggie-table ng-show="pagination.total > 0">
+<div class="table-responsive-md pt-3">
+  <table class="table-sm" aggie-table ng-show="pagination.total > 0">
     <thead>
       <tr>
         <th scope="col" ng-show="currentUser.can('edit data')"></th>
@@ -16,13 +16,13 @@
     <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
           ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-        <td ng-show="currentUser.can('edit data')">
+        <td class="align-middle text-center" ng-show="currentUser.can('edit data')">
           <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
         </td>
-        <td class="time">
-          <h6><span class="badge badge-info">{{ r.storedAt | interval }} ago</span></h6>
-          <span class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</span>
-          <span>{{ r.storedAt | aggieDate:'date' }}</span>
+        <td class="td--time">
+          <span class="badge badge-info">{{ r.storedAt | interval }} ago</span>
+          <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
+          <div>{{ r.storedAt | aggieDate:'date' }}</div>
           <!--<p class="created"><span>{{ r | delay }}</span></p>-->
         </td>
         <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
@@ -45,32 +45,35 @@
             </p>
           </a>
         </td>
-        <td class="source" ng-class="{ strong: !isRead(r) }">
-          <span ng-repeat="s in r._sources" class="source text-wrap">
-            {{ sourcesById[s].nickname || '[Deleted]' }}
-          </span>
+        <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
           <div class="icon-left" ng-class="sourceClass(r)">
           </div>
+          <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
+            {{ sourcesById[s].nickname || '[Deleted]' }}
+          </span>
         </td>
         <td class="tag" ng-class="{ strong: !isRead(r) }">
           <span class="text-wrap">
             {{ tagsToString(r.tags) }}
           </span>
         </td>
-        <td class="expand incident text-center relative" ng-hide="pageType == 'show-incident'">
-          <div data-toggle="modal" data-target="#exampleModal">
-            <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
-              <strong class="text-wrap" ng-if="r._incident && incidentsById[r._incident]">
-                {{ incidentsById[r._incident].title | strLimit: 40 }}
-              </strong>
-              <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
-            </a>
+        <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
+          <div class="text-center">
+            <span>
+              <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
+                <strong class="text-wrap" ng-if="r._incident && incidentsById[r._incident]">
+                  {{ incidentsById[r._incident].title | strLimit: 40 }}
+                </strong>
+                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
+              </a>
+            </span>
+            <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
           </div>
-          <a class="remove" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
         </td>
         <td class="flagged text-center">
           <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
-               ng-click="currentUser.can('edit data') && toggleFlagged(r)"></div>
+               ng-click="currentUser.can('edit data') && toggleFlagged(r)">
+          </div>
         </td>
       </tr>
     </tbody>

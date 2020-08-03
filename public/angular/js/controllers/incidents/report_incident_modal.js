@@ -16,7 +16,7 @@ angular.module('Aggie')
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
         windowClass: 'report-to-existing',
-        size: 'lg',
+        size: 'xl',
         controller: 'IncidentSelectModalInstanceController',
         templateUrl: '/templates/incidents/report_incident_modal.html',
         resolve: {

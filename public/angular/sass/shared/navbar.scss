@@ -19,7 +19,6 @@
   background-color: $navbar-green;
   .navbar-nav {
     > li {
-      z-index: 2000;
       >a {
         line-height: 30px;
       }
@@ -47,46 +46,9 @@
   }
 }
 
-.navbar-stats {
-  min-height: 34px;
-  background-color: $navbar-yellow;
-  .navbar-text {
-    line-height: 26px;
-  }
-  .container {
-    height: 44px;
-    position: relative;
-    padding-top: 8px;
-  }
-  .navbar-nav > li {
-    > a:hover,
-    > a:focus,
-    &.active > a,
-    &.active > a:hover,
-    &.active > a:focus {
-      background-color: darken($navbar-yellow, 10%);
-    }
-  }
+.dropdown-menu {
+  z-index: 4000;
 }
-
-.navbar-text {
-  line-height: 1;
-  margin: 0;
-  font-weight: $medium-weight;
-
-  .nav-bar-number {
-    font-size: 18px;
-  }
-  .nav-bar-label {
-    font-size: 12px;
-    margin-right: 10px;
-  }
-}
-
-li.user {
-  font-weight: bold;
-}
-
 .source-errors {
   float: right;
   padding-top: 5px;

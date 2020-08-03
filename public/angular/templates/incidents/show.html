@@ -1,87 +1,133 @@
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
+  <ol class="breadcrumb mb-0">
     <li class="breadcrumb-item"><a ui-sref="incidents" translate>Incidents</a></li>
     <li class="breadcrumb-item active">{{ incident.title }}</li>
   </ol>
 </nav>
 
-<div class="container-fluid">
+<ng-include src="'/templates/alerts.html'"></ng-include>
+
+<div class="container-fluid mt-4">
   <div class="row">
     <div class="col">
     </div>
-    <div class="col-xl-8">
+    <div class="col-xl-10">
       <div class="card">
         <div class="card-header">
           <div ng-show="currentUser.can('edit data')" class="button-row">
+            <button type="button" ng-click="$back()" class="btn btn-default mr-2">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
             <button ng-controller="IncidentFormModalController" class="btn btn-info margin-right" ng-click="edit(incident)" translate>Edit</button>
             <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete()">Delete</button>
           </div>
         </div>
         <div class="card-body">
-          <table class="table detail-table">
+          <table class="table table-bordered">
             <tbody>
             <tr>
-              <td class="detail-key" translate>Location</td>
+              <th class="detail-key" translate>Location</th>
               <td class="detail-value">
-                <div ng-if="incident.locationName">{{ incident.locationName }}</div>
-                <div ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</td>
+                <span ng-if="incident.locationName">{{ incident.locationName }}</span>
+                <span ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</span>
+              </td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Tags</td>
+              <th class="detail-key" translate>Tags</th>
               <td class="detail-value">{{ tagsToString(incident.tags) }}</td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Creator</td>
+              <th class="detail-key" translate>Creator</th>
               <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Assigned To</td>
+              <th class="detail-key" translate>Assigned To</th>
               <td class="detail-value"><a href="/users/{{ incident.assignedTo.username }}">{{ incident.assignedTo.username }}</a></td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Status</td>
+              <th class="detail-key" translate>Status</th>
               <td class="detail-value">{{ incident.closed ? 'Closed' : 'Open' | translate}}</td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Veracity</td>
+              <th class="detail-key" translate>Veracity</th>
               <td class="detail-value">
                 {{ incident.veracity ? 'Confirmed True' : (incident.veracity === false ? 'Confirmed False' : 'Unconfirmed') | translate }}
               </td>
             </tr>
             <tr>
-              <td class="detail-key" translate>Notes</td>
+              <th class="detail-key" translate>Notes</th>
               <td class="detail-value"><span class="angular-with-newlines" ng-bind-html="incident.notes"></span></td>
             </tr>
             </tbody>
           </table>
           <h4 translate>Reports</h4>
+          <div class="dropdown-divider"></div>
+          <!-- Report view under incidents -->
           <p ng-hide="pagination.total > 0" translate>There are no reports to display.</p>
           <div ng-show="pagination.total > 0">
-            <div class="table-actions">
-              <div class="button-row margin-bottom-lg">
-                <div class="pull-left margin-right padding-top-bottom checkbox-btn bg-gray">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+              <div aria-label="Read/Unread Buttons/Selection">
+                <div class="btn-group ml-2 mr-4">
                   <input ng-select-all items="reports" type="checkbox" />
                 </div>
-                <div class="pull-left padding-top-bottom">
-                  <a ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</a>
-                </div>
-                <div class="pull-right padding-top-bottom pagination">
-                  <ul class="pager">
-                    <li class="pager-label">
-                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
-                    </li>
-                    <li>
-                      <button ng-class="{disabled: isFirstPage() }" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })" class="btn btn-info">&lsaquo;</button>
-                    </li>
-                    <li>
-                      <button ng-class="{disabled: isLastPage() }" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" class="btn btn-info">&rsaquo;</button>
-                    </li>
-                  </ul>
-                </div>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
               </div>
+              <nav class="Report list page navigation">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <label>
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                    </label>
+                  </li>
+                  <li class="list-inline-item">
+                    <ul class="pagination">
+                      <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                          <i class="fa fa-chevron-left"></i>
+                        </a>
+                      </li>
+                      <li class="page-item" ng-class="{disabled: isLastPage() }">
+                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                          <i class="fa fa-chevron-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
             </div>
-            <div class="card-footer">
-              <div ng-include="'/templates/reports/table.html'"></div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div ng-include="'/templates/reports/table.html'"></div>
+          <div class="dropdown-divider"></div>
+          <div ng-show="pagination.total > 0">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+              <div aria-label="Read/Unread Buttons/Selection">
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
+              </div>
+              <nav class="Report list page navigation">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <label>
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                    </label>
+                  </li>
+                  <li class="list-inline-item">
+                    <ul class="pagination">
+                      <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                          <i class="fa fa-chevron-left"></i>
+                        </a>
+                      </li>
+                      <li class="page-item" ng-class="{disabled: isLastPage() }">
+                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                          <i class="fa fa-chevron-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
@@ -89,7 +135,16 @@
     </div>
     <div class="col">
       <div class="sticky-top">
-        <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-xl-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-xl-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
     </div>
   </div>

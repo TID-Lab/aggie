@@ -1,8 +1,9 @@
+<ng-include src="'/templates/alerts.html'"></ng-include>
 <div class="container-fluid mt-4">
   <div class="row">
     <div class="col">
     </div>
-    <div class="col-xl-8">
+    <div class="col-lg-9">
       <div class="card">
         <h4 class="card-header"> Users </h4>
         <div class="card-body">
@@ -14,12 +15,12 @@
           </div>
           <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
 
-          <table class="table" ng-show="users.length > 0">
+          <table class="table mt-2" ng-show="users.length > 0">
             <thead>
             <tr>
-              <th translate>Username</th>
-              <th translate>Email</th>
-              <th translate>Role</th>
+              <th scope="col" translate>Username</th>
+              <th scope="col" translate>Email</th>
+              <th scope="col" translate>Role</th>
             </tr>
             </thead>
             <tbody>
@@ -40,7 +41,18 @@
       </div>
     </div>
     <div class="col">
-
+      <div class="sticky-top">
+        <div class="d-none d-lg-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-lg-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
+      </div>
     </div>
   </div>
 </div>

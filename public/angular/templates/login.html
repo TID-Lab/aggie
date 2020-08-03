@@ -1,3 +1,4 @@
+<ng-include src="'/templates/alerts.html'"></ng-include>
 <div class="mt-4 container">
   <div class="row">
     <div class="mx-auto col-8">
@@ -18,7 +19,7 @@
                 <div class="">
                   <button type="submit" class="btn btn-primary" translate>Log In</button>
                   <br/><br/>
-                  <a href="#" type="button" data-toggle="modal" data-target="#passwordResetModal" translate>Forgot password?</a>
+                  <a href ng-controller="PasswordResetModalController" ng-click="open()" translate>Forgot password?</a>
                 </div>
               </div>
             </fieldset>
@@ -28,5 +29,3 @@
     </div>
   </div>
 </div>
-
-<div ng-include="'/templates/password_reset_modal.html'"></div>

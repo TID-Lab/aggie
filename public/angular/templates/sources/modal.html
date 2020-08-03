@@ -1,11 +1,15 @@
 <div ng-controller="SourceFormModalController">
   <div class="modal-header">
-    <h4 class="modal-title">
-      <div class="source" ng-class="sourceClass(source)">
-        <span class="icon-left mr-1">&nbsp;</span>
-        <span>{{ source._id ? 'Edit' : 'Create' | translate }} {{ 'Source' | translate }}</span>
-      </div>
-    </h4>
+    <ul class="list-inline mb-0">
+      <li class="list-inline-item align-middle mb-0">
+        <div class="source mx-auto"><div class="icon-left" ng-class="sourceClass(source)"></div></div>
+      </li>
+      <li class="list-inline-item align-middle mb-0">
+        <h4 class="modal-title">
+          <span>{{ source._id ? 'Edit' : 'Create' | translate }} {{ 'Source' | translate }}</span>
+        </h4>
+      </li>
+    </ul>
     <button class="close" ng-click="close()" aria-hidden="true">×</button>
   </div>
   <div class="modal-body">

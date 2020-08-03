@@ -1,10 +1,10 @@
 <div>
   <form name="settingsForm" class="form-horizontal" novalidate>
     <div class="modal-header">
-      <button class="close" ng-click="close()" aria-hidden="true">×</button>
-      <h4 class="modal-title">
+      <h5 class="modal-title">
         <div class="icon-left" translate="api_settings_modal.title" translate-value-api="{{ item }}"></div>
-      </h4>
+      </h5>
+      <button class="close" ng-click="close()" aria-hidden="true">×</button>
     </div>
     <div class="modal-body">
       <alert type="info" ng-show="success">{{ "api_settings_modal.success" | translate }}</alert>
@@ -31,30 +31,27 @@
         <li translate>api_settings_modal.gplaces.p2</li>
       </ol>
       <p ng-show="settingsForm.$invalid" translate>api_settings_modal.field_required</p>
-      <div class="well bs-component">
-        <fieldset>
-          <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
-            <label for="{{ settingName }}" class="col-lg-3 control-label">{{ settingName }}</label>
-            <div class="col-lg-8">
-              <input type="text" ng-model="settings[settingName]" class="form-control"
-                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
-            </div>
-          </div>
-        </fieldset>
-      </div>
+      <fieldset>
+        <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
+          <label for="{{ settingName }}" class="control-label">{{ settingName }}</label>
+          <input type="text" ng-model="settings[settingName]" class="form-control"
+                 id="{{ settingName }}" name="{{settingName}}" placeholder="{{ settingValue }}" required />
+        </div>
+      </fieldset>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(item, settings)" ng-if="item !== 'elmo' && item !== 'gplaces'">
         <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
         <span ng-hide="loading">Test</span>
-        <span ng-show="loading">Testing</span></button>
+        <span ng-show="loading">Testing</span>
+      </button>
       <button class="btn btn-default" aggie-confirm="api_settings_modal.confirm_delete"
               on-confirm="delete(item, settings)">
         {{ 'Delete' | translate }}
       </button>
       <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
       <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, item, settings)" translate>
-        Save &amp; Close
+        Save
       </button>
     </div>
   </form>

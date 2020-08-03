@@ -1,111 +1,126 @@
 <!-- This is the Search Bar -->
-<form class="mb-4">
-  <div class="table-filters">
-    <div class="filter-row mb-0 d-flex justify-content-center">
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
-          <div class="input-group-append">
-            <button type="reset" title="Search" href class="btn btn-secondary" ng-click="clearSearch()">
-              <span>&times;</span>
-            </button>
+<div class="container-fluid bg-table-filters">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-xl-10">
+      <form>
+        <div class="form-row pt-2 pb-2">
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.keywords" class="form-control" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
+              <div class="input-group-append">
+                <button type="reset" title="Search" class="btn btn-transparent button--clearFilter" ng-click="clearSearch()">
+                  <span>&times;</span>
+                </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.tags" aria-label="tagSearch" class="form-control" placeholder="{{'Enter Tags' | translate}}">
+              <div class="input-group-append" ng-click="clearTags()">
+                <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
+                  <span>&times;</span>
+                </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col mb-0">
+            <div class="input-group input-group-sm">
+              <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter Author' | translate }}">
+              <div class="input-group-append">
+                <button type="reset" title="clearAuthor" class="btn btn-transparent button--clearFilter" ng-click="clearAuthor()">
+                  <span>&times;</span>
+                </button>
+                <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.tags" aria-label="tagSearch" class="form-control" placeholder="{{'Enter Tags' | translate}}">
-          <div class="input-group-append" ng-click="clearTags()">
-            <button class="btn input-group-btn btn-secondary" type="reset" title="clearTags" href ng-click="clearTags()">
-              <span>&times;</span>
-            </button>
+        <div class="form-row">
+          <div class="form-group col mb-0 pb-2">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
+                <option value="" translate>Status</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-2">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.media" ng-options="media | capitalize | translate for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
+                <option value="" translate>Media</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-2">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
+                <option value="" translate>Source</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col mb-0 pb-2">
+            <div class="input-group input-group-sm">
+              <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
+                <option value="" translate>Linked Incident</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col-md-auto mb-0 pb-2">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item">
+                <div class="input-group input-group-sm">
+                  <button type="button" class="btn btn-light" ng-controller="DatetimeModalController" ng-click="open()">
+                    <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+                      <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+                      <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+                      <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+                      <span ng-switch-default translate>Date/Time</span>
+                    </span>
+                  </button>
+                </div>
+              </li>
+              <li class="list-inline-item" ng-hide="noFilters()">
+                <div class="input-group input-group-sm">
+                  <button type="submit" class="btn btn-light" ng-click="clearFilters()" translate>Clear Filters</button>
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="input-group input-group-sm">
+                  <button type="submit" class="btn btn-info" ng-click="search()">
+                    <span class="mr-2" translate> Search </span>
+                    <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-      <div class="td search">
-        <div class="input-group">
-          <input type="text" ng-model="searchParams.author" class="form-control" placeholder="{{ 'Enter Author' | translate }}">
-          <div class="input-group-append">
-            <button class="btn input-group-btn btn-secondary" type="reset" title="clearAuthor" href ng-click="clearAuthor()">
-              <span>&times;</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      </form>
     </div>
-    <div class="filter-row mb-0 d-flex justify-content-center">
-      <div class="td filter date-filter">
-        <button type="button" class="btn btn-light" ng-controller="DatetimeModalController" ng-click="open()">
-          <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
-            <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-            <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
-            <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
-            <span ng-switch-default translate>Date/Time</span>
-          </span>
-        </button>
-      </div>
-      <div class="td filter status-filter">
-        <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
-          <option value="" translate>Status</option>
-        </select>
-      </div>
-      <div class="td filter source-type-filter">
-        <select ng-model="searchParams.media" ng-options="media | capitalize | translate for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control">
-          <option value="" translate>Media</option>
-        </select>
-      </div>
-      <div class="td filter source-type-filter">
-        <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control">
-          <option value="" translate>Source</option>
-        </select>
-      </div>
-      <div class="td filter incident-filter">
-        <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control">
-          <option value="" translate>Linked Incident</option>
-        </select>
-      </div>
-      <div class="td filter">
-        <button type="submit" class="btn btn-info" ng-click="search()">
-          <span class="mr-2" translate> Search </span>
-          <i class="fa fa-search text-dark" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div class="td" ng-hide="noFilters()">
-        <button type="submit" class="btn" ng-click="clearFilters()"><i class="fa fa-close"></i></button>
-      </div>
-    </div>
+    <div class="col"></div>
   </div>
-</form>
+</div>
 
 <!-- Alerts Section -->
 <alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <ng-include src="'/templates/alerts.html'"></ng-include>
 
 <!-- Main Section -->
-<div class="container-fluid">
+<div class="container-fluid mt-4">
   <div class="row">
     <div class="col">
       <!-- This is the tagging sidebar -->
       <div class="sticky-top">
-        <div class="d-none d-xl-block">
-          <h4 class="mt-2"> Tags </h4>
-          <div>
-            testing tagify wrapper
-            <tagify [settings]="settings"
-                    (add)="onAdd($event)"
-                    (remove)="onRemove($event)">
-            </tagify>
-            <button ng-click="clearTags()">clear</button>
-            <button ng-click="addTags()">add Tags</button>
-          </div>
-        </div>
       </div>
     </div>
     <!--This is the centered card-->
     <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div class="card-header bg-light">
+        <div class="card-header bg-gray">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
@@ -113,21 +128,21 @@
                 <input ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
+                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(false)">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
                   <span class="mr-2" translate> Un-Flag </span>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
                 </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-outline-secondary" ng-click="toggleSelectedFlagged(true)">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-warning" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
@@ -154,13 +169,12 @@
             </nav>
           </div>
         </div>
-        <div class="clearfix"></div>
         <!-- If no reports were found, a message is displayed-->
         <p class="p-2" ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p>
         <div ng-include="'/templates/reports/table.html'"></div>
 
         <!-- Footer Selection Toolbar -->
-        <div class="card-footer">
+        <div class="card-footer bg-gray">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
@@ -169,15 +183,17 @@
                 <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)" translate>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)" translate>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
+                  <span class="mr-2" translate> Un-Flag </span>
                   <i class="fa fa-flag-o" aria-hidden="true"></i>
+                </button>
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
@@ -208,8 +224,18 @@
     </div>
     <div class="col">
       <div class="sticky-top">
-        <div ng-include="'/templates/statsbar.html'"></div>
+        <div class="d-none d-xl-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-xl-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
     </div>
   </div>
 </div>
+

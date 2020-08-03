@@ -40,6 +40,10 @@ angular.module('Aggie')
       flash.setAlertNow('settings.error');
       console.log('failure: ', data);
     }
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
     init();
   }
 ]);
