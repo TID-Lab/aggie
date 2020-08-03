@@ -1,0 +1,25 @@
+<div ng-controller="SMTCTagFormModalController">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <span class="icon-left" ng-show="currentSmtcTag._id == null" translate>Create Tag</span>
+      <span class="icon-left" ng-show="currentSmtcTag._id != null" translate>Edit Tag</span>
+    </h5>
+    <button class="close" ng-click="close()" aria-hidden="true">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="well bs-component">
+      <div class="alert alert-danger" ng-show="message" translate>{{message}}</div>
+      <form novalidate name="form" class="mt-2">
+        <fieldset>
+
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button type="button" class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+  </div>
+</div>

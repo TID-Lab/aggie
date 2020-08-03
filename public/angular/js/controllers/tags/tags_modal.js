@@ -12,45 +12,34 @@ angular.module('Aggie')
       $scope.create = function() {
         var modalInstance = $modal.open({
           controller: 'SMTCTagFormModalInstanceController',
-          templateUrl: 'templates/users/modal.html',
+          templateUrl: 'templates/tags/tag-modal.html',
           resolve: {
-            smtcTags: function() {
-              return {
-                role: 'viewer'
-              };
-            }
+
           }
         });
 
-        modalInstance.result.then(function(user) {
-          $scope.smtcTags.push(user);
-          flash.setNoticeNow('user.create.success');
+        modalInstance.result.then(function(smtcTag) {
+          $scope.smtcTags.push(smtcTag);
         });
       };
-
-      $scope.edit = function(user) {
+      $scope.edit = function(smtcTag) {
         var modalInstance = $modal.open({
-          controller: 'UserFormModalInstanceController',
-          templateUrl: '/templates/users/modal.html',
+          controller: 'SMTCTagFormModalInstanceController',
+          templateUrl: '/templates/tags/tag-modal.html',
           resolve: {
-            user: function() {
-              return user;
+            smtcTags: function() {
+              return smtcTag;
             }
           }
         });
-
-        modalInstance.result.then(function(user) {
-          flash.setNoticeNow('user.update.success');
-          angular.forEach($scope.users, function(u, i) {
+        modalInstance.result.then(function(smtcTag) {
+          flash.setNoticeNow('smtcTag.update.success');
+          angular.forEach($scope.smtcTags, function(u, i) {
             if (u._id == user._id) {
-              $scope.users[i] = user;
+              $scope.smtcTags[i] = smtcTag;
             }
           });
         });
-      };
-
-      $scope.view = function(user) {
-        $state.go('profile', { userName: user.username });
       };
     }
   ])
@@ -58,18 +47,11 @@ angular.module('Aggie')
   .controller('SMTCTagFormModalInstanceController', [
     '$scope',
     '$modalInstance',
-    'userRoles',
-    'user',
-    'User',
     '$translate',
     'FlashService',
     'shared',
-    function($scope, $modalInstance, userRoles, user, User, $translate, flash, shared) {
-      $scope.userRoles = userRoles;
-      $scope.user = angular.copy(user);
-      $scope.user.oldUserName = user.username;
+    function($scope, $modalInstance, $translate, flash, shared) {
       $scope.showErrors = false;
-      $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
       $scope.message = '';
       $scope.model = { showPassword: false };
 
@@ -99,9 +81,9 @@ angular.module('Aggie')
           return;
         }
         if ($scope.user._id) {
-          User.update({ _id: $scope.user._id }, $scope.user, handleSuccess, handleError);
+
         } else {
-          User.create($scope.user, handleSuccess, handleError);
+
         }
       };
 

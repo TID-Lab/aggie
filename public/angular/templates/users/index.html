@@ -8,10 +8,7 @@
         <h4 class="card-header"> Users </h4>
         <div class="card-body">
           <div ng-show="currentUser.can('admin users')" class="button-row">
-            <a href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" data-toggle="collapse" ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
-          </div>
-          <div class="collapse" id="createUserCollapse">
-            <div ng-include="'/templates/users/modal.html'"></div>
+            <a role="button" aria-expanded="false" ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
           </div>
           <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
 

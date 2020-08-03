@@ -8,6 +8,7 @@ angular.module('Aggie')
   'FlashService',
   'reports',
   'sources',
+  'smtcTags',
   'mediaOptions',
   'incidents',
   'statusOptions',
@@ -21,7 +22,7 @@ angular.module('Aggie')
   'SMTCTag',
   'paginationOptions',
   '$translate',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources,
+  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
            Report, Incident, Batch, Socket, Queue, Tags, SMTCTag, paginationOptions,
            $translate) {
@@ -38,7 +39,7 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
-    $scope.smtcTags = [];
+    $scope.smtcTags = smtcTags;
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -303,7 +304,7 @@ angular.module('Aggie')
       SMTCTag.save({ name: 'Test6'}).$promise
         .then(function(tag) {
           // if a new tag is successfully added, update the $scope.tags by calling SMTCTag.query()
-          $scope.updateTags(report);          
+          $scope.updateTags(report);
         })
         .catch(function(error) {
           // add error handling
@@ -332,7 +333,7 @@ angular.module('Aggie')
       SMTCTag.delete({ _id: $scope.smtcTags[0]._id}).$promise
         .then(function(tag) {
           // if a tag is successfully deleted, update the $scope.tags by calling SMTCTag.query()
-          $scope.updateTags(report);          
+          $scope.updateTags(report);
         })
         .catch(function(error) {
           // add error handling
