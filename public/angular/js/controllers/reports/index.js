@@ -72,6 +72,9 @@ angular.module('Aggie')
         Socket.on('report:updated', $scope.updateReport.bind($scope));
         Socket.on('stats', updateStats);
         Socket.join('stats');
+        Socket.join('tags');
+        Socket.on('tag:new', $scope.updateSMTCTag.bind($scope));
+        Socket.on('tag:removed',$scope.updateSMTCTag.bind($scope));    
         if ($scope.isFirstPage()) {
           Socket.emit('query', searchParams());
           Socket.on('reports', $scope.handleNewReports.bind($scope));
@@ -301,40 +304,30 @@ angular.module('Aggie')
     };
 
     $scope.addSMTCTag = function(report) {
-      SMTCTag.save({ name: 'Test6'}).$promise
-        .then(function(tag) {
-          // if a new tag is successfully added, update the $scope.tags by calling SMTCTag.query()
-          $scope.updateTags(report);
-        })
+      SMTCTag.save({ name: 'Test6'})
+      .$promise
         .catch(function(error) {
           // add error handling
           console.log(error);
         });
     }
 
-    $scope.updateTags = function (report) {
-      SMTCTag.query().$promise
-        .then(function(allTags) {
-          $scope.smtcTags = [];
-          for (var i = 0; i < allTags.length; i++) {
-            // pushes all queried tags to $scope.smtcTags
-            $scope.smtcTags.push(allTags[i]);
-          }
-          console.log($scope.smtcTags);
-        })
-        .catch(function (error) {
-          // add error handling
-          console.log(error);
-        })
+    $scope.updateSMTCTag = function (updatedTag) {
+      // remove deleted tag
+      if (updatedTag.name == null) {
+        var delIndex = $scope.smtcTags.map(function(item) {
+          return item._id
+        }).indexOf(updatedTag);
+        $scope.smtcTags.splice(delIndex, 1);
+      } else {
+        // add new tag
+        $scope.smtcTags.push(updatedTag);
+      }
     }
 
     $scope.deleteSMTCTag = function(report) {
       // pass in delete parameter through user input. currently has a placeholder
-      SMTCTag.delete({ _id: $scope.smtcTags[0]._id}).$promise
-        .then(function(tag) {
-          // if a tag is successfully deleted, update the $scope.tags by calling SMTCTag.query()
-          $scope.updateTags(report);
-        })
+      SMTCTag.delete({ _id: $scope.smtcTags[0]._id})
         .catch(function(error) {
           // add error handling
           console.log(error);
