@@ -14,8 +14,8 @@ function stubWithFixture(fixtureFile, service) {
   // Make the stub function return the expected args (err, res, body).
   fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
   service._httpRequest = async function(params) {
-    if (params.fixtureUrl) {
-      fixtureFile = path.resolve(__dirname, `../../test/backend/fixtures/${params.fixtureUrl}.json`);
+    if (params.url.slice(0,4) != 'http') {
+      fixtureFile = path.resolve(__dirname, `../../test/backend/fixtures/${params.url}.json`);
     }
     return fs.readFileSync(fixtureFile).toString();
   };
@@ -31,7 +31,7 @@ function stubWithFixture(fixtureFile, service) {
         title: title,
       }
       list.accountOptions = {
-        fixtureUrl: idString
+        url: idString
       };
       return list
     });
@@ -107,7 +107,8 @@ describe('CrowdTangle list update service', function() {
           "0": "list0",
           "1": "list0",
           "2": "list1",
-          "3": "list1"
+          "3": "list1",
+          "4": "list1"
         });
         done();
       });
