@@ -28,7 +28,6 @@ angular.module('Aggie')
       Source.getAll().$promise
       .then(function(response) {
         for (var i = 0; i < response.length; i++) {
-          console.log(response[i]);
           if (response[i].media == 'crowdtangle') {
             $scope.showCTButton = true;
           };
