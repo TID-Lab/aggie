@@ -42,10 +42,10 @@ angular.module('Aggie')
 
     $scope.updateCTList = function() {
       $rootScope.disableCTButton = true;
-      flash.setNoticeNow('Updating CT List', {persist: true});
+      flash.setNoticeNow('settings.ctUpdate.pending', {persist: true});
       UpdateCTList.update().$promise
-      .then(function() { flash.setNoticeNow('CT List Updated!') })
-      .catch(function() { flash.setAlertNow("Failed to update CT List") })
+      .then(function() { flash.setNoticeNow('settings.ctUpdate.success') })
+      .catch(function() { flash.setAlertNow('settings.ctUpdate.failure') })
       .finally(function() { $rootScope.disableCTButton = false });
     }
 
