@@ -2,6 +2,7 @@ angular.module('Aggie')
 
 .controller('SettingsController', [
   '$scope',
+  '$rootScope',
   '$window',
   'Settings',
   'UpdateCTList',
@@ -11,7 +12,7 @@ angular.module('Aggie')
   'FlashService',
   'apiSettingsOptions',
   'widgetSettingsOptions',
-  function($scope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions) {
+  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions) {
 
     $scope.setting = {};
 
@@ -40,7 +41,12 @@ angular.module('Aggie')
     }
 
     $scope.updateCTList = function() {
-      UpdateCTList.update();
+      $rootScope.disableCTButton = true;
+      flash.setNoticeNow('Updating CT List', {persist: true});
+      UpdateCTList.update().$promise
+      .then(function() { flash.setNoticeNow('CT List Updated!') })
+      .catch(function() { flash.setAlertNow("Failed to update CT List") })
+      .finally(function() { $rootScope.disableCTButton = false });
     }
 
     function getSetting(name) {
