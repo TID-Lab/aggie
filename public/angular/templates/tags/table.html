@@ -1,0 +1,33 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col" translate>Tag Name</th>
+    <th scope="col" translate>Color</th>
+    <th scope="col" translate>Date Created</th>
+    <th scope="col" translate>Created By</th>
+    <th scope="col" translate>Description</th>
+    <th scope="col" translate>Delete</th>
+  </tr>
+  </thead>
+  <tbody class="table-bordered">
+  <tr ng-repeat="smtcTag in smtcTags">
+    <th class="content"><h6>{{ smtcTag.name }}</h6></th>
+    <td>
+      <input type="text" class="form-control" ng-value="smtcTag.color" disabled/>
+    </td>
+    <td>
+      <h6>{{smtcTag.createdAt}}</h6>
+    </td>
+    <td>
+      {{smtcTag.createdBy}}
+    </td>
+    <td>
+      <textarea class="form-control" rows="3" disabled placeholder="Example Description" ng-bind="smtcTag.description"></textarea>
+    </td>
+    <td ng-hide="modal ||  !currentUser.can('edit tags')">
+      <div class="fa pointer fa-trash text-blue" aggie-confirm="{{ 'Are you sure you want to delete this tag?' | translate }}" on-confirm="deleteSMTCTag(smtcTag)"></div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+

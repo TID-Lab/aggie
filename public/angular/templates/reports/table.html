@@ -54,8 +54,11 @@
         </td>
         <td class="tag" ng-class="{ strong: !isRead(r) }">
           <span class="text-wrap">
-            {{ tagsToString(r.tags) }}
+            {{tagsToString(r.tags) + ", "}}
           </span>
+          <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags([r])" class="table-primary-link">
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Add</strong>
+          </a>
         </td>
         <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
           <div class="text-center">

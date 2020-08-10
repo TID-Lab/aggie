@@ -74,7 +74,7 @@ angular.module('Aggie')
         Socket.join('stats');
         Socket.join('tags');
         Socket.on('tag:new', $scope.updateSMTCTag.bind($scope));
-        Socket.on('tag:removed',$scope.updateSMTCTag.bind($scope));    
+        Socket.on('tag:removed',$scope.updateSMTCTag.bind($scope));
         if ($scope.isFirstPage()) {
           Socket.emit('query', searchParams());
           Socket.on('reports', $scope.handleNewReports.bind($scope));
@@ -302,6 +302,7 @@ angular.module('Aggie')
         flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
       });
     };
+
 
     $scope.addSMTCTag = function(report) {
       SMTCTag.save({ name: 'Test6'})

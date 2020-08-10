@@ -108,6 +108,7 @@
 <alert type="info" ng-hide="newReports.isEmpty()"><a href class="alert-link" ng-click="displayNewReports()">{{ newReports.total }} {{ 'new reports available.' | translate }}</a></alert>
 <ng-include src="'/templates/alerts.html'"></ng-include>
 
+
 <!-- Main Section -->
 <div class="container-fluid mt-4">
   <div class="row">
@@ -116,15 +117,11 @@
       <div class="sticky-top">
         <div class="d-none d-xl-block">
           <h4 class="pt-2"> Tags </h4>
-          <div>
-            <tagify [settings]="settings"
-                    (add)="onAdd($event)"
-                    (remove)="onRemove($event)">
-            </tagify>
-          </div>
-          <tags class="tagify readonlyMix" tabindex="-1">
+          <tags class="tagify readonly" tabindex="-1">
+
             <tag ng-repeat="smtcTag in smtcTags" title="bar" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" __isvalid="true" value="bar">
-              <x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+
+              <x title="" class="tagify__tag__removeBtn" role="button" ng-click="removeTagFromSelected(smtcTag)" aria-label="remove tag"></x>
               <div>
                 <span class="tagify__tag-text">{{smtcTag.name}}</span>
               </div>

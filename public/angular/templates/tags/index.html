@@ -3,37 +3,13 @@
   <div class="row">
     <div class="col">
     </div>
-    <div class="col-md-8">
+    <div class="col-lg-9">
       <div class="card">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card-header bg-gray d-flex justify-content-between">
           <h4 class="card-title mb-0">Tags</h4>
-          <button href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" data-toggle="collapse" ng-controller="SMTCTagFormModalController" class="btn btn-info" ng-click="create()" translate>Create Tag</button>
+          <button role="button" aria-expanded="false" ng-if="currentUser.can('edit tags')" ng-controller="SMTCTagFormModalController" class="btn btn-info" ng-click="create()" translate>Create Tag</button>
         </div>
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-              <tr>
-                <th scope="col" translate>Tag Name</th>
-                <th scope="col" translate>Color</th>
-                <th scope="col" translate>Date Created</th>
-                <th scope="col" translate>Edit or Delete</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="smtcTag in smtcTags">
-                <th class="content">{{ smtcTag.name }}</th>
-                <td>
-                  <input id="demo-input" type="text" class="form-control" value="rgb(255, 128, 0)" />
-                </td>
-                <td> Random Date</td>
-                <td ng-hide="modal ||  !currentUser.can('edit data')">
-                  <div ng-controller="SMTCTagFormModalController" class="fa pointer fa-pencil text-blue" ng-click="edit(smtcTag)"></div>
-                  <div class="fa pointer fa-trash text-blue" aggie-confirm="{{ 'Are you sure you want to delete this tag?' | translate }}" on-confirm="delete(smtcTag)"></div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+        <div ng-include="'/templates/tags/table.html'"></div>
       </div>
     </div>
     <div class="col">
@@ -44,15 +20,13 @@
       </div>
     </div>
   </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-lg-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<script>
-  $(function () {
-    // Basic instantiation:
-    $('#demo-input').colorpicker();
 
-    // Example using an event, to change the color of the #demo div background:
-    $('#demo-input').on('colorpickerChange', function(event) {
-      $('#demo').css('background-color', event.color.toString());
-    });
-  });
-</script>
+

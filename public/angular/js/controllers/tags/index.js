@@ -17,6 +17,22 @@ angular.module('Aggie')
       $scope.stats = stats;
     };
 
+    $scope.deleteSMTCTag = function(smtcTag) {
+      // Deletes from Front-End Scope
+      angular.forEach($scope.smtcTags, function(s, i) {
+        if (s._id == smtcTag._id) {
+          $scope.smtcTags.splice(i, 1);
+        }
+      });
+
+      // Deletes from Back-End
+      SMTCTag.delete({ _id: smtcTag._id})
+        .catch(function(error) {
+          // add error handling
+          console.log(error);
+        });
+    }
+
     $scope.$on('$destroy', function() {
       Socket.leave('stats');
       Socket.removeAllListeners('stats');

@@ -6,7 +6,9 @@ var logger = require('../lib/logger');
 var _ = require('underscore');
 
 var tagSchema = new mongoose.Schema({
-    name: {type: String, required: true, unique: true }
+    name: {type: String, required: true, unique: true },
+    color: {type: String},
+    description: {type: String},
 });
 
 tagSchema.pre('save', function(next) {
@@ -25,7 +27,9 @@ tagSchema.pre('save', function(next) {
 tagSchema.post('save', function() {
     tagSchema.emit('tag:new', {
         _id: this._id.toString(),
-        name: this.name
+        name: this.name,
+        color: this.color,
+        description: this.description,
     });
 });
 

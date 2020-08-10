@@ -1,5 +1,4 @@
 angular.module('Aggie')
-
   .controller('SMTCTagFormModalController', [
     '$rootScope',
     '$scope',
@@ -14,12 +13,14 @@ angular.module('Aggie')
           controller: 'SMTCTagFormModalInstanceController',
           templateUrl: 'templates/tags/tag-modal.html',
           resolve: {
-
+            smtcTag: ['SMTCTag', function(SMTCTag) {
+              return SMTCTag.query().$promise;
+            }],
           }
         });
-
         modalInstance.result.then(function(smtcTag) {
           $scope.smtcTags.push(smtcTag);
+          flash.setNoticeNow('smtcTag.create.success');
         });
       };
       $scope.edit = function(smtcTag) {
@@ -27,15 +28,15 @@ angular.module('Aggie')
           controller: 'SMTCTagFormModalInstanceController',
           templateUrl: '/templates/tags/tag-modal.html',
           resolve: {
-            smtcTags: function() {
+            smtcTag: function() {
               return smtcTag;
             }
           }
         });
         modalInstance.result.then(function(smtcTag) {
           flash.setNoticeNow('smtcTag.update.success');
-          angular.forEach($scope.smtcTags, function(u, i) {
-            if (u._id == user._id) {
+          angular.forEach($scope.smtcTags, function(s, i) {
+            if (s._id == smtc._id) {
               $scope.smtcTags[i] = smtcTag;
             }
           });
@@ -48,9 +49,12 @@ angular.module('Aggie')
     '$scope',
     '$modalInstance',
     '$translate',
+    'smtcTag',
+    'SMTCTag',
     'FlashService',
     'shared',
-    function($scope, $modalInstance, $translate, flash, shared) {
+    function($scope, $modalInstance, $translate, smtcTag, SMTCTag, flash, shared) {
+      $scope.smtcTag = angular.copy(smtcTag);
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
@@ -61,29 +65,40 @@ angular.module('Aggie')
 
       var handleError = function(response) {
         if (response.status == 502) {
-          $scope.message = 'user.create.emailNotConfigured';
+          $scope.message = 'smtcTag.create.tagAlreadyExists';
         } else {
           $translate(response.data).then(function(error) {
             $scope.message = error;
           }).catch(function() {
-            if ($scope.user._id) {
-              $scope.message = 'user.update.error';
+            if ($scope.smtcTag._id) {
+              $scope.message = 'smtcTag.update.error';
             } else {
-              $scope.message = 'user.create.error';
+              $scope.message = 'smtcTag.create.error';
             }
           });
         }
       };
 
       $scope.save = function(form) {
+        console.log("Hello");
         if (form.$invalid) {
           $scope.showErrors = true;
           return;
         }
-        if ($scope.user._id) {
-
+        if ($scope.smtcTag._id) {
+          console.log("EDIT");
+          SMTCTag.save({name: $scope.smtcTag.name}, $scope.smtcTag, handleSuccess, handleError);
         } else {
-
+          console.log("Add");
+          SMTCTag.save({ name: $scope.smtcTag.name})
+            .$promise
+            .then(function() {
+              handleSuccess();
+            })
+            .catch(function(error) {
+              // add error handling
+              console.log(error);
+            });
         }
       };
 
