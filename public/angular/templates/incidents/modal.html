@@ -1,105 +1,98 @@
 <div ng-controller="IncidentFormModalController">
   <div class="modal-header">
-    <button class="close" ng-click="close()" aria-hidden="true">×</button>
-    <h4 class="modal-title">
-      <div class="icon-left" ng-show="incident._id == null" translate>Create Incident</div>
-      <div class="icon-left" ng-show="incident._id != null" translate>Edit Incident</div>
-    </h4>
+    <h5 class="modal-title">
+      <span class="icon-left" ng-show="incident._id == null" translate>Create Incident</span>
+      <span class="icon-left" ng-show="incident._id != null" translate>Edit Incident</span>
+    </h5>
+    <button class="close" ng-click="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <p ng-show="report" class="info">{{'Enter the incident details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing incident' | translate}}</button></span>.</p>
     <div class="well bs-component">
-      <form name="form" class="form-horizontal">
+      <form name="form">
         <fieldset>
+          <!-- Beginning of Incident Edit/Create Form -->
           <div class="form-group">
-            <label for="Title" class="col-lg-2 control-label" translate>Title</label>
-            <div class="col-lg-9">
-              <div class="input-group">
-                <input id="title" name="title" type="text" class="form-control" ng-model="incident.title" maxlength="32" required ng-focus>
-                <span class="input-group-addon"><span ng-show="incident.title.length && form.title.$focused">{{32 - incident.title.length}}</span></span>
-              </div>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.title.$error.required" translate>Title is required.</div>
+            <label for="title" translate>Title</label>
+            <input id="title" name="title" type="text" class="form-control"
+                   ng-model="incident.title" maxlength="32" ng-focus required>
+            <small><span ng-show="incident.title.length">{{32 - incident.title.length}} characters remaining</span></small>
+            <div class="has-error" ng-show="showErrors">
+              <div class="help-block" ng-show="form.title.$error.required" translate>
+                <p class="lead">Title is required.</p>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-hide="minimal">
-            <label for="veracity" class="col-lg-2 control-label" translate>Veracity</label>
-            <div class="col-lg-4">
-              <select ng-model="incident.veracity"
-                      class="form-control"
-                      ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
-              </select>
-            </div>
-
-            <label class="col-lg-2 control-label" translate>Status</label>
-            <div class="col-lg-3">
-              <select ng-model="incident.closed"
-                      class="form-control"
-                      ng-options="v.value as v.label | translate for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
-              </select>
-              <div class="has-error" ng-show="showErrors">
-                <div class="help-block" ng-show="form.user.$error.required" translate>User is required.</div>
+            <div class="form-row">
+              <div class="col">
+                <label for="veracity" translate>Veracity</label>
+                <select id="veracity" ng-model="incident.veracity"
+                        class="form-control"
+                        ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
+                </select>
+              </div>
+              <div class="col">
+                <label for="status" translate>Status</label>
+                <select id="status" ng-model="incident.closed"
+                        class="form-control"
+                        ng-options="v.value as v.label | translate for v in [{label: 'Open', value: false}, {label: 'Closed', value: true}]">
+                </select>
               </div>
             </div>
-
           </div>
 
           <div class="form-group" ng-hide="minimal">
-            <label for="escalated" class="col-lg-2 control-label" translate>Escalated</label>
-            <div class="col-lg-9">
-              <input type="checkbox" id="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
-            </div>
+            <label for="escalated" translate>Escalated</label>
+            <input type="checkbox" id="escalated" title="escalated" name="escalated" ng-model="incident.escalated" class="form-control">
           </div>
+
           <div class="form-group">
-            <label for="location" class="col-lg-2 control-label" translate>Location</label>
-            <div class="col-lg-9">
-              <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
-              <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
-            </div>
+            <label for="location" translate>Location</label>
+            <input id="location" ng-autocomplete name="location" details="details" type="text" class="form-control" ng-model="incident.locationName">
+            <button type="button" class="btn btn-link float-right" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
+            <aggie-location show-errors="showErrors" model="incident" form="form" minimal-lat-lng="minimalLatLng"></aggie-location>
           </div>
-          <aggie-location show-errors="showErrors" model="incident" form="form" minimal-lat-lng="minimalLatLng"></aggie-location>
+
           <div class="form-group">
-            <label for="tags" class="col-lg-2 control-label" translate>Tags</label>
-            <div class="col-lg-9">
-              <input id="tags" name="tags" type="text" class="form-control" ng-model="incident.tags" ng-focus>
-            </div>
+            <label for="tags" translate>Tags</label>
+            <input id="tags" name="tags" type="text" class="form-control" ng-model="incident.tags" ng-focus>
           </div>
 
           <div class="form-group" ng-hide="minimal">
-            <label for="user" class="col-lg-2 control-label" translate>Assign To</label>
-            <div class="col-lg-9">
-              <select id="user" name="user" ng-model="incident.assignedTo"
-                ng-options="user as user.username for user in users track by user._id" class="form-control">
-                <option value="" translate>Select User</option>
-              </select>
+            <label for="user" translate>Assign To</label>
+            <select id="user" name="user" ng-model="incident.assignedTo"
+              ng-options="user as user.username for user in users track by user._id" class="form-control">
+              <option value="" translate>Select User</option>
+            </select>
+            <div class="has-error" ng-show="showErrors">
+              <div class="help-block" ng-show="form.user.$error.required" translate>User is required.</div>
             </div>
           </div>
+
           <div class="form-group">
-            <label for="notes" class="col-lg-2 control-label" translate>Notes</label>
-            <div class="col-lg-9 notes-text">
-              <textarea id="notes" name="notes" class="form-control" ng-model="incident.notes"></textarea>
-            </div>
+            <label for="notes" translate>Notes</label>
+            <textarea id="notes" name="notes" class="form-control" rows="8" ng-model="incident.notes"></textarea>
           </div>
+
           <div class="form-group">
-            <label for="public" class="col-lg-2 control-label" translate>Public</label>
-            <div class="col-lg-9">
-              <input type="checkbox" id="public" name="public" ng-model="incident.public" class="form-control">
-            </div>
+            <label for="public" translate>Public</label>
+            <input type="checkbox" id="public" name="public" ng-model="incident.public" class="form-control">
           </div>
+
           <div class="form-group">
-            <label for="public" class="col-lg-2 control-label" translate>Public Description</label>
-            <div class="col-lg-9 description-text">
-              <textarea id="publicDescription" name="publicDescription" class="form-control" ng-model="incident.publicDescription"></textarea>
-            </div>
+            <label for="public" translate>Public Description</label>
+            <textarea id="publicDescription" name="publicDescription" class="form-control" ng-model="incident.publicDescription"></textarea>
           </div>
         </fieldset>
       </form>
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()" translate>Close</button>
-    <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+    <button type="button" class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button type="button" class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>

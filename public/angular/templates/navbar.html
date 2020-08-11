@@ -1,86 +1,76 @@
-<div class="navbar-wrapper" ng-controller="NavbarController">
-  <div class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <a ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
-          <div class="navbar-brand"></div>
-        </a>
-      </div>
-      <ul class="nav navbar-nav" ng-show="currentUser && !$state.includes('reset_admin_password') ">
-        <li ng-class="{ active: $state.includes('reports') || $state.includes('report') }"><a ui-sref="reports" translate>Reports</a></li>
-        <li ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }"><a ui-sref="incidents" translate>Incidents</a></li>
-        <li ng-class="{ active: $state.includes('sources') || $state.includes('source') }"><a ui-sref="sources" translate>Sources</a></li>
-        <li ng-class="{ active: $state.includes('analysis') }"><a ui-sref="lastAnalysis" translate>Analysis</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show="currentUser && !$state.includes('reset_admin_password')">
-        <li ui-sref-active="active" class="user">
-          <a href ng-click="viewProfile(currentUser)">
+<nav class="navbar navbar-expand-lg navbar-dark bg-default" ng-controller="NavbarController">
+  <!--This is the Left Side of the NavBar -->
+  <a class="aggie-brand" ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
+    <div class="navbar-brand"></div>
+  </a>
+  <!-- This is the button for the collapsed nav content -->
+  <button class="navbar-toggler"  ng-show="currentUser" type="button" data-toggle="collapse" data-target="#navbarLeft" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarLeft">
+    <ul class="navbar-nav nav mr-auto" ng-show="currentUser && !$state.includes('reset_admin_password') ">
+      <li class="nav-item" ng-class="{ active: $state.includes('reports') || $state.includes('report') }">
+        <a class="nav-link" ui-sref="reports" translate>Reports</a>
+      </li>
+      <li class="nav-item" ng-class="{ active: $state.includes('incidents') || $state.includes('incidents') }">
+        <a class="nav-link" ui-sref="incidents" translate>Incidents</a>
+      </li>
+      <li class="nav-item" ng-class="{ active: $state.includes('sources') || $state.includes('source') }">
+        <a class="nav-link" ui-sref="sources" translate>Sources</a>
+      </li>
+      <li class="nav-item" ng-class="{ active: $state.includes('analysis') }">
+        <a class="nav-link" ui-sref="lastAnalysis" translate>Analysis</a>
+      </li>
+    </ul>
+    <!--This is the Right Side of the NavBar -->
+    <ul class="navbar-nav ml-auto" ng-show="currentUser && !$state.includes('reset_admin_password')">
+      <!-- This shows your role -->
+      <li class="nav-item user" ui-sref-active="active">
+        <a class="nav-link" href ng-click="viewProfile(currentUser)">
           <i class="fa fa-user fa-fw"></i>
-          {{currentUser.username}}</a>
-        </li>
-        <li ui-sref-active="active">
-          <a id="dropdownMenu1" data-target="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" translate>
-            Settings
+          {{currentUser.username}}
+        </a>
+      </li>
+      <li class="nav-item dropdown" ui-sref-active="active">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false" >
+          Settings
+        </a>
+        <div class="dropdown-menu mt-0 py-0" role="menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item nav-link" href role="menuitem" ui-sref="config"
+             ng-show="currentUser.can('change settings')" role="presentation">
+            <i class="fa fa-gear fa-fw"></i>
+            {{'Configuration' | translate}}
           </a>
-          <ul class="nav dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            <li ng-show="currentUser.can('change settings')" role="presentation">
-              <a href role="menuitem" tabindex="-1" ui-sref="settings">
-                <i class="fa fa-gear fa-fw"></i>
-                {{'Settings' | translate}}
-              </a>
-            </li>
-            <li role="presentation">
-              <a href role="menuitem" tabindex="-1" ui-sref="users">
-                <i class="fa fa-users fa-fw"></i>
-                {{'Users' | translate}}
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href ng-click="logout()">
-            <i class="fa fa-sign-out fa-fw"></i>
-            {{'Log out' | translate}}
+          <a class="dropdown-item nav-link" href role="menuitem" ui-sref="users">
+            <i class="fa fa-users fa-fw"></i>
+            {{'Users' | translate}}
           </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" ng-hide="currentUser">
-        <li ui-sref-active="active">
-          <a href ui-sref="login">
-            <i class="fa fa-sign-in fa-fw"></i>
-            {{'Log in' | translate}}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show="$state.includes('reset_admin_password')">
-        <li ui-sref-active="active">
-                    <a href ng-click="logout()">
-            <i class="fa fa-sign-out fa-fw"></i>
-            {{'Log out' | translate}}
-          </a>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href ng-click="logout()">
+          <i class="fa fa-sign-out fa-fw"></i>
+          {{'Log out' | translate}}
+        </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav" ng-show="$state.includes('reset_admin_password')">
+      <li class="nav-item" ui-sref-active="active">
+        <a class="nav-link" href ng-click="logout()">
+          <i class="fa fa-sign-out fa-fw"></i>
+          {{'Log out' | translate}}
+        </a>
+      </li>
+    </ul>
   </div>
-  <div class="navbar navbar-stats" ng-show="currentUser && !$state.includes('reset_admin_password')">
-    <div class="container">
-      <p class="navbar-text" ng-if="stats">
-        <span class="nav-bar-number">{{stats.totalReports | number}}</span>
-        <span class="nav-bar-label" translate>Total Reports</span>
-        <span class="nav-bar-number">{{stats.totalReportsPerMinute | number}}</span>
-        <span class="nav-bar-label" translate>Reports/min</span>
-        <span class="nav-bar-number">{{stats.totalReportsUnread | number}}</span>
-        <span class="nav-bar-label" translate>Unread</span>
-        <span class="nav-bar-number">{{stats.totalReportsFlagged | number}}</span>
-        <span class="nav-bar-label" translate>Flagged</span>
-        <span class="nav-bar-number">{{stats.totalIncidents | number}}</span>
-        <span class="nav-bar-label" translate>Incidents</span>
-        <span class="nav-bar-number">{{stats.totalEscalatedIncidents | number}}</span>
-        <span class="nav-bar-label" translate>Escalated Incidents</span>
-      </p>
-      <div class="source-errors" ng-show="unreadErrorCount > 0">
-        <a href ui-sref="sources" ui-sref-opts="{ reload: true }"><i class="fa fa-warning"></i> {{ unreadErrorCount }} {{'Warnings' | translate}}</a>
-      </div>
-    </div>
-  </div>
-</div>
+
+  <ul class="navbar-nav" ng-hide="currentUser">
+    <li class="nav-item" ui-sref-active="active">
+      <a class="nav-link" href ui-sref="login">
+        <i class="fa fa-sign-in fa-fw"></i>
+        {{'Log in' | translate}}
+      </a>
+    </li>
+  </ul>
+</nav>

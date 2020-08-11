@@ -12,7 +12,7 @@ var SALT_WORK_FACTOR = 10;
 
 var isEmail = function(email) {
   return (typeof email === 'string' && validator.isEmail(email));
-}
+};
 
 var userSchema = new mongoose.Schema({
   provider: { type: String, default: 'local' },

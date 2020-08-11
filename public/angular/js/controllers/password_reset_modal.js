@@ -24,7 +24,7 @@ angular.module('Aggie').controller('PasswordResetModalController', [
               flash.setAlertNow('passwordReset.email.error');
             }
           });
-      });
+        });
     };
   }
 ])

@@ -1,13 +1,13 @@
 require('./angular', { expose: 'angular' });
 require('./angular-ui-router');
 require('./angular-sanitize');
-require('./ui-bootstrap');
-require('./ui-bootstrap-templates');
+require('./ui-bootstrap-0.12.0');
+require('./ui-bootstrap-tpls-custom');
 require('./angular-resource');
 require('./jquery.sparkline');
 require('../vendor/select2/select2');
 require('../vendor/select2/ui-select2');
-require('./loading-bar');
+require('./loading-bar.min');
 require('angular-translate');
 require('angular-translate-loader-static-files');
 require('angular-translate-handler-log');
@@ -34,6 +34,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 .factory('tz', function() {
   return require('timezone');
 })
+
 
 .run([
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',

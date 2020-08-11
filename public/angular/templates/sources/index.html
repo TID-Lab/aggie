@@ -1,44 +1,36 @@
-<div class="button-row">
-  <button ng-controller="SourceFormModalController" ng-show="currentUser.can('edit data')"
-          class="btn btn-info" ng-click="create()" translate>Create Source</button>
+<ng-include src="'/templates/alerts.html'"></ng-include>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-lg-9">
+      <div class="card">
+        <div class="card-header">
+          <div class="btn-toolbar float-right">
+            <button type="button" class="btn btn-info" ng-controller="SourceFormModalController"
+                    ng-show="currentUser.can('edit data')" ng-click="create()" translate>
+              <span class="mr-2" translate>Add Source</span>
+              <i class="fa fa-flag-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
+        <div ng-include="'/templates/sources/table.html'"></div>
+      </div>
+    </div>
+    <div class="col">
+      <!-- Right Hand Stats Bar -->
+      <div class="sticky-top">
+        <div class="d-none d-lg-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-lg-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="clearfix"></div>
-
-<p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
-
-<table aggie-table ng-show="sources.length > 0">
-  <thead>
-    <tr>
-      <th class="compact" translate>Media</th>
-      <th class="compact" translate>Name</th>
-      <th class="compact" ng-show="currentUser.can('view other users')" translate>Creator</th>
-      <th class="expand" translate>Target</th>
-      <th class="expand" translate>Tags</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>New Warnings</th>
-      <th class="compact" ng-show="currentUser.can('edit data')" translate>Enabled</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="s in sources | orderBy:'+nickname'"  class="item">
-      <td class="compact source" ng-class="sourceClass(s)">
-        <div class="icon-left"></div>
-      </td>
-      <td class="compact source content">
-        <a href="sources/{{s._id}}" class="table-primary">
-          {{ s.nickname }}
-        </a>
-      </td>
-      <td class="compact content" ng-show="currentUser.can('view other users')">
-        <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
-      </td>
-      <td class="expand content">{{ target(s) }}</td>
-      <td class="expand tag">{{ tagsToString(s.tags) }}</td>
-      <td class="compact content zero-errors" ng-show="currentUser.can('edit data')"
-          ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">{{ s.unreadErrorCount }}</td>
-      <td class="compact status" ng-show="currentUser.can('edit data')">
-        <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
-      </td>
-    </tr>
-  </tbody>
-</table>

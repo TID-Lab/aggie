@@ -1,5 +1,5 @@
-angular.module('Aggie')
 
+angular.module('Aggie')
 .controller('ReportsIndexController', [
   '$state',
   '$scope',
@@ -59,20 +59,29 @@ angular.module('Aggie')
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
 
+
+
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
       if ($scope.currentPath === 'reports' || $scope.currentPath === 'batch') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
+        Socket.on('stats', updateStats);
+        Socket.join('stats');
         if ($scope.isFirstPage()) {
           Socket.emit('query', searchParams());
           Socket.on('reports', $scope.handleNewReports.bind($scope));
         }
       }
 
+
       // make links clickable
       $scope.reports.forEach(linkify);
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     var linkify = function(report) {
@@ -138,6 +147,7 @@ angular.module('Aggie')
       }, []);
     };
 
+
     var toggleRead = function(items, read) {
       return items.map(function(item) {
         item.read = read;
@@ -194,6 +204,10 @@ angular.module('Aggie')
       $scope.newReports = new Queue(paginationOptions.perPage);
     };
 
+    $scope.clearDateFilterFields = function() {
+      $scope.searchParams.after = null; $scope.searchParams.before = null;
+    };
+
     $scope.clearSearch = function() {
       $scope.search({ page: null, keywords: null });
     };
@@ -204,6 +218,10 @@ angular.module('Aggie')
 
     $scope.clearTags = function() {
       $scope.search({ tags: null });
+    };
+
+    $scope.clearDateFilter = function() {
+      $scope.search({ after: null, before: null });
     };
 
     $scope.countAndCheck = function(key, value) {
@@ -279,6 +297,11 @@ angular.module('Aggie')
       });
     };
 
+    $scope.addSMTCTags = function(report) {
+
+      report.SMTCtags.push()
+    }
+
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
 
@@ -303,7 +326,6 @@ angular.module('Aggie')
     };
 
     $scope.someSelected = function() {
-
       return $scope.reports.some(function(report) {
         return report.selected;
       });
@@ -394,6 +416,8 @@ angular.module('Aggie')
     $scope.$on('$destroy', function() {
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
     });
 
     $scope.tagsToString = Tags.tagsToString;

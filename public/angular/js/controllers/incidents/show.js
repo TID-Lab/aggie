@@ -5,6 +5,7 @@ angular.module('Aggie')
   '$scope',
   '$state',
   '$stateParams',
+  '$window',
   'incident',
   'reports',
   'sources',
@@ -17,7 +18,8 @@ angular.module('Aggie')
   'FlashService',
   'Report',
   'Tags',
-  function($rootScope, $scope, $state, $stateParams, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags) {
+  'Socket',
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -42,10 +44,21 @@ angular.module('Aggie')
       return memo;
     };
 
+    var updateStats = function(stats) {
+      $scope.stats = stats;
+    };
+
     var init = function() {
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
+
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+      // if (!$scope.currentUser) {
+      //   Socket.leave('stats');
+      //   Socket.removeAllListeners('stats');
+      // }
     };
 
     var paginate = function(items) {
@@ -167,6 +180,9 @@ angular.module('Aggie')
 
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
+    };
+    $scope.$back = function() {
+      $window.history.back();
     };
     $scope.tagsToString = Tags.tagsToString;
     init();

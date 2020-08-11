@@ -11,20 +11,23 @@
     > tr {
       transition: background 0.25s ease-in-out;
       > td {
-        border: solid 1px #e4e4e4;
-        font-weight: normal;
-        &.status {
+        &.td--status {
           vertical-align: middle;
         }
-        &.incident {
+        &.td--errors {
           vertical-align: middle;
-          min-width: 130px;
         }
         &.flagged {
           vertical-align: middle;
         }
         &.tag {
-         min-width: 130px
+        }
+        &.author {
+          max-width: 100px;
+        }
+        &.td--time {
+          min-width: 56px;
+          max-width: 60px;
         }
       }
     }
@@ -32,24 +35,18 @@
   .compact {
     white-space: nowrap;
   }
-  .expand {
-    width: 100%;
+
+  .thumbnail-image {
+    padding: 0;
+    min-width: 30px;
+    max-width: 120px;
   }
 
   // The main link in the table, which gets special treatment.
-  a.table-primary {
+  a.table-primary-link {
     font-weight: bold;
     color: $link-blue;
-  }
-}
-
-.detail-table {
-  width: auto;
-  .detail-key {
-    min-width: 100px;
-  }
-  .detail-value {
-    min-width: 200px;
+    background-color: transparent;
   }
 }
 
@@ -102,7 +99,6 @@ tbody {
   vertical-align: top;
   font-weight: bold;
   margin-right: 10px;
-  min-width: 31px;
   .interval-amount,
   .interval-relative {
     display: block;
@@ -122,17 +118,52 @@ tbody {
     display: block;
   }
 }
+.bg-flagged {
+  background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 5%);
+    }
 
+}
 .source {
   .icon-left {
+    width: 33px;
+    height: 33px;
     display: inline-block;
     padding-left: 33px;
-    min-height: 33px;
   }
-}
+  .facebook-source {
+      background: url('/images/facebook.png') no-repeat 0 50%;
+  }
+  .twitter-source {
+    background: transparent url('/images/twitter.png') no-repeat 0 50%;
+    &:before {
+      display: none;
+    }
+  }
 
-.unknown-source {
-  .icon-left {
+  .elmo-source {
+    background: url('/images/elmo.png') no-repeat 0 50%;
+  }
+
+  .facebook-source {
+    background: url('/images/facebook.png') no-repeat 0 50%;
+  }
+
+  .rss-source {
+    background: url('/images/rss.png') no-repeat 0 50%;
+  }
+  .smsgh-source {
+    background: url('/images/smsgh.png') no-repeat 0 50%;
+  }
+  .whatsapp-source {
+    background: url('/images/whatsapp.png') no-repeat 0 50%;
+  }
+
+  .crowdtangle-source {
+    background: url('/images/crowdtangle.png') no-repeat 0 50%;
+  }
+  .unknown-source {
     position: relative;
     &:before {
       position: absolute;
@@ -149,34 +180,9 @@ tbody {
   }
 }
 
-.twitter-source .icon-left {
-  background: transparent url('/images/twitter.png') no-repeat 0 50%;
-  &:before {
-    display: none;
-  }
-}
 
-.elmo-source .icon-left {
-  background: url('/images/elmo.png') no-repeat 0 50%;
-}
 
-.facebook-source .icon-left {
-  background: url('/images/facebook.png') no-repeat 0 50%;
-}
 
-.rss-source .icon-left {
-  background: url('/images/rss.png') no-repeat 0 50%;
-}
-.smsgh-source .icon-left {
-  background: url('/images/smsgh.png') no-repeat 0 50%;
-}
-.whatsapp-source .icon-left {
-  background: url('/images/whatsapp.png') no-repeat 0 50%;
-}
-
-.crowdtangle-source .icon-left {
-  background: url('/images/crowdtangle.png') no-repeat 0 50%;
-}
 
 .strong {
   font-weight: bold;
@@ -230,46 +236,11 @@ table, .table {
   }
 }
 
-.table-filters {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 5px;
-  background-color: #bfbfbf;
-  font-size: 12px;
-  .filter-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    .td {
-      padding: 5px;
-    }
-    .filter {
-      vertical-align: top;
-    }
-    .search {
-      flex-grow: 1;
-      width: 150px;
-    }
-  }
-  label {
-    font-weight: bold;
-  }
-  .form-control {
-    font-size: 12px;
-    height: 25px;
-  }
-  .date-filter {
-    label {
-      margin-right: 4px;
-    }
-    input {
-      line-height: 1;
-      height: 25px;
-    }
-  }
+.bg-table-filters {
+  background-color: #eaef92;
 }
 
-.table-filters,
+/*.table-filters,
 .button-row,
 .batch-actions {
   .checkbox-btn {
@@ -277,29 +248,9 @@ table, .table {
     margin-top: 10px;
     padding: 4px 8px 5px 8px;
   }
-}
+}*/
 
-.pagination {
-  margin: 0;
 
-  .btn {
-    width: 25px;
-    font-size: 18px;
-  }
-
-  li {
-    display: inline-block;
-
-    &:not(.pager-label) {
-      margin-left: 5px;
-    }
-
-    &.pager-label {
-      margin-right: 5px;
-      font-size: 13px;
-    }
-  }
-}
 
 .actions {
   width: 50px;
@@ -346,4 +297,14 @@ td {
   span.source {
     display: block;
   }
+}
+
+.button--clearFilter {
+  margin-left: -30px;
+  z-index: 100;
+  height: 29px;
+}
+
+.button--addIncident {
+  background-color: #bfbfbf;
 }

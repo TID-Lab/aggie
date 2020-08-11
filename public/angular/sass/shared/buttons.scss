@@ -1,8 +1,5 @@
 .btn {
   text-decoration: none;
-  line-height: 15px;
-  height: 25px;
-  padding: 4px 8px;
   font-size: 12px;
 
   &.highlight {
@@ -13,8 +10,7 @@
     outline: none;
   }
 }
-
-// This is the primary call to action button. Defined in the bootstrap theme.
+  // This is the primary call to action button. Defined in the bootstrap theme.
 .btn-primary {}
 
 // This is a secondary weight button. Also defined in bootstrap.

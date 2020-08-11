@@ -8,10 +8,17 @@ angular.module('Aggie')
   'source',
   'Tags',
   'FlashService',
-  function($scope, $rootScope, $stateParams, Source, source, Tags, flash) {
+  'Socket',
+  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket) {
     $scope.source = source;
     Source.resetUnreadErrorCount({ id: source._id }, source);
-
+    var init = function() {
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+    }
+    var updateStats = function(stats) {
+      $scope.stats = stats;
+    };
     $scope.delete = function() {
       Source.delete({ id: $scope.source._id }, function() {
         flash.setNotice('source.delete.success');
@@ -22,5 +29,6 @@ angular.module('Aggie')
     };
 
     $scope.tagsToString = Tags.tagsToString;
+    init();
   }
 ]);

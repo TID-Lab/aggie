@@ -1,60 +1,79 @@
-<div class="batch-mode">
-  <div class="pull-left">
-    <p class="title" translate>Batch Mode</p>
-    <p translate>batch.intro</p>
-    <div ng-if="searchParams">
-      <p translate>batch.reportsAreFiltered</p>
+<ng-include src="'/templates/alerts.html'"></ng-include>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col">
     </div>
-  </div>
-
-  <div class="pull-right">
-    <div class="batch-actions">
-      <div class="pull-left margin-left">
-        <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
+    <!--This is the centered card-->
+    <div class="col-xl-10">
+      <div class="card">
+        <div class="card-header text-white bg-info">
+          <h4 class="card-title" translate>Batch Mode</h4>
+          <p class="" translate>batch.intro</p>
+          <div ng-if="searchParams">
+            <p translate>batch.reportsAreFiltered</p>
+          </div>
+          <div class="btn-toolbar flex-wrap justify-content-between" role="toolbar" aria-label="Toolbar with selection actions">
+            <div role="group" aria-label="Read/Unread Buttons/Selection">
+              <!-- Check all button -->
+              <div class="btn-group mr-2" role="group" aria-label="Read/Unread Buttons">
+                <div class="form-check">
+                  <input ng-select-all items="reports" title="Select All" type="checkbox"/>
+                </div>
+              </div>
+              <div class="btn-group mr-2">
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</button>
+              </div>
+              <div class="btn-group mr-2">
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</button>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-primary mr-2" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
+              <button class="btn btn-default mr-2" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</button>
+              <button class="btn btn-default mr-2" ng-click="cancelBatch()" translate>Cancel</button>
+            </div>
+          </div>
+        </div>
+        <p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
+        <div ng-include="'/templates/reports/table.html'"></div>
+        <div class="card-footer text-muted">
+          <div class="float-right">
+            <div class="batch-actions">
+              <div class="float-left ml-2">
+                <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>
+                  Mark All Read &amp; Grab Another
+                </button>
+              </div>
+              <div class="float-left ml-2">
+                <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>
+                  Mark All Read &amp; Done
+                </button>
+              </div>
+              <div class="float-left ml-2">
+                <button class="btn btn-default" ng-click="cancelBatch()" translate>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
+    </div>
+    <div class="col">
+      <div class="sticky-top">
+        <div class="d-none d-xl-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
       </div>
-      <div class="pull-left margin-left">
-        <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col text-center">
+      <div class="d-xl-none">
+        <div ng-include="'/templates/bottom-statsbar.html'"></div>
       </div>
-      <div class="clearfix"></div>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-</div>
-
-<div class="button-row margin-bottom-lg">
-  <div class="pull-left checkbox-btn bg-gray">
-    <input ng-select-all items="reports" type="checkbox" />
-  </div>
-  <div class="pull-left margin-left padding-top-bottom">
-    <a ng-if="!countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</a>
-    <a ng-if="countAndCheck('read', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</a>
-  </div>
-  <div class="pull-left margin-right padding">
-    <a ng-if="!countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(true)" translate>Flag</a>
-    <a ng-if="countAndCheck('flagged', true)" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged(false)" translate>Unflag</a>
-  </div>
-  <div class="clearfix"></div>
-</div>
-
-<div class="clearfix"></div>
-
-<p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
-
-<div ng-include="'/templates/reports/table.html'"></div>
-
-<div class="pull-right">
-  <div class="batch-actions">
-    <div class="pull-left margin-left">
-      <button class="btn btn-primary" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</a>
-    </div>
-    <div class="pull-left margin-left">
-      <button class="btn btn-default" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</a>
-    </div>
-    <div class="pull-left margin-left">
-      <button class="btn btn-default" ng-click="cancelBatch()" translate>Cancel</a>
     </div>
   </div>
 </div>
