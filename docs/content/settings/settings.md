@@ -103,10 +103,9 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
            * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
 
      ![GNotifier Add-on for Firefox](gnotifier.png)
-     
+
   1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
   1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
-
 
 ### Google Places API
 
@@ -114,7 +113,8 @@ Aggie uses Google Places API to add location to the incidents, letting users to 
 
 1.  Get your key for [Google Places API](https://developers.google.com/maps) from your Google account and copy it here. Remember to limit the domain to where Aggie is hosted (e.g., aggie.africanelections.org) when creating you new key.
 
-### ELMO Tokens
+### ELMO
+
 
 1.  Log into your *ELMO* instance with an account having *coordinator* or higher privileges on the mission you want to track.
 2.  In your ELMO instance, mark one or more forms as *public* (via the Edit Form page). *Note the Form ID in the URL bar (e.g. if URL ends in /m/mymission/forms/123, the ID is 123)*.
