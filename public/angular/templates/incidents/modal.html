@@ -65,7 +65,7 @@
           <div class="form-group" ng-hide="minimal">
             <label for="user" translate>Assign To</label>
             <select id="user" name="user" ng-model="incident.assignedTo"
-              ng-options="user as user.username for user in users track by user._id" class="form-control" required>
+              ng-options="user as user.username for user in users track by user._id" class="form-control">
               <option value="" translate>Select User</option>
             </select>
             <div class="has-error" ng-show="showErrors">

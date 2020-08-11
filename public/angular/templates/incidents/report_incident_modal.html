@@ -8,6 +8,76 @@
     </button>
   </div>
   <div class="modal-body">
+    <div class="container-fluid" ng-show="reports">
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <th scope="col" translate>Time</th>
+          <th scope="col" translate>Thumbnail</th>
+          <th scope="col" translate>Author</th>
+          <th scope="col" translate>Content</th>
+          <th scope="col" translate>Sources</th>
+          <th scope="col" translate>Tags</th>
+          <th scope="col" translate>Flagged</th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered">
+        <tr ng-repeat="r in reports | orderBy:'-storedAt'"
+            ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+          <td class="td--time">
+            <span class="badge badge-info">{{ r.storedAt | interval }} ago</span>
+            <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
+            <div>{{ r.storedAt | aggieDate:'date' }}</div>
+            <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+          </td>
+          <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
+            <div ng-repeat="media in r.metadata.mediaUrl">
+              <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
+                <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
+              </a>
+            </div>
+          </td>
+          <td class="author" ng-class="{ strong: !isRead(r) }">
+              <span class="text-wrap">
+                {{ r.author }}
+              </span>
+          </td>
+          <td class="content" ng-class="{ strong: !isRead(r) }">
+            <a href="/reports/{{r._id}}">
+              <p class="text-wrap"> {{ (r.content || '[No Content]') | stripHtml }} </p>
+              <p class="text-wrap shared-content" ng-if="r.metadata.description">
+                {{r.metadata.description | stripHtml}}
+              </p>
+            </a>
+          </td>
+          <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
+            <div class="icon-left" ng-class="sourceClass(r)">
+            </div>
+            <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
+                {{ sourcesById[s].nickname || '[Deleted]' }}
+              </span>
+          </td>
+          <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
+            <div class="text-center">
+                <span>
+                  <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
+                    <strong class="text-wrap" ng-if="r._incident && incidentsById[r._incident]">
+                      {{ incidentsById[r._incident].title | strLimit: 40 }}
+                    </strong>
+                  </a>
+                </span>
+              <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
+            </div>
+          </td>
+          <td class="flagged text-center">
+            <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
+                 ng-click="currentUser.can('edit data') && toggleFlagged(r)">
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any incidents. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
     <div class="container-fluid" ng-show="incidents">
       <p class='info'>{{'Click an incident below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
