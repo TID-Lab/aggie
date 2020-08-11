@@ -28,6 +28,11 @@ angular.module('Aggie')
       });
     };
 
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
+
     $scope.tagsToString = Tags.tagsToString;
     init();
   }

@@ -246,7 +246,10 @@ angular.module('Aggie')
     };
 
     $scope.$on('$destroy', function() {
+      Socket.leave('incidents');
       Socket.removeAllListeners('incidents');
+      Socket.leave('incidents');
+      Socket.removeAllListeners('stats');
     });
 
     $scope.tagsToString = Tags.tagsToString;
