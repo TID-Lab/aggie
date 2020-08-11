@@ -1,6 +1,6 @@
 # Settings
 
-After a successful login, you will see Aggies's front end interface as below.
+After a successful login, you will see Aggie's front end interface as below.
 
 ![Main Menu](main_menu.png)
 
@@ -11,7 +11,7 @@ Fetching allows Aggie to receive feeds from all sources at a global level.
 ### Toggling ON/OFF Fetching
 
 Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To toggle ON/OFF fetching, please follow the steps below.
-1. From the menu bar, click **Settings** and select **Settings**.
+1. From the menu bar, click **Settings** and select **Configuration**.
 
     ![Fetching ON/OFF](settings.png)
 
@@ -27,7 +27,7 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
 
     ![Settings Menu](settings.png)
 
-2.  From the dropdown list, click on **Settings**.
+2.  From the dropdown list, click on **Configuration**.
 
     ![Media Authentication](toggle3.png)
 
@@ -119,7 +119,7 @@ Aggie uses Google Places API to add location to the incidents, letting users to 
 1.  Log into your *ELMO* instance with an account having *coordinator* or higher privileges on the mission you want to track.
 2.  In your ELMO instance, mark one or more forms as *public* (via the Edit Form page). *Note the Form ID in the URL bar (e.g. if URL ends in /m/mymission/forms/123, the ID is 123)*.
 3.  Visit your profile page (click the **icon bearing your username** in the top-right corner) and copy your *API key* (click **'Regenerate'** if necessary).
-4.  From Aggie, click **Settings -> Settings** and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings
+4.  From Aggie, click **Settings > Configuration** and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings
 
 ## Email Settings
 
@@ -130,7 +130,7 @@ This must be set up to allow newly created users to receive emails from Aggie wi
 
 *In this example we are going to set up the email with Sendgrid’s service.*
 
-1.  Click the **Settings** tab and select the **Settings** option in the dropdown list.
+1.  Click the **Settings** tab and select the **Configuration** option in the dropdown list.
 
     ![Email](email.png)
 
