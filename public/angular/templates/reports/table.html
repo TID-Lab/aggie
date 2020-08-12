@@ -15,7 +15,7 @@
     </thead>
     <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-          ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+          ng-class="{ item: true, flagged: r.flagged, unread: !r.read && !r.flagged }">
         <td class="align-middle text-center" ng-show="currentUser.can('edit data')">
           <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
         </td>
