@@ -97,7 +97,8 @@ html {
 }
 
 .bg-gray {
-  background-color: #eee;
+  // Same color as Bootstrap card-headers.
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .fetching {
