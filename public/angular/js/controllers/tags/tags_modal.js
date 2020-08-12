@@ -19,6 +19,7 @@ angular.module('Aggie')
           }
         });
         modalInstance.result.then(function(smtcTag) {
+          console.log(smtcTag);
           $scope.smtcTags.push(smtcTag);
           flash.setNoticeNow('smtcTag.create.success');
         });
@@ -55,6 +56,11 @@ angular.module('Aggie')
     'shared',
     function($scope, $modalInstance, $translate, smtcTag, SMTCTag, flash, shared) {
       $scope.smtcTag = angular.copy(smtcTag);
+      $scope.newSMTCTag = {
+        name: '',
+        color: 'rgb(0,0,0)',
+        description: ''
+      }
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
@@ -89,8 +95,8 @@ angular.module('Aggie')
           console.log("EDIT");
           SMTCTag.save({name: $scope.smtcTag.name}, $scope.smtcTag, handleSuccess, handleError);
         } else {
-          console.log("Add");
-          SMTCTag.save({ name: $scope.smtcTag.name})
+          console.log("Add" , $scope.newSMTCTag);
+          SMTCTag.save($scope.newSMTCTag)
             .$promise
             .then(function() {
               handleSuccess();

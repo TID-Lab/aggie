@@ -14,24 +14,24 @@
       <fieldset>
         <div class="form-group">
           <label for="tagName">Tag Name</label>
-          <input type="text" class="form-control" id="tagName" required ng-focus ng-model="smtcTag.name">
-          <span class="input-group-addon"><span ng-show="smtcTag.name.length && form.name.$focused">{{15 - smtcTag.name.length}}</span></span>
+          <input type="text" class="form-control" id="tagName" required ng-focus ng-model="newSMTCTag.name">
+          <span class="input-group-addon"><span ng-show="newSMTCTag.name.length && form.name.$focused">{{15 - newSMTCTag.name.length}}</span></span>
         </div>
         <div class="form-group">
           <div class="form-row">
             <div class="col">
               <label for="tagColor">Tag Color</label>
-              <input type="text" class="basic form-control" id="tagColor" required ng-model="smtcTag.color">
+              <input type="text" class="basic form-control" id="tagColor" required ng-model="newSMTCTag.color">
             </div>
             <div class="col">
               <label for="tagHex">Tag Color Code</label>
-              <input type="text" class="form-control" id="tagHex" required ng-model="smtcTag.color">
+              <input type="text" class="form-control" id="tagHex" required ng-model="newSMTCTag.color">
             </div>
           </div>
         </div>
         <div class="form-group">
           <label for="tagDescription">Tag Description</label>
-          <textarea class="form-control" id="tagDescription" rows="3" ng-model="smtcTag.description"></textarea>
+          <textarea class="form-control" id="tagDescription" rows="3" ng-model="newSMTCTag.description"></textarea>
         </div>
       </fieldset>
     </form>
@@ -47,7 +47,7 @@
     togglePaletteOnly: true,
     togglePaletteMoreText: 'more',
     togglePaletteLessText: 'less',
-    color: 'blanchedalmond',
+    color: 'white',
     palette: [
       ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
       ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],

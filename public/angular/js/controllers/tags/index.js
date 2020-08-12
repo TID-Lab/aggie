@@ -18,19 +18,18 @@ angular.module('Aggie')
     };
 
     $scope.deleteSMTCTag = function(smtcTag) {
-      // Deletes from Front-End Scope
-      angular.forEach($scope.smtcTags, function(s, i) {
-        if (s._id == smtcTag._id) {
-          $scope.smtcTags.splice(i, 1);
-        }
-      });
-
       // Deletes from Back-End
-      SMTCTag.delete({ _id: smtcTag._id})
-        .catch(function(error) {
-          // add error handling
-          console.log(error);
-        });
+      SMTCTag.delete({_id: smtcTag._id}, function () {
+        flash.setNoticeNow('smtcTag.delete.success');
+        // Deletes from Front-End Scope
+        angular.forEach($scope.smtcTags, function (s, i) {
+          if (s._id == smtcTag._id) {
+            $scope.smtcTags.splice(i, 1);
+          }
+        })
+      }, function () {
+        flash.setAlertNow('smtcTag.delete.error');
+      });
     }
 
     $scope.$on('$destroy', function() {

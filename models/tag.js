@@ -7,8 +7,9 @@ var _ = require('underscore');
 
 var tagSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true },
-    color: {type: String},
-    description: {type: String},
+    color: String,
+    description: String,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
 });
 
 tagSchema.pre('save', function(next) {
