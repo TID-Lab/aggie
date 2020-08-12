@@ -24759,7 +24759,7 @@ angular.module('routes', ['ui.router']).
 
     $stateProvider.state('settings', {
       url: '/settings',
-      templateUrl: 'templates/settings.html'
+      templateUrl: 'templates/config.html'
     });
 
     $stateProvider.state('password_reset', {

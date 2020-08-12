@@ -5,7 +5,6 @@ var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
-var toRegexp = require('../to-regexp');
 
 function ReportQuery(options) {
   options = options || {};

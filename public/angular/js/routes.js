@@ -287,9 +287,9 @@ angular.module('Aggie')
       }
     });
 
-    $stateProvider.state('settings', {
-      url: '/settings',
-      templateUrl: '/templates/settings.html',
+    $stateProvider.state('config', {
+      url: '/config',
+      templateUrl: '/templates/config.html',
       controller: 'SettingsController'
     });
 
