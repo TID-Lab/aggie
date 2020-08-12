@@ -45,7 +45,11 @@ angular.module('Aggie')
 
     $scope.viewSource = function(event, source) {
       $rootScope.$state.go('source', { id: source._id });
-    };
+    }
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
 
     $scope.tagsToString = Tags.tagsToString;
     init();
