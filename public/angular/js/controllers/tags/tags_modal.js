@@ -70,7 +70,7 @@ angular.module('Aggie')
       };
 
       var handleError = function(response) {
-        if (response.status == 502) {
+        if (response.status == 422) {
           $scope.message = 'smtcTag.create.tagAlreadyExists';
         } else {
           $translate(response.data).then(function(error) {
@@ -96,15 +96,7 @@ angular.module('Aggie')
           SMTCTag.save({name: $scope.smtcTag.name}, $scope.smtcTag, handleSuccess, handleError);
         } else {
           console.log("Add" , $scope.newSMTCTag);
-          SMTCTag.save($scope.newSMTCTag)
-            .$promise
-            .then(function() {
-              handleSuccess();
-            })
-            .catch(function(error) {
-              // add error handling
-              console.log(error);
-            });
+          SMTCTag.save($scope.newSMTCTag, handleSuccess, handleError);
         }
       };
 

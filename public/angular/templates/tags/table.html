@@ -3,7 +3,6 @@
   <tr>
     <th scope="col" translate>Tag Name</th>
     <th scope="col" translate>Color</th>
-    <th scope="col" translate>Date Created</th>
     <th scope="col" translate>Created By</th>
     <th scope="col" translate>Description</th>
     <th scope="col" translate>Delete</th>
@@ -15,11 +14,8 @@
     <td>
       <input type="text" class="form-control" ng-value="smtcTag.color" disabled/>
     </td>
-    <td>
-      <h6>{{smtcTag.createdAt}}</h6>
-    </td>
-    <td>
-      {{smtcTag.createdBy}}
+    <td ng-show="currentUser.can('view other users')">
+      {{smtcTag.user.username}}
     </td>
     <td>
       <textarea class="form-control" rows="3" disabled placeholder="Example Description" ng-bind="smtcTag.description"></textarea>

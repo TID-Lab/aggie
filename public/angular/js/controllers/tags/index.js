@@ -9,6 +9,7 @@ angular.module('Aggie')
   'Socket',
   function($scope, $rootScope, smtcTags, SMTCTag, flash, Socket) {
     $scope.smtcTags = smtcTags;
+    console.log($scope.smtcTags);
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');

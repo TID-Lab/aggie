@@ -146,6 +146,17 @@
       "error": "User failed to be deleted."
     }
   },
+  "smtcTag": {
+    "create": {
+      "success": "Tag was successfully created.",
+      "error": "Tag failed to be created. Please contact support.",
+      "tagAlreadyExists": "Tag name already exists. Change the name to a unique tag name."
+    },
+    "delete": {
+      "success": "Tag was successfully deleted.",
+      "error": "Tag failed to be deleted."
+    }
+  },
   "Uh oh!": "Uh oh!",
   "Sorry, but that page could not be found.": "Sorry, but that page could not be found.",
   "Trends (Lines)": "Trends (Lines)",
