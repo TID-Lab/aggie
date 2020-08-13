@@ -63,6 +63,11 @@
       }
     },
     "error": "An error has occurred saving the setting",
+    "ctUpdate": {
+      "success": "CrowdTangle List was successfully updated.",
+      "failure": "CrowdTangle List failed to be updated.",
+      "pending": "CrowdTangle List is being updated."
+    },
     "settingsModal": {
       "success": "{{itemName}} settings have been successfully {{verb}}.",
       "error": "An error has occurred"
@@ -260,7 +265,8 @@
   "Fetched Time": "Fetched Time",
   "Stored Time": "Stored Time",
   "Source": "Source",
-
+  "Update": "Update",
+  "Update CrowdTangle List": "Update CrowdTangle List",
   "URL": "URL",
   "Author": "Author",
   "Content": "Content",
