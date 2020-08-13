@@ -37,7 +37,7 @@ angular.module('Aggie')
         modalInstance.result.then(function(smtcTag) {
           flash.setNoticeNow('smtcTag.update.success');
           angular.forEach($scope.smtcTags, function(s, i) {
-            if (s._id == smtc._id) {
+            if (s._id === smtcTag._id) {
               $scope.smtcTags[i] = smtcTag;
             }
           });
@@ -54,13 +54,8 @@ angular.module('Aggie')
     'SMTCTag',
     'FlashService',
     'shared',
-    function($scope, $modalInstance, $translate, smtcTag, SMTCTag, flash, shared) {
+    function($scope, $modalInstance, $translate, smtcTag, SMTCTag) {
       $scope.smtcTag = angular.copy(smtcTag);
-      $scope.newSMTCTag = {
-        name: '',
-        color: 'rgb(0,0,0)',
-        description: ''
-      }
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
@@ -70,7 +65,7 @@ angular.module('Aggie')
       };
 
       var handleError = function(response) {
-        if (response.status == 422) {
+        if (response.status === 422) {
           $scope.message = 'smtcTag.create.tagAlreadyExists';
         } else {
           $translate(response.data).then(function(error) {
@@ -92,11 +87,9 @@ angular.module('Aggie')
           return;
         }
         if ($scope.smtcTag._id) {
-          console.log("EDIT");
-          SMTCTag.save({name: $scope.smtcTag.name}, $scope.smtcTag, handleSuccess, handleError);
+          SMTCTag.update({_id: $scope.smtcTag._id}, $scope.smtcTag, handleSuccess, handleError);
         } else {
-          console.log("Add" , $scope.newSMTCTag);
-          SMTCTag.save($scope.newSMTCTag, handleSuccess, handleError);
+          SMTCTag.save({name: $scope.smtcTag.name, color: $scope.smtcTag.color, description: $scope.smtcTag.description}, handleSuccess, handleError);
         }
       };
 

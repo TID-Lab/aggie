@@ -14,15 +14,12 @@ var tagSchema = new mongoose.Schema({
 
 tagSchema.pre('save', function(next) {
     var tag = this;
-
     if(!tag.name) return next(new Error.Validation("name_required"));
-
-    // Check for uniqueness
-    SMTCTag.checkUnique(tag, function(unique, err) {
+        // Check for uniqueness
+    SMTCTag.checkNewUnique(tag, function(unique, err) {
         if (!unique) return next(new Error.Validation(err));
         else next();
     });
-
 });
 
 tagSchema.post('save', function() {
@@ -34,13 +31,14 @@ tagSchema.post('save', function() {
     });
 });
 
+
 tagSchema.post('remove', function() {
     tagSchema.emit('tag:removed', this._id);
 });
 
 var SMTCTag = mongoose.model('SMTCTag', tagSchema);
 
-SMTCTag.checkUnique = function(tag, callback) {
+SMTCTag.checkNewUnique = function(tag, callback) {
     var query = { $and: [
         { _id: { $ne: tag._id } },
         { name: tag.name }
@@ -49,7 +47,7 @@ SMTCTag.checkUnique = function(tag, callback) {
         if (err) {
             logger.warning(err);
         }
-        if (count) callback(false, _.keys(_.last(query.$and))[0] + '_not_unique');
+        if (count) callback(false, tag.name + '_not_unique');
         else callback(true);
     })
 }
