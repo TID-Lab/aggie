@@ -192,6 +192,12 @@ angular.module('Aggie')
     });
 
     $scope.tagsToString = Tags.tagsToString;
+
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
+
     init();
   }
 ]);

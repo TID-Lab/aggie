@@ -83,6 +83,7 @@ require('./translations');
 require('./services/auth');
 require('./services/fetching');
 require('./services/settings');
+require('./services/updateCTlist');
 require('./services/flash');
 require('./services/queue');
 require('./services/report');

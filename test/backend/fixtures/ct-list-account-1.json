@@ -1,0 +1,18 @@
+{
+  "status": 200,
+  "result": {
+      "accounts": [
+          {
+              "id": 2,
+              "name": "account2"
+          },
+          {
+            "id": 3,
+            "name": "account3"
+        }
+        ],
+      "pagination": {
+        "nextPage": "ct-list-account-2"
+      }
+      }
+    }

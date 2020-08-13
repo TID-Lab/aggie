@@ -248,7 +248,7 @@ angular.module('Aggie')
     $scope.$on('$destroy', function() {
       Socket.leave('incidents');
       Socket.removeAllListeners('incidents');
-      Socket.leave('stats');
+      Socket.leave('incidents');
       Socket.removeAllListeners('stats');
     });
 

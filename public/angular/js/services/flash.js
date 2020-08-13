@@ -5,17 +5,23 @@ angular.module('Aggie').factory('FlashService', [
     var flash = {}, currentFlash = {};
 
     $rootScope.$on('$stateChangeSuccess', function() {
-      currentFlash = flash;
+      if (currentFlash.params) {
+        if (!currentFlash.params.persist) {
+          currentFlash = flash;
+        }
+      } else {
+        currentFlash = flash;
+      }
       flash = {};
     });
 
     return {
       getAlert: function() {
-        return $translate.instant(currentFlash.alert, currentFlash.params);
+        return $translate.instant(currentFlash.alert);
       },
 
       getNotice: function() {
-        return $translate.instant(currentFlash.notice, currentFlash.params);
+        return $translate.instant(currentFlash.notice);
       },
 
       setAlert: function(message, params) {

@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "result": {
+      "lists": [
+          {
+              "id": "ct-list-account-0",
+              "title": "list0",
+              "type": "LIST"
+          },
+          {
+              "id": "ct-list-account-1",
+              "title": "list1",
+              "type": "LIST"
+          }
+        ]
+      }
+    }

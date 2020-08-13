@@ -17,6 +17,7 @@ angular.module('Aggie')
       Socket.leave('stats');
       Socket.removeAllListeners('stats');
     });
+
     init();
   }
 ]);

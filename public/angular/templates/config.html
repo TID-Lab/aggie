@@ -56,6 +56,26 @@
               </table>
             </div>
           </div>
+          
+          <div class="row">
+            <div class="col">
+              <span class="ng-scope"  ng-controller="SettingsController">
+                <table ng-if="showCTButton" class="table table-settings ">
+                  <tr >
+                    <td>
+                      <label class="settings-label" translate>Update CrowdTangle List</label>
+                    </td>
+                    <td class="action">
+                      <div class="ng-scope" >
+                        <button class="btn btn-info ng-scope" ng-disabled="disableCTButton" ng-click="updateCTList()" translate>Update</button>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </span>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col">
               <h5 translate>Email</h5>
