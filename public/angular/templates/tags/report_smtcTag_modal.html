@@ -11,7 +11,18 @@
   <div class="modal-body">
     <div class="container-fluid" ng-show="selectedReports">
       <table class="table table-condensed">
-        <tbody>
+        <thead>
+          <tr>
+            <th scope="col" translate>Time</th>
+            <th scope="col" translate>Thumbnail</th>
+            <th scope="col" translate>Author</th>
+            <th scope="col" translate>Content</th>
+            <th scope="col" translate>Sources</th>
+            <th scope="col" translate>Incident</th><!-- No need to show incident on incident detail page -->
+            <th scope="col" translate>Flagged</th>
+          </tr>
+        </thead>
+        <tbody class="table-bordered">
           <tr ng-repeat="r in selectedReports | orderBy:'-storedAt'"
               ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
             <td class="td--time">
@@ -82,23 +93,16 @@
     <div class="container-fluid" ng-show="smtcTags">
       <form>
         <div class="form-group">
-          <label for="tagifySMTCTags">Add Tags</label>
+          <label for="tagifySMTCTags">Add and Remove Tags</label>
           <input ng-init="tagify()" class="input--tags readonlyMix" name="tagifySMTCTags" id="tagifySMTCTags" />
-          <button class="btn btn-light" type="button" ng-click="removeAllTags()"> Remove All Tags </button>
+          <button class="btn btn-secondary" type="button" ng-click="removeAllTags()"> Remove All Tags </button>
         </div>
         <div class="form-group">
         </div>
       </form>
-
-      <button class="btn btn-primary mt-4" type="button" data-toggle="collapse" data-target="#tagTableDisplay" aria-expanded="false" aria-controls="tagTableDisplay">
-        Expand to See Tag Details
-      </button>
-      <div class="collapse mt-4" id="tagTableDisplay">
-        <p ng-if="currentUser.can('edit tags')" class='info'>{{'Click a Tag below to which you would like to add the report. Or you can' | translate}}
-          <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">{{'create a new tag' | translate}}</button>.
-        </p>
-        <div ng-include="'/templates/tags/table.html'"></div>
-      </div>
+      <p ng-if="currentUser.can('edit tags')" class='info'> {{'If this requires a new tag, ' | translate}}
+        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">{{'create a new tag' | translate}}</button>.
+      </p>
     </div>
   </div>
   <div class="modal-footer">

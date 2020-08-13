@@ -19,7 +19,6 @@ angular.module('Aggie')
           }
         });
         modalInstance.result.then(function(smtcTag) {
-          console.log(smtcTag);
           $scope.smtcTags.push(smtcTag);
           flash.setNoticeNow('smtcTag.create.success');
         });

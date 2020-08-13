@@ -43,7 +43,7 @@ SMTCTag.checkNewUnique = function(tag, callback) {
         { _id: { $ne: tag._id } },
         { name: tag.name }
     ]};
-    SMTCTag.count(query, function(err, count) {
+    SMTCTag.countDocuments(query, function(err, count) {
         if (err) {
             logger.warning(err);
         }
