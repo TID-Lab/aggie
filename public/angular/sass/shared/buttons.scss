@@ -10,11 +10,6 @@
     outline: none;
   }
 }
-  // This is the primary call to action button. Defined in the bootstrap theme.
-.btn-primary {}
-
-// This is a secondary weight button. Also defined in bootstrap.
-.btn-info {}
 
 // Overriding the tertiary button to gray color.
 .btn-default {
@@ -43,4 +38,8 @@
   font-size: 14px;
   height: 35px;
   width: 100px;
+}
+
+.btn-search {
+
 }

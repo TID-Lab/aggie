@@ -6,7 +6,7 @@
     <!--This is the centered card-->
     <div class="col-xl-10">
       <div class="card">
-        <div class="card-header text-white bg-info">
+        <div class="card-header card__header">
           <h4 class="card-title" translate>Batch Mode</h4>
           <p class="" translate>batch.intro</p>
           <div ng-if="searchParams">
@@ -38,7 +38,7 @@
         </div>
         <p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
         <div ng-include="'/templates/reports/table.html'"></div>
-        <div class="card-footer text-muted">
+        <div class="card-footer text-muted card__footer">
           <div class="float-right">
             <div class="batch-actions">
               <div class="float-left ml-2">
