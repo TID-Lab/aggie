@@ -73,7 +73,7 @@ should be suggested]
 Users and emails
 ----------------
 
-1. Go to Settings > Settings [goes to `/settings`]
+1. Go to Settings > Configuration [goes to `/settings`]
 2. Set app email address [saved successfully]
 3. Set up email transport settings [saved successfully]
 4. Go to Settings > Users [list of users is shown]

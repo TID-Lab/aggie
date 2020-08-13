@@ -1,0 +1,30 @@
+<!---- Twitter Current Statistics ---->
+</br>
+<h5 class="card-title">Twitter Details</h5>
+<div class="table-responsive">
+  <table class="table table-hover table-bordered table-striped detail-table">
+    <tr>
+      <th scope="row" class="detail-key" translate>User Verified?</th>
+      <td colspan="4" class="detail-value">
+        <span class="text-capitalize">{{report.metadata.verified}}</span>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row" class="detail-key" translate>Follower Count</th>
+      <td colspan="4" class="detail-value">
+      <span title="{{'Subscriber Count' | translate}}">
+        {{report.metadata.followerCount}}
+      </span>
+      </td>
+    </tr>
+    <tr ng-if="report.metadata.rawAPIResponse.quoted_status">
+      <th scope="row" class="detail-key" translate>Replying To</th>
+      <td colspan="4" class="detail-value">
+      <span title="{{'Replying To' | translate}}">
+        {{report.metadata.rawAPIResponse.quoted_status.text}}
+      </span>
+      </td>
+    </tr>
+    <!------------------ End Twitter Data ------------------>
+  </table>
+</div>

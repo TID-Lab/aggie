@@ -1,0 +1,41 @@
+<div class="table-responsive-sm">
+  <table class="table" aggie-table ng-show="sources.length > 0">
+    <thead>
+      <tr>
+        <th scope="col" translate>Media</th>
+        <th scope="col" translate>Name</th>
+        <th scope="col" translate ng-show="currentUser.can('view other users')">Creator</th>
+        <th scope="col" translate>Target</th>
+        <th scope="col" translate>Tags</th>
+        <th scope="col" translate ng-show="currentUser.can('edit data')">New Warnings</th>
+        <th scope="col" translate ng-show="currentUser.can('edit data')">Enabled</th>
+      </tr>
+    </thead>
+    <tbody class="table-bordered">
+      <tr ng-repeat="s in sources | orderBy:'+nickname'">
+        <td class="td--media">
+          <div class="source mx-auto"><div class="icon-left" ng-class="sourceClass(s)"></div></div>
+        </td>
+        <td class="td--name">
+          <a href="sources/{{s._id}}" class="table-primary-link"> {{ s.nickname }} </a>
+        </td>
+        <td class="td--users" ng-show="currentUser.can('view other users')">
+          <a href="profile/{{s.user.username}}">{{ s.user.username }}</a>
+        </td>
+        <td>
+          <span>{{ target(s) }}</span>
+        </td>
+        <td class="td--tag">
+          <span>{{ tagsToString(s.tags) }}</span>
+        </td>
+        <td class="td--errors zero-errors" ng-show="currentUser.can('edit data')"
+            ng-class="{ 'multiple-errors': s.unreadErrorCount > 0 }">
+          <span>{{ s.unreadErrorCount }}</span>
+        </td>
+        <td class="td--status text-center align-middle" ng-show="currentUser.can('edit data')">
+          <aggie-toggle toggle="s.enabled" options="{ true: 'On', false: 'Off' }" on-change="saveSource(s)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

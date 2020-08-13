@@ -19,7 +19,6 @@ angular.module('Aggie')
               before = tz(new Date(), '+1 day', '%F%00:00:00');
               after = tz(new Date(), '%F%00:00:00');
             }
-
             return { before: before, after: after };
           }
         }

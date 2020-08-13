@@ -12,7 +12,8 @@ angular.module('Aggie')
   'FlashService',
   'apiSettingsOptions',
   'widgetSettingsOptions',
-  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions) {
+  'Socket',
+  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions, Socket) {
 
     $scope.setting = {};
 
@@ -35,10 +36,6 @@ angular.module('Aggie')
       });
     }
 
-    var init = function() {
-      $scope.checkSource();
-    }
-
     $scope.updateCTList = function() {
       $rootScope.disableCTButton = true;
       flash.setNoticeNow('settings.ctUpdate.pending', {persist: true});
@@ -47,6 +44,16 @@ angular.module('Aggie')
       .catch(function() { flash.setAlertNow('settings.ctUpdate.failure') })
       .finally(function() { $rootScope.disableCTButton = false });
     }
+
+    var init = function() {
+      $scope.checkSource();
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+    }
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
+    };
 
     function getSetting(name) {
       Settings.get(name, function success(data) {
@@ -58,6 +65,10 @@ angular.module('Aggie')
       flash.setAlertNow('settings.error');
       console.log('failure: ', data);
     }
-    init()
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
+    init();
   }
 ]);

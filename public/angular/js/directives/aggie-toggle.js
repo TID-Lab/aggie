@@ -4,7 +4,12 @@ angular.module('Aggie')
   return {
     restrict: 'E',
     replace: false,
-    template: '<div class="toggle-item" ng-repeat="(status, label) in options" ng-click="toggleStatus(status)" ng-class="{ selected: isStatus(status) }">{{label}}</div>',
+    template:
+        '<div class="btn-group" role="switch" aria-label="Source Toggle">' +
+        '  <button class="btn" ng-repeat="(status, label) in options" ' +
+        '          ng-click="toggleStatus(status)" ng-disabled="isStatus(status)" ng-class="{\n' +
+        '              \'btn-primary\':isStatus(status), \'btn-secondary\':!isStatus(status)}">{{label}}</button>' +
+        '</div>',
 
     scope: {
       toggle: '=',

@@ -60,6 +60,12 @@ angular.module('Aggie')
         Socket.emit('incidentQuery', searchParams());
         Socket.on('incidents', $scope.handleNewIncidents);
       }
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+      // if (!$scope.currentUser) {
+      //   Socket.leave('stats');
+      //   Socket.removeAllListeners('stats');
+      // }
     };
 
     var removeDuplicates = function(incidents) {
@@ -96,6 +102,10 @@ angular.module('Aggie')
         params[key] = newParams[key];
       }
       return params;
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
     };
 
     var paginate = function(items) {
@@ -149,6 +159,18 @@ angular.module('Aggie')
         flash.setAlertNow('incident.deleteMultiple.error');
       });
     };
+
+    $scope.clearTitle = function() {
+      $scope.search({ title: null });
+    }
+
+    $scope.clearTags = function() {
+      $scope.search({ tags: null });
+    }
+
+    $scope.clearLocationName = function() {
+      $scope.search({ locationName: null });
+    }
 
     $scope.noFilters = function() {
       return $scope.searchParams.title === null &&
@@ -224,7 +246,10 @@ angular.module('Aggie')
     };
 
     $scope.$on('$destroy', function() {
+      Socket.leave('incidents');
       Socket.removeAllListeners('incidents');
+      Socket.leave('incidents');
+      Socket.removeAllListeners('stats');
     });
 
     $scope.tagsToString = Tags.tagsToString;

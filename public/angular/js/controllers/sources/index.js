@@ -7,8 +7,18 @@ angular.module('Aggie')
   'sources',
   'Source',
   'Tags',
-  function($scope, $rootScope, flash, sources, Source, Tags) {
+  'Socket',
+  function($scope, $rootScope, flash, sources, Source, Tags, Socket) {
     $scope.sources = sources;
+
+    var init = function() {
+      Socket.on('stats', updateStats);
+      Socket.join('stats');
+    };
+
+    var updateStats = function(stats) {
+      $scope.stats = stats;
+    };
 
     $scope.saveSource = function(source) {
       Source.save({ id: source._id }, source, function() {
@@ -23,9 +33,9 @@ angular.module('Aggie')
     };
 
     $scope.sourceClass = function(source) {
-      
+
       var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle'];
-      
+
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
       } else {
@@ -35,8 +45,13 @@ angular.module('Aggie')
 
     $scope.viewSource = function(event, source) {
       $rootScope.$state.go('source', { id: source._id });
-    };
+    }
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
 
     $scope.tagsToString = Tags.tagsToString;
+    init();
   }
 ]);
