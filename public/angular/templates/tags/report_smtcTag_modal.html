@@ -58,11 +58,6 @@
                 {{ sourcesById[s].nickname || '[Deleted]' }}
               </span>
             </td>
-            <td class="tag" ng-class="{ strong: !isRead(r) }">
-              <span class="text-wrap">
-                {{tagsToString(r.tags) + ", "}}
-              </span>
-            </td>
             <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
               <div class="text-center">
                 <span>
