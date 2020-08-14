@@ -4,7 +4,7 @@
 
 ### What is a Source?
 
-Sources are the social media platforms such as *Twitter, Facebook, Ushahidi, and RSS feeds* that Aggie crawls through to aggregate reports relevant to the event being monitored.
+Sources are the social media platforms such as *Twitter, Crowdtangle, Ushahidi, and RSS feeds* that Aggie crawls through to aggregate reports relevant to the event being monitored.
 
 Sources can also be services that send reports directly to Aggie. Currently, we have implemented support for WhatsApp and [SMSGH](https://hubtel.com/messaging/), a service that forwards SMS text messages sent to [short codes](https://en.wikipedia.org/wiki/Short_code).
 

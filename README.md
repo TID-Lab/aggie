@@ -7,7 +7,7 @@ Aggie is a web application for using social media and other resources to track i
 Aggie can retrieve data from several sources:
 
 * [Twitter](https://search.twitter.com) (tweets matching a keyword search)
-* [Facebook](https://facebook.com) (comments from publicly accessible groups and pages)
+* [Crowdtangle](https://www.crowdtangle.com/) (posts from publicly accessible groups and pages)
 * [RSS](http://en.wikipedia.org/wiki/RSS) (article titles and descriptions)
 * [ELMO](http://getelmo.org) (answers to survey questions)
 
@@ -242,13 +242,6 @@ Set `config.adminParty=true` if you want to run tests.
 
   1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
   1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
-
-#### Facebook
-
-  1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
-  1. Inside your Facebook app, obtain `client_id` and `client_secret`.
-  1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
-  1. Go to Settings > Configuration and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### CrowdTangle
 
