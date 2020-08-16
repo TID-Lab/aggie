@@ -74,6 +74,18 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
+schema.methods.addSMTCTag = function(smtcTag) {
+  this.smtcTags.push(smtcTag);
+}
+
+schema.methods.removeSMTCTag = function(smtcTag) {
+  this.smtcTags.forEach(function(item, index) {
+    if (item._id === smtcTag._id) {
+      this.smtcTags = this.smtcTags.splice(index, 1);
+    }
+  });
+}
+
 var Report = mongoose.model('Report', schema);
 
 SMTCTag.schema.on('tag:removed', function(id) {
