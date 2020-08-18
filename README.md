@@ -212,6 +212,17 @@ sudo $EDITOR /etc/logrotate.conf
 npx pm2 logs
 ```
 
+### Semi-automated upgrade
+
+```shell script
+git add -A; git add -u; git stash # Save any files you may have changed
+git pull # Get upstream changes
+npm install # Make sure dependencies are up to date
+git stash pop # Only if you had changes saved earlier
+git status # Check if it looks right
+npx pm2 restart aggie # Serve the new version
+```
+
 ## Maintenance
 
 1. To run migrations run `npx migrate`.
