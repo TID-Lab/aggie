@@ -7,7 +7,7 @@ Aggie is a web application for using social media and other resources to track i
 Aggie can retrieve data from several sources:
 
 * [Twitter](https://search.twitter.com) (tweets matching a keyword search)
-* [Crowdtangle](https://www.crowdtangle.com/) (posts from publicly accessible groups and pages)
+* [Crowdtangle](https://www.crowdtangle.com/) (Facebook, Instagram, and Reddit posts from publicly accessible groups and pages)
 * [RSS](http://en.wikipedia.org/wiki/RSS) (article titles and descriptions)
 * [ELMO](http://getelmo.org) (answers to survey questions)
 
