@@ -31,7 +31,7 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
 
     ![Media Authentication](toggle3.png)
 
-3. Click on **Edit** to authenticate the Twitter, Facebook or Elmo feed settings.
+3. Click on **Edit** to authenticate the Twitter, Crowdtangle, or Elmo feed settings.
 
     ![Media Authentication](social_media_feed_authentication.png)
 
@@ -59,36 +59,6 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
     ![Twitter Apps](twitter_app4.png)
 
 6. With these access tokens, fellow the instructions from [Adding Media Feeds to Aggie](#adding-media-feeds-to-aggie) section and edit the Twitter settings in Aggie.
-
-### Facebook API Access Tokens
-
-
-1.  Visit [Facebook's Apps page](https://developers.facebook.com/apps/) and login with your credentials.
-2.  Click on **Create a new app** at the top right corner.
-
-    ![Facebook Apps](facebook_app1.png)
-
-3.  Type in the *name* of your app and click on **Create New Facebook App ID**.
-
-    ![Facebook Apps](facebook_app2.png)
-
-4.  Type in your *email address* and choose the *app category*, eg. *Apps for Pages* and click on **Create App ID**.
-
-    ![Facebook Apps](facebook_app3.png)
-
-5.  Select the pictures that apply and click **Submit**.
-6.  Enter a *site URL* and click on **next**.
-7.  Click **Skip to Developer Dashboard** to retrieve your *App ID* and *App Secret*.
-
-    ![Facebook Apps](facebook_app4.png)
-
-8.  Click on the **Show button** and enter your password to show your *App Secret*.
-
-    ![Facebook App](facebook_app5.png)
-
-9.  Now with your Facebook *App ID* and *App Secret*, copy **https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials** into your web browser, replacing the (**xxx**) in **secret = xxx** and **id=xxx** with your *App Secret* and *App ID* respectively.
-10.  Hit the return key to show your access token.
-11.  With this access token,fellow the instructions from [Adding Media Feeds to Aggie](#adding-media-feeds-to-aggie) section and edit the Facebook settings on Aggie.
 
 ### WhatsApp messages
 

@@ -36,11 +36,8 @@ Sources, APIs, and fetching
 --------------------
 
 1. Add Google Places API and refresh the page
-2. Add Facebook API token and turn fetching on
-3. Create Facebook source `https://www.facebook.com/nytimes` [at least 50
-reports show up, and no warnings]
-4. Create Facebook source `https://www.facebook.com/err102398-023894-1239084`
-[this source gets an error and appears as `OFF` in `/sources`]
+2. Add API tokens and turn fetching on
+3. Create Crowdtangle source
 
 
 
