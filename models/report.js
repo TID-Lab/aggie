@@ -75,7 +75,14 @@ schema.methods.toggleRead = function(read) {
 };
 
 schema.methods.addSMTCTag = function(smtcTag) {
-  this.smtcTags.push(smtcTag);
+  var isRepeat = false;
+  this.smtcTags.forEach(function(tag, index) {
+    if (tag._id === smtcTag._id) isRepeat = true;
+  })
+  if (!isRepeat) {
+    this.smtcTags.push(smtcTag);
+  }
+  return smtcTag;
 }
 
 schema.methods.removeSMTCTag = function(smtcTag) {
@@ -84,6 +91,11 @@ schema.methods.removeSMTCTag = function(smtcTag) {
       this.smtcTags = this.smtcTags.splice(index, 1);
     }
   });
+  return smtcTag;
+}
+
+schema.methods.clearSMTCTags = function() {
+  this.smtcTags = [];
 }
 
 var Report = mongoose.model('Report', schema);

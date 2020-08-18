@@ -168,6 +168,43 @@ angular.module('Aggie')
       });
     };
 
+    var removeSMTCTag = function(items, smtcTag) {
+      return items.map(function(item) {
+        item.smtcTags.forEach(function(tag, index) {
+          if (tag._id === smtcTag._id) {
+            item.smtcTags = item.smtcTags.splice(index, 1);
+          }
+        });
+        return item;
+      })
+    }
+    var addSMTCTag = function(items, smtcTag) {
+      return items.map(function(item) {
+        console.log(smtcTag);
+        var isRepeat = false;
+        console.log(isRepeat);
+        item.smtcTags.forEach(function(tagId, index) {
+          console.log('Tag ID: ', smtcTag._id);
+          console.log('Previous ID: ', tagId);
+          console.log(tagId == smtcTag._id);
+          if (tagId == smtcTag._id) { isRepeat = true; }
+        })
+        console.log(isRepeat);
+        if (isRepeat === false) {
+          console.log('Pushed');
+          item.smtcTags.push(smtcTag);
+        }
+        return item;
+      });
+    }
+
+    var clearSMTCTags = function(items) {
+      return items.map(function(item) {
+        item.smtcTags = [];
+        return item;
+      });
+    }
+
     var getIds = function(items) {
       return items.map(function(item) {
         return item._id;
@@ -303,16 +340,6 @@ angular.module('Aggie')
       });
     };
 
-
-    $scope.addSMTCTag = function(report) {
-      SMTCTag.save({ name: 'Test6'})
-      .$promise
-        .catch(function(error) {
-          // add error handling
-          console.log(error);
-        });
-    }
-
     $scope.updateSMTCTag = function (updatedTag) {
       // remove deleted tag
       if (updatedTag.name == null) {
@@ -325,15 +352,6 @@ angular.module('Aggie')
         $scope.smtcTags.push(updatedTag);
       }
     }
-
-    $scope.deleteSMTCTag = function(report) {
-      // pass in delete parameter through user input. currently has a placeholder
-      SMTCTag.delete({ _id: $scope.smtcTags[0]._id})
-        .catch(function(error) {
-          // add error handling
-          console.log(error);
-        });
-      };
 
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
@@ -372,6 +390,32 @@ angular.module('Aggie')
 
       Report.toggleFlagged({ ids: ids, flagged: flagged });
     };
+
+    $scope.addTagToSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(addSMTCTag(items, smtcTag));
+
+      Report.addSMTCTag({ids: ids, smtcTag: smtcTag});
+    }
+
+    $scope.removeTagFromSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(removeSMTCTag(items, smtcTag));
+
+      Report.removeSMTCTag({ids: ids, smtcTag: smtcTag});
+    }
+
+    $scope.clearTagsFromSelected = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return;
+
+      var ids = getIds(clearSMTCTags(items));
+      Report.clearSMTCTags({ids: ids})
+    }
 
     $scope.grabBatch = function() {
       $scope.searchParams.tags = Tags.stringToTags($scope.searchParams.tags);
@@ -454,6 +498,7 @@ angular.module('Aggie')
     });
 
     $scope.tagsToString = Tags.tagsToString;
+
     init();
   }
 ]);
