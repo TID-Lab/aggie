@@ -198,7 +198,9 @@ npx pm2 restart aggie
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
-/home/my_user/aggie/logs/*.log {
+/home/my_user/aggie/logs/*.log
+/home/my_user/.pm2/logs/*.log
+{
   weekly
   missingok
   rotate 12
