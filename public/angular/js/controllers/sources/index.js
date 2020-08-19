@@ -34,7 +34,7 @@ angular.module('Aggie')
 
     $scope.sourceClass = function(source) {
 
-      var mediaOptions = ['twitter', 'facebook', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle'];
+      var mediaOptions = ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle'];
 
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';

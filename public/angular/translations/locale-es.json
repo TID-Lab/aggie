@@ -23,7 +23,7 @@
   "elmo": "Elmo",
   "facebook": "Facebook",
   "smsgh": "SMS GH",
-  "crowdtangle": "CrowdTangle",
+  "crowdtangle": "Facebook",
   "Smsgh": "SMS GH",
   "new": "Nuevo",
   "working": "En proceso",
@@ -64,9 +64,9 @@
     },
     "error": "Ocurrió un error al guardar los ajustes",
     "ctUpdate": {
-      "success": "La lista CrowdTangle se actualizó correctamente",
-      "failure": "La lista CrowdTangle no se pudo actualiza",
-      "pending": "La lista CrowdTangle se está actualizando."
+      "success": "La lista Facebook se actualizó correctamente",
+      "failure": "La lista Facebook no se pudo actualiza",
+      "pending": "La lista Facebook se está actualizando."
     },
     "settingsModal": {
       "success": "Los ajustes de {{itenName}} han sido guardados correctamente.",
@@ -266,7 +266,7 @@
   "Stored Time": "Momento de almacenaje",
   "Source": "Fuente",
   "Update": "Actualizar",
-  "Update CrowdTangle List": "Actualizar la lista CrowdTangle",
+  "Update CrowdTangle List": "Actualizar la lista Facebook",
   "URL": "URL",
   "Author": "Autor",
   "Content": "Contenido",

@@ -146,10 +146,6 @@ tbody {
     background: url('/images/elmo.png') no-repeat 0 50%;
   }
 
-  .facebook-source {
-    background: url('/images/facebook.png') no-repeat 0 50%;
-  }
-
   .rss-source {
     background: url('/images/rss.png') no-repeat 0 50%;
   }
@@ -161,7 +157,7 @@ tbody {
   }
 
   .crowdtangle-source {
-    background: url('/images/crowdtangle.png') no-repeat 0 50%;
+    background: url('/images/facebook.png') no-repeat 0 50%;
   }
   .unknown-source {
     position: relative;
@@ -307,4 +303,11 @@ td {
 
 .button--addIncident {
   background-color: #bfbfbf;
+}
+
+.td__location {
+  max-width: 200px;
+}
+.td__tags {
+  max-width: 180px;
 }

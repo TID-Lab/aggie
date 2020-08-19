@@ -7,7 +7,7 @@ Aggie is a web application for using social media and other resources to track i
 Aggie can retrieve data from several sources:
 
 * [Twitter](https://search.twitter.com) (tweets matching a keyword search)
-* [Facebook](https://facebook.com) (comments from publicly accessible groups and pages)
+* [Crowdtangle](https://www.crowdtangle.com/) (Facebook, Instagram, and Reddit posts from publicly accessible groups and pages)
 * [RSS](http://en.wikipedia.org/wiki/RSS) (article titles and descriptions)
 * [ELMO](http://getelmo.org) (answers to survey questions)
 
@@ -212,6 +212,19 @@ sudo $EDITOR /etc/logrotate.conf
 npx pm2 logs
 ```
 
+### Semi-automated upgrade
+
+```shell script
+mongodump # Automatically back up your database to ./dump/
+cd aggie # Go to where you originally saved Aggie
+git add -A; git add -u; git stash # Save any files you may have changed
+git pull # Get upstream changes
+npm install # Make sure dependencies are up to date
+git stash pop # Only if you had changes saved earlier
+git status # Check if it looks right
+npx pm2 restart aggie # Serve the new version
+```
+
 ## Maintenance
 
 1. To run migrations run `npx migrate`.
@@ -242,13 +255,6 @@ Set `config.adminParty=true` if you want to run tests.
 
   1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
   1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
-
-#### Facebook
-
-  1. Visit [your apps](https://developers.facebook.com/apps/) on the Facebook developers site. Create a new app if needed.
-  1. Inside your Facebook app, obtain `client_id` and `client_secret`.
-  1. To obtain an access token, in a browser, visit `https://graph.facebook.com/oauth/access_token?client_secret=xxx&client_id=xxx&grant_type=client_credentials` using your `client_id` and `client_secret`.
-  1. Go to Settings > Configuration and edit the Facebook settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### CrowdTangle
 
