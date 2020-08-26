@@ -56,7 +56,10 @@
           <span class="text-wrap">
             {{tagsToString(r.tags) + ", "}}
           </span>
-          <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags([r])" class="table-primary-link">
+          <span ng-repeat="tag in r.smtcTags">
+            {{smtcTagsById[tag].name + ", "}}
+          </span>
+          <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
             <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Add</strong>
           </a>
         </td>
@@ -74,7 +77,7 @@
           </div>
         </td>
         <td class="flagged text-center">
-          <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
+          <div class="fa pointer td__flags" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
                ng-click="currentUser.can('edit data') && toggleFlagged(r)">
           </div>
         </td>

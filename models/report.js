@@ -74,24 +74,37 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
-schema.methods.addSMTCTag = function(smtcTag) {
-  var isRepeat = false;
-  this.smtcTags.forEach(function(tag, index) {
-    if (tag._id === smtcTag._id) isRepeat = true;
-  })
-  if (!isRepeat) {
-    this.smtcTags.push(smtcTag);
-  }
-  return smtcTag;
-}
-
-schema.methods.removeSMTCTag = function(smtcTag) {
-  this.smtcTags.forEach(function(item, index) {
-    if (item._id === smtcTag._id) {
-      this.smtcTags = this.smtcTags.splice(index, 1);
+schema.methods.addSMTCTag = function(smtcTagId) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to add (if it doesn't exists) then remove it.
+  let isRepeat = false;
+  this.smtcTags.forEach(function(tag) {
+    if(smtcTagId === tag.toString()) {
+      isRepeat = true;
     }
   });
-  return smtcTag;
+  if (isRepeat === false) {
+    this.smtcTags.push({_id: smtcTagId});
+  }
+  return smtcTagId;
+}
+
+schema.methods.removeSMTCTag = function(smtcTagId) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to remove (if it exists) then remove it.
+  if (this.smtcTags) {
+    let fndIndex = -1;
+    this.smtcTags.forEach(function(tag, index) {
+      let string = tag.toString();
+      if (smtcTagId === tag.toString()) {
+        fndIndex = index;
+      }
+    })
+    if (fndIndex !== -1) {
+      this.smtcTags.splice(fndIndex, 1);
+    }
+  }
+  return smtcTagId;
 }
 
 schema.methods.clearSMTCTags = function() {
