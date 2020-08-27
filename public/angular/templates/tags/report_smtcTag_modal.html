@@ -82,12 +82,12 @@
     </div>
     <div class="container-fluid" ng-show="smtcTags">
       <form>
-        <div class="form-group">
-          <label for="tagifySMTCTags">Add and Remove Tags</label>
-          <input ng-init="tagify()" class="input--tags readonlyMix" name="tagifySMTCTags" id="tagifySMTCTags" />
-          <button class="btn btn-secondary" type="button" ng-click="removeAllTags()"> Remove All Tags </button>
-        </div>
-        <div class="form-group">
+        <label for="tagifySMTCTags">Add and Remove Tags</label>
+        <div class="input-group">
+          <input ng-init="tagify()" class="input--tags readonlyMix" name="tagifySMTCTags" id="tagifySMTCTags"/>
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button" ng-click="removeAllTags()" translate> Remove All Tags </button>
+          </div>
         </div>
       </form>
       <p ng-if="currentUseselectedReport.can('edit tags')" class='info'> {{'If this requires a new tag, ' | translate}}
@@ -96,7 +96,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="close()" translate>Close</button>
+    <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
     <button type="button" class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
   </div>
 </div>

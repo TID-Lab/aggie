@@ -81,10 +81,10 @@ angular.module('Aggie')
         return memo;
       };
 
-      // Returns an array of tag names
-      var namesOfTags = function(smtcTags) {
+      // Formats the tags for tagify
+      var tagifyFormatTags = function(smtcTags) {
         return smtcTags.map(function (smtcTag) {
-          return smtcTag.name;
+          return { title: smtcTag._id, value: smtcTag.name, color: smtcTag.color};
         });
       };
 
@@ -93,6 +93,11 @@ angular.module('Aggie')
           return smtcTag.name == name;
         });
         return $scope.smtcTags[index]._id;
+      }
+
+      // This function transforms tagify tag colors to match the smtcTag color
+      var transformTag = function(tagData) {
+        tagData.style = "--tag-bg:" + $scope.smtcTagsById[tagData.title].color;
       }
 
       var handleSuccess = function(response) {
@@ -175,30 +180,37 @@ angular.module('Aggie')
         $scope.addedSMTCTagsIds = [];
       }
 
-      $scope.loadReportTags = function() {
+      $scope.loadReportTags = function(tagifyElement) {
+        $scope.selectedReport.smtcTags.forEach( function(tag) {
+          tagifyElement.addTags([{
+            value: $scope.smtcTagsById[tag].name,
+            title: $scope.smtcTagsById[tag]._id
+          }]);
+        })
       }
 
       $scope.tagify = function() {
-        // Because we are manipulating the DOM, tag inputs don't actually load on init(). This means that running a
-        // forEach statement in init (like linkify) doesn't work because DOM elements can't be found. Instead this
-        // function is run when the element is loaded using ng-init. THIS IS NOT HOW NG-INIT is supposed to be
-        // used. I would otherwise use a component, but this was coded in angular 1.2 which doesn't have good component
-        // support
-
+        /* Because we are manipulating the DOM, tag inputs don't actually load on init(). This means that running a
+         * forEach statement in init (like linkify) doesn't work because DOM elements can't be found. Instead this
+         * function is run when the element is loaded using ng-init. THIS IS NOT HOW NG-INIT is supposed to be
+         * used. I would otherwise use a component, but this was coded in angular 1.2 which doesn't have good component
+         * support.
+         */
         var tagifyElement = angular.element('input[name=tagifySMTCTags]');
         // Add Translated Placeholder Text
         tagifyElement.attr("placeholder", $scope.tagifyPlaceHolderText);
         tagifyElement.tagify({
             enforceWhitelist: true,
-            whitelist: namesOfTags($scope.smtcTags),
+            whitelist: tagifyFormatTags($scope.smtcTags),
             autocomplete: true,
+            transformTag: transformTag,
             dropdown : {
               classname: "color-blue",
               enabled: 0,              // show the dropdown immediately on focus
               maxItems: 5,
               position: "text",         // place the dropdown near the typed text
               closeOnSelect: false,     // keep the dropdown open after selecting a suggestion
-              highlightFirst: true
+              highlightFirst: true,
             }
         }).on('add', function(e, tagName){ // Attach Event Listeners
             $scope.onAddSMTCTag(e, tagName);
@@ -210,7 +222,7 @@ angular.module('Aggie')
             $scope.onInvalidSMTCTagAdd(e, tagName);
           });
         $scope.tagifyElement = tagifyElement.data('tagify');
-        $scope.loadReportTags();
+        $scope.loadReportTags($scope.tagifyElement);
       };
 
       $scope.sourceClass = function() {

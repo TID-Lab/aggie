@@ -10,7 +10,32 @@
 <div class="container-fluid mt-4">
   <div class="row">
     <div class="col">
+      <!-- This is the tagging sidebar -->
+      <div class="sticky-top">
+        <div class="d-none d-xl-block">
+          <label class="pt-2"> <h4>Tags</h4> </label>
 
+          <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
+            <tag ng-repeat="smtcTag in smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                 class="tagify__tag tagify--noAnim" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}">
+              <x title="" class="tagify__tag__removeBtn" role="button" ng-click="removeTagFromSelected(smtcTag)" aria-label="remove tag"></x>
+              <div>
+                <a ng-click="addTagToSelected(smtcTag)">
+                  <span class="tagify__tag-text">{{smtcTag.name}}</span>
+                </a>
+              </div>
+            </tag>
+            <tag contenteditable="false" spellcheck="false" tabindex="-1"
+                 class="tagify__tag tagify--noAnim" __isvalid="true" value="bar">
+              <div>
+                <a ng-click="clearTagsFromSelected()">
+                  <span class="tagify__tag-text">Clear Tags</span>
+                </a>
+              </div>
+            </tag>
+          </tags>
+        </div>
+      </div>
     </div>
     <div class="col-lg-9">
       <div class="card">
@@ -53,6 +78,14 @@
                   <span ng-repeat="tag in report.tags">
                     {{ tag }}
                   </span>
+                  <tags class="tagify readonly" tabindex="-1">
+                    <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                         class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                      <div>
+                        <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                      </div>
+                    </tag>
+                  </tags>
                 </td>
               </tr>
               <tr>
