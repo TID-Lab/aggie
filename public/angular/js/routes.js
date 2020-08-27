@@ -123,6 +123,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });

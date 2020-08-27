@@ -4,10 +4,10 @@
       <tr>
         <th scope="col" ng-show="currentUser.can('edit data')"></th>
         <th scope="col" translate>Time</th>
+        <th scope="col" translate>Sources</th>
         <th scope="col" translate>Thumbnail</th>
         <th scope="col" translate>Author</th>
         <th scope="col" translate>Content</th>
-        <th scope="col" translate>Sources</th>
         <th scope="col" translate>Tags</th>
         <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
         <th scope="col" translate>Flagged</th>
@@ -15,7 +15,7 @@
     </thead>
     <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-          ng-class="{ item: true, flagged: r.flagged, unread: !r.read && !r.flagged }">
+          ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
         <td class="align-middle text-center" ng-show="currentUser.can('edit data')">
           <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
         </td>
@@ -24,6 +24,13 @@
           <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
           <div>{{ r.storedAt | aggieDate:'date' }}</div>
           <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+        </td>
+        <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
+          <div class="icon-left" ng-class="sourceClass(r)">
+          </div>
+          <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
+            {{ sourcesById[s].nickname || '[Deleted]' }}
+          </span>
         </td>
         <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
           <div ng-repeat="media in r.metadata.mediaUrl">
@@ -45,23 +52,21 @@
             </p>
           </a>
         </td>
-        <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
-          <div class="icon-left" ng-class="sourceClass(r)">
-          </div>
-          <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
-            {{ sourcesById[s].nickname || '[Deleted]' }}
-          </span>
-        </td>
-        <td class="td__tags tag" ng-class="{ strong: !isRead(r) }">
-          <span class="text-wrap">
+        <td class="td__tags tag">
+          <span class="text-wrap" ng-class="{ strong: !isRead(r) }">
             {{tagsToString(r.tags) + ", "}}
-          </span>
-          <span ng-repeat="tag in r.smtcTags">
-            {{smtcTagsById[tag].name + ", "}}
           </span>
           <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
             <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Add</strong>
           </a>
+          <tags class="tagify readonly" tabindex="-1">
+            <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                 class="tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+              <div>
+                <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+              </div>
+            </tag>
+          </tags>
         </td>
         <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
           <div class="text-center">

@@ -305,9 +305,25 @@ td {
   background-color: #bfbfbf;
 }
 
+.tr--unread {
+  background-color: white;
+}
+
+.tr--read {
+  background-color: #f5f6f7;
+}
+
 .td__location {
   max-width: 200px;
 }
 .td__tags {
   max-width: 180px;
+}
+
+.td__flags {
+  cursor: pointer;
+}
+
+tag {
+
 }

@@ -1,5 +1,5 @@
 angular.module('Aggie')
-
+    // This controller is for adding smtcTags to individual reports
 .controller('SMTCTagSelectModalController', [
   '$rootScope',
   '$scope',
@@ -8,11 +8,12 @@ angular.module('Aggie')
   'SMTCTag',
   'Report',
   'Tags',
+  'Incident',
   'FlashService',
   '$translate',
   '$state',
-  function($rootScope, $scope, $modal, $modalStack, SMTCTag, Report, Tags, flash, $translate, $state) {
-    $scope.setSMTCTags = function(reports) {
+  function($rootScope, $scope, $modal, $modalStack, SMTCTag, Report, Tags, Incident, flash, $translate, $state) {
+    $scope.setSMTCTags = function(report) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
         windowClass: 'report-to-existing',
@@ -23,11 +24,14 @@ angular.module('Aggie')
           smtcTags: ['SMTCTag', function(SMTCTag) {
             return SMTCTag.query().$promise;
           }],
-          reports: function() {
-            if (!reports) {
-              reports = $scope.filterSelected($scope.reports);
-            }
-            return reports;
+          incidents: ['Incident', function(Incident) {
+            return Incident.query().$promise;
+          }],
+          sources: ['Source', function(Source) {
+            return Source.query().$promise;
+          }],
+          report: function() {
+            return report;
           }
         }
       });
@@ -47,16 +51,36 @@ angular.module('Aggie')
     '$translate',
     'smtcTags',
     'SMTCTag',
-    'reports',
+    'Report',
+    'report',
+    'incidents',
+    'sources',
     'FlashService',
     'shared',
-    function($scope, $modalInstance, $translate, smtcTags, SMTCTag, reports, flash, shared) {
+    function($scope, $modalInstance, $translate, smtcTags, SMTCTag, Report, report, incidents, sources, flash, shared) {
       $scope.smtcTags = angular.copy(smtcTags);
-      $scope.selectedReports = angular.copy(reports);
+      $scope.smtcTagsById = {}
+      $scope.incidents = incidents.results;
+      $scope.incidentsById = {};
+      $scope.sources = sources;
+      $scope.sourcesById = {};
+      $scope.selectedReport = angular.copy(report);
       $scope.showErrors = false;
       $scope.message = '';
       $scope.addedSMTCTagsIds = [];
       $scope.tagifyPlaceHolderText = $translate.instant('Type to Enter Tags');
+
+      var init = function() {
+        $scope.incidentsById = $scope.incidents.reduce(groupById, {});
+        $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+        $scope.sourcesById = $scope.sources.reduce(groupById, {});
+      }
+
+      var groupById = function(memo, item) {
+        memo[item._id] = item;
+        return memo;
+      };
+
       // Returns an array of tag names
       var namesOfTags = function(smtcTags) {
         return smtcTags.map(function (smtcTag) {
@@ -107,6 +131,30 @@ angular.module('Aggie')
         $modalInstance.dismiss('cancel');
       };
 
+      $scope.saveReport = function() {
+        Report.save({ id: $scope.selectedReport._id }, $scope.selectedReport, function() {
+        }, function() {
+          flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
+        });
+      };
+
+      $scope.unlinkIncident = function() {
+        $scope.selectedReport._incident = '';
+        Report.update({ id: $scope.selectedReport._id }, $scope.selectedReport);
+      };
+
+      $scope.toggleFlagged = function() {
+        $scope.selectedReport.flagged = !$scope.selectedReport.flagged;
+        if ($scope.selectedReport.flagged) {
+          $scope.selectedReport.read = true;
+        }
+        $scope.saveReport();
+      };
+
+      $scope.isRead = function() {
+        return $scope.selectedReport.read;
+      }
+
       // Tagify Event Listeners
       $scope.onAddSMTCTag = function(e, addedTag) {
         console.log('JQEURY EVENT: ', 'added', addedTag);
@@ -128,7 +176,6 @@ angular.module('Aggie')
       }
 
       $scope.loadReportTags = function() {
-
       }
 
       $scope.tagify = function() {
@@ -150,7 +197,7 @@ angular.module('Aggie')
               enabled: 0,              // show the dropdown immediately on focus
               maxItems: 5,
               position: "text",         // place the dropdown near the typed text
-              closeOnSelect: false,          // keep the dropdown open after selecting a suggestion
+              closeOnSelect: false,     // keep the dropdown open after selecting a suggestion
               highlightFirst: true
             }
         }).on('add', function(e, tagName){ // Attach Event Listeners
@@ -165,5 +212,25 @@ angular.module('Aggie')
         $scope.tagifyElement = tagifyElement.data('tagify');
         $scope.loadReportTags();
       };
+
+      $scope.sourceClass = function() {
+        // Pick one of the sources that has a media type. For now, it happens that
+        // if a report has multiple sources, they all have the same type, or are
+        // deleted
+        if ($scope.selectedReport.metadata.platform === "Facebook") {
+          // set Facebook as source for CrowdTangle reports
+          return 'facebook-source';
+        } else {
+          for (var i = 0; i < $scope.selectedReport._sources.length; i++) {
+            var sourceId = $scope.selectedReport._sources[i];
+            var source = $scope.sourcesById[sourceId];
+            if (source && $scope.mediaOptions[source.media] !== -1) {
+              return source.media + '-source';
+            }
+          }
+          return 'unknown-source';
+        }
+      };
+      init();
     }
   ]);

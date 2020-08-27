@@ -19,12 +19,11 @@ angular.module('Aggie')
   'Socket',
   'Queue',
   'Tags',
-  'SMTCTag',
   'paginationOptions',
   '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
-           Report, Incident, Batch, Socket, Queue, Tags, SMTCTag, paginationOptions,
+           Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate) {
 
     $scope.searchParams = $stateParams;
@@ -61,8 +60,7 @@ angular.module('Aggie')
       $scope.reportsById = $scope.reports.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
-
-
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
 
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
@@ -179,19 +177,16 @@ angular.module('Aggie')
       })
     }
     var addSMTCTag = function(items, smtcTag) {
+      console.log($scope.smtcTagsById);
       return items.map(function(item) {
-        console.log(smtcTag);
         var isRepeat = false;
-        console.log(isRepeat);
         item.smtcTags.forEach(function(tagId, index) {
-          console.log('Tag ID: ', smtcTag._id);
-          console.log('Previous ID: ', tagId);
-          console.log(tagId == smtcTag._id);
-          if (tagId == smtcTag._id) { isRepeat = true; }
+          if (tagId == smtcTag._id)
+          {
+            isRepeat = true;
+          }
         })
-        console.log(isRepeat);
         if (isRepeat === false) {
-          console.log('Pushed');
           item.smtcTags.push(smtcTag);
         }
         return item;
@@ -392,22 +387,21 @@ angular.module('Aggie')
     };
 
     $scope.addTagToSelected = function(smtcTag) {
+      console.log(smtcTag._id);
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
 
       var ids = getIds(addSMTCTag(items, smtcTag));
-
-      Report.addSMTCTag({ids: ids, smtcTag: smtcTag});
-    }
+      Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+    };
 
     $scope.removeTagFromSelected = function(smtcTag) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
 
       var ids = getIds(removeSMTCTag(items, smtcTag));
-
-      Report.removeSMTCTag({ids: ids, smtcTag: smtcTag});
-    }
+      Report.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+    };
 
     $scope.clearTagsFromSelected = function() {
       var items = $scope.filterSelected($scope.reports);
@@ -415,7 +409,7 @@ angular.module('Aggie')
 
       var ids = getIds(clearSMTCTags(items));
       Report.clearSMTCTags({ids: ids})
-    }
+    };
 
     $scope.grabBatch = function() {
       $scope.searchParams.tags = Tags.stringToTags($scope.searchParams.tags);

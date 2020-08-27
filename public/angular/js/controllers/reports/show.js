@@ -13,12 +13,15 @@ angular.module('Aggie')
   'Report',
   'Incident',
   'Tags',
+  'smtcTags',
   'Socket',
   '$translate',
-  function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident, Tags, Socket, $translate) {
-  $scope.incidents = incidents.results;
-  $scope.incidentsById = {};
-  $scope.currentPath = $rootScope.$state.current.name;
+  function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident,
+           Tags, smtcTags, Socket, $translate) {
+    $scope.incidents = incidents.results;
+    $scope.incidentsById = {};
+    $scope.currentPath = $rootScope.$state.current.name;
+    $scope.smtcTags = smtcTags;
 
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});

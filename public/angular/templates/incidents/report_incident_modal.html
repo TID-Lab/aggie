@@ -57,20 +57,10 @@
                 {{ sourcesById[s].nickname || '[Deleted]' }}
               </span>
           </td>
-          <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
-            <div class="text-center">
-                <span>
-                  <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
-                    <strong class="text-wrap" ng-if="r._incident && incidentsById[r._incident]">
-                      {{ incidentsById[r._incident].title | strLimit: 40 }}
-                    </strong>
-                  </a>
-                </span>
-              <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
-            </div>
+          <td class="tags text-center">
           </td>
           <td class="flagged text-center">
-            <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
+            <div class="fa pointer td__flags" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
                  ng-click="currentUser.can('edit data') && toggleFlagged(r)">
             </div>
           </td>
