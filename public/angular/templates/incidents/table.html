@@ -56,12 +56,9 @@
         </div>
       </td>
       <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions">
-        <a ng-controller="IncidentFormModalController" ng-click="edit(i)">
-          <div class="fa pointer fa-pencil text-blue"></div>
-        </a>
-        <a aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)">
-          <div class="fa pointer fa-trash text-blue"></div>
-        </a>
+        <div class="fa fa-pencil text-blue td__edit" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
+        <div class="fa fa-trash text-blue td__delete"
+             aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
       </td>
     </tr>
     </tbody>

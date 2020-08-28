@@ -324,6 +324,14 @@ td {
   cursor: pointer;
 }
 
+.td__edit {
+  cursor: pointer;
+}
+
+.td__delete {
+  cursor: pointer;
+}
+
 tag.tr__tag {
   --tags-border-color: transparent;
 }
