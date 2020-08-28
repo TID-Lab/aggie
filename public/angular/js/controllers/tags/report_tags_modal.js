@@ -1,5 +1,6 @@
 angular.module('Aggie')
     // This controller is for adding smtcTags to individual reports
+    // This controller uses the Tagify Element (https://github.com/yairEO/tagify)
 .controller('SMTCTagSelectModalController', [
   '$rootScope',
   '$scope',
@@ -36,10 +37,11 @@ angular.module('Aggie')
         }
       });
       modalInstance.result.then(function(smtcTagIds) {
-        var ids = reports.map(function(report) {
-          return report._id;
+        smtcTagIds.map(function (tag) {
+          return { _id: tag._id }
         });
-        //console.log(ids, smtcTagIds);
+        report.smtcTags = smtcTagIds;
+        Report.update({ id: report._id }, report);
       });
     };
   }
@@ -67,7 +69,7 @@ angular.module('Aggie')
       $scope.selectedReport = angular.copy(report);
       $scope.showErrors = false;
       $scope.message = '';
-      $scope.addedSMTCTagsIds = [];
+      $scope.tagifySMTCTagsIds = [];
       $scope.tagifyPlaceHolderText = $translate.instant('Type to Enter Tags');
 
       var init = function() {
@@ -81,6 +83,13 @@ angular.module('Aggie')
         return memo;
       };
 
+      /* Tagify Functions
+       * In order to use the tagify library, smtcTags must be converted into tagify format, then added to the tagify
+       * element's whitelist. As the default tagify format supports two fields, the value field is equal to the name
+       * and the title field is equal to the smtcTag Id. This allows the tagify element to parse any inputs into the
+       * tagify element. However, when saving the smtcTag values back to the Report, tagify tags must be converted
+       * back to an array smtcTagIds.
+       */
       // Formats the tags for tagify
       var tagifyFormatTags = function(smtcTags) {
         return smtcTags.map(function (smtcTag) {
@@ -97,8 +106,17 @@ angular.module('Aggie')
 
       // This function transforms tagify tag colors to match the smtcTag color
       var transformTag = function(tagData) {
+        // TODO: Make a Tagify template so that we can make code more intuitive. See template under Tagify Settings API.
         tagData.style = "--tag-bg:" + $scope.smtcTagsById[tagData.title].color;
       }
+      // This function transforms tagify tags to an array of SMTCTag Ids
+      $scope.save = function() {
+        // We don't use a form validation because the tagify element provides all the input parsing
+        $scope.tagifyElement.getTagElms().forEach( function(TagDomElement) {
+          $scope.tagifySMTCTagsIds.push(TagDomElement.title);
+        });
+        $modalInstance.close($scope.tagifySMTCTagsIds);
+      };
 
       var handleSuccess = function(response) {
         $modalInstance.close(response);
@@ -117,18 +135,6 @@ angular.module('Aggie')
               $scope.message = 'smtcTag.create.error';
             }
           });
-        }
-      };
-
-      $scope.save = function(form) {
-        if (form.$invalid) {
-          $scope.showErrors = true;
-          return;
-        }
-        if ($scope.user._id) {
-
-        } else {
-
         }
       };
 
@@ -162,20 +168,16 @@ angular.module('Aggie')
 
       // Tagify Event Listeners
       $scope.onAddSMTCTag = function(e, addedTag) {
-        console.log('JQEURY EVENT: ', 'added', addedTag);
-        $scope.addedSMTCTagsIds.push(nameToTagId(addedTag.data.value));
+
       };
 
       $scope.onRemoveSMTCTag = function(e, addedTag) {
-        console.log('JQEURY EVENT: ',"remove", e, ' ', addedTag);
       };
 
       $scope.onInvalidSMTCTagAdd = function(e, addedTag) {
-        console.log('JQEURY EVENT: ',"invalid", e, ' ', addedTag);
       };
 
       $scope.removeAllTags = function() {
-        console.log('Removed: ', $scope.tagifyElement.getTagElms());
         $scope.tagifyElement.removeAllTags();
         $scope.addedSMTCTagsIds = [];
       }
