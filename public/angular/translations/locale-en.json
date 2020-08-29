@@ -157,6 +157,11 @@
       "error": "Tag failed to be created. Please contact support.",
       "tagAlreadyExists": "Tag name already exists. Change the name to a unique tag name."
     },
+    "update": {
+      "success": "Tag was successfully updated.",
+      "error": "Tag failed to be updated. Please contact support.",
+      "tagAlreadyExists": "Tag name already exists. Change the name to a unique tag name."
+    },
     "delete": {
       "success": "Tag was successfully deleted.",
       "error": "Tag failed to be deleted."

@@ -142,7 +142,7 @@ angular.module('Aggie')
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
+        flash.setAlertNow("Sorry, but that report couldn't be saved.");
       });
     };
 

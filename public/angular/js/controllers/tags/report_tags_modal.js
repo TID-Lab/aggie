@@ -93,22 +93,16 @@ angular.module('Aggie')
       // Formats the tags for tagify
       var tagifyFormatTags = function(smtcTags) {
         return smtcTags.map(function (smtcTag) {
-          return { title: smtcTag._id, value: smtcTag.name, color: smtcTag.color};
+          return { title: smtcTag._id, value: smtcTag.name};
         });
       };
-
-      var nameToTagId = function(name) {
-        var index = $scope.smtcTags.findIndex(function(smtcTag) {
-          return smtcTag.name == name;
-        });
-        return $scope.smtcTags[index]._id;
-      }
 
       // This function transforms tagify tag colors to match the smtcTag color
       var transformTag = function(tagData) {
         // TODO: Make a Tagify template so that we can make code more intuitive. See template under Tagify Settings API.
         tagData.style = "--tag-bg:" + $scope.smtcTagsById[tagData.title].color;
       }
+
       // This function transforms tagify tags to an array of SMTCTag Ids
       $scope.save = function() {
         // We don't use a form validation because the tagify element provides all the input parsing
@@ -118,26 +112,6 @@ angular.module('Aggie')
         $modalInstance.close($scope.tagifySMTCTagsIds);
       };
 
-      var handleSuccess = function(response) {
-        $modalInstance.close(response);
-      };
-
-      var handleError = function(response) {
-        if (response.status == 502) {
-          $scope.message = 'smtcTag.create.tagAlreadyExists';
-        } else {
-          $translate(response.data).then(function(error) {
-            $scope.message = error;
-          }).catch(function() {
-            if ($scope.smtcTag._id) {
-              $scope.message = 'smtcTag.update.error';
-            } else {
-              $scope.message = 'smtcTag.create.error';
-            }
-          });
-        }
-      };
-
       $scope.close = function() {
         $modalInstance.dismiss('cancel');
       };
@@ -145,13 +119,8 @@ angular.module('Aggie')
       $scope.saveReport = function() {
         Report.save({ id: $scope.selectedReport._id }, $scope.selectedReport, function() {
         }, function() {
-          flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
+          flash.setAlertNow("Sorry, but that report couldn't be saved.");
         });
-      };
-
-      $scope.unlinkIncident = function() {
-        $scope.selectedReport._incident = '';
-        Report.update({ id: $scope.selectedReport._id }, $scope.selectedReport);
       };
 
       $scope.toggleFlagged = function() {
@@ -166,22 +135,13 @@ angular.module('Aggie')
         return $scope.selectedReport.read;
       }
 
-      // Tagify Event Listeners
-      $scope.onAddSMTCTag = function(e, addedTag) {
-
-      };
-
-      $scope.onRemoveSMTCTag = function(e, addedTag) {
-      };
-
-      $scope.onInvalidSMTCTagAdd = function(e, addedTag) {
-      };
-
+      // This function removes all tags from the input bar
       $scope.removeAllTags = function() {
         $scope.tagifyElement.removeAllTags();
         $scope.addedSMTCTagsIds = [];
       }
 
+      // This function adds the previously added tags to the tagify input
       $scope.loadReportTags = function(tagifyElement) {
         $scope.selectedReport.smtcTags.forEach( function(tag) {
           tagifyElement.addTags([{
@@ -214,15 +174,7 @@ angular.module('Aggie')
               closeOnSelect: false,     // keep the dropdown open after selecting a suggestion
               highlightFirst: true,
             }
-        }).on('add', function(e, tagName){ // Attach Event Listeners
-            $scope.onAddSMTCTag(e, tagName);
-          })
-          .on('removeTag', function(e, tagName){
-            $scope.onRemoveSMTCTag(e, tagName);
-          })
-          .on("invalid", function(e, tagName) {
-            $scope.onInvalidSMTCTagAdd(e, tagName);
-          });
+        });
         $scope.tagifyElement = tagifyElement.data('tagify');
         $scope.loadReportTags($scope.tagifyElement);
       };

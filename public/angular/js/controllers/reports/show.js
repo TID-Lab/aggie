@@ -76,7 +76,7 @@ angular.module('Aggie')
     $scope.saveFlaggedReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that report couldn't be flagged/unflagged for some reason");
+        flash.setAlertNow("Sorry, but that report couldn't be flagged/unflagged.");
       });
     };
 

@@ -10,7 +10,6 @@ angular.module('Aggie')
   'Socket',
   function($scope, $rootScope, flash, sources, Source, Tags, Socket) {
     $scope.sources = sources;
-    console.log($scope.sources);
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');
