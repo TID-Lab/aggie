@@ -18,7 +18,7 @@
       {{smtcTag.user.username}}
     </td>
     <td>
-      <textarea class="form-control" rows="3" disabled placeholder="Example Description" ng-bind="smtcTag.description"></textarea>
+      <textarea class="form-control" rows="3" disabled placeholder="No Description Provided" ng-bind="smtcTag.description"></textarea>
     </td>
     <td ng-hide="modal ||  !currentUser.can('edit tags')">
       <div ng-controller="SMTCTagFormModalController" class="fa pointer fa-pencil text-blue td__edit" ng-click="edit(smtcTag)"></div>

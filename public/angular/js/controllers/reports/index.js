@@ -1,4 +1,3 @@
-
 angular.module('Aggie')
 .controller('ReportsIndexController', [
   '$state',
@@ -78,8 +77,6 @@ angular.module('Aggie')
           Socket.on('reports', $scope.handleNewReports.bind($scope));
         }
       }
-
-
       // make links clickable
       $scope.reports.forEach(linkify);
     };
@@ -168,25 +165,13 @@ angular.module('Aggie')
 
     var removeSMTCTag = function(items, smtcTag) {
       return items.map(function(item) {
-        item.smtcTags.forEach(function(tag, index) {
-          if (tag._id === smtcTag._id) {
-            item.smtcTags = item.smtcTags.splice(index, 1);
-          }
-        });
+        item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
         return item;
       })
     }
     var addSMTCTag = function(items, smtcTag) {
-      console.log($scope.smtcTagsById);
       return items.map(function(item) {
-        var isRepeat = false;
-        item.smtcTags.forEach(function(tagId, index) {
-          if (tagId == smtcTag._id)
-          {
-            isRepeat = true;
-          }
-        })
-        if (isRepeat === false) {
+        if (item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1) {
           item.smtcTags.push(smtcTag);
         }
         return item;
@@ -206,13 +191,15 @@ angular.module('Aggie')
       });
     };
 
+    /**
+     * For use with socket.io. This function updates report when their properties are changed by another user.
+     * @param {!Report} report
+     */
     $scope.updateReport = function(report) {
       var foundReport = $scope.visibleReports.find(function(item) {
         return item._id === report._id;
       });
-
       if (!foundReport) return;
-
       angular.extend(foundReport, report);
       if (!$scope.incidentsById[report._incident]) {
         Incident.get({ id: report._incident }, function(inc) {
@@ -221,6 +208,23 @@ angular.module('Aggie')
         });
       }
     };
+
+    /**
+     * For use with socket.io to update SMTCTags as they are changed by other parties.
+     * @param {!smtcTag} updatedTag
+     */
+    $scope.updateSMTCTag = function (updatedTag) {
+      // remove deleted tag
+      if (updatedTag.name == null) {
+        var delIndex = $scope.smtcTags.map(function(item) {
+          return item._id
+        }).indexOf(updatedTag);
+        $scope.smtcTags.splice(delIndex, 1);
+      } else {
+        // add new tag
+        $scope.smtcTags.push(updatedTag);
+      }
+    }
 
     $scope.handleNewReports = function(reports) {
       var uniqueReports = removeDuplicates(reports);
@@ -328,6 +332,10 @@ angular.module('Aggie')
       return report.read;
     };
 
+    /**
+     * Saves a front-end report to the back end.
+     * @param {Report} report
+     */
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
@@ -335,29 +343,22 @@ angular.module('Aggie')
       });
     };
 
-    $scope.updateSMTCTag = function (updatedTag) {
-      // remove deleted tag
-      if (updatedTag.name == null) {
-        var delIndex = $scope.smtcTags.map(function(item) {
-          return item._id
-        }).indexOf(updatedTag);
-        $scope.smtcTags.splice(delIndex, 1);
-      } else {
-        // add new tag
-        $scope.smtcTags.push(updatedTag);
-      }
-    }
-
+    /**
+     * Toggles a report's flagged property and sets its read property to true
+     * @param {Report} report
+     */
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
-
       if (report.flagged) {
         report.read = report.flagged;
       }
-
       $scope.saveReport(report);
     };
 
+    /**
+     * Sets selected reports' read property to read value
+     * @param {boolean} read
+     */
     $scope.toggleSelectedRead = function(read) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
@@ -366,28 +367,57 @@ angular.module('Aggie')
       Report.toggleRead({ ids: ids, read: read });
     };
 
+    /**
+     * Sets all reports' read property in the scope to read
+     * @param {boolean} read
+     */
     $scope.toggleAllRead = function(read) {
       var ids = getIds(toggleRead($scope.reports, read));
       Report.toggleRead({ ids: ids, read: read });
     };
 
+    /**
+     * Returned value is meant to be used as a boolean to check if any reports are selected.
+     * @returns {boolean}
+     */
     $scope.someSelected = function() {
       return $scope.reports.some(function(report) {
         return report.selected;
       });
     };
 
+    /**
+     * Takes in a boolean "flagged" value and sets the flagged field on selected reports to that value.
+     * @param {boolean} flagged
+     */
     $scope.toggleSelectedFlagged = function(flagged) {
       var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return;
-
-      var ids = getIds(toggleFlagged(items, flagged));
-
-      Report.toggleFlagged({ ids: ids, flagged: flagged });
+      if (!items.length) return; // If empty, return
+      var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
+      Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
     };
 
+
+
+    /**
+     * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
+     * from all selected reports. Otherwise this function adds the smtcTag to each selected report.
+     * @param {SMTCTag} smtcTag
+     */
+    $scope.toggleTagOnSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return;
+      if (items.findIndex(function(item) {
+        return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
+      }) !== -1) $scope.addTagToSelected(smtcTag);
+      else $scope.removeTagFromSelected(smtcTag);
+    }
+
+    /**
+     * Adds a smtcTag to selected reports.
+     * @param {SMTCTag} smtcTag
+     */
     $scope.addTagToSelected = function(smtcTag) {
-      console.log(smtcTag._id);
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
 
@@ -395,14 +425,20 @@ angular.module('Aggie')
       Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
     };
 
+    /**
+     * Removes a smtcTag from selected reports.
+     * @param {SMTCTag} smtcTag
+     */
     $scope.removeTagFromSelected = function(smtcTag) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
-
       var ids = getIds(removeSMTCTag(items, smtcTag));
       Report.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
     };
 
+    /**
+     * Removes all tags from selected reports.
+     */
     $scope.clearTagsFromSelected = function() {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
@@ -411,6 +447,7 @@ angular.module('Aggie')
       Report.clearSMTCTags({ids: ids})
     };
 
+    // Batch Mode Functions
     $scope.grabBatch = function() {
       $scope.searchParams.tags = Tags.stringToTags($scope.searchParams.tags);
       Batch.checkout($scope.searchParams, function(resource) {
@@ -448,22 +485,29 @@ angular.module('Aggie')
       });
     };
 
+    /**
+     * Marks all reports in the batch to read and exits batch mode.
+     */
     $scope.markAllReadAndDone = function() {
       if (!$scope.reports) return;
-
       var ids = getIds($scope.reports);
-
       Report.toggleRead({ ids: ids, read: true }, function() {
         $rootScope.$state.go('reports', $scope.searchParams, { reload: true });
       });
     };
 
+    /**
+     * Goes to the show page for a report.
+     * @param event
+     * @param {!Report} report
+     */
     $scope.viewReport = function(event, report) {
       if (angular.element(event.target)[0].tagName === 'TD') {
         $state.go('report', { id: report._id });
       }
     };
 
+    // CSS functions
     $scope.sourceClass = function(report) {
       // Pick one of the sources that has a media type. For now, it happens that
       // if a report has multiple sources, they all have the same type, or are
@@ -492,7 +536,6 @@ angular.module('Aggie')
     });
 
     $scope.tagsToString = Tags.tagsToString;
-
     init();
   }
 ]);

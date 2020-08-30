@@ -7,3 +7,7 @@ tags.input--tags {
   --tags-border-color: #DDD;
   --tags-hover-border-color: #CCC;
 }
+
+tag.tags__tag {
+  cursor: pointer;
+}
