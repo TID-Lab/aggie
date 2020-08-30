@@ -58,6 +58,14 @@
               </span>
           </td>
           <td class="tags text-center">
+            <tags class="tagify readonly" tabindex="-1">
+              <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                   class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                <div>
+                  <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                </div>
+              </tag>
+            </tags>
           </td>
           <td class="flagged text-center">
             <div class="fa pointer td__flags" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
