@@ -9,8 +9,9 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid" ng-show="selectedReport">
-      <table class="table table-condensed">
-        <thead>
+      <div class="table-responsive">
+        <table class="table table-condensed">
+          <thead>
           <tr>
             <th scope="col" translate>Time</th>
             <th scope="col" translate>Thumbnail</th>
@@ -20,8 +21,8 @@
             <th scope="col" translate>Incident</th><!-- No need to show incident on incident detail page -->
             <th scope="col" translate>Flagged</th>
           </tr>
-        </thead>
-        <tbody class="table-bordered">
+          </thead>
+          <tbody class="table-bordered">
           <tr ng-class="{ item: true, 'bg-gray': selectedReport.read, flagged: selectedReport.flagged, unread: !selectedReport.read && !selectedReport.flagged }">
             <td class="td--time">
               <span class="badge badge-info">{{ selectedReport.storedAt | interval }} ago</span>
@@ -71,8 +72,9 @@
               </div>
             </td>
           </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
       <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
