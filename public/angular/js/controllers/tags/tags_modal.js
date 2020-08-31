@@ -47,20 +47,28 @@ angular.module('Aggie')
 
   .controller('SMTCTagFormModalInstanceController', [
     '$scope',
+    '$rootScope',
     '$modalInstance',
     '$translate',
     'smtcTag',
     'SMTCTag',
     'FlashService',
     'shared',
-    function($scope, $modalInstance, $translate, smtcTag, SMTCTag) {
+    function($scope, $rootScope, $modalInstance, $translate, smtcTag, SMTCTag) {
       $scope.smtcTag = angular.copy(smtcTag);
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
 
-      var handleSuccess = function(response) {
-        $modalInstance.close(response);
+      var init = function() {
+        if ($rootScope.currentUser) {
+          $scope.currentUser = $rootScope.currentUser;
+        }
+      }
+
+      var handleSuccess = function() {
+        $scope.smtcTag.user = $scope.currentUser;
+        $modalInstance.close($scope.smtcTag);
       };
 
       var handleError = function(response) {
@@ -107,5 +115,6 @@ angular.module('Aggie')
       $scope.close = function() {
         $modalInstance.dismiss('cancel');
       };
+      init();
     }
   ]);
