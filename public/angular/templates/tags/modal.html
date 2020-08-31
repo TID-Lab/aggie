@@ -10,25 +10,24 @@
   </div>
   <div class="modal-body">
     <div class="alert alert-danger" ng-show="message" translate>{{message}}</div>
-    <form novalidate name="form" class="mt-2">
+    <form name="form" class="mt-2" novalidate>
       <fieldset>
         <div class="form-group">
           <label for="tagName" translate>Tag Name</label>
-          <input type="text" class="form-control" id="tagName" required ng-focus ng-model="smtcTag.name">
-          <span class="input-group-addon"><span ng-show="smtcTag.name.length && form.name.$focused">{{15 - smtcTag.name.length}}</span></span>
+          <input type="text" class="form-control" id="tagName" required maxlength="15" ng-model="smtcTag.name">
+          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{15 - smtcTag.name.length}}</span></small>
+          <small class="input-group-addon"><span class="text-muted">
+            {{ "Please provide a name" | translate}}
+          </span></small>
         </div>
         <div class="form-group">
-          <div class="form-row">
-            <div class="col">
-              <label for="tagColor" translate>Tag Color</label>
-              <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
-            </div>
-            <div class="col">
-              <label for="tagHex">Tag Color Code</label>
-              <input type="text" class="form-control" id="tagHex" required ng-model="smtcTag.color">
-            </div>
-          </div>
+          <label for="tagColor" translate>Tag Color</label>
+          <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
+          <small class="text-muted">
+            A color must be specified.
+          </small>
         </div>
+
         <div class="form-group">
           <label for="tagDescription">Tag Description</label>
           <textarea class="form-control" id="tagDescription" rows="3" ng-model="smtcTag.description"></textarea>
