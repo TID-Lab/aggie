@@ -9,72 +9,74 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid" ng-show="reports">
-      <table class="table table-condensed">
-        <thead>
-        <tr>
-          <th scope="col" translate>Time</th>
-          <th scope="col" translate>Thumbnail</th>
-          <th scope="col" translate>Author</th>
-          <th scope="col" translate>Content</th>
-          <th scope="col" translate>Sources</th>
-          <th scope="col" translate>Tags</th>
-          <th scope="col" translate>Flagged</th>
-        </tr>
-        </thead>
-        <tbody class="table-bordered">
-        <tr ng-repeat="r in reports | orderBy:'-storedAt'"
-            ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
-          <td class="td--time">
-            <span class="badge badge-info">{{ r.storedAt | interval }} ago</span>
-            <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
-            <div>{{ r.storedAt | aggieDate:'date' }}</div>
-            <!--<p class="created"><span>{{ r | delay }}</span></p>-->
-          </td>
-          <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
-            <div ng-repeat="media in r.metadata.mediaUrl">
-              <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
-                <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
-              </a>
-            </div>
-          </td>
-          <td class="author" ng-class="{ strong: !isRead(r) }">
+      <div class="table-responsive">
+        <table class="table table-condensed">
+          <thead>
+          <tr>
+            <th scope="col" translate>Time</th>
+            <th scope="col" translate>Thumbnail</th>
+            <th scope="col" translate>Author</th>
+            <th scope="col" translate>Content</th>
+            <th scope="col" translate>Sources</th>
+            <th scope="col" translate>Tags</th>
+            <th scope="col" translate>Flagged</th>
+          </tr>
+          </thead>
+          <tbody class="table-bordered">
+          <tr ng-repeat="r in reports | orderBy:'-storedAt'"
+              ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+            <td class="td--time">
+              <span class="badge badge-info">{{ r.storedAt | interval }} ago</span>
+              <div class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</div>
+              <div>{{ r.storedAt | aggieDate:'date' }}</div>
+              <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+            </td>
+            <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
+              <div ng-repeat="media in r.metadata.mediaUrl">
+                <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
+                  <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
+                </a>
+              </div>
+            </td>
+            <td class="author" ng-class="{ strong: !isRead(r) }">
               <span class="text-wrap">
                 {{ r.author }}
               </span>
-          </td>
-          <td class="content" ng-class="{ strong: !isRead(r) }">
-            <a href="/reports/{{r._id}}">
-              <p class="text-wrap"> {{ (r.content || '[No Content]') | stripHtml }} </p>
-              <p class="text-wrap shared-content" ng-if="r.metadata.description">
-                {{r.metadata.description | stripHtml}}
-              </p>
-            </a>
-          </td>
-          <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
-            <div class="icon-left" ng-class="sourceClass(r)">
-            </div>
-            <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
+            </td>
+            <td class="content" ng-class="{ strong: !isRead(r) }">
+              <a href="/reports/{{r._id}}">
+                <p class="text-wrap"> {{ (r.content || '[No Content]') | stripHtml }} </p>
+                <p class="text-wrap shared-content" ng-if="r.metadata.description">
+                  {{r.metadata.description | stripHtml}}
+                </p>
+              </a>
+            </td>
+            <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
+              <div class="icon-left" ng-class="sourceClass(r)">
+              </div>
+              <span ng-repeat="s in r._sources" class="source text-wrap pb-2">
                 {{ sourcesById[s].nickname || '[Deleted]' }}
               </span>
-          </td>
-          <td class="tags text-center">
-            <tags class="tagify readonly" tabindex="-1">
-              <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                   class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
-                <div>
-                  <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
-                </div>
-              </tag>
-            </tags>
-          </td>
-          <td class="flagged text-center">
-            <div class="fa pointer td__flags" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
-                 ng-click="currentUser.can('edit data') && toggleFlagged(r)">
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+            </td>
+            <td class="tags text-center">
+              <tags class="tagify readonly" tabindex="-1">
+                <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                     class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                  <div>
+                    <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                  </div>
+                </tag>
+              </tags>
+            </td>
+            <td class="flagged text-center">
+              <div class="fa pointer td__flags" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'"
+                   ng-click="currentUser.can('edit data') && toggleFlagged(r)">
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any incidents. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new incident' | translate}}</button>.</p>
     <div class="container-fluid" ng-show="incidents">

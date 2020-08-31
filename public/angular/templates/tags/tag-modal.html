@@ -21,7 +21,7 @@
           <div class="form-row">
             <div class="col">
               <label for="tagColor" translate>Tag Color</label>
-              <input type="text" class="basic form-control" id="tagColor" required ng-model="smtcTag.color">
+              <input type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
             </div>
             <div class="col">
               <label for="tagHex">Tag Color Code</label>
@@ -42,7 +42,7 @@
   </div>
 </div>
 <script>
-  $(".basic").spectrum({
+  $("#tagColor").spectrum({
     showPaletteOnly: true,
     togglePaletteOnly: true,
     togglePaletteMoreText: 'more',

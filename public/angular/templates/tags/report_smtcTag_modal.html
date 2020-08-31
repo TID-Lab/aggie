@@ -1,5 +1,4 @@
 <div ng-controller="SMTCTagSelectModalController">
-
   <div class="modal-header">
     <h5 class="modal-title">
       Edit Report Tags
@@ -75,10 +74,11 @@
         </tbody>
       </table>
     </div>
-    <div ng-hide="smtcTags" ng-if="currentUseselectedReport.can('edit tags')">
-      <p class="info">{{"Sorry, but we couldn't find any tags. You can" | translate}}
-        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create($scope.selectedReport)">{{'create a new tag' | translate}}</button>.
-      </p>
+    <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
+      <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
+      </span>
+      <a ui-sref="tags" ng-click="close()"> tag page </a>
+      <span>{{ "under settings." | translate}}</span>
     </div>
     <div class="container-fluid" ng-show="smtcTags">
       <form>

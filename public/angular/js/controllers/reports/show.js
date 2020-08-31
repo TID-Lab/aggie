@@ -22,16 +22,18 @@ angular.module('Aggie')
     $scope.incidentsById = {};
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
+    $scope.smtcTagsById = {};
 
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
       Socket.on('stats', updateStats);
       Socket.join('stats');
-      console.log($scope.currentPath);
       if ($scope.currentPath === 'report') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
       }
+
     };
     var updateStats = function(stats) {
       $scope.stats = stats;

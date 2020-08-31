@@ -12,7 +12,6 @@ angular.module('Aggie')
   'SMTCTag',
   'FlashService',
   function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, SMTCTag, flash) {
-
     $scope.setIncident = function(reports) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({

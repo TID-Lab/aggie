@@ -20,7 +20,7 @@ angular.module('Aggie')
         windowClass: 'report-to-existing',
         size: 'xl',
         controller: 'SMTCTagSelectModalInstanceController',
-        templateUrl: 'templates/tags/report_smtcTag_modal.html',
+        templateUrl: '/templates/tags/report_smtcTag_modal.html',
         resolve: {
           smtcTags: ['SMTCTag', function(SMTCTag) {
             return SMTCTag.query().$promise;

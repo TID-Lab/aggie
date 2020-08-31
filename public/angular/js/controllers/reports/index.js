@@ -421,7 +421,6 @@ angular.module('Aggie')
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
       var ids = getIds(addSMTCTag(items, smtcTag));
-      console.log(ids)
       Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
     };
 
@@ -453,8 +452,6 @@ angular.module('Aggie')
      * @param {SMTCTag} smtcTag
      */
     $scope.removeTagFromReport = function(report, smtcTag) {
-      console.log(smtcTag);
-      console.log(report.smtcTags);
       report.smtcTags.splice(report.smtcTags.findIndex(function(tag) {return tag === smtcTag}), 1);
       Report.removeSMTCTag({ids: [report._id], smtcTag: smtcTag});
     }

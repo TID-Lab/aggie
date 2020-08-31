@@ -80,7 +80,6 @@ angular.module('Aggie')
       };
 
       $scope.save = function(form) {
-        console.log("Hello");
         if (form.$invalid) {
           $scope.showErrors = true;
           return;
