@@ -89,6 +89,9 @@ angular.module('Aggie')
 
       $scope.spectrumify = function() {
         angular.element("#tagColor").spectrum({
+          color: $scope.smtcTag.color,
+          allowEmpty: true,
+          showInput: true,
           showPaletteOnly: true,
           togglePaletteOnly: true,
           togglePaletteMoreText: 'more',

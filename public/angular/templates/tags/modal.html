@@ -16,18 +16,17 @@
           <label for="tagName" translate>Tag Name</label>
           <input type="text" class="form-control" id="tagName" required maxlength="15" ng-model="smtcTag.name">
           <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{15 - smtcTag.name.length}}</span></small>
-          <small class="input-group-addon"><span class="text-muted">
+          <small ng-show="!smtcTag.name.length && showErrors" class="input-group-addon"><span class="text-muted">
             {{ "Please provide a name" | translate}}
           </span></small>
         </div>
         <div class="form-group">
           <label for="tagColor" translate>Tag Color</label>
           <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
-          <small class="text-muted">
+          <small ng-show="!smtcTag.color.length && showErrors" class="text-muted">
             A color must be specified.
           </small>
         </div>
-
         <div class="form-group">
           <label for="tagDescription">Tag Description</label>
           <textarea class="form-control" id="tagDescription" rows="3" ng-model="smtcTag.description"></textarea>
