@@ -19,13 +19,14 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTagsmediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.sources = sources;
     $scope.sourcesById = {};
+    $scope.smtcTags = smtcTags;
     $scope.mediaOptions = mediaOptions;
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.pageType = 'show-incident';

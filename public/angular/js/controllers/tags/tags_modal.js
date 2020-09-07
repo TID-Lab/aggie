@@ -29,12 +29,13 @@ angular.module('Aggie')
           templateUrl: '/templates/tags/modal.html',
           resolve: {
             smtcTag: function() {
-              return smtcTag;
+              return {_id: smtcTag._id, name: smtcTag.name, color: smtcTag.color, description: smtcTag.description };
             }
           }
         });
         modalInstance.result.then(function(smtcTag) {
           flash.setNoticeNow('smtcTag.update.success');
+          console.log(smtcTag);
           angular.forEach($scope.smtcTags, function(s, i) {
             if (s._id === smtcTag._id) {
               $scope.smtcTags[i] = smtcTag;
@@ -56,6 +57,7 @@ angular.module('Aggie')
     'shared',
     function($scope, $rootScope, $modalInstance, $translate, smtcTag, SMTCTag) {
       $scope.smtcTag = angular.copy(smtcTag);
+      console.log($scope.smtcTag)
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
@@ -66,8 +68,9 @@ angular.module('Aggie')
         }
       }
 
-      var handleSuccess = function() {
+      var handleSuccess = function(response) {
         $scope.smtcTag.user = $scope.currentUser;
+        if (response._id) $scope.smtcTag._id = response._id;
         $modalInstance.close($scope.smtcTag);
       };
 
