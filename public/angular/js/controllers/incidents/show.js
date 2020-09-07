@@ -9,6 +9,7 @@ angular.module('Aggie')
   'incident',
   'reports',
   'sources',
+  'smtcTags',
   'mediaOptions',
   'Queue',
   'paginationOptions',
@@ -19,7 +20,7 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTagsmediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -27,6 +28,7 @@ angular.module('Aggie')
     $scope.sources = sources;
     $scope.sourcesById = {};
     $scope.smtcTags = smtcTags;
+    $scope.smtcTagsById = {};
     $scope.mediaOptions = mediaOptions;
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.pageType = 'show-incident';
@@ -53,7 +55,7 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
-
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
       Socket.on('stats', updateStats);
       Socket.join('stats');
       // if (!$scope.currentUser) {

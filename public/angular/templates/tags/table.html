@@ -10,9 +10,9 @@
   </thead>
   <tbody class="table-bordered table-condensed">
     <tr ng-repeat="smtcTag in smtcTags">
-      <th class="content"><strong><h6>{{ smtcTag.name }}</h6></strong></th>
+      <th ng-click="logTag(smtcTag)" class="content"><strong><h6>{{ smtcTag.name }}</h6></strong></th>
       <td>
-        <input type="text" class="form-control" ng-style="{'background-color': smtcTag.color}" disabled/>
+        <input type="text" class="form-control" ng-style="{'background-color': smtcTag.color}"disabled/>
       </td>
       <td ng-if="currentUser.can('view other users')">
         {{smtcTag.user.username}}

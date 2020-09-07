@@ -35,7 +35,6 @@ angular.module('Aggie')
         });
         modalInstance.result.then(function(smtcTag) {
           flash.setNoticeNow('smtcTag.update.success');
-          console.log(smtcTag);
           angular.forEach($scope.smtcTags, function(s, i) {
             if (s._id === smtcTag._id) {
               $scope.smtcTags[i] = smtcTag;
@@ -57,7 +56,6 @@ angular.module('Aggie')
     'shared',
     function($scope, $rootScope, $modalInstance, $translate, smtcTag, SMTCTag) {
       $scope.smtcTag = angular.copy(smtcTag);
-      console.log($scope.smtcTag)
       $scope.showErrors = false;
       $scope.message = '';
       $scope.model = { showPassword: false };
@@ -93,6 +91,7 @@ angular.module('Aggie')
       $scope.spectrumify = function() {
         angular.element("#tagColor").spectrum({
           color: $scope.smtcTag.color,
+          preferredFormat: "hex",
           allowEmpty: true,
           showInput: true,
           showPaletteOnly: true,

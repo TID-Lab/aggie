@@ -11,7 +11,7 @@
     </div>
     <div class="col-lg-9">
       <div class="card">
-        <div class="card-header card__header d-flex justify-content-between" ng-class="report.flagged ? 'bg-flagged' : 'bg-gray'">
+        <div class="card-header d-flex justify-content-between" ng-class="report.flagged ? 'bg-flagged' : 'card__header'">
           <h4 class="card-title mb-0">Report Details</h4>
           <div class="btn-group" role="group" aria-label="Flag/Unflag Buttons">
             <button type="button" class="btn btn-light" ng-disabled="!report.flagged" ng-click="toggleFlagged(false)">
