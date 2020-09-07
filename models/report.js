@@ -31,7 +31,6 @@ var schema = new Schema({
 
 // Add fulltext index to the `content` field.
 schema.index({ content: 'text' });
-
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;
