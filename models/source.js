@@ -37,6 +37,7 @@ var sourceSchema = new mongoose.Schema({
   events: { type: Array, default: [] },
   unreadErrorCount: { type: Number, default: 0 },
   lastReportDate: Date,
+  lastReportDateSavedSearch: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] }
 });
