@@ -66,6 +66,10 @@ Again, see below for automated installation.
 1. (optional) **JRE**
     - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
     - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+1. (optional) **Python** (requires >= 2.7) 
+    - Python 2.7 is required to use the hate speech classifier (presently only available for Burmese language).
+    - Python 2.7 is required because one of the dependencies ([Burmese Language Tools](https://github.com/MyanmarOnlineAdvertising/myanmar_language_tools)) for segmenting Burmese text is written in Python 2.7.
+
 
 ### Installation notes
 
@@ -83,6 +87,7 @@ Again, see below for automated installation.
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
+1. Install all python dependencies for hate-speech-api using `pip install -r requirements.txt` in the `hate-speech-api` directory. Start python hate-speech server using `python2 hate_speech_clf_api.py`. In `config/secrets.json`, set the `detectHateSpeech` parameter to `true`. The API will run on `http://localhost:5000`. User will never directly interact with this API.
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
 1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
@@ -165,12 +170,23 @@ nvm install && npm install
 
 cp config/secrets.json.example config/secrets.json
 # User input: Customize Aggie settings per the README instructions.
-# This includes adding your SMTP email server credentials.
+# This includes adding your SMTP email server credentials, detectHateSpeech option etc.
 $EDITOR config/secrets.json
 
 # User input: Get CrowdTangle sources per the README instructions, if using them.
 # Otherwise:
 echo "{}" > config/crowdtangle_list.json
+
+# if detectHateSpeech is set to true, then run the python 2 hate-speech-api
+cd hate-speech-api
+#install python dependencies. 
+pip install -r requirements.txt
+# if the above command doesn't work, use
+python2 -m pip install -r requirements.txt
+
+#Start the hate-speech-api server
+python2 hate_speech_clf_api.py
+
 
 # Ready! Test run:
 npm start
@@ -242,6 +258,9 @@ npx pm2 restart aggie # Serve the new version
     1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
     1. start Aggie on the test database with `npm run testrun`
     1. run protractor with `npm run protractor-with-apis`
+1. To verify if the CRON job for updating Account Ids <-> Crowdtangle List Names and Saved Searches works
+    1. Empty the contents of config/crowdtangle_list.json.
+    1. Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
 
 ## Project Configuration
 
