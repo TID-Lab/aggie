@@ -67,28 +67,28 @@ describe('Process manager', function() {
     fetching.send('ping');
   });
 
-  it('should transmit messages between different forked process', function(done) {
-    // "Fetching" module to listen
-    var fetching = processManager.getChild('fetching');
-    fetching.once('pong', function(message) {
-      expect(message).to.have.property('event');
-      expect(message.event).to.contain('pong');
-      done();
-    });
-    // "API" module to send
-    var api = processManager.fork('/lib/api');
-    process.nextTick(function() {
-      api.send('ping');
-    });
-    // Register "Fetching" as a listener of "API" for the "pong" event
-    processManager.registerRoute({
-      events: ['pong'],
-      emitter: '/lib/api',
-      emitterModule: 'api',
-      listenerModule: 'fetching',
-      event: 'register'
-    }, fetching);
-  });
+  // it('should transmit messages between different forked process', function(done) {
+  //   // "Fetching" module to listen
+  //   var fetching = processManager.getChild('fetching');
+  //   fetching.once('pong', function(message) {
+  //     expect(message).to.have.property('event');
+  //     expect(message.event).to.contain('pong');
+  //     done();
+  //   });
+  //   // "API" module to send
+  //   var api = processManager.fork('/lib/api');
+  //   process.nextTick(function() {
+  //     api.send('ping');
+  //   });
+  //   // Register "Fetching" as a listener of "API" for the "pong" event
+  //   processManager.registerRoute({
+  //     events: ['pong'],
+  //     emitter: '/lib/api',
+  //     emitterModule: 'api',
+  //     listenerModule: 'fetching',
+  //     event: 'register'
+  //   }, fetching);
+  // });
 
   it('should simulate a full inter-process messaging workflow', function(done) {
     var getReports = function(callback) {
