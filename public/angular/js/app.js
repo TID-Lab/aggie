@@ -5,8 +5,6 @@ require('./ui-bootstrap-0.12.0');
 require('./ui-bootstrap-tpls-custom');
 require('./angular-resource');
 require('./jquery.sparkline');
-require('../vendor/select2/select2');
-require('../vendor/select2/ui-select2');
 require('./loading-bar.min');
 require('angular-translate');
 require('angular-translate-loader-static-files');
@@ -14,7 +12,7 @@ require('angular-translate-handler-log');
 require('angular-cookies');
 
 angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
-  'pascalprecht.translate', 'ui.select2', 'ngSanitize', 'ngAutocomplete',
+  'pascalprecht.translate', 'ngSanitize', 'ngAutocomplete',
   'angular-loading-bar', 'ngCookies'])
 
 .config(['$urlRouterProvider', '$locationProvider',
@@ -98,6 +96,7 @@ require('./services/trend_fetching');
 require('./services/map');
 require('./services/batch');
 require('./services/tags');
+require('./services/smtcTag');
 
 // Controllers
 require('./controllers/application');
@@ -120,6 +119,9 @@ require('./controllers/settings/email_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');
+require('./controllers/tags/index');
+require('./controllers/tags/tags_modal');
+require('./controllers/tags/report_tags_modal');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');

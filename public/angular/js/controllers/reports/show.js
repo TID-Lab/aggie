@@ -13,22 +13,27 @@ angular.module('Aggie')
   'Report',
   'Incident',
   'Tags',
+  'smtcTags',
   'Socket',
   '$translate',
-  function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident, Tags, Socket, $translate) {
-  $scope.incidents = incidents.results;
-  $scope.incidentsById = {};
-  $scope.currentPath = $rootScope.$state.current.name;
+  function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident,
+           Tags, smtcTags, Socket, $translate) {
+    $scope.incidents = incidents.results;
+    $scope.incidentsById = {};
+    $scope.currentPath = $rootScope.$state.current.name;
+    $scope.smtcTags = smtcTags;
+    $scope.smtcTagsById = {};
 
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
       Socket.on('stats', updateStats);
       Socket.join('stats');
-      console.log($scope.currentPath);
       if ($scope.currentPath === 'report') {
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
       }
+
     };
     var updateStats = function(stats) {
       $scope.stats = stats;
@@ -73,7 +78,7 @@ angular.module('Aggie')
     $scope.saveFlaggedReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that report couldn't be flagged/unflagged for some reason");
+        flash.setAlertNow("Sorry, but that report couldn't be flagged/unflagged.");
       });
     };
 
@@ -85,6 +90,10 @@ angular.module('Aggie')
     $scope.$back = function() {
       $window.history.back();
     };
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
 
     $scope.$on('$destroy', function() {
       Socket.leave('reports');

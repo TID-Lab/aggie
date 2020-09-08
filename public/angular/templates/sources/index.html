@@ -4,14 +4,13 @@
     <div class="col"></div>
     <div class="col-lg-9">
       <div class="card">
-        <div class="card-header">
-          <div class="btn-toolbar float-right">
-            <button type="button" class="btn btn-info" ng-controller="SourceFormModalController"
-                    ng-show="currentUser.can('edit data')" ng-click="create()" translate>
-              <span class="mr-2" translate>Add Source</span>
-              <i class="fa fa-flag-o" aria-hidden="true"></i>
-            </button>
-          </div>
+        <div class="card-header card__header d-flex justify-content-between">
+          <h4 class="card-title mb-0">Sources</h4>
+          <button type="button" class="btn btn-info" ng-controller="SourceFormModalController"
+                  ng-show="currentUser.can('edit data')" ng-click="create()" translate>
+            <span class="mr-2" translate>Add Source</span>
+            <i class="fa fa-flag-o" aria-hidden="true"></i>
+          </button>
         </div>
         <p ng-hide="sources.length > 0" translate>Sorry, but we couldn't find any sources.</p>
         <div ng-include="'/templates/sources/table.html'"></div>

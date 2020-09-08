@@ -10,7 +10,6 @@ angular.module('Aggie')
   'Socket',
   function($scope, $rootScope, flash, sources, Source, Tags, Socket) {
     $scope.sources = sources;
-
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');
@@ -52,6 +51,11 @@ angular.module('Aggie')
     });
 
     $scope.tagsToString = Tags.tagsToString;
+
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
     init();
   }
 ]);

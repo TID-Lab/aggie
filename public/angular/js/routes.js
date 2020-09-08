@@ -66,6 +66,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -84,6 +87,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -117,6 +123,9 @@ angular.module('Aggie')
         }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -164,6 +173,9 @@ angular.module('Aggie')
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -197,6 +209,17 @@ angular.module('Aggie')
       resolve: {
         users: ['User', function(User) {
           return User.query().$promise;
+        }]
+      }
+    });
+
+    $stateProvider.state('tags', {
+      url: '/tags',
+      templateUrl: '/templates/tags/index.html',
+      controller: 'TagsIndexController',
+      resolve: {
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });

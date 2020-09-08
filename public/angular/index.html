@@ -12,21 +12,27 @@
     <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.3/video-js.css"/>
     <link rel="stylesheet" href="/css/app.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2@2.0.0/dist/spectrum.min.css">
     <link rel="stylesheet" href="/css/loading-bar.min.css"/>
+    <link rel="stylesheet" href="/css/tagify.css"/>
+    <link rel="stylesheet" href="/css/spectrum.min.css"/>
   </head>
   <body ng-controller="ApplicationController">
-    <div id="wrapper">
+    <div id="wrapper" class="bg-gray">
       <ng-include src="'/templates/navbar.html'"></ng-include>
       <div class="main">
         <div ui-view></div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCKWNAAWPW7HgDDEyRhUq0xasr1EO2P76M"></script>
         <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
         <script src="/js/moment-with-locales.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/tagify.min.js"></script>
+        <script src="/js/jQuery.tagify.min.js"></script>
+        <script src="/js/spectrum.js"></script>
         <script src="/js/Autolinker.min.js"></script>
         <script src="/js/canvasjs.min.js"></script>
         <script src="/js/app.min.js"></script>

@@ -15,7 +15,7 @@
         <fieldset>
           <div class="form-group">
             <label for="username" class="control-label" translate>Username</label>
-            <input id="username" name="username" type="text" class="form-control" ng-model="user.username" maxlength="15" required aggieusername ng-focus>
+            <input id="username" type="text" class="form-control" ng-model="user.username" maxlength="15" required aggieusername ng-focus>
             <span class="input-group-addon"><span ng-show="user.username.length && form.username.$focused">{{15 - user.username.length}}</span></span>
           </div>
 

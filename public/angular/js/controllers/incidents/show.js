@@ -9,6 +9,7 @@ angular.module('Aggie')
   'incident',
   'reports',
   'sources',
+  'smtcTags',
   'mediaOptions',
   'Queue',
   'paginationOptions',
@@ -19,13 +20,15 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.sources = sources;
     $scope.sourcesById = {};
+    $scope.smtcTags = smtcTags;
+    $scope.smtcTagsById = {};
     $scope.mediaOptions = mediaOptions;
     $scope.visibleReports = new Queue(paginationOptions.perPage);
     $scope.pageType = 'show-incident';
@@ -52,7 +55,7 @@ angular.module('Aggie')
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
-
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
       Socket.on('stats', updateStats);
       Socket.join('stats');
       // if (!$scope.currentUser) {
@@ -142,7 +145,7 @@ angular.module('Aggie')
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
-        flash.setAlertNow("Sorry, but that report couldn't be saved for some reason");
+        flash.setAlertNow("Sorry, but that report couldn't be saved.");
       });
     };
 
@@ -181,9 +184,16 @@ angular.module('Aggie')
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };
+
     $scope.$back = function() {
       $window.history.back();
     };
+
+    $scope.$on('$destroy', function() {
+      Socket.leave('stats');
+      Socket.removeAllListeners('stats');
+    });
+
     $scope.tagsToString = Tags.tagsToString;
 
     $scope.$on('$destroy', function() {

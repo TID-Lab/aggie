@@ -1,0 +1,30 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col" translate>Tag Name</th>
+    <th scope="col" translate>Color</th>
+    <th scope="col" translate ng-if="currentUser.can('view other users')">Created By</th>
+    <th scope="col" translate>Description</th>
+    <th scope="col" translate ng-if="currentUser.can('edit tags')">Edit or Delete</th>
+  </tr>
+  </thead>
+  <tbody class="table-bordered table-condensed">
+    <tr ng-repeat="smtcTag in smtcTags">
+      <th ng-click="logTag(smtcTag)" class="content"><strong><h6>{{ smtcTag.name }}</h6></strong></th>
+      <td>
+        <input type="text" class="form-control" ng-style="{'background-color': smtcTag.color}"disabled/>
+      </td>
+      <td ng-if="currentUser.can('view other users')">
+        {{smtcTag.user.username}}
+      </td>
+      <td>
+        <textarea class="form-control" rows="3" disabled placeholder="No description provided." ng-bind="smtcTag.description"></textarea>
+      </td>
+      <td ng-if="currentUser.can('edit tags')">
+        <div ng-controller="SMTCTagFormModalController" class="fa fa-pencil text-blue td__edit" ng-click="edit(smtcTag)"></div>
+        <div class="fa fa-trash text-blue td__delete" aggie-confirm="{{ 'Are you sure you want to delete this tag?' | translate }}" on-confirm="deleteSMTCTag(smtcTag)"></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

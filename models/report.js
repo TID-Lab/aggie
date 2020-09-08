@@ -5,6 +5,9 @@
 var database = require('../lib/database');
 var mongoose = database.mongoose;
 var Schema = mongoose.Schema;
+var SchemaTypes = mongoose.SchemaTypes;
+var logger = require('../lib/logger');
+var SMTCTag = require('../models/tag');
 
 var schema = new Schema({
   authoredAt: Date,
@@ -15,6 +18,7 @@ var schema = new Schema({
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
+  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
@@ -27,7 +31,6 @@ var schema = new Schema({
 
 // Add fulltext index to the `content` field.
 schema.index({ content: 'text' });
-
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;
@@ -70,7 +73,60 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
+schema.methods.addSMTCTag = function(smtcTagId) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to add (if it doesn't exists) then remove it.
+  let isRepeat = false;
+  this.smtcTags.forEach(function(tag) {
+    if(smtcTagId === tag.toString()) {
+      isRepeat = true;
+    }
+  });
+  if (isRepeat === false) {
+    this.smtcTags.push({_id: smtcTagId});
+  }
+  return smtcTagId;
+}
+
+schema.methods.removeSMTCTag = function(smtcTagId) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to remove (if it exists) then remove it.
+  if (this.smtcTags) {
+    let fndIndex = -1;
+    this.smtcTags.forEach(function(tag, index) {
+      let string = tag.toString();
+      if (smtcTagId === tag.toString()) {
+        fndIndex = index;
+      }
+    })
+    if (fndIndex !== -1) {
+      this.smtcTags.splice(fndIndex, 1);
+    }
+  }
+  return smtcTagId;
+}
+
+schema.methods.clearSMTCTags = function() {
+  this.smtcTags = [];
+}
+
 var Report = mongoose.model('Report', schema);
+
+SMTCTag.schema.on('tag:removed', function(id) {
+  Report.find({smtcTags: id}, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
+    reports.forEach(function(report) {
+      var i = report.smtcTags.indexOf(id);
+      if (i > -1) {
+        report.smtcTags.splice(i, 1);
+        report.save();
+      }
+    });
+  });
+})
+
 
 // queryReports reports based on passed query data
 Report.queryReports = function(query, page, callback) {

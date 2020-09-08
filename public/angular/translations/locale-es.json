@@ -107,7 +107,7 @@
       "error": "Lo sentimos, pero no ha sido posible guardar el incidente,"
     }
   },
-  "Sorry, but that report couldn't be saved for some reason": "Lo sentimos, pero no ha sido posible guardar el informe.",
+  "Sorry, but that report couldn't be saved.": "Lo sentimos, pero no ha sido posible guardar el informe.",
   "No more unread reports found.": "No quedan más informes sin leer.",
   "You have been successfully logged out.": "Sesión cerrada con éxito.",
   "source": {

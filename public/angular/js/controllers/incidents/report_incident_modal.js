@@ -9,9 +9,9 @@ angular.module('Aggie')
   '$modalStack',
   'Incident',
   'Report',
+  'SMTCTag',
   'FlashService',
-  function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, flash) {
-
+  function($rootScope, $scope, $q, $location, $modal, $modalStack, Incident, Report, SMTCTag, flash) {
     $scope.setIncident = function(reports) {
       $modalStack.dismissAll();
       var modalInstance = $modal.open({
@@ -22,6 +22,12 @@ angular.module('Aggie')
         resolve: {
           incidents: ['Incident', function(Incident) {
             return Incident.query().$promise;
+          }],
+          smtcTags: ['SMTCTag', function(SMTCTag) {
+            return SMTCTag.query().$promise;
+          }],
+          sources: ['Source', function(Source) {
+            return Source.query().$promise;
           }],
           reports: function() {
             if (!reports) {
@@ -37,7 +43,6 @@ angular.module('Aggie')
         var ids = reports.map(function(report) {
           return report._id;
         });
-
         Report.linkToIncident({ ids: ids, incident: incidentId });
       });
     };
@@ -50,14 +55,32 @@ angular.module('Aggie')
   '$modalInstance',
   'incidents',
   'reports',
+  'sources',
+  'smtcTags',
+  'Report',
   'Tags',
   'Incident',
   'paginationOptions',
-  function($rootScope, $scope, $modalInstance, incidents, reports, Tags, Incident, paginationOptions) {
+  'FlashService',
+  function($rootScope, $scope, $modalInstance, incidents, reports, sources, smtcTags, Report, Tags, Incident, paginationOptions, flash) {
     $scope.reports = angular.copy(reports);
     $scope.incidents = incidents.results;
+    $scope.sources = sources;
+    $scope.sourcesById = {};
+    $scope.smtcTags = angular.copy(smtcTags);
+    $scope.smtcTagsById = {}
     $scope.modal = $modalInstance;
     $scope._showErrors = false;
+
+    var init = function() {
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.sourcesById = $scope.sources.reduce(groupById, {});
+    }
+
+    var groupById = function(memo, item) {
+      memo[item._id] = item;
+      return memo;
+    };
 
     $scope.select = function(incident) {
       // report._incident = incident._id;
@@ -106,6 +129,21 @@ angular.module('Aggie')
         });
     };
 
+    $scope.saveReport = function(report) {
+      Report.save({ id: report._id }, report, function() {
+      }, function() {
+        flash.setAlertNow("Sorry, but that report couldn't be saved.");
+      });
+    };
+
+    $scope.toggleFlagged = function(report) {
+      report.flagged = !report.flagged;
+      if (report.flagged) {
+        report.read = report.flagged;
+      }
+      $scope.saveReport(report);
+    };
+
     $scope.isFirstPage = function() {
       return $scope.pagination.page === 1;
     };
@@ -113,5 +151,26 @@ angular.module('Aggie')
     $scope.isLastPage = function() {
       return $scope.pagination.end === incidents.total;
     };
+
+    $scope.sourceClass = function(report) {
+      // Pick one of the sources that has a media type. For now, it happens that
+      // if a report has multiple sources, they all have the same type, or are
+      // deleted
+
+      if (report.metadata.platform === "Facebook") {
+        // set Facebook as source for CrowdTangle reports
+        return 'facebook-source';
+      } else {
+        for (var i = 0; i < report._sources.length; i++) {
+          var sourceId = report._sources[i];
+          var source = $scope.sourcesById[sourceId];
+          if (source && $scope.mediaOptions[source.media] !== -1) {
+            return source.media + '-source';
+          }
+        }
+        return 'unknown-source';
+      }
+    };
+    init();
   }
 ]);

@@ -1,8 +1,11 @@
-$navbar-green: #107C10;
+$navbar-green: #107c41;
 $navbar-yellow: #eaef92;
 $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
-$gray: #aaaaaa;
+$light-gray: #f5f6f7;
+$gray: #e9ebee;
+$input-gray: #ccd0d5;
+$input-bg-gray: #f2f3f5;
 $blue: #5bc0de;
 $normal-weight: normal; // This is what the bootstrap style uses.
 $medium-weight: 400; // Not quite bold.
@@ -12,10 +15,10 @@ $font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @import 'shared/forms';
 @import 'shared/navbar';
 @import 'shared/buttons';
-@import 'shared/bootstrap-overrides';
 @import 'components/modals';
 @import 'components/tables';
 @import 'components/tabs';
+@import 'components/tags';
 @import 'sections/trend-bars';
 @import 'sections/trend-lines';
 @import 'sections/profile';
@@ -30,44 +33,6 @@ html {
 
 .padding {
   padding: 10px;
-}
-
-.padding-top-bottom {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.padding-sm {
-  padding: 5px;
-}
-
-.margin-right {
-  margin-right: 10px;
-}
-
-.margin-left {
-  margin-left: 10px;
-}
-
-.margin-bottom-lg {
-  margin-bottom: 20px;
-}
-
-.toggle-switch {
-  display: inline-block;
-  font-size: 0;
-}
-
-.pagination {
-  margin-bottom: 0;
-}
-.pointer {
-  cursor: pointer;
-}
-
-.pager {
-  text-align: right;
-  margin: 0;
 }
 
 
@@ -96,7 +61,8 @@ html {
 }
 
 .bg-gray {
-  background-color: #eee;
+  // Same color as Bootstrap card-headers.
+  background-color: $gray;
 }
 
 .fetching {
@@ -108,6 +74,7 @@ html {
 }
 
 .alert {
+
   font-size: 16px;
   margin-bottom: 0px;
   h4 {
@@ -210,7 +177,7 @@ li.collapse, li.collapsing {
 }
 
 .container-main {
-  background-color: white;
+  background-color: #e9ebee;
 }
 
 footer {
@@ -227,3 +194,13 @@ footer {
     bottom: 12px;
   }
 }
+
+.card__header {
+  background-color: #f5f6f7;
+}
+
+.card__footer {
+  background-color: #f5f6f7;
+}
+
+

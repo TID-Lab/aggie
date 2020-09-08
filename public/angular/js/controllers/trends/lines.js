@@ -248,6 +248,7 @@ angular.module('Aggie')
       return enabled ? 'trend' : 'trend-disabled';
     };
 
+
     $scope.$on('$destroy', function() {
       Socket.removeAllListeners('trend');
       Socket.leave('stats');
