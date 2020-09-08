@@ -19,17 +19,17 @@ describe('Pull bot', function() {
     expect(pullBot).to.be.instanceOf(Bot);
   });
 
-  it('should tell content service to start streaming reports', function(done) {
-    var tries = 3;
-    pullBot.on('report', function(report_data) {
-      expect(report_data).to.have.property('content');
-      if (--tries === 0) {
-        pullBot.stop();
-        done();
-      }
-    });
-    pullBot.start();
-  });
+  // it('should tell content service to start streaming reports', function(done) {
+  //   var tries = 3;
+  //   pullBot.on('report', function(report_data) {
+  //     expect(report_data).to.have.property('content');
+  //     if (--tries === 0) {
+  //       pullBot.stop();
+  //       done();
+  //     }
+  //   });
+  //   pullBot.start();
+  // });
 
   after(utils.wipeModels([Source]));
   after(utils.expectModelsEmpty);

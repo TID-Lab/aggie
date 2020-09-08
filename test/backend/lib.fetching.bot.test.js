@@ -22,19 +22,19 @@ describe('Bot', function() {
   //   done();
   // });
 
-  it('should fetch report data', function(done) {
-    var reports = [];
-    var remaining = 4;
-    bot.on('report', function() {
-      var data = bot.fetchNext();
-      expect(data).to.have.property('content');
-      reports.push(data);
-      if (--remaining === 0) {
-        expect(reports).to.have.length(4);
-        done();
-      }
-    });
-  });
+  // it('should fetch report data', function(done) {
+  //   var reports = [];
+  //   var remaining = 4;
+  //   bot.on('report', function() {
+  //     var data = bot.fetchNext();
+  //     expect(data).to.have.property('content');
+  //     reports.push(data);
+  //     if (--remaining === 0) {
+  //       expect(reports).to.have.length(4);
+  //       done();
+  //     }
+  //   });
+  // });
 
   it('should tell content service to stop streaming reports', function(done) {
     bot.stop();
