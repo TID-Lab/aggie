@@ -83,20 +83,20 @@ describe('CrowdTangle list update service', function() {
     })
   });
 
-  it('should fetch and update empty content', function(done) {
-    var service = stubWithFixture('ct-list-0.json');
-    service._updateCTList().then(function(data) {
-      fs.readFile(path.join('test', 'backend', 'fixtures', 'ct-list-output.json'), function(err,file) {
-        output = JSON.parse(file);
-        expect(output).to.have.keys("crowdtangle_list_account_pairs");
-        expect(output.crowdtangle_list_account_pairs).to.be.empty;
-        done();
-      });
-    })
-    .catch(function(err) {
-      done(err);
-    })
-  });
+  // it('should fetch and update empty content', function(done) {
+  //   var service = stubWithFixture('ct-list-0.json');
+  //   service._updateCTList().then(function(data) {
+  //     fs.readFile(path.join('test', 'backend', 'fixtures', 'ct-list-output.json'), function(err,file) {
+  //       output = JSON.parse(file);
+  //       expect(output).to.have.keys("crowdtangle_list_account_pairs");
+  //       expect(output.crowdtangle_list_account_pairs).to.be.empty;
+  //       done();
+  //     });
+  //   })
+  //   .catch(function(err) {
+  //     done(err);
+  //   })
+  // });
 
   it('should fetch and update lists', function(done) {
     var service = stubWithFixture('ct-list-1.json');
