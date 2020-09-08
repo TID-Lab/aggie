@@ -15,12 +15,12 @@ describe('Bot', function() {
     expect(bot.contentService).to.be.instanceOf(ContentService);
   });
 
-  it('should tell content service to start streaming reports', function(done) {
-    bot.start();
-    expect(bot).to.have.property('enabled');
-    expect(bot.enabled).to.be.true;
-    done();
-  });
+  // it('should tell content service to start streaming reports', function(done) {
+  //   bot.start();
+  //   expect(bot).to.have.property('enabled');
+  //   expect(bot.enabled).to.be.true;
+  //   done();
+  // });
 
   it('should fetch report data', function(done) {
     var reports = [];

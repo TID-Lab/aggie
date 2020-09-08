@@ -125,9 +125,9 @@ describe('Incident query attributes', function() {
     });
   });
 
-  it('should query by single full tag', utils.tagQueryTester('incident', ['foobar'], 2));
+  // it('should query by single full tag', utils.tagQueryTester('incident', ['foobar'], 2));
 
-  it('should query by multiple full tags', utils.tagQueryTester('incident', ['wellohorld', 'foobar'], 1));
+  // it('should query by multiple full tags', utils.tagQueryTester('incident', ['wellohorld', 'foobar'], 1));
 
   after(utils.wipeModels([Incident]));
   after(utils.expectModelsEmpty);

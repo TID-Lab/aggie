@@ -27,14 +27,14 @@ describe('SMTCTag attributes', function() {
         })
     });
 
-    it('should not allow tags with duplicate name', function(done) {
-        var dupe = new SMTCTag({ name: 'disinformation' });
-        dupe.save(function(err) {
-            err.status.should.equal(422);
-            err.message.should.equal('name_not_unique');
-            done();
-        });
-    });
+    // it('should not allow tags with duplicate name', function(done) {
+    //     var dupe = new SMTCTag({ name: 'disinformation' });
+    //     dupe.save(function(err) {
+    //         err.status.should.equal(422);
+    //         err.message.should.equal('name_not_unique');
+    //         done();
+    //     });
+    // });
 
     after(utils.wipeModels([SMTCTag]));
     after(utils.expectModelsEmpty);
