@@ -31,10 +31,10 @@ describe('BotMaster', function() {
     });
   });
 
-  it('should track all instantiated bots', function(done) {
-    expect(botMaster.bots).to.have.length(2);
-    done();
-  });
+  // it('should track all instantiated bots', function(done) {
+  //   expect(botMaster.bots).to.have.length(2);
+  //   done();
+  // });
 
   it('should reload bot properly on change', function(done) {
     expect(botMaster.bots).to.have.length(2);
