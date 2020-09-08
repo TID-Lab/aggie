@@ -101,6 +101,105 @@ For example to flag the sixth report, you click on the *flag* in the last column
 
 ![Flagged](flagged.png)
 
+## Tags 
+A tag is a method of categorizing reports at an individual level. Whereas incidents allow for clusters of reports based whether reports require action, tags allow for categorization of reports based on a report's qualities. In order to create a tag, you must have permission to do so.
+
+### Creating Tags
+1.  Navigate to the Tags page of the Aggie platform in order to create/edit/delete tags.
+
+    ![Tags Page](tags_navigation.png)
+    
+2.  Click the **Create Tag** button in the heard of the Tags card.
+
+    ![Tags_Create_Button](tags_creation.png)
+    
+3.  Fill out tag name (this is what is shown as the tag). Tag names can be edited after creation and will be updated on any reports it was applied to. Tags can only be 15 characters long.
+
+    ![Tags_Form_Name](tags_form_name.png)
+    
+4.  Fill out tag color (this is what is shown as the tag's background color). Tag colors can be picked using the present color values or custom hex values. Tag color can be edited after creation and will be updated on any reports it was applied to.
+
+    ![Tags_Form_Color](tags_form_colors.png)
+    
+5.  Fill out optional tag description (this is not shown but helps trackers understand what a tag is used for). Tag description can also be edited after creation.
+
+    ![Tags_Form_Description](tags_form_description.png)
+6.  Click the **Submit** to finish creating your tag.
+
+### Deleting Tags
+Removing tags will cause them to be removed from the reports they are added to. *Do not remove tags that are still in use*. If a tag change must be made, edit the tag.
+1.  Navigate to the Tags page of the Aggie platform in order to delete tags. 
+
+    ![Tags Page](tags_navigation.png)
+    
+2.  Click the **Trash Icon** located within the same row of the tag you would like to delete. 
+
+    ![Tags_Delete_Button](tags_delete.png)
+    
+3.  You will receive a confirmation modal after you click the **Trash Icon**. Press the **Confirm** button to continue with deletion.
+
+    ![Tags_Delete_Confirm](tags_delete_confirm.png)
+    
+### Editing Tags
+Editing tags will cause an existing tag and all the Reports that contain that tag to update said existing tag. *This does not remove the tag from any reports*.  
+
+1.  Navigate to the Tags page of the Aggie platform in order to edit tags. 
+
+    ![Tags Page](tags_navigation.png)
+    
+2.  Click the **Pencil Icon** located within the same row of the tag you would like to edit. 
+
+    ![Tags_Edit_Button](tags_edit.png)
+    
+3.  The form that appears upon clicking should be populated with the tag's previous information.
+
+    ![Tags_Edit_Form](tags_edit_form.png)
+    
+4.  Fill the form with updated name/color/description. Then click submit to update the tag's properties.
+
+    ![Tags_Edit_Submit](tags_edit_submit.png)
+    
+### Adding/Removing Tags to Reports
+There are two methods of adding/removing tags to reports. Tags may be added to every report selected (similar to flagging multiple reports at once). The second method is adding tags to individual reports. 
+
+#### Method 1: Adding/Removing Tags to Many Reports
+
+1.  On the reports page (or the batch page), select the reports you would to add a tag to.
+
+    ![Tags_Report_Selection](tags_report_multiselect.png)
+    
+2.  Then click the tag button on the left sidebar of the tag that you would like to add to each report. These tags operate as toggles. If all selected reports have that tag, it will remove that tag from each report selected. If none or only some of the reports have that tag, it will add that tag to each report selected.
+    
+    ![Tags_Report_ToggleTags](tags_report_tags.png)
+   
+3.  This should add the tag to each Report that was selected. Clicking that tag button again will remove the tag from the selected reports.
+
+    ![Tags_Reports_Result](tags_reports_result.png)
+    
+#### Method 2: Adding/Removing Tags to a Single Report
+
+1.  On the reports page (or the batch page), click the **Edit** text of the report row and tags column of the report you would like to edit. This functionality can also be accessed through the report details page.
+
+    ![Tags_Report_Edit](tags_report_edit.png)
+    
+2.  The form that appears should have the selected report's information, and an input box to add and remove tags. Tags can be added by typing the full tag then pressing the **Enter** key, using autocomplete functionality, clicking tag dropdown options. Tags can be removed using the backspace key, clicking the **x** on each tag, or clearing all tags. None of these changes will take place until the **Submit** button has been pressed. 
+
+    ![Tags_Report_Edit_Form](tags_report_edit_form.png)
+    
+3.  Click the **Submit** Button to finalize changes to the report's tags.
+
+    ![Tags_Report_Edit_Submit](tags_report_edit_submit.png)
+    
+### Quick Removal of Tags on Single Report
+
+1.  On the reports page (or the batch page), click a tag on a report row to remove the tag from that report.
+
+    ![Tags_Report_Quick_Remove](tags_quickRemove.png)
+    
+2.  This will result in the removal of that tag from that report.
+
+    ![Tags_Quick_Remove_Result](tags_quickRemove_result.png)
+    
 ### Creating Incidents
 
 #### Adding a report to an existing Incident
