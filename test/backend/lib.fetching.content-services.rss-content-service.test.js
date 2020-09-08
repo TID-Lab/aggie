@@ -65,7 +65,7 @@ describe('RSS content service', function() {
   // });
 
 
-  
+
   // it('should avoid duplicates', function(done) {
   //   // Fetch first time.
   //   var service = stubWithFixture('rss-good-1.xml');
@@ -90,13 +90,13 @@ describe('RSS content service', function() {
   //       }
   //     });
 
-      // Give enough time for extra report to appear.
-      setTimeout(function() { if (fetched == 2) done(); }, 100);
+  //     // Give enough time for extra report to appear.
+  //     setTimeout(function() { if (fetched == 2) done(); }, 100);
 
-      // Run second fetch.
-      service.fetch({ maxCount: 50 }, function() {});
-    });
-  });
+  //     // Run second fetch.
+  //     service.fetch({ maxCount: 50 }, function() {});
+  //   });
+  // });
 
   it('should emit warnings for missing data', function(done) {
     var service = stubWithFixture('rss-bad.xml');
