@@ -26,12 +26,12 @@ module.exports = function(karma) {
       moduleName: 'aggie.templates'
     },
 
-    // browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
     // Possible values: karma.LOG_DISABLE, karma.LOG_ERROR, karma.LOG_WARN,
     // karma.LOG_INFO, karma.LOG_DEBUG
     logLevel: karma.LOG_INFO,
-    singleRun: false,
+    singleRun: true,
     autoWatch: true,
 
     browserify: {
