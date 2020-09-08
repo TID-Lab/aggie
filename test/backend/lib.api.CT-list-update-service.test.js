@@ -7,9 +7,9 @@ var CTListUpdateService = require('../../lib/api/CT-list-update-service');
 // Stubs the _httpRequest method of the content service to return the data in the given fixture file.
 function stubWithFixture(fixtureFile, service) {
   // fixture to write all output to
-  var outputFixtureFile = path.join('../../test', 'backend', 'fixtures', 'ct-list-output.json');
+  CTListUpdateService.prototype.OUTPUT_DIR = path.join('../../test', 'backend', 'fixtures', 'ct-list-output.json');
   // If service is null, creates a CrowdTangleContentService
-  service = service || new CTListUpdateService({directory: outputFixtureFile});
+  service = service || new CTListUpdateService();
 
   // Make the stub function return the expected args (err, res, body).
   fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
@@ -41,7 +41,8 @@ function stubWithFixture(fixtureFile, service) {
 
 describe('CrowdTangle list update service', function() {
   it('should instantiate correct CrowdTangle list update service', function() {
-    var service = new CTListUpdateService({directory: '/'});
+    CTListUpdateService.prototype.OUTPUT_DIR = '/';
+    var service = new CTListUpdateService();
     expect(service).to.be.instanceOf(CTListUpdateService);
   });
 
