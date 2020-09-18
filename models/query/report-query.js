@@ -6,7 +6,7 @@ var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
 
-function ReportQuery(options) {
+function ReportQuery(options, list_pairs) {
   options = options || {};
   this.keywords = options.keywords;
 
@@ -23,6 +23,8 @@ function ReportQuery(options) {
   this.author = options.author;
   this.event = 'reports';
   this.tags = options.tags;
+  this.list = options.list;
+  this.list_pairs = list_pairs
 }
 
 _.extend(ReportQuery, Query);
@@ -41,49 +43,28 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
-    content: this.keywords,
     _sources: this.sourceId,
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,
     flagged: this.flagged,
-    tags: this.tags
-  };
-
+  }
   filter = _.omitBy(filter, _.isNil);
-
-  // Determine inclusive date filters
-  if (this.after || this.before) {
-    filter.storedAt = {};
-    if (this.after) filter.storedAt.$gte = this.after;
-    if (this.before) filter.storedAt.$lte = this.before;
+  if (this.before)    filter.storedAt = { $lte: this.before }
+  if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
+  if (this.author)    filter.author = { $regex: this.author, $options: 'i'}
+  if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
+  if (this.tags)      filter.tags = { $in: this.tags }
+  if (this.list) {
+    var listTags = Object.entries(this.list_pairs).reduce(function(acc, cur) {
+      return cur[1] === this.list ? acc.concat(cur[0]) : acc;
+    }.bind(this), [])
+    if (filter.tags) {
+      filter.tags.$in = Array.from(new Set(filter.tags.$in.concat(tags)));
+    } else {
+      filter.tags = { $in: listTags };
+    }
   }
-
-  // Return only newer results
-  if (this.since) {
-    filter.storedAt = filter.storedAt || {};
-    filter.storedAt.$gte = this.since;
-  }
-
-  // Determine author filter
-  if (this.author) {
-    filter.author = {};
-    // Using regex for the author filter so it can catch substrings ML2020
-    filter.author.$options = 'i';
-    filter.author.$regex = this.author//this.author.trim().split(/\s*,\s*/).sort());
-  }
-  if (this.tags) {
-    filter.tags.$options = 'i';
-    filter.tags.$regex = this.tags//{ $all: toRegexp.allCaseInsensitive(this.tags) };
-  } else delete filter.tags;
-
-  // Search by keyword
-  if (this.keywords) {
-    filter.content = {};
-    filter.content.$options = 'i';
-    filter.content.$regex = this.keywords;
-  }
-
   return filter;
 };
 

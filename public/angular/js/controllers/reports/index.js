@@ -1,3 +1,4 @@
+var crowdtangle_lists = require('../../../../../config/crowdtangle_list');
 angular.module('Aggie')
 .controller('ReportsIndexController', [
   '$state',
@@ -12,6 +13,7 @@ angular.module('Aggie')
   'incidents',
   'statusOptions',
   'linkedtoIncidentOptions',
+  'ctLists',
   'Report',
   'Incident',
   'Batch',
@@ -21,7 +23,7 @@ angular.module('Aggie')
   'paginationOptions',
   '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
-           mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
+           mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate) {
 
@@ -38,6 +40,7 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
+    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs)));
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
