@@ -25,85 +25,136 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="table-responsive">
-
-            <table class="table table-hover table-bordered table-striped detail-table">
-              <tbody>
-              <!----------------- General Report Information ----------------->
-              <tr>
-                <th scope="row" class="detail-key" translate>Content</th>
-                <td colspan="10" class="detail-value" ng-bind-html="report.content">{{ report.content }}</td>
-              </tr>
-              <tr ng-if="report.metadata.description">
-                <th scope="row" class="detail-key" translate>Shared Content</th>
-                <td colspan="10" class="detail-value" ng-bind-html="report.metadata.description">{{ report.metadata.description }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>Tags</th>
-                <td colspan="10" class="detail-value">
-                  <span ng-repeat="tag in report.tags">
-                    {{ tag + ', '}}
-                  </span>
-                  <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-                    <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
-                  </a>
-                  <tags class="tagify readonly" tabindex="-1">
-                    <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                         class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
-                      <div>
-                        <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
-                      </div>
-                    </tag>
-                  </tags>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>Author</th>
-                <td colspan="10" class="detail-value">
-                  <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
-                  <span ng-if="!report.metadata.accountUrl">{{ report.author }}</span>
-                </td>
-              </tr>
-              <th scope="row" class="detail-key" translate>Authored Time</th>
-              <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>Fetched Time</th>
-                <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>Stored Time</th>
-                <td colspan="10" class="detail-value">{{ report.storedAt | aggieDate:'datetime'}}</td>
-              </tr>
-              <tr ng-repeat="source in sources">
-                <th scope="row" class="detail-key" translate>Sources</th>
-                <td colspan="10" class="detail-value">{{ source.nickname }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>Linked Incident</th>
-                <td colspan="10" class="detail-value align-middle">
-                  <div class="text-center">
-                    <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
+          <div class="row">
+            <div class="col">
+              <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                  <tbody>
+                  <!----------------- General Report Information ----------------->
+                    <tr>
+                      <th scope="row" translate>Author</th>
+                      <td colspan="10" class="detail-value">
+                        <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
+                        <span ng-if="!report.metadata.accountUrl">{{ report.author }}</span>
+                      </td>
+                    </tr>
+                    <tr ng-if="report.metadata.subscriberCount">
+                      <th scope="row" translate>Subscriber Count</th>
+                      <td colspan="10">
+                        <span title="{{'Subscriber Count' | translate}}">
+                        {{report.metadata.subscriberCount}}
+                      </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="detail-key" translate>Authored Time</th>
+                      <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="detail-key" translate>URL</th>
+                      <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link</a></td>
+                    </tr>
+                    <tr ng-repeat="source in sources">
+                      <th scope="row" class="detail-key" translate>Sources</th>
+                      <td colspan="10" class="detail-value">{{ source.nickname }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="detail-key" translate>Fetched Time</th>
+                      <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="detail-key" translate>Linked Incident</th>
+                      <td colspan="10" class="detail-value align-middle">
+                        <div class="text-center">
+                          <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
                       <span ng-if="report._incident && incidentsById[report._incident]">
                         {{ incidentsById[report._incident].title }}
                       </span>
-                      <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Add</strong>
-                    </a>
-                    <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="detail-key" translate>URL</th>
-                <td colspan="10" class="detail-value"><a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a></td>
-              </tr>
-              </tbody>
-            </table>
-            <!-------------- Crowdtangle Specific Table Elements -------------->
-            <div ng-if="report.metadata.crowdtangleId" ng-include="'/templates/reports/content-services/crowd-tangle-show.html'"></div>
-            <div ng-if="report.metadata.tweetID" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>
+                            <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Add</strong>
+                          </a>
+                          <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th scope="row" class="detail-key" translate>Tags</th>
+                      <td colspan="10" class="detail-value">
+                          <span ng-repeat="tag in report.tags">
+                            {{ tag + ', '}}
+                          </span>
+                        <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
+                          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+                        </a>
+                        <tags class="tagify readonly" tabindex="-1">
+                          <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                               class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                            <div>
+                              <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                            </div>
+                          </tag>
+                        </tags>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h5 class="detail-key" translate>Content</h5>
+                <p class="detail-value" ng-bind-html="report.content">{{ report.content }}</p>
+                <p class="text-wrap content__shared" ng-if="report.metadata.description">
+                  {{report.metadata.description | stripHtml}}
+                </p>
+              </div>
+              <div ng-if="report.metadata.crowdtangleId" ng-include="'/templates/reports/content-services/crowd-tangle-show.html'"></div>
+            </div>
+            <div ng-if="report.metadata.mediaUrl" class="col">
+              <!-------------- Crowdtangle Specific Table Elements -------------->
+              <div ng-if="report.metadata.crowdtangleId">
+                <div ng-repeat="media in report.metadata.mediaUrl">
+                  <a id="reportMedia" ng-href="{{report.metadata.externalUrl}}" target="_blank"><img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}"></a>
+                </div>
+              </div>
+              <label ng-if="report.metadata.mediaUrl" for="reportMedia" title="{{'Content Type' | translate}}" ng-switch="report.metadata.type">
+                <span ng-switch-when="link">{{'Link' | translate}}</span>
+                <span ng-switch-when="native_video">{{'Native Video' | translate}}</span>
+                <span ng-switch-when="status">{{'Status' | translate}}</span>
+                <span ng-switch-when="photo">{{'Photo' | translate}}</span>
+                <span ng-switch-when="episode">{{'Episode' | translate}}</span>
+                <span ng-switch-when="extra_clip">{{'Extra Clip' | translate}}</span>
+                <span ng-switch-when="live_video">{{'Live Video' | translate}}</span>
+                <span ng-switch-when="live_video_complete">{{'Completed Live Video' | translate}}</span>
+                <span ng-switch-when="live_video_scheduled">{{'Scheduled Live Video' | translate}}</span>
+                <span ng-switch-when="trailer">{{'Trailer' | translate}}</span>
+                <span ng-switch-when="video">{{'Non-Native Video' | translate}}</span>
+                <span ng-switch-when="youtube">{{'Youtube Video' | translate}}</span>
+                <span ng-switch-default>{{'Unknown Type' | translate}}</span>
+              </label>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="card mt-2">
+        <div class="card-header d-flex justify-content-between">
+          <h4 class="card-title mb-0">Comments</h4>
+          <nav aria-label="Report list page navigation">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item"><label>
+                {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
+              </label></li>
+              <li class="list-inline-item">
+                <ul class="pagination">
+                  <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                    <a title="Previous Page" aria-label="Previous Page" class="page-link" ><i class="fa fa-chevron-left"></i></a>
+                  </li>
+                  <li class="page-item" ng-class="{disabled: isLastPage() }">
+                    <a title="Next Page" class="page-link"  ><i class="fa fa-chevron-right"></i></a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <p class="p-2" ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p>
+        <div ng-include="'/templates/reports/comments-table.html'"></div>
       </div>
     </div>
     <div class="col">
@@ -114,6 +165,7 @@
       </div>
     </div>
   </div>
+  <div class="row"></div>
   <div class="row mt-4">
     <div class="col text-center">
       <div class="d-lg-none">

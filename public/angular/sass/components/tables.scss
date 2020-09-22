@@ -22,12 +22,8 @@
         }
         &.tag {
         }
-        &.author {
+        &.td__sourceInfo {
           max-width: 100px;
-        }
-        &.td--time {
-          min-width: 56px;
-          max-width: 60px;
         }
       }
     }
@@ -125,7 +121,7 @@ tbody {
     }
 
 }
-.source {
+.td__source {
   .icon-left {
     width: 33px;
     height: 33px;
@@ -194,11 +190,6 @@ table, .table {
       position: relative;
     }
 
-    .fa {
-      font-size: 16px;
-      padding: 3px;
-    }
-
   }
   a {
     color: $link-blue;
@@ -257,11 +248,10 @@ table, .table {
   vertical-align: middle;
 }
 
-td.content {
+.td__content {
   height: 100% !important;
   max-width: 400px;
   a {
-    color: #000;
     height: 100%;
     width: 100%;
     display: inline-block;
@@ -320,8 +310,19 @@ td {
   max-width: 180px;
 }
 
-.td__flags {
+.td__flag {
   cursor: pointer;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.flag__icon {
+  padding: 5px;
+  background-color: #dee2e6;
+  border-bottom: 2px solid #dee2e6;
+  border-left: 2px solid #dee2e6;
+  border-bottom-left-radius: 5px;
 }
 
 .td__edit {
@@ -334,4 +335,50 @@ td {
 
 tag.tr__tag {
   --tags-border-color: transparent;
+}
+
+.td__incident {
+  position: relative;
+}
+
+.content__shared {
+  border-left: 3px solid #4e5d6c;
+  padding: 0px 10px;
+  margin: 0 0 21px;
+  color: #575757;
+}
+
+.content__comment {
+  border-left: 3px solid #4e5d6c;
+  padding: 0px 10px;
+  color: #000;
+}
+
+.comment__icon {
+  font-size: 14px;
+  color: #000;
+}
+
+.content__originalPost {
+  color: #929292;
+}
+.sourceInfo__author {
+
+}
+.author__icon {
+  color: #929292;
+  font-size: 14px;
+}
+
+.flag__icon {
+  font-size: 20px
+}
+
+.content__originalLink {
+  color: #24AEC8;
+  display: block;
+}
+
+.content {
+  color: #000;
 }
