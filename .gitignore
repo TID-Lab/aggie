@@ -13,7 +13,7 @@ pids
 logs
 results
 tmp
-
+dump/
 npm-debug*
 node_modules
 fiddle

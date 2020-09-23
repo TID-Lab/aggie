@@ -6,7 +6,7 @@ lists_url = "https://api.crowdtangle.com/lists"
 
 headers = {
     # Add CrowdTangle Dashboard token here.
-    'x-api-token': "YOUR_TOKEN",
+    'x-api-token': "UWJ3ETwcxWNedSBCtpP8nEm6QHZstv969s0rqYfT",
     'Cache-Control': "no-cache",
 }
 
@@ -48,6 +48,7 @@ for l_name, l_dict in list_dict.items():
     if "accounts" in l_dict:
         for acc in l_dict["accounts"]:
             output_dict["crowdtangle_list_account_pairs"][str(acc)] = l_dict["title"]
+# print(json.dump(output_dict, out, indent=4, ensure_ascii=False))
 
 # print(json.dumps(output_dict, indent=4, ensure_ascii=False))
 with open("../config/crowdtangle_list.json", "w") as out:
