@@ -56,8 +56,12 @@ angular.module('Aggie')
     };
 
     function getSetting(name) {
+      //converting between facebook and crowdtangle to retrieve crowdtangle settings from secrets.json
+      name = name === 'facebook'? 'crowdtangle' : name;
       Settings.get(name, function success(data) {
-        $scope.setting[data.setting] = angular.copy(data[data.setting]);
+        var settings = data[data.setting];
+        data.setting = data.setting === 'crowdtangle'? 'facebook' : data.setting;
+        $scope.setting[data.setting] = angular.copy(settings);
       }, failure);
     }
 

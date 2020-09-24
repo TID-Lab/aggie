@@ -314,12 +314,6 @@
       "p1": "Follow <a href=\"https://dev.twitter.com/oauth/overview/application-owner-access-tokens\" target=\"_blank\"> these instructions</a> to generate tokens to use the Twitter API.",
       "p2": "Replace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, and <code>access_token_secret</code> with the keys from <a href=\"https://apps.twitter.com\" target=\"_blank\"> your app</a>."
     },
-    "facebook": {
-      "p1": "Visit <a href=\"https://developers.facebook.com/apps/\" target=\"_blank\">your apps</a> on the Facebook developers site. Create a new app if needed.",
-      "p2": "Inside your Facebook app, obtain <code>client_id</code> and <code>client_secret</code>.",
-      "p3": "To obtain an access token, in a browser, visit <code>https://graph.facebook.com/oauth/access_token?client_secret=xxx&amp;client_id=xxx&amp;grant_type=client_credentials</code> using your <code>client_id</code> and <code>client_secret</code>.",
-      "p4": "Replace the <code>accessToken</code> placeholder with your access token."
-    },
     "elmo": {
       "p1": "Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.",
       "p2": "In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in <code>/m/mymission/forms/123</code>, the ID is <code>123</code>).",
