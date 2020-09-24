@@ -22,9 +22,12 @@
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
               {{ r.author }}
           </p>
-          <p>{{r.metadata.ct_tag}}</p>
-          <span ng-repeat="s in r._sources" class="source pb-2">
+          <span>
+            <span ng-repeat="s in r._sources">
             {{ sourcesById[s].nickname || '[Deleted]' }}
+            </span>
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <span ng-if="r.metadata.ct_tag">{{r.metadata.ct_tag}}</span>
           </span>
           <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
           <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
@@ -39,7 +42,7 @@
           </div>
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
-          <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post:</b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
+          <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
           <a href="/reports/{{r._id}}">
             <p class="content" ng-if="!r.commentTo"> {{ (r.content || '[No Content]') | stripHtml }} </p>
             <p class="content__shared" ng-if="r.metadata.description && !r.commentTo">
