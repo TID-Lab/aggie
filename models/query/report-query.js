@@ -6,7 +6,7 @@ var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
 
-function ReportQuery(options) {
+function ReportQuery(options, list_pairs) {
   options = options || {};
   this.keywords = options.keywords;
 
@@ -24,6 +24,7 @@ function ReportQuery(options) {
   this.event = 'reports';
   this.tags = options.tags;
   this.list = options.list;
+  this.list_pairs = list_pairs
 }
 
 _.extend(ReportQuery, Query);
@@ -54,7 +55,17 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.author)    filter.author = { $regex: this.author, $options: 'i'}
   if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
   if (this.tags)      filter.tags = { $in: this.tags }
-  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
+  if (this.list) {
+    var listTags = Object.entries(this.list_pairs).reduce(function(acc, cur) {
+      return cur[1].includes(this.list) ? acc.concat(cur[0]) : acc;
+    }.bind(this), [])
+    console.log(listTags);
+    if (filter.tags) {
+      filter.tags.$in = Array.from(new Set(filter.tags.$in.concat(tags)));
+    } else {
+      filter.tags = { $in: listTags };
+    }
+  }
   return filter;
 };
 
