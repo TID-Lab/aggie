@@ -40,7 +40,7 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
-    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs)));
+    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat()));
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);

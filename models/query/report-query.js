@@ -57,8 +57,9 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.tags)      filter.tags = { $in: this.tags }
   if (this.list) {
     var listTags = Object.entries(this.list_pairs).reduce(function(acc, cur) {
-      return cur[1] === this.list ? acc.concat(cur[0]) : acc;
+      return cur[1].includes(this.list) ? acc.concat(cur[0]) : acc;
     }.bind(this), [])
+    console.log(listTags);
     if (filter.tags) {
       filter.tags.$in = Array.from(new Set(filter.tags.$in.concat(tags)));
     } else {
