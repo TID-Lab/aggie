@@ -15,14 +15,24 @@ angular.module('Aggie')
   'Tags',
   'smtcTags',
   'Socket',
+  'paginationOptions',
   '$translate',
   function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident,
-           Tags, smtcTags, Socket, $translate) {
+           Tags, smtcTags, Socket, paginationOptions,  $translate) {
     $scope.incidents = incidents.results;
     $scope.incidentsById = {};
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
     $scope.smtcTagsById = {};
+
+    /*$scope.pagination = {
+      page: parseInt($stateParams.page) || 1,
+      //total: reports.total,
+      //visibleTotal: reports.total,
+      perPage: paginationOptions.perPage,
+      start: 0,
+      end: 0
+    };*/
 
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
@@ -33,6 +43,8 @@ angular.module('Aggie')
         Socket.join('reports');
         Socket.on('report:updated', $scope.updateReport.bind($scope));
       }
+      //var visibleComments = paginate($scope.reports);
+      //$scope.visibleReports.addMany(visibleReports);
 
     };
     var updateStats = function(stats) {
@@ -44,6 +56,18 @@ angular.module('Aggie')
       return memo;
     };
 
+    var paginate = function(items) {
+      var page = $scope.pagination.page,
+        perPage = $scope.pagination.perPage,
+        total = $scope.pagination.total,
+        start = (page - 1) * perPage,
+        end = page * perPage - 1;
+
+      $scope.pagination.start = Math.min(start + 1, total);
+      $scope.pagination.end = Math.min(end + 1, total);
+
+      return items;
+    };
 
     $scope.report = data.report;
     $scope.sources = data.sources;
