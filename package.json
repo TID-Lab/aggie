@@ -34,7 +34,7 @@
     "angular-translate-loader-static-files": "^2.11.1",
     "async": "^3.2.0",
     "aws-sdk": "^2.674.0",
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "browserify": "^16.5.1",
     "chance": "^1.1.5",
     "connect-mongo": "^3.2.0",
