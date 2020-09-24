@@ -6,7 +6,7 @@ var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
 
-function ReportQuery(options, list_pairs) {
+function ReportQuery(options) {
   options = options || {};
   this.keywords = options.keywords;
 
@@ -24,7 +24,6 @@ function ReportQuery(options, list_pairs) {
   this.event = 'reports';
   this.tags = options.tags;
   this.list = options.list;
-  this.list_pairs = list_pairs
 }
 
 _.extend(ReportQuery, Query);
