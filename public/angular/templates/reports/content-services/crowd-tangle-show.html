@@ -1,38 +1,10 @@
 <!---- Crowdtangle Current Statistics ---->
 </br>
-<h5 class="card-title">Crowdtangle Details</h5>
+<h5>Statistics</h5>
 <div class="table-responsive">
-  <table class="table table-hover table-bordered table-striped detail-table">
+  <table class="table table-sm">
     <tr>
-      <th scope="row" class="detail-key" translate>Content Type</th>
-      <td colspan="10" class="detail-value">
-      <span title="{{'Content Type' | translate}}" ng-switch="report.metadata.type">
-        <span ng-switch-when="link">{{'Link' | translate}}</span>
-        <span ng-switch-when="native_video">{{'Native Video' | translate}}</span>
-        <span ng-switch-when="status">{{'Status' | translate}}</span>
-        <span ng-switch-when="photo">{{'Photo' | translate}}</span>
-        <span ng-switch-when="episode">{{'Episode' | translate}}</span>
-        <span ng-switch-when="extra_clip">{{'Extra Clip' | translate}}</span>
-        <span ng-switch-when="live_video">{{'Live Video' | translate}}</span>
-        <span ng-switch-when="live_video_complete">{{'Completed Live Video' | translate}}</span>
-        <span ng-switch-when="live_video_scheduled">{{'Scheduled Live Video' | translate}}</span>
-        <span ng-switch-when="trailer">{{'Trailer' | translate}}</span>
-        <span ng-switch-when="video">{{'Non-Native Video' | translate}}</span>
-        <span ng-switch-when="youtube">{{'Youtube Video' | translate}}</span>
-        <span ng-switch-default>{{'Unknown Type' | translate}}</span>
-      </span>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row" class="detail-key" translate>Group Subscribers</th>
-      <td colspan="10" class="detail-value">
-      <span title="{{'Subscriber Count' | translate}}">
-        {{report.metadata.subscriberCount}}
-      </span>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row" class="detail-key" translate>Statistics</th>
+      <th translate>Real Statistics</th>
       <td class="detail-value">
       <span title="{{'Comments' | translate}}">
         <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
@@ -76,7 +48,7 @@
     </tr>
     <!---- Crowdtangle Expected Statistics ---->
     <tr>
-      <th scope="row" class="detail-key" translate>Expected Statistics</th>
+      <th translate>Expected Statistics</th>
       <td class="detail-value">
       <span title="{{'Comments' | translate}}">
         <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.expectedStatistics.commentCount}}
@@ -116,33 +88,6 @@
       <span title="{{'Angry Reacts' | translate}}">
         <b>😡's: </b>{{report.metadata.expectedStatistics.angryCount}}
       </span>
-      </td>
-    </tr>
-    <tr ng-if="report.metadata.mediaUrl">
-      <th scope="row" class="detail-key" translate>Media Content</th>
-      <td colspan="10" class="detail-value">
-        <div ng-repeat="media in report.metadata.mediaUrl">
-          <a ng-href="{{report.metadata.externalUrl}}" target="_blank"><img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}"></a>
-          <div ng-if="media.type === 'video'">
-            <video
-                    id="my-video"
-                    class="video-js"
-                    controls
-                    preload="auto"
-                    width="640"
-                    height="264"
-                    data-setup="{}">
-              <source ng-src="{{media.url | trusted}}" type="video/mp4" />
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a
-                web browser that
-                <a href="https://videojs.com/html5-video-support/" target="_blank"
-                >supports HTML5 video</a
-                >
-              </p>
-            </video>
-          </div>
-        </div>
       </td>
     </tr>
     <!------------------ End Crowdtangle Data ------------------>
