@@ -1,4 +1,3 @@
-var crowdtangle_lists = require('../../../../../config/crowdtangle_list');
 angular.module('Aggie')
 .controller('ReportsIndexController', [
   '$state',
