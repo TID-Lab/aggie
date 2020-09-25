@@ -29,7 +29,7 @@ angular.module('Aggie')
       Source.getAll().$promise
       .then(function(response) {
         for (var i = 0; i < response.length; i++) {
-          if (response[i].media == 'facebook') {
+          if (response[i].media == 'crowdtangle') {
             $scope.showCTButton = true;
           };
         }
@@ -56,12 +56,8 @@ angular.module('Aggie')
     };
 
     function getSetting(name) {
-      //converting between facebook and crowdtangle to retrieve crowdtangle settings from secrets.json
-      name = name === 'facebook'? 'crowdtangle' : name;
       Settings.get(name, function success(data) {
-        var settings = data[data.setting];
-        data.setting = data.setting === 'crowdtangle'? 'facebook' : data.setting;
-        $scope.setting[data.setting] = angular.copy(settings);
+        $scope.setting[data.setting] = angular.copy(data[data.setting]);
       }, failure);
     }
 
