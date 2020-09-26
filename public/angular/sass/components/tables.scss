@@ -11,10 +11,10 @@
     > tr {
       transition: background 0.25s ease-in-out;
       > td {
-        &.td--status {
+        &.td__status {
           vertical-align: middle;
         }
-        &.td--errors {
+        &.td__errors {
           vertical-align: middle;
         }
         &.flagged {
