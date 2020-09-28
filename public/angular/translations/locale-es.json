@@ -69,8 +69,8 @@
       "pending": "La lista Facebook se está actualizando."
     },
     "settingsModal": {
-      "success": "Los ajustes de {{itenName}} han sido guardados correctamente.",
-        "error": "Ocurrió un error!"
+      "success": "Los ajustes de {{itemName}} han sido guardados correctamente.",
+      "error": "Ocurrió un error!"
     },
     "widget": {
       "settingsModal": {
