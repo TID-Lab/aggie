@@ -9,7 +9,7 @@ var lengthValidator = function(str) {
     return validator.isLength(str, {min: 0, max: 15})
 }
 var tagSchema = new mongoose.Schema({
-    name: {type: String, required: true, unique: true, validate: lengthValidator},
+    name: {type: String, required: true, unique: true},
     color: String,
     description: String,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
