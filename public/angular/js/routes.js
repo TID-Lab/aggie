@@ -78,7 +78,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('batch', {
-      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author&tags',
+      url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author&tags&list',
       templateUrl: '/templates/reports/batch.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -94,8 +94,11 @@ angular.module('Aggie')
         }],
         smtcTags: ['SMTCTag', function(SMTCTag) {
           return SMTCTag.query().$promise;
-        }]
-      }
+        }],
+        ctLists: ['CTLists', function(CTLists) {
+          return CTLists.get().$promise;
+        }],
+      },
     });
 
     $stateProvider.state('report', {
