@@ -26,6 +26,10 @@ angular.module('Aggie')
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate) {
 
+    $scope.smtcTags = smtcTags;
+    $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
+      return smtcTag.name;
+    });
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -38,10 +42,6 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
-    $scope.smtcTags = smtcTags;
-    $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
-      return smtcTag.name;
-    });
     $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat()));
 
     // We add options to search reports with any or none incidents linked
@@ -65,7 +65,9 @@ angular.module('Aggie')
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
-
+      if ($scope.searchParams.tags) {
+        $scope.searchParams.tags = smtcTagIdsToNames($scope.searchParams.tags);
+      }
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
@@ -135,7 +137,16 @@ angular.module('Aggie')
         if (foundId === "") return smtcTagName;
         return foundId;
       });
-      return searchedTagIds.join('+');
+      return searchedTagIds;
+    }
+
+    var smtcTagIdsToNames = function(tagIds) {
+      var tagNames = tagIds.split(',').map(function(tagId) {
+        if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+        else { return tagId; }
+      });
+      console.log(tagNames);
+      return tagNames.join(', ');
     }
 
     var searchParams = function(newParams) {
@@ -146,7 +157,6 @@ angular.module('Aggie')
       }
       if (params.tags) {
         params.tags = smtcTagNamesToIds(params.tags);
-        console.log(params.tags);
       }
       return params;
     };
@@ -307,6 +317,7 @@ angular.module('Aggie')
         $scope.searchParams.incidentId === null &&
         $scope.searchParams.author === null &&
         $scope.searchParams.tags === null &&
+        $scope.searchParams.list === null &&
         $scope.searchParams.keywords === null;
     };
 
@@ -320,6 +331,7 @@ angular.module('Aggie')
         incidentId: null,
         author: null,
         tags: null,
+        list: null,
         keywords: null
       });
     };
@@ -559,6 +571,38 @@ angular.module('Aggie')
         return 'unknown-source';
       }
     };
+
+    var splitInput = function(val) {
+      return val.split( /,\s*/ );
+    }
+    var extractLast = function extractLast(term) {
+        return split( term ).pop();
+    }
+    /**
+    $scope.onTagSearchInputLoad = function() {
+      $( "#tagSearchInput" )
+        .autocomplete({
+          minLength: 0,
+          source: function( request, response ) {
+            response( $.ui.autocomplete.filter(
+              $scope.smtcTagNames, extractLast( request.term ) ) );
+          },
+          focus: function() {
+            return false;
+          },
+          select: function( event, ui ) {
+            var terms = splitInput( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+          }
+        });
+    }**/
 
     $scope.$on('$destroy', function() {
       Socket.leave('reports');

@@ -24,7 +24,7 @@
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" class="form-control autocomplete filters__input" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}" typeahead="smtcTagName for smtcTagName in smtcTagNames | filter:$viewValue">
+                  <input id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
                   <div class="input-group-append">
                     <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
                       <span>&times;</span>
