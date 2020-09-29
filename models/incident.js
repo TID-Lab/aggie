@@ -16,7 +16,7 @@ var logger = require('../lib/logger');
 require('../lib/error');
 
 var lengthValidator = function(str) {
-  return validator.isLength(str, {min: 0, max: 32})
+  return validator.isLength(str, {min: 0, max: 42})
 }
 
 var schema = new mongoose.Schema({

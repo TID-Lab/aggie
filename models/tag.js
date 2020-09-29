@@ -5,8 +5,11 @@ var mongoose = database.mongoose;
 var logger = require('../lib/logger');
 var _ = require('underscore');
 
+var lengthValidator = function(str) {
+    return validator.isLength(str, {min: 0, max: 15})
+}
 var tagSchema = new mongoose.Schema({
-    name: {type: String, required: true, unique: true },
+    name: {type: String, required: true, unique: true, validate: lengthValidator},
     color: String,
     description: String,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
@@ -51,5 +54,6 @@ SMTCTag.checkNewUnique = function(tag, callback) {
         else callback(true);
     })
 }
+
 
 module.exports = SMTCTag;
