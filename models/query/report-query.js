@@ -23,6 +23,7 @@ function ReportQuery(options) {
   this.author = options.author;
   this.event = 'reports';
   this.tags = options.tags;
+  this.list = options.list;
 }
 
 _.extend(ReportQuery, Query);
@@ -41,49 +42,19 @@ ReportQuery.prototype.normalize = function() {
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
-    content: this.keywords,
     _sources: this.sourceId,
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,
     flagged: this.flagged,
-    tags: this.tags
-  };
-
+  }
   filter = _.omitBy(filter, _.isNil);
-
-  // Determine inclusive date filters
-  if (this.after || this.before) {
-    filter.storedAt = {};
-    if (this.after) filter.storedAt.$gte = this.after;
-    if (this.before) filter.storedAt.$lte = this.before;
-  }
-
-  // Return only newer results
-  if (this.since) {
-    filter.storedAt = filter.storedAt || {};
-    filter.storedAt.$gte = this.since;
-  }
-
-  // Determine author filter
-  if (this.author) {
-    filter.author = {};
-    // Using regex for the author filter so it can catch substrings ML2020
-    filter.author.$options = 'i';
-    filter.author.$regex = this.author//this.author.trim().split(/\s*,\s*/).sort());
-  }
-  if (this.tags) {
-    filter.tags.$options = 'i';
-    filter.tags.$regex = this.tags//{ $all: toRegexp.allCaseInsensitive(this.tags) };
-  } else delete filter.tags;
-
-  // Search by keyword
-  if (this.keywords) {
-    filter.content = {};
-    filter.content.$options = 'i';
-    filter.content.$regex = this.keywords;
-  }
-
+  if (this.before)    filter.storedAt = { $lte: this.before }
+  if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
+  if (this.author)    filter.author = { $regex: this.author, $options: 'i'}
+  if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
+  if (this.tags)      filter.tags = { $in: this.tags }
+  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
   return filter;
 };
 
