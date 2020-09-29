@@ -5,10 +5,8 @@ angular.module('Aggie').factory('FlashService', [
     var flash = {}, currentFlash = {};
 
     $rootScope.$on('$stateChangeSuccess', function() {
-      if (currentFlash.params) {
-        if (!currentFlash.params.persist) {
-          currentFlash = flash;
-        }
+      if (currentFlash.params && currentFlash.params.persist) {
+        // Do nothing (I'm not sure why, just simplifying existing logic here).
       } else {
         currentFlash = flash;
       }
@@ -17,11 +15,11 @@ angular.module('Aggie').factory('FlashService', [
 
     return {
       getAlert: function() {
-        return $translate.instant(currentFlash.alert);
+        return $translate.instant(currentFlash.alert, currentFlash.params);
       },
 
       getNotice: function() {
-        return $translate.instant(currentFlash.notice);
+        return $translate.instant(currentFlash.notice, currentFlash.params);
       },
 
       setAlert: function(message, params) {

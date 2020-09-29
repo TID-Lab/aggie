@@ -522,9 +522,9 @@ angular.module('Aggie')
       // if a report has multiple sources, they all have the same type, or are
       // deleted
 
-      if (report.metadata.platform === "Facebook") {
+      if (report.metadata && report.metadata.platform === "Facebook") {
         // set Facebook as source for CrowdTangle reports
-          return 'facebook-source';
+        return 'facebook-source';
       } else {
         for (var i = 0; i < report._sources.length; i++) {
           var sourceId = report._sources[i];
