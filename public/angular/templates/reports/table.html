@@ -29,7 +29,7 @@
             {{ sourcesById[s].nickname || '[Deleted]' }}
             </span>
             <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
-            <span ng-if="r.metadata.ct_tag">{{r.metadata.ct_tag}}</span>
+            <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
           </span>
           <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
           <small>{{ r.storedAt | aggieDate:'date' }}</small>-->

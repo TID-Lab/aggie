@@ -51,3 +51,5 @@ config/cert.pem
 config/key.pem
 
 docs/_build
+
+.vscode/settings.json

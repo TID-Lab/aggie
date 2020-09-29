@@ -12,6 +12,7 @@ angular.module('Aggie')
   'incidents',
   'statusOptions',
   'linkedtoIncidentOptions',
+  'ctLists',
   'Report',
   'Incident',
   'Batch',
@@ -21,7 +22,7 @@ angular.module('Aggie')
   'paginationOptions',
   '$translate',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
-           mediaOptions, incidents, statusOptions, linkedtoIncidentOptions,
+           mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate) {
 
@@ -41,6 +42,7 @@ angular.module('Aggie')
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
       return smtcTag.name;
     });
+    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat()));
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -111,7 +113,6 @@ angular.module('Aggie')
     };
 
     $scope.search = function(newParams) {
-
       $scope.$evalAsync(function() {
 
         // Remove empty params.
@@ -119,7 +120,6 @@ angular.module('Aggie')
         for (var key in params) {
           if (!params[key]) params[key] = null;
         }
-
         $state.go('reports', params, { reload: true });
       });
     };
@@ -282,7 +282,7 @@ angular.module('Aggie')
     };
 
     $scope.clearTags = function() {
-      $scope.search({ smtcTags: null });
+      $scope.search({ tags: null });
     };
 
     $scope.clearDateFilter = function() {

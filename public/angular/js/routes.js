@@ -42,7 +42,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('reports', {
-      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags',
+      url: '/reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags&list',
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
@@ -58,8 +58,12 @@ angular.module('Aggie')
             incidentId: params.incidentId,
             status: params.status,
             author: params.author,
-            tags: params.tags
+            tags: params.tags,
+            list: params.list,
           }).$promise;
+        }],
+        ctLists: ['CTLists', function(CTLists) {
+          return CTLists.get().$promise;
         }],
         sources: ['Source', function(Source) {
           return Source.query().$promise;
