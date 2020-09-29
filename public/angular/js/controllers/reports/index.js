@@ -38,6 +38,9 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
+    $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
+      return smtcTag.name;
+    });
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -108,6 +111,7 @@ angular.module('Aggie')
     };
 
     $scope.search = function(newParams) {
+
       $scope.$evalAsync(function() {
 
         // Remove empty params.
@@ -115,15 +119,34 @@ angular.module('Aggie')
         for (var key in params) {
           if (!params[key]) params[key] = null;
         }
+
         $state.go('reports', params, { reload: true });
       });
     };
+
+    var smtcTagNamesToIds = function(tagNames) {
+      var tagNames = tagNames.split(',');
+      var searchedTagIds = tagNames.map(function(smtcTagName) {
+        smtcTagName = smtcTagName.trim();
+        var foundId = ""
+        $scope.smtcTags.forEach(function(smtcTag){
+          if (smtcTag.name === smtcTagName) foundId = smtcTag._id;
+        });
+        if (foundId === "") return smtcTagName;
+        return foundId;
+      });
+      return searchedTagIds.join('+');
+    }
 
     var searchParams = function(newParams) {
       var params = $scope.searchParams;
       params.page = 1;
       for (var key in newParams) {
         params[key] = newParams[key];
+      }
+      if (params.tags) {
+        params.tags = smtcTagNamesToIds(params.tags);
+        console.log(params.tags);
       }
       return params;
     };
@@ -259,7 +282,7 @@ angular.module('Aggie')
     };
 
     $scope.clearTags = function() {
-      $scope.search({ tags: null });
+      $scope.search({ smtcTags: null });
     };
 
     $scope.clearDateFilter = function() {
@@ -458,7 +481,7 @@ angular.module('Aggie')
 
     // Batch Mode Functions
     $scope.grabBatch = function() {
-      $scope.searchParams.tags = Tags.stringToTags($scope.searchParams.tags);
+      $scope.searchParams.tags = $scope.searchParams.tags;
       Batch.checkout($scope.searchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
@@ -542,6 +565,8 @@ angular.module('Aggie')
       Socket.removeAllListeners('reports');
       Socket.leave('stats');
       Socket.removeAllListeners('stats');
+      Socket.leave('tags');
+      Socket.removeAllListeners('tags');
     });
 
     $scope.tagsToString = Tags.tagsToString;

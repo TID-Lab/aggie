@@ -22,7 +22,7 @@ function ReportQuery(options) {
   this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
-  this.tags = options.tags;
+  this._parseSmtcTagIds(options.tags);
 }
 
 _.extend(ReportQuery, Query);
@@ -47,7 +47,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
     _incident: this.incidentId,
     read: this.read,
     flagged: this.flagged,
-    tags: this.tags
+    smtcTags: this.tags
   };
 
   filter = _.omitBy(filter, _.isNil);
@@ -72,11 +72,6 @@ ReportQuery.prototype.toMongooseFilter = function() {
     filter.author.$options = 'i';
     filter.author.$regex = this.author//this.author.trim().split(/\s*,\s*/).sort());
   }
-  if (this.tags) {
-    filter.tags.$options = 'i';
-    filter.tags.$regex = this.tags//{ $all: toRegexp.allCaseInsensitive(this.tags) };
-  } else delete filter.tags;
-
   // Search by keyword
   if (this.keywords) {
     filter.content = {};
@@ -116,6 +111,10 @@ ReportQuery.prototype._parseIncidentId = function(incidentId) {
   } else {
     this.incidentId = incidentId;
   }
+};
+
+ReportQuery.prototype._parseSmtcTagIds = function(smtcTagIds) {
+  if (smtcTagIds) this.smtcTags = smtcTagIds.split('+');
 };
 
 module.exports = ReportQuery;
