@@ -65,9 +65,8 @@ angular.module('Aggie')
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
-      if ($scope.searchParams.tags) {
-        $scope.searchParams.tags = smtcTagIdsToNames($scope.searchParams.tags);
-      }
+      updateTagSearchNames();
+      console.log($scope.searchParams.tags);
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
@@ -127,7 +126,9 @@ angular.module('Aggie')
     };
 
     var smtcTagNamesToIds = function(tagNames) {
+      // This is here because the autocomplete adds , to the end of
       var tagNames = tagNames.split(',');
+
       var searchedTagIds = tagNames.map(function(smtcTagName) {
         smtcTagName = smtcTagName.trim();
         var foundId = ""
@@ -140,13 +141,14 @@ angular.module('Aggie')
       return searchedTagIds;
     }
 
-    var smtcTagIdsToNames = function(tagIds) {
-      var tagNames = tagIds.split(',').map(function(tagId) {
-        if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
-        else { return tagId; }
-      });
-      console.log(tagNames);
-      return tagNames.join(', ');
+    var updateTagSearchNames = function() {
+      /*if ($scope.searchParams.tags) {
+        var tagNames = $scope.searchParams.tags.split(',').map(function(tagId) {
+          if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+          else { return tagId; }
+        });
+        $scope.searchParams = { tags: tagNames.join(', ') };
+      }*/
     }
 
     var searchParams = function(newParams) {
@@ -576,9 +578,9 @@ angular.module('Aggie')
       return val.split( /,\s*/ );
     }
     var extractLast = function extractLast(term) {
-        return split( term ).pop();
+        return splitInput( term ).pop();
     }
-    /**
+
     $scope.onTagSearchInputLoad = function() {
       $( "#tagSearchInput" )
         .autocomplete({
@@ -602,7 +604,7 @@ angular.module('Aggie')
             return false;
           }
         });
-    }**/
+    }
 
     $scope.$on('$destroy', function() {
       Socket.leave('reports');
