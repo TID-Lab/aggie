@@ -118,12 +118,7 @@ angular.module('Aggie')
       $scope.pagination.start = Math.min(start + 1, total);
       $scope.pagination.end = Math.min(end + 1, total);
 
-      if ($scope.searchParams.title || $scope.searchParams.location) {
-        $scope.pagination.visibleTotal = items.length;
-        return items.slice(start, end);
-      } else {
-        return items;
-      }
+      return items;
     };
 
     var filterSelected = function(items) {
