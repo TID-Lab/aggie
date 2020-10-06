@@ -125,38 +125,38 @@ angular.module('Aggie')
     };
 
     var smtcTagNamesToIds = function(tagNames) {
+      // This runs on the start of the page
       // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
-      var tagNames = tagNames.split(',');
-      if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      if (tagNames.length !== 1) {
+        tagNames = tagNames.split(',');
+        if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      }
       //TODO: This can be done with functional programming (whenever I try it breaks)
       var searchedTagIds = tagNames.map(function(smtcTagName) {
         smtcTagName = smtcTagName.trim();
-        var foundId = ""
+        var foundId = "";
         $scope.smtcTags.forEach(function(smtcTag){
           // Case doesn't matter
-          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) foundId = smtcTag._id;
+          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
+          else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
         });
-        if (foundId === "") return smtcTagName;
+        if (foundId === "") return null;
         return foundId;
       });
+      searchedTagIds = searchedTagIds.filter(function (el) {
+        return el != null;
+      });
+      console.log(searchedTagIds);
       return searchedTagIds;
     }
 
     var updateTagSearchNames = function() {
       if ($scope.searchParams.tags) {
         var tagNames = "";
-        if ($scope.searchParams.tags.length === 1) {
-          tagNames = $scope.searchParams.tags.split(',').map(function(tagId) {
-            if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
-            else { return tagId; }
-          });
-        }
-        else {
-          tagNames = $scope.searchParams.tags.map(function(tagId) {
-            if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
-            else { return tagId; }
-          });
-        }
+        tagNames = $scope.searchParams.tags.map(function(tagId) {
+          if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+          else { return tagId; }
+        });
         $scope.searchParams = { tags: tagNames.join(', ') };
       }
     }
