@@ -65,8 +65,7 @@ angular.module('Aggie')
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
-      updateTagSearchNames();
-      console.log($scope.searchParams.tags);
+
       var visibleReports = paginate($scope.reports);
       $scope.visibleReports.addMany(visibleReports);
 
@@ -85,6 +84,7 @@ angular.module('Aggie')
       }
       // make links clickable
       $scope.reports.forEach(linkify);
+      updateTagSearchNames();
     };
 
     var updateStats = function(stats) {
@@ -115,7 +115,6 @@ angular.module('Aggie')
 
     $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
-
         // Remove empty params.
         var params = searchParams(newParams);
         for (var key in params) {
@@ -126,14 +125,16 @@ angular.module('Aggie')
     };
 
     var smtcTagNamesToIds = function(tagNames) {
-      // This is here because the autocomplete adds , to the end of
+      // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
       var tagNames = tagNames.split(',');
-
+      if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      //TODO: This can be done with functional programming (whenever I try it breaks)
       var searchedTagIds = tagNames.map(function(smtcTagName) {
         smtcTagName = smtcTagName.trim();
         var foundId = ""
         $scope.smtcTags.forEach(function(smtcTag){
-          if (smtcTag.name === smtcTagName) foundId = smtcTag._id;
+          // Case doesn't matter
+          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) foundId = smtcTag._id;
         });
         if (foundId === "") return smtcTagName;
         return foundId;
@@ -142,13 +143,22 @@ angular.module('Aggie')
     }
 
     var updateTagSearchNames = function() {
-      /*if ($scope.searchParams.tags) {
-        var tagNames = $scope.searchParams.tags.split(',').map(function(tagId) {
-          if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
-          else { return tagId; }
-        });
+      if ($scope.searchParams.tags) {
+        var tagNames = "";
+        if ($scope.searchParams.tags.length === 1) {
+          tagNames = $scope.searchParams.tags.split(',').map(function(tagId) {
+            if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+            else { return tagId; }
+          });
+        }
+        else {
+          tagNames = $scope.searchParams.tags.map(function(tagId) {
+            if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+            else { return tagId; }
+          });
+        }
         $scope.searchParams = { tags: tagNames.join(', ') };
-      }*/
+      }
     }
 
     var searchParams = function(newParams) {
@@ -433,8 +443,6 @@ angular.module('Aggie')
       var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
       Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
     };
-
-
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
