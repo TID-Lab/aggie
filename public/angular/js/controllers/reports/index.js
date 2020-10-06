@@ -146,7 +146,6 @@ angular.module('Aggie')
       searchedTagIds = searchedTagIds.filter(function (el) {
         return el != null;
       });
-      console.log(searchedTagIds);
       return searchedTagIds;
     }
 
