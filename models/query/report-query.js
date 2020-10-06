@@ -89,8 +89,4 @@ ReportQuery.prototype._parseIncidentId = function(incidentId) {
   }
 };
 
-ReportQuery.prototype._parseSmtcTagIds = function(smtcTagIds) {
-  if (smtcTagIds) this.smtcTags = smtcTagIds.split('+');
-};
-
 module.exports = ReportQuery;
