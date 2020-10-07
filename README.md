@@ -231,14 +231,15 @@ npx pm2 logs
 ### Semi-automated upgrade
 
 ```shell script
-mongodump # Automatically back up your database to ./dump/
-cd aggie # Go to where you originally saved Aggie
-git add -A; git add -u; git stash # Save any files you may have changed
-git pull # Get upstream changes
-npm install # Make sure dependencies are up to date
-git stash pop # Only if you had changes saved earlier
-git status # Check if it looks right
-npx pm2 restart aggie # Serve the new version
+mongodump # Automatically back up your database to ./dump/.
+cd aggie # Go to where you originally saved Aggie.
+git add -A; git add -u; git stash # Save any files you may have changed.
+git pull # Get upstream changes.
+npm install # Make sure dependencies are up to date.
+git stash pop # Only if you had changes saved earlier.
+# Make sure to resolve any conflicts if there are any.
+git status # Check if it looks right.
+npx pm2 restart aggie # Serve the new version.
 ```
 
 ## Maintenance
