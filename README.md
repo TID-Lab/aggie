@@ -174,19 +174,17 @@ cp config/secrets.json.example config/secrets.json
 $EDITOR config/secrets.json
 
 # User input: Get CrowdTangle sources per the README instructions, if using them.
-# Otherwise:
+# Otherwise stub it:
 echo "{}" > config/crowdtangle_list.json
 
-# if detectHateSpeech is set to true, then run the python 2 hate-speech-api
+# If detectHateSpeech is set to true, then run the python 2 hate-speech-api.
 cd hate-speech-api
-#install python dependencies. 
 pip install -r requirements.txt
-# if the above command doesn't work, use
-python2 -m pip install -r requirements.txt
+# ONLY IF the above command doesn't work, use instead:
+# python2 -m pip install -r requirements.txt
 
-#Start the hate-speech-api server
+# Start the hate-speech-api server.
 python2 hate_speech_clf_api.py
-
 
 # Ready! Test run:
 npm start
@@ -201,8 +199,8 @@ curl localhost:3000
 # Final steps
 
 # User input: Print a script to run that will enable Aggie on startup.
-# Copy/paste the last line of output as instructed.
 npx pm2 startup
+# Copy/paste the last line of output as instructed.
 
 # Start (or restart) Aggie in the background; save the PM2 state for startup.
 npm run serve
