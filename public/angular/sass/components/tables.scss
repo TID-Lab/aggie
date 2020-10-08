@@ -11,10 +11,10 @@
     > tr {
       transition: background 0.25s ease-in-out;
       > td {
-        &.td--status {
+        &.td__status {
           vertical-align: middle;
         }
-        &.td--errors {
+        &.td__errors {
           vertical-align: middle;
         }
         &.flagged {
@@ -394,4 +394,8 @@ tag.tr__tag {
   -webkit-transform-origin: 0 0;
   -o-transform-origin: 0 0;
   -moz-transform-origin: 0 0;
+}
+
+.author__verifiedIcon {
+  color: rgba(29,161,242,1.00);
 }
