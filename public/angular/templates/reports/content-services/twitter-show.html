@@ -1,33 +1,6 @@
 <!---- Twitter Current Statistics ---->
 </br>
 <h5 class="card-title">Twitter Details</h5>
-<div class="table-responsive">
-  <table class="table table-hover table-bordered table-striped detail-table">
-    <tr>
-      <th scope="row" class="detail-key" translate>User Verified?</th>
-      <td colspan="4" class="detail-value">
-        <span class="text-capitalize">{{report.metadata.verified}}</span>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row" class="detail-key" translate>Follower Count</th>
-      <td colspan="4" class="detail-value">
-      <span title="{{'Subscriber Count' | translate}}">
-        {{report.metadata.followerCount}}
-      </span>
-      </td>
-    </tr>
-    <tr ng-if="report.metadata.rawAPIResponse.quoted_status">
-      <th scope="row" class="detail-key" translate>Replying To</th>
-      <td colspan="4" class="detail-value">
-      <span title="{{'Replying To' | translate}}">
-        {{report.metadata.rawAPIResponse.quoted_status.text}}
-      </span>
-      </td>
-    </tr>
-    <!------------------ End Twitter Data ------------------>
-  </table>
-</div>
 <div class="row">
   <div class="col">
     <!---- Crowdtangle Current Statistics ---->
@@ -40,9 +13,9 @@
           <td colspan="10" class="detail-value">
             <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
             <span ng-if="!report.metadata.accountUrl">{{ report.author }}
-              <i ng-if="report.metadata.verified == 'False'" class="fa fa-check-circle author__verifiedIcon" aria-hidden="true">
-              </i></span>
-            <p>{{report.metadata.verified}}</p>
+              <i ng-if="report.metadata.verified" class="fa fa-check-circle author__verifiedIcon" aria-hidden="true">
+              </i>
+            </span>
           </td>
         </tr>
         <!-- Facebook Group/Page Sub Count -->
@@ -125,107 +98,10 @@
         </tbody>
       </table>
     </div>
-    <h5 class="detail-key" translate>Content</h5>
+    <h4 class="detail-key" translate>Content</h4>
     <p class="detail-value" ng-bind-html="report.content">{{ report.content }}</p>
     <p class="text-wrap content__shared" ng-if="report.metadata.description">
       {{report.metadata.description | stripHtml}}
     </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <h5>Statistics</h5>
-    <div class="table-responsive">
-      <table class="table table-sm">
-        <tr>
-          <th translate>Real Statistics</th>
-          <td class="detail-value">
-        <span title="{{'Comments' | translate}}">
-          <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Shares' | translate}}">
-          <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.actualStatistics.shareCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Likes' | translate}}">
-          <b>{{'Likes:' | translate}}</b> {{report.metadata.actualStatistics.likeCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Love Reacts' | translate}}">
-          <b>❤'s</b> {{report.metadata.actualStatistics.loveCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Haha Reacts' | translate}}">
-          <b>😂's:</b> {{report.metadata.actualStatistics.hahaCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Wow Reacts' | translate}}">
-          <b>😯's</b> {{report.metadata.actualStatistics.wowCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Sad Reacts' | translate}}">
-          <b>😢's: </b>{{report.metadata.actualStatistics.sadCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Angry Reacts' | translate}}">
-          <b>😡's: </b>{{report.metadata.actualStatistics.angryCount}}
-        </span>
-          </td>
-        </tr>
-        <!---- Crowdtangle Expected Statistics ---->
-        <tr>
-          <th translate>Expected Statistics</th>
-          <td class="detail-value">
-        <span title="{{'Comments' | translate}}">
-          <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.expectedStatistics.commentCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Shares' | translate}}">
-          <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.expectedStatistics.shareCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Likes' | translate}}">
-          <b>{{'Likes:' | translate}}</b> {{report.metadata.expectedStatistics.likeCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Love Reacts' | translate}}">
-          <b>❤'s</b> {{report.metadata.expectedStatistics.loveCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Haha Reacts' | translate}}">
-          <b>😂's:</b> {{report.metadata.expectedStatistics.hahaCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Wow Reacts' | translate}}">
-          <b>😯's</b> {{report.metadata.expectedStatistics.wowCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Sad Reacts' | translate}}">
-          <b>😢's: </b>{{report.metadata.expectedStatistics.sadCount}}
-        </span>
-          </td>
-          <td class="detail-value">
-        <span title="{{'Angry Reacts' | translate}}">
-          <b>😡's: </b>{{report.metadata.expectedStatistics.angryCount}}
-        </span>
-          </td>
-        </tr>
-        <!------------------ End Crowdtangle Data ------------------>
-      </table>
-    </div>
   </div>
 </div>
