@@ -231,7 +231,12 @@ angular.module('Aggie')
     $stateProvider.state('analysis', {
       url: '/analysis',
       templateUrl: '/templates/analysis.html',
-      controller: 'AnalysisController'
+      controller: 'AnalysisController',
+      resolve: {
+        data: ['Visualization', function(Visualization) {
+          return Visualization.query().$promise;
+        }],
+      }
     });
 
     $stateProvider.state('lastAnalysis', {

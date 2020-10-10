@@ -3,7 +3,9 @@ angular.module('Aggie')
 .controller('AnalysisController', [
   '$scope',
   'Socket',
-  function($scope, Socket) {
+  'data',
+  function($scope, Socket, data) {
+    $scope.data = data;
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');
