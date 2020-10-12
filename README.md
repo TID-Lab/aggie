@@ -174,19 +174,17 @@ cp config/secrets.json.example config/secrets.json
 $EDITOR config/secrets.json
 
 # User input: Get CrowdTangle sources per the README instructions, if using them.
-# Otherwise:
+# Otherwise stub it:
 echo "{}" > config/crowdtangle_list.json
 
-# if detectHateSpeech is set to true, then run the python 2 hate-speech-api
+# If detectHateSpeech is set to true, then run the python 2 hate-speech-api.
 cd hate-speech-api
-#install python dependencies. 
 pip install -r requirements.txt
-# if the above command doesn't work, use
-python2 -m pip install -r requirements.txt
+# ONLY IF the above command doesn't work, use instead:
+# python2 -m pip install -r requirements.txt
 
-#Start the hate-speech-api server
+# Start the hate-speech-api server.
 python2 hate_speech_clf_api.py
-
 
 # Ready! Test run:
 npm start
@@ -201,8 +199,8 @@ curl localhost:3000
 # Final steps
 
 # User input: Print a script to run that will enable Aggie on startup.
-# Copy/paste the last line of output as instructed.
 npx pm2 startup
+# Copy/paste the last line of output as instructed.
 
 # Start (or restart) Aggie in the background; save the PM2 state for startup.
 npm run serve
@@ -233,14 +231,15 @@ npx pm2 logs
 ### Semi-automated upgrade
 
 ```shell script
-mongodump # Automatically back up your database to ./dump/
-cd aggie # Go to where you originally saved Aggie
-git add -A; git add -u; git stash # Save any files you may have changed
-git pull # Get upstream changes
-npm install # Make sure dependencies are up to date
-git stash pop # Only if you had changes saved earlier
-git status # Check if it looks right
-npx pm2 restart aggie # Serve the new version
+mongodump # Automatically back up your database to ./dump/.
+cd aggie # Go to where you originally saved Aggie.
+git add -A; git add -u; git stash # Save any files you may have changed.
+git pull # Get upstream changes.
+npm install # Make sure dependencies are up to date.
+git stash pop # Only if you had changes saved earlier.
+# Make sure to resolve any conflicts if there are any.
+git status # Check if it looks right.
+npx pm2 restart aggie # Serve the new version.
 ```
 
 ## Maintenance
