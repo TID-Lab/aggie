@@ -45,6 +45,9 @@
                 <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(true)" translate>Mark as Read</button>
                 <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead(false)" translate>Mark as Unread</button>
               </div>
+              <button type="button" ng-disabled="true"  class="btn btn-light" translate>
+               Reports sorted by Hate Speech Score
+              </button>
             </div>
             <div>
               <button class="btn btn-primary mr-2" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
@@ -54,7 +57,7 @@
           </div>
         </div>
         <p ng-hide="pagination.total > 0 " translate>batch.noReports</p>
-        <div ng-include="'/templates/reports/table.html'"></div>
+        <div ng-include="'/templates/reports/tableBatch.html'"></div>
         <div class="card-footer text-muted card__footer">
           <div class="float-right">
             <div class="batch-actions">
