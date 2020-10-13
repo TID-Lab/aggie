@@ -6,30 +6,26 @@
     </div>
     <div class="col-md-8">
       <div class="card">
-        <div class="card-header card__header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a ui-sref-active="active" class="nav-link" href ui-sref=".trend-lines" translate>Trends (Lines)</a>
-            </li>
-            <li>
-              <a ui-sref-active="active" class="nav-link" href ui-sref=".trend-bars" translate>Trends (Bars)</a>
-            </li>
-            <!--
-            <li>
-              <a ui-sref-active="active" class="nav-link" href ui-sref=".incidentsMap" translate>Incident Map</a>
-            </li>
-            -->
-          </ul>
-        </div>
         <div class="card-body">
-          <h1>Actual and Expected Engagement</h1>
-          <figure id="aggie-viz1"></figure>
-          <h1>Distribution by Media Type</h1>
-          <figure id="aggie-viz2"></figure>
-          <h1>Temporal Trend</h1>
-          <figure id="aggie-viz3"></figure>
-          <h1>Count by Tags</h1>
-          <figure id="aggie-viz4"></figure>
+          <h1>Reports from the last 48 Hours</h1>
+          <div class="analysis-figures">
+            <div id="figure-1">
+              <h1>Actual and Expected Engagement</h1>
+              <figure id="aggie-viz1"></figure>
+            </div>
+            <div id="figure-2">
+              <h1>Distribution by Media Type</h1>
+              <figure id="aggie-viz2"></figure>
+            </div>
+            <div id="figure-3">
+              <h1>Temporal Trend</h1>
+              <figure id="aggie-viz3"></figure>
+            </div>
+            <div id="figure-4">
+              <h1>Tag Composition</h1>
+              <div id="tag-bubble"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -49,4 +45,3 @@
     </div>
   </div>
 </div>
-

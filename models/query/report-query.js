@@ -55,6 +55,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
   if (this.tags)      filter.tags = { $in: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
+  console.log(filter);
   return filter;
 };
 
