@@ -53,12 +53,12 @@
           </div>
         </div>
 
-        <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && source.media != 'whatsapp' && source.media != 'crowdtangle'">
+        <div class="form-group" ng-show="source.media && source.media != 'twitter' && source.media != 'smsgh' && source.media != 'whatsapp' && source.media != 'crowdtangle' && source.media != 'comments'">
           <label for="url" translate>URL</label>
           <div class="input-group">
             <div ng-switch="source.media">
-              <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\//" class="form-control" id="url" name="url" ng-required="source.media != 'twitter'" ng-focus>
-              <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="{{ 'Enter url' | translate }}" ng-init="sourceUrl(source)" ng-required="!(source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp' || source.media == 'crowdtangle')" ng-focus>
+              <input type="url" ng-model="source.url" ng-switch-when="facebook" ng-pattern="/https?:\/\/www\.facebook\.com\//" class="form-control" id="url" name="url" ng-required="source.media != 'twitter' || source.media != 'comments'" ng-focus>
+              <input type="url" ng-model="source.url" ng-switch-default class="form-control" id="url" name="url" placeholder="{{ 'Enter url' | translate }}" ng-init="sourceUrl(source)" ng-required="!(source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp' || source.media == 'crowdtangle' || source.media == 'comments')" ng-focus>
             </div>
             <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
           </div>
@@ -72,7 +72,7 @@
             <small class="form-text text-muted" ng-show="form.url.$dirty && !form.url.$error.required" translate>URL is invalid.</small>
           </div>
         </div>
-        <div class="form-group" ng-show="source.media">
+        <div class="form-group" ng-show="source.media && source.media != 'comments'">
           <label for="tags" translate>Tags</label>
           <input ng-model="source.tags" ng-list class="form-control" id="tags" name="tags" placeholder="{{ 'Enter tags' | translate }}">
           <small class="form-text text-muted" translate="sources_modal.tags"></small>

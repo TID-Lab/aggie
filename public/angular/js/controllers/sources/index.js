@@ -28,12 +28,12 @@ angular.module('Aggie')
     };
 
     $scope.target = function(source) {
-      return source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp' || source.media == 'crowdtangle' ? source.keywords : source.url;
+      return source.media == 'twitter' || source.media == 'smsgh' || source.media == 'whatsapp' || source.media == 'crowdtangle' || source.media == 'comments' ? source.keywords : source.url;
     };
 
     $scope.sourceClass = function(source) {
 
-      var mediaOptions = ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle'];
+      var mediaOptions = ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle', 'comments'];
 
       if (mediaOptions.indexOf(source.media) !== -1) {
         return source.media + '-source';
