@@ -6,6 +6,7 @@ angular.module('Aggie')
   'data',
   function($scope, Socket, data) {
     $scope.data = data;
+    console.log(data);
     var init = function() {
       Socket.on('stats', updateStats);
       Socket.join('stats');

@@ -349,10 +349,6 @@
 		"6015939": [
 			"NLD information Pages (Regional)"
 		],
-		"6419684": [
-			"Anti-USDP Groups",
-			"Pro-NLD Groups"
-		],
 		"6419706": [
 			"Anti-USDP Groups",
 			"Pro-NLD Groups"
@@ -363,8 +359,8 @@
 		],
 		"6598541": [
 			"Ma Ba Tha Groups",
-			"Anti-NLD Groups",
-			"Fake News Groups"
+			"Fake News Groups",
+			"Anti-NLD Groups"
 		],
 		"6598548": [
 			"Pro-Military Groups"
@@ -740,6 +736,9 @@
 		],
 		"8597869": [
 			"Political Party Pages"
+		],
+		"8621501": [
+			"Fake News Groups"
 		],
 		"8679968": [
 			"Anti-USDP Groups",
