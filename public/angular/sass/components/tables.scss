@@ -354,6 +354,8 @@ tag.tr__tag {
 
 .td__incident {
   position: relative;
+  max-width: 120px;
+  word-wrap: break-word;
 }
 
 .content__shared {
