@@ -21,5 +21,11 @@ angular.module('Aggie')
     });
 
     init();
+    
+    $scope.initiatesvg = function() {
+      $scope.barsvg = d3.select('figure#aggie-viz').append('svg').attr('width', '100%').attr('viewBox', '0 0 1400 800');
+    }
+
+    $scope.initiatesvg();
   }
 ]);
