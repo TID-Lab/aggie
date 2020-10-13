@@ -34,16 +34,20 @@
 
 #figure-1 {
   grid-area: figure1;
+  text {
+    font-size: 1.3em;
+  }
 }
 
 #figure-2 {
   grid-area: figure2;
-  .legend {
-  }
 }
 
 #figure-3 {
   grid-area: figure3;
+  text {
+    font-size: 1.3em;
+  }
 }
 
 #figure-4 {

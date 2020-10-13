@@ -389,7 +389,8 @@ angular.module('Aggie')
 
     group.append('text')
     .text(function(d) {
-      return d.type;
+      var text = d.type.replace(/_/g, " ");
+			return text.charAt(0).toUpperCase() + text.slice(1);
     });
 
     group.append('rect')
