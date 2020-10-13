@@ -276,6 +276,18 @@ angular.module('Aggie')
         .attr('height', function(d) { return heightScale(d.count)})
         .attr('fill', '#F79F1F');
 
+        var emojiMap = {
+					like: "👍",
+					share: "⟳",
+					comment: "🗨️",
+					love: "❤️",
+					wow: "😯",
+					haha: "😂",
+					sad: "😢",
+					angry: "😡",
+					thankful: "🌺",
+					care: "🤗",
+				};
         $scope.barsvg.selectAll('.mark')
           .data(expectedStatistics)
           .enter()
@@ -288,14 +300,19 @@ angular.module('Aggie')
           .attr('stroke', '#3498db')
           .attr('stroke-width', 4);
 
-          $scope.barsvg.selectAll('.bar-label')
-          .data(actualStatistics)
-          .enter()
-          .append('text')
-          .text(function(d) {return d.type.slice(0,-5)})
-          .attr('class', 'bar-label')
-          .attr('text-anchor', 'middle')
-          .attr('transform', function(d) {return 'translate('+xScale(d.type)+ ',' + (yScale(0) + 20) + ')'});
+          $scope.barsvg
+						.selectAll(".bar-label")
+						.data(actualStatistics)
+						.enter()
+						.append("text")
+						.text(function (d) {
+							return emojiMap[d.type.slice(0, -5)] + " " + d.type.slice(0, -5);
+						})
+						.attr("class", "bar-label")
+						.attr("text-anchor", "middle")
+						.attr("transform", function (d) {
+							return "translate(" + xScale(d.type) + "," + (yScale(0) + 20) + ")";
+						});
 
           $scope.barsvg.append('g')
           .attr('class', 'y-axis')
@@ -408,11 +425,14 @@ angular.module('Aggie')
     
       var width = 1400, height = 800;
 
-      var xScale = d3.scaleLinear()
-      .domain(d3.extent(areaChartCounts, function(d) {
-        return d.time;
-      }))
-      .range([50, width - 50]);
+      var xScale = d3
+				.scaleLinear()
+				.domain(
+					d3.extent(areaChartCounts, function (d) {
+						return d.time;
+					})
+				)
+				.range([80, width - 50]);
 
       var yScale = d3.scaleLinear()
       .domain([0, d3.max(areaChartCounts, function(d) {
@@ -425,9 +445,7 @@ angular.module('Aggie')
         .call(d3.axisBottom(xScale))
         .attr('transform', 'translate(0,' + (height - 40) + ')');
 
-      $scope.areasvg.append('g')
-        .call(d3.axisLeft(yScale))
-        .attr('transform', 'translate(40, 0)');
+      $scope.areasvg.append("g").call(d3.axisLeft(yScale)).attr("transform", "translate(70, 0)");
 
       $scope.areasvg.append('path')
       .datum(areaChartCounts)
@@ -452,12 +470,13 @@ angular.module('Aggie')
         .attr('transform', 'translate(' + width/2 + ',' + (height - 8) +')')
         .attr('text-align', 'center');
 
-        $scope.areasvg.append('g')
-        .attr('transform', 'translate(' + 10 + ',' + (height/2) +')')
-        .append('text')
-        .text('Number of Reports')
-        .attr('text-align', 'center')
-        .attr('transform', 'rotate(-90)');
+        $scope.areasvg
+					.append("g")
+					.attr("transform", "translate(" + 30 + "," + height / 2 + ")")
+					.append("text")
+					.text("Number of Reports")
+					.attr("text-align", "center")
+					.attr("transform", "rotate(-90)");
       }
 
     $scope.prepareDataPie = function(data) {
