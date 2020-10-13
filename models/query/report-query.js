@@ -24,7 +24,6 @@ function ReportQuery(options) {
   this.event = 'reports';
   this.tags = options.tags;
   this.list = options.list;
-  console.log(options, this);
 }
 
 _.extend(ReportQuery, Query);
