@@ -19,7 +19,7 @@
           </div>
         </td>
         <td class="td__sourceInfo">
-          <span class="badge badge-pill badge-secondary mb-2">{{ r.storedAt | interval }} ago</span>
+          <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
           <p class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
               {{ r.author }}
