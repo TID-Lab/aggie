@@ -414,40 +414,50 @@ angular.module('Aggie')
       .range([50, width - 50]);
 
       var yScale = d3.scaleLinear()
-    .domain([0, d3.max(areaChartCounts, function(d) {
-      return d.count;
-    })])
-    .range([height - 50, 50]);
+      .domain([0, d3.max(areaChartCounts, function(d) {
+        return d.count;
+      })])
+      .range([height - 50, 50]);
 
-    console.log("here2");
-
-    $scope.areasvg
-      .append('g')
-      .call(d3.axisBottom(xScale))
-      .attr('transform', 'translate(0,' + (height - 40) + ')');
+      $scope.areasvg
+        .append('g')
+        .call(d3.axisBottom(xScale))
+        .attr('transform', 'translate(0,' + (height - 40) + ')');
 
       $scope.areasvg.append('g')
-    .call(d3.axisLeft(yScale))
-    .attr('transform', 'translate(40, 0)');
+        .call(d3.axisLeft(yScale))
+        .attr('transform', 'translate(40, 0)');
 
-    $scope.areasvg.append('path')
-    .datum(areaChartCounts)
-    .attr("fill", function(d) {
-      return "steelblue";
-    })
-    .attr("stroke", "none")
-    .attr("d", d3.area()
-       .curve(d3.curveLinear)
-       .x(function(d) {
-         return xScale(d.time);
-       })
-       .y0(function(d) {
-         return yScale(0);
-       })
-       .y1(function(d) {
-         return yScale(d.count);
-       }));
-    }
+      $scope.areasvg.append('path')
+      .datum(areaChartCounts)
+      .attr("fill", function(d) {
+        return "steelblue";
+      })
+      .attr("stroke", "none")
+      .attr("d", d3.area()
+        .curve(d3.curveLinear)
+        .x(function(d) {
+          return xScale(d.time);
+        })
+        .y0(function(d) {
+          return yScale(0);
+        })
+        .y1(function(d) {
+          return yScale(d.count);
+        }));
+      
+      $scope.areasvg.append('text')
+        .text('Time (hours)')
+        .attr('transform', 'translate(' + width/2 + ',' + (height - 8) +')')
+        .attr('text-align', 'center');
+
+        $scope.areasvg.append('g')
+        .attr('transform', 'translate(' + 10 + ',' + (height/2) +')')
+        .append('text')
+        .text('Number of Reports')
+        .attr('text-align', 'center')
+        .attr('transform', 'rotate(-90)');
+      }
 
     $scope.prepareDataPie = function(data) {
       var mediaTypeCounts = [];
@@ -455,18 +465,21 @@ angular.module('Aggie')
       for (var i=0; i<data.length; i++) {
         var datum = data[i];
 
-        if (mediaTypeCounts.find(function(d) {
-          return d.type == datum.metadata.type;
-        })) {
-          mediaTypeCounts.find(function(d) {
+        if (datum.metadata.type) {
+          if (mediaTypeCounts.find(function(d) {
             return d.type == datum.metadata.type;
-          }).count++;
-        } else {
-          mediaTypeCounts.push({
-            type: datum.metadata.type,
-            count: 1
-        });
+          })) {
+            mediaTypeCounts.find(function(d) {
+              return d.type == datum.metadata.type;
+            }).count++;
+          } else {
+            mediaTypeCounts.push({
+              type: datum.metadata.type,
+              count: 1
+          });
+          }
         }
+        
       }
 
       $scope.mediaTypeCounts = mediaTypeCounts;
