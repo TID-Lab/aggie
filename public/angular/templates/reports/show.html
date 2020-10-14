@@ -71,7 +71,6 @@
                         </div>
                       </td>
                     </tr>
-
                     <tr>
                       <th scope="row" class="detail-key" translate>Tags</th>
                       <td colspan="10" class="detail-value">
@@ -101,6 +100,30 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header card__header">
+          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+            <h4 class="card-title mb-0">Comments</h4>
+            <nav aria-label="Report list page navigation">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item"><label>
+                  {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                </label></li>
+                <li class="list-inline-item">
+                  <ul class="pagination">
+                    <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                      <a title="Previous Page" aria-label="Previous Page" class="page-link"  ui-sref="reports({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
+                    </li>
+                    <li class="page-item" ng-class="{disabled: isLastPage() }">
+                      <a title="Next Page" class="page-link"  ui-sref="reports({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
