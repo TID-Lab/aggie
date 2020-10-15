@@ -399,19 +399,17 @@ tag.tr__tag {
 .content {
   color: #000;
 }
-.td__checkbox {
-  zoom: 1.25;
-  transform: scale(1.25);
-  -ms-transform: scale(1.25);
-  -webkit-transform: scale(1.25);
-  -o-transform: scale(1.25);
-  -moz-transform: scale(1.25);
-  transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-  -o-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
+
+
+.table__checkbox {
+  width: 32px;
 }
+
+input.checkbox__input {
+  width: 22px;
+  height: 22px;
+}
+
 
 .author__verifiedIcon {
   color: rgba(29,161,242,1.00);

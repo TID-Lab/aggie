@@ -13,8 +13,8 @@
     <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-metadata.hateSpeechScore'"
           ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
-        <td class="text-center" ng-show="currentUser.can('edit data')">
-          <div class="td__checkbox pr-1">
+        <td ng-show="currentUser.can('edit data')">
+          <div class="td__checkbox">
             <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
           </div>
         </td>
