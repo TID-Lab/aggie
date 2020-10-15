@@ -5,11 +5,13 @@
     </div>
     <div class="col-lg-9">
       <div class="card">
-        <h4 class="card-header card__header"> Users </h4>
-        <div class="card-body">
-          <div ng-show="currentUser.can('admin users')" class="button-row">
-            <a role="button" aria-expanded="false" ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</a>
+        <div class="card-header card__header d-flex justify-content-between">
+          <h4 class="card-title mb-0">Users</h4>
+          <div ng-show="currentUser.can('admin users')">
+            <button role="button" aria-expanded="false" ng-controller="UserFormModalController" class="btn btn-info" ng-click="create()" translate>Create User</button>
           </div>
+        </div>
+        <div class="card-body">
           <p ng-hide="users.length > 0 " translate>Sorry, but we couldn't find any users.</p>
 
           <table class="table mt-2" ng-show="users.length > 0">
