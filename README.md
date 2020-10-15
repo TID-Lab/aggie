@@ -231,7 +231,7 @@ npx pm2 logs
 ### Semi-automated upgrade
 
 ```shell script
-mongodump # Automatically back up your database to ./dump/.
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
 cd aggie # Go to where you originally saved Aggie.
 git add -A; git add -u; git stash # Save any files you may have changed.
 git pull # Get upstream changes.
