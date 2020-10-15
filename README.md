@@ -279,18 +279,10 @@ Set `config.adminParty=true` if you want to run tests.
 #### CrowdTangle
 
   1. Create a dashboard on CrowdTangle and generate the dashboard token.
-  1. `cd scripts`
-  1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable:
-      ```python
-      headers = {
-          # Add CrowdTangle Dashboard token here.
-          'x-api-token': "YOUR_TOKEN",
-          'Cache-Control': "no-cache",
-      }
-      ```
-  1. Run `python3 get_ct_accounts_from_lists.py` inside the `scripts` directory.
-  1. This will generate a new file `crowdtangle_list.json` in the `config` directory.
-  1. Add your token to `config/secrets.json` as well.
+  1. Add your CT API token to `config/secrets.json`.
+  1. Run `npm run update-ct-lists` to fetch data.
+      - This will update `config/crowdtangle_list.json`.
+      - This also happens automatically every night at midnight while Aggie is running.
 
 #### WhatsApp
 
