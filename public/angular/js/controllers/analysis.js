@@ -1,3 +1,5 @@
+var _ = require('lodash')
+
 angular
 	.module("Aggie")
 
@@ -5,10 +7,19 @@ angular
 		"$scope",
 		"Socket",
 		"data",
-		function ($scope, Socket, data) {
+		"smtcTags",
+		function ($scope, Socket, data, smtcTags) {
+			var groupById = function(memo, item) {
+				memo[item._id] = item;
+				return memo;
+			};
+			$scope.smtcTags = smtcTags;
+			$scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+			console.log($scope.smtcTags, $scope.smtcTagsById);
+			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 			$scope.data = data.map(function (e) {
 				var out = Object.assign({}, e);
-				out.tags = out.tags.map(function(t) {return (t.includes(",") ? t.split(", ") : t)}).flat();
+				out.tags = out.tags.map(function (t) { return (t.includes(",") ? t.split(", ") : t) }).flat();
 				out.authoredAt = parseTime(out.authoredAt);
 				return out;
 			});
@@ -44,12 +55,13 @@ angular
 					return d3.descending(a.value, b.value);
 				});
 
-			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 
 			var init = function () {
 				Socket.on("stats", updateStats);
 				Socket.join("stats");
-				renderReportGraph("#report-graph", data, tags);
+				renderReportGraph("#report-graph", $scope.data, tags);
+				renderTagBarHistogram("#tags-hist", tagCount);
+				renderStatisticsPlot("#most-stats", tagCount, tagCount[0].name, $scope.data);
 			};
 
 			var updateStats = function (stats) {
@@ -63,9 +75,244 @@ angular
 
 			init();
 
+			function renderStatisticsPlot(id, tagCount, maxTag, data) {
+				var margin = { top: 10, right: 30, bottom: 58, left: 100 },
+					width = 900 - margin.left - margin.right,
+					height = 450 - margin.top - margin.bottom;
+				var reports = data
+					.filter(function (d) {
+						return d.tags.includes(maxTag);
+					})
+					.map(function (r) {
+						return Object.assign({}, r.metadata.expectedStatistics);
+					});
+				var reportStats = Object.entries(
+					reports.reduce(
+						function (acc, cur, i) {
+							Object.keys(cur).forEach(function (k) {
+								acc[k].push(cur[k]);
+							});
+							return acc;
+						},
+						Object.keys(reports[0]).reduce(function (acc, key) {
+							acc[key] = [];
+							return acc;
+						}, {})
+					)
+				).map(function (e) {
+					var sorted = e[1].sort(d3.ascending);
+					var q1 = d3.quantile(sorted, 0.25);
+					var q3 = d3.quantile(sorted, 0.75);
+					var median = d3.quantile(sorted, 0.5);
+					// if (median === q1 && median !== q3) median += 0.2;
+					// else if (median === q3 && median !== q1) median -= 0.2;
+					return { name: e[0], values: sorted, min: d3.min(e[1]), max: d3.max(e[1]), q1: q1, q3: q3, median: median };
+				});
+				console.log(reportStats);
+				var labels = [
+					"Likes 👍",
+					"Shares ➦",
+					"Comments 🗨️",
+					"Loves ❤️",
+					"Wows 😯",
+					"Hahas 😂",
+					"Sads 😢",
+					"Angrys 😡",
+					"Thankfuls 🌺",
+					"Cares 🤗",
+				];
+
+				var svg = d3
+					.select(id)
+					.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				var x = d3
+					.scaleBand()
+					.range([0, width])
+					.domain([
+						"likeCount",
+						"shareCount",
+						"commentCount",
+						"loveCount",
+						"wowCount",
+						"hahaCount",
+						"sadCount",
+						"angryCount",
+						"thankfulCount",
+						"careCount",
+					])
+					.paddingInner(1)
+					.paddingOuter(0.5);
+				var xAxis = svg
+					.append("g")
+					.style("font", "12px 'Lato")
+					.style("color", "#000")
+					.style("opacity", "0.6")
+					.attr("transform", "translate(0," + height + ")")
+					.call(
+						d3.axisBottom(x).tickFormat(function (d, i) {
+							return labels[i];
+						})
+					);
+				var y = d3
+					.scaleLinear()
+					.domain([
+						0,
+						d3.max(reports, function (r) {
+							return d3.max(Object.values(r));
+						}),
+					])
+					.range([height, 0]);
+				svg.append("g").style("opacity", "0.6").call(d3.axisLeft(y));
+				svg
+					.selectAll("vertLines")
+					.data(reportStats)
+					.enter()
+					.append("line")
+					.attr("x1", function (d) {
+						return x(d.name);
+					})
+					.attr("x2", function (d) {
+						return x(d.name);
+					})
+					.attr("y1", function (d) {
+						return y(d.min);
+					})
+					.attr("y2", function (d) {
+						return y(d.max);
+					})
+					.attr("stroke", "black")
+					.style("opacity", "0.6")
+					.style("width", 40);
+				var boxWidth = 30;
+				svg
+					.selectAll("boxes")
+					.data(reportStats)
+					.enter()
+					.append("rect")
+					.attr("x", function (d) {
+						return x(d.name) - boxWidth / 2;
+					})
+					.attr("y", function (d) {
+						return y(d.q3);
+					})
+					.attr("height", function (d) {
+						return y(d.q1) - y(d.q3);
+					})
+					.attr("width", boxWidth)
+					.attr("stroke", "black")
+					.style("fill", "rgb(72, 167, 115)");
+				svg
+					.selectAll("medianLines")
+					.data(reportStats)
+					.enter()
+					.append("line")
+					.attr("x1", function (d) {
+						return x(d.name) - boxWidth / 1.5;
+					})
+					.attr("x2", function (d) {
+						return x(d.name) + boxWidth / 1.5;
+					})
+					.attr("y1", function (d) {
+						return y(d.median);
+					})
+					.attr("y2", function (d) {
+						return y(d.median);
+					})
+					.attr("stroke", "black")
+					.attr("stroke-width", 2)
+					.style("width", 80);
+
+				var label = svg
+					.append("text")
+					.text("Expected* post statistics for " + maxTag + " posts")
+					.attr("text-anchor", "end")
+					.attr("x", width / 2 - 100)
+					.attr("y", height + 54)
+					.style("opacity", "0.75")
+					.attr("text-anchor", "start");
+				var len = label.node().getComputedTextLength();
+				label.attr("x", width / 2 - len / 2);
+			}
+
+			function renderTagBarHistogram(id, data) {
+				var margin = { top: 10, right: 30, bottom: 68, left: 100 },
+					width = 1080 - margin.left - margin.right,
+					height = 450 - margin.top - margin.bottom;
+				var svg = d3
+					.select(id)
+					.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				var y = d3
+					.scaleBand()
+					.range([0, height])
+					.domain(
+						data.map(function (e) {
+							return e.name;
+						})
+					)
+					.padding(0.2);
+				var yAxis = svg
+					.append("g")
+					.style("font", "12px 'Lato")
+					.style("color", "#000")
+					.style("opacity", "0.6")
+					.call(d3.axisLeft(y));
+				var x = d3
+					.scaleLinear()
+					.domain([
+						0,
+						d3.max(data, function (d) {
+							return d.value;
+						}),
+					])
+					.range([0, width]);
+				svg
+					.append("g")
+					.style("font", "12px 'Lato")
+					.style("color", "#000")
+					.style("opacity", "0.6")
+					.attr("transform", "translate(0," + height + ")")
+					.call(d3.axisBottom(x))
+					.selectAll("text")
+					.attr("transform", "translate(-10,0)rotate(-45)")
+					.style("text-anchor", "end");
+				svg
+					.selectAll("myRect")
+					.data(data)
+
+					.enter()
+					.append("rect")
+					.attr("transform", "translate(1,0) ")
+					.attr("x", x(0))
+					.attr("y", function (d) {
+						return y(d.name);
+					})
+					.attr("width", function (d) {
+						return x(d.value);
+					})
+					.attr("height", y.bandwidth())
+					.attr("fill", "#48a773");
+
+				svg
+					.append("text")
+					.text("Reports in past 48hrs")
+					.attr("text-anchor", "end")
+					.attr("x", width / 2 - 100)
+					.attr("y", height + 64)
+					.style("opacity", "0.75")
+					.attr("text-anchor", "start");
+			}
+
 			function renderReportGraph(id, data, tags) {
-				var margin = { top: 40, right: 250, bottom: 50, left: 50 },
-					width = 1050 - margin.left - margin.right,
+				var margin = { top: 40, right: 250, bottom: 100, left: 50 },
+					width = 900 - margin.left - margin.right,
 					height = 400 - margin.top - margin.bottom;
 				data = data.map(function (e) {
 					var out = Object.assign({}, e);
@@ -127,20 +374,15 @@ angular
 					.keys(topTags)
 					.order(d3.stackOrderAppearance)
 					.offset(d3.stackOffsetNone);
-				// var color = d3.scaleOrdinal(
-				// 	data.map(function (d) {
-				// 		return d.;
-				// 	}),
-				// 	d3.interpolateCool
-				// );
-				var color = function (tag) {
-					return d3
-						.scaleLinear()
-						.domain([0, 0.5, 1])
-						.range(["rgb(72, 167, 115)", "#e1ca2a", "orange"])(
-						topTags.indexOf(tag) / topTags.length
-					);
-				};
+				var color = d3.scaleOrdinal(d3.schemeTableau10);
+				// var color = function (tag) {
+				// 	return d3
+				// 		.scaleLinear()
+				// 		.domain([0, 0.5, 1])
+				// 		.range(["rgb(72, 167, 115)", "#e1ca2a", "orange"])(
+				// 			topTags.indexOf(tag) / topTags.length
+				// 		);
+				// };
 				var x = d3
 					.scaleLinear()
 					.domain(
@@ -155,7 +397,9 @@ angular
 					.style("color", "#000")
 					.style("opacity", "0.6")
 					.attr("transform", "translate(0," + height + ")")
-					.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b. %d %H:00")));
+					.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b. %d %H:00")))
+					.selectAll("text")
+					.attr("transform", "translate(-25,25) rotate(-35)");
 
 				var yScale = d3
 					.scaleLinear()
@@ -176,8 +420,8 @@ angular
 					.text("Time")
 					.style("opacity", "0.75")
 					.attr("text-anchor", "end")
-					.attr("x", width)
-					.attr("y", height + 40);
+					.attr("x", width / 2)
+					.attr("y", height + 90);
 				svg
 					.append("text")
 					.text("Reports")
