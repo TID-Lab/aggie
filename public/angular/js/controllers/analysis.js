@@ -1,209 +1,309 @@
-angular.module('Aggie')
+angular
+	.module("Aggie")
 
-.controller('AnalysisController', [
-  '$scope',
-  'Socket',
-  'data',
-  function($scope, Socket, data) {
-    $scope.data = data.map(function (e) {
-			var out = Object.assign({}, e);
-			out.tags = out.tags
-				.map(function (t) {
-					return t.includes(",") ? t.split(", ") : t;
-				})
-				.flat();
-			return out;
-		});
-		var totalCount = data.length;
-		var tags = Array.from(
-			data.reduce(function (acc, cur) {
-				cur.tags.forEach(function (t) {
-					return acc.add(t);
-				});
+	.controller("AnalysisController", [
+		"$scope",
+		"Socket",
+		"data",
+		function ($scope, Socket, data) {
+			$scope.data = data.map(function (e) {
+				var out = Object.assign({}, e);
+				out.tags = out.tags.map(function(t) {return (t.includes(",") ? t.split(", ") : t)}).flat();
+				out.authoredAt = parseTime(out.authoredAt);
+				return out;
+			});
+
+			var tags = Array.from(
+				data.reduce(function (acc, cur) {
+					cur.tags.forEach(function (t) {
+						return acc.add(t);
+					});
+					return acc;
+				}, new Set())
+			);
+
+			var filtered = tags.reduce(function (acc, key) {
+				acc[key] = data.filter(function (e) {
+					return e.tags.includes(key);
+				}).length;
 				return acc;
-			}, new Set())
-		);
-		var filtered = tags.reduce(function (acc, key) {
-			acc[key] = data.filter(function (e) {
-				return e.tags.includes(key);
+			}, {});
+
+			filtered["No Tag"] = data.filter(function (e) {
+				return !e.tags || e.tags.length < 1;
 			}).length;
-			return acc;
-		}, {});
-		filtered["No Tag"] = data.filter(function (e) {
-			return !e.tags || e.tags.length < 1;
-		}).length;
-		var tagCount = Object.keys(filtered)
-			.map(function (key) {
-				return { name: key, value: filtered[key] };
-			})
-			.filter(function (e) {
-				return e.value > 0;
-			});
-		console.log(
-			filtered,
-			tagCount,
-			tagCount.reduce(function (acc, cur) {
-				return acc + cur.value;
-			}, 0)
-		);
 
-		function wrap(d) {
-			var text = d3.select(this),
-				width = d.r * 2,
-				x = d.x,
-				y = d.y,
-				words = text.text().split(/\s+/).reverse(),
-				word,
-				line = [],
-				lineNumber = 0,
-				lineHeight = 1.1,
-				tspan = text.text(null).append("tspan"), //.attr("x", x).attr("y", y);
-				elements = [];
-			elements.push(tspan);
-			while ((word = words.pop())) {
-				line.push(word);
-				tspan.text(line.join(" "));
-				if (tspan.node().getComputedTextLength() > width) {
-					line.pop();
-					tspan.text(line.join(" "));
-					line = [word];
-					tspan = text
-						.append("tspan")
-						.attr("x", 0)
-						.attr("y", 0)
-						.attr("dy", ++lineNumber * lineHeight + "em")
-						.text(word);
-					elements.push(tspan);
-				}
-			}
-			// console.log(elements);
-			tspan = text
-				.append("tspan")
-				.attr("x", 0)
-				.attr("y", 0)
-				.attr("dy", ++lineNumber * lineHeight + "em")
-				.text(((d.data.value / totalCount) * 100).toFixed(1) + "%");
-			elements.push(tspan);
-			elements.forEach(function (e) {
-				return e.attr(
-					"dy",
-					parseFloat((e.attr("dy") || "0em").replace("em", "")) -
-						((elements.length - 1) / 2 - 0.2) * lineHeight +
-						"em"
-				);
-			});
-		}
-
-		var createBubbleChart = function (data, id) {
-			var diameter = 1000;
-			var color = (color = d3.scaleOrdinal(
-				data.map(function (d) {
-					return d.group;
-				}),
-				d3.schemeTableau10
-			));
-			var bubble = d3.pack(data).size([diameter, diameter]).padding(1.5);
-			var tooltipDiv = d3.select(id).append("div").attr("class", "tooltip").style("opacity", 0);
-			var tooltip = function (event, d) {
-				return tooltipDiv
-					.html(
-						'<div class="tooltip-title">' +
-							d.data.name +
-							"</div><div>" +
-							d.data.value +
-							" Reports" +
-							"</div><div>" +
-							((d.data.value / totalCount) * 100).toFixed(1) +
-							"%</div>"
-					)
-					.style("left", event.pageX + "px")
-					.style("top", event.pageY - 75 + "px");
-			};
-			var svg = d3
-				.select(id)
-				.append("svg")
-				.attr("viewBox", [0, 0, diameter, diameter])
-				.attr("font-size", 10)
-				.attr("font-family", "sans-serif")
-				.attr("text-anchor", "middle");
-			var nodes = d3
-				.hierarchy({ children: data })
-				.sum(function (d) {
-					return d.value;
+			var tagCount = Object.keys(filtered)
+				.map(function (key) {
+					return { name: key, value: filtered[key] };
+				})
+				.filter(function (e) {
+					return e.value > 0;
 				})
 				.sort(function (a, b) {
-					return b.value - a.value;
+					return d3.descending(a.value, b.value);
 				});
-			var node = svg
-				.selectAll(".node")
-				.data(bubble(nodes).descendants())
-				.enter()
-				.filter(function (d) {
-					return !d.children;
-				})
-				.append("g")
-				.attr("class", "node")
-				.attr("transform", function (d) {
-					return "translate(" + d.x + "," + d.y + ")";
-				})
-				.on("mouseover", function (event, d) {
-					tooltipDiv.transition().duration(200).style("opacity", 1);
-					tooltip(event, d);
-				})
-				.on("mouseout", function (event, d) {
-					tooltipDiv.transition().duration(500).style("opacity", 0);
-				})
-				.on("mousemove", function (event, d) {
-					tooltip(event, d);
+
+			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
+
+			var init = function () {
+				Socket.on("stats", updateStats);
+				Socket.join("stats");
+				renderReportGraph("#report-graph", data, tags);
+			};
+
+			var updateStats = function (stats) {
+				$scope.stats = stats;
+			};
+
+			$scope.$on("$destroy", function () {
+				Socket.leave("stats");
+				Socket.removeAllListeners("stats");
+			});
+
+			init();
+
+			function renderReportGraph(id, data, tags) {
+				var margin = { top: 40, right: 250, bottom: 50, left: 50 },
+					width = 1050 - margin.left - margin.right,
+					height = 400 - margin.top - margin.bottom;
+				data = data.map(function (e) {
+					var out = Object.assign({}, e);
+					out.authoredAt.setMinutes(0, 0, 0);
+					// out.authoredAt.setHours(0);
+					return out;
 				});
-			node
-				.append("circle")
-				.attr("r", function (d) {
-					return d.r;
-				})
-				.style("fill", function (d, i) {
-					return color(i);
-				})
-				.style("cursor", "pointer");
-			node
-				.append("text")
-				.attr("dy", ".2em")
-				.style("text-anchor", "middle")
-				.text(function (d) {
-					return d.data.name;
-				})
-				.attr("font-family", "sans-serif")
-				.attr("font-size", function (d) {
-					return d.r / 5;
-				})
-				.attr("fill", "white")
-				.each(wrap)
-				.style("cursor", "pointer");
+				var timeBuckets = d3.group(data, function (d) {
+					return d.authoredAt.getTime();
+				});
+				var svg = d3
+					.select(id)
+					.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				var groupedData = Array.from(timeBuckets.entries())
+					.sort(function (a, b) {
+						return a[0] - b[0];
+					})
+					.reduce(function (acc, entry) {
+						var grouped = { day: entry[0] };
+						tags.forEach(function (tag) {
+							grouped[tag] = entry[1].filter(function (r) {
+								return r.tags.includes(tag);
+							}).length;
+						});
+						return acc.concat(grouped);
+					}, []);
+				var totals = groupedData.reduce(function (acc, cur, i) {
+					if (i === 0) return acc;
+					Object.entries(cur).forEach(function (entry) {
+						if (entry[0] !== "day") acc[entry[0]] += entry[1];
+					});
+					return acc;
+				}, Object.assign({}, groupedData[0]));
+				delete totals.day;
+				Object.keys(totals).forEach(function (key) {
+					totals[key] /= groupedData.length;
+				});
+				var sortedTags = Object.entries(totals)
+					.sort(function (a, b) {
+						return b[1] - a[1];
+					})
+					.map(function (e) {
+						return e[0];
+					});
+				var topTags = sortedTags.slice(0, 9).concat(["Other"]);
+				var bottomTags = sortedTags.slice(9);
+				var prunedData = groupedData.map(function (e) {
+					var other = Object.values(_.pick(e, bottomTags)).reduce(function (acc, cur) {
+						return acc + cur;
+					}, 0);
+					return Object.assign({ day: e.day }, _.pick(e, topTags), { Other: other });
+				});
+				var stack = d3
+					.stack()
+					.keys(topTags)
+					.order(d3.stackOrderAppearance)
+					.offset(d3.stackOffsetNone);
+				// var color = d3.scaleOrdinal(
+				// 	data.map(function (d) {
+				// 		return d.;
+				// 	}),
+				// 	d3.interpolateCool
+				// );
+				var color = function (tag) {
+					return d3
+						.scaleLinear()
+						.domain([0, 0.5, 1])
+						.range(["rgb(72, 167, 115)", "#e1ca2a", "orange"])(
+						topTags.indexOf(tag) / topTags.length
+					);
+				};
+				var x = d3
+					.scaleLinear()
+					.domain(
+						d3.extent(data, function (e) {
+							return e.authoredAt.getTime();
+						})
+					)
+					.range([0, width]);
+				var xAxis = svg
+					.append("g")
+					.style("font", "12px 'Lato")
+					.style("color", "#000")
+					.style("opacity", "0.6")
+					.attr("transform", "translate(0," + height + ")")
+					.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b. %d %H:00")));
 
-			d3.select(self.frameElement).style("height", diameter + "px");
-		};
+				var yScale = d3
+					.scaleLinear()
+					.domain(
+						d3.extent(timeBuckets.values(), function (b) {
+							return b.length;
+						})
+					)
+					.range([height, margin.top]);
+				svg
+					.append("g")
+					.style("opacity", "0.6")
+					.attr("transform", "translate(0,0)")
+					.call(d3.axisLeft(yScale).ticks(5));
 
-    var init = function() {
-      Socket.on('stats', updateStats);
-      Socket.join('stats');
-      createBubbleChart(tagCount, "#tag-bubble");
-    }
+				svg
+					.append("text")
+					.text("Time")
+					.style("opacity", "0.75")
+					.attr("text-anchor", "end")
+					.attr("x", width)
+					.attr("y", height + 40);
+				svg
+					.append("text")
+					.text("Reports")
+					.attr("text-anchor", "end")
+					.attr("x", -25)
+					.attr("y", 30)
+					.style("opacity", "0.75")
+					.attr("text-anchor", "start");
 
-    var updateStats = function(stats) {
-      $scope.stats = stats;
-    };
+				var area = d3
+					.area()
+					.x(function (d, i) {
+						return x(d.data.day);
+					})
+					.y0(function (d) {
+						return yScale(d[0]);
+					})
+					.y1(function (d) {
+						return yScale(d[1]);
+					});
+				var areaChart = svg.append("g").attr("clip-path", "url(#clip)");
+				areaChart
+					.selectAll("mylayers")
+					.data(stack(prunedData))
+					.enter()
+					.append("path")
+					.attr("class", function (d) {
+						return "myArea " + d.key.replace(/[\s+|/]/g, "-");
+					})
+					.style("fill", function (d) {
+						return color(d.key);
+					})
+					.attr("d", area);
 
-    $scope.$on('$destroy', function() {
-      Socket.leave('stats');
-      Socket.removeAllListeners('stats');
-    });
+				var clip = svg
+					.append("defs")
+					.append("svg:clipPath")
+					.attr("id", "clip")
+					.append("svg:rect")
+					.attr("width", width)
+					.attr("height", height)
+					.attr("x", 0)
+					.attr("y", 0);
 
-    init();
-    
-    $scope.initiatesvg = function() {
-      $scope.barsvg = d3.select('figure#aggie-viz').append('svg').attr('width', '100%').attr('viewBox', '0 0 1400 800');
-    }
+				// function updateChart(event, d) {
+				//   extent = event.selection;
+				//   console.log(!extent);
 
-    $scope.initiatesvg();
-  }
-]);
+				//   if (!extent) {
+				//     if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
+				//     x.domain(
+				//       d3.extent(data, function (e) {
+				//         return e.authoredAt.getTime();
+				//       })
+				//     );
+				//   } else {
+				//     x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+				//     areaChart.select(".brush").call(brush.move, null);
+				//   }
+
+				//   xAxis
+				//     .transition()
+				//     .duration(800)
+				//     .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b. %d %H:00")));
+				//   areaChart.selectAll("path").transition().duration(800).attr("d", area);
+				// }
+				// var brush = d3
+				// 	.brushX() // Add the brush feature using the d3.brush function
+				// 	.extent([
+				// 		[0, 0],
+				// 		[width, height],
+				// 	]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+				// 	.on("end", updateChart);
+				// areaChart.append("g").attr("class", "brush").call(brush);
+				// var idleTimeout;
+				// function idled() {
+				//   idleTimeout = null;
+				// }
+
+				var highlight = function (event, d) {
+					d3.selectAll(".myArea").style("opacity", 0.1);
+					d3.select("." + d.replace(/[\s+|/]/g, "-")).style("opacity", 1);
+				};
+				var noHighlight = function (event, d) {
+					d3.selectAll(".myArea").style("opacity", 1);
+				};
+
+				var size = 20;
+				svg
+					.selectAll("myrect")
+					.data(topTags)
+					.enter()
+					.append("rect")
+					.attr("x", width + 20)
+					.attr("y", function (d, i) {
+						return 10 + i * (size + 5);
+					}) // 100 is where the first dot appears. 25 is the distance between dots
+					.attr("width", size)
+					.attr("height", size)
+					.style("fill", function (d) {
+						return color(d);
+					})
+					.on("mouseover", highlight)
+					.on("mouseleave", noHighlight);
+
+				// Add one dot in the legend for each name.
+				svg
+					.selectAll("mylabels")
+					.data(topTags)
+					.enter()
+					.append("text")
+					.attr("class", "legend-item")
+					.attr("x", width + 20 + size * 1.2)
+					.attr("y", function (d, i) {
+						return 10 + i * (size + 5) + size / 2;
+					}) // 100 is where the first dot appears. 25 is the distance between dots
+					.style("fill", function (d) {
+						return color(d);
+					})
+					.text(function (d) {
+						return d;
+					})
+					.attr("text-anchor", "left")
+					.style("alignment-baseline", "middle")
+					.on("mouseover", highlight)
+					.on("mouseleave", noHighlight);
+			}
+		},
+	]);
