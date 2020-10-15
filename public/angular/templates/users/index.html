@@ -20,6 +20,8 @@
               <th scope="col" translate>Username</th>
               <th scope="col" translate>Email</th>
               <th scope="col" translate>Role</th>
+              <th scope="col" translate>Edit</th>
+              <th scope="col" translate>Delete</th>
             </tr>
             </thead>
             <tbody>
@@ -30,8 +32,10 @@
               <td class="compact content">{{ u.email }}</td>
               <td class="compact content">{{ u.role | translate }}</td>
               <td ng-controller="UserFormModalController" class="actions compact">
-                <a ng-click="edit(u)" ><i class="fa fa-pencil text-blue"></i></a>
-                <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue"></i></a>
+                <a ng-click="edit(u)" ><i class="fa fa-pencil text-blue fa-lg"></i></a>
+              </td>
+              <td ng-controller="UserFormModalController" class="actions compact">
+                <a href ng-show="currentUser.can('admin users')" aggie-confirm="{{ 'Are you sure you want to delete this user?' | translate }}" on-confirm="delete(u)"><i class="fa fa-trash text-blue fa-lg"></i></a>
               </td>
             </tr>
             </tbody>

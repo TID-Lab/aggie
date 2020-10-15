@@ -13,13 +13,16 @@
       <th scope="col" translate>Escalated?</th>
       <th scope="col" translate>Tags</th>
       <th scope="col" translate>Last Updated</th>
-      <th scope="col" ng-hide="modal || !currentUser.can('edit data')"></th>
+      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
+      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
     </tr>
     </thead>
     <tbody class="table-bordered">
     <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
-      <th scope="row" ng-hide="modal || !currentUser.can('edit data')">
-        <input ng-model="i.selected" type="checkbox" ng-model="i._id"/>
+      <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
+        <div class="td__checkbox">
+          <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>
+        </div>
       </th>
       <td>
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
@@ -57,9 +60,11 @@
         <br>
         <small> {{ i.updatedAt | aggieDate:'date' }}</small>
       </td>
-      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions">
-        <div class="fa fa-pencil text-blue td__edit" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
-        <div class="fa fa-trash text-blue td__delete"
+      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
+        <div class="fa fa-pencil text-blue td__edit fa-lg" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
+      </td>
+      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
+        <div class="fa fa-trash text-blue td__delete fa-lg"
              aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
       </td>
     </tr>
