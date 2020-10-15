@@ -118,11 +118,11 @@
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
               <div aria-label="Read/Unread Buttons/Selection">
                 <!-- Check all button -->
-                <div class="btn-group mr-2">
+                <div class="btn-group mr-4">
                   <input ng-select-all items="incidents" title="Select All" type="checkbox"/>
                 </div>
                 <div class="btn-group mr-2" role="group" aria-label="Delete Button">
-                  <button class="btn btn-default" aggie-confirm="{{'Are you sure you want to delete selected incidents?' | translate}}" on-confirm="removeSelected()">
+                  <button class="btn btn-secondary" aggie-confirm="{{'Are you sure you want to delete selected incidents?' | translate}}" on-confirm="removeSelected()">
                     {{'Delete' | translate}}
                   </button>
                 </div>
