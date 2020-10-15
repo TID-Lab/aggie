@@ -12,7 +12,8 @@ var tagSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
     color: String,
     description: String,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+    isCommentTag: { type: Boolean, default: false }
 });
 
 tagSchema.pre('save', function(next) {
@@ -31,6 +32,7 @@ tagSchema.post('save', function() {
         name: this.name,
         color: this.color,
         description: this.description,
+        isCommentTag: Boolean
     });
 });
 
