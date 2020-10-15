@@ -22,6 +22,7 @@
         </div>
         <div class="form-group">
           <label for="tagColor" translate>Tag Color</label>
+          <br>
           <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
           <small ng-show="!smtcTag.color.length && showErrors" class="text-muted">
             A color must be specified.
@@ -30,6 +31,10 @@
         <div class="form-group">
           <label for="tagDescription">Tag Description</label>
           <textarea class="form-control" id="tagDescription" rows="3" ng-model="smtcTag.description"></textarea>
+        </div>
+        <div class="form-group text-center">
+          <label for="tagIsCommentTag" translate>Tag enables comment acquisition on posts?</label>
+          <input type="checkbox" class="form-control" id="tagIsCommentTag" ng-model="smtcTag.isCommentTag">
         </div>
       </fieldset>
     </form>
