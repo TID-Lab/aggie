@@ -15,17 +15,21 @@ angular
 			};
 			$scope.smtcTags = smtcTags;
 			$scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
-			console.log($scope.smtcTags, $scope.smtcTagsById);
 			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
-			$scope.data = data.map(function (e) {
+			$scope.data = (data || []).map(function (e) {
 				var out = Object.assign({}, e);
-				out.tags = out.tags.map(function (t) { return (t.includes(",") ? t.split(", ") : t) }).flat();
+				out.tags = out.smtcTags.map(function(t) {
+					return $scope.smtcTagsById[t].name;
+				})
 				out.authoredAt = parseTime(out.authoredAt);
 				return out;
 			});
+			console.log(data.filter(function(d) {
+				return d.tags.length > 0 || d.smtcTags.length > 0
+			}));
 
 			var tags = Array.from(
-				data.reduce(function (acc, cur) {
+				$scope.data.reduce(function (acc, cur) {
 					cur.tags.forEach(function (t) {
 						return acc.add(t);
 					});
@@ -34,13 +38,13 @@ angular
 			);
 
 			var filtered = tags.reduce(function (acc, key) {
-				acc[key] = data.filter(function (e) {
+				acc[key] = $scope.data.filter(function (e) {
 					return e.tags.includes(key);
 				}).length;
 				return acc;
 			}, {});
 
-			filtered["No Tag"] = data.filter(function (e) {
+			filtered["Untagged"] = $scope.data.filter(function (e) {
 				return !e.tags || e.tags.length < 1;
 			}).length;
 
@@ -55,13 +59,18 @@ angular
 					return d3.descending(a.value, b.value);
 				});
 
-
+console.log(tagCount);
 			var init = function () {
 				Socket.on("stats", updateStats);
 				Socket.join("stats");
-				renderReportGraph("#report-graph", $scope.data, tags);
-				renderTagBarHistogram("#tags-hist", tagCount);
-				renderStatisticsPlot("#most-stats", tagCount, tagCount[0].name, $scope.data);
+				if ($scope.data.length > 0)  {
+						renderReportGraph("#report-graph", $scope.data, tags);
+						renderTagBarHistogram("#tags-hist", tagCount);
+						var maxTag = tagCount[0];
+						if (maxTag.name === "Untagged" && tagCount.length > 1)
+							maxTag = tagCount[1]
+						renderStatisticsPlot("#most-stats", tagCount, maxTag, $scope.data);
+				}
 			};
 
 			var updateStats = function (stats) {
@@ -76,16 +85,20 @@ angular
 			init();
 
 			function renderStatisticsPlot(id, tagCount, maxTag, data) {
-				var margin = { top: 10, right: 30, bottom: 58, left: 100 },
+				var margin = { top: 10, right: 30, bottom: 58, left: 30 },
 					width = 900 - margin.left - margin.right,
 					height = 450 - margin.top - margin.bottom;
 				var reports = data
 					.filter(function (d) {
-						return d.tags.includes(maxTag);
+						if (maxTag === "Untagged") return d.tags.length === 0;
+						return d.tags.includes(maxTag.name)
+					}).filter(function(d) {
+						return d.metadata.expectedStatistics
 					})
 					.map(function (r) {
 						return Object.assign({}, r.metadata.expectedStatistics);
 					});
+				console.log(reports);
 				var reportStats = Object.entries(
 					reports.reduce(
 						function (acc, cur, i) {
@@ -341,6 +354,9 @@ angular
 								return r.tags.includes(tag);
 							}).length;
 						});
+						grouped["Untagged"] = entry[1].filter(function (r) {
+							return r.tags.length === 0;
+						}).length;
 						return acc.concat(grouped);
 					}, []);
 				var totals = groupedData.reduce(function (acc, cur, i) {
@@ -363,11 +379,19 @@ angular
 					});
 				var topTags = sortedTags.slice(0, 9).concat(["Other"]);
 				var bottomTags = sortedTags.slice(9);
+				if (sortedTags.length < 10) {
+					topTags = topTags.slice(0, topTags.length - 1)
+				}
+				console.log(topTags);
 				var prunedData = groupedData.map(function (e) {
-					var other = Object.values(_.pick(e, bottomTags)).reduce(function (acc, cur) {
-						return acc + cur;
-					}, 0);
-					return Object.assign({ day: e.day }, _.pick(e, topTags), { Other: other });
+					if (sortedTags.length < 10) {
+						return Object.assign({ day: e.day }, _.pick(e, topTags));
+					} else {
+						var other = Object.values(_.pick(e, bottomTags)).reduce(function (acc, cur) {
+							return acc + cur;
+						}, 0);
+						return Object.assign({ day: e.day }, _.pick(e, topTags), { Other: other });
+					}
 				});
 				var stack = d3
 					.stack()
