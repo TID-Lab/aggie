@@ -234,10 +234,11 @@ npx pm2 logs
 export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
 cd aggie # Go to where you originally saved Aggie.
 git add -A; git add -u; git stash # Save any files you may have changed.
+git branch # Make sure you're on 'develop' (or whatever you need to be on).
 git pull # Get upstream changes.
-npm install # Make sure dependencies are up to date.
 git stash pop # Only if you had changes saved earlier.
-# Make sure to resolve any conflicts if there are any.
+# ! Make sure to resolve any conflicts if there are any.
+npm install # Make sure dependencies are up to date.
 git status # Check if it looks right.
 npx pm2 restart aggie # Serve the new version.
 ```
