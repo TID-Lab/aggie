@@ -1,5 +1,5 @@
 <ng-include src="'/templates/alerts.html'"></ng-include>
-<div class="viz-content">
+<div class="viz-content" ng-if="data.length > 0">
   <div class="stat-cards">
     <div class="data-card total-reports">
       <div class="data-card__title" translate>Total Reports</div>
@@ -15,13 +15,16 @@
   <div class="box-sidebar">
     <div class="data-card">
       <h3>Engagement</h3>
-  
+      
     </div>
     <div class="expected-explanation" translate>
       *Expected statistics based on Facebook's prediction model at time of retrieval.
     </div>
   </div>
   <div id="most-stats"></div>
+</div>
+<div class="viz-no-data" ng-if="data.length <= 0">
+  <h2>No Data</h2>
 </div>
 <div class="row mt-4">
   <div class="col text-center">
