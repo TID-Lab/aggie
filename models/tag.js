@@ -32,7 +32,7 @@ tagSchema.post('save', function() {
         name: this.name,
         color: this.color,
         description: this.description,
-        isCommentTag: Boolean
+        isCommentTag: this.isCommentTag,
     });
 });
 
