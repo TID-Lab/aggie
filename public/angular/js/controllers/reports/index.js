@@ -408,19 +408,26 @@ angular.module('Aggie')
      * Sets selected reports' read property to read value
      * @param {boolean} read
      */
-    $scope.toggleSelectedRead = function(read) {
+    $scope.setSelectedReadStatus = function(read) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
-
       var ids = getIds(toggleRead(items, read));
       Report.toggleRead({ ids: ids, read: read });
     };
 
+    $scope.toggleSelectedRead = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return; // If empty, return
+      if (items.findIndex(function(item) {
+        return !item.read;
+      }) !== -1) $scope.setSelectedReadStatus(true);
+      else $scope.setSelectedReadStatus(false);
+    }
     /**
      * Sets all reports' read property in the scope to read
      * @param {boolean} read
      */
-    $scope.toggleAllRead = function(read) {
+    $scope.setAllReadStatus = function(read) {
       var ids = getIds(toggleRead($scope.reports, read));
       Report.toggleRead({ ids: ids, read: read });
     };
@@ -439,12 +446,21 @@ angular.module('Aggie')
      * Takes in a boolean "flagged" value and sets the flagged field on selected reports to that value.
      * @param {boolean} flagged
      */
-    $scope.toggleSelectedFlagged = function(flagged) {
+    $scope.setSelectedFlaggedStatus = function(flagged) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return; // If empty, return
       var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
       Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
     };
+
+    $scope.toggleSelectedFlagged = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return; // If empty, return
+      if (items.findIndex(function(item) {
+        return !item.flagged;
+      }) !== -1) $scope.setSelectedFlaggedStatus(true);
+      else $scope.setSelectedFlaggedStatus(false);
+    }
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
