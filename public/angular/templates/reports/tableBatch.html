@@ -15,7 +15,7 @@
           ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
         <td ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
-            <input type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
+            <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
           </div>
         </td>
         <td class="td__sourceInfo">
