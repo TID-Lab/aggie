@@ -29,7 +29,7 @@ angular.module('Aggie')
           templateUrl: '/templates/tags/modal.html',
           resolve: {
             smtcTag: function() {
-              return {_id: smtcTag._id, name: smtcTag.name, color: smtcTag.color, description: smtcTag.description };
+              return {_id: smtcTag._id, name: smtcTag.name, color: smtcTag.color, description: smtcTag.description, isCommentTag: smtcTag.isCommentTag };
             }
           }
         });
@@ -113,7 +113,7 @@ angular.module('Aggie')
         if ($scope.smtcTag._id) {
           SMTCTag.update({_id: $scope.smtcTag._id}, $scope.smtcTag, handleSuccess, handleError);
         } else {
-          SMTCTag.save({name: $scope.smtcTag.name, color: $scope.smtcTag.color, description: $scope.smtcTag.description}, handleSuccess, handleError);
+          SMTCTag.save({name: $scope.smtcTag.name, color: $scope.smtcTag.color, description: $scope.smtcTag.description, isCommentTag: $scope.smtcTag.isCommentTag}, handleSuccess, handleError);
         }
       };
 

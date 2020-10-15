@@ -303,11 +303,26 @@ td {
   background-color: #f5f6f7;
 }
 
-.td__location {
+.table__incidentTitle {
+  max-width: 10vw;
+}
+
+.modal__incidentTitle {
+  max-width: 100px;
+  word-wrap: break-word;
+}
+
+.modal__location {
+  max-width: 160px;
+  word-wrap: break-word;
+}
+.table__location {
   max-width: 200px;
 }
+
 .td__tags {
   max-width: 180px;
+  word-wrap: break-word;
 }
 
 .td__flag {
@@ -339,6 +354,8 @@ tag.tr__tag {
 
 .td__incident {
   position: relative;
+  max-width: 120px;
+  word-wrap: break-word;
 }
 
 .content__shared {
@@ -382,19 +399,17 @@ tag.tr__tag {
 .content {
   color: #000;
 }
-.td__checkbox {
-  zoom: 1.25;
-  transform: scale(1.25);
-  -ms-transform: scale(1.25);
-  -webkit-transform: scale(1.25);
-  -o-transform: scale(1.25);
-  -moz-transform: scale(1.25);
-  transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-  -o-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
+
+
+.table__checkbox {
+  width: 32px;
 }
+
+input.checkbox__input {
+  width: 22px;
+  height: 22px;
+}
+
 
 .author__verifiedIcon {
   color: rgba(29,161,242,1.00);
