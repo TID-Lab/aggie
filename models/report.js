@@ -87,7 +87,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
 
-    if (!this.commentTo) {
+    if (!this.commentTo && this.media[0] === 'crowdtangle') {
       SMTCTag.findById(smtcTagId, (err, tag) => {
         if (err) {
           logger.error(err);
@@ -116,7 +116,7 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
 
-      if (!this.commentTo) {
+      if (!this.commentTo && this.media[0] === 'crowdtangle') {
         SMTCTag.findById(smtcTagId, (err, tag) => {
           if (err) {
             logger.error(err);
