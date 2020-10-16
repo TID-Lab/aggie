@@ -29,6 +29,7 @@ var schema = new Schema({
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
+  originalPost: { type: String },
 });
 
 // Add fulltext index to the `content` field.
