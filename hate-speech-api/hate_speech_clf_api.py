@@ -33,6 +33,10 @@ class HateSpeechClassifier(FlaskView):
         return preprocessed_text_document
 
     #API endpoints
+    @route('/')
+    def test(self):
+        return jsonify('Hate Speech API is running')
+
     @route("/preprocess", methods=["POST"])
     def preprocess(self):
         try:
@@ -72,4 +76,4 @@ class HateSpeechClassifier(FlaskView):
 HateSpeechClassifier.register(app, route_base = '/')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=False, host='127.0.0.1', port=5000)
