@@ -35,10 +35,10 @@ server {
   index index.html;
 
   # nginx to serve static files rather than Aggie
-  location ~ ^/(js|templates|translations) {
-    # Modify /etc/nginx/nginx.conf to enable the the compression of js, css and other file types
+  location ~ ^/(js|css|images|templates|translations)/ {
     sendfile on;
-    expires 24h;
+    # Cache for 10 minutes, so things update quickly after aggie is deployed.
+    expires 600;
     add_header Cache-Control public;
 
     # XXX NEEDS CUSTOMIZATION.
