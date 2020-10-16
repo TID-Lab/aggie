@@ -174,19 +174,17 @@ cp config/secrets.json.example config/secrets.json
 $EDITOR config/secrets.json
 
 # User input: Get CrowdTangle sources per the README instructions, if using them.
-# Otherwise:
+# Otherwise stub it:
 echo "{}" > config/crowdtangle_list.json
 
-# if detectHateSpeech is set to true, then run the python 2 hate-speech-api
+# If detectHateSpeech is set to true, then run the python 2 hate-speech-api.
 cd hate-speech-api
-#install python dependencies. 
 pip install -r requirements.txt
-# if the above command doesn't work, use
-python2 -m pip install -r requirements.txt
+# ONLY IF the above command doesn't work, use instead:
+# python2 -m pip install -r requirements.txt
 
-#Start the hate-speech-api server
+# Start the hate-speech-api server.
 python2 hate_speech_clf_api.py
-
 
 # Ready! Test run:
 npm start
@@ -201,8 +199,8 @@ curl localhost:3000
 # Final steps
 
 # User input: Print a script to run that will enable Aggie on startup.
-# Copy/paste the last line of output as instructed.
 npx pm2 startup
+# Copy/paste the last line of output as instructed.
 
 # Start (or restart) Aggie in the background; save the PM2 state for startup.
 npm run serve
@@ -233,14 +231,16 @@ npx pm2 logs
 ### Semi-automated upgrade
 
 ```shell script
-mongodump # Automatically back up your database to ./dump/
-cd aggie # Go to where you originally saved Aggie
-git add -A; git add -u; git stash # Save any files you may have changed
-git pull # Get upstream changes
-npm install # Make sure dependencies are up to date
-git stash pop # Only if you had changes saved earlier
-git status # Check if it looks right
-npx pm2 restart aggie # Serve the new version
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
+cd aggie # Go to where you originally saved Aggie.
+git add -A; git add -u; git stash # Save any files you may have changed.
+git branch # Make sure you're on 'develop' (or whatever you need to be on).
+git pull # Get upstream changes.
+git stash pop # Only if you had changes saved earlier.
+# ! Make sure to resolve any conflicts if there are any.
+npm install # Make sure dependencies are up to date.
+git status # Check if it looks right.
+npx pm2 restart aggie # Serve the new version.
 ```
 
 ## Maintenance
@@ -280,18 +280,10 @@ Set `config.adminParty=true` if you want to run tests.
 #### CrowdTangle
 
   1. Create a dashboard on CrowdTangle and generate the dashboard token.
-  1. `cd scripts`
-  1. Open `get_ct_accounts_from_lists.py` and add the dashboard token in the `headers` variable:
-      ```python
-      headers = {
-          # Add CrowdTangle Dashboard token here.
-          'x-api-token': "YOUR_TOKEN",
-          'Cache-Control': "no-cache",
-      }
-      ```
-  1. Run `python3 get_ct_accounts_from_lists.py` inside the `scripts` directory.
-  1. This will generate a new file `crowdtangle_list.json` in the `config` directory.
-  1. Add your token to `config/secrets.json` as well.
+  1. Add your CT API token to `config/secrets.json`.
+  1. Run `npm run update-ct-lists` to fetch data.
+      - This will update `config/crowdtangle_list.json`.
+      - This also happens automatically every night at midnight while Aggie is running.
 
 #### WhatsApp
 

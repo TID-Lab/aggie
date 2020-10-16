@@ -59,7 +59,6 @@ angular
 			var init = function () {
 				Socket.on("stats", updateStats);
 				Socket.join("stats");
-				console.log($scope.data.length);
 				if ($scope.data.length > 0) {
 					renderReportGraph("#report-graph", $scope.data, tags);
 					renderTagBarHistogram("#tags-hist", tagCount);
@@ -96,7 +95,6 @@ angular
 					.map(function (r) {
 						return Object.assign({}, r.metadata.expectedStatistics);
 					});
-				// console.log(reports);
 				if (reports.length < 1)
 					return;
 				var reportStats = Object.entries(
@@ -129,7 +127,6 @@ angular
 						median: median,
 					};
 				});
-				console.log(reportStats);
 				var labels = [
 					"Likes 👍",
 					"Shares ➦",
@@ -249,13 +246,12 @@ angular
 
 				var label = svg
 					.append("text")
-					.text("Expected* post statistics for \"" + maxTag.name + "\" posts")
+					.text('Expected* post statistics for "' + maxTag.name + '" posts')
 					.attr("text-anchor", "end")
 					.attr("x", width / 2 - 100)
 					.attr("y", height + 54)
 					.style("opacity", "0.75")
 					.attr("text-anchor", "start");
-				console.log(label, label.node());
 				var len = label.node().getComputedTextLength();
 				label.attr("x", width / 2 - len / 2);
 			}
@@ -391,7 +387,6 @@ angular
 				if (sortedTags.length < 10) {
 					topTags = topTags.slice(0, topTags.length - 1);
 				}
-				console.log(topTags);
 				var prunedData = groupedData.map(function (e) {
 					if (sortedTags.length < 10) {
 						return Object.assign({ day: e.day }, _.pick(e, topTags));

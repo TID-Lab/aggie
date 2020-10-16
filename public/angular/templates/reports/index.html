@@ -24,7 +24,7 @@
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" ng-model="searchParams.tags" aria-label="tagSearch" class="form-control filters__input" placeholder="{{'Enter Tags' | translate}}">
+                  <input id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
                   <div class="input-group-append">
                     <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
                       <span>&times;</span>
@@ -85,7 +85,7 @@
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <div class="input-group input-group-sm">
-                      <button type="button" class="btn btn-light" ng-controller="DatetimeModalController" ng-click="open()">
+                      <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
                     <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
                       <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
                       <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
@@ -97,7 +97,7 @@
                   </li>
                   <li class="list-inline-item" ng-hide="noFilters()">
                     <div class="input-group input-group-sm">
-                      <button type="submit" class="btn btn-light" ng-click="clearFilters()" translate>Clear Filters</button>
+                      <button type="submit" class="btn btn-secondary" ng-click="clearFilters()" translate>Clear Filters</button>
                     </div>
                   </li>
                   <li class="list-inline-item">
@@ -153,22 +153,17 @@
               <div class="btn-group mr-4">
                 <input ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+              <div class="btn-group mr-2" role="group" aria-label="Read/Unread Buttons">
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
-                  <span class="mr-2" translate> Un-Flag </span>
-                  <i class="fa fa-flag-o" aria-hidden="true"></i>
-                </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
+              <div class="btn-group mr-2" role="group" aria-label="Flag Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+              <div class="btn-group mr-2" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>

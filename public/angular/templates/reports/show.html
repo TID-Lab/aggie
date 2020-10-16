@@ -25,25 +25,20 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <div class="table-responsive">
-                <table class="table table-sm table-hover">
-                  <tbody>
-                  <!----------------- General Report Information ----------------->
+          <div ng-if="report._media[0] === 'twitter'" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>
+          <div ng-if="report._media[0] === 'crowdtangle'" ng-include="'/templates/reports/content-services/crowd-tangle-show.html'"></div>
+          <div ng-if="report._media[0] !== 'twitter' && report._media[0] !== 'crowdtangle'">
+            <div class="row">
+              <div class="col">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover">
+                    <tbody>
+                    <!----------------- General Report Information ----------------->
                     <tr>
                       <th scope="row" translate>Author</th>
                       <td colspan="10" class="detail-value">
                         <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
                         <span ng-if="!report.metadata.accountUrl">{{ report.author }}</span>
-                      </td>
-                    </tr>
-                    <tr ng-if="report.metadata.subscriberCount">
-                      <th scope="row" translate>Subscriber Count</th>
-                      <td colspan="10">
-                        <span title="{{'Subscriber Count' | translate}}">
-                        {{report.metadata.subscriberCount}}
-                      </span>
                       </td>
                     </tr>
                     <tr>
@@ -96,38 +91,15 @@
                         </tags>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
-                <h5 class="detail-key" translate>Content</h5>
-                <p class="detail-value" ng-bind-html="report.content">{{ report.content }}</p>
-                <p class="text-wrap content__shared" ng-if="report.metadata.description">
-                  {{report.metadata.description | stripHtml}}
-                </p>
-              </div>
-              <div ng-if="report.metadata.crowdtangleId" ng-include="'/templates/reports/content-services/crowd-tangle-show.html'"></div>
-            </div>
-            <div ng-if="report.metadata.mediaUrl" class="col">
-              <!-------------- Crowdtangle Specific Table Elements -------------->
-              <div ng-if="report.metadata.crowdtangleId">
-                <div ng-repeat="media in report.metadata.mediaUrl">
-                  <a id="reportMedia" ng-href="{{report.metadata.externalUrl}}" target="_blank"><img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}"></a>
+                    </tbody>
+                  </table>
+                  <h5 class="detail-key" translate>Content</h5>
+                  <p class="detail-value" ng-bind-html="report.content">{{ report.content }}</p>
+                  <p class="text-wrap content__shared" ng-if="report.metadata.description">
+                    {{report.metadata.description | stripHtml}}
+                  </p>
                 </div>
               </div>
-              <label ng-if="report.metadata.mediaUrl" for="reportMedia" title="{{'Content Type' | translate}}" ng-switch="report.metadata.type">
-                <span ng-switch-when="link">{{'Link' | translate}}</span>
-                <span ng-switch-when="native_video">{{'Native Video' | translate}}</span>
-                <span ng-switch-when="status">{{'Status' | translate}}</span>
-                <span ng-switch-when="photo">{{'Photo' | translate}}</span>
-                <span ng-switch-when="episode">{{'Episode' | translate}}</span>
-                <span ng-switch-when="extra_clip">{{'Extra Clip' | translate}}</span>
-                <span ng-switch-when="live_video">{{'Live Video' | translate}}</span>
-                <span ng-switch-when="live_video_complete">{{'Completed Live Video' | translate}}</span>
-                <span ng-switch-when="live_video_scheduled">{{'Scheduled Live Video' | translate}}</span>
-                <span ng-switch-when="trailer">{{'Trailer' | translate}}</span>
-                <span ng-switch-when="video">{{'Non-Native Video' | translate}}</span>
-                <span ng-switch-when="youtube">{{'Youtube Video' | translate}}</span>
-                <span ng-switch-default>{{'Unknown Type' | translate}}</span>
-              </label>
             </div>
           </div>
         </div>

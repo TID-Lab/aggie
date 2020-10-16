@@ -53,7 +53,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
   if (this.author)    filter.author = { $regex: this.author, $options: 'i'}
   if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
-  if (this.tags)      filter.tags = { $in: this.tags }
+  if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
   console.log(filter);
   return filter;

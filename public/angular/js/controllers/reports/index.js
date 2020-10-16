@@ -26,6 +26,10 @@ angular.module('Aggie')
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate) {
 
+    $scope.smtcTags = smtcTags;
+    $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
+      return smtcTag.name;
+    });
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -39,7 +43,9 @@ angular.module('Aggie')
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
     $scope.smtcTags = smtcTags;
-    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat()));
+    $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function(obj) {
+      return obj.name;
+    }))), ["Saved Search"]);
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -81,6 +87,7 @@ angular.module('Aggie')
       }
       // make links clickable
       $scope.reports.forEach(linkify);
+      updateTagSearchNames();
     };
 
     var updateStats = function(stats) {
@@ -111,7 +118,6 @@ angular.module('Aggie')
 
     $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
-
         // Remove empty params.
         var params = searchParams(newParams);
         for (var key in params) {
@@ -121,11 +127,50 @@ angular.module('Aggie')
       });
     };
 
+    var smtcTagNamesToIds = function(tagNames) {
+      // This runs on the start of the page
+      // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
+      if (tagNames.length !== 1) {
+        tagNames = tagNames.split(',');
+        if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      }
+      //TODO: This can be done with functional programming (whenever I try it breaks)
+      var searchedTagIds = tagNames.map(function(smtcTagName) {
+        smtcTagName = smtcTagName.trim();
+        var foundId = "";
+        $scope.smtcTags.forEach(function(smtcTag){
+          // Case doesn't matter
+          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
+          else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
+        });
+        if (foundId === "") return null;
+        return foundId;
+      });
+      searchedTagIds = searchedTagIds.filter(function (el) {
+        return el != null;
+      });
+      return searchedTagIds;
+    }
+
+    var updateTagSearchNames = function() {
+      if ($scope.searchParams.tags) {
+        var tagNames = "";
+        tagNames = $scope.searchParams.tags.map(function(tagId) {
+          if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+          else { return tagId; }
+        });
+        $scope.searchParams = { tags: tagNames.join(', ') };
+      }
+    }
+
     var searchParams = function(newParams) {
       var params = $scope.searchParams;
       params.page = 1;
       for (var key in newParams) {
         params[key] = newParams[key];
+      }
+      if (params.tags) {
+        params.tags = smtcTagNamesToIds(params.tags);
       }
       return params;
     };
@@ -286,6 +331,7 @@ angular.module('Aggie')
         $scope.searchParams.incidentId === null &&
         $scope.searchParams.author === null &&
         $scope.searchParams.tags === null &&
+        $scope.searchParams.list === null &&
         $scope.searchParams.keywords === null;
     };
 
@@ -299,6 +345,7 @@ angular.module('Aggie')
         incidentId: null,
         author: null,
         tags: null,
+        list: null,
         keywords: null
       });
     };
@@ -361,19 +408,26 @@ angular.module('Aggie')
      * Sets selected reports' read property to read value
      * @param {boolean} read
      */
-    $scope.toggleSelectedRead = function(read) {
+    $scope.setSelectedReadStatus = function(read) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
-
       var ids = getIds(toggleRead(items, read));
       Report.toggleRead({ ids: ids, read: read });
     };
 
+    $scope.toggleSelectedRead = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return; // If empty, return
+      if (items.findIndex(function(item) {
+        return !item.read;
+      }) !== -1) $scope.setSelectedReadStatus(true);
+      else $scope.setSelectedReadStatus(false);
+    }
     /**
      * Sets all reports' read property in the scope to read
      * @param {boolean} read
      */
-    $scope.toggleAllRead = function(read) {
+    $scope.setAllReadStatus = function(read) {
       var ids = getIds(toggleRead($scope.reports, read));
       Report.toggleRead({ ids: ids, read: read });
     };
@@ -392,14 +446,21 @@ angular.module('Aggie')
      * Takes in a boolean "flagged" value and sets the flagged field on selected reports to that value.
      * @param {boolean} flagged
      */
-    $scope.toggleSelectedFlagged = function(flagged) {
+    $scope.setSelectedFlaggedStatus = function(flagged) {
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return; // If empty, return
       var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
       Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
     };
 
-
+    $scope.toggleSelectedFlagged = function() {
+      var items = $scope.filterSelected($scope.reports);
+      if (!items.length) return; // If empty, return
+      if (items.findIndex(function(item) {
+        return !item.flagged;
+      }) !== -1) $scope.setSelectedFlaggedStatus(true);
+      else $scope.setSelectedFlaggedStatus(false);
+    }
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
@@ -460,7 +521,7 @@ angular.module('Aggie')
 
     // Batch Mode Functions
     $scope.grabBatch = function() {
-      $scope.searchParams.tags = Tags.stringToTags($scope.searchParams.tags);
+      $scope.searchParams.tags = $scope.searchParams.tags;
       Batch.checkout($scope.searchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
@@ -539,11 +600,45 @@ angular.module('Aggie')
       }
     };
 
+    var splitInput = function(val) {
+      return val.split( /,\s*/ );
+    }
+    var extractLast = function extractLast(term) {
+        return splitInput( term ).pop();
+    }
+
+    $scope.onTagSearchInputLoad = function() {
+      $( "#tagSearchInput" )
+        .autocomplete({
+          minLength: 0,
+          source: function( request, response ) {
+            response( $.ui.autocomplete.filter(
+              $scope.smtcTagNames, extractLast( request.term ) ) );
+          },
+          focus: function() {
+            return false;
+          },
+          select: function( event, ui ) {
+            var terms = splitInput( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+          }
+        });
+    }
+
     $scope.$on('$destroy', function() {
       Socket.leave('reports');
       Socket.removeAllListeners('reports');
       Socket.leave('stats');
       Socket.removeAllListeners('stats');
+      Socket.leave('tags');
+      Socket.removeAllListeners('tags');
     });
 
     $scope.tagsToString = Tags.tagsToString;

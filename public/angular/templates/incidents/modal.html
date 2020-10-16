@@ -17,8 +17,8 @@
           <div class="form-group">
             <label for="title" translate>Title</label>
             <input id="title" name="title" type="text" class="form-control"
-                   ng-model="incident.title" maxlength="32" ng-focus required>
-            <small><span ng-show="incident.title.length">{{32 - incident.title.length}} characters remaining</span></small>
+                   ng-model="incident.title" maxlength="42" ng-focus required>
+            <small><span ng-show="incident.title.length">{{42 - incident.title.length}} characters remaining</span></small>
             <div class="has-error" ng-show="showErrors">
               <div class="help-block" ng-show="form.title.$error.required" translate>
                 <p class="lead">Title is required.</p>

@@ -1,3 +1,4 @@
+<!-- TODO: Make this into two different files for clarity -->
 <div class="table-responsive">
   <table class="table table-sm" ng-show="pagination.total > 0 || modal" ng-class="{'table-hover': modal}">
     <thead>
@@ -12,24 +13,27 @@
       <th scope="col" translate>Escalated?</th>
       <th scope="col" translate>Tags</th>
       <th scope="col" translate>Last Updated</th>
-      <th scope="col" ng-hide="modal || !currentUser.can('edit data')"></th>
+      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
+      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
     </tr>
     </thead>
     <tbody class="table-bordered">
     <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
-      <th scope="row" ng-hide="modal || !currentUser.can('edit data')">
-        <input ng-model="i.selected" type="checkbox" ng-model="i._id"/>
+      <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
+        <div class="td__checkbox">
+          <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>
+        </div>
       </th>
       <td>
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>
-      <td>
+      <td ng-class="modal ? 'modal__incidentTitle' : 'table__incidentTitle'">
         <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
         <strong ng-show="modal">{{ i.title }}</strong>
         <br />
         <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
       </td>
-      <td class="td__location">
+      <td ng-class = "modal ? 'modal__location' : 'table__location'">
         <div class="map-marker" ng-show="i.latitude && i.longitude"></div>
         <span ng-if="i.locationName">{{ i.locationName }}</span>
         <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
@@ -43,21 +47,24 @@
           <span ng-if="!i.veracity" class="text-red" translate>False</span>
         </div>
       </td>
-      <td>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</td>
-      <td class="td__tags">{{ tagsToString(i.tags) }}</td>
-      <td>
-        <div class="interval">
-          <span class="interval-amount">{{ i.updatedAt | interval }}</span>
-          <span class="interval-relative" translate>ago</span>
-        </div>
-        <div class="date-and-time">
-          <span class="time">{{ i.updatedAt | aggieDate:'time' }}</span>
-          <span class="date">{{ i.updatedAt | aggieDate:'date' }}</span>
-        </div>
+      <td class="table__escalated" title="{{'Escalated?' | translate}}">
+        <span>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</span>
       </td>
-      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions">
-        <div class="fa fa-pencil text-blue td__edit" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
-        <div class="fa fa-trash text-blue td__delete"
+      <td class="td__tags" title="{{'Tags' | translate}}">
+        <span>{{ tagsToString(i.tags) }}</span>
+      </td>
+      <td>
+        <span class="badge badge-pill badge-secondary mb-2" title="">{{ i.storedAt | interval }} ago</span>
+        <br>
+        <small class="time">{{ i.updatedAt | aggieDate:'time' }}</small>
+        <br>
+        <small> {{ i.updatedAt | aggieDate:'date' }}</small>
+      </td>
+      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
+        <div class="fa fa-pencil text-blue td__edit fa-lg" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
+      </td>
+      <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
+        <div class="fa fa-trash text-blue td__delete fa-lg"
              aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
       </td>
     </tr>

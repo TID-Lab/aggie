@@ -5,11 +5,15 @@ var mongoose = database.mongoose;
 var logger = require('../lib/logger');
 var _ = require('underscore');
 
+var lengthValidator = function(str) {
+    return validator.isLength(str, {min: 0, max: 15})
+}
 var tagSchema = new mongoose.Schema({
-    name: {type: String, required: true, unique: true },
+    name: {type: String, required: true, unique: true},
     color: String,
     description: String,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+    isCommentTag: { type: Boolean, default: false }
 });
 
 tagSchema.pre('save', function(next) {
@@ -28,6 +32,7 @@ tagSchema.post('save', function() {
         name: this.name,
         color: this.color,
         description: this.description,
+        isCommentTag: this.isCommentTag,
     });
 });
 
@@ -51,5 +56,6 @@ SMTCTag.checkNewUnique = function(tag, callback) {
         else callback(true);
     })
 }
+
 
 module.exports = SMTCTag;

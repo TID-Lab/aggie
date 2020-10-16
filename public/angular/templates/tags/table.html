@@ -5,7 +5,9 @@
     <th scope="col" translate>Color</th>
     <th scope="col" translate ng-if="currentUser.can('view other users')">Created By</th>
     <th scope="col" translate>Description</th>
-    <th scope="col" translate ng-if="currentUser.can('edit tags')">Edit or Delete</th>
+    <th scope="col" translate>Tag Enables Comment Acquisition on Posts?</th>
+    <th scope="col" translate ng-if="currentUser.can('edit tags')">Edit</th>
+    <th scope="col" translate ng-if="currentUser.can('edit tags')">Delete</th>
   </tr>
   </thead>
   <tbody class="table-bordered table-condensed">
@@ -21,8 +23,13 @@
         <textarea class="form-control" rows="3" disabled placeholder="No description provided." ng-bind="smtcTag.description"></textarea>
       </td>
       <td ng-if="currentUser.can('edit tags')">
-        <div ng-controller="SMTCTagFormModalController" class="fa fa-pencil text-blue td__edit" ng-click="edit(smtcTag)"></div>
-        <div class="fa fa-trash text-blue td__delete" aggie-confirm="{{ 'Are you sure you want to delete this tag?' | translate }}" on-confirm="deleteSMTCTag(smtcTag)"></div>
+        <input type="checkbox" class="form-control" disabled ng-checked="smtcTag.isCommentTag">
+      </td>
+      <td ng-if="currentUser.can('edit tags')" class="align-middle text-center">
+        <div ng-controller="SMTCTagFormModalController" class="fa fa-pencil text-blue td__edit fa-lg" ng-click="edit(smtcTag)"></div>
+      </td>
+      <td ng-if="currentUser.can('edit tags')" class="align-middle text-center">
+        <div class="fa fa-trash text-blue td__delete fa-lg" aggie-confirm="{{ 'Are you sure you want to delete this tag? You cannot revert this action.' | translate }}" on-confirm="deleteSMTCTag(smtcTag)"></div>
       </td>
     </tr>
   </tbody>

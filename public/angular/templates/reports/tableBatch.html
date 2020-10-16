@@ -11,15 +11,15 @@
       </tr>
     </thead>
     <tbody class="table-bordered">
-      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
+      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-metadata.hateSpeechScore'"
           ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
-        <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
+        <td class="table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
             <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
           </div>
         </td>
         <td class="td__sourceInfo">
-          <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
+          <span class="badge badge-pill badge-secondary mb-2">{{ r.storedAt | interval }} ago</span>
           <p class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
               {{ r.author }}
