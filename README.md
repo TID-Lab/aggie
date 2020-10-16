@@ -80,23 +80,23 @@ Again, see below for automated installation.
     - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
     - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
-    1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-    1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+    -  Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+    - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
 1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
-2.  Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
-3. Run `npm install` from the project directory.
+1.  Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
+1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-4. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
+1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
     - This installs some tools globally which can then be run from the command line for testing.
     - You will most likely need Google Chrome installed on your computer for the protractor tests to run.
     - This is optional, as `npx` provides easy access to the local copies of these that are installed by `npm install`
-5. To start server in production mode, run `npm start`. Use `npm run dev` for development.
+1. To start server in production mode, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-6. Navigate to `https://localhost:3000` in your browser.
+1. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
