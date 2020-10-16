@@ -9,7 +9,7 @@ angular
 		"data",
 		"smtcTags",
 		function ($scope, Socket, data, smtcTags) {
-			var groupById = function(memo, item) {
+			var groupById = function (memo, item) {
 				memo[item._id] = item;
 				return memo;
 			};
@@ -18,15 +18,12 @@ angular
 			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 			$scope.data = (data || []).map(function (e) {
 				var out = Object.assign({}, e);
-				out.tags = out.smtcTags.map(function(t) {
+				out.tags = out.smtcTags.map(function (t) {
 					return $scope.smtcTagsById[t].name;
-				})
+				});
 				out.authoredAt = parseTime(out.authoredAt);
 				return out;
 			});
-			console.log(data.filter(function(d) {
-				return d.tags.length > 0 || d.smtcTags.length > 0
-			}));
 
 			var tags = Array.from(
 				$scope.data.reduce(function (acc, cur) {
@@ -59,17 +56,17 @@ angular
 					return d3.descending(a.value, b.value);
 				});
 
-console.log(tagCount);
 			var init = function () {
 				Socket.on("stats", updateStats);
 				Socket.join("stats");
-				if ($scope.data.length > 0)  {
-						renderReportGraph("#report-graph", $scope.data, tags);
-						renderTagBarHistogram("#tags-hist", tagCount);
-						var maxTag = tagCount[0];
-						if (maxTag.name === "Untagged" && tagCount.length > 1)
-							maxTag = tagCount[1]
-						renderStatisticsPlot("#most-stats", tagCount, maxTag, $scope.data);
+				console.log($scope.data.length);
+				if ($scope.data.length > 0) {
+					renderReportGraph("#report-graph", $scope.data, tags);
+					renderTagBarHistogram("#tags-hist", tagCount);
+					var maxTag = tagCount[0];
+					if (maxTag.name === "Untagged" && tagCount.length > 1) maxTag = tagCount[1];
+					$scope.maxTag = maxTag;
+					renderStatisticsPlot("#most-stats", tagCount, maxTag, $scope.data);
 				}
 			};
 
@@ -91,14 +88,17 @@ console.log(tagCount);
 				var reports = data
 					.filter(function (d) {
 						if (maxTag === "Untagged") return d.tags.length === 0;
-						return d.tags.includes(maxTag.name)
-					}).filter(function(d) {
-						return d.metadata.expectedStatistics
+						return d.tags.includes(maxTag.name);
+					})
+					.filter(function (d) {
+						return d.metadata.expectedStatistics;
 					})
 					.map(function (r) {
 						return Object.assign({}, r.metadata.expectedStatistics);
 					});
-				console.log(reports);
+				// console.log(reports);
+				if (reports.length < 1)
+					return;
 				var reportStats = Object.entries(
 					reports.reduce(
 						function (acc, cur, i) {
@@ -119,7 +119,15 @@ console.log(tagCount);
 					var median = d3.quantile(sorted, 0.5);
 					// if (median === q1 && median !== q3) median += 0.2;
 					// else if (median === q3 && median !== q1) median -= 0.2;
-					return { name: e[0], values: sorted, min: d3.min(e[1]), max: d3.max(e[1]), q1: q1, q3: q3, median: median };
+					return {
+						name: e[0],
+						values: sorted,
+						min: d3.min(e[1]),
+						max: d3.max(e[1]),
+						q1: q1,
+						q3: q3,
+						median: median,
+					};
 				});
 				console.log(reportStats);
 				var labels = [
@@ -241,12 +249,13 @@ console.log(tagCount);
 
 				var label = svg
 					.append("text")
-					.text("Expected* post statistics for " + maxTag + " posts")
+					.text("Expected* post statistics for \"" + maxTag.name + "\" posts")
 					.attr("text-anchor", "end")
 					.attr("x", width / 2 - 100)
 					.attr("y", height + 54)
 					.style("opacity", "0.75")
 					.attr("text-anchor", "start");
+				console.log(label, label.node());
 				var len = label.node().getComputedTextLength();
 				label.attr("x", width / 2 - len / 2);
 			}
@@ -380,7 +389,7 @@ console.log(tagCount);
 				var topTags = sortedTags.slice(0, 9).concat(["Other"]);
 				var bottomTags = sortedTags.slice(9);
 				if (sortedTags.length < 10) {
-					topTags = topTags.slice(0, topTags.length - 1)
+					topTags = topTags.slice(0, topTags.length - 1);
 				}
 				console.log(topTags);
 				var prunedData = groupedData.map(function (e) {
