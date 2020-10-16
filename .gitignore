@@ -22,6 +22,7 @@ npm-debug*
 node_modules
 fiddle
 .idea
+.vscode/settings.json
 *.iml
 .DS_Store
 Thumbs.db
@@ -39,17 +40,18 @@ public/angular/translations/locale-debug.json
 lib/translations/locale-debug.json
 
 config/secrets.json
+# We can't directly ignore config/crowdtangle_list.json, instead:
+# git update-index --skip-worktree config/crowdtangle_list.json
+
+hate-speech-api/*.log
 
 buildAssets
+docs/_build
 
 NOTES
 
 data
 
 config/cert.pem
-
 config/key.pem
 
-docs/_build
-
-.vscode/settings.json
