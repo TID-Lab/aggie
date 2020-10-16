@@ -293,6 +293,8 @@ Set `config.adminParty=true` if you want to run tests.
       - This will update `config/crowdtangle_list.json`.
       - This also happens automatically every night at midnight while Aggie is running.
 
+Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
+
 #### WhatsApp
 
 The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
