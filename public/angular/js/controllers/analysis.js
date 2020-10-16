@@ -1,5 +1,5 @@
 var _ = require('lodash')
-
+var d3 = require("d3");
 angular
 	.module("Aggie")
 
@@ -15,6 +15,7 @@ angular
 			};
 			$scope.smtcTags = smtcTags;
 			$scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+			console.log(data.length, d3);
 			var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 			$scope.data = (data || []).map(function (e) {
 				var out = Object.assign({}, e);
