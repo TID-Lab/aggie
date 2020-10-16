@@ -18,7 +18,7 @@
                     <button type="reset" title="Search" class="btn btn-transparent button--clearFilter" ng-click="clearSearch()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
@@ -29,7 +29,7 @@
                     <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
@@ -40,7 +40,7 @@
                     <button type="reset" title="clearAuthor" class="btn btn-transparent button--clearFilter" ng-click="clearAuthor()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
@@ -106,7 +106,7 @@
                     <div class="input-group input-group-sm">
                       <button type="submit" class="btn btn-info" ng-click="search()">
                         <span class="mr-2" translate> Search </span>
-                        <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                        <i class="fa fa-search text-light" aria-hidden="true"></i>
                       </button>
                     </div>
                   </li>
@@ -148,28 +148,28 @@
     <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div title="Selection Actions" class="card-header card__header" aria-label="Top Selection Actions Toolbar" role="toolbar">
+        <div title="Selection Actions" class="card-header card__header cardheader--withSelect" aria-label="Top Selection Actions Toolbar" role="toolbar">
           <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
-              <div class="btn-group mr-4">
-                <input ng-select-all items="reports" title="Select All" type="checkbox"/>
+              <div class="btn-group mr-3">
+                <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Read/Unread Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
                 <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Flag Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Incident Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
-              <div class="btn-group mr-2">
+              <div class="btn-group mr-3">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
@@ -200,27 +200,21 @@
         <div title="Selection Actions" class="card-footer card__footer" aria-label="Bottom Selection Actions Toolbar" role="toolbar">
           <div class="btn-toolbar justify-content-between" aria-label="Bottom Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
-              <!-- Check all button -->
-              <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                <button title="Mark as Read/Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
-                  <span class="mr-2" translate> Un-Flag </span>
-                  <i class="fa fa-flag-o" aria-hidden="true"></i>
-                </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
-              <div class="btn-group mr-2">
+              <div class="btn-group mr-3">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>

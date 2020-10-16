@@ -38,7 +38,7 @@
         </td>
         <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
           <div ng-repeat="media in r.metadata.mediaUrl">
-            <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
+            <a ng-if="media.type==='photo'" href="/reports/{{r._id}}" target="_blank">
               <img alt="{{'Thumbnail from report media'}}" class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
             </a>
           </div>
