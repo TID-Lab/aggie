@@ -177,7 +177,7 @@ $EDITOR config/secrets.json
 # Otherwise stub it:
 echo "{}" > config/crowdtangle_list.json
 
-# Follow this steps for setting up hate speech API for Burmese
+# Follow these steps for setting up hate speech API for Burmese
 python --version # check if you have python 2 installed.
 cd hate-speech-api
 npm install forever -g # install `forever` npm module.
