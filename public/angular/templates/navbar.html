@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-default" ng-controller="NavbarController">
+<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark bg-default" ng-controller="NavbarController">
   <!--This is the Left Side of the NavBar -->
-  <a class="aggie-brand" ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
+  <a class="aggie-brand" aria-label="Reports Page" ng-href="{{ $state.includes('reset_admin_password')? '/reset_admin_password' : '/' }}">
     <div class="navbar-brand"></div>
   </a>
   <!-- This is the button for the collapsed nav content -->
-  <button class="navbar-toggler"  ng-show="currentUser" type="button" data-toggle="collapse" data-target="#navbarLeft" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler"  ng-show="currentUser" type="button" data-toggle="collapse" data-target="#navbarLeft" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarLeft">

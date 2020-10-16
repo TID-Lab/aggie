@@ -9,11 +9,11 @@
     <div class="col-xl-10">
       <div class="card">
         <div class="container-fluid">
-          <form>
+          <form role="search">
             <div class="form-row pt-2 pb-2">
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" ng-model="searchParams.keywords" class="form-control filters__input" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
+                  <input title="{{'Keyword Search' | translate}}" type="text" ng-model="searchParams.keywords" class="form-control filters__input" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
                   <div class="input-group-append">
                     <button type="reset" title="Search" class="btn btn-transparent button--clearFilter" ng-click="clearSearch()">
                       <span>&times;</span>
@@ -24,7 +24,7 @@
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
+                  <input title="{{'Tag Search' | translate}}" id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
                   <div class="input-group-append">
                     <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
                       <span>&times;</span>
@@ -35,7 +35,7 @@
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" ng-model="searchParams.author" class="form-control filters__input" placeholder="{{ 'Enter Author' | translate }}">
+                  <input title="{{'Author Search' | translate}}" type="text" ng-model="searchParams.author" class="form-control filters__input" placeholder="{{ 'Enter Author' | translate }}">
                   <div class="input-group-append">
                     <button type="reset" title="clearAuthor" class="btn btn-transparent button--clearFilter" ng-click="clearAuthor()">
                       <span>&times;</span>
@@ -48,35 +48,37 @@
             <div class="form-row">
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Status Filter' | translate}}" ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Status</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.media" ng-options="media| replaceCT | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Media Type Filter' | translate}}" ng-model="searchParams.media" ng-options="media| replaceCT | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Media</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Source Filter' | translate}}" ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Source</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.list" ng-options="list | capitalize | translate for list in listOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Crowdtangle List Filter' | translate}}" ng-model="searchParams.list" ng-options="list | capitalize | translate for list in listOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Facebook List</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Linked Incident Filter' | translate}}" ng-model="searchParams.incidentId"
+                          ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'"
+                          ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Linked Incident</option>
                   </select>
                 </div>
@@ -146,8 +148,8 @@
     <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div class="card-header card__header">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+        <div title="Selection Actions" class="card-header card__header" aria-label="Top Selection Actions Toolbar" role="toolbar">
+          <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
               <div class="btn-group mr-4">
@@ -171,7 +173,7 @@
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
-            <nav aria-label="Report list page navigation">
+            <nav aria-label="Top report list page navigation">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
@@ -195,8 +197,8 @@
         <div ng-include="'/templates/reports/table.html'"></div>
 
         <!-- Footer Selection Toolbar -->
-        <div class="card-footer card__footer">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+        <div title="Selection Actions" class="card-footer card__footer" aria-label="Bottom Selection Actions Toolbar" role="toolbar">
+          <div class="btn-toolbar justify-content-between" aria-label="Bottom Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
@@ -222,7 +224,7 @@
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
-            <nav aria-label="Report list page navigation">
+            <nav aria-label="Bottom report list page navigation">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}

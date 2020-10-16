@@ -13,15 +13,15 @@
     <form name="form" class="mt-2" novalidate>
       <fieldset>
         <div class="form-group">
-          <label for="tagName" translate>Tag Name</label>
+          <label for="tagName" class="required-label" translate>Tag Name</label>
           <input type="text" class="form-control" id="tagName" required maxlength="15" ng-model="smtcTag.name">
-          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{15 - smtcTag.name.length}}</span></small>
+          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{15 - smtcTag.name.length}} characters remaining</span></small>
           <small ng-show="!smtcTag.name.length && showErrors" class="input-group-addon"><span class="text-muted">
             {{ "Please provide a name" | translate}}
           </span></small>
         </div>
         <div class="form-group">
-          <label for="tagColor" translate>Tag Color</label>
+          <label for="tagColor" class="required-label" translate>Tag Color</label>
           <br>
           <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
           <small ng-show="!smtcTag.color.length && showErrors" class="text-muted">
@@ -32,9 +32,12 @@
           <label for="tagDescription">Tag Description</label>
           <textarea class="form-control" id="tagDescription" rows="3" ng-model="smtcTag.description"></textarea>
         </div>
-        <div class="form-group text-center">
-          <label for="tagIsCommentTag" translate>Tag enables comment acquisition on posts?</label>
-          <input type="checkbox" class="form-control" id="tagIsCommentTag" ng-model="smtcTag.isCommentTag">
+        <div class="form-group">
+          <label for="tagIsCommentTag" translate class="mr-1">Tag enables comment acquisition on posts?</label>
+          <div>
+            <input type="checkbox" id="tagIsCommentTag"  ng-model="smtcTag.isCommentTag">
+          </div>
+
         </div>
       </fieldset>
     </form>

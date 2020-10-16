@@ -177,6 +177,7 @@ angular.module('Aggie')
         });
         $scope.tagifyElement = tagifyElement.data('tagify');
         $scope.loadReportTags($scope.tagifyElement);
+
       };
 
       $scope.sourceClass = function() {
