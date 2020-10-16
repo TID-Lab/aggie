@@ -87,16 +87,16 @@ Again, see below for automated installation.
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
-1. Install all python dependencies for hate-speech-api using `pip install -r requirements.txt` in the `hate-speech-api` directory. Start python hate-speech server using `python2 hate_speech_clf_api.py`. In `config/secrets.json`, set the `detectHateSpeech` parameter to `true`. The API will run on `http://localhost:5000`. User will never directly interact with this API.
-1. Run `npm install` from the project directory.
+2.  Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
+3. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
+4. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
     - This installs some tools globally which can then be run from the command line for testing.
     - You will most likely need Google Chrome installed on your computer for the protractor tests to run.
     - This is optional, as `npx` provides easy access to the local copies of these that are installed by `npm install`
-1. To start server in production mode, run `npm start`. Use `npm run dev` for development.
+5. To start server in production mode, run `npm start`. Use `npm run dev` for development.
     - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-1. Navigate to `https://localhost:3000` in your browser.
+6. Navigate to `https://localhost:3000` in your browser.
     - This will show you the running site. Login with the user name and password from your terminal mentioned above.
     - If you did not set up the SSL certificate, use `http://localhost:3000` instead
 
@@ -178,14 +178,15 @@ $EDITOR config/secrets.json
 echo "{}" > config/crowdtangle_list.json
 
 # If detectHateSpeech is set to true, then run the python 2 hate-speech-api.
+python --version # check if you have python 2 installed.
 cd hate-speech-api
-pip install -r requirements.txt
-# ONLY IF the above command doesn't work, use instead:
-# python2 -m pip install -r requirements.txt
-
-# Start the hate-speech-api server.
-python2 hate_speech_clf_api.py
-
+npm install forever -g # install `forever` npm module.
+pip install virtualenv # install virtual environment.
+virtualenv venv # create virtual environment.
+source venv/bin/activate # activate virtual environment
+pip install -r requirements.txt # install dependencies 
+forever start -c python -e error.log hate_speech_clf_api.py # start the Hate Speech API on localhost port 5000.
+#Set `detectHateSpeech: true` in config/secrets.json 
 # Ready! Test run:
 npm start
 # Now verify Aggie is online at your URL, then kill this process (ctrl+c) when you're done.

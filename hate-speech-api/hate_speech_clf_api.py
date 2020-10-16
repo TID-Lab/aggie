@@ -7,13 +7,8 @@ from data_processing.mm_converter import zawgyi_to_unicode
 import re
 import json
 from sklearn.ensemble import RandomForestClassifier
-from waitress import serve
-import logging
 
 app = Flask(__name__)
-
-logger = logging.getLogger('waitress')
-logger.setLevel(logging.ERROR)
 
 class HateSpeechClassifier(FlaskView):
 
@@ -77,5 +72,4 @@ class HateSpeechClassifier(FlaskView):
 HateSpeechClassifier.register(app, route_base = '/')
 
 if __name__ == '__main__':
-    # app.run(debug=False)
-    serve(app, _quiet=True)
+    app.run(debug=False)
