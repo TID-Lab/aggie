@@ -185,8 +185,15 @@ pip install virtualenv # install virtual environment.
 virtualenv venv # create virtual environment.
 source venv/bin/activate # activate virtual environment
 pip install -r requirements.txt # install dependencies 
-forever start -c python -e error.log hate_speech_clf_api.py # start the Hate Speech API on localhost port 5000.
-#Set `detectHateSpeech: true` in config/secrets.json 
+# User input: Set `detectHateSpeech: true`.
+$EDITOR config/secrets.json
+# User input: Set the script to run on startup.
+crontab -e
+# Paste the following line in crontab:
+@reboot forever start -c python -e error.log hate_speech_clf_api.py &
+# Reboot the machine and make sure the Hate Speech API is available on port 5000:
+curl localhost:5000
+
 # Ready! Test run:
 npm start
 # Now verify Aggie is online at your URL, then kill this process (ctrl+c) when you're done.
