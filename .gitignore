@@ -53,3 +53,5 @@ config/key.pem
 docs/_build
 
 .vscode/settings.json
+
+hate-speech-api/*.log
