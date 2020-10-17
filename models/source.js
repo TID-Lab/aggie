@@ -25,7 +25,7 @@ var urlValidator = function(url) {
   )
 }
 
-var mediaValues = ['crowdtangle', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
+var mediaValues = ['crowdtangle', 'comments', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'dummy-pull', 'dummy-fast'];
 
 var sourceSchema = new mongoose.Schema({
   media: { type: String, enum: mediaValues },
@@ -38,6 +38,7 @@ var sourceSchema = new mongoose.Schema({
   unreadErrorCount: { type: Number, default: 0 },
   lastReportDate: Date,
   lastReportDateSavedSearch: Date,
+  lastFetchDate: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] }
 });
