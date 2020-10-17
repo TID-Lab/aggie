@@ -481,6 +481,7 @@ angular.module('Aggie')
      * @param {SMTCTag} smtcTag
      */
     $scope.addTagToSelected = function(smtcTag) {
+      //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
       var ids = getIds(addSMTCTag(items, smtcTag));

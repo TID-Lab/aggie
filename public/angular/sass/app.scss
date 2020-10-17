@@ -200,8 +200,21 @@ footer {
   background-color: #f5f6f7;
 }
 
+.cardheader--withSelect {
+  padding-left: 6px;
+}
+
+.batchcardheader--withSelect {
+  padding-left: 6px;
+  padding-right: 6px;
+  //TODO: FIX THIS MESS OF ALIGNMENT
+}
+
 .card__footer {
   background-color: #f5f6f7;
 }
 
-
+.cardheader__text {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}

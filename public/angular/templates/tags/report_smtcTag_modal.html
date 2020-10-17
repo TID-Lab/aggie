@@ -13,62 +13,65 @@
         <table class="table table-condensed">
           <thead>
           <tr>
-            <th scope="col" translate>Time</th>
+            <th scope="col" translate>Source Info</th>
             <th scope="col" translate>Thumbnail</th>
-            <th scope="col" translate>Author</th>
             <th scope="col" translate>Content</th>
-            <th scope="col" translate>Sources</th>
-            <th scope="col" translate>Incident</th><!-- No need to show incident on incident detail page -->
-            <th scope="col" translate>Flagged</th>
+            <th scope="col" translate>Tags</th>
+            <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
           </tr>
           </thead>
           <tbody class="table-bordered">
           <tr ng-class="{ item: true, 'bg-gray': selectedReport.read, flagged: selectedReport.flagged, unread: !selectedReport.read && !selectedReport.flagged }">
-            <td class="td--time">
-              <span class="badge badge-info">{{ selectedReport.storedAt | interval }} ago</span>
-              <div class="text-wrap">{{ selectedReport.storedAt | aggieDate:'short_time' }}</div>
-              <div>{{ selectedReport.storedAt | aggieDate:'date' }}</div>
+            <td class="td__sourceInfo">
+              <span class="badge badge-pill badge-secondary mb-2" title="{{ selectedReport.storedAt | aggieDate:'date' }} at {{ selectedReport.storedAt | aggieDate:'short_time' }}">{{ selectedReport.storedAt | interval }} ago</span>
+              <p class="sourceInfo__author">
+                <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
+                {{ selectedReport.author }}
+              </p>
+              <span>
+            <span ng-repeat="s in selectedReport._sources">
+            {{ sourcesById[s].nickname || '[Deleted]' }}
+            </span>
+            <i ng-if="selectedReport.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
+            <span ng-if="selectedReport.metadata.ct_tag">{{typeof(selectedReport.metadata.ct_tag) === "string" ? selectedReport.metadata.ct_tag : selectedReport.metadata.ct_tag.join(', ')}}</span>
+          </span>
+              <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
+              <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
               <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+              <!--<div class="icon-left" ng-class="sourceClass(r)"></div>-->
             </td>
-            <td class="thumbnail-image" ng-class="{ strong: !isRead() }">
+            <td class="thumbnail-image" ng-class="{ strong: !isRead(selectedReport) }">
               <div ng-repeat="media in selectedReport.metadata.mediaUrl">
                 <a ng-if="media.type==='photo'" ng-href="{{selectedReport.metadata.externalUrl}}" target="_blank">
                   <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
                 </a>
               </div>
             </td>
-            <td class="author" ng-class="{ strong: !isRead() }">
-              <span class="text-wrap">
-                {{ selectedReport.author }}
-              </span>
-            </td>
-            <td class="content" ng-class="{ strong: !isRead() }">
-              <a ng-click="close()" href="/reports/{{selectedReport._id}}">
-                <p class="text-wrap"> {{ (selectedReport.content || '[No Content]') | stripHtml }} </p>
-                <p class="text-wrap shared-content" ng-if="selectedReport.metadata.description">
+            <td class="td__content" ng-class="{ strong: !isRead(selectedReport) }">
+              <p class="content__originalPost" ng-if="selectedReport.commentTo"><b>Original Post: </b>{{ (selectedReport.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{selectedReport.commentTo}}">...see report details</a></span></p>
+              <a href="/reports/{{selectedReport._id}}">
+                <p class="content" ng-if="!selectedReport.commentTo"> {{ (selectedReport.content || '[No Content]') | stripHtml }} </p>
+                <p class="content__shared" ng-if="selectedReport.metadata.description && !selectedReport.commentTo">
                   {{selectedReport.metadata.description | stripHtml}}
                 </p>
+                <ul class="fa-ul" ng-if="selectedReport.commentTo">
+                  <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (selectedReport.content || '[No Content]') | stripHtml }}</p></li>
+                </ul>
               </a>
             </td>
-            <td class="source text-center align-middle" ng-class="{ strong: !isRead(r) }">
-              <div class="icon-left" ng-class="sourceClass()">
-              </div>
-              <span ng-repeat="s in selectedReport._sources" class="source text-wrap pb-2">
-                {{ sourcesById[s].nickname || '[Deleted]' }}
-              </span>
+            <td class="tags text-center">
+              <tags class="tagify readonly" tabindex="-1">
+                <tag ng-repeat="tag in selectedReport.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                     class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                  <div>
+                    <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                  </div>
+                </tag>
+              </tags>
             </td>
-            <td class="incident align-middle" ng-hide="pageType == 'show-incident'">
+            <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
               <div class="text-center">
-                <span>
-                  <strong class="text-wrap" ng-if="selectedReport._incident && incidentsById[selectedReport._incident]">
-                      {{ incidentsById[selectedReport._incident].title | strLimit: 40 }}
-                    </strong>
-                </span>
-              </div>
-            </td>
-            <td class="flagged text-center">
-              <div class="fa pointer td__flags" ng-class="selectedReport.flagged ? 'fa-flag' : 'fa-flag-o'"
-                   ng-click="currentUser.can('edit data') && toggleFlagged()">
+                <strong>{{ incidentsById[selectedReport._incident].title }}</strong>
               </div>
             </td>
           </tr>
@@ -76,6 +79,7 @@
         </table>
       </div>
     </div>
+    <br>
     <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
       <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
       </span>
