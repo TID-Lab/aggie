@@ -45,16 +45,17 @@
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
           <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
-          <a href="/reports/{{r._id}}">
-            <p class="content" ng-if="!r.commentTo"> {{ (r.content || '[No Content]') | stripHtml }} </p>
-            <p class="content__shared" ng-if="r.metadata.description && !r.commentTo">
+          <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+            <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
+            <p class="content__shared" ng-if="r.metadata.description">
               {{r.metadata.description | stripHtml}}
             </p>
-            <ul class="fa-ul" ng-if="r.commentTo">
+          </a>
+          <a href="/reports/{{r.commentTo}}#{{r._id}}" ng-if="r.commentTo">
+            <ul class="fa-ul">
               <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
             </ul>
           </a>
-
         </td>
         <td class="td__tags tag">
           <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
