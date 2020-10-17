@@ -38,6 +38,7 @@ var sourceSchema = new mongoose.Schema({
   unreadErrorCount: { type: Number, default: 0 },
   lastReportDate: Date,
   lastReportDateSavedSearch: Date,
+  lastFetchDate: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] }
 });
