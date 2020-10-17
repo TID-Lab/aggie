@@ -32,8 +32,6 @@ angular.module('Aggie')
       $scope.visibleComments = new Queue(paginationOptions.perPage);
       $scope.sources = sources;
       $scope.sourcesById = {};
-      console.log(comments);
-      console.log(sources);
       $scope.pagination = {
         page: parseInt($stateParams.page) || 1,
         total: comments.total,
