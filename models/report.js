@@ -26,7 +26,8 @@ var schema = new Schema({
   _sourceNicknames: [String],
   _incident: { type: String, ref: 'Incident', index: true },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
-  checkedOutAt: { type: Date, index: true }
+  checkedOutAt: { type: Date, index: true },
+  commentTo: { type: Schema.ObjectId, ref: 'Report', index: true }
 });
 
 // Add fulltext index to the `content` field.

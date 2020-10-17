@@ -32,7 +32,8 @@ angular.module('Aggie')
       $scope.visibleComments = new Queue(paginationOptions.perPage);
       $scope.sources = sources;
       $scope.sourcesById = {};
-
+      console.log(comments);
+      console.log(sources);
       $scope.pagination = {
         page: parseInt($stateParams.page) || 1,
         total: comments.total,
@@ -43,7 +44,7 @@ angular.module('Aggie')
       };
 
       var init = function() {
-        //$scope.commentsById = $scope.comments.reduce(groupById, {});
+        $scope.commentsById = $scope.comments.reduce(groupById, {});
         $scope.sourcesById = $scope.sources.reduce(groupById, {});
         $scope.incidentsById = $scope.incidents.reduce(groupById, {});
         $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
@@ -54,12 +55,23 @@ angular.module('Aggie')
           Socket.join('reports');
           Socket.on('report:updated', $scope.updateReport.bind($scope));
         }
-        /*var visibleComments = paginate($scope.comments);
-        $scope.visibleComments.addMany(visibleComments);*/
+        var visibleComments = paginate($scope.comments);
+        $scope.visibleComments.addMany(visibleComments);
 
       };
       var updateStats = function(stats) {
         $scope.stats = stats;
+      };
+
+      /**
+       * Saves a front-end report to the back end.
+       * @param {Report} report
+       */
+      $scope.saveReport = function(report) {
+        Report.save({ id: report._id }, report, function() {
+        }, function() {
+          flash.setAlertNow("Sorry, but that report couldn't be saved.");
+        });
       };
 
       var paginate = function(items) {

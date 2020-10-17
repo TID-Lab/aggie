@@ -132,7 +132,7 @@ angular.module('Aggie')
           var page = $stateParams.page || 1;
           return Report.queryComments({
             id: $stateParams.id,
-            page: $stateParams.page - 1,
+            page: page - 1,
           }).$promise;
         }],
         incidents: ['Incident', function(Incident) {
