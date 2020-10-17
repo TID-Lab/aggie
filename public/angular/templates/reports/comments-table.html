@@ -43,7 +43,7 @@
           </a>
         </div>
       </td>
-      <td class="td__content" ng-class="{ strong: !isRead(r) }">
+      <td id="{{r._id}}" class="td__content" ng-class="{ strong: !isRead(r) }">
         <ul class="fa-ul">
           <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
         </ul>
