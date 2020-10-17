@@ -98,6 +98,7 @@ require('./services/batch');
 require('./services/tags');
 require('./services/smtcTag');
 require('./services/getCTList');
+require('./services/visualization');
 
 // Controllers
 require('./controllers/application');

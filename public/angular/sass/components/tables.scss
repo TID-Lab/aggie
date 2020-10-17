@@ -121,6 +121,10 @@ tbody {
     }
 
 }
+
+.td__media {
+  max-width: 56px;
+}
 .td__source {
   .icon-left {
     width: 33px;
@@ -410,7 +414,8 @@ input.checkbox__input {
   height: 22px;
 }
 
-
 .author__verifiedIcon {
   color: rgba(29,161,242,1.00);
 }
+
+

@@ -102,7 +102,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('report', {
-      url: '/reports/:id',
+      url: '/reports/:id?page',
       templateUrl: '/templates/reports/show.html',
       controller: 'ReportsShowController',
       resolve: {
@@ -128,12 +128,22 @@ angular.module('Aggie')
 
           return deferred.promise;
         }],
+        comments: ['Report', '$stateParams', function(Report, $stateParams) {
+          var page = $stateParams.page || 1;
+          return Report.queryComments({
+            id: $stateParams.id,
+            page: page - 1,
+          }).$promise;
+        }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
         }],
         smtcTags: ['SMTCTag', function(SMTCTag) {
           return SMTCTag.query().$promise;
-        }]
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
       }
     });
 
@@ -231,10 +241,24 @@ angular.module('Aggie')
       }
     });
 
-    $stateProvider.state('analysis', {
-      url: '/analysis',
-      templateUrl: '/templates/analysis.html',
-      controller: 'AnalysisController'
+    $stateProvider.state("analysis", {
+      url: "/analysis",
+      templateUrl: "/templates/analysis.html",
+      controller: "AnalysisController",
+      resolve: {
+        data: [
+          "Visualization",
+          function (Visualization) {
+            return Visualization.query().$promise;
+          },
+        ],
+        smtcTags: [
+          "SMTCTag",
+          function (SMTCTag) {
+            return SMTCTag.query().$promise;
+          },
+        ],
+      },
     });
 
     $stateProvider.state('lastAnalysis', {
