@@ -195,7 +195,6 @@ angular.module('Aggie')
       }, []);
     };
 
-
     var toggleRead = function(items, read) {
       return items.map(function(item) {
         item.read = read;
@@ -533,10 +532,8 @@ angular.module('Aggie')
           } else {
             flash.setNoticeNow(message);
           }
-
           return;
         }
-
         Batch.resource = resource;
         $rootScope.$state.go('batch', $scope.searchParams, { reload: true });
       });
