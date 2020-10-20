@@ -522,7 +522,6 @@ angular.module('Aggie')
 
     // Batch Mode Functions
     $scope.grabBatch = function() {
-      $scope.searchParams.tags = $scope.searchParams.tags;
       Batch.checkout($scope.searchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
