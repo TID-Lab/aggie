@@ -190,7 +190,7 @@ $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
 crontab -e
 # Paste the following line in crontab:
-@reboot forever start -c python -e error.log hate_speech_clf_api.py &
+@reboot forever start -c python -e $HOME/aggie/hate-speech-api/error.log $HOME/aggie/hate-speech-api/hate_speech_clf_api.py &
 # Reboot the machine and make sure the Hate Speech API is available on port 5000:
 curl localhost:5000
 
@@ -292,6 +292,8 @@ Set `config.adminParty=true` if you want to run tests.
   1. Run `npm run update-ct-lists` to fetch data.
       - This will update `config/crowdtangle_list.json`.
       - This also happens automatically every night at midnight while Aggie is running.
+
+Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
 
 #### WhatsApp
 
