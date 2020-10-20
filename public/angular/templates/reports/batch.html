@@ -31,7 +31,7 @@
           <div class="cardheader__text">
             <div class="btn-toolbar flex-wrap justify-content-between" aria-label="Page title and Hate Speech Ranking">
               <h4 class="card-title" translate>Batch Mode</h4>
-              <button type="button" ng-disabled="true" class="btn btn-light" translate>
+              <button ng-if="detectHateSpeech" type="button" ng-disabled="true" class="btn btn-light" translate>
                 Reports sorted by Hate Speech Score
               </button>
             </div>
