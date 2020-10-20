@@ -37,7 +37,7 @@ public/angular/css/app.css
 public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
 lib/translations/locale-debug.json
-
+hate-speech-api/error.log
 config/secrets.json
 
 buildAssets
