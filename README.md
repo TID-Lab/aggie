@@ -239,7 +239,11 @@ npx pm2 logs
 ### Semi-automated upgrade
 
 ```shell script
-export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
+# Back up your database.
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" 
+# OR authenticated (will prompt for your password):
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" -d aggie -u admin
+
 cd aggie # Go to where you originally saved Aggie.
 git add -A; git add -u; git stash # Save any files you may have changed.
 git branch # Make sure you're on 'develop' (or whatever you need to be on).
