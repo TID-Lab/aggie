@@ -29,7 +29,7 @@ var schema = new Schema({
   checkedOutAt: { type: Date, index: true }
 });
 
-schema.index({'metadata.ct_tags': 1}, {background: true});
+schema.index({'metadata.ct_tag': 1}, {background: true});
 // Add fulltext index to the `content` field.
 schema.index({ content: 'text' });
 schema.path('_incident').set(function(_incident) {
