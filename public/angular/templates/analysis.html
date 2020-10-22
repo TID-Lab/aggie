@@ -1,36 +1,56 @@
 <ng-include src="'/templates/alerts.html'"></ng-include>
-<div class="viz-content">
-  <div class="stat-cards" ng-if="data.length > 0">
-    <div class="data-card total-reports">
-      <div class="data-card__title" translate>Total Reports</div>
-      <div class="data-card__value">{{stats.totalReports | number}}</div>
-    </div>
-    <div class="data-card recent-reports">
-      <div class="data-card__title" translate>Reports in the last 48hrs</div>
-      <div class="data-card__value">{{data.length | number}}</div>
-    </div>
-  </div>
-  <div class="report-graph" id="report-graph"></div>
-  <div class="tags-hist" id="tags-hist"></div>
-  <div class="box-sidebar" ng-if="data.length > 0">
-    <div class="data-card engagement">
-      <h3 translate>Engagement</h3>
-      <p translate>The average engagement statistics for the most frequent tag. {{maxTag.name}}</p>
-    </div>
-    <div class="expected-explanation" translate>
-      *Expected statistics based on Facebook's prediction model at time of retrieval.
-    </div>
-  </div>
-  <div id="most-stats"></div>
-</div>
-<div class="viz-no-data" ng-if="data.length <= 0">
-  <h2>No Data</h2>
-</div>
-<div class="row mt-4">
-  <div class="col text-center">
-    <div class="d-md-none">
-      <div ng-include="'/templates/bottom-statsbar.html'"></div>
-    </div>
-  </div>
-</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-xl-10">
+      <div class="card">
+        <div class="card-header card__header">
+          <h4 class="card-title mb-0">Analysis</h4>
+        </div>
+        <div class="viz-content">
+          <div class="stat-cards" ng-if="data.length > 0">
+            <div class="data-card total-reports">
+              <div class="data-card__title" translate>Total Reports</div>
+              <div class="data-card__value">{{stats.totalReports | number}}</div>
+            </div>
+            <div class="data-card recent-reports">
+              <div class="data-card__title" translate>Reports in the last 48hrs</div>
+              <div class="data-card__value">{{data.length | number}}</div>
+            </div>
+          </div>
+          <div class="report-graph" id="report-graph"></div>
+          <div class="tags-hist" id="tags-hist"></div>
+          <div class="box-sidebar" ng-if="data.length > 0">
+            <div class="data-card engagement">
+              <h3 translate>Engagement</h3>
+              <p translate>The average engagement statistics for the most frequent tag. {{maxTag.name}}</p>
+            </div>
+            <div class="expected-explanation" translate>
+              *Expected statistics based on Facebook's prediction model at time of retrieval.
+            </div>
+          </div>
+          <div id="most-stats"></div>
+        </div>
+        <div class="viz-no-data" ng-if="data.length <= 0">
+          <h2>No Data</h2>
+        </div>
+      </div>
 
+      <div class="row mt-4">
+        <div class="col text-center">
+          <div class="d-xl-none">
+            <div ng-include="'/templates/bottom-statsbar.html'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <!-- Right Hand Stats Bar -->
+      <div class="sticky-top">
+        <div class="d-none d-xl-block">
+          <div ng-include="'/templates/side-statsbar.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
