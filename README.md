@@ -238,20 +238,35 @@ npx pm2 logs
 
 ### Semi-automated upgrade
 
+Save backup:
+
 ```shell script
 # Back up your database.
 export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" 
 # OR authenticated (will prompt for your password):
 export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" -d aggie -u admin
+```
 
+Quick upgrade:
+
+```shell script
 cd aggie # Go to where you originally saved Aggie.
+alias assertClean='git diff --exit-code && git diff --cached --exit-code' # Check for dirty files.
+assertClean && (git pull && npm install && npx pm2 restart aggie) || echo "Dirty." # Serve the new version.
+```
+
+Full upgrade if the above fails:
+
+```shell script
+cd aggie # Go to where you originally saved Aggie.
+git status # Check if anything is modified (this should be rare).
 git add -A; git add -u; git stash # Save any files you may have changed.
 git branch # Make sure you're on 'develop' (or whatever you need to be on).
 git pull # Get upstream changes.
 git stash pop # Only if you had changes saved earlier.
 # ! Make sure to resolve any conflicts if there are any.
-npm install # Make sure dependencies are up to date.
 git status # Check if it looks right.
+npm install # Make sure dependencies are up to date.
 npx pm2 restart aggie # Serve the new version.
 ```
 
