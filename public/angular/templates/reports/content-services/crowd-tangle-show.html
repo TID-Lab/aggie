@@ -8,7 +8,7 @@
         <tr>
           <th scope="row" translate>Author</th>
           <td colspan="10" class="detail-value">
-            <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
+            <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
           </td>
         </tr>
         <!-- Facebook Group/Page Sub Count -->
@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <th scope="row" class="detail-key" translate>URL</th>
-          <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link</a></td>
+          <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link <i class="fa fa-external-link" aria-hidden="true"></i></a></td>
         </tr>
         <tr ng-repeat="source in sources">
           <th scope="row" class="detail-key" translate>Sources</th>
@@ -57,8 +57,9 @@
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
+            <!-- see reports index.html to why this is -->
             <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
             </a>
             <tags class="tagify readonly" tabindex="-1">
               <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"

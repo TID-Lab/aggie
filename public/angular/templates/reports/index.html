@@ -10,38 +10,38 @@
     <div class="col-xl-10">
       <div class="card">
         <div class="container-fluid">
-          <form>
+          <form role="search">
             <div class="form-row pt-2 pb-2">
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" ng-model="searchParams.keywords" class="form-control filters__input" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
+                  <input title="{{'Keyword Search' | translate}}" type="text" ng-model="searchParams.keywords" class="form-control filters__input" placeholder="{{ 'Enter Keywords' | translate }}" aria-label="Keyword Search">
                   <div class="input-group-append">
                     <button type="reset" title="Search" class="btn btn-transparent button--clearFilter" ng-click="clearSearch()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
+                  <input title="{{'Tag Search' | translate}}" id="tagSearchInput" type="text" class="form-control filters__input" ng-init="onTagSearchInputLoad()" ng-model="searchParams.tags" aria-label="tagSearch" placeholder="{{'Enter Tags' | translate}}">
                   <div class="input-group-append">
                     <button type="reset" title="clearTags" class="btn btn-transparent button--clearFilter" ng-click="clearTags()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
               <div class="form-group col mb-0">
                 <div class="input-group input-group-sm">
-                  <input type="text" ng-model="searchParams.author" class="form-control filters__input" placeholder="{{ 'Enter Author' | translate }}">
+                  <input title="{{'Author Search' | translate}}" type="text" ng-model="searchParams.author" class="form-control filters__input" placeholder="{{ 'Enter Author' | translate }}">
                   <div class="input-group-append">
                     <button type="reset" title="clearAuthor" class="btn btn-transparent button--clearFilter" ng-click="clearAuthor()">
                       <span>&times;</span>
                     </button>
-                    <button type="submit" class="btn btn-info" ng-click="search()" translate>Go</button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate> <i class="fa fa-search text-light" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </div>
@@ -49,35 +49,37 @@
             <div class="form-row">
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Status Filter' | translate}}" ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Status</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.media" ng-options="media| replaceCT | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Media Type Filter' | translate}}" ng-model="searchParams.media" ng-options="media| replaceCT | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Media</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Source Filter' | translate}}" ng-model="searchParams.sourceId" ng-options="value._id as (value.nickname | capitalize) for (key, value) in sources | orderObjectBy:'nickname'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Source</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.list" ng-options="list | capitalize | translate for list in listOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Crowdtangle List Filter' | translate}}" ng-model="searchParams.list" ng-options="list | capitalize | translate for list in listOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Facebook List</option>
                   </select>
                 </div>
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.incidentId" ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Linked Incident Filter' | translate}}" ng-model="searchParams.incidentId"
+                          ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'"
+                          ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Linked Incident</option>
                   </select>
                 </div>
@@ -105,7 +107,7 @@
                     <div class="input-group input-group-sm">
                       <button type="submit" class="btn btn-info" ng-click="search()">
                         <span class="mr-2" translate> Search </span>
-                        <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                        <i class="fa fa-search text-light" aria-hidden="true"></i>
                       </button>
                     </div>
                   </li>
@@ -127,18 +129,22 @@
       <!-- This is the tagging sidebar -->
       <div class="sticky-top">
         <div class="d-none d-xl-block">
-          <label class="pt-2"> <h4>Tags</h4> </label>
-          <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
-            <tag ng-repeat="smtcTag in smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                 class="tags__tag tagify__tag tagify--noAnim" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}"
-                  ng-click="toggleTagOnSelected(smtcTag)">
-              <div>
-                <a>
-                  <span class="tagify__tag-text">{{smtcTag.name}}</span>
-                </a>
-              </div>
-            </tag>
-          </tags>
+          <label for="addTagColumn" class="pt-2 mb-0"> <h4 translate>Tags</h4> </label>
+          <br>
+          <small translate> Click tags to add/remove to selected reports</small>
+          <div id="addTagColumn" class="mt-2">
+            <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
+              <tag ng-repeat="smtcTag in smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                   class="tags__tag tagify__tag tagify--noAnim" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}">
+                <x title="Remove Tag from Selected" ng-click="removeTagFromSelected(smtcTag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+                <div ng-click="addTagToSelected(smtcTag)">
+                  <a>
+                    <span class="tagify__tag-text">{{smtcTag.name}}</span>
+                  </a>
+                </div>
+              </tag>
+            </tags>
+          </div>
         </div>
       </div>
     </div>
@@ -146,32 +152,32 @@
     <div class="col-xl-10">
       <div class="card">
         <!-- This is the Toolbar with selection actions -->
-        <div class="card-header card__header">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+        <div title="Selection Actions" class="card-header card__header cardheader--withSelect" aria-label="Top Selection Actions Toolbar" role="toolbar">
+          <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
-              <div class="btn-group mr-4">
-                <input ng-select-all items="reports" title="Select All" type="checkbox"/>
+              <div class="btn-group mr-3">
+                <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Read/Unread Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
                 <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Flag Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
                 <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
-              <div class="btn-group mr-2" role="group" aria-label="Incident Buttons">
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
-              <div class="btn-group mr-2">
+              <div class="btn-group mr-3">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
-            <nav aria-label="Report list page navigation">
+            <nav aria-label="Top report list page navigation">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
@@ -195,34 +201,28 @@
         <div ng-include="'/templates/reports/table.html'"></div>
 
         <!-- Footer Selection Toolbar -->
-        <div class="card-footer card__footer">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+        <div title="Selection Actions" class="card-footer card__footer" aria-label="Bottom Selection Actions Toolbar" role="toolbar">
+          <div class="btn-toolbar justify-content-between" aria-label="Bottom Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <div aria-label="Read/Unread Buttons/Selection">
-              <!-- Check all button -->
-              <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
-                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(true)" translate>Mark Read</button>
-                <button title="Mark as Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedRead(false)" translate>Mark Unread</button>
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                <button title="Mark as Read/Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Flag/Unflag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(false)">
-                  <span class="mr-2" translate> Un-Flag </span>
-                  <i class="fa fa-flag-o" aria-hidden="true"></i>
-                </button>
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-click="toggleSelectedFlagged(true)">
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
                   <span class="mr-2" translate> Flag </span>
                   <i class="fa fa-flag" aria-hidden="true"></i>
                 </button>
               </div>
-              <div class="btn-group mr-4" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-light" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
                 </button>
               </div>
-              <div class="btn-group mr-2">
+              <div class="btn-group mr-3">
                 <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
               </div>
             </div>
-            <nav aria-label="Report list page navigation">
+            <nav aria-label="Bottom report list page navigation">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item"><label>
                   {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}

@@ -7,16 +7,18 @@ from data_processing.mm_converter import zawgyi_to_unicode
 import re
 import json
 from sklearn.ensemble import RandomForestClassifier
+import os
 
 app = Flask(__name__)
+dir_path = os.path.dirname(os.path.abspath(__file__))
 
 class HateSpeechClassifier(FlaskView):
 
     def __init__(self):
         self.burmese_segmenter = mm.Segmenter()
-        with open("models/vectorizers/oversampled-tfidf-vect.pkl", 'rb') as vect_b:
+        with open(os.path.join(dir_path, "models/vectorizers/oversampled-tfidf-vect.pkl"), 'rb') as vect_b:
             self.vectorizer = pickle.load(vect_b)
-        with open("models/clfs/oversampled-RFClf-tfidf.pkl", 'rb') as clf_b:
+        with open(os.path.join(dir_path,"models/clfs/oversampled-RFClf-tfidf.pkl"), 'rb') as clf_b:
             self.model = pickle.load(clf_b)
 
     #Internal functions. Not exposed via API    
