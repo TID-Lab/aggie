@@ -41,6 +41,14 @@
             <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
               <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
             </a>
+            <div ng-if="r.commentTo">
+              <a ng-if="media.type==='photo'" ng-href="{{r.url}}" target="_blank">
+                <img alt="Comment Image Thumbnail" class="img-fluid img-thumbnail" ng-src="{{media.mediaUrl}}" >
+              </a>
+              <a ng-if="media.type=='video'" ng-href="{{r.url}}" target="_blank">
+                <i class="fa fa-file-video-o fa-3x" aria-hidden="true"></i>
+              </a>
+            </div>
           </div>
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
