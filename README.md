@@ -190,7 +190,7 @@ $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
 crontab -e
 # Paste the following line in crontab:
-@reboot source $HOME/.nvm/nvm.sh && forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py
+@reboot bash -c 'source $HOME/.nvm/nvm.sh; forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py > hate-cron.log 2>&1'
 # Reboot the machine and make sure the Hate Speech API is available on port 5000:
 curl localhost:5000
 
