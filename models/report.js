@@ -88,7 +88,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
 
-    if (!this.commentTo && this._media[0] === 'crowdtangle') {
+    if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
       SMTCTag.findById(smtcTagId, (err, tag) => {
         if (err) {
           logger.error(err);
