@@ -128,6 +128,7 @@
       <div class="sticky-top">
         <div class="d-none d-xl-block">
           <label class="pt-2"> <h4>Tags</h4> </label>
+          <input type="text" id="tag-search" onkeyup="filterTags()" placeholder="Search tags" title="Type in a tag">
           <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
             <tag ng-repeat="smtcTag in smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
                  class="tags__tag tagify__tag tagify--noAnim" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}"
@@ -259,4 +260,21 @@
     </div>
   </div>
 </div>
-
+<script>
+  function filterTags() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("tag-search");
+    filter = input.value.toUpperCase();
+    ul = document.getElementsByClassName("tagify")[0];
+    li = ul.getElementsByClassName("tags__tag");
+    for (i = 0; i < li.length; i++) {
+      span = li[i].getElementsByTagName("span")[0];
+      txtValue = span.textContent || span.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+</script>
