@@ -222,8 +222,9 @@ sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
 /home/my_user/aggie/logs/*.log
 /home/my_user/.pm2/logs/*.log
+/var/log/mongodb/*.log
 {
-  weekly
+  daily
   missingok
   rotate 12
   compress
