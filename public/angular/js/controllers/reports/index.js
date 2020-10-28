@@ -481,13 +481,10 @@ angular.module('Aggie')
      * Filters the tag list by the given input
      * @param {*} event 
      */
-    $scope.filterTags = function(event) {
-      console.log(1);
-      console.log($event);
-      $scope.visibleSmtcTags = $scope.smtcTags.filter(function(tag) {
-        return tag.name.includes(event.target.value)
+    $scope.filterTags = function(event, tags) {
+      $scope.visibleSmtcTags = tags.filter(function(tag) {
+        return tag.name.toLowerCase().includes(event.target.value.toLowerCase())
       })
-      console.log($scope.visibleReports);
     }
 
     /**
