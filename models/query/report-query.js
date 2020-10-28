@@ -53,7 +53,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
-  if (this.author || this.keywords) filter.$and = [{$text: { $search: this.author +" "+ this.keywords}}];
+  if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
   if (this.author)    filter.$and.push({"author": {$regex: this.author, $options: 'i'}});
   if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'i'}});
   if (this.tags)      filter.smtcTags = { $all: this.tags }
