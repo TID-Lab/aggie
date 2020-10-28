@@ -345,13 +345,13 @@ net:
     PEMKeyFile: '/opt/certs/bi.pem'
     CAFile: '/opt/certs/mdbca.crt'
 
-```
-
 #Restart mongosqld
 sudo systemctl restart mongosqld
 
 #Check mongosqld is running
 sudo systemctl status mongosqld
+
+```
 
 
 ### Semi-automated upgrade
