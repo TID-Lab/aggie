@@ -148,6 +148,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Checking for multiple tags in incident
   if (query.tags) {
+    filter.tags ||= {};
     filter.tags.$options = 'i';
     filter.tags.$all = query.tags;
   } else delete filter.tags;
