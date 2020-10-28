@@ -31,6 +31,7 @@ angular.module('Aggie')
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
       return smtcTag.name;
     });
+    $scope.visibleSmtcTags = smtcTags;
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -486,6 +487,17 @@ angular.module('Aggie')
         return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
       }) !== -1) $scope.addTagToSelected(smtcTag);
       else $scope.removeTagFromSelected(smtcTag);
+    }
+
+    /**
+     * Filters the tag list by the given input
+     * @param {*} event the DOM event from the text input
+     * @param {*} tags the smtc tags, because apparently we can't just reference $scope.smtcTags directly?
+     */
+    $scope.filterTags = function(event, tags) {
+      $scope.visibleSmtcTags = tags.filter(function(tag) {
+        return tag.name.toLowerCase().includes(event.target.value.toLowerCase())
+      })
     }
 
     /**
