@@ -479,7 +479,8 @@ angular.module('Aggie')
 
     /**
      * Filters the tag list by the given input
-     * @param {*} event 
+     * @param {*} event the DOM event from the text input
+     * @param {*} tags the smtc tags, because apparently we can't just reference $scope.smtcTags directly?
      */
     $scope.filterTags = function(event, tags) {
       $scope.visibleSmtcTags = tags.filter(function(tag) {
