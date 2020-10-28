@@ -37,7 +37,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
@@ -51,8 +51,11 @@ ReportQuery.prototype.toMongooseFilter = function() {
   filter = _.omitBy(filter, _.isNil);
   if (this.before)    filter.storedAt = { $lte: this.before }
   if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
-  if (this.author)    filter.author = { $regex: this.author, $options: 'i'}
-  if (this.keywords)  filter.content = { $regex: this.keywords,  $options: 'i' }
+  //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
+  //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
+  if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
+  if (this.author)    filter.$and.push({"author": {$regex: this.author, $options: 'i'}});
+  if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'i'}});
   if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
   return filter;

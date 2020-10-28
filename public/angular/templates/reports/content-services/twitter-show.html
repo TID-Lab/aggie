@@ -51,7 +51,7 @@
         </tr>
         <tr>
           <th scope="row" class="detail-key" translate>URL</th>
-          <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link</a></td>
+          <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link <i class="fa fa-external-link" aria-hidden="true"></i></a></td>
         </tr>
         <tr ng-repeat="source in sources">
           <th scope="row" class="detail-key" translate>Sources</th>
@@ -82,9 +82,11 @@
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
+            <!-- See reports index.html to see why this is removed -->
             <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
             </a>
+
             <tags class="tagify readonly" tabindex="-1">
               <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
                    class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">

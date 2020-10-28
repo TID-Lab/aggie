@@ -21,10 +21,11 @@ angular.module('Aggie')
   'Tags',
   'paginationOptions',
   '$translate',
+  'Settings',
   function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
-           $translate) {
+           $translate, Settings) {
 
     $scope.smtcTags = smtcTags;
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
@@ -47,6 +48,15 @@ angular.module('Aggie')
     $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function(obj) {
       return obj.name;
     }))), ["Saved Search"]);
+    $scope.detectHateSpeech = false;
+
+    function setDetectHateSpeech() {
+      Settings.get('detectHateSpeech', function(data) {
+        $scope.detectHateSpeech = data.detectHateSpeech;
+      }, function(error) {
+        console.log(error);
+      });
+    }
 
     // We add options to search reports with any or none incidents linked
     linkedtoIncidentOptions[0].title = $translate.instant(linkedtoIncidentOptions[0].title);
@@ -89,6 +99,8 @@ angular.module('Aggie')
       // make links clickable
       $scope.reports.forEach(linkify);
       updateTagSearchNames();
+
+      setDetectHateSpeech($scope.detectHateSpeech);
     };
 
     var updateStats = function(stats) {
@@ -493,6 +505,7 @@ angular.module('Aggie')
      * @param {SMTCTag} smtcTag
      */
     $scope.addTagToSelected = function(smtcTag) {
+      //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
       var ids = getIds(addSMTCTag(items, smtcTag));
@@ -533,7 +546,6 @@ angular.module('Aggie')
 
     // Batch Mode Functions
     $scope.grabBatch = function() {
-      $scope.searchParams.tags = $scope.searchParams.tags;
       Batch.checkout($scope.searchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {

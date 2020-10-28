@@ -17,10 +17,10 @@
         <input type="text" class="form-control" ng-style="{'background-color': smtcTag.color}"disabled/>
       </td>
       <td ng-if="currentUser.can('view other users')">
-        {{smtcTag.user.username}}
+        <a href="profile/{{smtcTag.user.username}}">{{smtcTag.user.username}}</a>
       </td>
       <td>
-        <textarea class="form-control" rows="3" disabled placeholder="No description provided." ng-bind="smtcTag.description"></textarea>
+        {{smtcTag.description}}
       </td>
       <td ng-if="currentUser.can('edit tags')">
         <input type="checkbox" class="form-control" disabled ng-checked="smtcTag.isCommentTag">
