@@ -30,6 +30,7 @@ angular.module('Aggie')
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
       return smtcTag.name;
     });
+    $scope.visibleSmtcTags = smtcTags;
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -474,6 +475,19 @@ angular.module('Aggie')
         return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
       }) !== -1) $scope.addTagToSelected(smtcTag);
       else $scope.removeTagFromSelected(smtcTag);
+    }
+
+    /**
+     * Filters the tag list by the given input
+     * @param {*} event 
+     */
+    $scope.filterTags = function(event) {
+      console.log(1);
+      console.log($event);
+      $scope.visibleSmtcTags = $scope.smtcTags.filter(function(tag) {
+        return tag.name.includes(event.target.value)
+      })
+      console.log($scope.visibleReports);
     }
 
     /**
