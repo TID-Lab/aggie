@@ -217,6 +217,11 @@ npx pm2 save
 # If you ever modify secrets.json, restart the app by running (in the `aggie` directory):
 npx pm2 restart aggie
 
+# OPTIONAL User input: Restart Aggie every 6 hours if you have high traffic. Memory leaks are in the process of being addressed.
+crontab -e
+# Paste the following line in crontab:
+0 */6 * * * bash -c 'source $HOME/.nvm/nvm.sh && cd $HOME/aggie && npx pm2 restart aggie > $HOME/restart-cron.log 2>&1'
+
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
