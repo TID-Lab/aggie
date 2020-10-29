@@ -77,8 +77,9 @@
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
+                        <!-- See why Tag Modal isn't going to work with comments on table.html-->
                         <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-                          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+                          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
                         </a>
                         <tags class="tagify readonly" tabindex="-1">
                           <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
@@ -103,7 +104,7 @@
           </div>
         </div>
       </div>
-      <div class="card mt-4">
+      <div class="card mt-4" ng-if="pagination.total > 0">
         <div class="card-header card__header">
           <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
             <h4 class="card-title mb-0">Comments</h4>

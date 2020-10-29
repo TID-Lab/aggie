@@ -190,7 +190,7 @@ $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
 crontab -e
 # Paste the following line in crontab:
-@reboot forever start -c python -e $HOME/aggie/hate-speech-api/error.log $HOME/aggie/hate-speech-api/hate_speech_clf_api.py &
+@reboot source $HOME/.nvm/nvm.sh && forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py
 # Reboot the machine and make sure the Hate Speech API is available on port 5000:
 curl localhost:5000
 
@@ -238,16 +238,35 @@ npx pm2 logs
 
 ### Semi-automated upgrade
 
+Save backup:
+
 ```shell script
-export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
+# Back up your database.
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" 
+# OR authenticated (will prompt for your password):
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" -d aggie -u admin
+```
+
+Quick upgrade:
+
+```shell script
 cd aggie # Go to where you originally saved Aggie.
+alias assertClean='git diff --exit-code && git diff --cached --exit-code' # Check for dirty files.
+assertClean && (git pull && npm install && npx pm2 restart aggie) || echo "Dirty." # Serve the new version.
+```
+
+Full upgrade if the above fails:
+
+```shell script
+cd aggie # Go to where you originally saved Aggie.
+git status # Check if anything is modified (this should be rare).
 git add -A; git add -u; git stash # Save any files you may have changed.
 git branch # Make sure you're on 'develop' (or whatever you need to be on).
 git pull # Get upstream changes.
 git stash pop # Only if you had changes saved earlier.
 # ! Make sure to resolve any conflicts if there are any.
-npm install # Make sure dependencies are up to date.
 git status # Check if it looks right.
+npm install # Make sure dependencies are up to date.
 npx pm2 restart aggie # Serve the new version.
 ```
 

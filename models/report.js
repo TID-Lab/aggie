@@ -32,6 +32,7 @@ var schema = new Schema({
   originalPost: { type: String },
 });
 
+schema.index({'metadata.ct_tag': 1}, {background: true});
 // Add fulltext index to the `content` field.
 schema.index({ content: 'text' });
 schema.path('_incident').set(function(_incident) {

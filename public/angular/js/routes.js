@@ -128,10 +128,11 @@ angular.module('Aggie')
 
           return deferred.promise;
         }],
-        comments: ['Report', '$stateParams', function(Report, $stateParams) {
-          var page = $stateParams.page || 1;
+        comments: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          console.log(page);
           return Report.queryComments({
-            id: $stateParams.id,
+            id: params.id,
             page: page - 1,
           }).$promise;
         }],

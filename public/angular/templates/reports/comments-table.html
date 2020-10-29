@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th scope="col" ng-show="currentUser.can('edit data')"></th>
-      <th scope="col" translate>Source Info</th>
+      <th scope="col" translate>Time Commented</th>
       <th scope="col" translate>Thumbnail</th>
       <th scope="col" translate>Content</th>
       <th scope="col" translate>Tags</th>
@@ -20,32 +20,20 @@
       </td>
       <td class="td__sourceInfo">
         <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
-        <p class="sourceInfo__author">
-          <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
-          {{ r.author }}
-        </p>
-        <span>
-            <span ng-repeat="s in r._sources">
-            {{ sourcesById[s].nickname || '[Deleted]' }}
-            </span>
-            <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
-            <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
-          </span>
-        <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
-        <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
-        <!--<p class="created"><span>{{ r | delay }}</span></p>-->
-        <!--<div class="icon-left" ng-class="sourceClass(r)"></div>-->
       </td>
-      <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
+      <td class="thumbnail-image text-center" ng-class="{ strong: !isRead(r) }">
         <div ng-repeat="media in r.metadata.mediaUrl">
-          <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
-            <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
+          <a ng-if="media.type==='photo'" ng-href="{{r.url}}" target="_blank">
+            <img alt="Comment Image Thumbnail" class="img-fluid img-thumbnail" ng-src="{{media.mediaUrl}}" >
+          </a>
+          <a ng-if="media.type=='video'" ng-href="{{r.url}}" target="_blank">
+            <i class="fa fa-file-video-o fa-3x" aria-hidden="true"></i>
           </a>
         </div>
       </td>
       <td id="{{r._id}}" class="td__content" ng-class="{ strong: !isRead(r) }">
         <ul class="fa-ul">
-          <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
+          <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><a ng-href="{{r.url}}" target="_blank"><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></a></li>
         </ul>
       </td>
       <td class="td__tags tag">

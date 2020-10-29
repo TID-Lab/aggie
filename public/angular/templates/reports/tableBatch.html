@@ -41,6 +41,14 @@
             <a ng-if="media.type==='photo'" ng-href="{{r.metadata.externalUrl}}" target="_blank">
               <img class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
             </a>
+            <div ng-if="r.commentTo">
+              <a ng-if="media.type==='photo'" ng-href="{{r.url}}" target="_blank">
+                <img alt="Comment Image Thumbnail" class="img-fluid img-thumbnail" ng-src="{{media.mediaUrl}}" >
+              </a>
+              <a ng-if="media.type=='video'" ng-href="{{r.url}}" target="_blank">
+                <i class="fa fa-file-video-o fa-3x" aria-hidden="true"></i>
+              </a>
+            </div>
           </div>
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
@@ -60,8 +68,9 @@
           <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
             {{tagsToString(r.tags) + ", "}}
           </span>
+          <!-- See table.html for reason for commenting out. -->
           <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
           </a>
           <tags class="tagify readonly" tabindex="-1">
             <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
@@ -80,7 +89,7 @@
               </div>
             </div>
           </div>
-          <div class="text-center">
+          <div class="text-center incident__addLink">
             <span>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
                 <strong ng-if="r._incident && incidentsById[r._incident]">
