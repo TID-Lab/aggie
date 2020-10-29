@@ -167,8 +167,18 @@ angular.module('Aggie')
       $scope.search({ locationName: null });
     }
 
+    $scope.clearDateFilterFields = function() {
+      $scope.searchParams.after = null; $scope.searchParams.before = null;
+    };
+
+    $scope.clearDateFilter = function() {
+      $scope.search({ after: null, before: null });
+    };
+
     $scope.noFilters = function() {
-      return $scope.searchParams.title === null &&
+      return $scope.searchParams.before === null &&
+        $scope.searchParams.after === null &&
+        $scope.searchParams.title === null &&
         $scope.searchParams.locationName === null &&
         $scope.searchParams.assignedTo === null &&
         $scope.searchParams.status === null &&
@@ -188,7 +198,9 @@ angular.module('Aggie')
         veracity: null,
         tags: null,
         escalated: null,
-        public: null
+        public: null,
+        before: null,
+        after: null,
       });
     };
 
