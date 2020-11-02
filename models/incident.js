@@ -9,6 +9,7 @@ var database = require('../lib/database');
 var mongoose = database.mongoose;
 var validator = require('validator');
 var _ = require('underscore');
+var castArray = require('lodash/castArray');
 var AutoIncrement = require('mongoose-sequence')(mongoose);
 var Report = require('./report');
 var logger = require('../lib/logger');
@@ -148,7 +149,10 @@ Incident.queryIncidents = function(query, page, options, callback) {
 
   // Checking for multiple tags in incident
   if (query.tags) {
-    filter.tags = filter.tags || {};
+    // In some specific cases, they're not an array yet.
+    query.tags = castArray(query.tags)
+    filter.tags = castArray(filter.tags)
+
     filter.tags.$options = 'i';
     filter.tags.$all = query.tags;
   } else delete filter.tags;
