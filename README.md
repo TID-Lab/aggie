@@ -80,14 +80,14 @@ Again, see below for automated installation.
     - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
     - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
-    1. Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-    1. For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+    -  Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+    - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
 1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
     - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
     - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
-1. Install all python dependencies for hate-speech-api using `pip install -r requirements.txt` in the `hate-speech-api` directory. Start python hate-speech server using `python2 hate_speech_clf_api.py`. In `config/secrets.json`, set the `detectHateSpeech` parameter to `true`. The API will run on `http://localhost:5000`. User will never directly interact with this API.
+1.  Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
 1. Run `npm install` from the project directory.
     - This installs all dependencies and concatenates the angular application.
 1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
@@ -177,14 +177,22 @@ $EDITOR config/secrets.json
 # Otherwise stub it:
 echo "{}" > config/crowdtangle_list.json
 
-# If detectHateSpeech is set to true, then run the python 2 hate-speech-api.
+# Follow these steps for setting up hate speech API for Burmese
+python --version # check if you have python 2 installed.
 cd hate-speech-api
-pip install -r requirements.txt
-# ONLY IF the above command doesn't work, use instead:
-# python2 -m pip install -r requirements.txt
-
-# Start the hate-speech-api server.
-python2 hate_speech_clf_api.py
+npm install forever -g # install `forever` npm module.
+pip install virtualenv # install virtual environment.
+virtualenv venv # create virtual environment.
+source venv/bin/activate # activate virtual environment
+pip install -r requirements.txt # install dependencies 
+# User input: Set `detectHateSpeech: true`.
+$EDITOR config/secrets.json
+# User input: Set the script to run on startup.
+crontab -e
+# Paste the following line in crontab:
+@reboot bash -c 'source $HOME/.nvm/nvm.sh; forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py > hate-cron.log 2>&1'
+# Reboot the machine and make sure the Hate Speech API is available on port 5000:
+curl localhost:5000
 
 # Ready! Test run:
 npm start
@@ -214,8 +222,9 @@ sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
 /home/my_user/aggie/logs/*.log
 /home/my_user/.pm2/logs/*.log
+/var/log/mongodb/*.log
 {
-  weekly
+  daily
   missingok
   rotate 12
   compress
@@ -230,16 +239,35 @@ npx pm2 logs
 
 ### Semi-automated upgrade
 
+Save backup:
+
 ```shell script
-export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" # Automatically back up your database.
+# Back up your database.
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" 
+# OR authenticated (will prompt for your password):
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" -d aggie -u admin
+```
+
+Quick upgrade:
+
+```shell script
 cd aggie # Go to where you originally saved Aggie.
+alias assertClean='git diff --exit-code && git diff --cached --exit-code' # Check for dirty files.
+assertClean && (git pull && npm install && npx pm2 restart aggie) || echo "Dirty." # Serve the new version.
+```
+
+Full upgrade if the above fails:
+
+```shell script
+cd aggie # Go to where you originally saved Aggie.
+git status # Check if anything is modified (this should be rare).
 git add -A; git add -u; git stash # Save any files you may have changed.
 git branch # Make sure you're on 'develop' (or whatever you need to be on).
 git pull # Get upstream changes.
 git stash pop # Only if you had changes saved earlier.
 # ! Make sure to resolve any conflicts if there are any.
-npm install # Make sure dependencies are up to date.
 git status # Check if it looks right.
+npm install # Make sure dependencies are up to date.
 npx pm2 restart aggie # Serve the new version.
 ```
 
@@ -284,6 +312,8 @@ Set `config.adminParty=true` if you want to run tests.
   1. Run `npm run update-ct-lists` to fetch data.
       - This will update `config/crowdtangle_list.json`.
       - This also happens automatically every night at midnight while Aggie is running.
+
+Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
 
 #### WhatsApp
 

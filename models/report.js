@@ -29,8 +29,9 @@ var schema = new Schema({
   checkedOutAt: { type: Date, index: true }
 });
 
-// Add fulltext index to the `content` field.
-schema.index({ content: 'text' });
+schema.index({'metadata.ct_tag': 1}, {background: true});
+// Add fulltext index to the `content` and `author` field.
+schema.index({ content: 'text', author: 'text' });
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;

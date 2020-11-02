@@ -74,6 +74,7 @@ angular.module('Aggie')
 
     var init = function() {
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
     }
 

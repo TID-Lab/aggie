@@ -19,14 +19,9 @@ angular.module('Aggie')
         if (adminNeedsToChangePwd && $state.current.name != 'reset_admin_password') {
           $state.go('reset_admin_password');
         }
-
         Socket.on('sourceErrorCountUpdated', sourceErrorCountUpdated);
-        Socket.on('stats', updateStats);
-        Socket.join('stats');
       } else {
         Socket.off('sourceErrorCountUpdated');
-        Socket.leave('stats');
-        Socket.removeAllListeners('stats');
       }
     };
 
@@ -60,8 +55,7 @@ angular.module('Aggie')
     $rootScope.$watch('currentUser', init);
 
     $scope.$on('$destroy', function() {
-      Socket.leave('stats');
-      Socket.removeAllListeners('stats');
+      Socket.removeAllListeners('sourceErrorCountUpdated');
     });
     init();
   }

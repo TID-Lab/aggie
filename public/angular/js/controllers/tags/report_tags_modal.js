@@ -37,11 +37,14 @@ angular.module('Aggie')
         }
       });
       modalInstance.result.then(function(smtcTagIds) {
-        smtcTagIds.map(function (tag) {
-          return { _id: tag._id }
+        /*TODO: Whenever we can, fix this. We used to use a PUT request to update the tags in mass
+         * Instead because of the comments hook into the tag endpoints, we have to use the individual add and remove endpoints
+         */
+        smtcTagIds.forEach(function(smtcTagId) {
+          console.log(smtcTagIds);
+            Report.addSMTCTag({ids: [report._id], smtcTag: smtcTagId});
         });
         report.smtcTags = smtcTagIds;
-        Report.update({ id: report._id }, report);
       });
     };
   }
@@ -177,6 +180,7 @@ angular.module('Aggie')
         });
         $scope.tagifyElement = tagifyElement.data('tagify');
         $scope.loadReportTags($scope.tagifyElement);
+
       };
 
       $scope.sourceClass = function() {

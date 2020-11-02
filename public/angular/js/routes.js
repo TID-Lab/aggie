@@ -232,24 +232,24 @@ angular.module('Aggie')
     });
 
     $stateProvider.state("analysis", {
-			url: "/analysis",
-			templateUrl: "/templates/analysis.html",
-			controller: "AnalysisController",
-			resolve: {
-				data: [
-					"Visualization",
-					function (Visualization) {
-						return Visualization.query().$promise;
-					},
-				],
-				smtcTags: [
-					"SMTCTag",
-					function (SMTCTag) {
-						return SMTCTag.query().$promise;
-					},
-				],
-			},
-		});
+      url: "/analysis",
+      templateUrl: "/templates/analysis.html",
+      controller: "AnalysisController",
+      resolve: {
+        data: [
+          "Visualization",
+          function (Visualization) {
+            return Visualization.query().$promise;
+          },
+        ],
+        smtcTags: [
+          "SMTCTag",
+          function (SMTCTag) {
+            return SMTCTag.query().$promise;
+          },
+        ],
+      },
+    });
 
     $stateProvider.state('lastAnalysis', {
       onEnter: function($state) {
