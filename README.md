@@ -190,7 +190,7 @@ $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
 crontab -e
 # Paste the following line in crontab:
-@reboot source $HOME/.nvm/nvm.sh && forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py
+@reboot bash -c 'source $HOME/.nvm/nvm.sh; forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py > hate-cron.log 2>&1'
 # Reboot the machine and make sure the Hate Speech API is available on port 5000:
 curl localhost:5000
 
@@ -217,13 +217,19 @@ npx pm2 save
 # If you ever modify secrets.json, restart the app by running (in the `aggie` directory):
 npx pm2 restart aggie
 
+# OPTIONAL User input: Restart Aggie every 6 hours if you have high traffic. Memory leaks are in the process of being addressed.
+crontab -e
+# Paste the following line in crontab:
+0 */6 * * * bash -c 'source $HOME/.nvm/nvm.sh && cd $HOME/aggie && npx pm2 restart aggie > $HOME/restart-cron.log 2>&1'
+
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
 /home/my_user/aggie/logs/*.log
 /home/my_user/.pm2/logs/*.log
+/var/log/mongodb/*.log
 {
-  weekly
+  daily
   missingok
   rotate 12
   compress
