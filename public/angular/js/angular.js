@@ -9771,6 +9771,8 @@ function $LogProvider(){
 
       if (hasApply) {
         return function() {
+          // Silence the spammy "Translation for X doesn't exist" until we have real i18n.
+          if (/^Translation for /.test(arguments[0])) return;
           var args = [];
           forEach(arguments, function(arg) {
             args.push(formatError(arg));
