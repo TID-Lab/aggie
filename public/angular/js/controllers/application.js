@@ -12,7 +12,7 @@ angular.module('Aggie')
         if (e.matomo.send_data) {
           var _paq = window._paq = window._paq || [];
           /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-          _paq.push(["setCookieDomain", "*.aggiebeta.cartercenter.org"]);
+          _paq.push(["setCookieDomain", e.matomo.cookie_domain]);
           _paq.push(['trackPageView']);
           _paq.push(['enableLinkTracking']);
           (function() {
