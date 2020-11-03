@@ -379,6 +379,12 @@ Set various logging options in `logger` section.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
 
+### Data visualization using Tableau
+
+- Setting up and viewing tableau visualizations in Aggie requires installing BI connector on the server that acts as a bridge between Tableau and MongoDB. 
+- To setup the BI-connector on the server, follow these steps - [BI connector setup](docs/content/tableau/bi-connector-setup.md) 
+
+
 ## Architecture
 
 Aggie consists of two largely separate frontend and backend apps. Some model code (in `/shared`) is shared between them.
