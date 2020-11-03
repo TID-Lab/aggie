@@ -33,8 +33,6 @@
     "angular-translate": "^2.11.1",
     "angular-translate-handler-log": "^2.11.1",
     "angular-translate-loader-static-files": "^2.11.1",
-    "angulartics": "^1.6.0",
-    "angulartics-piwik": "^1.0.6",
     "async": "^3.2.0",
     "aws-sdk": "^2.674.0",
     "bcrypt": "^5.0.0",
