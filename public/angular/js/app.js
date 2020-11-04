@@ -10,10 +10,12 @@ require('angular-translate');
 require('angular-translate-loader-static-files');
 require('angular-translate-handler-log');
 require('angular-cookies');
+require('./angulartics.min');
+require('./angulartics-piwik.min');
 
 angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
   'pascalprecht.translate', 'ngSanitize', 'ngAutocomplete',
-  'angular-loading-bar', 'ngCookies'])
+  'angular-loading-bar', 'ngCookies', 'angulartics', 'angulartics.piwik'])
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
