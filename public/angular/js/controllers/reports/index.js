@@ -4,6 +4,7 @@ angular.module('Aggie')
   '$scope',
   '$rootScope',
   '$stateParams',
+  '$window',
   'FlashService',
   'reports',
   'sources',
@@ -22,7 +23,7 @@ angular.module('Aggie')
   'paginationOptions',
   '$translate',
   'Settings',
-  function($state, $scope, $rootScope, $stateParams, flash, reports, sources, smtcTags,
+  function($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate, Settings) {
@@ -31,6 +32,7 @@ angular.module('Aggie')
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
       return smtcTag.name;
     });
+    $scope.visibleSmtcTags = smtcTags;
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
     $scope.reportsById = {};
@@ -298,11 +300,14 @@ angular.module('Aggie')
     };
 
     $scope.displayNewReports = function() {
+      // TODO: When attempting to add tags to "new Reports" tags breaks the software. Until this is solved, I'm making this function refresh the page, which solves the issue on its own.
+      $window.location.reload();
+      /*
       var reports = $scope.newReports.toArray();
       reports.forEach(linkify);
       $scope.reports.concat(reports);
       $scope.visibleReports.addMany(reports);
-      $scope.newReports = new Queue(paginationOptions.perPage);
+      $scope.newReports = new Queue(paginationOptions.perPage);*/
     };
 
     $scope.clearDateFilterFields = function() {
@@ -489,14 +494,28 @@ angular.module('Aggie')
     }
 
     /**
+     * Filters the tag list by the given input
+     * @param {*} event the DOM event from the text input
+     * @param {*} tags the smtc tags, because apparently we can't just reference $scope.smtcTags directly?
+     */
+    $scope.filterTags = function(event, tags) {
+      $scope.visibleSmtcTags = tags.filter(function(tag) {
+        return tag.name.toLowerCase().includes(event.target.value.toLowerCase())
+      })
+    }
+
+    /**
      * Adds a smtcTag to selected reports.
      * @param {SMTCTag} smtcTag
      */
     $scope.addTagToSelected = function(smtcTag) {
+      console.log(smtcTag);
       //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
       var ids = getIds(addSMTCTag(items, smtcTag));
+      console.log(ids);
+      console.log(smtcTag._id);
       Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
     };
 

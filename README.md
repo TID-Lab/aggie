@@ -190,7 +190,7 @@ $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
 crontab -e
 # Paste the following line in crontab:
-@reboot source $HOME/.nvm/nvm.sh && forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py
+@reboot bash -c 'source $HOME/.nvm/nvm.sh; forever start -o $HOME/aggie/logs/hate-speech-out.log -e $HOME/aggie/logs/hate-speech-err.log -c python $HOME/aggie/hate-speech-api/hate_speech_clf_api.py > hate-cron.log 2>&1'
 # Reboot the machine and make sure the Hate Speech API is available on port 5000:
 curl localhost:5000
 
@@ -217,13 +217,19 @@ npx pm2 save
 # If you ever modify secrets.json, restart the app by running (in the `aggie` directory):
 npx pm2 restart aggie
 
+# OPTIONAL User input: Restart Aggie every 6 hours if you have high traffic. Memory leaks are in the process of being addressed.
+crontab -e
+# Paste the following line in crontab:
+0 */6 * * * bash -c 'source $HOME/.nvm/nvm.sh && cd $HOME/aggie && npx pm2 restart aggie > $HOME/restart-cron.log 2>&1'
+
 # User input: Enable log rotation.
 sudo $EDITOR /etc/logrotate.conf
 # Paste the following, changing `/home/my_user` to the location of the `aggie` folder.
 /home/my_user/aggie/logs/*.log
 /home/my_user/.pm2/logs/*.log
+/var/log/mongodb/*.log
 {
-  weekly
+  daily
   missingok
   rotate 12
   compress
@@ -329,12 +335,10 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
 
 #### ELMO
 
-
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
   1. Go to Settings > Configuration and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
-
 
 ### Google Places
 
@@ -372,6 +376,11 @@ Set various logging options in `logger` section.
 - **DO NOT** set `level` to *debug*. Recommended value is *error*.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
+
+### Data visualization using Tableau
+
+Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.
+To set up the BI Connector, follow these steps: [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
 
 ## Architecture
 

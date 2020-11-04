@@ -83,6 +83,18 @@
               </div>
               <div class="form-group col-md-auto mb-0 pb-2">
                 <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <div class="input-group input-group-sm">
+                      <button type="button" class="btn btn-default" ng-controller="DatetimeModalController" ng-click="open()">
+                    <span ng-switch="(searchParams.before && 1) + (searchParams.after && 2)">
+                      <span ng-switch-when="3">{{ 'From' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong> to <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+                      <span ng-switch-when="2">{{ 'After' | translate }} <strong>{{searchParams.after | aggieDate : 'datetime' }}</strong></span>
+                      <span ng-switch-when="1">{{ 'Before' | translate }} <strong>{{searchParams.before | aggieDate : 'datetime'}}</strong></span>
+                      <span ng-switch-default translate>Date/Time</span>
+                    </span>
+                      </button>
+                    </div>
+                  </li>
                   <li class="list-inline-item" ng-hide="noFilters()">
                     <div class="input-group input-group-sm">
                       <button type="submit" class="btn btn-secondary" ng-click="clearFilters()" translate>Clear Filters</button>
