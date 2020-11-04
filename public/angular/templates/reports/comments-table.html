@@ -1,5 +1,5 @@
-<div class="table-responsive-md pt-3">
-  <table class="table-sm" aggie-table ng-show="pagination.total > 0">
+<div class="table-responsive">
+  <table class="table table-sm" ng-show="pagination.total > 0">
     <thead>
     <tr>
       <th scope="col" ng-show="currentUser.can('edit data')"></th>
@@ -11,14 +11,14 @@
     </tr>
     </thead>
     <tbody class="table-bordered">
-    <tr ng-repeat="r in visibleComments.toArray() | orderBy:'-fetchedAt'"
+    <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-fetchedAt'"
         ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
       <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
         <div class="td__checkbox">
           <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
         </div>
       </td>
-      <td class="td__sourceInfo">
+      <td class="td__commentTime">
         <span class="badge badge-pill badge-secondary mb-2" title="{{ r.fetchedAt | aggieDate:'date' }} at {{ r.fetchedAt | aggieDate:'short_time' }}">{{ r.fetchedAt | interval }} ago</span>
       </td>
       <td class="thumbnail-image text-center" ng-class="{ strong: !isRead(r) }">
@@ -56,12 +56,12 @@
       </td>
       <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
         <div class="td__flag">
-          <div class="flag__icon" ng-click="currentUser.can('edit data') && toggleFlaggedComment(r)">
+          <div class="flag__icon" ng-click="currentUser.can('edit data') && toggleFlagged(r)">
             <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'">
             </div>
           </div>
         </div>
-        <div class="text-center">
+        <div class="text-center incident__addLink">
             <span>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
                 <strong ng-if="r._incident && incidentsById[r._incident]">
@@ -70,7 +70,7 @@
                 <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
               </a>
             </span>
-          <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
+          <a class="position-relative" ng-show="r._incident" ng-click="unlinkCommentIncident(r)">x</a>
         </div>
       </td>
     </tr>

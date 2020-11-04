@@ -106,8 +106,30 @@
       </div>
       <div class="card mt-4" ng-if="pagination.total > 0">
         <div class="card-header card__header">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
-            <h4 class="card-title mb-0">Comments</h4>
+          <h4 class="card-title mb-0">Comments</h4>
+          <div class="btn-toolbar mt-3 justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+            <div aria-label="Read/Unread Buttons/Selection">
+
+              <!-- Check all button -->
+              <div class="btn-group mr-3">
+                <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                  Add to Incident
+                </button>
+              </div>
+            </div>
+
             <nav aria-label="Report list page navigation">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item"><label>

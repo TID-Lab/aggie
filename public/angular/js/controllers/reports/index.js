@@ -209,6 +209,7 @@ angular.module('Aggie')
       }, []);
     };
 
+
     var toggleRead = function(items, read) {
       return items.map(function(item) {
         item.read = read;
@@ -327,15 +328,6 @@ angular.module('Aggie')
 
     $scope.clearDateFilter = function() {
       $scope.search({ after: null, before: null });
-    };
-
-    $scope.countAndCheck = function(key, value) {
-      var total = $scope.reports.reduce(function(total, report) {
-        if (report[key] === value) total += 1;
-        return total;
-      }, 0);
-
-      return total === $scope.reports.length;
     };
 
     $scope.noFilters = function() {
