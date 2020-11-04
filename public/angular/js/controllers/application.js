@@ -9,7 +9,14 @@ angular.module('Aggie')
 
     // Set up Matomo analytics.
     settings.get('matomo', function success(data) {
-      if (!data.matomo.enabled) return;
+      if (!data.matamo) {
+        console.error("Matomo is not set up in Aggie's configuration");
+        return;
+      }
+      if (!data.matomo.enabled) {
+        console.error("Matomo is not correctly set up in Aggie's configuration");
+        return;
+      }
 
       var _paq = window._paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
