@@ -335,12 +335,10 @@ The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org
 
 #### ELMO
 
-
   1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
   1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
   1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
   1. Go to Settings > Configuration and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
-
 
 ### Google Places
 
@@ -381,9 +379,8 @@ Only the `console` and `file` transports are enabled by default. Transports can 
 
 ### Data visualization using Tableau
 
-- Setting up and viewing tableau visualizations in Aggie requires installing BI connector on the server that acts as a bridge between Tableau and MongoDB. 
-- To setup the BI-connector on the server, follow these steps - [BI connector setup](docs/content/tableau/bi-connector-setup.md) 
-
+Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.
+To set up the BI Connector, follow these steps: [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
 
 ## Architecture
 
