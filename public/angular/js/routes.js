@@ -239,7 +239,7 @@ angular.module('Aggie')
         data: [
           "Visualization",
           function (Visualization) {
-            return Visualization.query().$promise;
+            return Visualization.get().$promise;
           },
         ],
         smtcTags: [
