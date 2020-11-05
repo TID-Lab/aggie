@@ -82,6 +82,7 @@ Again, see below for automated installation.
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
     -  Set `adminPassword` to the default password your want to use for the `admin` user during installation.
     - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+    - If using hate speech indication icons, set hateSpeechThreshold at the threshold the icon appears (.0 - 1) and set enable to true.
 1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
     - If you do not have the certificate you can create a new self-signed certificate with the following command:
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
