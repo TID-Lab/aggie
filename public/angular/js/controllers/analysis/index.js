@@ -13,8 +13,8 @@ angular
     "data",
     "smtcTags",
     function ($scope, Socket, data, smtcTags) {
-      var endDate = new Date("2020-09-21T09:00:59.000Z");
-      var startDate = new Date("2020-09-21T09:00:59.000Z");
+      var endDate = new Date();
+      var startDate = new Date();
       startDate.setTime(startDate.getTime() - 2 * (24 * 60 * 60 * 1000));
       var hateSpeechCutoff = 0.7;
       var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
