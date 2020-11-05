@@ -1,5 +1,5 @@
 module.exports = function renderReportGraph(id, reports, startDate, endDate, description) {
-  var margin = { top: 40, right: 0, bottom: 55, left: 50 };
+  var margin = { top: 50, right: 0, bottom: 55, left: 50 };
   var width = 1200,
     height = 500;
   var graphWidth = width - margin.left - margin.right,
@@ -58,7 +58,7 @@ module.exports = function renderReportGraph(id, reports, startDate, endDate, des
         return d.date;
       })
     )
-    .range([0, width])
+    .range([0, graphWidth])
     .paddingInner(0.2)
     .paddingOuter(0.2);
   var y = d3
@@ -132,4 +132,13 @@ module.exports = function renderReportGraph(id, reports, startDate, endDate, des
     .attr("y", height - 7)
     .style("opacity", "0.75")
     .attr("text-anchor", "left");
+    svg
+      .append("text")
+      .text("Reports")
+      .attr("class", "description")
+      .attr("x", margin.left - 30)
+      .attr("y", 20)
+      .style("opacity", "0.75")
+      .style("font-size", "0.8em")
+      .attr("text-anchor", "left");
 }
