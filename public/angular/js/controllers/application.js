@@ -10,11 +10,11 @@ angular.module('Aggie')
     // Set up Matomo analytics.
     settings.get('matomo', function success(data) {
       if (!data.matamo) {
-        console.error("Matomo is not set up in Aggie's configuration");
+        console.warn("Matomo is missing from Aggie's configuration.");
         return;
       }
       if (!data.matomo.enabled) {
-        console.error("Matomo is not correctly set up in Aggie's configuration");
+        console.log("Matomo is disabled.");
         return;
       }
 
