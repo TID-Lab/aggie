@@ -9,7 +9,7 @@ angular.module('Aggie')
 
     // Set up Matomo analytics.
     settings.get('matomo', function success(data) {
-      if (!data.matamo) {
+      if (!data.matomo) {
         console.warn("Matomo is missing from Aggie's configuration.");
         return;
       }
