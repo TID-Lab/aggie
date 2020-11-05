@@ -19,7 +19,7 @@ angular
       var hateSpeechCutoff = 0.7;
       var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 
-      $scope.reports = (data.reports || [])
+      $scope.reports = data.reports
         .map(function (e) {
           var out = Object.assign({}, e);
           out.authoredAt = parseTime(out.authoredAt);
