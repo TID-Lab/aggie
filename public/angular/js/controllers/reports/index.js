@@ -50,10 +50,23 @@ angular.module('Aggie')
       return obj.name;
     }))), ["Saved Search"]);
     $scope.detectHateSpeech = false;
+    // The initial values of hateSpeechThreshold. These determine the warning icon that appears next to a report
+    $scope.hateSpeechThreshold = {
+      "threshold": 1.1, // the max hate speech score is 1 so this makes it unachievable
+      "enabled": false,
+    };
 
     function setDetectHateSpeech() {
       Settings.get('detectHateSpeech', function(data) {
         $scope.detectHateSpeech = data.detectHateSpeech;
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
+    function setHateSpeechThreshold() {
+      Settings.get('hateSpeechThreshold', function(data) {
+        $scope.hateSpeechThreshold = data.hateSpeechThreshold;
       }, function(error) {
         console.log(error);
       });
@@ -101,7 +114,8 @@ angular.module('Aggie')
       $scope.reports.forEach(linkify);
       updateTagSearchNames();
 
-      setDetectHateSpeech($scope.detectHateSpeech);
+      setDetectHateSpeech();
+      setHateSpeechThreshold()
     };
 
     var updateStats = function(stats) {
