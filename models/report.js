@@ -10,8 +10,8 @@ var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
 
 var schema = new Schema({
-  authoredAt: Date,
-  fetchedAt: Date,
+  authoredAt: {type: Date, index: true},
+  fetchedAt: {type: Date, index: true},
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
