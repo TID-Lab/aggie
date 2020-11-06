@@ -97,6 +97,8 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
         }
         if (tag.isCommentTag) {
           addPost(this.url, callback)
+        } else {
+          callback();
         }
       });
       return;
@@ -126,6 +128,8 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
           }
           if (tag.isCommentTag) {
             removePost(this.url, callback)
+          } else {
+            callback();
           }
         });
         return;
