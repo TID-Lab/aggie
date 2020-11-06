@@ -64,6 +64,16 @@ angular.module('Aggie')
       });
     }
 
+    function setSortingScore() {
+      for (var i = 0; i<$scope.visibleReports.toArray().length; i++) {
+        if ($scope.visibleReports.toArray()[i].metadata.hateSpeechScore == null) {
+          $scope.visibleReports.toArray()[i].metadata.sortingScore = -1;
+        } else {
+          $scope.visibleReports.toArray()[i].metadata.sortingScore = $scope.visibleReports.toArray()[i].metadata.hateSpeechScore;
+        }        
+      }
+    }
+
     function setHateSpeechThreshold() {
       Settings.get('hateSpeechThreshold', function(data) {
         $scope.hateSpeechThreshold = data.hateSpeechThreshold;
@@ -115,6 +125,8 @@ angular.module('Aggie')
       updateTagSearchNames();
       setDetectHateSpeech();
       setHateSpeechThreshold();
+
+      setSortingScore();
     };
 
     var updateStats = function(stats) {

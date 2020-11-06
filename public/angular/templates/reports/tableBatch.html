@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody class="table-bordered">
-      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-metadata.hateSpeechScore'"
+      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-metadata.sortingScore'"
           ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
         <td class="table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
