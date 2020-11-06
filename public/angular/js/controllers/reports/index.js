@@ -113,9 +113,8 @@ angular.module('Aggie')
       // make links clickable
       $scope.reports.forEach(linkify);
       updateTagSearchNames();
-
       setDetectHateSpeech();
-      setHateSpeechThreshold()
+      setHateSpeechThreshold();
     };
 
     var updateStats = function(stats) {
