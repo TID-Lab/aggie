@@ -236,6 +236,9 @@ angular.module('Aggie')
       templateUrl: "/templates/analysis.html",
       controller: "AnalysisController",
       resolve: {
+        threshold: ['Settings', function(Settings) {
+          return Settings.settings.get({ item: "hateSpeechThreshold" }).$promise
+        }],
         data: [
           "Visualization",
           function (Visualization) {

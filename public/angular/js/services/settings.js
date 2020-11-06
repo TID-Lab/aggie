@@ -27,6 +27,7 @@ angular.module('Aggie')
 
     clear: function(item, success, failure) {
       return Settings.delete({ item: item }, {}, success, failure);
-    }
+    },
+    settings: Settings
   };
 });

@@ -99,6 +99,6 @@ module.exports = function renderHateSpeechActualReportGraph(id, data, range, des
       .attr("x", margin.left - 30)
       .attr("y", 20)
       .style("opacity", "0.75")
-      .style("font-size", "0.8em")
+      .style("font-size", "1em")
       .attr("text-anchor", "left");
 }

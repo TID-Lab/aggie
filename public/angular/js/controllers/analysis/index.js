@@ -12,11 +12,14 @@ angular
     "Socket",
     "data",
     "smtcTags",
-    function ($scope, Socket, data, smtcTags) {
+    "threshold",
+    "Settings",
+    function ($scope, Socket, data, smtcTags, threshold, Settings) {
+      $scope.hateSpeechThreshold = threshold.hateSpeechThreshold;
+
       var endDate = new Date();
       var startDate = new Date();
       startDate.setTime(startDate.getTime() - 2 * (24 * 60 * 60 * 1000));
-      var hateSpeechCutoff = 0.7;
       var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 
       $scope.reports = data.reports
@@ -43,7 +46,6 @@ angular
         return acc;
       }, {});
       $scope.numSources = Object.keys($scope.sources).length;
-      console.log($scope.numSources);
 
       $scope.incidents = data.incidents.map(function (incident) {
         var tags = incident.title
@@ -84,9 +86,9 @@ angular
         };
       });
       $scope.algHateSpeech = $scope.reports.filter(function (report) {
-        return report.metadata.hateSpeechScore > hateSpeechCutoff;
+        return report.metadata.hateSpeechScore > $scope.hateSpeechThreshold.threshold;
       });
-      var hateSpeechReportsData = d3.timeHour.range(startDate, endDate).map(function (d) {
+      $scope.hateSpeechReportsData = d3.timeHour.range(startDate, endDate).map(function (d) {
         d.setMinutes(0, 0, 0);
         var intTime = d.getTime();
         return {
@@ -96,13 +98,13 @@ angular
           }).length,
         };
       });
-      var range = [
+      $scope.range = [
         0,
         Math.max(
           d3.max(incidentReportData, function (d) {
             return d.value;
           }),
-          d3.max(hateSpeechReportsData, function (d) {
+          d3.max($scope.hateSpeechReportsData, function (d) {
             return d.value;
           })
         ),
@@ -129,32 +131,32 @@ angular
         Socket.removeAllListeners("stats");
       });
 
-      $scope.initIncidentGraph = function() {
+      $scope.initIncidentGraph = function () {
         renderHateSpeechActualReportGraph(
           "#reports-hs-actual",
           incidentReportData,
-          range,
+          $scope.range,
           "Hate speech identified by trackers"
         );
-      }
+      };
 
-      $scope.initHateSpeechGraph = function() {
+      $scope.initHateSpeechGraph = function () {
         renderHateSpeechReportGraph(
           "#reports-hs",
-          hateSpeechReportsData,
-          range,
+          $scope.hateSpeechReportsData,
+          $scope.range,
           "Problematic speech identified by algorithm"
         );
-      }
+      };
 
-      $scope.initSourceBar = function() {
+      $scope.initSourceBar = function () {
         renderSourceBar(
           "#sources",
           $scope.sources,
           $scope.reports.length,
           "Facebook source breakdown"
         );
-      }
+      };
 
       init();
     },

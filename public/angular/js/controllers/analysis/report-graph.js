@@ -137,8 +137,8 @@ module.exports = function renderReportGraph(id, reports, startDate, endDate, des
       .text("Reports")
       .attr("class", "description")
       .attr("x", margin.left - 30)
-      .attr("y", 20)
+      .attr("y", 35)
       .style("opacity", "0.75")
-      .style("font-size", "0.8em")
+      .style("font-size", "1em")
       .attr("text-anchor", "left");
 }
