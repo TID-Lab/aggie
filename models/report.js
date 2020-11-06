@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var SchemaTypes = mongoose.SchemaTypes;
 var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
+var { addPost, removePost } = require('../lib/comments');
 
 var schema = new Schema({
   authoredAt: {type: Date, index: true},
@@ -26,7 +27,9 @@ var schema = new Schema({
   _sourceNicknames: [String],
   _incident: { type: String, ref: 'Incident', index: true },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
-  checkedOutAt: { type: Date, index: true }
+  checkedOutAt: { type: Date, index: true },
+  commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
+  originalPost: { type: String },
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -74,9 +77,9 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
-schema.methods.addSMTCTag = function(smtcTagId) {
+schema.methods.addSMTCTag = function(smtcTagId, callback) {
   // TODO: Use Functional Programming
-  // ML This finds the smtcTag to add (if it doesn't exists) then remove it.
+  // ML This finds the smtcTag to add (if it doesn't exists) then add it.
   let isRepeat = false;
   this.smtcTags.forEach(function(tag) {
     if(smtcTagId === tag.toString()) {
@@ -85,11 +88,26 @@ schema.methods.addSMTCTag = function(smtcTagId) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
+
+    // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
+    if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
+      SMTCTag.findById(smtcTagId, (err, tag) => {
+        if (err) {
+          logger.error(err);
+        }
+        if (tag.isCommentTag) {
+          addPost(this.url, callback)
+        } else {
+          callback();
+        }
+      });
+      return;
+    }
   }
-  return smtcTagId;
+  callback();
 }
 
-schema.methods.removeSMTCTag = function(smtcTagId) {
+schema.methods.removeSMTCTag = function(smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to remove (if it exists) then remove it.
   if (this.smtcTags) {
@@ -102,13 +120,48 @@ schema.methods.removeSMTCTag = function(smtcTagId) {
     })
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
+
+      if (!this.commentTo && this._media[0] === 'crowdtangle') {
+        SMTCTag.findById(smtcTagId, (err, tag) => {
+          if (err) {
+            logger.error(err);
+          }
+          if (tag.isCommentTag) {
+            removePost(this.url, callback)
+          } else {
+            callback();
+          }
+        });
+        return;
+      }
     }
   }
-  return smtcTagId;
+  callback();
 }
 
-schema.methods.clearSMTCTags = function() {
-  this.smtcTags = [];
+schema.methods.clearSMTCTags = function(callback) {
+
+  const cb = () => {
+    this.smtcTags = [];
+    callback();
+  }
+
+  if (!this.commentTo) {
+    var remaining = this.smtcTags.length;
+    this.smtcTags.forEach((tag) => {
+      const tagId = tag.toString();
+      this.removeSMTCTag(tagId, (err) => {
+        if (err) {
+          logger.error(err);
+        }
+        if (--remaining === 0) {
+          cb();
+        }
+      });
+    });
+    return;
+  }
+  cb();
 }
 
 var Report = mongoose.model('Report', schema);
@@ -119,11 +172,9 @@ SMTCTag.schema.on('tag:removed', function(id) {
       logger.error(err);
     }
     reports.forEach(function(report) {
-      var i = report.smtcTags.indexOf(id);
-      if (i > -1) {
-        report.smtcTags.splice(i, 1);
+      report.removeSMTCTag(id, () => {
         report.save();
-      }
+      })
     });
   });
 })

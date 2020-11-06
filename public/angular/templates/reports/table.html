@@ -20,7 +20,7 @@
         </td>
         <td class="td__sourceInfo">
           <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
-          <p class="sourceInfo__author">
+          <p ng-if="r.author" class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
               {{ r.author }}
           </p>
@@ -41,27 +41,37 @@
             <a ng-if="media.type==='photo'" href="/reports/{{r._id}}" target="_blank">
               <img alt="{{'Thumbnail from report media'}}" class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
             </a>
+            <div ng-if="r.commentTo">
+              <a ng-if="media.type==='photo'" ng-href="{{r.url}}" target="_blank">
+                <img alt="Comment Image Thumbnail" class="img-fluid img-thumbnail" ng-src="{{media.mediaUrl}}" >
+              </a>
+              <a ng-if="media.type=='video'" ng-href="{{r.url}}" target="_blank">
+                <i class="fa fa-file-video-o fa-3x" aria-hidden="true"></i>
+              </a>
+            </div>
           </div>
+        </td>
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
           <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
-          <a href="/reports/{{r._id}}">
-            <p class="content" ng-if="!r.commentTo"> {{ (r.content || '[No Content]') | stripHtml }} </p>
-            <p class="content__shared" ng-if="r.metadata.description && !r.commentTo">
+          <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+            <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
+            <p class="content__shared" ng-if="r.metadata.description">
               {{r.metadata.description | stripHtml}}
             </p>
-            <ul class="fa-ul" ng-if="r.commentTo">
+          </a>
+          <a href="/reports/{{r.commentTo}}#{{r._id}}" ng-if="r.commentTo">
+            <ul class="fa-ul">
               <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
             </ul>
           </a>
-
         </td>
         <td class="td__tags tag">
           <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
             {{tagsToString(r.tags) + ", "}}
           </span>
-          <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
+          <!-- ML removed for election day <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong> -->
           </a>
           <tags class="tagify readonly" tabindex="-1">
             <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"

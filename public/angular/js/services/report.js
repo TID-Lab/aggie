@@ -5,6 +5,7 @@ angular.module('Aggie')
 
   return $resource('/api/v1/report/:id', null, {
     'query': { isArray: false },
+    'queryComments': { url: '/api/v1/comments/:id', isArray: false },
     'save': { method: 'PUT' },
     'update': { method: 'PUT' },
     'toggleRead': { method: 'PATCH', url: '/api/v1/report/_read', isArray: false },

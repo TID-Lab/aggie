@@ -343,15 +343,6 @@ angular.module('Aggie')
       $scope.search({ after: null, before: null });
     };
 
-    $scope.countAndCheck = function(key, value) {
-      var total = $scope.reports.reduce(function(total, report) {
-        if (report[key] === value) total += 1;
-        return total;
-      }, 0);
-
-      return total === $scope.reports.length;
-    };
-
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
@@ -522,13 +513,10 @@ angular.module('Aggie')
      * @param {SMTCTag} smtcTag
      */
     $scope.addTagToSelected = function(smtcTag) {
-      console.log(smtcTag);
       //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.reports);
       if (!items.length) return;
       var ids = getIds(addSMTCTag(items, smtcTag));
-      console.log(ids);
-      console.log(smtcTag._id);
       Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
     };
 
@@ -577,10 +565,8 @@ angular.module('Aggie')
           } else {
             flash.setNoticeNow(message);
           }
-
           return;
         }
-
         Batch.resource = resource;
         $rootScope.$state.go('batch', $scope.searchParams, { reload: true });
       });

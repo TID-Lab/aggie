@@ -71,17 +71,16 @@
                         </div>
                       </td>
                     </tr>
-
                     <tr>
                       <th scope="row" class="detail-key" translate>Tags</th>
                       <td colspan="10" class="detail-value">
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
-                        <!-- See why Tag Modal isn't going to work with comments on table.html-->
+                        <!-- See why Tag Modal isn't going to work with comments on table.html
                         <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
                           <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
-                        </a>
+                        </a> -->
                         <tags class="tagify readonly" tabindex="-1">
                           <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
                                class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
@@ -104,6 +103,53 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="card mt-4" ng-if="pagination.total > 0">
+        <div class="card-header card__header">
+          <h4 class="card-title mb-0">Comments</h4>
+          <div class="btn-toolbar mt-3 justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+            <div aria-label="Read/Unread Buttons/Selection">
+
+              <!-- Check all button -->
+              <div class="btn-group mr-3">
+                <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
+                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
+                  <span class="mr-2" translate> Flag </span>
+                  <i class="fa fa-flag" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
+                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                  Add to Incident
+                </button>
+              </div>
+            </div>
+
+            <nav aria-label="Report list page navigation">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item"><label>
+                  {{ pagination.start }} - {{ pagination.end }} {{ 'of' | translate }} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                </label></li>
+                <li class="list-inline-item">
+                  <ul class="pagination">
+                    <li class="page-item" ng-class="{disabled: isFirstPage() }">
+                      <a title="Previous Page" aria-label="Previous Page" class="page-link"  ui-sref="report({ page: pagination.page - 1 })"><i class="fa fa-chevron-left"></i></a>
+                    </li>
+                    <li class="page-item" ng-class="{disabled: isLastPage() }">
+                      <a title="Next Page" class="page-link"  ui-sref="report({ page: pagination.page + 1 })"><i class="fa fa-chevron-right"></i></a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div ng-include="'/templates/reports/comments-table.html'"></div>
       </div>
     </div>
     <div class="col">

@@ -121,6 +121,10 @@ tbody {
     }
 
 }
+
+.td__media {
+  max-width: 56px;
+}
 .td__source {
   .icon-left {
     width: 33px;
@@ -417,4 +421,8 @@ input.checkbox__input {
 .incident__addLink {
   padding-top: 40px;
   padding-bottom: 40px;
+}
+
+.td__commentTime {
+  width: 120px;
 }

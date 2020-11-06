@@ -102,7 +102,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('report', {
-      url: '/reports/:id',
+      url: '/reports/:id?page',
       templateUrl: '/templates/reports/show.html',
       controller: 'ReportsShowController',
       resolve: {
@@ -128,12 +128,23 @@ angular.module('Aggie')
 
           return deferred.promise;
         }],
+        comments: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          console.log(page);
+          return Report.queryComments({
+            id: params.id,
+            page: page - 1,
+          }).$promise;
+        }],
         incidents: ['Incident', function(Incident) {
           return Incident.query().$promise;
         }],
         smtcTags: ['SMTCTag', function(SMTCTag) {
           return SMTCTag.query().$promise;
-        }]
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
       }
     });
 

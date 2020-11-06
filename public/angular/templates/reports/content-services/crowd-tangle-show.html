@@ -57,10 +57,10 @@
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
-            <!-- see reports index.html to why this is -->
+            <!-- see reports index.html to why this is
             <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
               <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
-            </a>
+            </a> -->
             <tags class="tagify readonly" tabindex="-1">
               <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
                    class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">

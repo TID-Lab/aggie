@@ -24,6 +24,7 @@ function ReportQuery(options) {
   this.event = 'reports';
   this.tags = options.tags;
   this.list = options.list;
+  this.commentTo = options.commentTo;
 }
 
 _.extend(ReportQuery, Query);
@@ -47,6 +48,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
     _incident: this.incidentId,
     read: this.read,
     flagged: this.flagged,
+    commentTo: this.commentTo,
   }
   filter = _.omitBy(filter, _.isNil);
   if (this.before)    filter.storedAt = { $lte: this.before }
