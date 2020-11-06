@@ -145,7 +145,7 @@ angular
           "#reports-hs",
           $scope.hateSpeechReportsData,
           $scope.range,
-          "Problematic speech identified by algorithm"
+          "Probable problematic speech identified by algorithm"
         );
       };
 
