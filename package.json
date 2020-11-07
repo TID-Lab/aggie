@@ -36,6 +36,7 @@
     "async": "^3.2.0",
     "aws-sdk": "^2.674.0",
     "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
     "browserify": "^16.5.1",
     "chance": "^1.1.5",
     "connect-mongo": "^3.2.0",
