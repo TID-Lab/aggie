@@ -4,7 +4,8 @@ angular.module('Aggie')
   '$scope',
   'FlashService',
   'Settings',
-  function($scope, flash, settings) {
+  '$rootScope',
+  function($scope, flash, settings,$rootScope) {
     $scope.flash = flash;
 
     // Set up Matomo analytics.
@@ -46,6 +47,14 @@ angular.module('Aggie')
       g.async=true; 
       g.src='https://cdn.matomo.cloud/' + data.matomo.dashboard_name +'.matomo.cloud/container_' + data.matomo.container_id  + '.js'; 
       s.parentNode.insertBefore(g,s);
+
+      // Sending Username Data
+      $rootScope.$watch('currentUser', function() {
+        if ($rootScope.currentUser != undefined) {
+          var user = $rootScope.currentUser;
+          _paq.push(["setUserId", user.username]);
+        }      
+      });
 
     }, function failure(e) {
       console.error("Couldn't set up Matomo:", e);
