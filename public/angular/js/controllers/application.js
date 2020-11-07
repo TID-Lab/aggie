@@ -47,9 +47,11 @@ angular.module('Aggie')
     // Sending Username Data
     $rootScope.$watch('currentUser', function() {
       var user = $rootScope.currentUser;
+      var _paq = window._paq = window._paq || [];
       if (user) {
         _paq.push(["setUserId", user.username]);
-      } else {
+      } 
+      else {
         // https://developer.matomo.org/guides/tracking-javascript-guide#user-id
         // This doesn't seem to work fully, but it's good enough.
         _paq.push(['resetUserId']);
