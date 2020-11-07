@@ -27,5 +27,13 @@ angular.module('Aggie')
 .value('emailTransportOptions', {
   SES: ['accessKeyId', 'secretAccessKey', 'region'],
   SMTP: ['host', 'port', 'secure', 'user', 'pass'],
-  SendGrid: ['apiKey'] });
+  SendGrid: ['apiKey']
+})
 
+.value('matomoConfig', {
+  "enabled": false,
+  "dashboard_name": "my-aggie",
+  "cookie_domain": "*.aggie.example.org",
+  "site_id": "1",
+  "container_id": "container-id"
+})
