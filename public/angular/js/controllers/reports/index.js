@@ -65,12 +65,16 @@ angular.module('Aggie')
     }
 
     function setSortingScore() {
-      for (var i = 0; i<$scope.visibleReports.toArray().length; i++) {
-        if ($scope.visibleReports.toArray()[i].metadata.hateSpeechScore == null) {
-          $scope.visibleReports.toArray()[i].metadata.sortingScore = -1;
+      var reports = $scope.visibleReports.toArray();
+      for (var i = 0; i < reports.length; i++) {
+        var metadata = reports[i].metadata;
+        if (!metadata) {
+          // Ignore this report, it's probably not from CT.
+        } else if (metadata.hateSpeechScore == null) {
+          metadata.sortingScore = -1;
         } else {
-          $scope.visibleReports.toArray()[i].metadata.sortingScore = $scope.visibleReports.toArray()[i].metadata.hateSpeechScore;
-        }        
+          metadata.sortingScore = metadata.hateSpeechScore;
+        }
       }
     }
 
