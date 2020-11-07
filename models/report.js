@@ -121,7 +121,7 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
 
-      if (!this.commentTo && this._media[0] === 'crowdtangle') {
+      if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
         SMTCTag.findById(smtcTagId, (err, tag) => {
           if (err) {
             logger.error(err);
