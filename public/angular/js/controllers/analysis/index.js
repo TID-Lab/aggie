@@ -71,7 +71,6 @@ angular
           return out;
         })
         .filter(function (report) {
-          console.log(report);
           return report._incident.titleTags.includes("hate speech");
         });
 
