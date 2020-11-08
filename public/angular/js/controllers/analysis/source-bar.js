@@ -77,7 +77,7 @@ module.exports = function renderSourceBar(id, sources, totalReports, description
         .attr("y", "0.7em")
         .attr("font-weight", "bold")
         .text(function (d) {
-          return d.name;
+          return d.name.length > 20 ? d.name.slice(0, 20) + '...' : d.name;
         });
     })
     .call(function (text) {
