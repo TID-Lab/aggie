@@ -4,9 +4,28 @@
 
 ### Configuring MongoDB BI Connector for using Tableau
 
-- Follow this tutorial to add access control for MongoDB: [Access control tutorial](https://docs.mongodb.com/manual/tutorial/enable-authentication/)
-    - If access control is enabled, replace username and password for MongoDB in the following steps accordingly. If its not enabled, then remove username and password fields
 - Make sure ports 27017 and 3307 are publicly accessible
+
+- Follow this tutorial to add access control for MongoDB: [Access control tutorial](https://docs.mongodb.com/manual/tutorial/enable-authentication/), example below
+    - If access control is enabled, replace username and password for MongoDB in the following steps accordingly. If its not enabled, then remove username and password fields
+
+Example:
+
+```shell script
+mongo aggie
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "CHANGE_ME",
+    roles: [{ role: "userAdminAnyDatabase", db: "aggie" }, "readWriteAnyDatabase"]
+  }
+)
+
+db.adminCommand({ shutdown: 1 })
+
+mongo aggie -u admin
+```
 
 Then:
 
@@ -33,7 +52,7 @@ mongosqld
 sudo vi /etc/mongosqld.conf
 
 # copy and paste the following template:
----------------------------------------------------
+#---------------------------------------------------
 systemLog:
   path: '/var/log/mongosqld.log'
 schema:
@@ -46,7 +65,7 @@ mongodb:
     uri: "mongodb://localhost:27017/"      
     auth:
       username: admin
-      password: letmein1
+      password: CHANGE_ME
       mechanism: "SCRAM-SHA-1"
       source: aggie
 security:
@@ -56,10 +75,10 @@ processManagement:
     name: mongosqld
     displayName: mongosqld
     description: "BI Connector SQL proxy server"
----------------------------------------------------
+#---------------------------------------------------
 
 # Generate MongoDB schema [add -u and -p flags if authentication is enabled on MongoDB]
-sudo mongodrdl -o /var/aggie-schema.drdl  -d aggie --authenticationDatabase aggie -u admin -p letmein1
+sudo mongodrdl -o /var/aggie-schema.drdl  -d aggie --authenticationDatabase aggie -u admin -p CHANGE_ME
 
 # Check that schema has been generated
 head /var/aggie-schema.drdl
@@ -108,6 +127,7 @@ sudo vi /etc/mongosqld.conf
 
 # Add the following ssl lines under net block in the conf file.
 # Note: This should NOT be added in the net block in mongodb:
+#---------------------------------------------------
 net:
   bindIp: 127.0.0.1
   port: 3307
@@ -115,6 +135,7 @@ net:
     mode: 'requireSSL'
     PEMKeyFile: '/opt/certs/bi.pem'
     CAFile: '/opt/certs/mdbca.crt'
+#---------------------------------------------------
 
 # Restart mongosqld
 sudo systemctl restart mongosqld
@@ -123,7 +144,7 @@ sudo systemctl restart mongosqld
 sudo systemctl status mongosqld
 ```
 
-Verify that you can connect remotely using the admin password:
+Verify that you can connect remotely, using the admin password when it prompts you:
 
 ```shell script
 mongo "mongodb://aggie.example.org" -u admin
