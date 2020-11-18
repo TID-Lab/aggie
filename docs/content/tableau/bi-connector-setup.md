@@ -8,6 +8,8 @@
     - If access control is enabled, replace username and password for MongoDB in the following steps accordingly. If its not enabled, then remove username and password fields
 - Make sure ports 27017 and 3307 are publicly accessible
 
+Then:
+
 ```shell script
 # create temporary bin folder
 mkdir ~/bin && cd ~/bin 
@@ -119,6 +121,12 @@ sudo systemctl restart mongosqld
 
 # Check mongosqld is running
 sudo systemctl status mongosqld
+```
+
+Verify that you can connect remotely using the admin password:
+
+```shell script
+mongo "mongodb://aggie.example.org" -u admin
 ```
 
 Now Tableau can connect to the MongoDB on the server using the server IP, authentication information, and database name.
