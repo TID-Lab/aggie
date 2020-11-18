@@ -378,6 +378,10 @@ Set various logging options in `logger` section.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
 
+### Remote access
+
+See the first part of the Tableau docs in [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
+
 ### Data visualization using Tableau
 
 Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.

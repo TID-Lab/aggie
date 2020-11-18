@@ -9,11 +9,15 @@
 - Follow this tutorial to add access control for MongoDB: [Access control tutorial](https://docs.mongodb.com/manual/tutorial/enable-authentication/), example below
     - If access control is enabled, replace username and password for MongoDB in the following steps accordingly. If its not enabled, then remove username and password fields
 
-Example:
+Example from the tutorial:
 
-```shell script
-mongo aggie
+```yaml
+# /etc/mongod.conf
+security:
+    authorization: enabled
+```
 
+```js
 db.createUser(
   {
     user: "admin",
@@ -23,11 +27,9 @@ db.createUser(
 )
 
 db.adminCommand({ shutdown: 1 })
-
-mongo aggie -u admin
 ```
 
-Then:
+Then set up Tableau access:
 
 ```shell script
 # create temporary bin folder
@@ -147,7 +149,17 @@ sudo systemctl status mongosqld
 Verify that you can connect remotely, using the admin password when it prompts you:
 
 ```shell script
-mongo "mongodb://aggie.example.org" -u admin
+mongo "mongodb://aggie.example.org" --authenticationDatabase aggie -u admin
 ```
 
 Now Tableau can connect to the MongoDB on the server using the server IP, authentication information, and database name.
+
+### Notes
+
+To change your password later:
+
+```js
+db.changeUserPassword("admin", passwordPrompt())
+```
+
+Make sure you remember to update `/etc/mongosqld.conf` and `aggie/config/secrets.json` to use the new password.
