@@ -13,12 +13,13 @@
       <th scope="col" translate>Escalated?</th>
       <th scope="col" translate>Tags</th>
       <th scope="col" translate>Last Updated</th>
+      <th scope="col" translate>Created</th>
       <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
       <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
     </tr>
     </thead>
     <tbody class="table-bordered">
-    <tr ng-repeat="i in incidents | orderBy:['closed','idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
+    <tr ng-repeat="i in incidents | orderBy:['closed','-updatedAt']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
       <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
         <div class="td__checkbox">
           <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>
@@ -54,11 +55,12 @@
         <span>{{ tagsToString(i.tags) }}</span>
       </td>
       <td>
-        <span class="badge badge-pill badge-secondary mb-2" title="">{{ i.storedAt | interval }} ago</span>
+        <span class="badge badge-pill badge-secondary mb-2" title="">{{i.updatedAt| interval }} ago</span>
+      </td>
+      <td>
+        <small class="time">{{ i.storedAt | aggieDate:'time' }}</small>
         <br>
-        <small class="time">{{ i.updatedAt | aggieDate:'time' }}</small>
-        <br>
-        <small> {{ i.updatedAt | aggieDate:'date' }}</small>
+        <small> {{ i.storedAt | aggieDate:'date' }}</small>
       </td>
       <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
         <div class="fa fa-pencil text-blue td__edit fa-lg" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>

@@ -570,21 +570,31 @@ angular.module('Aggie')
 
     // Batch Mode Functions
     $scope.grabBatch = function() {
-      Batch.checkout($scope.searchParams, function(resource) {
+      // Before we go to batch, the searched query tag is going to be the name of the tag not the ID.
+      // This is because the backend sends us back a objectId and we quickly change it to a smtcTag Name instead.
+      // TODO: Make the backend return a smtcTagObject instead then populate just the searchbar with the name.
+      var batchSearchParams = {};
+      if ($scope.searchParams.tags) {
+        if (!$scope.smtcTagsById[$scope.searchParams.tags]) {
+          batchSearchParams = $scope.searchParams;
+          batchSearchParams.tags = smtcTagNamesToIds($scope.searchParams.tags);
+        }
+      }
+      Batch.checkout(batchSearchParams, function(resource) {
         // no more results found
         if (!resource.results || !resource.results.length) {
           var message = 'No more unread reports found.';
 
           if ($scope.currentPath === 'batch') {
             flash.setNotice(message);
-            $rootScope.$state.go('reports', $scope.searchParams);
+            $rootScope.$state.go('reports', batchSearchParams);
           } else {
             flash.setNoticeNow(message);
           }
           return;
         }
         Batch.resource = resource;
-        $rootScope.$state.go('batch', $scope.searchParams, { reload: true });
+        $rootScope.$state.go('batch', batchSearchParams, { reload: true });
       });
     };
 

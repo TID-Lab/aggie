@@ -23,41 +23,43 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table table-bordered">
+          <table class="table table-bordered incidentShow__table">
             <tbody>
-            <tr>
-              <th class="detail-key" translate>Location</th>
-              <td class="detail-value">
-                <span ng-if="incident.locationName">{{ incident.locationName }}</span>
-                <span ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</span>
-              </td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Tags</th>
-              <td class="detail-value">{{ tagsToString(incident.tags) }}</td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Creator</th>
-              <td class="detail-value"><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Assigned To</th>
-              <td class="detail-value"><a href="/users/{{ incident.assignedTo.username }}">{{ incident.assignedTo.username }}</a></td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Status</th>
-              <td class="detail-value">{{ incident.closed ? 'Closed' : 'Open' | translate}}</td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Veracity</th>
-              <td class="detail-value">
-                {{ incident.veracity ? 'Confirmed True' : (incident.veracity === false ? 'Confirmed False' : 'Unconfirmed') | translate }}
-              </td>
-            </tr>
-            <tr>
-              <th class="detail-key" translate>Notes</th>
-              <td class="detail-value"><span class="angular-with-newlines" ng-bind-html="incident.notes"></span></td>
-            </tr>
+              <tr>
+                <th scope="row" translate>Location</th>
+                <td>
+                  <span ng-if="incident.locationName">{{ incident.locationName }}</span>
+                  <span ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Tags</th>
+                <td>{{ tagsToString(incident.tags) }}</td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Creator</th>
+                <td><a href="/users/{{ incident.creator.username }}">{{ incident.creator.username }}</a></td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Assigned To</th>
+                <td><a href="/users/{{ incident.assignedTo.username }}">{{ incident.assignedTo.username }}</a></td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Status</th>
+                <td>{{ incident.closed ? 'Closed' : 'Open' | translate}}</td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Veracity</th>
+                <td>
+                  {{ incident.veracity ? 'Confirmed True' : (incident.veracity === false ? 'Confirmed False' : 'Unconfirmed') | translate }}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" translate>Notes</th>
+                <td>
+                  <span ng-bind-html="incident.notes"></span>
+                </td>
+              </tr>
             </tbody>
           </table>
           <h4 translate>Reports</h4>
