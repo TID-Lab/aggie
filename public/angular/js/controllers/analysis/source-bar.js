@@ -1,3 +1,4 @@
+var responsivefy = require('./chart-utils');
 module.exports = function renderSourceBar(id, sources, totalReports, description) {
   var stackedSources = d3
     .stack()
@@ -30,7 +31,7 @@ module.exports = function renderSourceBar(id, sources, totalReports, description
     height = 90;
 
   var margin = { top: 40, right: 0, bottom: 30, left: 50 };
-  var svg = d3.select(id).append("svg").attr("width", width).attr("height", height);
+  var svg = d3.select(id).append("svg").attr("width", width).attr("height", height).call(responsivefy);
   var x = d3.scaleLinear([0, d3.sum(Object.values(sources))], [margin.left, width - margin.right]);
   var formatPercent = x.tickFormat(null, "%");
   svg

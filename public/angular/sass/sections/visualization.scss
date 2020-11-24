@@ -1,4 +1,5 @@
 .viz-content {
+  width: 100%;
   max-width: 1300px;
   margin: 0 auto;
   h1 {
@@ -6,7 +7,7 @@
     font-weight: 300;
   }
   .chart {
-    margin: 20px 0;
+    margin: 20px;
   }
   .stat-cards {
     display: flex;

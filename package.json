@@ -61,6 +61,7 @@
     "merge-stream": "^2.0.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.25.3",
+    "moment-timezone": "^0.5.32",
     "mongoose": "^5.9.16",
     "mongoose-sequence": "^5.2.2",
     "nconf": "^0.10.0",
