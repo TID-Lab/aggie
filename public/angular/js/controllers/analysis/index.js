@@ -71,7 +71,6 @@ angular
           return out;
         })
         .filter(function (report) {
-          console.log(report);
           return report._incident.titleTags.includes("hate speech");
         });
 
@@ -86,7 +85,7 @@ angular
         };
       });
       $scope.algHateSpeech = $scope.reports.filter(function (report) {
-        return report.metadata.hateSpeechScore > $scope.hateSpeechThreshold;
+        return report.metadata.hateSpeechScore > $scope.hateSpeechThreshold.threshold;
       });
       $scope.hateSpeechReportsData = d3.timeHour.range(startDate, endDate).map(function (d) {
         d.setMinutes(0, 0, 0);
