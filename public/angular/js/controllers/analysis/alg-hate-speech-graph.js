@@ -1,3 +1,5 @@
+var responsivefy = require('./chart-utils');
+var moment = require('moment-timezone');
 module.exports = function renderHateSpeechReportGraph(id, data, range, description) {
   var margin = { top: 50, right: 0, bottom: 55, left: 50 };
   var width = 1200,
@@ -13,14 +15,14 @@ module.exports = function renderHateSpeechReportGraph(id, data, range, descripti
           d.value +
           " Reports" +
           "</div><div>" +
-          d3.timeFormat("%b. %d %H:00")(d.date).replace(/\s0/g, " ") +
+          moment(d.data.date).tz("Asia/Yangon").format('MMM. Do hh:mm:ss') +
           "</div><div>"
       )
       .style("left", event.offsetX + "px")
       .style("top", event.offsetY - 40 + "px");
   };
 
-  var svg = d3.select(id).append("svg").attr("width", width).attr("height", height);
+  var svg = d3.select(id).append("svg").attr("width", width).attr("height", height).call(responsivefy);
   var graph = svg
     .append("g")
     .attr("width", graphWidth)
@@ -71,9 +73,10 @@ module.exports = function renderHateSpeechReportGraph(id, data, range, descripti
       xAxis
         .tickSize(15)
         .tickPadding(5)
-        .tickFormat(function (d, i) {
-          return d.getHours() === 0 ? d3.timeFormat("%b. %d")(d) : "";
-        })
+        .tickFormat(function(d){
+          if (d.getHours() !== 0) return "";
+          return moment(d).tz("Asia/Yangon").format('MMM. Do');
+      })
     )
     .selectAll("text");
   // .attr("transform", "translate(13,50) rotate(90)");
