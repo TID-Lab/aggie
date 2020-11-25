@@ -51,8 +51,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
     commentTo: this.commentTo,
   }
   filter = _.omitBy(filter, _.isNil);
-  if (this.before)    filter.storedAt = { $lte: this.before }
-  if (this.after)     filter.storedAt = Object.assign({}, filter.storedAt, { $gte: this.after });
+  if (this.before)    filter.authoredAt = { $lte: this.before }
+  if (this.after)     filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
   if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
