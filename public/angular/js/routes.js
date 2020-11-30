@@ -130,7 +130,6 @@ angular.module('Aggie')
         }],
         comments: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
-          console.log(page);
           return Report.queryComments({
             id: params.id,
             page: page - 1,
