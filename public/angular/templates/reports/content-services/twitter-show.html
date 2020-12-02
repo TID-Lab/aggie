@@ -82,10 +82,9 @@
                           <span ng-repeat="tag in report.tags">
                             {{ tag + ', '}}
                           </span>
-            <!-- See reports index.html to see why this is removed
             <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
               <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
-            </a> -->
+            </a>
 
             <tags class="tagify readonly" tabindex="-1">
               <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
