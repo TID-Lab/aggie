@@ -33,9 +33,20 @@
             <div class="btn-toolbar flex-wrap justify-content-between" aria-label="Page title and Hate Speech Ranking">
               <h4 class="card-title" translate>Batch Mode</h4>
               <div ng-if="detectHateSpeech" class="pt-2 text-right text-secondary">
-                <span ng-if="hateSpeechThreshold.enabled" class="badge badge-pill badge-danger mr-1"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
-                <span translate> Indicates a report that is likely to contain hate speech</span>
+                <span ng-if="hateSpeechThreshold.enabled" >
+                  <span translate> Red icon indicates a report that is <b>very likely</b> to contain hate speech</span>
+                  <span class="badge badge-pill badge-danger mr-1"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                </span>
                 <br>
+                <span ng-if="hateSpeechThreshold.enabled" >
+                  <span translate> Orange icon indicates a report that is <b>likely</b> to contain hate speech</span>
+                  <span class="badge badge-pill badge-elevated mr-1"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                </span>
+                <br>
+                <span ng-if="hateSpeechThreshold.enabled" >
+                  <span translate> Yellow icon indicates a report that is <b>moderately likely</b> to contain hate speech</span>
+                  <span class="badge badge-pill badge-moderate mr-1"><i class="fa fa-bell" aria-hidden="true"></i></span>
+                </span>
                 <br>
                 <span translate>
                   Reports sorted by Hate Speech Score

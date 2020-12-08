@@ -20,9 +20,21 @@
         </td>
         <td class="td__sourceInfo">
           <span class="badge badge-pill badge-secondary mb-2">{{ r.storedAt | interval }} ago</span>
-          <span ng-if="r.metadata.hateSpeechScore && hateSpeechThreshold.enabled && r.metadata.hateSpeechScore >= hateSpeechThreshold.threshold"
-                class="badge badge-pill badge-danger mb-2">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          <span ng-if="r.metadata.hateSpeechScore && hateSpeechThreshold.enabled">
+            <span ng-if="r.metadata.hateSpeechScore >= hateSpeechThreshold.severeThreshold"
+                   class="badge badge-pill badge-danger mb-2">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </span>
+            <span ng-if="r.metadata.hateSpeechScore >= hateSpeechThreshold.elevatedThreshold &&
+            r.metadata.hateSpeechScore < hateSpeechThreshold.severeThreshold"
+                  class="badge badge-pill badge-elevated mb-2">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </span>
+            <span ng-if="r.metadata.hateSpeechScore >= hateSpeechThreshold.moderateThreshold &&
+            r.metadata.hateSpeechScore < hateSpeechThreshold.elevatedThreshold"
+                class="badge badge-pill badge-moderate mb-2">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </span>
           </span>
           <p class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>

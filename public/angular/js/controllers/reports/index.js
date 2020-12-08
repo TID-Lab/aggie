@@ -53,6 +53,9 @@ angular.module('Aggie')
     // The initial values of hateSpeechThreshold. These determine the warning icon that appears next to a report
     $scope.hateSpeechThreshold = {
       "threshold": 1.1, // the max hate speech score is 1 so this makes it unachievable
+      "moderateThreshold": 1.1,
+      "elevatedThreshold": 1.1,
+      "severeThreshold": 1.1,
       "enabled": false,
     };
 
