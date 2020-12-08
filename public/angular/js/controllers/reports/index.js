@@ -159,6 +159,10 @@ angular.module('Aggie')
       return memo;
     };
 
+    $scope.toHundredthsPrecision = function(speechScore) {
+      return speechScore.toFixed(2);
+    }
+
     $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
         // Remove empty params.

@@ -19,11 +19,11 @@
           </div>
         </td>
         <td class="td__sourceInfo">
-          <span class="badge badge-pill badge-secondary mb-2">{{ r.storedAt | interval }} ago</span>
           <span ng-if="r.metadata.hateSpeechScore && hateSpeechThreshold.enabled && r.metadata.hateSpeechScore >= hateSpeechThreshold.threshold"
-                class="badge badge-pill badge-danger mb-2">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            class="badge badge-pill badge-info mb-2 hateSpeechScore">
+            {{ toHundredthsPrecision(r.metadata.hateSpeechScore) }}
           </span>
+          <span class="badge badge-pill badge-secondary mb-2">{{ r.storedAt | interval }} ago</span>
           <p class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
               {{ r.author }}
