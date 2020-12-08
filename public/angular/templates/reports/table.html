@@ -71,8 +71,8 @@
           <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
             {{tagsToString(r.tags) + ", "}}
           </span>
-          <!-- ML removed for election day <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong> -->
+          <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
           </a>
           <tags class="tagify readonly" tabindex="-1">
             <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
