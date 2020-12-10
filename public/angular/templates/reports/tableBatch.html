@@ -28,12 +28,12 @@
             <span ng-if="r.metadata.hateSpeechScore >= hateSpeechThreshold.elevatedThreshold &&
             r.metadata.hateSpeechScore < hateSpeechThreshold.severeThreshold"
                   class="badge badge-pill badge-elevated mb-2">
-              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
             </span>
             <span ng-if="r.metadata.hateSpeechScore >= hateSpeechThreshold.moderateThreshold &&
             r.metadata.hateSpeechScore < hateSpeechThreshold.elevatedThreshold"
                 class="badge badge-pill badge-moderate mb-2">
-              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <i class="fa fa-bell" aria-hidden="true"></i>
             </span>
           </span>
           <p class="sourceInfo__author">
