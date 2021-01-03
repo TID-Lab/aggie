@@ -25,8 +25,10 @@ angular.module('Aggie')
   'FlashService',
   'settingsValues',
   'item',
+  '$resource',
   '$filter',
-  function($scope, $modalInstance, Settings, flash, settings, item, $filter) {
+  'tz',
+  function($scope, $modalInstance, Settings, flash, settings, item, $resource, $filter, tz) {
     $scope.settings = settings;
     $scope.item = item;
     $scope._showErrors = false;
@@ -50,6 +52,47 @@ angular.module('Aggie')
 
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
+    };
+
+    $scope.download = function(before, after) {
+    //ToDo: - Get dates from user input, index reports based on given dates
+    //      - Set default date range to include all reports
+    var url = "/api/v1/viz";
+    beforeDate = tz(new Date(), before);
+    afterDate = tz(new Date(), after);
+
+    url = url.concat("/?before=" + beforeDate.toISOString() + "/?after=" + afterDate.toISOString());
+    console.log(beforeDate);
+    console.log(after);
+    //gets reports from viz code
+    $resource(url).get().$promise.then(function(res){ //success function
+      //headers for tsv
+      var toWrite = "author \t authoredAt \t content \t fetchedAt \t flagged \t read \t tags \t url \t media";
+      //for each report, create a new line and a tab separated string for data. Replace all other newline characters with a space
+      for(i=0; i < res.reports.length; i++) {
+        var newString = "\n" + res.reports[i].author.replace(/(?:\r\n|\r|\n)/g, ' ') + "\t" +
+                                res.reports[i].authoredAt.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
+                                res.reports[i].content.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
+                                res.reports[i].fetchedAt.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
+                                res.reports[i].flagged +"\t"+
+                                res.reports[i].read +"\t"+
+                                res.reports[i].tags[0].replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
+                                res.reports[i].url.replace('\t','') +"\t"+
+                                res.reports[i]._media[0].replace(/(?:\r\n|\r|\n)/g,' ');
+        toWrite = toWrite.concat(newString);         
+      }
+      //create and click the csv file to download
+      //console.log(toWrite);
+      var hiddenElement = document.createElement('a');
+      hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURIComponent(toWrite);
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'reports.tsv';
+      //hiddenElement.click();
+      $modalInstance.close();
+    }, function(error){ //error function
+      console.log(error);
+      $modalInstance.close();
+    })
     };
 
     function success(itemName, verb) {
@@ -93,6 +136,5 @@ angular.module('Aggie')
       $scope.settings['latitude'] = $scope.details.geometry.location.lat();
       $scope.settings['longitude'] = $scope.details.geometry.location.lng();
     });
-
   }
 ]);
