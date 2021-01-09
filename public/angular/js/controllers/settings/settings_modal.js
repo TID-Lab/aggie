@@ -58,17 +58,15 @@ angular.module('Aggie')
     //ToDo: - Get dates from user input, index reports based on given dates
     //      - Set default date range to include all reports
     var url = "/api/v1/viz";
-    beforeDate = tz(new Date(), before);
-    afterDate = tz(new Date(), after);
+    beforeDate = before + ":00.277Z";
+    afterDate = after + ":00.277Z";
 
-    url = url.concat("/?before=" + beforeDate.toISOString() + "/?after=" + afterDate.toISOString());
+    url = url.concat("/?before=" + beforeDate + "&after=" + afterDate);
     console.log(beforeDate);
-    console.log(after);
+    console.log(afterDate);
     //gets reports from viz code
     $resource(url).get().$promise.then(function(res){ //success function
-      //headers for tsv
       var toWrite = "author \t authoredAt \t content \t fetchedAt \t flagged \t read \t tags \t url \t media";
-      //for each report, create a new line and a tab separated string for data. Replace all other newline characters with a space
       for(i=0; i < res.reports.length; i++) {
         var newString = "\n" + res.reports[i].author.replace(/(?:\r\n|\r|\n)/g, ' ') + "\t" +
                                 res.reports[i].authoredAt.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
@@ -81,13 +79,11 @@ angular.module('Aggie')
                                 res.reports[i]._media[0].replace(/(?:\r\n|\r|\n)/g,' ');
         toWrite = toWrite.concat(newString);         
       }
-      //create and click the csv file to download
-      //console.log(toWrite);
       var hiddenElement = document.createElement('a');
       hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURIComponent(toWrite);
       hiddenElement.target = '_blank';
       hiddenElement.download = 'reports.tsv';
-      //hiddenElement.click();
+      hiddenElement.click();
       $modalInstance.close();
     }, function(error){ //error function
       console.log(error);
