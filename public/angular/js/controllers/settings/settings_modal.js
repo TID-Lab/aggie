@@ -56,15 +56,24 @@ angular.module('Aggie')
 
     $scope.download = function(before, after) {
     var url = "/api/v1/viz";
-    if(before === 'undefined'){
-      beforeDate = "2000-01-01T00:00:00.000Z"
+    var afterDate = "";
+
+    if(after === undefined){
+      afterDate = "2000-01-01T00:00:00.000Z"
     }
     else{
-      beforeDate = before + ":00.277Z";
+      afterDate = before + ":00.277Z";
     }
-    afterDate = after + ":00.277Z";
-    url = url.concat("/?before=" + beforeDate + "&after=" + afterDate);
+    if(before === undefined){
+      var today = new Date();
+      var bString = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') +"-"+ String(today.getDate()).padStart(2, '0') + "T00:00:00.000Z";
+      url = url.concat("/?before=" + bString + "&after=" + afterDate);
+    }
+    else{
+      url = url.concat("/?before=" + before + "&after=" + afterDate  + ":00.277Z");
+    }
 
+    console.log(url);
     //gets reports from viz code
     $resource(url).get().$promise.then(function(res){ //success function
       var toWrite = "author \t authoredAt \t content \t fetchedAt \t flagged \t read \t tags \t url \t media";
