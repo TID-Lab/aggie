@@ -55,19 +55,22 @@ angular.module('Aggie')
     };
 
     $scope.download = function(before, after) {
-    //ToDo: - Get dates from user input, index reports based on given dates
-    //      - Set default date range to include all reports
     var url = "/api/v1/viz";
-    beforeDate = before + ":00.277Z";
+    if(before === 'undefined'){
+      beforeDate = "2000-01-01T00:00:00.000Z"
+    }
+    else{
+      beforeDate = before + ":00.277Z";
+    }
     afterDate = after + ":00.277Z";
-
     url = url.concat("/?before=" + beforeDate + "&after=" + afterDate);
-    console.log(beforeDate);
-    console.log(afterDate);
+
     //gets reports from viz code
     $resource(url).get().$promise.then(function(res){ //success function
       var toWrite = "author \t authoredAt \t content \t fetchedAt \t flagged \t read \t tags \t url \t media";
       for(i=0; i < res.reports.length; i++) {
+        //for each of the given rows, remove line breaks/tabs to correcly format output
+        //output is a tsv, since commas frequently show up in plain
         var newString = "\n" + res.reports[i].author.replace(/(?:\r\n|\r|\n)/g, ' ') + "\t" +
                                 res.reports[i].authoredAt.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
                                 res.reports[i].content.replace(/(?:\r\n|\r|\n)/g,' ') + "\t"+
