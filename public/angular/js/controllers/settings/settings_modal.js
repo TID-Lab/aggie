@@ -62,7 +62,7 @@ angular.module('Aggie')
       afterDate = "2000-01-01T00:00:00.000Z"
     }
     else{
-      afterDate = before + ":00.277Z";
+      afterDate = after + ":00.277Z";
     }
     if(before === undefined){
       var today = new Date();
@@ -70,7 +70,7 @@ angular.module('Aggie')
       url = url.concat("/?before=" + bString + "&after=" + afterDate);
     }
     else{
-      url = url.concat("/?before=" + before + "&after=" + afterDate  + ":00.277Z");
+      url = url.concat("/?before=" + before + ":00.277Z" + "&after=" + afterDate);
     }
 
     console.log(url);
