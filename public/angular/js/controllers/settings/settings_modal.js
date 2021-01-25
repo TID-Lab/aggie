@@ -73,7 +73,6 @@ angular.module('Aggie')
       url = url.concat("/?before=" + before + ":00.277Z" + "&after=" + afterDate);
     }
 
-    console.log(url);
     //gets reports from viz code
     $resource(url).get().$promise.then(function(res){ //success function
       var toWrite = "author \t authoredAt \t content \t fetchedAt \t flagged \t read \t tags \t url \t media";
