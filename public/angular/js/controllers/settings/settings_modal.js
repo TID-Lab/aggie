@@ -25,8 +25,10 @@ angular.module('Aggie')
   'FlashService',
   'settingsValues',
   'item',
+  '$resource',
   '$filter',
-  function($scope, $modalInstance, Settings, flash, settings, item, $filter) {
+  'tz',
+  function($scope, $modalInstance, Settings, flash, settings, item, $resource, $filter, tz) {
     $scope.settings = settings;
     $scope.item = item;
     $scope._showErrors = false;
@@ -93,6 +95,5 @@ angular.module('Aggie')
       $scope.settings['latitude'] = $scope.details.geometry.location.lat();
       $scope.settings['longitude'] = $scope.details.geometry.location.lng();
     });
-
   }
 ]);
