@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th scope="col" ng-show="currentUser.can('edit data')"></th>
-      <th scope="col" translate>Time Commented</th>
+      <th scope="col" translate>Comment Source Info</th>
       <th scope="col" translate>Thumbnail</th>
       <th scope="col" translate>Content</th>
       <th scope="col" translate>Tags</th>
@@ -19,7 +19,7 @@
         </div>
       </td>
       <td class="td__commentTime">
-        <span class="badge badge-pill badge-secondary mb-2" title="{{ r.fetchedAt | aggieDate:'date' }} at {{ r.fetchedAt | aggieDate:'short_time' }}">{{ r.fetchedAt | interval }} ago</span>
+        <span class="badge badge-pill badge-secondary mb-2" title="{{ r.authoredAt | aggieDate:'date' }} at {{ r.authoredAt | aggieDate:'short_time' }}">{{ r.authoredAt | interval }} ago</span>
       </td>
       <td class="thumbnail-image text-center" ng-class="{ strong: !isRead(r) }">
         <div ng-repeat="media in r.metadata.mediaUrl">
