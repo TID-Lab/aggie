@@ -22,6 +22,7 @@ var schema = new Schema({
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   read: { type: Boolean, default: false, required: true, index: true },
   flagged: { type: Boolean, default: false, required: true, index: true },
+  escalated: { type: Boolean, default: false, required: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
@@ -69,6 +70,13 @@ schema.methods.toggleFlagged = function(flagged) {
   this.flagged = flagged;
 
   if (flagged) {
+    this.read = true;
+  }
+};
+
+schema.methods.toggleEscalated = function(escalated) {
+  this.escalated = escalated;
+  if (escalated) {
     this.read = true;
   }
 };
@@ -194,6 +202,8 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
   Report.findSortedPage(filter, page, callback);
 };
 
