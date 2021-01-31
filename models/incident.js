@@ -14,6 +14,7 @@ var Report = require('./report');
 var logger = require('../lib/logger');
 
 require('../lib/error');
+var SMTCTag = require('../models/tag');
 
 var lengthValidator = function(str) {
   return validator.isLength(str, {min: 0, max: 42})
@@ -28,6 +29,7 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   tags: { type: [String], default: [] },
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
   veracity: { type: Boolean, default: null },
@@ -68,8 +70,109 @@ schema.post('remove', function() {
 
 });
 
+schema.methods.addSMTCTag = function(smtcTagId, callback) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to add (if it doesn't exists) then add it.
+  let isRepeat = false;
+  this.smtcTags.forEach(function(tag) {
+    if(smtcTagId === tag.toString()) {
+      isRepeat = true;
+    }
+  });
+  if (isRepeat === false) {
+    this.smtcTags.push({_id: smtcTagId});
+
+    // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
+    if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
+      SMTCTag.findById(smtcTagId, (err, tag) => {
+        if (err) {
+          logger.error(err);
+        }
+        if (tag.isCommentTag) {
+          addPost(this.url, callback)
+        } else {
+          callback();
+        }
+      });
+      return;
+    }
+  }
+  callback();
+}
+
+schema.methods.removeSMTCTag = function(smtcTagId, callback) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to remove (if it exists) then remove it.
+  if (this.smtcTags) {
+    let fndIndex = -1;
+    this.smtcTags.forEach(function(tag, index) {
+      let string = tag.toString();
+      if (smtcTagId === tag.toString()) {
+        fndIndex = index;
+      }
+    })
+    if (fndIndex !== -1) {
+      this.smtcTags.splice(fndIndex, 1);
+
+      if (!this.commentTo && this._media[0] === 'crowdtangle') {
+        SMTCTag.findById(smtcTagId, (err, tag) => {
+          if (err) {
+            logger.error(err);
+          }
+          if (tag.isCommentTag) {
+            removePost(this.url, callback)
+          } else {
+            callback();
+          }
+        });
+        return;
+      }
+    }
+  }
+  callback();
+}
+
+schema.methods.clearSMTCTags = function(callback) {
+
+  const cb = () => {
+    this.smtcTags = [];
+    callback();
+  }
+
+  if (!this.commentTo) {
+    var remaining = this.smtcTags.length;
+    this.smtcTags.forEach((tag) => {
+      const tagId = tag.toString();
+      this.removeSMTCTag(tagId, (err) => {
+        if (err) {
+          logger.error(err);
+        }
+        if (--remaining === 0) {
+          cb();
+        }
+      });
+    });
+    return;
+  }
+  cb();
+}
+
 schema.plugin(AutoIncrement, { inc_field: 'idnum' });
 var Incident = mongoose.model('Incident', schema);
+
+/* We need to be able to find Incidents by smtcTag Id
+SMTCTag.schema.on('tag:removed', function(id) {
+  Incident.find({smtcTags: id}, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
+    reports.forEach(function(report) {
+      report.removeSMTCTag(id, () => {
+        report.save();
+      })
+    });
+  });
+})*/
 
 Report.schema.on('change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
