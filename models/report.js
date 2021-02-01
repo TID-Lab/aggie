@@ -16,6 +16,7 @@ var schema = new Schema({
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
+  veracity: { type: Boolean, default: null },
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
@@ -193,6 +194,11 @@ Report.queryReports = function(query, page, callback) {
 
   // Re-set search timestamp
   query.since = new Date();
+
+  if (query.veracity === 'confirmed true') filter.veracity = true;
+  if (query.veracity === 'confirmed false') filter.veracity = false;
+  if (query.veracity === 'unconfirmed') filter.veracity = null;
+  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
 
   Report.findSortedPage(filter, page, callback);
 };
