@@ -195,11 +195,15 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
-  if (query.veracity === 'confirmed true') filter.veracity = true;
-  if (query.veracity === 'confirmed false') filter.veracity = false;
-  if (query.veracity === 'unconfirmed') filter.veracity = null;
-  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
-
+  if (query.veracity === 'confirmed true') {
+    filter.veracity = true;
+  } 
+  if (query.veracity === 'confirmed false') {
+    filter.veracity = false;
+  } 
+  if (query.veracity === 'unconfirmed') {
+    filter.veracity = null;
+  } 
   Report.findSortedPage(filter, page, callback);
 };
 
