@@ -30,6 +30,7 @@ var schema = new Schema({
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
+  notes: {type: String}
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});

@@ -182,7 +182,7 @@ angular.module('Aggie')
         $scope.searchParams.locationName === null &&
         $scope.searchParams.assignedTo === null &&
         $scope.searchParams.status === null &&
-        $scope.searchParams.veracity === null &&
+        $scope.searchParams.veracity === 'unconfirmed' &&
         $scope.searchParams.tags === null &&
         $scope.searchParams.public === null &&
         $scope.searchParams.escalated === null;
