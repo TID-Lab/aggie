@@ -78,6 +78,11 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
+schema.methods.toggleVeracity = function(veracity) {
+  this.veracity = veracity;
+};
+
+
 schema.methods.addSMTCTag = function(smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to add (if it doesn't exists) then add it.
