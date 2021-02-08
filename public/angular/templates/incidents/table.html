@@ -19,7 +19,7 @@
     </tr>
     </thead>
     <tbody class="table-bordered">
-    <tr ng-repeat="i in incidents | orderBy:['closed','-idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
+    <tr ng-repeat="i in incidents | orderBy:['-idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
       <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
         <div class="td__checkbox">
           <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>
