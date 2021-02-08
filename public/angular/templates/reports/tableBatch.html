@@ -92,6 +92,10 @@
               <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'">
               </div>
             </div>
+            <div class="flag__icon" ng-click="currentUser.can('edit data') && toggleEscalated(r)">
+              <div class="fa arrow-circle-up" ng-class="r.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+              </div>
+            </div>
           </div>
           <div class="text-center incident__addLink">
             <span>
