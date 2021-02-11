@@ -181,6 +181,7 @@ angular.module('Aggie')
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
         $scope.searchParams.idnum === null &&
+        $scope.searchParams.creator === null &&
         $scope.searchParams.title === null &&
         $scope.searchParams.locationName === null &&
         $scope.searchParams.assignedTo === null &&
@@ -196,6 +197,7 @@ angular.module('Aggie')
         page: null,
         title: null,
         idnum: null,
+        creator: null,
         locationName: null,
         assignedTo: null,
         status: null,

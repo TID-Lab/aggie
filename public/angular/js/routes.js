@@ -167,7 +167,7 @@ angular.module('Aggie')
             public: params.public,
             after: params.after,
             before: params.before,
-            idnum: params.idnum-1,
+            idnum: params.idnum,
             creator: params.creator,
           }).$promise;
         }],
