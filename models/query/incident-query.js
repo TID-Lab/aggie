@@ -14,8 +14,6 @@ var IncidentQuery = function(options) {
   this.veracity = options.veracity == 'Confirmed true' ? true : (options.veracity == 'Confirmed false' ? false : null);
   this.event = 'incidents';
   this.tags = options.tags;
-  this.idnum = options.idnum;
-  this.creator = options.creator;
 };
 
 _.extend(IncidentQuery, Query);

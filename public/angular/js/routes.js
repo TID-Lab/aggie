@@ -149,7 +149,7 @@ angular.module('Aggie')
 
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&veracity&tags&escalated&public&before&after&idnum&creator',
+      url: '/incidents?page&title&locationName&assignedTo&status&veracity&tags&escalated&public&before&after',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -167,8 +167,6 @@ angular.module('Aggie')
             public: params.public,
             after: params.after,
             before: params.before,
-            idnum: (params.idnum == null) ? params.idnum: params.idnum -1,
-            creator: params.creator,
           }).$promise;
         }],
         users: ['User', function(User) {

@@ -10,7 +10,7 @@
 
   Incident.filterAttributes = [
     'title', 'locationName', 'assignedTo', 'status', 'veracity',
-    'escalated', 'tags', 'public', 'storedAt', 'idnum', 'creator'
+    'escalated', 'tags', 'public', 'storedAt'
   ];
   Incident.statusOptions = ['new', 'working', 'alert', 'closed'];
 

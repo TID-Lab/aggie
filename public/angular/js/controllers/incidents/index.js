@@ -84,6 +84,7 @@ angular.module('Aggie')
 
     $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
+
         // Remove empty params.
         var params = searchParams(newParams);
         for (var key in params) {
@@ -157,9 +158,6 @@ angular.module('Aggie')
     $scope.clearTitle = function() {
       $scope.search({ title: null });
     }
-    $scope.clearId = function() {
-      $scope.search({ idnum: null });
-    }
 
     $scope.clearTags = function() {
       $scope.search({ tags: null });
@@ -180,8 +178,6 @@ angular.module('Aggie')
     $scope.noFilters = function() {
       return $scope.searchParams.before === null &&
         $scope.searchParams.after === null &&
-        $scope.searchParams.idnum === null &&
-        $scope.searchParams.creator === null &&
         $scope.searchParams.title === null &&
         $scope.searchParams.locationName === null &&
         $scope.searchParams.assignedTo === null &&
@@ -196,8 +192,6 @@ angular.module('Aggie')
       $scope.search({
         page: null,
         title: null,
-        idnum: null,
-        creator: null,
         locationName: null,
         assignedTo: null,
         status: null,
