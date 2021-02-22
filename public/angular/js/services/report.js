@@ -14,6 +14,8 @@ angular.module('Aggie')
     'removeSMTCTag': { method: 'PATCH', url: '/api/v1/report/_untag', isArray: false },
     'clearSMTCTags': { method: 'PATCH', url: '/api/v1/report/_clearTags', isArray: false},
     'linkToIncident': { method: 'PATCH', url: '/api/v1/report/_link', isArray: false },
-    'unlinkFromIncident': { method: 'PATCH', url: '/api/v1/report/_unlink', isArray: false }
+    'unlinkFromIncident': { method: 'PATCH', url: '/api/v1/report/_unlink', isArray: false },
+    'updateNotes': { method: 'PATCH', url: '/api/v1/report/_updateNotes', isArray: false },
+    'updateEscalated': { method: 'PATCH', url: '/api/v1/report/_updateEscalated', isArray: false },
   });
 });

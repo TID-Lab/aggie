@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-lg-9">
-      <div class="card">
+      <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between" ng-class="report.flagged ? 'bg-flagged' : 'card__header'">
           <h4 class="card-title mb-0">Report Details</h4>
           <div class="btn-group" role="group" aria-label="Flag/Unflag Buttons">
@@ -103,7 +103,7 @@
           </div>
         </div>
       </div>
-      <div class="card mt-4" ng-if="pagination.total > 0">
+      <div class="card mt-4 shadow-sm" ng-if="pagination.total > 0">
         <div class="card-header card__header">
           <h4 class="card-title mb-0">Comments</h4>
           <div class="btn-toolbar mt-3 justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">

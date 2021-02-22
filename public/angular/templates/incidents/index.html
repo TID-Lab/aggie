@@ -7,7 +7,7 @@
   <div class="row">
     <div class="col"></div>
     <div class="col-xl-10">
-      <div class="card">
+      <div class="card shadow-sm">
         <div class="container-fluid">
           <form>
             <div class="form-row pt-2 pb-2">
@@ -16,6 +16,17 @@
                   <input type="text" ng-model="searchParams.title" class="form-control filters__input" placeholder="{{'Enter Title' | translate}}">
                   <div class="input-group-append">
                     <button class="btn btn-transparent button--clearFilter" type="reset" title="clearTitle" href ng-click="clearTitle()">
+                      <span>&times;</span>
+                    </button>
+                    <button type="submit" class="btn btn-info" ng-click="search()" translate><i class="fa fa-search text-light" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col mb-0">
+                <div class="input-group input-group-sm">
+                  <input type="text" ng-model="searchParams.idnum" class="form-control filters__input" placeholder="{{'Enter ID' | translate}}">
+                  <div class="input-group-append">
+                    <button class="btn btn-transparent button--clearFilter" type="reset" title="clearId" href ng-click="clearId()">
                       <span>&times;</span>
                     </button>
                     <button type="submit" class="btn btn-info" ng-click="search()" translate><i class="fa fa-search text-light" aria-hidden="true"></i></button>
@@ -62,8 +73,8 @@
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-change="search()" class="form-control filters__select">
-                    <option value="" translate>Veracity</option>
+                  <select ng-model="searchParams.veracity" ng-options="option | capitalize | translate for option in veracityOptions" ng-init="searchParams.veracity=veracityOptions[0]" ng-change="search()" class="form-control filters__select">
+                    <!--<option value="" translate>Veracity</option>-->
                   </select>
                 </div>
               </div>
@@ -78,6 +89,13 @@
                 <div class="input-group input-group-sm">
                   <select ng-model="searchParams.public" ng-options="option | capitalize | translate for option in publicOptions" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Public?</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col mb-0 pb-2">
+                <div class="input-group input-group-sm">
+                  <select ng-model="searchParams.creator" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control filters__select">
+                    <option value="" translate>Created By/option>
                   </select>
                 </div>
               </div>
@@ -125,7 +143,7 @@
     <div class="col">
     </div>
     <div class="col-xl-10">
-      <div class="card">
+      <div class="card shadow-sm">
         <div class="card-header card__header cardheader--withSelect">
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
               <div aria-label="Read/Unread Buttons/Selection">
