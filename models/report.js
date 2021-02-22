@@ -31,7 +31,8 @@ var schema = new Schema({
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
-  notes: {type: String}
+  notes: {type: String},
+  escalated: { type: Boolean, default: false, required: true }
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -77,6 +78,10 @@ schema.methods.toggleFlagged = function(flagged) {
 
 schema.methods.toggleRead = function(read) {
   this.read = read;
+};
+
+schema.methods.toggleEscalated = function(escalated) {
+  this.escalated = escalated;
 };
 
 schema.methods.addSMTCTag = function(smtcTagId, callback) {
