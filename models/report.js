@@ -80,6 +80,9 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
+schema.methods.toggleVeracity = function(veracity) {
+  this.veracity = veracity;
+};
 schema.methods.toggleEscalated = function(escalated) {
   this.escalated = escalated;
 };
