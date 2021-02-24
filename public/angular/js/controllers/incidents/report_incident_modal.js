@@ -137,6 +137,7 @@ angular.module('Aggie')
       });
     };
 
+    /* Flag Deprecated
     $scope.toggleFlagged = function(report) {
       report.flagged = !report.flagged;
       if (report.flagged) {
@@ -144,6 +145,7 @@ angular.module('Aggie')
       }
       $scope.saveReport(report);
     };
+    */
 
     $scope.isFirstPage = function() {
       return $scope.pagination.page === 1;

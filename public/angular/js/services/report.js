@@ -9,7 +9,7 @@ angular.module('Aggie')
     'save': { method: 'PUT' },
     'update': { method: 'PUT' },
     'toggleRead': { method: 'PATCH', url: '/api/v1/report/_read', isArray: false },
-    'toggleFlagged': { method: 'PATCH', url: '/api/v1/report/_flag', isArray: false },
+    // 'toggleFlagged': { method: 'PATCH', url: '/api/v1/report/_flag', isArray: false }, Flag is deprecated
     'addSMTCTag': { method: 'PATCH', url: '/api/v1/report/_tag', isArray: false },
     'removeSMTCTag': { method: 'PATCH', url: '/api/v1/report/_untag', isArray: false },
     'clearSMTCTags': { method: 'PATCH', url: '/api/v1/report/_clearTags', isArray: false},
