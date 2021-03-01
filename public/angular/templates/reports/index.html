@@ -163,12 +163,6 @@
               <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
                 <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
-                  <span class="mr-2" translate> Flag </span>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-              </div>
               <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                   Add to Incident
@@ -207,12 +201,6 @@
             <div aria-label="Read/Unread Buttons/Selection">
               <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
                 <button title="Mark as Read/Unread" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
-              </div>
-              <div class="btn-group mr-3" role="group" aria-label="Flag Buttons">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
-                  <span class="mr-2" translate> Flag </span>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
               </div>
               <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
