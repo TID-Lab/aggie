@@ -196,9 +196,13 @@ angular.module('Aggie')
     }
 
     var updateTagSearchNames = function() {
-      if ($scope.searchParams.tags) {
+      var tempTags = $scope.searchParams.tags;
+      if (tempTags) {
+        if(typeof tempTags=="string"){
+          tempTags = [tempTags];
+        }
         var tagNames = "";
-        tagNames = $scope.searchParams.tags.map(function(tagId) {
+        tagNames = tempTags.map(function(tagId) {
           if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
           else { return tagId; }
         });
