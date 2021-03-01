@@ -30,7 +30,7 @@ var schema = new mongoose.Schema({
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
-  veracity: { type: String, default: null, enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   escalated: { type: Boolean, default: false, required: true },
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
