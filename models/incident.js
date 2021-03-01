@@ -7,14 +7,16 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var SchemaTypes = mongoose.SchemaTypes;
 var validator = require('validator');
 var _ = require('underscore');
 var AutoIncrement = require('mongoose-sequence')(mongoose);
 var Report = require('./report');
 var logger = require('../lib/logger');
+var SMTCTag = require('../models/tag');
 
 require('../lib/error');
-var SMTCTag = require('../models/tag');
+
 
 var lengthValidator = function(str) {
   return validator.isLength(str, {min: 0, max: 42})
