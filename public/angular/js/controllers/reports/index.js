@@ -246,13 +246,6 @@ angular.module('Aggie')
       });
     };
 
-    var toggleFlagged = function(items, flagged) {
-      return items.map(function(item) {
-        item.flagged = flagged;
-        return item;
-      });
-    };
-
     var removeSMTCTag = function(items, smtcTag) {
       return items.map(function(item) {
         item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
@@ -410,9 +403,6 @@ angular.module('Aggie')
       return !this.isRelevant(report) && !this.isIrrelevant(report);
     };
 
-    $scope.isFlagged = function(report) {
-      return report.flagged;
-    };
 
     $scope.isRead = function(report) {
       return report.read;
@@ -427,18 +417,6 @@ angular.module('Aggie')
       }, function() {
         flash.setAlertNow("Sorry, but that report couldn't be saved.");
       });
-    };
-
-    /**
-     * Toggles a report's flagged property and sets its read property to true
-     * @param {Report} report
-     */
-    $scope.toggleFlagged = function(report) {
-      report.flagged = !report.flagged;
-      if (report.flagged) {
-        report.read = report.flagged;
-      }
-      $scope.saveReport(report);
     };
 
     /**
@@ -479,25 +457,6 @@ angular.module('Aggie')
       });
     };
 
-    /**
-     * Takes in a boolean "flagged" value and sets the flagged field on selected reports to that value.
-     * @param {boolean} flagged
-     */
-    $scope.setSelectedFlaggedStatus = function(flagged) {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
-      Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
-    };
-
-    $scope.toggleSelectedFlagged = function() {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      if (items.findIndex(function(item) {
-        return !item.flagged;
-      }) !== -1) $scope.setSelectedFlaggedStatus(true);
-      else $scope.setSelectedFlaggedStatus(false);
-    }
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag

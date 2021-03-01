@@ -132,17 +132,6 @@ angular.module('Aggie')
       });
     };
 
-    /* Flag deprecated
-    $scope.toggleFlagged = function(report) {
-      report.flagged = !report.flagged;
-
-      if (report.flagged) {
-        report.read = report.flagged;
-      }
-
-      $scope.saveReport(report);
-    };
-     */
 
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {

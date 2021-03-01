@@ -123,16 +123,6 @@ angular.module('Aggie')
         });
       };
 
-      /*
-      Flag Deprecated
-      $scope.toggleFlagged = function() {
-        $scope.selectedReport.flagged = !$scope.selectedReport.flagged;
-        if ($scope.selectedReport.flagged) {
-          $scope.selectedReport.read = true;
-        }
-        $scope.saveReport();
-      };
-      */
 
       $scope.isRead = function() {
         return $scope.selectedReport.read;

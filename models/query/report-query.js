@@ -49,10 +49,9 @@ ReportQuery.prototype.toMongooseFilter = function() {
     _media: this.media,
     _incident: this.incidentId,
     read: this.read,
-    // flagged: this.flagged,
     commentTo: this.commentTo,
     escalated: this.escalated,
-    notes: this.notes,
+    notes: this.notes
   }
   if (this.escalated === 'unescalated') filter.escalated= false;
   if (this.escalated === 'escalated') filter.escalated = true;
@@ -67,28 +66,17 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'i'}});
   if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
+  console.log(filter)
   return filter;
 };
 
 ReportQuery.prototype._parseStatus = function(status) {
   switch (status) {
-    /* Flag deprecated
-  case 'Flagged':
-    this.flagged = true;
-    break;
-  case 'Unflagged':
-    this.unflagged = true;
-    break;
-     */
   case 'Read':
     this.read = true;
     break;
   case 'Unread':
     this.read = false;
-    break;
-  case 'Read & Unflagged':
-    this.read = true;
-    // this.flagged = false;
     break;
   }
 };
