@@ -170,30 +170,30 @@ angular.module('Aggie')
           });
         };
 
-        var smtcTagNamesToIds = function(tagNames) {
-          // This runs on the start of the page
-          // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
-          if (tagNames.length !== 1) {
-            tagNames = tagNames.split(',');
-            if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
-          }
-          //TODO: This can be done with functional programming (whenever I try it breaks)
-          var searchedTagIds = tagNames.map(function(smtcTagName) {
-            smtcTagName = smtcTagName.trim();
-            var foundId = "";
-            $scope.smtcTags.forEach(function(smtcTag){
-              // Case doesn't matter
-              if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
-              else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
-            });
-            if (foundId === "") return null;
-            return foundId;
-          });
-          searchedTagIds = searchedTagIds.filter(function (el) {
-            return el != null;
-          });
-          return searchedTagIds;
-        }
+    var smtcTagNamesToIds = function(tagNames) {
+      // This runs on the start of the page
+      // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
+      if (tagNames.length !== 1) {
+        tagNames = tagNames.split(',');
+        if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      }
+      //TODO: This can be done with functional programming (whenever I try it breaks)
+      var searchedTagIds = tagNames.map(function(smtcTagName) {
+        smtcTagName = smtcTagName.trim();
+        var foundId = "";
+        $scope.smtcTags.forEach(function(smtcTag){
+          // Case doesn't matter
+          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
+          else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
+        });
+        if (foundId === "") return null;
+        return foundId;
+      });
+      searchedTagIds = searchedTagIds.filter(function (el) {
+        return el != null;
+      });
+      return searchedTagIds;
+    }
 
         var updateTagSearchNames = function() {
           var tempTags = $scope.searchParams.tags;
