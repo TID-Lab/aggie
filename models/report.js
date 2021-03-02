@@ -22,7 +22,6 @@ var schema = new Schema({
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   read: { type: Boolean, default: false, required: true, index: true },
-  flagged: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
@@ -67,14 +66,6 @@ schema.post('save', function() {
     schema.emit('change:incident', this._prevIncident, this._incident);
   }
 });
-
-schema.methods.toggleFlagged = function(flagged) {
-  this.flagged = flagged;
-
-  if (flagged) {
-    this.read = true;
-  }
-};
 
 schema.methods.toggleRead = function(read) {
   this.read = read;
