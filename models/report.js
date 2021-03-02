@@ -16,6 +16,7 @@ var schema = new Schema({
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
+  veracity: { type: Boolean, default: null },
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
@@ -68,6 +69,10 @@ schema.post('save', function() {
 
 schema.methods.toggleRead = function(read) {
   this.read = read;
+};
+
+schema.methods.toggleVeracity = function(veracity) {
+  this.veracity = veracity;
 };
 
 schema.methods.toggleEscalated = function(escalated) {
@@ -191,8 +196,15 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
+  if (query.veracity === 'confirmed true') filter.veracity = true;
+  if (query.veracity === 'confirmed false') filter.veracity = false;
+  if (query.veracity === 'unconfirmed') filter.veracity = null;
+  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+
   Report.findSortedPage(filter, page, callback);
 };
+
+
 
 Report.findSortedPage = function(filter, page, callback) {
   Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {

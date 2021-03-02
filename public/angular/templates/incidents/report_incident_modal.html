@@ -22,7 +22,7 @@
           </thead>
           <tbody class="table-bordered">
           <tr ng-repeat="r in reports | orderBy:'-storedAt'"
-              ng-class="{ item: true, 'bg-gray': r.read, flagged: r.flagged, unread: !r.read && !r.flagged }">
+              ng-class="{ item: true, 'bg-gray': r.read, unread: !r.read}">
             <td class="td__sourceInfo">
               <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
               <p class="sourceInfo__author">

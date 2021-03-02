@@ -12,7 +12,7 @@
     </thead>
     <tbody class="table-bordered">
       <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-          ng-class="{ item: true, flagged: r.flagged, 'tr--unread': !r.read && !r.flagged, 'tr--read': r.read }">
+          ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
         <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
             <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
@@ -86,12 +86,6 @@
           </tags>
         </td>
         <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
-          <div class="td__flag">
-            <div class="flag__icon" ng-click="currentUser.can('edit data') && toggleFlagged(r)">
-              <div class="fa pointer" ng-class="r.flagged ? 'fa-flag' : 'fa-flag-o'">
-              </div>
-            </div>
-          </div>
           <div class="text-center incident__addLink">
             <span>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">

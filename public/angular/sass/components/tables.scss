@@ -17,9 +17,6 @@
         &.td__errors {
           vertical-align: middle;
         }
-        &.flagged {
-          vertical-align: middle;
-        }
         &.tag {
         }
         &.td__sourceInfo {
@@ -65,12 +62,6 @@ tbody {
     }
   }
 
-  tr.flagged {
-    background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-  }
   tr.new-incident {
     background-color: rgba(146, 200, 220, 0.4);
   }
@@ -327,21 +318,6 @@ td {
 .td__tags {
   max-width: 180px;
   word-wrap: break-word;
-}
-
-.td__flag {
-  cursor: pointer;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-
-.flag__icon {
-  padding: 5px;
-  background-color: #dee2e6;
-  border-bottom: 2px solid #dee2e6;
-  border-left: 2px solid #dee2e6;
-  border-bottom-left-radius: 5px;
 }
 
 .td__edit {
