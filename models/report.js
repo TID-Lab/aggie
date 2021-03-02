@@ -9,6 +9,7 @@ var SchemaTypes = mongoose.SchemaTypes;
 var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
 var { addPost, removePost } = require('../lib/comments');
+var _= require('lodash')
 
 var schema = new Schema({
   authoredAt: {type: Date, index: true},
