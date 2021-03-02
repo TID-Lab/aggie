@@ -105,13 +105,6 @@ tbody {
     display: block;
   }
 }
-.bg-flagged {
-  background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-
-}
 
 .td__media {
   max-width: 56px;
