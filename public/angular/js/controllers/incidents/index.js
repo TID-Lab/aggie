@@ -14,19 +14,26 @@ angular.module('Aggie')
   'publicOptions',
   'Incident',
   'Socket',
+  'Tags',
+  'smtcTags',
   'Queue',
   'paginationOptions',
-  'Tags',
+
   function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
            incidentStatusOptions, veracityOptions, escalatedOptions, publicOptions,
-           Incident, Socket, Queue, paginationOptions, Tags) {
+           Incident, Socket, Queue, paginationOptions, Tags, smtcTags) {
+    $scope.smtcTags = smtcTags;
+    $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
+      return smtcTag.name;
+    });
+    $scope.visibleSmtcTags = smtcTags;
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
     $scope.veracityOptions = veracityOptions;
     $scope.escalatedOptions = escalatedOptions;
     $scope.publicOptions = publicOptions;
-
+    $scope.smtcTags = smtcTags;
     $scope.users = users;
 
     $rootScope.$watch('currentUser', function(user) {
@@ -55,6 +62,7 @@ angular.module('Aggie')
 
       var visibleIncidents = paginate($scope.incidents);
       $scope.visibleIncidents.addMany(visibleIncidents);
+      $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
 
       if ($scope.isFirstPage()) {
         Socket.emit('incidentQuery', searchParams());
@@ -77,11 +85,21 @@ angular.module('Aggie')
       }, []);
     };
 
+    var updateTagSearchNames = function() {
+      if ($scope.searchParams.tags) {
+        var tagNames = "";
+        tagNames = $scope.searchParams.tags.map(function(tagId) {
+          if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
+          else { return tagId; }
+        });
+        $scope.searchParams = { tags: tagNames.join(', ') };
+      }
+    }
+
     var groupById = function(memo, item) {
       memo[item._id] = item;
       return memo;
     };
-
     $scope.search = function(newParams) {
       $scope.$evalAsync(function() {
 
@@ -100,6 +118,9 @@ angular.module('Aggie')
       params.page = 1;
       for (var key in newParams) {
         params[key] = newParams[key];
+      }
+      if (params.tags) {
+        params.tags = smtcTagNamesToIds(params.tags);
       }
       return params;
     };
@@ -127,6 +148,100 @@ angular.module('Aggie')
         return memo;
       }, []);
     };
+    var smtcTagNamesToIds = function(tagNames) {
+      // This runs on the start of the page
+      // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
+      if (tagNames.length !== 1) {
+        tagNames = tagNames.split(',');
+        if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+      }
+      //TODO: This can be done with functional programming (whenever I try it breaks)
+      var searchedTagIds = tagNames.map(function(smtcTagName) {
+        smtcTagName = smtcTagName.trim();
+        var foundId = "";
+        $scope.smtcTags.forEach(function(smtcTag){
+          // Case doesn't matter
+          if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
+          else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
+        });
+        if (foundId === "") return null;
+        return foundId;
+      });
+      searchedTagIds = searchedTagIds.filter(function (el) {
+        return el != null;
+      });
+      return searchedTagIds;
+    }
+
+    var removeSMTCTag = function(items, smtcTag) {
+      return items.map(function(item) {
+        item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
+        return item;
+      })
+    }
+    var addSMTCTag = function(items, smtcTag) {
+      return items.map(function(item) {
+        if (item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1) {
+          item.smtcTags.push(smtcTag);
+        }
+        return item;
+      });
+    }
+
+    $scope.updateSMTCTag = function (updatedTag) {
+      // remove deleted tag
+      if (updatedTag.name == null) {
+        var delIndex = $scope.smtcTags.map(function(item) {
+          return item._id
+        }).indexOf(updatedTag);
+        $scope.smtcTags.splice(delIndex, 1);
+      } else {
+        // add new tag
+        $scope.smtcTags.push(updatedTag);
+      }
+    }
+    $scope.toggleTagOnSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.incidents);
+      if (!items.length) return;
+      if (items.findIndex(function(item) {
+        return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
+      }) !== -1) $scope.addTagToSelected(smtcTag);
+      else $scope.removeTagFromSelected(smtcTag);
+    }
+
+    $scope.filterTags = function(event, tags) {
+      $scope.visibleSmtcTags = tags.filter(function(tag) {
+        return tag.name.toLowerCase().includes(event.target.value.toLowerCase())
+      })
+    }
+
+    $scope.addTagToSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.incidents);
+      if (!items.length) return;
+      var ids = getIds(addSMTCTag(items, smtcTag));
+      Incident.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+    };
+
+    $scope.removeTagFromSelected = function(smtcTag) {
+      var items = $scope.filterSelected($scope.incidents);
+      if (!items.length) return;
+      var ids = getIds(removeSMTCTag(items, smtcTag));
+      Incident.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+    };
+
+    $scope.clearTagsFromSelected = function() {
+      var items = $scope.filterSelected($scope.incidents);
+      if (!items.length) return;
+
+      var ids = getIds(clearSMTCTags(items));
+      Incident.clearSMTCTags({ids: ids})
+    };
+
+    $scope.removeTagFromIncident = function(incident, smtcTag) {
+      incident.smtcTags.splice(incident.smtcTags.findIndex(function(tag) {return tag === smtcTag}), 1);
+      Incident.removeSMTCTag({ids: [incident._id], smtcTag: smtcTag});
+    }
+
 
     $scope.handleNewIncidents = function(incidents) {
       var uniqueIncidents = removeDuplicates(incidents);
@@ -254,6 +369,7 @@ angular.module('Aggie')
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };
+    
 
     $scope.$on('$destroy', function() {
       Socket.leave('incidents');
