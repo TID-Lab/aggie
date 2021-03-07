@@ -12,6 +12,7 @@ var _ = require('underscore');
 var AutoIncrement = require('mongoose-sequence')(mongoose);
 var Report = require('./report');
 var logger = require('../lib/logger');
+var SchemaTypes = mongoose.SchemaTypes;
 
 require('../lib/error');
 var SMTCTag = require('../models/tag');

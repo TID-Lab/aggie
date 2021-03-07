@@ -247,7 +247,10 @@ angular.module('Aggie')
         flash.setAlertNow('incident.delete.error');
       });
     };
-
+    $scope.removeTagFromIncident = function(incident, smtcTag) {
+      incident.smtcTags.splice(incident.smtcTags.findIndex(function(tag) {return tag === smtcTag}), 1);
+      Incident.removeSMTCTag({ids: [incident._id], smtcTag: smtcTag});
+    }
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };

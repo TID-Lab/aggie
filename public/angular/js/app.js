@@ -126,6 +126,7 @@ require('./controllers/users/profile');
 require('./controllers/tags/index');
 require('./controllers/tags/tags_modal');
 require('./controllers/tags/report_tags_modal');
+require('.controllers/tags/incident_tags_modal');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');
@@ -136,6 +137,7 @@ require('./controllers/trends/lines');
 require('./controllers/analysis');
 require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
+
 
 // Routes
 require('./routes');

@@ -1,0 +1,58 @@
+<div ng-controller="SMTCTagSelectModalControllerIncident">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        Edit Incident Tags
+      </h5>
+      <button type="button" class="close" ng-click="close()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid" ng-show="selectedIncident">
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+            <tr>
+              <th scope="col" translate>Tags</th>
+            </tr>
+            </thead>
+            <tbody class="table-bordered">
+              <td class="tags text-center">
+                <tags class="tagify readonly" tabindex="-1">
+                  <tag ng-repeat="tag in selectedIncident.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                       class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                    <div>
+                      <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                    </div>
+                  </tag>
+                </tags>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <br>
+      <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
+        <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
+        </span>
+        <a ui-sref="tags" ng-click="close()"> tag page </a>
+        <span>{{ "under settings." | translate}}</span>
+      </div>
+      <div class="container-fluid" ng-show="smtcTags">
+        <form>
+          <label for="tagifySMTCTags">Add and Remove Tags</label>
+          <div class="input-group">
+            <input ng-init="tagify()" class="input--tags readonlyMix" name="tagifySMTCTags" id="tagifySMTCTags"/>
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" ng-click="removeAllTags()" translate> Clear Tags </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
+      <button type="button" class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+    </div>
+  </div>
