@@ -58,7 +58,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
             $urlRouter.sync();
           } else {
             flash.setAlert('You must be logged in before accessing that page.');
+            console.log("BEFORE");
             $state.go('login');
+            console.log("AFTER");
           }
         }).catch(function(error) {
           flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
