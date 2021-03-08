@@ -19,7 +19,10 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 
 .config(['$urlRouterProvider', '$locationProvider',
   function($urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });
     $urlRouterProvider.otherwise('/404');
   }
 ])
