@@ -51,16 +51,16 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
     };
 
     var checkStateChange = function(e, toState) {
+      console.log(":((((((((((((((((((((((((((((((((((");
       if (!publicRoute(toState) && !$rootScope.currentUser) {
         e.preventDefault();
         res = AuthService.getCurrentUser().then(function() {
           if ($rootScope.currentUser) {
             $urlRouter.sync();
           } else {
+            console.log("WAHAJSDJASIDASJDASD")
             flash.setAlert('You must be logged in before accessing that page.');
-            console.log("BEFORE");
             $state.go('login');
-            console.log("AFTER");
           }
         }).catch(function(error) {
           flash.setAlert('Sorry, we had some trouble finding your user account. Please log in again.');
