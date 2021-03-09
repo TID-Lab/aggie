@@ -51,7 +51,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
     };
 
     var checkStateChange = function($transition$) {
-      const toState = $transition$.to();
+      var toState = $transition$.to();
       if (!publicRoute(toState) && !$rootScope.currentUser) {
         e.preventDefault();
         res = AuthService.getCurrentUser().then(function() {
