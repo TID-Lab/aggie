@@ -43,22 +43,21 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
   'FlashService', '$cookies', '$translate',
   function($rootScope, $urlRouter, $location, AuthService, $state, flash,
-            $cookies, $translate) {
+            $cookies, $translate, $transitions) {
     $rootScope.$state = $state;
 
     var publicRoute = function(state) {
       return !!(state.data && state.data.public === true);
     };
 
-    var checkStateChange = function(e, toState) {
-      console.log(":((((((((((((((((((((((((((((((((((");
+    var checkStateChange = function($transition$) {
+      const toState = $transition$.to();
       if (!publicRoute(toState) && !$rootScope.currentUser) {
         e.preventDefault();
         res = AuthService.getCurrentUser().then(function() {
           if ($rootScope.currentUser) {
             $urlRouter.sync();
           } else {
-            console.log("WAHAJSDJASIDASJDASD")
             flash.setAlert('You must be logged in before accessing that page.');
             $state.go('login');
           }
@@ -69,9 +68,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
       }
     };
 
-    $rootScope.$on('$stateChangeSuccess', checkStateChange.bind(this));
+    $transitions.onSuccess({}, checkStateChange.bind(this));
 
-    $rootScope.$on('$stateChangeError', checkStateChange.bind(this));
+    $transitions.onError({}, checkStateChange.bind(this));
 
     $rootScope.$watch(function getLangCookie() {
       return $cookies['aggie-lang'];
