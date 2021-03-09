@@ -1,10 +1,11 @@
 angular.module('Aggie').factory('FlashService', [
   '$rootScope',
   '$translate',
-  function($rootScope, $translate) {
+  '$transitions',
+  function($rootScope, $translate, $transitions) {
     var flash = {}, currentFlash = {};
 
-    $rootScope.$on('$stateChangeSuccess', function() {
+    $transitions.onSuccess({}, function() {
       if (currentFlash.params && currentFlash.params.persist) {
         // Do nothing (I'm not sure why, just simplifying existing logic here).
       } else {

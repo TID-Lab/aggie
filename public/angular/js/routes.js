@@ -46,7 +46,8 @@ angular.module('Aggie')
       templateUrl: '/templates/reports/index.html',
       controller: 'ReportsIndexController',
       resolve: {
-        reports: ['Report', '$stateParams', function(Report, params) {
+        reports: ['Report', '$transition$', function(Report, $transition$) {
+          var params = $transition$.params();
           var page = params.page || 1;
           return Report.query({
             page: page - 1,
@@ -106,7 +107,8 @@ angular.module('Aggie')
       templateUrl: '/templates/reports/show.html',
       controller: 'ReportsShowController',
       resolve: {
-        data: ['$stateParams', '$q', 'Report', 'Source', function($stateParams, $q, Report, Source) {
+        data: ['$transition$', '$q', 'Report', 'Source', function($transition$, $q, Report, Source) {
+          var $stateParams = $transition$.params();
           var deferred = $q.defer();
           Report.get({ id: $stateParams.id }, function(report) {
             report.content = Autolinker.link(report.content);
@@ -128,7 +130,8 @@ angular.module('Aggie')
 
           return deferred.promise;
         }],
-        comments: ['Report', '$stateParams', function(Report, params) {
+        comments: ['Report', '$transition$', function(Report, $transition$) {
+          var params = $transition$.params();
           var page = params.page || 1;
           return Report.queryComments({
             id: params.id,
@@ -153,7 +156,8 @@ angular.module('Aggie')
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
-        incidents: ['Incident', '$stateParams', function(Incident, params) {
+        incidents: ['Incident', '$transition$', function(Incident, $transition$) {
+          var params = $transition$.params();
           var page = params.page || 1;
           return Incident.query({
             page: page - 1,
@@ -182,10 +186,12 @@ angular.module('Aggie')
       templateUrl: '/templates/incidents/show.html',
       controller: 'IncidentsShowController',
       resolve: {
-        incident: ['Incident', '$stateParams', function(Incident, params) {
+        incident: ['Incident', '$transition$', function(Incident, $transition$) {
+          var params = $transition$.params();
           return Incident.get({ id: params.id }).$promise;
         }],
-        reports: ['Report', '$stateParams', function(Report, params) {
+        reports: ['Report', '$transition$', function(Report, $transition$) {
+          var params = $transition$.params();
           var page = params.page || 1;
           return Report.query({
             incidentId: params.id,
@@ -217,7 +223,8 @@ angular.module('Aggie')
       templateUrl: '/templates/sources/show.html',
       controller: 'SourcesShowController',
       resolve: {
-        source: ['Source', '$stateParams', function(Source, params) {
+        source: ['Source', '$transition$', function(Source, $transition$) {
+          var params = $transition$.params();
           return Source.get({ id: params.id }).$promise;
         }]
       }

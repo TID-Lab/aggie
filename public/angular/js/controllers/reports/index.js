@@ -3,7 +3,7 @@ angular.module('Aggie')
   '$state',
   '$scope',
   '$rootScope',
-  '$stateParams',
+  '$transition$',
   '$window',
   'FlashService',
   'reports',
@@ -23,10 +23,12 @@ angular.module('Aggie')
   'paginationOptions',
   '$translate',
   'Settings',
-  function($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
+  function($state, $scope, $rootScope, $transition$, $window, flash, reports, sources, smtcTags,
            mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
            Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
            $translate, Settings) {
+
+    var $stateParams = $transition$.params();
 
     $scope.smtcTags = smtcTags;
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {

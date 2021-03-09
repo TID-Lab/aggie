@@ -3,7 +3,7 @@ angular.module('Aggie')
   '$rootScope',
   '$state',
   '$scope',
-  '$stateParams',
+  '$transition$',
   '$window',
   'mediaOptions',
   'FlashService',
@@ -20,8 +20,10 @@ angular.module('Aggie')
   'sources',
   'paginationOptions',
   '$translate',
-  function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident,
+  function($rootScope, $state, $scope, $transition$, $window, mediaOptions, flash, data, incidents, Report, Incident,
            incidents, Tags, smtcTags, comments, Socket, Queue, sources, paginationOptions,  $translate) {
+    var $stateParams = $transition$.params();
+
     $scope.incidents = incidents.results;
     $scope.incidentsById = {};
     $scope.currentPath = $rootScope.$state.current.name;

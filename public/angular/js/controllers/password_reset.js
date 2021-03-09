@@ -2,12 +2,14 @@ angular.module('Aggie').controller('PasswordResetController', [
   '$rootScope',
   '$scope',
   '$state',
-  '$stateParams',
+  '$transition$',
   '$http',
   'AuthService',
   'FlashService',
   'shared',
-  function($rootScope, $scope, $state, $stateParams, $http, AuthService, flash, shared) {
+  function($rootScope, $scope, $state, $transition$, $http, AuthService, flash, shared) {
+    var $stateParams = $transition$.params();
+
     $scope.passwordMinLength = shared.User.PASSWORD_MIN_LENGTH;
 
     $scope.passwordsMatch = function() {

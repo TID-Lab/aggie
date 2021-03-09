@@ -3,13 +3,13 @@ angular.module('Aggie')
 .controller('SourcesShowController', [
   '$scope',
   '$rootScope',
-  '$stateParams',
+  '$transition$',
   'Source',
   'source',
   'Tags',
   'FlashService',
   'Socket',
-  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket) {
+  function($scope, $rootScope, $transition$, Source, source, Tags, flash, Socket) {
     $scope.source = source;
     Source.resetUnreadErrorCount({ id: source._id }, source);
     var init = function() {

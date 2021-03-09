@@ -4,7 +4,7 @@ angular.module('Aggie')
   '$state',
   '$scope',
   '$rootScope',
-  '$stateParams',
+  '$transition$',
   'FlashService',
   'incidents',
   'users',
@@ -17,9 +17,10 @@ angular.module('Aggie')
   'Queue',
   'paginationOptions',
   'Tags',
-  function($state, $scope, $rootScope, $stateParams, flash, incidents, users,
+  function($state, $scope, $rootScope, $transition$, flash, incidents, users,
            incidentStatusOptions, veracityOptions, escalatedOptions, publicOptions,
            Incident, Socket, Queue, paginationOptions, Tags) {
+    var $stateParams = $transition$.params();
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;

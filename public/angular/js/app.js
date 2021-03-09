@@ -41,7 +41,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 
 .run([
   '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
-  'FlashService', '$cookies', '$translate',
+  'FlashService', '$cookies', '$translate', '$transitions',
   function($rootScope, $urlRouter, $location, AuthService, $state, flash,
             $cookies, $translate, $transitions) {
     $rootScope.$state = $state;

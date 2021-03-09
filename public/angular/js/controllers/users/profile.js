@@ -5,11 +5,13 @@ angular.module('Aggie')
 .controller('UsersProfileController', [
   '$scope',
   '$rootScope',
-  '$stateParams',
+  '$transition$',
   'users',
   'User',
   'Socket',
-  function($scope, $rootScope, stateParams, users, User, Socket) {
+  function($scope, $rootScope, $transition$, users, User, Socket) {
+    var stateParams = $transition$.params();
+
     $scope.users = users;
     var init = function() {
       Socket.on('stats', updateStats);

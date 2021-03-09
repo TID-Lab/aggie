@@ -4,7 +4,7 @@ angular.module('Aggie')
   '$rootScope',
   '$scope',
   '$state',
-  '$stateParams',
+  '$transition$',
   '$window',
   'incident',
   'reports',
@@ -20,7 +20,9 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  function($rootScope, $scope, $state, $transition$, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+    var $stateParams = $transition$.params();
+
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
