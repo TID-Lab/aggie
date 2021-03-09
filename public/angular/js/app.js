@@ -40,9 +40,9 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 
 
 .run([
-  '$rootScope', '$urlRouter', '$location', 'AuthService', '$state',
+  '$rootScope', '$urlService', '$location', 'AuthService', '$state',
   'FlashService', '$cookies', '$translate', '$transitions',
-  function($rootScope, $urlRouter, $location, AuthService, $state, flash,
+  function($rootScope, $urlService, $location, AuthService, $state, flash,
             $cookies, $translate, $transitions) {
     $rootScope.$state = $state;
 
@@ -56,7 +56,7 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
         e.preventDefault();
         res = AuthService.getCurrentUser().then(function() {
           if ($rootScope.currentUser) {
-            $urlRouter.sync();
+            $urlService.sync();
           } else {
             flash.setAlert('You must be logged in before accessing that page.');
             $state.go('login');
