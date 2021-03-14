@@ -1,4 +1,5 @@
 var ReParse = require('reparse').ReParse;
+var Term = require('./CNF')
 
 // --------------- grammar bits -------------------
 
@@ -57,20 +58,42 @@ var OPTREES = {
 
 // --------------- test strings -------------------
 
+function buildCNF(tree) {
+    var op = tree[0];
+    if (op == 'OR') {
+        return new Term(Term.OR, buildCNF(tree[1]), buildCNF(tree[2]))
+    }
+    else if (op == 'AND') {
+        let x = new Term(Term.AND, buildCNF(tree[1]), buildCNF(tree[2]))
+        return x
+    }
+    else if (op == 'NOT') {
+        let x = buildCNF(tree[1])
+        return x.negate()
+    }
+    else {
+        return new Term(Term.LITERAL, tree)
+    }
+}
 function evalTree(tree) {
     // console.log(tree)
     var op = tree[0];
     if (op == 'OR') {
-        return "(" + evalTree(tree[1]) + "|" +  evalTree(tree[2]) + ")";
+        // return "(" + evalTree(tree[1]) + "|" +  evalTree(tree[2]) + ")";
+        return {"$or": [evalTree(tree[1]), evalTree(tree[2])]}
     }
     else if (op == 'AND') {
-        return "(?=.+?(" + evalTree(tree[1]) + "))(?=.+?(" + evalTree(tree[2]) + "))"
+        // return "(?=.+?(" + evalTree(tree[1]) + "))(?=.+?(" + evalTree(tree[2]) + "))"
+        return {"$and": [evalTree(tree[1]), evalTree(tree[2])]}
     }
     else if (op == 'NOT') {
-        return "^(?!" + evalTree(tree[1]) + "$).*$"
+        let negated_tree = evalTree(tree[1])
+        let neg_content = negated_tree["content"]
+        negated_tree["content"] = {'$not': neg_content}
+        return negated_tree
     }
     else {
-        return tree
+        return {"content": {"$regex": tree, "$options": "si"}}
     }
 }
 
@@ -102,7 +125,7 @@ function collectLeaves(tree, leaves, notnot) {
 // --------------- public interface -------------------
 
 function Expression(query) {
-    if (!query.includes(" AND ") && !query.includes(" OR ")) {
+    if (!query.includes(" AND ") && !query.includes(" OR ") && !query.includes("NOT")) {
         this.tree = query
     }
     else {
@@ -115,7 +138,10 @@ Expression.prototype = {
     flatten: function() {
         return flattenTree(this.tree);
     },
-    test: function() {
+    generate_seach_query: function() {
+        let cnfTerm = buildCNF(this.tree).toCNF().toString()
+        console.log(cnfTerm)
+        this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
         return evalTree(this.tree);
     }
 }

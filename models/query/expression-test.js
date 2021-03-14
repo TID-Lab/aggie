@@ -1,7 +1,10 @@
 const Expression = require("./expression");
+const Term = require("./CNF")
 
-exp = new Expression("AMHARA AND Ethiopia")
-console.log(exp.tree)
-console.log(exp.test())
+
+exp = new Expression("NOT Biden")
+s = exp.test()
+console.log(JSON.stringify(s))
+
 
 

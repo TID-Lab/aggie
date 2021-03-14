@@ -62,53 +62,27 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.after)     filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
-  if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
-  if (this.author)    filter.$and.push({"author": {$regex: this.author, $options: 'i'}});
+  // if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
+  if (this.author)    filter.author = {"author": {$regex: this.author, $options: 'si'}};
   // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
 
   if (this.keywords) {
-    // Replace ! with NOT
-    this.keywords = this.keywords.replace(/\s!\s/gi, " NOT ");
-    // Replace 1 or more & with just AND
-    this.keywords = this.keywords.replace(/\s&+\s/gi, " AND ")
-    // Replace 1 or more | with just OR
-    this.keywords = this.keywords.replace(/\s\|+\s/gi, " OR ")
-    // Replace " with whitespace, for perfect match
-    this.keywords = this.keywords.replace(/\"/gi, " ")
+      // Replace ! with NOT
+      this.keywords = this.keywords.replace(/\s!\s/g, " NOT ");
+      // Replace 1 or more & with just AND
+      this.keywords = this.keywords.replace(/\s&+\s/g, " AND ")
+      // Replace 1 or more | with just OR
+      this.keywords = this.keywords.replace(/\s\|+\s/g, " OR ")
+      // Replace " with whitespace, for perfect match
+      this.keywords = this.keywords.replace(/\"/g, " ")
 
-    let not_idx = this.keywords.indexOf("NOT")
-    let main_substr = ""
 
-    // Finding the main part of keyword query (before NOT)
-    if (not_idx != -1) {
-      main_substr = this.keywords.substring(0, not_idx)
-      if (this.keywords.match(/$\s*^/gi)) {
-        main_substr = ".*"
-      }
+      // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
+      let exp = new Expression(this.keywords.toString());
+      // Convert main expression into regex form
+      let res = exp.generate_seach_query();
+      filter.$and = [res]
     }
-    else {
-      main_substr = this.keywords;
-    }
-
-    // Convert main expression into regex
-    let exp = new Expression(main_substr.toString());
-    let res = exp.test();
-    filter.$and.push({"content": {$regex: res, $options: 'si'}});
-
-
-    // Handling the NOT keywords
-    if (not_idx != -1) {
-      let not_substr = this.keywords.substring(not_idx)
-      console.log(not_substr)
-      let not_tokens = not_substr.split(" ")
-      not_tokens.forEach(function (item, index) {
-        if (item !== "NOT") {
-          console.log(item)
-          filter.$and.push({"content": {$not: {$regex: item, $options: 'si'}}});
-        }
-      });
-    }
-  }
 
   if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
