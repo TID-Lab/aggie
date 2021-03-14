@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody class="table-bordered">
-      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
+      <tr class="report__tr" ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
           ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
         <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
@@ -85,13 +85,12 @@
           </tags>
         </td>
         <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
-          <div class="td__flag">
-            <div class="flag__icon" ng-click="currentUser.can('edit data') && toggleEscalated(r)">
-              <div class="fa arrow-circle-up" ng-class="r.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+          <div class="td__escalate shadow-sm rounded-lg">
+            <div class="escalate__icon" ng-click="currentUser.can('edit data') && toggleEscalated(r)">
+              <div class="fa fa-3x" ng-class="r.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
               </div>
             </div>
           </div>
-
           <div class="text-center incident__addLink">
             <span>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">

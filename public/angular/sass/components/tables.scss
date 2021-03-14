@@ -331,6 +331,25 @@ tag.tr__tag {
   word-wrap: break-word;
 }
 
+.td__escalate {
+  cursor: pointer;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.escalate__icon {
+  padding: 2px 5px;
+  background-color: #dee2e6;
+  border-bottom: 2px solid #dee2e6;
+  border-left: 2px solid #dee2e6;
+  border-bottom-left-radius: 5px;
+}
+
+.escalate--hidden {
+  display: none;
+}
+
 .content__shared {
   border-left: 3px solid #4e5d6c;
   padding: 0px 10px;
