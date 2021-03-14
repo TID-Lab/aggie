@@ -1,3 +1,5 @@
+// Source: https://gist.github.com/mooz/1538610
+
 function Term(type) {
     this.type = type;
     this.negated = false;

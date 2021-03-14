@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/^[#@_\-'&!\w\dàèìòùáéíóúäëïöüâêîôûçßåøñœæ]+/i).toString();
+    return this.match(/.+/i).toString();
 }
 
 function notop() {
@@ -140,7 +140,7 @@ Expression.prototype = {
     },
     generate_seach_query: function() {
         let cnfTerm = buildCNF(this.tree).toCNF().toString()
-        console.log(cnfTerm)
+        // console.log(cnfTerm)
         this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
         return evalTree(this.tree);
     }
