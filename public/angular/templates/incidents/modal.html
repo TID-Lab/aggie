@@ -1,15 +1,15 @@
 <div ng-controller="IncidentFormModalController">
   <div class="modal-header">
     <h5 class="modal-title">
-      <span class="icon-left" ng-show="incident._id == null" translate>Create Incident</span>
-      <span class="icon-left" ng-show="incident._id != null" translate>Edit Incident</span>
+      <span class="icon-left" ng-show="incident._id == null" translate>Create Group</span>
+      <span class="icon-left" ng-show="incident._id != null" translate>Edit Group Details</span>
     </h5>
     <button class="close" ng-click="close()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p ng-show="report" class="info">{{'Enter the incident details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing incident' | translate}}</button></span>.</p>
+    <p ng-show="report" class="info">{{'Enter the group details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing group' | translate}}</button></span>.</p>
     <div class="well bs-component">
       <form name="form">
         <fieldset>

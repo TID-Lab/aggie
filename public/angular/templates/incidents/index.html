@@ -95,7 +95,7 @@
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
                   <select ng-model="searchParams.creator" ng-options="user._id as user.username for user in users" ng-change="search()" class="form-control filters__select">
-                    <option value="" translate>Created By/option>
+                    <option value="" translate>Created By </option>
                   </select>
                 </div>
               </div>
@@ -158,7 +158,7 @@
                   </button>
                 </div>
                 <div class="btn-group mr-2" role="group" aria-label="Create Incident Button">
-                  <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()" translate>Create Incident</button>
+                  <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()" translate>Create Group</button>
                 </div>
               </div>
             <nav aria-label="incident list page navigation">
