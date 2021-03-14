@@ -68,6 +68,8 @@ schema.post('save', function() {
   }
 });
 
+
+
 schema.methods.toggleRead = function(read) {
   this.read = read;
 };
@@ -197,6 +199,8 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
   if (query.veracity === 'confirmed true') filter.veracity = true;
   if (query.veracity === 'confirmed false') filter.veracity = false;
   if (query.veracity === 'unconfirmed') filter.veracity = null;
