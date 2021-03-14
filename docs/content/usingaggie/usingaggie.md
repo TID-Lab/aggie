@@ -46,7 +46,7 @@ From your Aggie header bar, click the **Reports** Tab. This will show you the re
 
 ### Actions on the Reports Page
 
-There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Flag reports](#flagging-reports), [Create Incidents](#creating-incidents),[Filter reports](#filtering-reports)  or add a report to an [Incident](#what-is-an-incident).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
+There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Create Incidents](#creating-incidents),[Filter reports](#filtering-reports)  or add a report to an [Incident](#what-is-an-incident).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
 
 ### Sections of the Reports Page
 
@@ -64,8 +64,6 @@ This indicates the social media account of the person who authored the report.
 This column shows the exact content of the report published by the author.
   -   **The Incident column**:
 This column is used to add a report to an existing incident or create a new incident.
-  -   **The Flagged column**:
-This column is used to note/identify reports for reference.
 
 ### Navigating within the Reports page.
 
@@ -79,27 +77,13 @@ There are two ways to read reports in Aggie. One way is to grab a batch using th
 
 #### Reading using the "Grab Batch" button
 
-The “*Grab Batch*” automatically pulls a set of ten unread reports that are displayed in batch mode. The batch mode is noted by the indication of a *blue bar* on the reports page. Users can take certain actions on these ten reports – such as [“flagging”](#flagging-reports) or [“adding reports to incidents”](#creating-incidents).  Upon completely taking desired action on the collected reports, trackers can grab another batch by clicking the “**Mark All Read & Grab Another**” button.
+The “*Grab Batch*” automatically pulls a set of ten unread reports that are displayed in batch mode. The batch mode is noted by the indication of a *blue bar* on the reports page. Users can take certain actions on these ten reports – like [“adding reports to incidents”](#creating-incidents).  Upon completely taking desired action on the collected reports, trackers can grab another batch by clicking the “**Mark All Read & Grab Another**” button.
 
 ![Grab Batch](grab_batch.png)
 
 #### Marking Reports as Read
 
 A report can be manually marked as read. More than one reports can be marked as read by checking their respective checkboxes or with the “*Mark all Read*” button. When a tracker grabs a new batch, it is recommended that the tracker selects either *“Mark All Read & Grab Another”* or *“Mark All Read & Done”*. If the batch was accidentally grabbed, the tracker should click the *"Cancel"* button.
-
-### Flagging Reports
-
-A *flag* is a way of marking a report for future reference. Trackers might come across certain reports they wish to revisit and easily find. In situations like that, trackers can flag the report and then *filter* it latter by using *flagged reports* filter.
-
-#### To Flag a Report
-
-1.  Select the report(s) to be flagged using the *checkboxes* on each report row.
-2.  Click the **Flag** tab beneath the filter bar if multiple reports are selected.
-3.  You can flag a single message by clicking the **little flag** in the last column of the report’s row.
-
-For example to flag the sixth report, you click on the *flag* in the last column of the first row. You notice that a report is flagged by the *light pink highlight* and the *black flag* on the report as indicated below.
-
-![Flagged](flagged.png)
 
 ## Tags 
 A tag is a method of categorizing reports at an individual level. Whereas incidents allow for clusters of reports based whether reports require action, tags allow for categorization of reports based on a report's qualities. In order to create a tag, you must have permission to do so.
@@ -160,7 +144,7 @@ Editing tags will cause an existing tag and all the Reports that contain that ta
     ![Tags_Edit_Submit](tags_edit_submit.png)
     
 ### Adding/Removing Tags to Reports
-There are two methods of adding/removing tags to reports. Tags may be added to every report selected (similar to flagging multiple reports at once). The second method is adding tags to individual reports. 
+There are two methods of adding/removing tags to reports. Tags may be added to every report selected. The second method is adding tags to individual reports. 
 
 #### Method 1: Adding/Removing Tags to Many Reports
 
@@ -266,7 +250,7 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 #### Filtering by Status
 
 1.  From the Header Bar, click the **Status** menu.
-2.  Select the report *Status (e.g. Flagged, Unread, Read)* to display the reports of that status.
+2.  Select the report *Status (e.g. Unread, Read)* to display the reports of that status.
 
     ![Filtering by Status](filtering_status.png)
 

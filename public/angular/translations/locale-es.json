@@ -384,6 +384,8 @@
   "Passwords don't match.": "Las contraseñas no coinciden.",
   "Read": "Leídos",
   "Unread": "No leídos",
+  "Escalated": "Escalados",
+  "Non-escalated": "No Escalados",
   "Total Reports": "Informes totales",
   "Reports/min": "Informes/min",
   "Escalated Incidents": "Incidentes elevados",
