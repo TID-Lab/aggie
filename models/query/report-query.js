@@ -5,7 +5,7 @@ var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
-const Expression = require("./expression");
+const Expression = require("./query_helper/expression");
 
 function ReportQuery(options) {
   options = options || {};

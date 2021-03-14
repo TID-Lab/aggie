@@ -3,7 +3,7 @@ const Term = require("./CNF")
 
 
 exp = new Expression("NOT Biden")
-s = exp.test()
+s = exp.generate_seach_query()
 console.log(JSON.stringify(s))
 
 
