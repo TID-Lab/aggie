@@ -137,13 +137,6 @@ angular.module('Aggie')
       });
     };
 
-    $scope.toggleFlagged = function(report) {
-      report.flagged = !report.flagged;
-      if (report.flagged) {
-        report.read = report.flagged;
-      }
-      $scope.saveReport(report);
-    };
 
     $scope.isFirstPage = function() {
       return $scope.pagination.page === 1;
