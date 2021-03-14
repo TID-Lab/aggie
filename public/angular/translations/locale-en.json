@@ -301,8 +301,6 @@
   "Mark All Read & Done": "Mark All Read &amp; Done",
   "Mark as Read": "Mark as Read",
   "Mark as Unread": "Mark as Unread",
-  "Flag": "Flag",
-  "Unflag": "Unflag",
   "Sorry, but we couldn't find any reports assigned to you.": "Sorry, but we couldn't find any reports assigned to you.",
   "Widgets": "Widgets",
   "Incident map": "Incident map",
@@ -313,7 +311,7 @@
     "success": "The credentials are valid. You need to save them before continuing.",
     "twitter": {
       "p1": "Follow <a href=\"https://dev.twitter.com/oauth/overview/application-owner-access-tokens\" target=\"_blank\"> these instructions</a> to generate tokens to use the Twitter API.",
-      "p2": "Replace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, and <code>access_token_secret</code> with the keys from <a href=\"https://apps.twitter.com\" target=\"_blank\"> your app</a>."
+      "p2": "Replace <code>API_key</code>, <code>API_key_secret</code>, <code>access_token</code>, and <code>access_token_secret</code> with the keys from <a href=\"https://developer.twitter.com/en/portal/projects-and-apps\" target=\"_blank\"> your app</a>."
     },
     "crowdtangle": {
       "p1": "Update Crowdtangle API (Facebook) settings here."

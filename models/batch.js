@@ -6,7 +6,7 @@ var _ = require('lodash');
 var ReadWriteLock = require('rwlock');
 var ReportQuery = require('./query/report-query');
 
-var ITEMS_PER_BATCH = 10; // 10 items per batch
+var ITEMS_PER_BATCH = 25; // 10 items per batch
 var BATCH_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 var lock = new ReadWriteLock();
 

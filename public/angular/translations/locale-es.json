@@ -283,8 +283,6 @@
   "Mark All Read & Done": "Marcar todos como leídos y acabar",
   "Mark as Read": "Marcar como leídos",
   "Mark as Unread": "Marcar como no leído",
-  "Flag": "Señalar",
-  "Unflag": "Quitar la señal",
   "Sorry, but we couldn't find any reports assigned to you.": "Lo sentimos, peron no fue posible encontrar ningún informe asignado a usted.",
   "Widgets": "Widgets",
   "Incident map": "Mapa de incidentes",
@@ -295,7 +293,7 @@
     "success": "Las credenciales son válidas. Guárdelas antes de continuar",
     "twitter": {
       "p1": "Siga las <a href=\"https://dev.twitter.com/oauth/overview/application-owner-access-tokens\" target=\"_blank\">instrucciones</a> para generas los tokens de Twitter necesarios.",
-      "p2": "Reemplace <code>consumer_key</code>, <code>consumer_secret</code>, <code>access_token</code>, y <code>access_token_secret</code> con la información de <a href=\"https://apps.twitter.com\" target=\"_blank\"> su app</a> en Twitter."
+      "p2": "Reemplace <code>API_key</code>, <code>API_key_secret</code>, <code>access_token</code>, y <code>access_token_secret</code> con la información de <a href=\"https://developer.twitter.com/en/portal/projects-and-apps\" target=\"_blank\"> su app</a> en Twitter."
     },
     "facebook": {
       "p1": "Visite <a href=\"https://developers.facebook.com/apps/\" target=\"_blank\">sus aplicaciones</a> en Facebook, seleccione la app para Aggie, o cree una nueva si no hay.",
@@ -386,9 +384,6 @@
   "Passwords don't match.": "Las contraseñas no coinciden.",
   "Read": "Leídos",
   "Unread": "No leídos",
-  "Flagged": "Señalados",
-  "Unflagged": "No señalados",
-  "Read & Unflagged": "Leídos y no señalados",
   "Total Reports": "Informes totales",
   "Reports/min": "Informes/min",
   "Escalated Incidents": "Incidentes elevados",

@@ -8,6 +8,7 @@
       <th scope="col" translate>Title</th>
       <th scope="col" translate>Location</th>
       <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
+      <th scope="col" ng-show="currentUser.can('view other users')" translate>Created By</th>
       <th scope="col" translate>Status</th>
       <th scope="col" translate>Veracity</th>
       <th scope="col" translate>Escalated?</th>
@@ -40,6 +41,7 @@
         <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
       <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
+      <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.creator.username}}">{{ i.creator.username }}</a></td>
       <td>{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
       <td>
         <div ng-if="i.veracity != null">
