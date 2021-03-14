@@ -113,6 +113,7 @@ require('./controllers/password_reset_modal');
 require('./controllers/password_reset_admin');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
+require('./controllers/reports/relevant_reports');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
