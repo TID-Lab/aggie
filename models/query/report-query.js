@@ -81,6 +81,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
       let exp = new Expression(this.keywords.toString());
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
+      console.log(res)
       filter.$and = [res]
     }
 

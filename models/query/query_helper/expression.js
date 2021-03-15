@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/.+/i).toString();
+    return this.match(/[^\s]+/i).toString();
 }
 
 function notop() {
@@ -100,7 +100,6 @@ function evalTree(tree) {
 // --------------- collect terms -------------------
 
 function flattenTree(tree) {
-    // TODO: unique leaves, sorted?
     return collectLeaves(tree, [], true);
 }
 
