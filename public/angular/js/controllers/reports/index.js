@@ -250,13 +250,6 @@ angular.module('Aggie')
           });
         };
 
-    var toggleEscalated = function(items, escalated) {
-      return items.map(function(item) {
-        item.escalated = escalated;
-        return item;
-      });
-    };
-
     var removeSMTCTag = function(items, smtcTag) {
       return items.map(function(item) {
         item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
@@ -424,9 +417,6 @@ angular.module('Aggie')
           return report.read;
         };
 
-    $scope.isEscalated = function(report) {
-      return report.escalated;
-    }
         /**
          * Saves a front-end report to the back end.
          * @param {Report} report
@@ -439,18 +429,6 @@ angular.module('Aggie')
         };
 
         /**
-         * Toggles a report's escalated property and sets its read property to true
-         * @param {Report} report
-         */
-        $scope.toggleEscalated = function(report) {
-          report.escalated = !report.escalated;
-          if (report.escalated) {
-            report.read = report.escalated;
-          }
-          $scope.saveReport(report);
-        };
-
-        /**
          * Returned value is meant to be used as a boolean to check if any reports are selected.
          * @returns {boolean}
          */
@@ -460,25 +438,6 @@ angular.module('Aggie')
           });
         };
 
-    /**
-     * Takes in a boolean "escalated" value and sets the escalated field on selected reports to that value.
-     * @param {boolean} escalated
-     */
-    $scope.setSelectedEscalatedStatus = function(escalated) {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      var ids = getIds(toggleEscalated(items, escalated)); // Changes the Front-end Values
-      Report.toggleEscalated({ ids: ids, flagged: escalated }); // Changes the Back-end Values
-    };
-
-    $scope.toggleSelectedEscalated = function() {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      if (items.findIndex(function(item) {
-        return !item.flagged;
-      }) !== -1) $scope.setSelectedEscalatedStatus(true);
-      else $scope.setSelectedEscalatedStatus(false);
-    }
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag

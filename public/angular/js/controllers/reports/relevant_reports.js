@@ -196,9 +196,13 @@ angular.module('Aggie')
       }
 
       var updateTagSearchNames = function() {
-        if ($scope.searchParams.tags) {
+        var tempTags = $scope.searchParams.tags;
+        if (tempTags) {
+          if(typeof tempTags=="string"){
+            tempTags = [tempTags];
+          }
           var tagNames = "";
-          tagNames = $scope.searchParams.tags.map(function(tagId) {
+          tagNames = tempTags.map(function(tagId) {
             if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
             else { return tagId; }
           });
@@ -246,6 +250,19 @@ angular.module('Aggie')
         });
       };
 
+      var toggleEscalated = function(items, escalated) {
+        return items.map(function(item) {
+          item.escalated = escalated;
+          return item;
+        });
+      };
+
+      var removeSMTCTag = function(items, smtcTag) {
+        return items.map(function(item) {
+          item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
+          return item;
+        })
+      }
       var removeSMTCTag = function(items, smtcTag) {
         return items.map(function(item) {
           item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
@@ -407,6 +424,9 @@ angular.module('Aggie')
         return report.read;
       };
 
+      $scope.isEscalated = function(report) {
+        return report.escalated;
+      }
       /**
        * Saves a front-end report to the back end.
        * @param {Report} report
@@ -418,33 +438,16 @@ angular.module('Aggie')
         });
       };
 
-
       /**
-       * Sets selected reports' read property to read value
-       * @param {boolean} read
+       * Toggles a report's escalated property and sets its read property to true
+       * @param {Report} report
        */
-      $scope.setSelectedReadStatus = function(read) {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return;
-        var ids = getIds(toggleRead(items, read));
-        Report.toggleRead({ ids: ids, read: read });
-      };
-
-      $scope.toggleSelectedRead = function() {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return; // If empty, return
-        if (items.findIndex(function(item) {
-          return !item.read;
-        }) !== -1) $scope.setSelectedReadStatus(true);
-        else $scope.setSelectedReadStatus(false);
-      }
-      /**
-       * Sets all reports' read property in the scope to read
-       * @param {boolean} read
-       */
-      $scope.setAllReadStatus = function(read) {
-        var ids = getIds(toggleRead($scope.reports, read));
-        Report.toggleRead({ ids: ids, read: read });
+      $scope.toggleEscalated = function(report) {
+        report.escalated = !report.escalated;
+        if (report.escalated) {
+          report.read = report.escalated;
+        }
+        $scope.saveReport(report);
       };
 
       /**
@@ -457,6 +460,25 @@ angular.module('Aggie')
         });
       };
 
+      /**
+       * Takes in a boolean "escalated" value and sets the escalated field on selected reports to that value.
+       * @param {boolean} escalated
+       */
+      $scope.setSelectedEscalatedStatus = function(escalated) {
+        var items = $scope.filterSelected($scope.reports);
+        if (!items.length) return; // If empty, return
+        var ids = getIds(toggleEscalated(items, escalated)); // Changes the Front-end Values
+        Report.toggleEscalated({ ids: ids, flagged: escalated }); // Changes the Back-end Values
+      };
+
+      $scope.toggleSelectedEscalated = function() {
+        var items = $scope.filterSelected($scope.reports);
+        if (!items.length) return; // If empty, return
+        if (items.findIndex(function(item) {
+          return !item.flagged;
+        }) !== -1) $scope.setSelectedEscalatedStatus(true);
+        else $scope.setSelectedEscalatedStatus(false);
+      }
 
       /**
        * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
@@ -466,8 +488,10 @@ angular.module('Aggie')
       $scope.toggleTagOnSelected = function(smtcTag) {
         var items = $scope.filterSelected($scope.reports);
         if (!items.length) return;
-        if (items.findIndex(function(item) {
-          return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
+        if (items.findIndex(function (item) {
+          return item.smtcTags.findIndex(function (tag) {
+            return tag === smtcTag._id
+          }) === -1;
         }) !== -1) $scope.addTagToSelected(smtcTag);
         else $scope.removeTagFromSelected(smtcTag);
       }
