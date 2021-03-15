@@ -85,6 +85,123 @@ The “*Grab Batch*” automatically pulls a set of ten unread reports that are 
 
 A report can be manually marked as read. More than one reports can be marked as read by checking their respective checkboxes or with the “*Mark all Read*” button. When a tracker grabs a new batch, it is recommended that the tracker selects either *“Mark All Read & Grab Another”* or *“Mark All Read & Done”*. If the batch was accidentally grabbed, the tracker should click the *"Cancel"* button.
 
+### Creating Incidents
+
+#### Adding a report to an existing Incident
+
+When trackers come across reports that, if verified, require action, they create an incident from that report. Or, if the report is associated with an already existing incident, the tracker may add the report to the existing incident.
+
+#### Creating a New Incident
+
+1.  Select the report(s) you are creating the *Incident* for by checking its/their *checkbox(es)* on the first column to the left fo the reports page.
+
+    ![Incidents](incident_add.png)
+
+2.  Click the **Add to Incident** button beneath the filter bar.
+
+    ![Incidents](incidents.png)
+
+3.  Select the related category of an *existing incident* to add the report to that incident or…
+    **If it's a new Incident**;
+4. Click on the *blue* **Create a new Incident** link to create the new incident.
+
+   ![Adding Incident](create_incident.png)
+
+5.  Type in the *Title* of the incident (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the incident and a brief *note* describing the incident. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new incident. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken.
+
+6.  The *Public* and *Public Description* fields are used by the escalation team to add the incident to the list of public incidents. The *Public Description* will appear attached to the incident, for example, in the [Public Incident Map](#public_incident_map).
+
+### Filtering Reports
+
+#### The Filter Bar
+
+With the *filter bar*, trackers can narrow down their search for specific types of reports. The screenshot below shows the filter bar and a number of filters that can be used.
+
+    ![Filter Bar](filter_bar.png)  
+
+#### Filtering by Date/Time
+
+1.  Click on **Date/Time** button on the right end of the filter bar.
+2.  Select a Date/Time range by specifying the *From* and *To* fields.
+3.  Click **Submit** to filter and display reports aggregated within that date and time range.
+
+    ![Filtering by Date/Time](filter_date.png)
+
+#### Filtering by Incident
+
+1.  Click on the **Linked Incident** tab and select an incident to view all related reports tagged to that incident.
+2.  In this example, selecting the incident *Hate Speech* shows the three reports which have been linked to that incident.
+
+    ![Filtering by Incidence](filter_incident.png)
+
+#### Filtering by Source
+
+1.  Click the **Source** menu from the header bar.
+2.  Select the *Source type (e.g. Twitter Search)* to filter and display only reports from that source.
+
+    ![Filtering by Incidence](filter_source.png)
+
+#### Filtering by Media Type
+
+1.  From the header bar, click the **Media** menu.
+2.  Select the *Media type* (e.g. Twitter, RSS) to filter and display reports from sources of that media type.
+
+    ![Filtering by Media](filtering_media.png)
+
+#### Filtering by Status
+
+1.  From the Header Bar, click the **Status** menu.
+2.  Select the report *Status (e.g. Unread, Read)* to display the reports of that status.
+
+    ![Filtering by Status](filtering_status.png)
+
+#### Filtering by Author
+
+1.  Type in all or part of the name of an *Author, e.g. the user name of a Facebook account or a Twitter handle,* in the **Enter author** space on the filter bar.
+2.  Click **Go** to show only reports by authors with matching names.
+    For example, entering the author *JoyNews*, and clicking **Go** displays all the reports published by JoyNews.
+
+    ![Filtering by Author](filtering_author.png)
+
+#### Filtering by Keywords
+
+1.  Type in a *query keyword*, term or set of terms separated by commas, quotations or operators in the **Enter keywords** space on the Filter bar.
+2.  Click **Go** or the return key to display all reports that include the keyword or set of terms.
+    For example, by searching the keywords, *Ghana*, *ECG* and *Free n Fair Election*, there is a display of all reports containing one or more of the keywords.
+
+    ![Filtering by Keywords](filtering_keywords.png)
+
+## Batch Mode
+
+### What does Batch Mode do?
+
+Batch mode provides a method of distributing work to multiple users to prevent one user from doing the work another user has already completed. In Aggie, batch mode assigns reports to any user that clicks "Grab Batch" on the reports page. 
+
+This marks those reports as that user's and prevents any other user from seeing those reports on their respective batch modes. This means that a report in one user's batch mode cannot show up in another user's batch mode. In addition, Batch Mode has NLP
+functionality and displays reports that are highly scored near the top of the screen and adds a warning icon to reports that meet a certain threshold.
+
+### How do I use Batch Mode?
+
+On the Reports screen, click the Grab Batch button. This button is in blue.
+
+![Report Page](report_page.png)
+
+From the Batch Page, go through reports and triage those that are relevant. 
+
+![Batch Page](batch_mode_buttons.png)
+Once you are completed with a batch of reports, click either "Mark All Read & Grab Another" to mark all the reports in that batch read and grab another batch, or "Mark All Read & Done"
+which marks all the reports in the batch read then returns to the report screen. "Cancel" will simply return to the reports screen.
+
+#### NLP Indication and Ordering
+
+According to the NLP classifier linked with Aggie, Batch mode will order reports based on the likelihood a report is hate speech. This will appear in two ways: the higher scoring (more likely hate speech) reports will appear on the top of the page and reports that meet a threshold will
+show a warning indication in the Source Info column of the report. You can see the icon attached to several reports below. These orderings and icons will not appear in the reports page, only the batch mode.
+
+![Batch Page Hate Speech Indication](batch_NLPindicator.png)
+
+
+
+
 ## Tags 
 A tag is a method of categorizing reports at an individual level. Whereas incidents allow for clusters of reports based whether reports require action, tags allow for categorization of reports based on a report's qualities. In order to create a tag, you must have permission to do so.
 
@@ -184,91 +301,7 @@ There are two methods of adding/removing tags to reports. Tags may be added to e
 
     ![Tags_Quick_Remove_Result](tags_quickRemove_result.png)
     
-### Creating Incidents
 
-#### Adding a report to an existing Incident
-
-When trackers come across reports that, if verified, require action, they create an incident from that report. Or, if the report is associated with an already existing incident, the tracker may add the report to the existing incident.
-
-#### Creating a New Incident
-
-1.  Select the report(s) you are creating the *Incident* for by checking its/their *checkbox(es)* on the first column to the left fo the reports page.
-
-    ![Incidents](incident_add.png)
-
-2.  Click the **Add to Incident** button beneath the filter bar.
-
-    ![Incidents](incidents.png)
-
-3.  Select the related category of an *existing incident* to add the report to that incident or…
-**If it's a new Incident**;
-4. Click on the *blue* **Create a new Incident** link to create the new incident.
-
-    ![Adding Incident](create_incident.png)
-
-5.  Type in the *Title* of the incident (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the incident and a brief *note* describing the incident. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new incident. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken. 
-
-6.  The *Public* and *Public Description* fields are used by the escalation team to add the incident to the list of public incidents. The *Public Description* will appear attached to the incident, for example, in the [Public Incident Map](#public_incident_map).
-
-### Filtering Reports
-
-#### The Filter Bar
-
-With the *filter bar*, trackers can narrow down their search for specific types of reports. The screenshot below shows the filter bar and a number of filters that can be used.
-
-    ![Filter Bar](filter_bar.png)  
-
-#### Filtering by Date/Time
-
-1.  Click on **Date/Time** button on the right end of the filter bar.
-2.  Select a Date/Time range by specifying the *From* and *To* fields.
-3.  Click **Submit** to filter and display reports aggregated within that date and time range.
-
-    ![Filtering by Date/Time](filter_date.png)
-
-#### Filtering by Incident
-
-1.  Click on the **Linked Incident** tab and select an incident to view all related reports tagged to that incident.
-2.  In this example, selecting the incident *Hate Speech* shows the three reports which have been linked to that incident.
-
-    ![Filtering by Incidence](filter_incident.png)
-
-#### Filtering by Source
-
-1.  Click the **Source** menu from the header bar.
-2.  Select the *Source type (e.g. Twitter Search)* to filter and display only reports from that source.
-
-    ![Filtering by Incidence](filter_source.png)
-
-#### Filtering by Media Type
-
-1.  From the header bar, click the **Media** menu.
-2.  Select the *Media type* (e.g. Twitter, RSS) to filter and display reports from sources of that media type.
-
-    ![Filtering by Media](filtering_media.png)
-
-#### Filtering by Status
-
-1.  From the Header Bar, click the **Status** menu.
-2.  Select the report *Status (e.g. Unread, Read)* to display the reports of that status.
-
-    ![Filtering by Status](filtering_status.png)
-
-#### Filtering by Author
-
-1.  Type in all or part of the name of an *Author, e.g. the user name of a Facebook account or a Twitter handle,* in the **Enter author** space on the filter bar.
-2.  Click **Go** to show only reports by authors with matching names.
-For example, entering the author *JoyNews*, and clicking **Go** displays all the reports published by JoyNews.
-
-    ![Filtering by Author](filtering_author.png)
-
-#### Filtering by Keywords
-
-1.  Type in a *query keyword*, term or set of terms separated by commas, quotations or operators in the **Enter keywords** space on the Filter bar.
-2.  Click **Go** or the return key to display all reports that include the keyword or set of terms.
-For example, by searching the keywords, *Ghana*, *ECG* and *Free n Fair Election*, there is a display of all reports containing one or more of the keywords.
-
-    ![Filtering by Keywords](filtering_keywords.png)
 
 ## Incidents Page Activities
 
