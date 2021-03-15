@@ -61,6 +61,12 @@ tbody {
       font-weight: bold;
     }
   }
+  tr.escalated {
+    background-color: #FFDDDD;
+    &:hover {
+      background-color: darken(#FFDDDD, 10%);
+    }
+  }
 
   tr.new-incident {
     background-color: rgba(146, 200, 220, 0.4);

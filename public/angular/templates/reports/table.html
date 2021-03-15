@@ -12,7 +12,7 @@
     </thead>
     <tbody class="table-bordered">
       <tr class="report__tr" ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-          ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
+          ng-class="{ item: true, escalated: r.escalated, 'tr--unread': !r.read && !r.escalated, 'tr--read': r.read }">
         <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
             <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />

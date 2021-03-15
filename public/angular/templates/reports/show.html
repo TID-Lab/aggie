@@ -13,6 +13,14 @@
       <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between" ng-class="'card__header'">
           <h4 class="card-title mb-0">Report Details</h4>
+          <div ng-show="currentUser.can('edit data')" class="button-row">
+            <button type="button" class="btn btn-default mr-2">
+              <div class="escalate__icon" ng-click="currentUser.can('edit data') && toggleEscalated()">
+                <div class="fa fa-3x" ng-class="report.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
         <div class="card-body">
           <div ng-if="report._media[0] === 'twitter'" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>

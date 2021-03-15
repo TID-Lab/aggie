@@ -196,6 +196,18 @@ angular.module('Aggie')
           Report.update({ id: report._id }, report);
         };
 
+        /**
+         * Toggles a report's escalated property and sets its read property to true
+         * @param {Report} report
+         */
+        $scope.toggleEscalated = function() {
+          $scope.report.escalated = !$scope.report.escalated;
+          if ($scope.report.escalated) {
+            $scope.report.read = $scope.report.escalated;
+          }
+          Report.updateEscalated({id: $scope.report, escalated: $scope.report.escalated})
+        };
+
         $scope.displayNewReports = function() {
           // TODO: When attempting to add tags to "new Reports" tags breaks the software. Until this is solved, I'm making this function refresh the page, which solves the issue on its own.
           $window.location.reload();
