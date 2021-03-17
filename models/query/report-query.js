@@ -62,8 +62,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.after)     filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
-  // if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
-  if (this.author)    filter.author = {"author": {$regex: this.author, $options: 'si'}};
+  // if (this.author || this.keywords) filter.author = [{$text: { $search: `${this.author || ""}` }}];
+  if (this.author)    filter.author = {$regex: this.author, $options: 'si'};
   // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
 
   if (this.keywords) {
@@ -81,7 +81,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
       let exp = new Expression(this.keywords.toString());
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
-      console.log(res)
+      console.log(JSON.stringify(res))
       filter.$and = [res]
     }
 
