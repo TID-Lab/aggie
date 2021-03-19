@@ -874,6 +874,9 @@
 		"67994": [
 			"US State Government Agencies (Full List)"
 		],
+		"71285": [
+			"Ghana Pages"
+		],
 		"74382": [
 			"US College Newspapers"
 		],
@@ -2485,6 +2488,9 @@
 		"291378": [
 			"US State Government Agencies (Full List)"
 		],
+		"297268": [
+			"Ghana Pages"
+		],
 		"298270": [
 			"US State Government Agencies (Full List)"
 		],
@@ -3292,11 +3298,20 @@
 		"587950": [
 			"US State Government Agencies (Full List)"
 		],
+		"599016": [
+			"Ghana Pages"
+		],
+		"599017": [
+			"Ghana Pages"
+		],
 		"603888": [
 			"US State Government Agencies (Full List)"
 		],
 		"606073": [
 			"US State Government Agencies (Full List)"
+		],
+		"633974": [
+			"Ghana Pages"
 		],
 		"636374": [
 			"Tech Media"
@@ -3390,6 +3405,27 @@
 		],
 		"703977": [
 			"US State Government Agencies (Full List)"
+		],
+		"705842": [
+			"Ghana Pages"
+		],
+		"705886": [
+			"Ghana Pages"
+		],
+		"705912": [
+			"Ghana Pages"
+		],
+		"705913": [
+			"Ghana Pages"
+		],
+		"705916": [
+			"Ghana Pages"
+		],
+		"705918": [
+			"Ghana Pages"
+		],
+		"705921": [
+			"Ghana Pages"
 		],
 		"706624": [
 			"US State Government Agencies (Full List)"
@@ -17488,17 +17524,48 @@
 		"11215614": [
 			"Covid"
 		],
+		"11691311": [
+			"Ghana Pages"
+		],
+		"12023132": [
+			"Ghana Pages"
+		],
+		"12084612": [
+			"Ghana Pages"
+		],
 		"12489215": [
 			"Covid"
 		],
 		"12601765": [
 			"Covid"
+		],
+		"13027625": [
+			"Ghana Pages"
+		],
+		"13027632": [
+			"Ghana Pages"
+		],
+		"13027633": [
+			"Ghana Pages"
+		],
+		"13051235": [
+			"Ghana Pages"
+		],
+		"13051236": [
+			"Ghana Pages"
+		],
+		"13051237": [
+			"Ghana Pages"
+		],
+		"13051238": [
+			"Ghana Pages"
+		],
+		"13051239": [
+			"Ghana Pages"
+		],
+		"13051248": [
+			"Ghana Pages"
 		]
 	},
-	"crowdtangle_saved_searches": {
-		"1440000": {
-			"name": "Bernie Sanders",
-			"words": []
-		}
-	}
+	"crowdtangle_saved_searches": {}
 }
