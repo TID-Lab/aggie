@@ -9,6 +9,7 @@ var SchemaTypes = mongoose.SchemaTypes;
 var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
 var { addPost, removePost } = require('../lib/comments');
+var _= require('lodash')
 
 var schema = new Schema({
   authoredAt: {type: Date, index: true},
@@ -22,7 +23,6 @@ var schema = new Schema({
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   read: { type: Boolean, default: false, required: true, index: true },
-  flagged: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
@@ -68,14 +68,6 @@ schema.post('save', function() {
   }
 });
 
-schema.methods.toggleFlagged = function(flagged) {
-  this.flagged = flagged;
-
-  if (flagged) {
-    this.read = true;
-  }
-};
-
 schema.methods.toggleRead = function(read) {
   this.read = read;
 };
@@ -83,6 +75,7 @@ schema.methods.toggleRead = function(read) {
 schema.methods.toggleVeracity = function(veracity) {
   this.veracity = veracity;
 };
+
 schema.methods.toggleEscalated = function(escalated) {
   this.escalated = escalated;
 };
@@ -204,8 +197,15 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
+  if (query.veracity === 'confirmed true') filter.veracity = true;
+  if (query.veracity === 'confirmed false') filter.veracity = false;
+  if (query.veracity === 'unconfirmed') filter.veracity = null;
+  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+
   Report.findSortedPage(filter, page, callback);
 };
+
+
 
 Report.findSortedPage = function(filter, page, callback) {
   Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {

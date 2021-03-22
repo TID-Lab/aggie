@@ -17,9 +17,6 @@
         &.td__errors {
           vertical-align: middle;
         }
-        &.flagged {
-          vertical-align: middle;
-        }
         &.tag {
         }
         &.td__sourceInfo {
@@ -65,12 +62,6 @@ tbody {
     }
   }
 
-  tr.flagged {
-    background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-  }
   tr.new-incident {
     background-color: rgba(146, 200, 220, 0.4);
   }
@@ -113,13 +104,6 @@ tbody {
   .date, .time {
     display: block;
   }
-}
-.bg-flagged {
-  background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-
 }
 
 .td__media {
@@ -329,21 +313,6 @@ td {
   word-wrap: break-word;
 }
 
-.td__flag {
-  cursor: pointer;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-
-.flag__icon {
-  padding: 5px;
-  background-color: #dee2e6;
-  border-bottom: 2px solid #dee2e6;
-  border-left: 2px solid #dee2e6;
-  border-bottom-left-radius: 5px;
-}
-
 .td__edit {
   cursor: pointer;
 }
@@ -389,10 +358,6 @@ tag.tr__tag {
 .author__icon {
   color: #929292;
   font-size: 14px;
-}
-
-.flag__icon {
-  font-size: 24px
 }
 
 .content__originalLink {
