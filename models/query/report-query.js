@@ -87,6 +87,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
 
   if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
+  console.log(filter)
   return filter;
 };
 

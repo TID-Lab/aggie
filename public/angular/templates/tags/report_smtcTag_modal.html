@@ -21,7 +21,7 @@
           </tr>
           </thead>
           <tbody class="table-bordered">
-          <tr ng-class="{ item: true, 'bg-gray': selectedReport.read, unread: !selectedReport.read && !selectedReport.flagged }">
+          <tr ng-class="{ item: true, 'bg-gray': selectedReport.read, unread: !selectedReport.read }">ts
             <td class="td__sourceInfo">
               <span class="badge badge-pill badge-secondary mb-2" title="{{ selectedReport.storedAt | aggieDate:'date' }} at {{ selectedReport.storedAt | aggieDate:'short_time' }}">{{ selectedReport.storedAt | interval }} ago</span>
               <p class="sourceInfo__author">
