@@ -148,7 +148,7 @@ sudo systemctl restart nginx
 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 sudo apt update
-sudo apt install -y mongodb-org
+sudo apt install -y mongodb-org zip
 sudo systemctl enable mongod
 # Optional: Increase ulimits via https://docs.mongodb.com/manual/reference/ulimit/.
 # This will affect DB performance in some cases.
@@ -249,9 +249,13 @@ Save backup:
 
 ```shell script
 # Back up your database.
-export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" 
+export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE"
 # OR authenticated (will prompt for your password):
 export DATE=`date -u +"%Y-%m-%d"`; mongodump -o "mongodump-$DATE" -d aggie -u admin
+
+# Compress the data to save disk space.
+zip -r "mongodump-$DATE.zip" "mongodump-$DATE"
+rm "mongodump-$DATE" -rf
 ```
 
 Quick upgrade:
