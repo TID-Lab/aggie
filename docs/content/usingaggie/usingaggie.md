@@ -165,9 +165,11 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 
 #### Filtering by Keywords
 
-1.  Type in a *query keyword*, term or set of terms separated by commas, quotations or operators in the **Enter keywords** space on the Filter bar.
-2.  Click **Go** or the return key to display all reports that include the keyword or set of terms.
-    For example, by searching the keywords, *Ghana*, *ECG* and *Free n Fair Election*, there is a display of all reports containing one or more of the keywords.
+1.  Type in a *query keyword*, this search supports logic such as AND, OR, and NOT. If you would like to search for keywords Trump and Fauci, type Trump AND Fauci. If you would like to
+    return all posts containing Trump or Fauci, type in Trump OR Fauci or Fauci OR TRUMP. If you would like to search all posts containing Trump but not Fauci,
+    type Trump AND NOT Fauci or NOT Fauci AND Trump. Using () can create subsets of logic like shown in the image below. 
+    
+2.  Click **Go** or the return key to display all reports that match the search logic.
 
     ![Filtering by Keywords](filtering_keywords.png)
 
