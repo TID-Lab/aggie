@@ -7,7 +7,7 @@
             <th scope="col" translate>Thumbnail</th>
             <th scope="col" translate>Content</th>
             <th scope="col" translate>Tags</th>
-            <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
+            <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th><!-- No need to show incident on incident detail page -->
         </tr>
         </thead>
         <tbody class="table-bordered">
@@ -20,6 +20,8 @@
             </td>
             <td class="td__sourceInfo">
                 <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
+                <span ng-if="r.author =='bobbyhainline'" ng-class="{'text-primary': r.read, 'text-muted': !r.read }"><i class="fa fa-lg" ng-class="{'fa-circle-o': !r.read, 'fa-check-circle ': r.read}" aria-hidden="true"></i></span>
+                <span ng-if="r.author != 'bobbyhainline'" class="text-muted"><i class="fa fa-lg" ng-class="{'fa-circle-o': !r.read, 'fa-times-circle ': r.read}" aria-hidden="true"></i></span>
                 <p ng-if="r.author" class="sourceInfo__author">
                     <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
                     {{ r.author }}
@@ -65,13 +67,25 @@
                         <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
                     </ul>
                 </a>
+              <form ng-if="r.author == 'bobbyhainline'">
+                <div class="form-group">
+                  <label><a>Edit Notes</a></label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled>Verified by Matthew Lim. Refers to hate speech against Fauci. The image portrays a blah blah.
+                  </textarea>
+                </div>
+              </form>
+              <form  ng-if="r.author != 'bobbyhainline'">
+                <div class="form-group">
+                  <label><a>Edit Notes</a></label>
+                </div>
+              </form>
             </td>
             <td class="td__tags tag">
           <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
             {{tagsToString(r.tags) + ", "}}
           </span>
                 <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-                    <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
+                    <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
                 </a>
                 <tags class="tagify readonly" tabindex="-1">
                     <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
@@ -85,13 +99,37 @@
                 </tags>
             </td>
             <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
-                <div class="text-center incident__addLink">
+              <div ng-if="r.author == 'NYformerDem'" class="td__escalate shadow-sm rounded-lg">
+                    <div class="btn-group" role="group" aria-label="First group">
+                      <button type="button" class="btn btn-sm btn-light leftmost__confirm">
+                        <span class="confirm__span">Confirm True
+                          <i class="fa fa-check-circle text-primary"></i>
+                        </span>
+
+                      </button>
+                      <button type="button" class="btn btn-sm btn-light">
+                        <span class="confirm__span">Confirm False
+                          <i class="fa fa-times-circle"></i>
+                        </span>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-light">
+                        <span class="confirm__span">Unconfirm
+                        <i class="fa fa-circle-o text-secondary"></i>
+                        </span>
+                      </button>
+                      <button ng-click="currentUser.can('edit data') && toggleEscalated(r)" type="button" class="btn btn-sm btn-light escalate__icon">
+                        <i class="fa fa-2x" ng-class="r.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+                        </i>
+                      </button>
+                    </div>
+                </div>
+              <div class="text-center incident__addLink">
             <span>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
                 <strong ng-if="r._incident && incidentsById[r._incident]">
                   {{ incidentsById[r._incident].title | strLimit: 40 }}
                 </strong>
-                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
+                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Edit</strong>
               </a>
             </span>
                     <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>

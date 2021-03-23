@@ -80,7 +80,7 @@
                                     <select title="{{'Linked Incident Filter' | translate}}" ng-model="searchParams.incidentId"
                                             ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'"
                                             ng-change="search()" class="form-control filters__select">
-                                        <option value="" translate>Linked Incident</option>
+                                        <option value="" translate>Group</option>
                                     </select>
                                 </div>
                             </div>
@@ -161,11 +161,18 @@
                                 <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
-                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Confirm True</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Confirm False </button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Unconfirm</button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Escalate</button>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
-                                    Add to Incident
+                                    Add to Group
                                 </button>
                             </div>
                             <div class="btn-group mr-3">

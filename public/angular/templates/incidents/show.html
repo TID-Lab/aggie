@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb mb-0">
-    <li class="breadcrumb-item"><a ui-sref="incidents" translate>Incidents</a></li>
+    <li class="breadcrumb-item"><a ui-sref="incidents" translate>Groups</a></li>
     <li class="breadcrumb-item active">{{ incident.title }}</li>
   </ol>
 </nav>
@@ -72,7 +72,7 @@
                 <div class="btn-group ml-2 mr-4">
                   <input ng-select-all items="reports" type="checkbox" />
                 </div>
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Group</button>
               </div>
               <nav class="Report list page navigation">
                 <ul class="list-inline mb-0">

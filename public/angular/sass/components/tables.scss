@@ -238,6 +238,7 @@ table, .table {
 
 .td__content {
   height: 100% !important;
+  position: relative;
   max-width: 400px;
   a {
     height: 100%;
@@ -336,16 +337,21 @@ tag.tr__tag {
   position: absolute;
   right: 0px;
   top: 0px;
+  z-index: 50;
 }
 
 .escalate__icon {
-  padding: 2px 5px;
-  background-color: #dee2e6;
-  border-bottom: 2px solid #dee2e6;
-  border-left: 2px solid #dee2e6;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
+.confirm__span {
+  white-space: nowrap;
+}
+
+.leftmost__confirm {
+  border-top-left-radius: 0px;
+}
 .escalate--hidden {
   display: none;
 }
@@ -414,4 +420,13 @@ input.checkbox__input {
 .incidentShow__table {
   word-break: break-all;
   table-layout: fixed;
+}
+
+.relevant_table {
+  border: 1px solid #6c757d;
+}
+
+.stickbottom {
+  position: absolute;
+  bottom: 0px;
 }
