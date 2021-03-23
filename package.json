@@ -74,6 +74,7 @@
     "pm2": "^4.4.0",
     "promise": "^8.1.0",
     "readline-sync": "^1.4.10",
+    "reparse": "^0.1.2",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "rwlock": "^5.0.0",
