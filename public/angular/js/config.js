@@ -6,7 +6,7 @@ angular.module('Aggie')
 
 .value('widgetSettingsOptions', ['incident map'])
 
-.value('statusOptions', ['Read', 'Unread', 'Flagged', 'Unflagged', 'Read & Unflagged'])
+.value('statusOptions', ['Read', 'Unread'])
 
 .value('linkedtoIncidentOptions', [{ _id: 'any', title: '* Any Incident' },
                                    { _id: 'none', title: '* Without Incident' }])
