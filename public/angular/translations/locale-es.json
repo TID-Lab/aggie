@@ -6,7 +6,7 @@
   "notice": {
     "report": {
       "unlinkMultiple": {
-        "success": "El informe ha sido desconectado del incidente",
+        "success": "El informe ha sido desconectado del grupo",
         "error": "Se produjo un error al desvincular los informes."
       }
     }
@@ -36,8 +36,8 @@
   "keywords": "Palabras Clave",
   "media": "Medios",
   "sourceId": "Fuente",
-  "* Any Incident": "* Cualquier incidente",
-  "* Without Incident": "* Sin incidentes",
+  "* Any Incident": "* Cualquier grupo",
+  "* Without Incident": "* Sin grupos",
   "passwordReset": {
     "noMatch": "Las contraseñas no coinciden",
     "tooShort": "La contraseña es muy corta",
@@ -77,7 +77,7 @@
         "title": "Editar los ajustes de {{ widget | capitalize }}",
         "field_required": "Este campo es necesario",
         "incident_map": {
-          "p1": "Aquí puede elegir el centro y el nivel de zoom para el mapa de incidentes.",
+          "p1": "Aquí puede elegir el centro y el nivel de zoom para el mapa de grupos.",
           "p2": "Guarde los ajustes y observe los cambios <a target=\"_blank\" href=\"widget/public_incident_map.html\">aquí</a>.",
           "p3": "Lea la <a href=\"http://aggie.readthedocs.io/en/stable/content/settings/settings.html#widgets\">documentación</a> para ver como puede añadir el mapa a su sitio web."
         },
@@ -88,23 +88,23 @@
   "An error has occurred setting the fetching status": "Ocurrió un error al cambiar el estado de recolección",
   "incident": {
     "create": {
-      "success": "El incidente se creó con éxito.",
-      "error": "El incidente no se pudo crear. Contacte con el équipo técnico."
+      "success": "El grupo se creó con éxito.",
+      "error": "El grupo no se pudo crear. Contacte con el équipo técnico."
     },
     "update": {
-      "success": "El incidente se ha actualizado con éxito.",
-      "error": "El incidente no se ha podido actualizar."
+      "success": "El grupo se ha actualizado con éxito.",
+      "error": "El grupo no se ha podido actualizar."
     },
     "delete": {
-      "success": "El incidente ha sido borrado.",
-      "error": "El incidente no se pudo borrar."
+      "success": "El grupo ha sido borrado.",
+      "error": "El grupo no se pudo borrar."
     },
     "deleteMultiple": {
-      "success": "Los incidentes han sido borrados",
-      "error": "Los incidentes no pudieron ser borrados."
+      "success": "Los grupos han sido borrados",
+      "error": "Los grupos no pudieron ser borrados."
     },
     "save": {
-      "error": "Lo sentimos, pero no ha sido posible guardar el incidente,"
+      "error": "Lo sentimos, pero no ha sido posible guardar el grupo,"
     }
   },
   "Sorry, but that report couldn't be saved.": "Lo sentimos, pero no ha sido posible guardar el informe.",
@@ -155,7 +155,7 @@
   "Sorry, but that page could not be found.": "Lo sentimos, pero la página no existe.",
   "Trends (Lines)": "Tendencias (Líneas)",
   "Trends (Bars)": "Tendencias (Barras)",
-  "Incident Map": "Mapa de incidentes",
+  "Incident Map": "Mapa de grupos",
   "Set a password for your account": "Elija una contraseña para su cuenta",
   "Password": "Contraseña",
   "Password Confirmation": "Confirme la contraseña",
@@ -177,7 +177,7 @@
   "Enter password": "Introduzca su contraseña",
   "Forgot password?": "¿Se olvidó de la contraseña?",
   "Reports": "Informes",
-  "Incidents": "Incidentes",
+  "Incidents": "Grupos",
   "Sources": "Fuentes",
   "Analysis": "Análisis",
   "Users": "Usuarios",
@@ -211,12 +211,12 @@
   "Public": "Público",
   "Public Description": "Descripción pública",
   "Delete": "Borrar",
-  "Create Incident": "Crear incidente",
-  "Sorry, but we couldn't find any incidents.": "No ha sido posible encontrar ningún incidente.",
-  "Edit Incident": "Editar incidente",
-  "Enter the incident details below": "Introduzca la información del incidente a continuación",
+  "Create Incident": "Crear grupo",
+  "Sorry, but we couldn't find any incidents.": "No ha sido posible encontrar ningún grupo.",
+  "Edit Incident": "Editar grupo",
+  "Enter the incident details below": "Introduzca la información del grupo a continuación",
   "Or you can": "O usted puede",
-  "choose an existing incident": "elegir un incidente ya creado",
+  "choose an existing incident": "elegir un grupo ya creado",
   "Title": "Título",
   "Title is required.": "El título es obligatorio.",
   "User is required.": "El usuario es obligatorio.",
@@ -231,10 +231,10 @@
   "Longitude is required if latitude is entered.": "Es necesario introducir la latitud si la longitud ha sido introducida..",
   "Select User": "Seleccione el usuario",
   "Notes": "Notas",
-  "Add report to incident": "Añadir informe al incidente",
-  "Sorry, but we couldn't find any incidents. You can": "Lo sentimos, pero no encotramos ningún incidente. Usted puede",
-  "create a new incident": "crear un incidente nuevo",
-  "Click an incident below to which you would like to add the report. Or you can": "Haga clic en el incidente al que quiere añadir el informe. También puede ",
+  "Add report to incident": "Añadir informe al grupo",
+  "Sorry, but we couldn't find any incidents. You can": "Lo sentimos, pero no encotramos ningún grupo. Usted puede",
+  "create a new incident": "crear un grupo nuevo",
+  "Click an incident below to which you would like to add the report. Or you can": "Haga clic en el grupo al que quiere añadir el informe. También puede ",
   "Creator": "Creador",
   "Closed": "Cerrado",
   "Open": "Abierto",
@@ -243,7 +243,7 @@
   "Unconfirmed": "Sin verificar",
   "There are no reports to display.": "No hay informes que mostrar.",
   "of": "de",
-  "Are you sure you want to delete selected incidents?": "Esta seguro de querer borrar los incidentes seleccionados?",
+  "Are you sure you want to delete selected incidents?": "Esta seguro de querer borrar los grupos seleccionados?",
   "ID#": "ID#",
   "Last Updated": "Última actualización",
   "reports": "Informe",
@@ -251,7 +251,7 @@
   "True": "Verdarero",
   "False": "Falso",
   "ago": "atrás",
-  "Are you sure you want to delete this incident?": "Esta seguro de querer borrar este incidente?",
+  "Are you sure you want to delete this incident?": "Esta seguro de querer borrar este grupo?",
   "No": "No",
   "Yes": "Si",
   "Sorry, but we couldn't find any sources.": "Lo sentimos, pero no fue posible encontrar ninguna fuente.",
@@ -271,7 +271,7 @@
   "Author": "Autor",
   "Content": "Contenido",
   "Time": "Momento",
-  "Incident": "Incidente",
+  "Incident": "Grupo",
   "Batch Mode": "Por lotes",
   "new reports available.": "nuevos informes disponibles.",
   "batch": {
@@ -285,7 +285,7 @@
   "Mark as Unread": "Marcar como no leído",
   "Sorry, but we couldn't find any reports assigned to you.": "Lo sentimos, peron no fue posible encontrar ningún informe asignado a usted.",
   "Widgets": "Widgets",
-  "Incident map": "Mapa de incidentes",
+  "Incident map": "Mapa de grupos",
   "Center": "Centro",
   "Zoom": "Zoom",
   "api_settings_modal": {
@@ -323,17 +323,17 @@
   "Media:": "Medio:",
   "Source:": "Fuente:",
   "Incident:": "Incidentw:",
-  "Linked Incident": "Incidente conectado",
+  "Linked Incident": "Grupo conectado",
   "Date/Time": "Fecha/Hora",
-  "Add to Incident": "Añadir a incidente",
-  "Remove from Incident": "Eliminar del incidente",
+  "Add to Incident": "Añadir a grupo",
+  "Remove from Incident": "Eliminar del grupo",
   "Grab Batch": "Coger lote",
 "There are currently no trends. Click 'Create Trend' to make one.": "No hay tendencias de momento. Haga clic en 'Crear tendencia' parar crear una.",
   "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.": "Los datos se actualizan cada 10 segundos. Datos agrupados en intervalos de 5 minutos. Haga click en los los círculos para ver los informes de ese momento,",
   "trends_modal_help": "e.g. <strong>manzana \"maracuyá\" plátano</strong>",
   "Choose media": "Elija el medio",
   "Choose source": "Elija la fuente",
-  "Choose incident": "Elija el incidente",
+  "Choose incident": "Elija el grupo",
   "Close": "Cerrar",
   "Choose source media": "Elija el medio de la fuente",
   "Media is required.": "El medio es obligatorio.",
@@ -388,7 +388,7 @@
   "Non-escalated": "No Escalados",
   "Total Reports": "Informes totales",
   "Reports/min": "Informes/min",
-  "Escalated Incidents": "Incidentes elevados",
+  "Escalated Incidents": "Grupos elevados",
   "Mark all Unread": "Marcar todos como no leídos",
   "Sorry, we had some trouble finding your user account. Please log in again.": "Lo sentimos, pero tenemos problemas para encontrar su cuenta de usuario. Intente iniciar sesión de nuevo.",
   "You must be logged in before accessing that page.": "Necesita haber iniciado sesión para acceder a esa página.",

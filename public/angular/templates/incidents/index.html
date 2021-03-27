@@ -152,13 +152,13 @@
                   <input class="checkbox__input" ng-select-all items="incidents" title="Select All" type="checkbox"/>
                 </div>
                 <div class="btn-group mr-2" role="group" aria-label="Delete Button">
-                  <button class="btn btn-secondary" aggie-confirm="{{'Are you sure you want to delete selected incidents?' | translate}}" on-confirm="removeSelected()">
+                  <button class="btn btn-secondary" aggie-confirm="{{'Are you sure you want to delete selected groups?' | translate}}" on-confirm="removeSelected()">
                     <span class="mr-2" translate> Delete </span>
                     <i class="fa fa-trash text-light" aria-hidden="true"></i>
                   </button>
                 </div>
                 <div class="btn-group mr-2" role="group" aria-label="Create Incident Button">
-                  <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()" translate>Create Incident</button>
+                  <button ng-controller="IncidentFormModalController" class="btn btn-info" ng-click="create()" translate>Create Group</button>
                 </div>
               </div>
             <nav aria-label="incident list page navigation">
@@ -183,7 +183,7 @@
           </div>
         </div>
         <div ng-hide="pagination.total > 0" class="card-body">
-          <p  translate>Sorry, but we couldn't find any incidents.</p>
+          <p  translate>Sorry, but we couldn't find any groups.</p>
         </div>
         <div ng-include="'/templates/incidents/table.html'"></div>
       </div>
