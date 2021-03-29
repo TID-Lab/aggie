@@ -17,7 +17,7 @@ var schema = new Schema({
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
-  veracity: { type: Boolean, default: null },
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },

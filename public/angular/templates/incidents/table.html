@@ -44,11 +44,7 @@
       <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.creator.username}}">{{ i.creator.username }}</a></td>
       <td>{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
       <td>
-        <div ng-if="i.veracity != null">
-          <div translate>Confirmed</div>
-          <span ng-if="i.veracity" class="text-green" translate>True</span>
-          <span ng-if="!i.veracity" class="text-red" translate>False</span>
-        </div>
+        {{i.veracity}}
       </td>
       <td class="table__escalated" title="{{'Escalated?' | translate}}">
         <span>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</span>
