@@ -173,6 +173,9 @@ angular.module('Aggie')
         }],
         users: ['User', function(User) {
           return User.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });

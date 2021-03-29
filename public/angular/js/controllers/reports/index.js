@@ -32,6 +32,7 @@ angular.module('Aggie')
     $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
       return smtcTag.name;
     });
+    $scope.smtcTagsById = {};
     $scope.visibleSmtcTags = smtcTags;
     $scope.searchParams = $stateParams;
     $scope.reports = reports.results;
@@ -45,7 +46,6 @@ angular.module('Aggie')
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
     $scope.currentPath = $rootScope.$state.current.name;
-    $scope.smtcTags = smtcTags;
     $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function(obj) {
       return obj.name;
     }))), ["Saved Search"]);

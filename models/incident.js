@@ -83,21 +83,6 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
-
-    // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
-    if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
-      SMTCTag.findById(smtcTagId, (err, tag) => {
-        if (err) {
-          logger.error(err);
-        }
-        if (tag.isCommentTag) {
-          addPost(this.url, callback)
-        } else {
-          callback();
-        }
-      });
-      return;
-    }
   }
   callback();
 }
@@ -115,20 +100,6 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
     })
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
-
-      if (!this.commentTo && this._media[0] === 'crowdtangle') {
-        SMTCTag.findById(smtcTagId, (err, tag) => {
-          if (err) {
-            logger.error(err);
-          }
-          if (tag.isCommentTag) {
-            removePost(this.url, callback)
-          } else {
-            callback();
-          }
-        });
-        return;
-      }
     }
   }
   callback();

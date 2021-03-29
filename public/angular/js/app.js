@@ -125,7 +125,7 @@ require('./controllers/users/index');
 require('./controllers/users/profile');
 require('./controllers/tags/index');
 require('./controllers/tags/tags_modal');
-require('./controllers/tags/report_tags_modal');
+require('./controllers/tags/report_and_incident_tags_modal');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');
