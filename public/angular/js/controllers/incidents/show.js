@@ -142,6 +142,24 @@ angular.module('Aggie')
       $scope.saveReport(report);
     };
 
+    $scope.unconfirm = function() {
+      $scope.incident.veracity = "Unconfirmed";
+      $scope.saveIncident();
+    }
+
+    $scope.confirm = function(veracityValue) {
+      if (veracityValue) {
+        $scope.incident.veracity = "Confirmed True";
+      } else {
+        $scope.incident.veracity = "Confirmed False";
+      }
+      $scope.saveIncident();
+    }
+
+    $scope.saveIncident = function() {
+      Incident.update({ id: $scope.incident._id }, $scope.incident)
+    }
+
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {
       }, function() {
