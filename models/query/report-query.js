@@ -67,18 +67,23 @@ ReportQuery.prototype.toMongooseFilter = function() {
   // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
 
   if (this.keywords) {
-      // Replace ! with NOT
-      this.keywords = this.keywords.replace(/\s!\s/g, " NOT ");
-      // Replace 1 or more & with just AND
-      this.keywords = this.keywords.replace(/\s&+\s/g, " AND ")
-      // Replace 1 or more | with just OR
-      this.keywords = this.keywords.replace(/\s\|+\s/g, " OR ")
-      // Replace " with whitespace, for perfect match
-      this.keywords = this.keywords.replace(/\"/g, " ")
+    // Replace non-operator spacing with @ to support perfect match
+    this.keywords = this.keywords.replace(/\s+/gi, "@")
+    // Replace ! with NOT
+    this.keywords = this.keywords.replace(/@!@/g, " NOT ");
+    // Replace 1 or more & with just AND
+    this.keywords = this.keywords.replace(/@&+@/g, " AND ")
+    // Replace 1 or more | with just OR
+    this.keywords = this.keywords.replace(/@\|+@/g, " OR ")
+    // Replace " with @, for perfect match
+    this.keywords = this.keywords.replace(/\"/g, "@")
+    this.keywords = this.keywords.replace(/'/g, "\'")
 
-
+      console.log(this.keywords.toString())
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
       let exp = new Expression(this.keywords.toString());
+      console.log(exp)
+
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
       console.log(JSON.stringify(res))

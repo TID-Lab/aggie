@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z\u1200-\u1399]+/i).toString();
+    return this.match(/[A-Za-z@\u1200-\u1399\'\/\\]+/i).toString();
 }
 
 function notop() {
@@ -60,6 +60,7 @@ var OPTREES = {
 
 function buildCNF(tree) {
     var op = tree[0];
+    console.log(op)
     if (op == 'OR') {
         return new Term(Term.OR, buildCNF(tree[1]), buildCNF(tree[2]))
     }
@@ -93,7 +94,9 @@ function evalTree(tree) {
         return negated_tree
     }
     else {
-        return {"content": {"$regex": tree, "$options": "si"}}
+        let x = tree.toString()
+        x = x.replace(/\@/gi,  " ")
+        return {"content": {"$regex": x, "$options": "si"}}
     }
 }
 
