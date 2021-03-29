@@ -235,6 +235,149 @@ npm install # Make sure dependencies are up to date.
 npx pm2 restart aggie # Serve the new version.
 ```
 
-### Additional setup
+## Maintenance
 
-Additional instructions for technical configurations can be found at the [GitHub repository](https://github.com/TID-Lab/aggie#README).
+1. To run migrations run `npx migrate`.
+1. To run unit tests, run `npm test`.
+    - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
+    - Calling `npm run mocha` will run just the backend tests
+    - Calling `npm run karma` will run just the frontend tests
+1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
+1. To run end-to-end tests:
+    1. first start Aggie on the test database with `npm run testrun`
+    1. then run protractor with `npm run protractor`
+1. To run end-to-end tests with external APIs
+    1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+    1. start Aggie on the test database with `npm run testrun`
+    1. run protractor with `npm run protractor-with-apis`
+1. To verify if the CRON job for updating Account Ids <-> Crowdtangle List Names and Saved Searches works
+    1. Empty the contents of config/crowdtangle_list.json.
+    1. Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
+
+## Project Configuration
+
+You can adjust the settings in the `config/secrets.json` file to configure the application.
+
+### Tests
+
+Set `config.adminParty=true` if you want to run tests.
+
+### Social Media and Feeds
+
+#### Twitter
+
+  1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
+  1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
+
+#### CrowdTangle
+
+  1. Create a dashboard on CrowdTangle and generate the dashboard token.
+  1. Add your CT API token to `config/secrets.json`.
+  1. Run `npm run update-ct-lists` to fetch data.
+      - This will update `config/crowdtangle_list.json`.
+      - This also happens automatically every night at midnight while Aggie is running.
+
+Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
+
+#### WhatsApp
+
+The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
+  1. Install Firefox in Linux using your distribution preferred method.
+  1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
+  1. Configure the add-on [about:addons](about:addons):
+       * Set Notification Engine to Custom command
+       * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
+           * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source.
+           * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
+  1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
+  1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
+
+#### ELMO
+
+  1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
+  1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
+  1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
+  1. Go to Settings > Configuration and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+
+### Google Places
+
+Aggie uses Google Places for guessing locations in the application. To make it work:
+
+1. You will need to get an API key from [Google API console](https://console.developers.google.com/) for [Google Places API](https://developers.google.com/places/documentation/).
+1. Read about [Google API usage](https://developers.google.com/places/web-service/usage) limits and consider [whitelisting](https://support.google.com/googleapi/answer/6310037) your Aggie deployment to avoid surprises.
+1. Go to Settings > Configuration and edit the Google Places settings and add the key.
+
+### Emails
+
+Email service is required to create new users.
+
+1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
+1. `email.from` is the address from which application emails will come
+1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
+1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
+
+### Fetching
+
+1. Set `fetching` value to enable/disable fetching for all sources at global level.
+  - This is also changed during runtime based on user choice.
+
+### Logging
+
+Set various logging options in `logger` section.
+
+- `console` section is for console logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+- `file` section is for file logging. For various options, see [winston](see https://github.com/winstonjs/winston#transports)
+- `SES` section is for email notifications.
+  - Set appropriate AWS key and secret values.
+  - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
+- `Slack` section is for Slack messages.
+  - Set the webhook URL to send logs to a specific Slack channel
+- **DO NOT** set `level` to *debug*. Recommended value is *error*.
+
+Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
+
+### Remote access
+
+See the first part of the Tableau docs in [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
+
+### Data visualization using Tableau
+
+Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.
+To set up the BI Connector, follow these steps: [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
+
+## Architecture
+
+Aggie consists of two largely separate frontend and backend apps. Some model code (in `/shared`) is shared between them.
+
+### Backend
+
+The backend is a Node.js/Express app responsible for fetching and analyzing data and servicing API requests. There are three main modules, each of which runs in its own process:
+
+* API module
+* Fetching module
+* Analytics module
+
+See README files in the `lib` subdirectories for more info on each module.
+
+The model layer (in `/models`) is shared among all three modules.
+
+### Frontend
+
+The frontend is a single-page Angular.js app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It is contained in `/public/angular`.
+
+## Building and Publishing Aggie's documentation
+
+The documentation is in the `docs` directory. These are automatically built and
+pushed on each commit for the `master` and `develop` branches in Github:
+
+* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
+* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
+
+To build the docs locally, do the following:
+
+1. Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/)
+1. Install [Sphinx](http://www.sphinx-doc.org/) with `pip install -U Sphinx`
+1. Install `recommonmark`: `pip install recommonmark`
+1. Install Read The Docs theme: `pip install sphinx_rtd_theme`
+1. From the `docs` directory in Aggie, run `make html`
+1. The compiled documentation has its root at `docs/_build/html/index.html`
