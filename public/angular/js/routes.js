@@ -149,7 +149,7 @@ angular.module('Aggie')
 
 
     $stateProvider.state('incidents', {
-      url: '/incidents?page&title&locationName&assignedTo&status&veracity&tags&escalated&public&before&after&idnum&creator',
+      url: '/groups?page&title&locationName&assignedTo&status&veracity&tags&escalated&public&before&after&idnum&creator',
       templateUrl: '/templates/incidents/index.html',
       controller: 'IncidentsIndexController',
       resolve: {
@@ -178,7 +178,7 @@ angular.module('Aggie')
     });
 
     $stateProvider.state('incident', {
-      url: '/incidents/:id?page',
+      url: '/groups/:id?page',
       templateUrl: '/templates/incidents/show.html',
       controller: 'IncidentsShowController',
       resolve: {
