@@ -83,6 +83,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
       let exp = new Expression(this.keywords.toString());
       console.log(exp)
+
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
       console.log(JSON.stringify(res))
