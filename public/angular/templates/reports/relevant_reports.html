@@ -49,7 +49,7 @@
                         <div class="form-row">
                             <div class="form-group col mb-0 pb-2">
                                 <div class="input-group input-group-sm">
-                                    <select title="{{'Status Filter' | translate}}" ng-model="searchParams.status" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                                    <select title="{{'Status Filter' | translate}}" ng-model="searchParams" ng-options="option | capitalize | translate for option in statusOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                                         <option value="" translate>Status</option>
                                     </select>
                                 </div>

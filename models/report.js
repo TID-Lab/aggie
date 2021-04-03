@@ -93,7 +93,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
-
+    this.read = true;
     // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
     if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
       SMTCTag.findById(smtcTagId, (err, tag) => {
