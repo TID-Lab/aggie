@@ -48,7 +48,7 @@
                       <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
                     </tr>
                     <tr>
-                      <th scope="row" class="detail-key" translate>Linked Incident</th>
+                      <th scope="row" class="detail-key" translate>Group</th>
                       <td colspan="10" class="detail-value align-middle">
                         <div class="text-center">
                           <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
@@ -108,7 +108,7 @@
               </div>
               <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
-                  Add to Incident
+                  Add to Group
                 </button>
               </div>
             </div>
