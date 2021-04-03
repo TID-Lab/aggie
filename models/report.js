@@ -74,7 +74,7 @@ schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
-schema.methods.toggleVeracity = function(veracity) {
+schema.methods.setVeracity = function(veracity) {
   this.veracity = veracity;
 };
 

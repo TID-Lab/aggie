@@ -430,3 +430,15 @@ input.checkbox__input {
   position: absolute;
   bottom: 0px;
 }
+
+tr.escalated {
+  background-color: #FFDDDD;
+  &:hover {
+    background-color: darken(#FFDDDD, 5%);
+  }
+}
+
+
+.label__button{
+  font-weight: normal;
+}

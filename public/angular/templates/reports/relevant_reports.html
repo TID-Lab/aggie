@@ -161,22 +161,19 @@
                                 <input class="checkbox__input" ng-select-all items="reports" title="Select All" type="checkbox"/>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
-                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Confirm True</button>
-                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Confirm False </button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Confirmed True')" translate>Confirm True</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Confirmed False')" translate>Confirm False </button>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
-                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Unconfirm</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Unconfirmed')" translate>Unconfirm</button>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
-                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Escalate</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedEscalated()" translate>Escalate</button>
                             </div>
                             <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
                                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                                     Add to Group
                                 </button>
-                            </div>
-                            <div class="btn-group mr-3">
-                                <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
                             </div>
                         </div>
                         <nav aria-label="Top report list page navigation">
@@ -213,9 +210,6 @@
                                 <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
                                     Add to Incident
                                 </button>
-                            </div>
-                            <div class="btn-group mr-3">
-                                <button class="btn btn-primary" ng-click="grabBatch()" translate>Grab Batch</button>
                             </div>
                         </div>
                         <nav aria-label="Bottom report list page navigation">

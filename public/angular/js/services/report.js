@@ -17,5 +17,6 @@ angular.module('Aggie')
     'unlinkFromIncident': { method: 'PATCH', url: '/api/v1/report/_unlink', isArray: false },
     'updateNotes': { method: 'PATCH', url: '/api/v1/report/_updateNotes', isArray: false },
     'updateEscalated': { method: 'PATCH', url: '/api/v1/report/_updateEscalated', isArray: false },
+    'updateVeracity': { method: 'PATCH', url: '/api/v1/report/_updateVeracity', isArray: false },
   });
 });

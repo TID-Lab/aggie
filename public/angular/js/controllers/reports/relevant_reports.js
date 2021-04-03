@@ -111,7 +111,7 @@ angular.module('Aggie')
         var visibleReports = paginate($scope.reports);
         $scope.visibleReports.addMany(visibleReports);
 
-        if ($scope.currentPath === 'reports' || $scope.currentPath === 'batch') {
+        if ($scope.currentPath === 'relevant_reports' || $scope.currentPath === 'relevant_reports_batch') {
           Socket.join('reports');
           Socket.on('report:updated', $scope.updateReport.bind($scope));
           Socket.on('stats', updateStats);
@@ -166,7 +166,7 @@ angular.module('Aggie')
           for (var key in params) {
             if (!params[key]) params[key] = null;
           }
-          $state.go('reports', params, { reload: true });
+          $state.go('relevant_reports', params, { reload: true });
         });
       };
 
@@ -242,13 +242,12 @@ angular.module('Aggie')
         }, []);
       };
 
-
-      var toggleRead = function(items, read) {
+      var setVeracity = function (items, veracity) {
         return items.map(function(item) {
-          item.read = read;
+          item.veracity = veracity;
           return item;
         });
-      };
+      }
 
       var toggleEscalated = function(items, escalated) {
         return items.map(function(item) {
@@ -257,12 +256,6 @@ angular.module('Aggie')
         });
       };
 
-      var removeSMTCTag = function(items, smtcTag) {
-        return items.map(function(item) {
-          item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
-          return item;
-        })
-      }
       var removeSMTCTag = function(items, smtcTag) {
         return items.map(function(item) {
           item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
@@ -336,6 +329,18 @@ angular.module('Aggie')
       $scope.unlinkIncident = function(report) {
         report._incident = '';
         Report.update({ id: report._id }, report);
+      };
+
+      $scope.reportHoverIn = function(report) {
+        if (!report.hoverOver) {
+          report.hoverOver = true;
+        }
+      };
+
+      $scope.reportHoverOut = function(report) {
+        if (report.hoverOver) {
+          report.hoverOver = false;
+        }
       };
 
       $scope.displayNewReports = function() {
@@ -438,6 +443,24 @@ angular.module('Aggie')
         });
       };
 
+      $scope.editNotes = function(report) {
+        report.editingNotes = true;
+      }
+
+      $scope.saveNotes = function(report) {
+        report.editingNotes = false;
+        $scope.saveReport(report);
+      }
+
+      /**
+       * Sets a report's veracity property and sets its read property to true
+       * @param {Report} report
+       */
+      $scope.setVeracity = function(report, veracity) {
+        report.veracity = veracity;
+        $scope.saveReport(report);
+      };
+
       /**
        * Toggles a report's escalated property and sets its read property to true
        * @param {Report} report
@@ -460,6 +483,13 @@ angular.module('Aggie')
         });
       };
 
+      $scope.setSelectedVeracityStatus = function(veracity) {
+        var items = $scope.filterSelected($scope.reports);
+        if (!items.length) return; // If empty, return
+        var ids = getIds(setVeracity(items, veracity)); // Changes the Front-end Values
+        Report.updateVeracity({ ids: ids, veracity: veracity }); // Changes the Back-end Values
+      };
+
       /**
        * Takes in a boolean "escalated" value and sets the escalated field on selected reports to that value.
        * @param {boolean} escalated
@@ -468,14 +498,14 @@ angular.module('Aggie')
         var items = $scope.filterSelected($scope.reports);
         if (!items.length) return; // If empty, return
         var ids = getIds(toggleEscalated(items, escalated)); // Changes the Front-end Values
-        Report.toggleEscalated({ ids: ids, flagged: escalated }); // Changes the Back-end Values
+        Report.updateEscalated({ ids: ids, escalated: escalated }); // Changes the Back-end Values
       };
 
       $scope.toggleSelectedEscalated = function() {
         var items = $scope.filterSelected($scope.reports);
         if (!items.length) return; // If empty, return
         if (items.findIndex(function(item) {
-          return !item.flagged;
+          return !item.escalated;
         }) !== -1) $scope.setSelectedEscalatedStatus(true);
         else $scope.setSelectedEscalatedStatus(false);
       }
@@ -551,7 +581,7 @@ angular.module('Aggie')
         Report.removeSMTCTag({ids: [report._id], smtcTag: smtcTag});
       }
 
-      // Batch Mode Functions
+      /* Batch Mode Functions - TODO: RELEVANT REPORTS BATCH MODE
       $scope.grabBatch = function() {
         // Before we go to batch, the searched query tag is going to be the name of the tag not the ID.
         // This is because the backend sends us back a objectId and we quickly change it to a smtcTag Name instead.
@@ -593,12 +623,13 @@ angular.module('Aggie')
         var ids = getIds($scope.reports);
         Report.toggleRead({ ids: ids, read: true }, function() {
           $scope.grabBatch();
+          $scope.grabBatch();
         });
       };
 
       /**
        * Marks all reports in the batch to read and exits batch mode.
-       */
+       *
       $scope.markAllReadAndDone = function() {
         if (!$scope.reports) return;
         var ids = getIds($scope.reports);
@@ -606,6 +637,7 @@ angular.module('Aggie')
           $rootScope.$state.go('reports', $scope.searchParams, { reload: true });
         });
       };
+      */
 
       /**
        * Goes to the show page for a report.

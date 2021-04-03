@@ -12,7 +12,7 @@
         </thead>
         <tbody class="table-bordered">
         <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-            ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
+            ng-class="{ item: true, 'escalated': r.escalated, 'tr--unread': r.veracity == 'Unconfirmed', 'tr--read': r.veracity == 'Confirmed True' || r.veracity == 'Confirmed False' }" ng-mouseover="reportHoverIn(r)" ng-mouseleave="reportHoverOut(r)">
             <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
                 <div class="td__checkbox">
                     <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
@@ -20,8 +20,15 @@
             </td>
             <td class="td__sourceInfo">
                 <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
-                <span ng-if="r.author =='bobbyhainline'" ng-class="{'text-primary': r.read, 'text-muted': !r.read }"><i class="fa fa-lg" ng-class="{'fa-circle-o': !r.read, 'fa-check-circle ': r.read}" aria-hidden="true"></i></span>
-                <span ng-if="r.author != 'bobbyhainline'" class="text-muted"><i class="fa fa-lg" ng-class="{'fa-circle-o': !r.read, 'fa-times-circle ': r.read}" aria-hidden="true"></i></span>
+                <span ng-show="r.veracity == 'Confirmed True'" class="text-primary">
+                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+                </span>
+                <span ng-show="r.veracity == 'Confirmed False'" class="text-muted">
+                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+                </span>
+                <span ng-show="r.veracity == 'Unconfirmed'" class='text-muted'>
+                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+                </span>
                 <p ng-if="r.author" class="sourceInfo__author">
                     <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
                     {{ r.author }}
@@ -39,7 +46,7 @@
                 <!--<p class="created"><span>{{ r | delay }}</span></p>-->
                 <!--<div class="icon-left" ng-class="sourceClass(r)"></div>-->
             </td>
-            <td class="thumbnail-image" ng-class="{ strong: !isRead(r) }">
+            <td class="thumbnail-image">
                 <div ng-repeat="media in r.metadata.mediaUrl">
                     <a ng-if="media.type==='photo'" href="/reports/{{r._id}}" target="_blank">
                         <img alt="{{'Thumbnail from report media'}}" class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
@@ -54,7 +61,7 @@
                     </div>
                 </div>
             </td>
-            <td class="td__content" ng-class="{ strong: !isRead(r) }">
+            <td class="td__content" ng-class="{ strong: r.veracity == 'Unconfirmed' }">
                 <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
                 <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
                     <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
@@ -67,17 +74,14 @@
                         <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
                     </ul>
                 </a>
-              <form ng-if="r.author == 'bobbyhainline'">
+              <form>
                 <div class="form-group">
-                  <label><a>Edit Notes</a></label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled>Verified by Matthew Lim. Refers to hate speech against Fauci. The image portrays a blah blah.
-                  </textarea>
+                  <label><a class="label__button" ng-click="editNotes(r)">Edit Notes</a></label>
+                  <br>
+                  <textarea ng-show="r.notes && !r.editingNotes" class="form-control" rows="3" ng-model="r.notes" disabled></textarea>
+                  <textarea ng-show="r.editingNotes" class="form-control" rows="3" ng-blur="saveNotes(r)" ng-model="r.notes"></textarea>
                 </div>
-              </form>
-              <form  ng-if="r.author != 'bobbyhainline'">
-                <div class="form-group">
-                  <label><a>Edit Notes</a></label>
-                </div>
+
               </form>
             </td>
             <td class="td__tags tag">
@@ -99,20 +103,19 @@
                 </tags>
             </td>
             <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
-              <div ng-if="r.author == 'NYformerDem'" class="td__escalate shadow-sm rounded-lg">
+              <div ng-show="r.hoverOver" class="td__escalate shadow rounded-lg">
                     <div class="btn-group" role="group" aria-label="First group">
-                      <button type="button" class="btn btn-sm btn-light leftmost__confirm">
+                      <button type="button" class="btn btn-sm btn-light leftmost__confirm" ng-click="setVeracity(r, 'Confirmed True')">
                         <span class="confirm__span">Confirm True
                           <i class="fa fa-check-circle text-primary"></i>
                         </span>
-
                       </button>
-                      <button type="button" class="btn btn-sm btn-light">
+                      <button type="button" class="btn btn-sm btn-light" ng-click="setVeracity(r, 'Confirmed False')">
                         <span class="confirm__span">Confirm False
                           <i class="fa fa-times-circle"></i>
                         </span>
                       </button>
-                      <button type="button" class="btn btn-sm btn-light">
+                      <button type="button" class="btn btn-sm btn-light" ng-click="setVeracity(r, 'Unconfirmed')">
                         <span class="confirm__span">Unconfirm
                         <i class="fa fa-circle-o text-secondary"></i>
                         </span>
