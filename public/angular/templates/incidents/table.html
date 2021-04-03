@@ -13,8 +13,7 @@
       <th scope="col" translate>Veracity</th>
       <th scope="col" translate>Escalated?</th>
       <th scope="col" translate>Tags</th>
-      <th scope="col" translate>Last Updated</th>
-      <th scope="col" translate>Created</th>
+      <th scope="col" translate>Modified Date</th>
       <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
       <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
     </tr>
@@ -50,12 +49,25 @@
         <span>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</span>
       </td>
       <td class="td__tags" title="{{'Tags' | translate}}">
-        <span>{{ tagsToString(i.tags) }}</span>
+        <a ng-controller="SMTCTagSelectModalController" ng-click="setIncidentSMTCTags(i)" class="table-primary-link">
+          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+        </a>
+        <tags class="tagify readonly" tabindex="-1">
+          <tag ng-repeat="tag in i.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+               class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+               ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+            <x title="" ng-click="removeTagFromIncident(i, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+            <div>
+              <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+            </div>
+          </tag>
+        </tags>
       </td>
       <td>
         <span class="badge badge-pill badge-secondary mb-2" title="">{{i.updatedAt| interval }} ago</span>
-      </td>
-      <td>
+        <br>
+        <small>Created: </small>
+        <br>
         <small class="time">{{ i.storedAt | aggieDate:'time' }}</small>
         <br>
         <small> {{ i.storedAt | aggieDate:'date' }}</small>
