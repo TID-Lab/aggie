@@ -5,6 +5,7 @@ var Report = require('../report');
 var Query = require('../query');
 var util = require('util');
 var _ = require('lodash');
+const Expression = require("./query_helper/expression");
 
 function ReportQuery(options) {
   options = options || {};
@@ -61,9 +62,34 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.after)     filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
-  if (this.author || this.keywords) filter.$and = [{$text: { $search: `${this.author || ""} ${this.keywords || ""}` }}];
-  if (this.author)    filter.$and.push({"author": {$regex: this.author, $options: 'i'}});
-  if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'i'}});
+  // if (this.author || this.keywords) filter.author = [{$text: { $search: `${this.author || ""}` }}];
+  if (this.author)    filter.author = {$regex: this.author, $options: 'si'};
+  // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
+
+  if (this.keywords) {
+    // Replace non-operator spacing with @ to support perfect match
+    this.keywords = this.keywords.replace(/\s+/gi, "@")
+    // Replace ! with NOT
+    this.keywords = this.keywords.replace(/@!@/g, " NOT ");
+    // Replace 1 or more & with just AND
+    this.keywords = this.keywords.replace(/@&+@/g, " AND ")
+    // Replace 1 or more | with just OR
+    this.keywords = this.keywords.replace(/@\|+@/g, " OR ")
+    // Replace " with @, for perfect match
+    this.keywords = this.keywords.replace(/\"/g, "@")
+    this.keywords = this.keywords.replace(/'/g, "\'")
+
+      console.log(this.keywords.toString())
+      // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
+      let exp = new Expression(this.keywords.toString());
+      console.log(exp)
+
+      // Convert the nested logical array into the approriate mongo query with $and, $or and $not
+      let res = exp.generate_seach_query();
+      console.log(JSON.stringify(res))
+      filter.$and = [res]
+    }
+
   if (this.tags)      filter.smtcTags = { $all: this.tags }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
   console.log(filter)

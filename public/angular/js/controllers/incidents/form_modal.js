@@ -24,7 +24,7 @@ angular.module('Aggie')
           }],
           incident: function() {
             return {
-              veracity: null,
+              veracity: 'Unconfirmed',
               closed: false
             };
           },
