@@ -4,11 +4,17 @@
     <h3>{{stats.totalReports | number}}</h3>
     <span title="{{'Total number of Reports' | translate}}" translate>Reports/Last min</span>
     <h3>{{stats.totalReportsPerMinute | number}}</h3>
-    <span translate>Unread</span>
+    <span translate>Unread Reports</span>
     <h3>{{stats.totalReportsUnread | number}}</h3>
-    <span translate>Incidents</span>
+    <span translate>Tagged Reports</span>
+    <!-- stats.totalTaggedReports -->
+    <h3>{{ 0 | number}}</h3>
+    <span translate>Escalated Reports</span>
+    <!-- stats.totalEscalatedReports -->
+    <h3>{{ 0 | number}}</h3>
+    <span translate>Groups</span>
     <h3>{{stats.totalIncidents | number}}</h3>
-    <span translate>Escalated Incidents</span>
+    <span translate>Escalated Groups</span>
     <h3>{{stats.totalEscalatedIncidents | number}}</h3>
   </div>
 </div>

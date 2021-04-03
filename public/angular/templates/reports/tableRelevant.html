@@ -1,0 +1,144 @@
+<div class="table-responsive-md pt-3">
+    <table class="table-sm" aggie-table ng-show="pagination.total > 0">
+        <thead>
+        <tr>
+            <th scope="col" ng-show="currentUser.can('edit data')"></th>
+            <th scope="col" translate>Source Info</th>
+            <th scope="col" translate>Thumbnail</th>
+            <th scope="col" translate>Content</th>
+            <th scope="col" translate>Tags</th>
+            <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th><!-- No need to show incident on incident detail page -->
+        </tr>
+        </thead>
+        <tbody class="table-bordered">
+        <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
+            ng-class="{ item: true, 'escalated': r.escalated, 'tr--unread': r.veracity == 'Unconfirmed', 'tr--read': r.veracity == 'Confirmed True' || r.veracity == 'Confirmed False' }" ng-mouseover="reportHoverIn(r)" ng-mouseleave="reportHoverOut(r)">
+            <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
+                <div class="td__checkbox">
+                    <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
+                </div>
+            </td>
+            <td class="td__sourceInfo">
+                <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
+                <span ng-show="r.veracity == 'Confirmed True'" class="text-primary">
+                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+                </span>
+                <span ng-show="r.veracity == 'Confirmed False'" class="text-muted">
+                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+                </span>
+                <span ng-show="r.veracity == 'Unconfirmed'" class='text-muted'>
+                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+                </span>
+                <p ng-if="r.author" class="sourceInfo__author">
+                    <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
+                    {{ r.author }}
+                </p>
+                <p>
+            <span ng-repeat="s in r._sources">
+            {{ sourcesById[s].nickname || '[Deleted]' }}
+            </span>
+                    <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
+                    <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
+                </p>
+                <p><a ng-href="{{r.url}}" target="_blank">Link <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
+                <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
+                <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
+                <!--<p class="created"><span>{{ r | delay }}</span></p>-->
+                <!--<div class="icon-left" ng-class="sourceClass(r)"></div>-->
+            </td>
+            <td class="thumbnail-image">
+                <div ng-repeat="media in r.metadata.mediaUrl">
+                    <a ng-if="media.type==='photo'" href="/reports/{{r._id}}" target="_blank">
+                        <img alt="{{'Thumbnail from report media'}}" class="img-fluid img-thumbnail" ng-src="{{media.url}}" >
+                    </a>
+                    <div ng-if="r.commentTo">
+                        <a ng-if="media.type==='photo'" ng-href="{{r.url}}" target="_blank">
+                            <img alt="Comment Image Thumbnail" class="img-fluid img-thumbnail" ng-src="{{media.mediaUrl}}" >
+                        </a>
+                        <a ng-if="media.type=='video'" ng-href="{{r.url}}" target="_blank">
+                            <i class="fa fa-file-video-o fa-3x" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </td>
+            <td class="td__content" ng-class="{ strong: r.veracity == 'Unconfirmed' }">
+                <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
+                <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+                    <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
+                    <p class="content__shared" ng-if="r.metadata.description">
+                        {{r.metadata.description | stripHtml}}
+                    </p>
+                </a>
+                <a href="/reports/{{r.commentTo}}#{{r._id}}" ng-if="r.commentTo">
+                    <ul class="fa-ul">
+                        <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
+                    </ul>
+                </a>
+              <form>
+                <div class="form-group">
+                  <label><a class="label__button" ng-click="editNotes(r)">Edit Notes</a></label>
+                  <br>
+                  <textarea ng-show="r.notes && !r.editingNotes" class="form-control" rows="3" ng-model="r.notes" disabled></textarea>
+                  <textarea ng-show="r.editingNotes" class="form-control" rows="3" ng-blur="saveNotes(r)" ng-model="r.notes"></textarea>
+                </div>
+
+              </form>
+            </td>
+            <td class="td__tags tag">
+          <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
+            {{tagsToString(r.tags) + ", "}}
+          </span>
+                <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
+                    <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+                </a>
+                <tags class="tagify readonly" tabindex="-1">
+                    <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                         class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+                         ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                        <x title="" ng-click="removeTagFromReport(r, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+                        <div>
+                            <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                        </div>
+                    </tag>
+                </tags>
+            </td>
+            <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
+              <div ng-show="r.hoverOver" class="td__escalate shadow rounded-lg">
+                    <div class="btn-group" role="group" aria-label="First group">
+                      <button type="button" class="btn btn-sm btn-light leftmost__confirm" ng-click="setVeracity(r, 'Confirmed True')">
+                        <span class="confirm__span">Confirm True
+                          <i class="fa fa-check-circle text-primary"></i>
+                        </span>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-light" ng-click="setVeracity(r, 'Confirmed False')">
+                        <span class="confirm__span">Confirm False
+                          <i class="fa fa-times-circle"></i>
+                        </span>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-light" ng-click="setVeracity(r, 'Unconfirmed')">
+                        <span class="confirm__span">Unconfirm
+                        <i class="fa fa-circle-o text-secondary"></i>
+                        </span>
+                      </button>
+                      <button ng-click="currentUser.can('edit data') && toggleEscalated(r)" type="button" class="btn btn-sm btn-light escalate__icon">
+                        <i class="fa fa-2x" ng-class="r.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+                        </i>
+                      </button>
+                    </div>
+                </div>
+              <div class="text-center incident__addLink">
+            <span>
+              <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
+                <strong ng-if="r._incident && incidentsById[r._incident]">
+                  {{ incidentsById[r._incident].title | strLimit: 40 }}
+                </strong>
+                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Edit</strong>
+              </a>
+            </span>
+                    <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
