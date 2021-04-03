@@ -34,8 +34,8 @@ server {
 
   index index.html;
 
-  # nginx to serve static files rather than Aggie
-  location ~ ^/(js|css|images|templates|translations)/ {
+  # nginx to serve static files (except CSS) rather than Aggie
+  location ~ ^/(js|images|templates|translations)/ {
     sendfile on;
     # Cache for 10 minutes, so things update quickly after aggie is deployed.
     expires 600;
