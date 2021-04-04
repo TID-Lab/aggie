@@ -247,22 +247,13 @@ angular.module('Aggie')
 
     $stateProvider.state("analysis", {
       url: "/analysis",
-      templateUrl: "/templates/analysis.html",
+      templateUrl: "/templates/analysis/index.html",
       controller: "AnalysisController",
       resolve: {
-        threshold: ['Settings', function(Settings) {
-          return Settings.settings.get({ item: "hateSpeechThreshold" }).$promise
-        }],
         data: [
           "Visualization",
           function (Visualization) {
             return Visualization.get().$promise;
-          },
-        ],
-        smtcTags: [
-          "SMTCTag",
-          function (SMTCTag) {
-            return SMTCTag.query().$promise;
           },
         ],
       },
