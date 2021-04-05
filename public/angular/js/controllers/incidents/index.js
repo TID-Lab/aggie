@@ -34,6 +34,12 @@ angular.module('Aggie')
     $scope.visibleSmtcTags = smtcTags;
     $scope.users = users;
 
+    $scope.sortByProp = 'idnum';
+
+    $scope.setSortByProp = function(prop) {
+      $scope.sortByProp = prop;
+    }
+
     $rootScope.$watch('currentUser', function(user) {
       if (user) {
         // Add a 'me' option for 'assigned to' filter.
