@@ -16,6 +16,9 @@
     <h3>{{stats.totalIncidents | number}}</h3>
     <span translate>Escalated Groups</span>
     <h3>{{stats.totalEscalatedIncidents | number}}</h3>
+    <div class="stats-timestamp">
+      <i class="fa fa-clock-o text-dark-gray" aria-hidden="true"></i>
+      <span class="text-dark-gray" translate>Updated {{stats.timestamp.toString() | date:'shortTime'}}</span>
+    </div>
   </div>
 </div>
-

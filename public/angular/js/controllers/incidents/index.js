@@ -18,9 +18,10 @@ angular.module('Aggie')
   'Queue',
   'paginationOptions',
   'Tags',
+  'StatsCache',
   function($state, $scope, $rootScope, $stateParams, flash, incidents, users, smtcTags,
            incidentStatusOptions, veracityOptions, escalatedOptions, publicOptions,
-           Incident, Socket, Queue, paginationOptions, Tags) {
+           Incident, Socket, Queue, paginationOptions, Tags, StatsCache) {
     $scope.searchParams = $stateParams;
     $scope.incidents = incidents.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -67,6 +68,7 @@ angular.module('Aggie')
         Socket.emit('incidentQuery', searchParams());
         Socket.on('incidents', $scope.handleNewIncidents);
       }
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
       Socket.join('tags');
@@ -159,6 +161,7 @@ angular.module('Aggie')
     };
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 

@@ -23,10 +23,11 @@ angular.module('Aggie')
     'paginationOptions',
     '$translate',
     'Settings',
+    'StatsCache',
     function($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
              mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
              Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
-             $translate, Settings) {
+             $translate, Settings, StatsCache) {
 
       $scope.smtcTags = smtcTags;
       $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
@@ -114,6 +115,7 @@ angular.module('Aggie')
         if ($scope.currentPath === 'relevant_reports' || $scope.currentPath === 'relevant_reports_batch') {
           Socket.join('reports');
           Socket.on('report:updated', $scope.updateReport.bind($scope));
+          $scope.stats = StatsCache.get('stats');
           Socket.on('stats', updateStats);
           Socket.join('stats');
           Socket.join('tags');
@@ -134,6 +136,7 @@ angular.module('Aggie')
       };
 
       var updateStats = function(stats) {
+        StatsCache.put('stats', stats);
         $scope.stats = stats;
       };
 

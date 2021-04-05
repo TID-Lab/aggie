@@ -4,6 +4,7 @@ $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 $light-gray: #f5f6f7;
 $gray: #e9ebee;
+$dark-gray: #555;
 $input-gray: #ccd0d5;
 $input-bg-gray: #f2f3f5;
 $blue: #5bc0de;
@@ -67,6 +68,10 @@ html {
 
 .text-gray {
   color: $gray;
+}
+
+.text-dark-gray {
+  color: $dark-gray;
 }
 
 .bg-gray {
@@ -254,4 +259,9 @@ footer {
 .analysis-table {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.stats-timestamp {
+  display: block;
+  margin-top: 30px;
 }
