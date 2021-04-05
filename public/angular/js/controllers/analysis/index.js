@@ -281,7 +281,12 @@ angular
           var timeline_data = $scope.timeData;
           for (var i = 0; i < timeline_data.length; i++) {
             var time = timeline_data[i];
-            timeline_data[i].datef = new Date((time.year) + '-' + (time.month) + '-' + (time.day) + 'T' + (time.hour) + ':00:00');
+            var year = time.year;
+            var month = (time.month < 10 ? '0' + time.month : time.month);
+            var day = (time.day < 10 ? '0' + time.day : time.day);
+            var hour = (time.hour < 10 ? '0' + time.hour : time.hour)
+            var date = year + '-' + month + '-' + day + 'T' + hour + ':00:00';
+            timeline_data[i].datef = new Date(date);
           }
 
           var date_range = d3.extent(timeline_data, function (d) {
