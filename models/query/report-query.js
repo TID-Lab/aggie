@@ -75,14 +75,22 @@ ReportQuery.prototype.toMongooseFilter = function() {
     this.keywords = this.keywords.replace(/@&+@/g, " AND ")
     // Replace 1 or more | with just OR
     this.keywords = this.keywords.replace(/@\|+@/g, " OR ")
+
+    // Re-add space around operators
+    this.keywords = this.keywords.replace(/@NOT@/g, " NOT ");
+    // Replace 1 or more & with just AND
+    this.keywords = this.keywords.replace(/@AND@/g, " AND ")
+    // Replace 1 or more | with just OR
+    this.keywords = this.keywords.replace(/@OR@/g, " OR ")
+
     // Replace " with @, for perfect match
     this.keywords = this.keywords.replace(/\"/g, "@")
     this.keywords = this.keywords.replace(/'/g, "\'")
 
-      console.log(this.keywords.toString())
+    console.log(this.keywords.toString())
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
       let exp = new Expression(this.keywords.toString());
-      console.log(exp)
+    console.log(exp)
 
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
