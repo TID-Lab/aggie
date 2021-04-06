@@ -38,8 +38,6 @@ angular.module('Aggie')
     $scope.reverseSortBy = false;
 
     $scope.setSortByProp = function(prop) {
-      console.log($scope.sortByProp)
-      console.log(prop)
       if ($scope.sortByProp == prop) {
         $scope.reverseSortBy = !$scope.reverseSortBy;
         $scope.sortByProp = prop;

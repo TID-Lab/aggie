@@ -16,13 +16,31 @@
         <th class='text-info th__label' ng-show="sortByProp =='title'" scope="col" ng-click="setSortByProp('title')" translate>
           <span>Title</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
         </th>
-        <th scope="col" translate>
-          Location
+        <th class='th__label' ng-hide="sortByProp =='locationName'" scope="col" ng-click="setSortByProp('locationName')" translate>
+          <span>Location</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='locationName'" scope="col" ng-click="setSortByProp('locationName')" translate>
+          <span>Location</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
         </th>
         <th ng-hide='modal' scope="col" translate>Notes</th>
-        <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
-        <th scope="col" translate>Creation Info</th>
-        <th scope="col" translate>Tags</th>
+        <th class='th__label' ng-hide="sortByProp =='assignedTo'" scope="col" ng-click="setSortByProp('assignedTo')" translate>
+          <span>Assigned To</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='assignedTo'" scope="col" ng-click="setSortByProp('assignedTo')" translate>
+          <span>Assigned To</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='storedAt'" scope="col" ng-click="setSortByProp('storedAt')" translate>
+          <span>Creation Info</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='storedAt'" scope="col" ng-click="setSortByProp('storedAt')" translate>
+          <span>Creation Info</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='smtcTags'" scope="col" ng-click="setSortByProp('smtcTags')" translate>
+          <span>Tags</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='smtcTags'" scope="col" ng-click="setSortByProp('smtcTags')" translate>
+          <span>Tags</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
         <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
         <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
       </tr>
