@@ -101,7 +101,6 @@ ReportQuery.prototype.toMongooseFilter = function() {
     }
   }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };
-  console.log(filter);
   return filter;
 };
 
