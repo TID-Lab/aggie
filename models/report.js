@@ -201,10 +201,9 @@ Report.queryReports = function(query, page, callback) {
 
   if (query.escalated === 'escalated') filter.escalated = true;
   if (query.escalated === 'unescalated') filter.escalated = false;
-  if (query.veracity === 'confirmed true') filter.veracity = true;
-  if (query.veracity === 'confirmed false') filter.veracity = false;
-  if (query.veracity === 'unconfirmed') filter.veracity = null;
-  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+  if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
+  if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
+  if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
 
   Report.findSortedPage(filter, page, callback);
 };

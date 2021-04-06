@@ -34,6 +34,27 @@ angular.module('Aggie')
     $scope.visibleSmtcTags = smtcTags;
     $scope.users = users;
 
+    $scope.sortByProp = 'idnum';
+    $scope.reverseSortBy = false;
+
+    $scope.setSortByProp = function(prop) {
+      if ($scope.sortByProp == prop) {
+        $scope.reverseSortBy = !$scope.reverseSortBy;
+        $scope.sortByProp = prop;
+      } else {
+        $scope.sortByProp = prop;
+        $scope.reverseSortBy = false;
+      }
+    }
+
+    $scope.checkWhichSortByProp = function(prop) {
+      if ($scope.sortByProp == prop) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     $rootScope.$watch('currentUser', function(user) {
       if (user) {
         // Add a 'me' option for 'assigned to' filter.
@@ -59,6 +80,8 @@ angular.module('Aggie')
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.sortByProp = 'idnum';
+      $scope.reverseSortBy = false;
 
       var visibleIncidents = paginate($scope.incidents);
       $scope.visibleIncidents.addMany(visibleIncidents);
