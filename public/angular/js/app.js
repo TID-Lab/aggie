@@ -101,6 +101,7 @@ require('./services/tags');
 require('./services/smtcTag');
 require('./services/getCTList');
 require('./services/visualization');
+require('./services/stats');
 
 // Controllers
 require('./controllers/application');

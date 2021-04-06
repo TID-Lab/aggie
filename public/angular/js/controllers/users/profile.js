@@ -9,9 +9,11 @@ angular.module('Aggie')
   'users',
   'User',
   'Socket',
-  function($scope, $rootScope, stateParams, users, User, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, stateParams, users, User, Socket, StatsCache) {
     $scope.users = users;
     var init = function() {
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
       if ($rootScope.currentUser) {
@@ -23,6 +25,7 @@ angular.module('Aggie')
 
     }
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
     $rootScope.$watch('currentUser', init);

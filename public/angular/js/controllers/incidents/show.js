@@ -20,7 +20,8 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  'StatsCache',
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket, StatsCache) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -48,6 +49,7 @@ angular.module('Aggie')
     };
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 
@@ -56,6 +58,7 @@ angular.module('Aggie')
       $scope.visibleReports.addMany(visibleReports);
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
       // if (!$scope.currentUser) {
