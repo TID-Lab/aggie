@@ -189,6 +189,15 @@ angular.module('Aggie')
           $scope.newReports.addMany(uniqueReports);
         };
 
+        $scope.editNotes = function(report) {
+          report.editingNotes = true;
+        }
+
+        $scope.saveNotes = function(report) {
+          report.editingNotes = false;
+          $scope.saveReport(report);
+        }
+
         $scope.unlinkIncident = function() {
           $scope.report._incident = '';
           Report.update({ id: $scope.report._id }, $scope.report);

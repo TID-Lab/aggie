@@ -21,12 +21,14 @@ angular.module('Aggie')
     'Queue',
     'Tags',
     'paginationOptions',
+    'escalatedOptions',
+    'veracityOptions',
     '$translate',
     'Settings',
     'StatsCache',
     function($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
              mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
-             Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
+             Report, Incident, Batch, Socket, Queue, Tags, paginationOptions, escalatedOptions, veracityOptions,
              $translate, Settings, StatsCache) {
 
       $scope.smtcTags = smtcTags;
@@ -35,6 +37,8 @@ angular.module('Aggie')
       });
       $scope.visibleSmtcTags = smtcTags;
       $scope.searchParams = $stateParams;
+      $scope.escalatedOptions = escalatedOptions;
+      $scope.veracityOptions = veracityOptions;
       $scope.reports = reports.results;
       $scope.reportsById = {};
       $scope.sources = sources;
@@ -387,7 +391,9 @@ angular.module('Aggie')
           $scope.searchParams.author === null &&
           $scope.searchParams.tags === null &&
           $scope.searchParams.list === null &&
-          $scope.searchParams.keywords === null;
+          $scope.searchParams.keywords === null &&
+          $scope.searchParams.escalated === null &&
+          $scope.searchParams.veracity === null;
       };
 
       $scope.clearFilters = function() {
@@ -401,7 +407,9 @@ angular.module('Aggie')
           author: null,
           tags: null,
           list: null,
-          keywords: null
+          keywords: null,
+          escalated: null,
+          veracity: null,
         });
       };
 

@@ -400,6 +400,7 @@
   "Read": "Read",
   "Unread": "Unread",
   "Escalated": "Escalated",
+  "Unescalated": "Unescalated",
   "Total Reports": "Total Reports",
   "Reports/min": "Reports/min",
   "Escalated Incidents": "Escalated Incidents",

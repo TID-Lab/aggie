@@ -16,17 +16,17 @@ function ReportQuery(options) {
   }
 
   this._parseIncidentId(options.incidentId);
-
+  this.tags = options.tags;
   this.after = options.after;
   this.before = options.before;
   this.sourceId = options.sourceId;
   this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
-  this.tags = options.tags;
   this.list = options.list;
   this.commentTo = options.commentTo;
   this.escalated = options.escalated;
+  this.veracity = options.veracity;
   this.notes = options.notes;
 }
 
@@ -41,7 +41,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'notes']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'notes', 'veracity']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
@@ -52,6 +52,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
     read: this.read,
     commentTo: this.commentTo,
     escalated: this.escalated,
+    veracity: this.veracity,
     notes: this.notes
   }
   if (this.escalated === 'unescalated') filter.escalated= false;
@@ -90,9 +91,17 @@ ReportQuery.prototype.toMongooseFilter = function() {
       filter.$and = [res]
     }
 
-  if (this.tags)      filter.smtcTags = { $all: this.tags }
-  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
-  console.log(filter)
+  if (this.tags) {
+    if (this.tags == 'any') {
+      filter.smtcTags = { $type: "objectId" };
+    } else if (this.tags == 'none') {
+      filter.smtcTags = { $not: { $type: 'objectId' }};
+    } else {
+      filter.smtcTags = { $all: this.tags };
+    }
+  }
+  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };
+  console.log(filter);
   return filter;
 };
 
@@ -116,5 +125,6 @@ ReportQuery.prototype._parseIncidentId = function(incidentId) {
     this.incidentId = incidentId;
   }
 };
+
 
 module.exports = ReportQuery;
