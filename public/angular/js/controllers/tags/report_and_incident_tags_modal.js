@@ -41,6 +41,7 @@ angular.module('Aggie')
           return { _id: tag._id }
         });
         report.smtcTags = smtcTagIds;
+        report.read = true;
         Report.update({ id: report._id }, report);
       });
     };

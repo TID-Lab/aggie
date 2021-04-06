@@ -475,9 +475,6 @@ angular.module('Aggie')
        */
       $scope.toggleEscalated = function(report) {
         report.escalated = !report.escalated;
-        if (report.escalated) {
-          report.read = report.escalated;
-        }
         $scope.saveReport(report);
       };
 
