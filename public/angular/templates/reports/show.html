@@ -68,7 +68,7 @@
                           {{ tag + ', '}}
                         </span>
                         <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-                          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
+                          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
                         </a>
                         <tags class="tagify readonly" tabindex="-1">
                           <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"

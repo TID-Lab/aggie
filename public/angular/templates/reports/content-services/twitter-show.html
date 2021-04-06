@@ -62,7 +62,7 @@
           <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
         </tr>
         <tr>
-          <th scope="row" class="detail-key" translate>Linked Incident</th>
+          <th scope="row" class="detail-key" translate>Group</th>
           <td colspan="10" class="detail-value align-middle">
             <div class="text-center">
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
@@ -83,7 +83,7 @@
                             {{ tag + ', '}}
                           </span>
             <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
+              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
             </a>
 
             <tags class="tagify readonly" tabindex="-1">
@@ -94,6 +94,19 @@
                 </div>
               </tag>
             </tags>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" class="detail-key" translate>Notes</th>
+          <td colspan="10" class="detail-value">
+            <form>
+            <div class="form-group">
+              <label><a class="label__button" ng-click="editNotes(report)">Edit Notes</a></label>
+              <br>
+              <textarea ng-show="report.notes && !report.editingNotes" class="form-control" rows="3" ng-model="report.notes" disabled></textarea>
+              <textarea ng-show="report.editingNotes" class="form-control" rows="3" ng-blur="saveNotes(report)" ng-model="report.notes"></textarea>
+            </div>
+            </form>
           </td>
         </tr>
         </tbody>
