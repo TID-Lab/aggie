@@ -12,7 +12,7 @@
         </thead>
         <tbody class="table-bordered">
         <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
-            ng-class="{ item: true, 'escalated': r.escalated, 'tr--unread': r.veracity == 'Unconfirmed', 'tr--read': r.veracity == 'Confirmed True' || r.veracity == 'Confirmed False' }" ng-mouseover="reportHoverIn(r)" ng-mouseleave="reportHoverOut(r)">
+            ng-class="{ item: true, 'escalated': r.escalated, 'tr--unread': r.veracity == 'Unconfirmed', 'tr--read': r.veracity == 'Confirmed True' || r.veracity == 'Confirmed False' }">
             <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
                 <div class="td__checkbox">
                     <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
@@ -63,7 +63,7 @@
             </td>
             <td class="td__content" ng-class="{ strong: r.veracity == 'Unconfirmed' }">
                 <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
-                <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+                <a ng-if="!r.commentTo" href="/reports/{{r._id}}" target="_blank">
                     <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
                     <p class="content__shared" ng-if="r.metadata.description">
                         {{r.metadata.description | stripHtml}}
@@ -85,9 +85,9 @@
               </form>
             </td>
             <td class="td__tags tag">
-          <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
-            {{tagsToString(r.tags) + ", "}}
-          </span>
+              <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
+                {{tagsToString(r.tags) + ", "}}
+              </span>
                 <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
                     <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
                 </a>
@@ -102,7 +102,7 @@
                     </tag>
                 </tags>
             </td>
-            <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
+            <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'" ng-mouseover="reportHoverIn(r)" ng-mouseleave="reportHoverOut(r)">
               <div ng-show="r.hoverOver" class="td__escalate shadow rounded-lg">
                     <div class="btn-group" role="group" aria-label="First group">
                       <button type="button" class="btn btn-sm btn-light leftmost__confirm" ng-click="setVeracity(r, 'Confirmed True')">
