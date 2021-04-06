@@ -63,13 +63,13 @@
         </tr>
         <tr>
           <th scope="row" class="detail-key" translate>Group</th>
-          <td colspan="10" class="detail-value align-middle">
-            <div class="text-center">
+          <td colspan="10" class="detail-value">
+            <div>
               <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
                       <span ng-if="report._incident && incidentsById[report._incident]">
                         {{ incidentsById[report._incident].title }}
                       </span>
-                <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Add</strong>
+                <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Edit</strong>
               </a>
               <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
             </div>
