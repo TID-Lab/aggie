@@ -251,9 +251,13 @@ footer {
 .analysis-svg {
   width: 100%;
 
-  border: 2px solid #E9E9E9;
+  border: 2px solid #b6b3b3;
   box-sizing: border-box;
   margin-bottom: 10px;
+  background-color: rgb(249, 250, 248);
+
+  font-family: "Lato",
+    "Helvetica Neue";
 }
 
 .analysis-table {
@@ -261,7 +265,20 @@ footer {
   padding-right: 10px;
 }
 
+.axis {
+  color: #838383;
+}
+
 .stats-timestamp {
   display: block;
   margin-top: 30px;
+}
+
+#desc-text {
+  fill: #424ab9;
+  font-size: 1.2em;
+}
+
+.axis-label {
+  fill: #838383;
 }
