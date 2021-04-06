@@ -53,7 +53,7 @@
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
           <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
-          <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+          <a ng-if="!r.commentTo" href="/reports/{{r._id}}" target="_blank">
             <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
             <p class="content__shared" ng-if="r.metadata.description">
               {{r.metadata.description | stripHtml}}

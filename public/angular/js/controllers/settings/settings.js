@@ -13,7 +13,8 @@ angular.module('Aggie')
   'apiSettingsOptions',
   'widgetSettingsOptions',
   'Socket',
-  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, apiSettingsOptions, widgetSettingsOptions, Socket, StatsCache) {
 
     $scope.setting = {};
 
@@ -47,11 +48,13 @@ angular.module('Aggie')
 
     var init = function() {
       $scope.checkSource();
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     }
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 

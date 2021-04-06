@@ -60,7 +60,6 @@ var OPTREES = {
 
 function buildCNF(tree) {
     var op = tree[0];
-    console.log(op)
     if (op == 'OR') {
         return new Term(Term.OR, buildCNF(tree[1]), buildCNF(tree[2]))
     }
@@ -77,7 +76,6 @@ function buildCNF(tree) {
     }
 }
 function evalTree(tree) {
-    // console.log(tree)
     var op = tree[0];
     if (op == 'OR') {
         // return "(" + evalTree(tree[1]) + "|" +  evalTree(tree[2]) + ")";
@@ -142,7 +140,6 @@ Expression.prototype = {
     },
     generate_seach_query: function() {
         let cnfTerm = buildCNF(this.tree).toCNF().toString()
-        console.log(cnfTerm)
         this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
         return evalTree(this.tree);
     }

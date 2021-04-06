@@ -29,10 +29,6 @@ angular.module('Aggie')
       $scope.unreadErrorCount = response.unreadErrorCount;
     };
 
-    var updateStats = function(stats) {
-      $scope.stats = stats;
-    };
-
     $scope.logout = function() {
       AuthService.logout(function(err) {
         if (!err) {

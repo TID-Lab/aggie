@@ -21,15 +21,13 @@
     <p class="clear">Tagged Reports</p>
   </li>
   <li class="list-inline-item" aria-labelledby="numUnreadReports">
-    <!--TODO: tagged Reports-->
-    <h3>{{5 | number}}</h3>
+    <h3>{{stats.totalReportsEscalated | number}}</h3>
   </li>
   <li class="list-inline-item" id="numEscalatedReports" translate>
     <p class="clear">Escalated Reports</p>
   </li>
   <li class="list-inline-item" aria-labelledby="numUnreadReports">
-    <!--TODO: escalated Reports-->
-    <h3>{{5 | number}}</h3>
+    <h3>{{stats.totalReportsTagged | number}}</h3>
   </li>
   <li class="list-inline-item" id="numIncidents"translate>
     <p class="clear">Groups</p>
@@ -44,4 +42,10 @@
     <h3>{{stats.totalEscalatedIncidents | number}}</h3>
   </li>
 </ul>
+<div class="stats-timestamp">
+  <small class="text-dark-gray" translate>Last Updated</small>
+  <br/>
+  <i class="fa fa-clock-o text-dark-gray" aria-hidden="true"></i>
+  <small>{{stats.timestamp.toString() | date:'shortTime'}}</small>
+</div>
 

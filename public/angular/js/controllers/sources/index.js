@@ -8,14 +8,17 @@ angular.module('Aggie')
   'Source',
   'Tags',
   'Socket',
-  function($scope, $rootScope, flash, sources, Source, Tags, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, flash, sources, Source, Tags, Socket, StatsCache) {
     $scope.sources = sources;
     var init = function() {
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     };
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 

@@ -209,6 +209,22 @@
                 <div title="Selection Actions" class="card-footer card__footer" aria-label="Bottom Selection Actions Toolbar" role="toolbar">
                     <div class="btn-toolbar justify-content-between" aria-label="Bottom Toolbar with selection actions" ng-show="currentUser.can('edit data')">
                         <div aria-label="Read/Unread Buttons/Selection">
+                            <!-- Check all button -->
+                            <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Confirmed True')" translate>Confirm True</button>
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Confirmed False')" translate>Confirm False </button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="setSelectedVeracityStatus('Unconfirmed')" translate>Unconfirm</button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Read/Unread Buttons">
+                                <button title="Mark as Read" type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedEscalated()" translate>Escalate</button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
+                                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
+                                    Add to Group
+                                </button>
+                            </div>
                         </div>
                         <nav aria-label="Bottom report list page navigation">
                             <ul class="list-inline mb-0">
