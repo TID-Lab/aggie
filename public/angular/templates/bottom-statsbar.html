@@ -44,4 +44,10 @@
     <h3>{{stats.totalEscalatedIncidents | number}}</h3>
   </li>
 </ul>
+<div class="stats-timestamp">
+  <small class="text-dark-gray" translate>Last Updated</small>
+  <br/>
+  <i class="fa fa-clock-o text-dark-gray" aria-hidden="true"></i>
+  <small>{{stats.timestamp.toString() | date:'shortTime'}}</small>
+</div>
 
