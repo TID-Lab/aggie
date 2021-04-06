@@ -131,6 +131,7 @@ angular.module('Aggie')
     };
 
     $scope.saveReport = function(report) {
+      report.read = true;
       Report.save({ id: report._id }, report, function() {
       }, function() {
         flash.setAlertNow("Sorry, but that report couldn't be saved.");

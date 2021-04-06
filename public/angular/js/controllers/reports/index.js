@@ -43,6 +43,7 @@ angular.module('Aggie')
     $scope.incidents = incidents.results;
     $scope.incidentsById = {};
     $scope.visibleReports = new Queue(paginationOptions.perPage);
+    $scope.batchSortBy = 'authoredAt'
     $scope.newReports = new Queue(paginationOptions.perPage);
     $scope.mediaOptions = mediaOptions;
     $scope.statusOptions = statusOptions;
@@ -131,8 +132,8 @@ angular.module('Aggie')
       updateTagSearchNames();
       setDetectHateSpeech();
       setHateSpeechThreshold();
-
       setSortingScore();
+      if ($scope.hateSpeechThreshold) $scope.batchSortBy = 'hateSpeechScore';
     };
 
     var updateStats = function(stats) {
@@ -482,26 +483,6 @@ angular.module('Aggie')
         return report.selected;
       });
     };
-
-    /**
-     * Takes in a boolean "flagged" value and sets the flagged field on selected reports to that value.
-     * @param {boolean} flagged
-     */
-    $scope.setSelectedFlaggedStatus = function(flagged) {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      var ids = getIds(toggleFlagged(items, flagged)); // Changes the Front-end Values
-      Report.toggleFlagged({ ids: ids, flagged: flagged }); // Changes the Back-end Values
-    };
-
-    $scope.toggleSelectedFlagged = function() {
-      var items = $scope.filterSelected($scope.reports);
-      if (!items.length) return; // If empty, return
-      if (items.findIndex(function(item) {
-        return !item.flagged;
-      }) !== -1) $scope.setSelectedFlaggedStatus(true);
-      else $scope.setSelectedFlaggedStatus(false);
-    }
 
     /**
      * Toggles smtcTag to selected reports. When all selected reports have the smtcTag, this function removes the tag
