@@ -77,15 +77,13 @@ ReportQuery.prototype.toMongooseFilter = function() {
     this.keywords = this.keywords.replace(/@\|+@/g, " OR ")
 
     // Re-add space around operators
-    this.keywords = this.keywords.replace(/@NOT@/g, " NOT ");
-    // Replace 1 or more & with just AND
-    this.keywords = this.keywords.replace(/@AND@/g, " AND ")
-    // Replace 1 or more | with just OR
-    this.keywords = this.keywords.replace(/@OR@/g, " OR ")
-
-    // Replace " with @, for perfect match
+    this.keywords = this.keywords.replace(/@*NOT@*/g, " NOT ");
+    this.keywords = this.keywords.replace(/@*AND@*/g, " AND ")
+    this.keywords = this.keywords.replace(/@*OR@*/g, " OR ")
+    this.keywords = this.keywords.replace(/\s+/gi, " ")
+    // Replace " with whitespace, for perfect match
     this.keywords = this.keywords.replace(/\"/g, "@")
-    this.keywords = this.keywords.replace(/'/g, "\'")
+    this.keywords =this. keywords.replace(/'/g, "\'")
 
     console.log(this.keywords.toString())
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
