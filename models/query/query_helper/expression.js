@@ -125,7 +125,7 @@ function collectLeaves(tree, leaves, notnot) {
 // --------------- public interface -------------------
 
 function Expression(query) {
-    if (!query.includes("@AND@") && !query.includes("@OR@") && !query.includes("NOT")) {
+    if (!query.includes(" AND ") && !query.includes(" OR ") && !query.includes("NOT")) {
         this.tree = query
     }
     else {

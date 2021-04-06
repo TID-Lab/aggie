@@ -16,10 +16,11 @@ keywords = keywords.replace(/@AND@/g, " AND ")
 // Replace 1 or more | with just OR
 keywords = keywords.replace(/@OR@/g, " OR ")
 
-
 // Replace " with whitespace, for perfect match
 keywords = keywords.replace(/\"/g, "@")
 keywords = keywords.replace(/'/g, "\'")
+
+console.log(keywords)
 
 exp = new Expression(keywords)
 s = exp.generate_seach_query()
