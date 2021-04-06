@@ -4,19 +4,34 @@
     <thead>
       <tr>
         <th ng-hide="modal || !currentUser.can('edit data')"></th>
-        <th scope="col" ng-click="setSortByProp('idnum')" translate>{{ sortByProp == "idnum" ? "ID# &#x25B2;" : "ID#" }}</th>
-        <th scope="col" ng-click="setSortByProp('title')" translate>
-          {{ sortByProp == "title" ? "Title &#x25B2;" : "Title" }}</th>
+        <th class='th__label' ng-hide="sortByProp =='idnum'" scope="col" ng-click="setSortByProp('idnum')" translate>
+          <span>ID #</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='idnum'" scope="col" ng-click="setSortByProp('idnum')" translate>
+          <span>ID #</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='title'" scope="col" ng-click="setSortByProp('title')" translate>
+          <span>Title</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='title'" scope="col" ng-click="setSortByProp('title')" translate>
+          <span>Title</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
         <th scope="col" ng-click="setSortByProp('locationName')" translate>
           {{ sortByProp == "locationName" ? "Location &#x25B2;" : "Location" }}</th>
         <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
         <th scope="col" ng-show="currentUser.can('view other users')" translate>Created By</th>
         <th scope="col" ng-click="setSortByProp('status')" translate>
-          {{ sortByProp == "status" ? "Status &#x25B2;" : "Status" }}</th>
-        <th scope="col" ng-click="setSortByProp('veracity')" translate>
-          {{ sortByProp == "veracity" ? "Veracity &#x25B2;" : "Veracity" }}</th>
-        <th scope="col" ng-click="setSortByProp('escalated')" translate>
-          {{ sortByProp == "escalated" ? "Escalated? &#x25B2;" : "Escalated?" }}</th>
+          <span>{{ sortByProp == "status" ? "Status &#x25B2;" : "Status" }}</span>
+        </th>
+        <th ng-hide="sortByProp =='veracity'" scope="col" ng-click="setSortByProp('veracity')" translate>
+          <span>Veracity</span>
+        </th>
+        <th class='text-info' ng-show="sortByProp =='veracity'" scope="col" ng-click="setSortByProp('veracity')" translate>
+          <span>Veracity</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th ng-hide="pagination.total > 0" scope="col" ng-click="setSortByProp('escalated')" translate>
+          {{ sortByProp == "escalated" ? "Escalated? &#x25B2;" : "Escalated?" }}
+        </th>
         <th scope="col" translate>Tags</th>
         <th scope="col" translate> Modified Date</th>
         <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
@@ -24,7 +39,7 @@
       </tr>
     </thead>
     <tbody class="table-bordered">
-    <tr ng-repeat="i in incidents | orderBy:sortByProp" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
+    <tr ng-repeat="i in incidents | orderBy: sortByProp: reverseSortBy" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
       <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
         <div class="td__checkbox">
           <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>

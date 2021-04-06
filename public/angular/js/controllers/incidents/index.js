@@ -35,9 +35,26 @@ angular.module('Aggie')
     $scope.users = users;
 
     $scope.sortByProp = 'idnum';
+    $scope.reverseSortBy = false;
 
     $scope.setSortByProp = function(prop) {
-      $scope.sortByProp = prop;
+      console.log($scope.sortByProp)
+      console.log(prop)
+      if ($scope.sortByProp == prop) {
+        $scope.reverseSortBy = !$scope.reverseSortBy;
+        $scope.sortByProp = prop;
+      } else {
+        $scope.sortByProp = prop;
+        $scope.reverseSortBy = false;
+      }
+    }
+
+    $scope.checkWhichSortByProp = function(prop) {
+      if ($scope.sortByProp == prop) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     $rootScope.$watch('currentUser', function(user) {
@@ -65,6 +82,8 @@ angular.module('Aggie')
     var init = function() {
       $scope.incidentsById = $scope.incidents.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.sortByProp = 'idnum';
+      $scope.reverseSortBy = false;
 
       var visibleIncidents = paginate($scope.incidents);
       $scope.visibleIncidents.addMany(visibleIncidents);
