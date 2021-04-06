@@ -17,6 +17,10 @@ angular
         $scope.timeData = data.time;
       }
 
+      $scope.updateTimestamp = function() {
+        $scope.lastUpdated = (new Date()).toString();
+      }
+
       $scope.createTagChart = function () {
         var padding = {
           l: 40,
@@ -483,6 +487,7 @@ angular
       }
 
       var init = function () {
+        $scope.updateTimestamp();
         $scope.loadData();
         $scope.createTagChart();
         $scope.createTimelineChart();

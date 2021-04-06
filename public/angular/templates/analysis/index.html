@@ -11,13 +11,14 @@
           <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions"
             ng-show="currentUser.can('edit data')">
             <h4>Analysis</h4>
-            <!-- <div class="btn-group mr-3" role="group" aria-label="Refresh Button">
-              <button type="button" class="btn btn-default" ng-click="refresh()" translate>
-                Refresh
+            <div class="btn-group mr-3" role="group" aria-label="Refresh Button">
+              <button type="button" class="btn btn-primary-outline" translate>
+                Last updated as of: {{lastUpdated}}
               </button>
-            </div> -->
+            </div>
           </div>
         </div>
+        
         <!-- If no reports were found, a message is displayed-->
         <!-- <p class="p-2" ng-hide="pagination.total > 0" translate>Sorry, but we couldn't find any results.</p> -->
         <div class="table-responsive-md pt-3 analysis-table">
