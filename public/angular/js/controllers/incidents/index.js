@@ -209,6 +209,7 @@ angular.module('Aggie')
       })
     }
 
+
     /**
      * Adds a smtcTag to selected reports.
      * @param {SMTCTag} smtcTag
@@ -216,9 +217,14 @@ angular.module('Aggie')
     $scope.addTagToSelected = function(smtcTag) {
       //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.incidents);
-      if (!items.length) return;
-      var ids = getIds(addSMTCTag(items, smtcTag));
-      Incident.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+      if (!items.length) {
+        flash.setAlertNow("Please select a group first.");
+      }
+      else {
+        if (!items.length) return;
+        var ids = getIds(addSMTCTag(items, smtcTag));
+        Incident.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+      }
     };
 
     /**
@@ -227,9 +233,15 @@ angular.module('Aggie')
      */
     $scope.removeTagFromSelected = function(smtcTag) {
       var items = $scope.filterSelected($scope.incidents);
-      if (!items.length) return;
-      var ids = getIds(removeSMTCTag(items, smtcTag));
-      Incident.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+      if (!items.length) {
+        flash.setAlertNow("Please select a group first.");
+      }
+      else {
+        var items = $scope.filterSelected($scope.incidents);
+        if (!items.length) return;
+        var ids = getIds(removeSMTCTag(items, smtcTag));
+        Incident.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+      }
     };
 
     /**
