@@ -22,6 +22,7 @@ var schema = new Schema({
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   read: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
@@ -32,7 +33,7 @@ var schema = new Schema({
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
   notes: {type: String},
-  escalated: { type: Boolean, default: false, required: true }
+  escalated: { type: Boolean, default: false, required: true, index: true }
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -93,6 +94,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
+    this.hasSMTCTags = this.smtcTags.length > 0;
     this.read = true;
     // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
     if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
@@ -125,6 +127,7 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
     })
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
+      this.hasSMTCTags = this.smtcTags.length > 0;
 
       if (!this.commentTo && this._media[0] === 'crowdtangle') {
         SMTCTag.findById(smtcTagId, (err, tag) => {
