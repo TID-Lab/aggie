@@ -43,6 +43,12 @@ schema.path('_incident').set(function(_incident) {
   return _incident;
 });
 
+// sets the indexed hasSMTCTags boolean
+schema.pre('save', function(next) {
+  this.hasSMTCTags = this.smtcTags.length > 0;
+  next()
+});
+
 schema.pre('save', function(next) {
   if (this.isNew) {
     this._wasNew = true;
