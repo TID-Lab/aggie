@@ -33,17 +33,19 @@ angular.module('Aggie')
             if (!reports) {
               reports = $scope.filterSelected($scope.reports);
             }
-
             return reports;
           }
         }
       });
 
-      modalInstance.result.then(function(incidentId) {
+      modalInstance.result.then(function(incident) {
         var ids = reports.map(function(report) {
           return report._id;
         });
-        Report.linkToIncident({ ids: ids, incident: incidentId });
+        reports.forEach(function(report) {
+          report._incident = incident._id;
+        })
+        Report.linkToIncident({ ids: ids, incident: incident._id });
       });
     };
   }
@@ -85,7 +87,7 @@ angular.module('Aggie')
 
     $scope.select = function(incident) {
       // report._incident = incident._id;
-      $modalInstance.close(incident._id);
+      $modalInstance.close(incident);
     };
 
     $scope.showErrors = function() {
