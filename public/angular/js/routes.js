@@ -84,7 +84,9 @@ angular.module('Aggie')
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
           // This line makes sure that the relevant reports page only gets reports with tags
-          if (params.tags == null) params.tags = 'any';
+          if (params.tags == null) {
+            params.tags = 'any';
+          }
           return Report.query({
             page: page - 1,
             keywords: params.keywords,
