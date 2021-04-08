@@ -222,12 +222,10 @@ Incident.queryIncidents = function(query, page, options, callback) {
   else delete filter.locationName;
 
   // Checking for multiple tags in incident
-  if (query.tags) {
-    filter.tags = filter.tags || {};
-    filter.tags.$options = 'i';
-    filter.tags.$all = query.tags;
-  } else delete filter.tags;
-
+  if (filter.tags) {
+    filter.smtcTags = { $all: filter.tags };
+    delete filter.tags;
+  }
   // Re-set search timestamp
   query.since = new Date();
 

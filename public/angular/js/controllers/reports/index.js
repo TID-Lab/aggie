@@ -129,7 +129,6 @@ angular.module('Aggie')
                 updateTagSearchNames();
                 setDetectHateSpeech();
                 setHateSpeechThreshold();
-
                 setSortingScore();
             };
 
