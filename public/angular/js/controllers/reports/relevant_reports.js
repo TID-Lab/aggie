@@ -37,6 +37,7 @@ angular.module('Aggie')
       });
       $scope.visibleSmtcTags = smtcTags;
       $scope.searchParams = $stateParams;
+      $scope.searchParams.isRelevantReports = true;
       $scope.escalatedOptions = escalatedOptions;
       $scope.veracityOptions = veracityOptions;
       $scope.reports = reports.results;
@@ -135,7 +136,6 @@ angular.module('Aggie')
         updateTagSearchNames();
         setDetectHateSpeech();
         setHateSpeechThreshold();
-
         setSortingScore();
       };
 
@@ -178,6 +178,9 @@ angular.module('Aggie')
       };
 
       var smtcTagNamesToIds = function(tagNames) {
+        if (tagNames == 'any') {
+          return '';
+        }
         // This runs on the start of the page
         // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
         if (tagNames.length !== 1) {
@@ -213,7 +216,7 @@ angular.module('Aggie')
             if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
             else { return tagId; }
           });
-          $scope.searchParams = { tags: tagNames.join(', ') };
+          $scope.searchParams.tags = tagNames.join(', ');
         }
       }
 
@@ -492,10 +495,15 @@ angular.module('Aggie')
       };
 
       $scope.setSelectedVeracityStatus = function(veracity) {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return; // If empty, return
-        var ids = getIds(setVeracity(items, veracity)); // Changes the Front-end Values
-        Report.updateVeracity({ ids: ids, veracity: veracity }); // Changes the Back-end Values
+        if (!$scope.someSelected()) {
+          flash.setAlertNow("Please first select a report to change veracity.");
+        }
+        else {
+          var items = $scope.filterSelected($scope.reports);
+          if (!items.length) return; // If empty, return
+          var ids = getIds(setVeracity(items, veracity)); // Changes the Front-end Values
+          Report.updateVeracity({ids: ids, veracity: veracity}); // Changes the Back-end Values
+        }
       };
 
       /**
@@ -503,19 +511,29 @@ angular.module('Aggie')
        * @param {boolean} escalated
        */
       $scope.setSelectedEscalatedStatus = function(escalated) {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return; // If empty, return
-        var ids = getIds(toggleEscalated(items, escalated)); // Changes the Front-end Values
-        Report.updateEscalated({ ids: ids, escalated: escalated }); // Changes the Back-end Values
+        if (!$scope.someSelected()) {
+          flash.setAlertNow("Please first select a report to change escalated value.");
+        }
+        else {
+          var items = $scope.filterSelected($scope.reports);
+          if (!items.length) return; // If empty, return
+          var ids = getIds(toggleEscalated(items, escalated)); // Changes the Front-end Values
+          Report.updateEscalated({ids: ids, escalated: escalated}); // Changes the Back-end Values
+        }
       };
 
       $scope.toggleSelectedEscalated = function() {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return; // If empty, return
-        if (items.findIndex(function(item) {
-          return !item.escalated;
-        }) !== -1) $scope.setSelectedEscalatedStatus(true);
-        else $scope.setSelectedEscalatedStatus(false);
+        if (!$scope.someSelected()) {
+          flash.setAlertNow("Please first select a report to toggle escalated value.");
+        }
+        else {
+          var items = $scope.filterSelected($scope.reports);
+          if (!items.length) return; // If empty, return
+          if (items.findIndex(function (item) {
+            return !item.escalated;
+          }) !== -1) $scope.setSelectedEscalatedStatus(true);
+          else $scope.setSelectedEscalatedStatus(false);
+        }
       }
 
       /**
@@ -546,15 +564,30 @@ angular.module('Aggie')
       }
 
       /**
+       * Returned value is meant to be used as a boolean to check if any reports are selected.
+       * @returns {boolean}
+       */
+      $scope.someSelected = function() {
+        return $scope.reports.some(function(report) {
+          return report.selected;
+        });
+      };
+
+      /**
        * Adds a smtcTag to selected reports.
        * @param {SMTCTag} smtcTag
        */
       $scope.addTagToSelected = function(smtcTag) {
         //TODO: There should be a validation that the tag is not already added to the report
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return;
-        var ids = getIds(addSMTCTag(items, smtcTag));
-        Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+        if (!$scope.someSelected()) {
+          flash.setAlertNow("Please first select a report to add a tag to.");
+        }
+        else {
+          var items = $scope.filterSelected($scope.reports);
+          if (!items.length) return;
+          var ids = getIds(addSMTCTag(items, smtcTag));
+          Report.addSMTCTag({ids: ids, smtcTag: smtcTag._id});
+        }
       };
 
       /**
@@ -562,10 +595,15 @@ angular.module('Aggie')
        * @param {SMTCTag} smtcTag
        */
       $scope.removeTagFromSelected = function(smtcTag) {
-        var items = $scope.filterSelected($scope.reports);
-        if (!items.length) return;
-        var ids = getIds(removeSMTCTag(items, smtcTag));
-        Report.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+        if (!$scope.someSelected()) {
+          flash.setAlertNow("Please first select a report to remove a tag from.");
+        }
+        else {
+          var items = $scope.filterSelected($scope.reports);
+          if (!items.length) return;
+          var ids = getIds(removeSMTCTag(items, smtcTag));
+          Report.removeSMTCTag({ids: ids, smtcTag: smtcTag._id});
+        }
       };
 
       /**

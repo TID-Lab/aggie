@@ -28,6 +28,7 @@ function ReportQuery(options) {
   this.escalated = options.escalated;
   this.veracity = options.veracity;
   this.notes = options.notes;
+  this.isRelevantReports = options.isRelevantReports;
 }
 
 _.extend(ReportQuery, Query);
@@ -41,7 +42,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'notes', 'veracity']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'veracity', 'isRelevantReports']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
@@ -53,7 +54,6 @@ ReportQuery.prototype.toMongooseFilter = function() {
     commentTo: this.commentTo,
     escalated: this.escalated,
     veracity: this.veracity,
-    notes: this.notes
   }
   if (this.escalated === 'unescalated') filter.escalated= false;
   if (this.escalated === 'escalated') filter.escalated = true;
@@ -95,15 +95,13 @@ ReportQuery.prototype.toMongooseFilter = function() {
       let res = exp.generate_seach_query();
       console.log(JSON.stringify(res))
       filter.$and = [res]
-    }
+  }
 
   if (this.tags) {
-    if (this.tags == 'any') {
-      filter.smtcTags = { $type: "objectId" };
-    } else if (this.tags == 'none') {
-      filter.smtcTags = { $not: { $type: 'objectId' }};
-    } else {
       filter.smtcTags = { $all: this.tags };
+  } else {
+    if (this.isRelevantReports == 'true') {
+      filter.smtcTags = {$type: "objectId"};
     }
   }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };

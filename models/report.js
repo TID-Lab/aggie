@@ -22,6 +22,7 @@ var schema = new Schema({
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   read: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
@@ -32,7 +33,7 @@ var schema = new Schema({
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
   notes: {type: String},
-  escalated: { type: Boolean, default: false, required: true }
+  escalated: { type: Boolean, default: false, required: true, index: true }
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -41,6 +42,12 @@ schema.index({ content: 'text', author: 'text' });
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;
+});
+
+// sets the indexed hasSMTCTags boolean
+schema.pre('save', function(next) {
+  this.hasSMTCTags = this.smtcTags.length > 0;
+  next()
 });
 
 schema.pre('save', function(next) {
