@@ -8,14 +8,17 @@
         <!-- This is the Toolbar with selection actions -->
         <div title="Selection Actions" class="card-header card__header cardheader--withSelect"
           aria-label="Top Selection Actions Toolbar" role="toolbar">
+          <h4>Analysis</h4>
           <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions"
             ng-show="currentUser.can('edit data')">
-            <h4>Analysis</h4>
-            <!-- <div class="btn-group mr-3" role="group" aria-label="Refresh Button">
-              <button type="button" class="btn btn-default" ng-click="refresh()" translate>
-                Refresh
+            <div class="checkbox vis-checkbox">
+              <label><input type="checkbox" ng-model="read_only" ng-change="refresh()" value="false">Filter by read reports</label>
+            </div>
+            <div class="btn-group mr-3" role="group" aria-label="Refresh Button">
+              <button type="button" class="btn btn-primary-outline" translate>
+                Last updated as of: {{lastUpdated}}
               </button>
-            </div> -->
+            </div>
           </div>
         </div>
         <!-- If no reports were found, a message is displayed-->
@@ -25,7 +28,7 @@
             <div class="col-xl-6">
               <h5>Reports by Tags</h5>
               <p>
-                Distribution of Read Reports by Tags. 
+                Distribution of Read Reports by Tags.
               </p>
               <svg class="analysis-svg" viewBox="0 0 400 300" ng-init="init()" id="tags-view"></svg>
             </div>
