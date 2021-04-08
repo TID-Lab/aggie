@@ -86,7 +86,6 @@ angular.module('Aggie')
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
           params.isRelevantReports = true;
-          console.log(params)
           // This line makes sure that the relevant reports page only gets reports with tags
           return Report.query({
             page: page - 1,
