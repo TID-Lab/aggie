@@ -144,7 +144,6 @@ angular.module('Aggie')
         for (var key in params) {
           if (!params[key]) params[key] = null;
         }
-
         $state.go('incidents', params, { reload: true });
       });
     };
@@ -180,6 +179,9 @@ angular.module('Aggie')
       for (var key in newParams) {
         params[key] = newParams[key];
       }
+      if (params.tags) {
+        params.tags = smtcTagNamesToIds(params.tags);
+      }
       return params;
     };
 
@@ -195,7 +197,7 @@ angular.module('Aggie')
           if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
           else { return tagId; }
         });
-        $scope.searchParams = { tags: tagNames.join(', ') };
+        $scope.searchParams.tags = tagNames.join(', ');
       }
     }
     /**
@@ -449,6 +451,38 @@ angular.module('Aggie')
     $scope.viewProfile = function(user) {
       $state.go('profile', { userName: user.username });
     };
+
+    var splitInput = function(val) {
+      return val.split( /,\s*/ );
+    }
+    var extractLast = function extractLast(term) {
+      return splitInput( term ).pop();
+    }
+
+    $scope.onTagSearchInputLoad = function() {
+      $( "#tagSearchInput" )
+        .autocomplete({
+          minLength: 0,
+          source: function( request, response ) {
+            response( $.ui.autocomplete.filter(
+              $scope.smtcTagNames, extractLast( request.term ) ) );
+          },
+          focus: function() {
+            return false;
+          },
+          select: function( event, ui ) {
+            var terms = splitInput( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+          }
+        });
+    }
 
     $scope.$on('$destroy', function() {
       Socket.leave('incidents');

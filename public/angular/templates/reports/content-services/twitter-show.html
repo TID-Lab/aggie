@@ -1,6 +1,5 @@
 <!---- Twitter Current Statistics ---->
 </br>
-<h5 class="card-title">Twitter Details</h5>
 <div class="row">
   <div class="col">
     <!---- Crowdtangle Current Statistics ---->
@@ -60,6 +59,29 @@
         <tr>
           <th scope="row" class="detail-key" translate>Fetched Time</th>
           <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="detail-key" translate>Verified</th>
+          <td colspan="10" class="detail-value">
+            {{report.veracity}}
+            <span ng-show="report.veracity == 'Confirmed True'" class="text-primary">
+                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+                </span>
+            <span ng-show="report.veracity == 'Confirmed False'" class="text-muted">
+                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+                </span>
+            <span ng-show="report.veracity == 'Unconfirmed'" class='text-muted'>
+                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+                </span></td>
+        </tr>
+        <tr>
+          <th scope="row" class="detail-key" translate>Escalated</th>
+          <td colspan="10" class="detail-value">
+            <span ng-show="report.escalated">Yes</span>
+            <span ng-hide="report.escalated">No</span>
+            <i class="fa fa-lg" ng-class="report.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+            </i>
+          </td>
         </tr>
         <tr>
           <th scope="row" class="detail-key" translate>Group</th>

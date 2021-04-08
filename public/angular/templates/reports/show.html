@@ -11,8 +11,18 @@
     </div>
     <div class="col-lg-9">
       <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between" ng-class="'card__header'">
-          <h4 class="card-title mb-0">Report Details</h4>
+        <div class="card-header d-flex justify-content-between" class="card__header" ng-class="{ 'escalated__header': report.escalated }">
+          <h4 class="card-title mb-0">Report Details
+            <span ng-show="report.veracity == 'Confirmed True'" class="text-primary">
+                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+                </span>
+            <span ng-show="report.veracity == 'Confirmed False'" class="text-muted">
+                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+                </span>
+            <span ng-show="report.veracity == 'Unconfirmed'" class='text-muted'>
+                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+                </span>
+          </h4>
         </div>
         <div class="card-body">
           <div ng-if="report._media[0] === 'twitter'" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>

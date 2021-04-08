@@ -34,6 +34,7 @@ angular.module('Aggie')
             });
             $scope.visibleSmtcTags = smtcTags;
             $scope.searchParams = $stateParams;
+            $scope.searchParams.isRelevantReports = false;
             $scope.reports = reports.results;
             $scope.reportsById = {};
             $scope.sources = sources;
@@ -107,7 +108,6 @@ angular.module('Aggie')
                 $scope.sourcesById = $scope.sources.reduce(groupById, {});
                 $scope.incidentsById = $scope.incidents.reduce(groupById, {});
                 $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
-
                 var visibleReports = paginate($scope.reports);
                 $scope.visibleReports.addMany(visibleReports);
 
@@ -129,7 +129,6 @@ angular.module('Aggie')
                 updateTagSearchNames();
                 setDetectHateSpeech();
                 setHateSpeechThreshold();
-
                 setSortingScore();
             };
 
@@ -162,7 +161,7 @@ angular.module('Aggie')
             $scope.search = function(newParams) {
                 $scope.$evalAsync(function() {
                     // Remove empty params.
-                    var params = searchParams(newParams);
+                    var params = searchParams(newParams)
                     for (var key in params) {
                         if (!params[key]) params[key] = null;
                     }
@@ -206,7 +205,7 @@ angular.module('Aggie')
                         if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
                         else { return tagId; }
                     });
-                    $scope.searchParams = { tags: tagNames.join(', ') };
+                    $scope.searchParams.tags = tagNames.join(', ');
                 }
             }
 

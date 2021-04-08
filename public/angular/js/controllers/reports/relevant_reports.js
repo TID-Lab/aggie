@@ -216,7 +216,7 @@ angular.module('Aggie')
             if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
             else { return tagId; }
           });
-          $scope.searchParams = { tags: tagNames.join(', ') };
+          $scope.searchParams.tags = tagNames.join(', ');
         }
       }
 

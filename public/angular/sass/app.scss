@@ -229,6 +229,13 @@ footer {
   background-color: #f5f6f7;
 }
 
+.escalated__header {
+  background-color: #FFDDDD;
+  &:hover {
+    background-color: darken(#FFDDDD, 10%);
+  }
+}
+
 .cardheader--withSelect {
   padding-left: 6px;
 }

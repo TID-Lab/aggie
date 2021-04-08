@@ -100,7 +100,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   if (this.tags) {
       filter.smtcTags = { $all: this.tags };
   } else {
-    if (this.isRelevantReports) {
+    if (this.isRelevantReports == 'true') {
       filter.smtcTags = {$type: "objectId"};
     }
   }
