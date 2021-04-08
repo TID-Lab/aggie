@@ -41,7 +41,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'notes', 'veracity']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'veracity']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
