@@ -493,7 +493,7 @@ angular.module('Aggie')
 
       $scope.setSelectedVeracityStatus = function(veracity) {
         if (!$scope.someSelected()) {
-          flash.setAlertNow("Please select a report first.");
+          flash.setAlertNow("Please first select a report to change veracity.");
         }
         else {
           var items = $scope.filterSelected($scope.reports);
@@ -509,7 +509,7 @@ angular.module('Aggie')
        */
       $scope.setSelectedEscalatedStatus = function(escalated) {
         if (!$scope.someSelected()) {
-          flash.setAlertNow("Please select a report first.");
+          flash.setAlertNow("Please first select a report to change escalated value.");
         }
         else {
           var items = $scope.filterSelected($scope.reports);
@@ -521,7 +521,7 @@ angular.module('Aggie')
 
       $scope.toggleSelectedEscalated = function() {
         if (!$scope.someSelected()) {
-          flash.setAlertNow("Please select a report first.");
+          flash.setAlertNow("Please first select a report to toggle escalated value.");
         }
         else {
           var items = $scope.filterSelected($scope.reports);
@@ -577,7 +577,7 @@ angular.module('Aggie')
       $scope.addTagToSelected = function(smtcTag) {
         //TODO: There should be a validation that the tag is not already added to the report
         if (!$scope.someSelected()) {
-          flash.setAlertNow("Please select a report first.");
+          flash.setAlertNow("Please first select a report to add a tag to.");
         }
         else {
           var items = $scope.filterSelected($scope.reports);
@@ -593,7 +593,7 @@ angular.module('Aggie')
        */
       $scope.removeTagFromSelected = function(smtcTag) {
         if (!$scope.someSelected()) {
-          flash.setAlertNow("Please select a report first.");
+          flash.setAlertNow("Please first select a report to remove a tag from.");
         }
         else {
           var items = $scope.filterSelected($scope.reports);

@@ -211,14 +211,14 @@ angular.module('Aggie')
 
 
     /**
-     * Adds a smtcTag to selected reports.
+     * Adds a smtcTag to selected groups.
      * @param {SMTCTag} smtcTag
      */
     $scope.addTagToSelected = function(smtcTag) {
       //TODO: There should be a validation that the tag is not already added to the report
       var items = $scope.filterSelected($scope.incidents);
       if (!items.length) {
-        flash.setAlertNow("Please select a group first.");
+        flash.setAlertNow("Please first select a group to add a tag to.");
       }
       else {
         if (!items.length) return;
@@ -228,13 +228,13 @@ angular.module('Aggie')
     };
 
     /**
-     * Removes a smtcTag from selected reports.
+     * Removes a smtcTag from selected groups.
      * @param {SMTCTag} smtcTag
      */
     $scope.removeTagFromSelected = function(smtcTag) {
       var items = $scope.filterSelected($scope.incidents);
       if (!items.length) {
-        flash.setAlertNow("Please select a group first.");
+        flash.setAlertNow("Please first select a group to remove a tag from.");
       }
       else {
         var items = $scope.filterSelected($scope.incidents);

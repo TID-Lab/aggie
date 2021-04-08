@@ -435,7 +435,7 @@ angular.module('Aggie')
 
             $scope.toggleSelectedRead = function() {
                 if (!$scope.someSelected()) {
-                    flash.setAlertNow("Please select a report first.");
+                    flash.setAlertNow("Please first select a report to toggle read.");
                 }
                 else {
                     var items = $scope.filterSelected($scope.reports);
@@ -497,7 +497,7 @@ angular.module('Aggie')
             $scope.addTagToSelected = function(smtcTag) {
                 //TODO: There should be a validation that the tag is not already added to the report
                 if (!$scope.someSelected()) {
-                    flash.setAlertNow("Please select a report first.");
+                    flash.setAlertNow("Please first select a report to add a tag to.");
                 }
                 else {
                     var items = $scope.filterSelected($scope.reports);
@@ -513,7 +513,7 @@ angular.module('Aggie')
              */
             $scope.removeTagFromSelected = function(smtcTag) {
                 if (!$scope.someSelected()) {
-                    flash.setAlertNow("Please select a report first.");
+                    flash.setAlertNow("Please first select a report to remove a tag from.");
                 }
                 else {
                     var items = $scope.filterSelected($scope.reports);
