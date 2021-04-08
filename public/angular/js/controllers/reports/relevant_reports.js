@@ -178,6 +178,9 @@ angular.module('Aggie')
       };
 
       var smtcTagNamesToIds = function(tagNames) {
+        if (tagNames == 'any') {
+          return '';
+        }
         // This runs on the start of the page
         // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
         if (tagNames.length !== 1) {

@@ -262,8 +262,9 @@ angular.module('Aggie')
     }
     var addSMTCTag = function(items, smtcTag) {
       return items.map(function(item) {
+        console.log(item);
         if (item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1) {
-          item.smtcTags.push(smtcTag);
+          item.smtcTags.push(smtcTag._id);
         }
         return item;
 

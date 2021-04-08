@@ -74,15 +74,6 @@
                   </select>
                 </div>
               </div>
-              <div class="form-group col mb-0 pb-2">
-                <div class="input-group input-group-sm">
-                  <select title="{{'Group Filter' | translate}}" ng-model="searchParams.incidentId"
-                          ng-options="value._id as (value.title | capitalize) for (key, value) in incidents | orderObjectBy:'title'"
-                          ng-change="search()" class="form-control filters__select">
-                    <option value="" translate>Group</option>
-                  </select>
-                </div>
-              </div>
               <div class="form-group col-md-auto mb-0 pb-2">
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
