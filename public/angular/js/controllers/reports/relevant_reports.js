@@ -37,6 +37,7 @@ angular.module('Aggie')
       });
       $scope.visibleSmtcTags = smtcTags;
       $scope.searchParams = $stateParams;
+      $scope.searchParams.isRelevantReports = true;
       $scope.escalatedOptions = escalatedOptions;
       $scope.veracityOptions = veracityOptions;
       $scope.reports = reports.results;
@@ -135,7 +136,6 @@ angular.module('Aggie')
         updateTagSearchNames();
         setDetectHateSpeech();
         setHateSpeechThreshold();
-
         setSortingScore();
       };
 

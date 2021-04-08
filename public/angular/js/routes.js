@@ -48,6 +48,7 @@ angular.module('Aggie')
       resolve: {
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
+          params.isRelevantReports = false;
           return Report.query({
             page: page - 1,
             keywords: params.keywords,
@@ -60,6 +61,7 @@ angular.module('Aggie')
             author: params.author,
             tags: params.tags,
             list: params.list,
+            isRelevantReports: params.isRelevantReports,
           }).$promise;
         }],
         ctLists: ['CTLists', function(CTLists) {
@@ -83,10 +85,9 @@ angular.module('Aggie')
       resolve: {
         reports: ['Report', '$stateParams', function(Report, params) {
           var page = params.page || 1;
+          params.isRelevantReports = true;
+          console.log(params)
           // This line makes sure that the relevant reports page only gets reports with tags
-          if (params.tags == null) {
-            params.tags = 'any';
-          }
           return Report.query({
             page: page - 1,
             keywords: params.keywords,
@@ -100,7 +101,8 @@ angular.module('Aggie')
             tags: params.tags,
             list: params.list,
             escalated: params.escalated,
-            veracity: params.veracity
+            veracity: params.veracity,
+            isRelevantReports: params.isRelevantReports,
           }).$promise;
         }],
         ctLists: ['CTLists', function(CTLists) {
