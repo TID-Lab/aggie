@@ -293,16 +293,12 @@ angular
           }
 
           var date_range = d3.extent(timeline_data, function (d) {
-            return d.datef.getTime() / 1000
+            return d.datef;
           });
 
-          var xScale = d3.scaleLinear()
+          var xScale = d3.scaleTime()
             .domain(date_range)
             .range([padding.l, width - padding.r]);
-
-          // var xScale = d3.scaleBand()
-          //   .domain(timeline_data.map(d => d.datef.getTime() / 1000))
-          //   .range([padding.l, width - padding.r]);
 
           var yScale = d3.scaleLinear()
             .domain([0, d3.max(timeline_data, function (d) {
@@ -315,17 +311,7 @@ angular
             .call(
               d3.axisBottom()
               .scale(xScale)
-              .ticks(4)
-              .tickFormat(function (d) {
-                var date = new Date(d * 1000);
-                if (date_range[1] - date_range[0] > (2629743)) {
-                  return monthNames[date.getMonth()] + '-' + date.getFullYear();
-                } else if (date_range[1] - date_range[0] > (86400 * 2)) {
-                  return date.getMonth() + '/' + date.getDate();
-                } else {
-                  return date.getHours() + ':00:00';
-                }
-              })
+              .ticks(4) 
             )
             .attr('transform', 'translate(0,' + (height - padding.b) + ')');
 
@@ -365,7 +351,7 @@ angular
             .append('rect')
             .attr('class', 'time-bar')
             .attr('x', function (d) {
-              return xScale(d.datef.getTime() / 1000)
+              return xScale(d.datef);
             })
             .attr('y', function (d) {
               return yScale(d.count)
@@ -404,8 +390,8 @@ angular
 
           svg.append('text')
             .attr('class', 'axis-label')
-            .text('Time')
-            .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t / 2) + ')')
+            .text('Time Posted')
+            .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t / 2 + 5) + ')')
             .style("text-anchor", "middle");
           svg.append("text")
             .attr('class', 'axis-label')
