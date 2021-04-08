@@ -139,6 +139,7 @@ angular
             .attr('transform', 'translate(0,' + (height - padding.b) + ')');
 
           svg.append('g')
+            .attr('class', 'axis')
             .call(
               d3.axisLeft()
               .scale(yScale)
@@ -176,10 +177,12 @@ angular
             });
 
           svg.append('text')
+            .attr('class', 'axis-label')
             .text('No. of Subscribers')
             .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t / 2) + ')')
             .style("text-anchor", "middle");
           svg.append("text")
+            .attr('class', 'axis-label')
             .attr("transform", "rotate(-90)")
             .attr("y", padding.l / 4)
             .attr("x", 0 - (height / 2))
@@ -304,6 +307,7 @@ angular
             .range([height - padding.b, padding.t]);
 
           svg.append('g')
+            .attr('class', 'axis')
             .call(
               d3.axisBottom()
               .scale(xScale)
@@ -312,6 +316,7 @@ angular
             .attr('transform', 'translate(0,' + (height - padding.b) + ')');
 
           svg.append('g')
+            .attr('class', 'axis')
             .call(
               d3.axisLeft()
               .scale(yScale)
@@ -384,10 +389,12 @@ angular
             });
 
           svg.append('text')
+            .attr('class', 'axis-label')
             .text('Time Posted')
             .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t / 2 + 5) + ')')
             .style("text-anchor", "middle");
           svg.append("text")
+            .attr('class', 'axis-label')
             .attr("transform", "rotate(-90)")
             .attr("y", padding.l / 4)
             .attr("x", 0 - (height / 2))
