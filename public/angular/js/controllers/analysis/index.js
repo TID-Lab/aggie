@@ -9,12 +9,23 @@ angular
     "data",
     function ($scope, Socket, data) {
 
-      $scope.loadData = function () {
-        $scope.authorData = data.authors;
+      $scope.updateTimestamp = function() {
+        $scope.lastUpdated = (new Date()).toString();
+      }
+
+      $scope.loadData = function (read) {
         $scope.tagData = data.tags;
-        $scope.mediaData = data.media;
-        $scope.wordData = data.words;
-        $scope.timeData = data.time;
+        if (read) {
+          $scope.authorData = data.authors_read;
+          $scope.mediaData = data.media_read;
+          $scope.wordData = data.words_read;
+          $scope.timeData = data.time_read;
+        } else {
+          $scope.authorData = data.authors;
+          $scope.mediaData = data.media;
+          $scope.wordData = data.words;
+          $scope.timeData = data.time;
+        }
       }
 
       $scope.createTagChart = function () {
@@ -472,16 +483,23 @@ angular
 
       $scope.refresh = function () {
         $scope.clear();
-        setTimeout(init, 1500)
+        $scope.loadData($scope.read_only);
+        $scope.drawAllGraphs();
+        // console.log($scope.read_only);
       }
 
-      var init = function () {
-        $scope.loadData();
+      $scope.drawAllGraphs = function() {
         $scope.createTagChart();
         $scope.createTimelineChart();
         $scope.createWordCloud();
         $scope.createAuthorChart();
         $scope.createMediaChart();
+      }
+
+      var init = function () {
+        $scope.updateTimestamp();
+        $scope.loadData(false);
+        $scope.drawAllGraphs();
       }
 
       init();
