@@ -9,23 +9,44 @@ angular
     "data",
     function ($scope, Socket, data) {
 
-      $scope.updateTimestamp = function() {
+      $scope.read_only = false;
+      $scope.tagSelection = 'all-tags';
+
+      $scope.initiateText = function(textToShow) {
+        d3.select('#time-text').html('Distribution of ' + textToShow + ' reports by time.');
+        d3.select('#word-text').html('Distribution of ' + textToShow + ' reports by word.');
+        d3.select('#author-text').html('Distribution of ' + textToShow + ' reports by author.');
+        d3.select('#media-text').html('Distribution of ' + textToShow + ' reports by media.');
+      }
+
+      $scope.updateTimestamp = function () {
         $scope.lastUpdated = (new Date()).toString();
       }
 
-      $scope.loadData = function (read) {
+      $scope.loadData = function () {
         $scope.tagData = data.tags;
-        if (read) {
-          $scope.authorData = data.authors_read;
-          $scope.mediaData = data.media_read;
-          $scope.wordData = data.words_read;
-          $scope.timeData = data.time_read;
+        if ($scope.tagSelection == 'all-tags') {
+          if ($scope.read_only) {
+            $scope.textToShow = "READ";
+            $scope.authorData = data.authors_read;
+            $scope.mediaData = data.media_read;
+            $scope.wordData = data.words_read;
+            $scope.timeData = data.time_read;
+          } else {
+            $scope.textToShow = "ALL";
+            $scope.authorData = data.authors;
+            $scope.mediaData = data.media;
+            $scope.wordData = data.words;
+            $scope.timeData = data.time;
+          }
         } else {
-          $scope.authorData = data.authors;
-          $scope.mediaData = data.media;
-          $scope.wordData = data.words;
-          $scope.timeData = data.time;
+          $scope.textToShow = $scope.tagSelection.toUpperCase();
+          $scope.authorData = data.tagData.author[$scope.tagSelection];
+          $scope.mediaData = data.tagData.media[$scope.tagSelection];
+          $scope.wordData = data.tagData.word[$scope.tagSelection];
+          $scope.timeData = data.tagData.time[$scope.tagSelection];
         }
+        $scope.initiateText($scope.textToShow);
       }
 
       $scope.createTagChart = function () {
@@ -39,7 +60,7 @@ angular
         var width = 400;
         var height = 250;
 
-        var svg = d3.select('#tags-view').append('g').attr('class', 'container-group');
+        var svg = d3.select('#tags-view');
         if ($scope.tagData.length == 0) {
           svg.append('text')
             .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
@@ -88,9 +109,31 @@ angular
             .on('mouseout', function (d, i) {
               svg.selectAll('.leaf').attr('opacity', 1);
               svg.select('#desc-text').remove();
+            })
+            .on('click', function (e, d) {
+              $scope.clear();
+              if ($scope.tagSelection == d.data.name) {
+                $scope.tagSelection = 'all-tags';
+                d3.selectAll('.tag-circle')
+                  .attr('opacity', 1)
+                  .attr('stroke', 'none');
+              } else {
+                $scope.tagSelection = d.data.name;
+                d3.selectAll('.tag-circle').attr('opacity', 0.1);
+                d3.select('#' + d.data.name)
+                  .attr('opacity', 1)
+                  .attr('stroke', 'black')
+                  .attr('stroke-width', 1);
+              }
+              $scope.loadData();
+              $scope.drawAllGraphs();
             });
 
           var circle = leaf.append("circle")
+            .attr('class', 'tag-circle')
+            .attr('id', function (d) {
+              return d.data.name;
+            })
             .attr("r", function (d) {
               return d.r
             })
@@ -483,13 +526,11 @@ angular
 
       $scope.refresh = function () {
         $scope.clear();
-        $scope.loadData($scope.read_only);
+        $scope.loadData();
         $scope.drawAllGraphs();
-        // console.log($scope.read_only);
       }
 
-      $scope.drawAllGraphs = function() {
-        $scope.createTagChart();
+      $scope.drawAllGraphs = function () {
         $scope.createTimelineChart();
         $scope.createWordCloud();
         $scope.createAuthorChart();
@@ -498,7 +539,8 @@ angular
 
       var init = function () {
         $scope.updateTimestamp();
-        $scope.loadData(false);
+        $scope.loadData();
+        $scope.createTagChart();
         $scope.drawAllGraphs();
       }
 
