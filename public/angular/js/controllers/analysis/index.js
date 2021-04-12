@@ -21,7 +21,7 @@ angular
 
       $scope.updateTimestamp = function () {
         var d = new Date();
-        $scope.lastUpdated = new Intl.DateTimeFormat('en',{
+        $scope.lastUpdated = new Intl.DateTimeFormat('en', {
           year: 'numeric',
           month: 'short',
           day: '2-digit',
@@ -285,26 +285,34 @@ angular
             }))
             .range(d3.schemeAccent);
 
+          // The arc generator
+          var arc = d3.arc()
+            .innerRadius(radius * 0.4) // This is the size of the donut hole
+            .outerRadius(radius * 0.8)
+
+          // Another arc that won't be drawn. Just for labels positioning
+          var outerArc = d3.arc()
+            .innerRadius(radius * 0.9)
+            .outerRadius(radius * 0.9)
+
           var data_ready = d3.pie()
             .value(function (d) {
               return d.count
             })
             ($scope.mediaData);
 
-          g.selectAll('.slice')
+          g
+            .selectAll('.slice')
             .data(data_ready)
             .enter()
             .append('path')
             .attr('class', 'slice')
-            .attr('d', d3.arc()
-              .innerRadius(0)
-              .outerRadius(radius)
-            )
+            .attr('d', arc)
             .attr('fill', function (d) {
-              return colorScale(d.data.name)
+              return (colorScale(d.data.name))
             })
-            // .attr("stroke", "black")
-            // .style("stroke-width", "2px")
+            .attr("stroke", "white")
+            .style("stroke-width", "1px")
             .style("opacity", 1)
             .on('mouseover', function (e, d) {
               svg.selectAll('.slice').style('opacity', 0.2);
@@ -320,6 +328,46 @@ angular
               svg.selectAll('.slice').style('opacity', 1);
               svg.select('#desc-text').remove();
             });
+
+          // g.selectAll('.slice')
+          //   .data(data_ready)
+          //   .enter()
+          //   .append('path')
+          //   .attr('class', 'slice')
+          //   .attr('d', d3.arc()
+          //     .innerRadius(0.5*radius)
+          //     .outerRadius(radius)
+          //   )
+          //   .attr('fill', function (d) {
+          //     return colorScale(d.data.name)
+          //   })
+          //   .style("opacity", 1);
+
+          g.selectAll('.allLabels')
+            .data(data_ready)
+            .enter()
+            .append('text')
+            .text(function (d) {
+              if (d.endAngle - d.startAngle < 0.25) {
+                return ' ';
+              } else {
+                return d.data.name;
+              }
+            })
+            .attr('class', 'allLabels axis-label')
+            .attr('fill', function(d) {
+              
+            })
+            .attr('transform', function (d) {
+              var pos = outerArc.centroid(d);
+              var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+              pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+              return 'translate(' + pos + ')';
+            })
+            .style('text-anchor', function (d) {
+              var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+              return (midangle < Math.PI ? 'start' : 'end')
+            })
         }
       }
 
@@ -443,8 +491,8 @@ angular
               svg.append('text')
                 .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t + 20) + ')')
                 .attr('id', 'desc-text')
-                .text(function() {
-                  return new Intl.DateTimeFormat('en',{
+                .text(function () {
+                  return new Intl.DateTimeFormat('en', {
                     year: 'numeric',
                     month: 'short',
                     day: '2-digit',
