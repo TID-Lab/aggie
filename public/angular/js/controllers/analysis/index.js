@@ -12,7 +12,7 @@ angular
       $scope.read_only = false;
       $scope.tagSelection = 'all-tags';
 
-      $scope.initiateText = function(textToShow) {
+      $scope.initiateText = function (textToShow) {
         d3.select('#time-text').html('Distribution of ' + textToShow + ' reports by time.');
         d3.select('#word-text').html('Distribution of ' + textToShow + ' reports by word.');
         d3.select('#author-text').html('Distribution of ' + textToShow + ' reports by author.');
@@ -20,7 +20,16 @@ angular
       }
 
       $scope.updateTimestamp = function () {
-        $scope.lastUpdated = (new Date()).toString();
+        var d = new Date();
+        $scope.lastUpdated = new Intl.DateTimeFormat('en',{
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        }).format(d);
       }
 
       $scope.loadData = function () {
@@ -365,7 +374,7 @@ angular
             .call(
               d3.axisBottom()
               .scale(xScale)
-              .ticks(4) 
+              .ticks(4)
             )
             .attr('transform', 'translate(0,' + (height - padding.b) + ')');
 
@@ -434,7 +443,15 @@ angular
               svg.append('text')
                 .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t + 20) + ')')
                 .attr('id', 'desc-text')
-                .text(d.datef.toString())
+                .text(function() {
+                  return new Intl.DateTimeFormat('en',{
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    hour12: true
+                  }).format(d.datef);
+                })
                 .attr('text-anchor', 'middle');
             })
             .on('mouseout', function (e, d) {
