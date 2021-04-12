@@ -138,7 +138,7 @@ angular
               return d.r
             })
             .attr("fill", function (d) {
-              return colorScale(d.r)
+              return d.data.color;
             });
 
           var text = leaf.append('text')
