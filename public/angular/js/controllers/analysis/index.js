@@ -495,7 +495,7 @@ angular
             .domain(d3.extent($scope.wordData, function (d) {
               return d.count
             }))
-            .range([12, 120]);
+            .range([12, 72]);
 
           var draw = function (words) {
             svg.selectAll('.words')
@@ -525,7 +525,7 @@ angular
                 test: d.name
               }
             }))
-            .padding(24)
+            .padding(36)
             .fontSize(function (d) {
               return d.size
             })
