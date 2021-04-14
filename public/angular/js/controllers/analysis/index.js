@@ -129,7 +129,7 @@ angular
               } else {
                 $scope.tagSelection = d.data.name;
                 d3.selectAll('.tag-circle').attr('opacity', 0.1);
-                d3.select('#' + d.data.name)
+                d3.select(this).select('circle')
                   .attr('opacity', 1)
                   .attr('stroke', 'black')
                   .attr('stroke-width', 1);
