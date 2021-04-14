@@ -101,7 +101,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
       filter.smtcTags = { $all: this.tags };
   } else {
     if (this.isRelevantReports == 'true') {
-      filter.smtcTags = {$type: "objectId"};
+      filter.hasSMTCTags = true;
     }
   }
   if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };
