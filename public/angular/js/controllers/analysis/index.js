@@ -12,7 +12,7 @@ angular
       $scope.read_only = false;
       $scope.tagSelection = 'all-tags';
 
-      $scope.initiateText = function(textToShow) {
+      $scope.initiateText = function (textToShow) {
         d3.select('#time-text').html('Distribution of ' + textToShow + ' reports by time.');
         d3.select('#word-text').html('Distribution of ' + textToShow + ' reports by word.');
         d3.select('#author-text').html('Distribution of ' + textToShow + ' reports by author.');
@@ -20,7 +20,16 @@ angular
       }
 
       $scope.updateTimestamp = function () {
-        $scope.lastUpdated = (new Date()).toString();
+        var d = new Date();
+        $scope.lastUpdated = new Intl.DateTimeFormat('en', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        }).format(d);
       }
 
       $scope.loadData = function () {
@@ -138,7 +147,7 @@ angular
               return d.r
             })
             .attr("fill", function (d) {
-              return colorScale(d.r)
+              return d.data.color;
             });
 
           var text = leaf.append('text')
@@ -276,26 +285,34 @@ angular
             }))
             .range(d3.schemeAccent);
 
+          // The arc generator
+          var arc = d3.arc()
+            .innerRadius(radius * 0.4) // This is the size of the donut hole
+            .outerRadius(radius * 0.8)
+
+          // Another arc that won't be drawn. Just for labels positioning
+          var outerArc = d3.arc()
+            .innerRadius(radius * 0.9)
+            .outerRadius(radius * 0.9)
+
           var data_ready = d3.pie()
             .value(function (d) {
               return d.count
             })
             ($scope.mediaData);
 
-          g.selectAll('.slice')
+          g
+            .selectAll('.slice')
             .data(data_ready)
             .enter()
             .append('path')
             .attr('class', 'slice')
-            .attr('d', d3.arc()
-              .innerRadius(0)
-              .outerRadius(radius)
-            )
+            .attr('d', arc)
             .attr('fill', function (d) {
-              return colorScale(d.data.name)
+              return (colorScale(d.data.name))
             })
-            // .attr("stroke", "black")
-            // .style("stroke-width", "2px")
+            .attr("stroke", "white")
+            .style("stroke-width", "1px")
             .style("opacity", 1)
             .on('mouseover', function (e, d) {
               svg.selectAll('.slice').style('opacity', 0.2);
@@ -311,6 +328,46 @@ angular
               svg.selectAll('.slice').style('opacity', 1);
               svg.select('#desc-text').remove();
             });
+
+          // g.selectAll('.slice')
+          //   .data(data_ready)
+          //   .enter()
+          //   .append('path')
+          //   .attr('class', 'slice')
+          //   .attr('d', d3.arc()
+          //     .innerRadius(0.5*radius)
+          //     .outerRadius(radius)
+          //   )
+          //   .attr('fill', function (d) {
+          //     return colorScale(d.data.name)
+          //   })
+          //   .style("opacity", 1);
+
+          g.selectAll('.allLabels')
+            .data(data_ready)
+            .enter()
+            .append('text')
+            .text(function (d) {
+              if (d.endAngle - d.startAngle < 0.25) {
+                return ' ';
+              } else {
+                return d.data.name;
+              }
+            })
+            .attr('class', 'allLabels axis-label')
+            .attr('fill', function(d) {
+              
+            })
+            .attr('transform', function (d) {
+              var pos = outerArc.centroid(d);
+              var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+              pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+              return 'translate(' + pos + ')';
+            })
+            .style('text-anchor', function (d) {
+              var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+              return (midangle < Math.PI ? 'start' : 'end')
+            })
         }
       }
 
@@ -365,7 +422,7 @@ angular
             .call(
               d3.axisBottom()
               .scale(xScale)
-              .ticks(4) 
+              .ticks(4)
             )
             .attr('transform', 'translate(0,' + (height - padding.b) + ')');
 
@@ -434,7 +491,15 @@ angular
               svg.append('text')
                 .attr('transform', 'translate(' + width / 2 + ',' + (height + padding.t + 20) + ')')
                 .attr('id', 'desc-text')
-                .text(d.datef.toString())
+                .text(function () {
+                  return new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    hour12: true
+                  }).format(d.datef);
+                })
                 .attr('text-anchor', 'middle');
             })
             .on('mouseout', function (e, d) {
@@ -478,7 +543,7 @@ angular
             .domain(d3.extent($scope.wordData, function (d) {
               return d.count
             }))
-            .range([12, 120]);
+            .range([12, 72]);
 
           var draw = function (words) {
             svg.selectAll('.words')
@@ -508,7 +573,7 @@ angular
                 test: d.name
               }
             }))
-            .padding(24)
+            .padding(36)
             .fontSize(function (d) {
               return d.size
             })
