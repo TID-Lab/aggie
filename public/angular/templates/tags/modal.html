@@ -14,8 +14,8 @@
       <fieldset>
         <div class="form-group">
           <label for="tagName" class="required-label" translate>Tag Name</label>
-          <input type="text" class="form-control" id="tagName" required maxlength="15" ng-model="smtcTag.name">
-          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{15 - smtcTag.name.length}} characters remaining</span></small>
+          <input type="text" class="form-control" id="tagName" required maxlength="40" ng-model="smtcTag.name">
+          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{40 - smtcTag.name.length}} characters remaining</span></small>
           <small ng-show="!smtcTag.name.length && showErrors" class="input-group-addon"><span class="text-muted">
             {{ "Please provide a name" | translate}}
           </span></small>
