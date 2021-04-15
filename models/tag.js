@@ -6,7 +6,7 @@ var logger = require('../lib/logger');
 var _ = require('underscore');
 
 var lengthValidator = function(str) {
-    return validator.isLength(str, {min: 0, max: 15})
+    return validator.isLength(str, {min: 0, max: 40})
 }
 var tagSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
