@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z@\u1200-\u1399\'\/\\]+/i).toString();
+    return this.match(/[A-Za-z0-9*$%\[\]\(\)\<\>?@#\u1200-\u1399\'\"\/\\]+/i).toString();
 }
 
 function notop() {
@@ -93,7 +93,7 @@ function evalTree(tree) {
     }
     else {
         let x = tree.toString()
-        x = x.replace(/\@/gi,  " ")
+        x = x.replace(/\%/gi,  " ")
         return {"content": {"$regex": x, "$options": "si"}}
     }
 }
