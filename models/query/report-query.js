@@ -79,6 +79,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
 
     // Re-add space around operators
     this.keywords = this.keywords.replace(/%*NOT%*/g, " NOT ");
+    this.keywords = this.keywords.replace(/\(/g, "\\(");
+    this.keywords = this.keywords.replace(/\)/g, "\\)");
     this.keywords = this.keywords.replace(/%*AND%*/g, " AND ")
     this.keywords = this.keywords.replace(/%*OR%*/g, " OR ")
     this.keywords = this.keywords.replace(/\s+/gi, " ")
