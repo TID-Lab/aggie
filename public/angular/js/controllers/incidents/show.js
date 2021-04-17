@@ -20,7 +20,8 @@ angular.module('Aggie')
   'Report',
   'Tags',
   'Socket',
-  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket) {
+  'StatsCache',
+  function($rootScope, $scope, $state, $stateParams, $window, incident, reports, sources, smtcTags, mediaOptions, Queue, paginationOptions, incidentStatusOptions, veracityOptions, Incident, flash, Report, Tags, Socket, StatsCache) {
     $scope.incident = incident;
     $scope.reports = reports.results;
     $scope.statusOptions = incidentStatusOptions;
@@ -48,6 +49,7 @@ angular.module('Aggie')
     };
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 
@@ -56,6 +58,7 @@ angular.module('Aggie')
       $scope.visibleReports.addMany(visibleReports);
       $scope.sourcesById = $scope.sources.reduce(groupById, {});
       $scope.smtcTagsById = $scope.smtcTags.reduce(groupById, {});
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
       // if (!$scope.currentUser) {
@@ -132,6 +135,24 @@ angular.module('Aggie')
       });
     };
 
+
+    $scope.unconfirm = function() {
+      $scope.incident.veracity = "Unconfirmed";
+      $scope.saveIncident();
+    }
+
+    $scope.confirm = function(veracityValue) {
+      if (veracityValue) {
+        $scope.incident.veracity = "Confirmed True";
+      } else {
+        $scope.incident.veracity = "Confirmed False";
+      }
+      $scope.saveIncident();
+    }
+
+    $scope.saveIncident = function() {
+      Incident.update({ id: $scope.incident._id }, $scope.incident)
+    }
 
     $scope.saveReport = function(report) {
       Report.save({ id: report._id }, report, function() {

@@ -7,11 +7,10 @@
         <th scope="col" translate>Thumbnail</th>
         <th scope="col" translate>Content</th>
         <th scope="col" translate>Tags</th>
-        <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
       </tr>
     </thead>
     <tbody class="table-bordered">
-      <tr ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
+      <tr class="report__tr" ng-repeat="r in visibleReports.toArray() | orderBy:'-storedAt'"
           ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
         <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
@@ -54,7 +53,7 @@
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
           <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
-          <a ng-if="!r.commentTo" href="/reports/{{r._id}}">
+          <a ng-if="!r.commentTo" href="/reports/{{r._id}}" target="_blank">
             <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
             <p class="content__shared" ng-if="r.metadata.description">
               {{r.metadata.description | stripHtml}}
@@ -71,7 +70,7 @@
             {{tagsToString(r.tags) + ", "}}
           </span>
           <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit Tags</strong>
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
           </a>
           <tags class="tagify readonly" tabindex="-1">
             <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
@@ -83,19 +82,6 @@
               </div>
             </tag>
           </tags>
-        </td>
-        <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
-          <div class="text-center incident__addLink">
-            <span>
-              <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
-                <strong ng-if="r._incident && incidentsById[r._incident]">
-                  {{ incidentsById[r._incident].title | strLimit: 40 }}
-                </strong>
-                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
-              </a>
-            </span>
-            <a class="position-relative" ng-show="r._incident" ng-click="unlinkIncident(r)">x</a>
-          </div>
         </td>
       </tr>
     </tbody>

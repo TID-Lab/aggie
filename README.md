@@ -116,10 +116,8 @@ export EDITOR=nano # Option 2
 sudo apt update
 sudo apt install -y ntp nginx software-properties-common
 sudo systemctl enable ntp
-sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt update
-sudo apt install -y certbot python3-certbot-nginx
+sudo snap install certbot --classic
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 # Nginx server and SSL. Source: https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
 sudo curl -o /etc/nginx/sites-available/aggie.conf https://raw.githubusercontent.com/TID-Lab/aggie/develop/docs/content/aggie-nginx

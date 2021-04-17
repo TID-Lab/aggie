@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z\u1200-\u1399]+/i).toString();
+    return this.match(/[A-Za-z0-9*$%\[\]()<>?@#\u1200-\u1399\'\"\/\\]+/i).toString();
 }
 
 function notop() {
@@ -76,7 +76,6 @@ function buildCNF(tree) {
     }
 }
 function evalTree(tree) {
-    // console.log(tree)
     var op = tree[0];
     if (op == 'OR') {
         // return "(" + evalTree(tree[1]) + "|" +  evalTree(tree[2]) + ")";
@@ -93,7 +92,9 @@ function evalTree(tree) {
         return negated_tree
     }
     else {
-        return {"content": {"$regex": tree, "$options": "si"}}
+        let x = tree.toString()
+        x = x.replace(/\%/gi,  " ")
+        return {"content": {"$regex": x, "$options": "si"}}
     }
 }
 
@@ -139,7 +140,6 @@ Expression.prototype = {
     },
     generate_seach_query: function() {
         let cnfTerm = buildCNF(this.tree).toCNF().toString()
-        console.log(cnfTerm)
         this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
         return evalTree(this.tree);
     }

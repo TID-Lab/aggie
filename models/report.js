@@ -17,11 +17,12 @@ var schema = new Schema({
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
-  veracity: { type: Boolean, default: null },
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   read: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
@@ -32,7 +33,7 @@ var schema = new Schema({
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
   notes: {type: String},
-  escalated: { type: Boolean, default: false, required: true }
+  escalated: { type: Boolean, default: false, required: true, index: true }
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -41,6 +42,12 @@ schema.index({ content: 'text', author: 'text' });
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;
+});
+
+// sets the indexed hasSMTCTags boolean
+schema.pre('save', function(next) {
+  this.hasSMTCTags = this.smtcTags.length > 0;
+  next()
 });
 
 schema.pre('save', function(next) {
@@ -68,11 +75,13 @@ schema.post('save', function() {
   }
 });
 
+
+
 schema.methods.toggleRead = function(read) {
   this.read = read;
 };
 
-schema.methods.toggleVeracity = function(veracity) {
+schema.methods.setVeracity = function(veracity) {
   this.veracity = veracity;
 };
 
@@ -91,7 +100,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
-
+    this.read = true;
     // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
     if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
       SMTCTag.findById(smtcTagId, (err, tag) => {
@@ -197,10 +206,11 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
-  if (query.veracity === 'confirmed true') filter.veracity = true;
-  if (query.veracity === 'confirmed false') filter.veracity = false;
-  if (query.veracity === 'unconfirmed') filter.veracity = null;
-  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
+  if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
+  if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
+  if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
 
   Report.findSortedPage(filter, page, callback);
 };

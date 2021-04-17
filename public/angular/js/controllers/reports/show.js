@@ -20,8 +20,9 @@ angular.module('Aggie')
       'sources',
       'paginationOptions',
       '$translate',
+      'StatsCache',
       function($rootScope, $state, $scope, $stateParams, $window, mediaOptions, flash, data, incidents, Report, Incident,
-               incidents, Tags, smtcTags, comments, Socket, Queue, sources, paginationOptions,  $translate) {
+               incidents, Tags, smtcTags, comments, Socket, Queue, sources, paginationOptions,  $translate, StatsCache) {
         $scope.incidents = incidents.results;
         $scope.incidentsById = {};
         $scope.currentPath = $rootScope.$state.current.name;
@@ -57,6 +58,7 @@ angular.module('Aggie')
             Socket.join('reports');
             Socket.on('report:updated', $scope.updateReport.bind($scope));
             Socket.join('stats');
+            $scope.stats = StatsCache.get('stats');
             Socket.on('stats', updateStats);
             if ($scope.isFirstPage()) {
               Socket.on('reports', $scope.handleNewReports.bind($scope));
@@ -64,6 +66,7 @@ angular.module('Aggie')
           }
         };
         var updateStats = function(stats) {
+          StatsCache.put('stats', stats);
           $scope.stats = stats;
         };
 
@@ -185,6 +188,15 @@ angular.module('Aggie')
           $scope.pagination.visibleTotal += uniqueReports.length;
           $scope.newReports.addMany(uniqueReports);
         };
+
+        $scope.editNotes = function(report) {
+          report.editingNotes = true;
+        }
+
+        $scope.saveNotes = function(report) {
+          report.editingNotes = false;
+          $scope.saveReport(report);
+        }
 
         $scope.unlinkIncident = function() {
           $scope.report._incident = '';

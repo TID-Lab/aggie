@@ -4,12 +4,17 @@ $link-blue: #24AEC8;
 $input-focus-outline: #66afe9;
 $light-gray: #f5f6f7;
 $gray: #e9ebee;
+$dark-gray: #555;
 $input-gray: #ccd0d5;
 $input-bg-gray: #f2f3f5;
 $blue: #5bc0de;
 $normal-weight: normal; // This is what the bootstrap style uses.
 $medium-weight: 400; // Not quite bold.
-$font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family: "Lato",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 
 @import 'shared/general';
 @import 'shared/forms';
@@ -40,16 +45,20 @@ html {
 .breadcrumb {
   font-size: 19px;
   background-color: #eaef92;
-  > .active {
+
+  >.active {
     color: #999;
   }
 }
 
-.zero-errors, .green, .text-green {
+.zero-errors,
+.green,
+.text-green {
   color: green;
 }
 
-.multiple-errors, .text-red {
+.multiple-errors,
+.text-red {
   color: red;
 }
 
@@ -59,6 +68,10 @@ html {
 
 .text-gray {
   color: $gray;
+}
+
+.text-dark-gray {
+  color: $dark-gray;
 }
 
 .bg-gray {
@@ -78,6 +91,7 @@ html {
 
   font-size: 16px;
   margin-bottom: 0px;
+
   h4 {
     margin-bottom: 0;
   }
@@ -94,6 +108,7 @@ html {
 a.list-group-item {
   background-color: #fff;
   color: #555;
+
   &:hover {
     background-color: #f6f7f7;
   }
@@ -101,7 +116,8 @@ a.list-group-item {
 
 .panel-info {
   box-shadow: none;
-  & > .panel-heading {
+
+  &>.panel-heading {
     color: #31708F;
     background-color: #D9EDF7;
     border-color: #BCE8F1;
@@ -130,13 +146,15 @@ a.list-group-item {
   background-color: #428bca;
 }
 
-li.collapse, li.collapsing {
+li.collapse,
+li.collapsing {
   margin: 10px;
 }
 
 #map-canvas {
   width: 100%;
   height: 450px;
+
   .info_window {
     overflow: auto;
     font-size: 12px;
@@ -154,23 +172,33 @@ li.collapse, li.collapsing {
 }
 
 .refresh-animate {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
+  -animation: spin .7s infinite linear;
+  -webkit-animation: spin2 .7s infinite linear;
 }
 
 @-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    transform: scale(1) rotate(360deg);
+  }
 }
 
 #wrapper {
-  min-height:100%;
-  position:relative;
+  min-height: 100%;
+  position: relative;
 }
 
 .main {
@@ -189,6 +217,7 @@ footer {
   bottom: 0px;
   left: 0px;
   padding: 20px;
+
   .version {
     position: absolute;
     right: 12px;
@@ -198,6 +227,13 @@ footer {
 
 .card__header {
   background-color: #f5f6f7;
+}
+
+.escalated__header {
+  background-color: #FFDDDD;
+  &:hover {
+    background-color: darken(#FFDDDD, 10%);
+  }
 }
 
 .cardheader--withSelect {
@@ -217,4 +253,47 @@ footer {
 .cardheader__text {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
+}
+
+.analysis-svg {
+  width: 100%;
+
+  border: 2px solid #b6b3b3;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  background-color: rgb(249, 250, 248);
+
+  font-family: "Lato",
+    "Helvetica Neue";
+}
+
+.vis-checkbox input {
+  margin-right: 10px;
+}
+
+.vis-checkbox {
+  padding-top: 10px;
+}
+
+.analysis-table {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.axis {
+  color: #838383;
+}
+
+.stats-timestamp {
+  display: block;
+  margin-top: 30px;
+}
+
+#desc-text {
+  fill: #424ab9;
+  font-size: 1.2em;
+}
+
+.axis-label {
+  fill: #838383;
 }

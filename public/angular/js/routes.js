@@ -60,6 +60,7 @@ angular.module('Aggie')
             author: params.author,
             tags: params.tags,
             list: params.list,
+            isRelevantReports: false,
           }).$promise;
         }],
         ctLists: ['CTLists', function(CTLists) {
@@ -76,7 +77,44 @@ angular.module('Aggie')
         }]
       }
     });
-
+    $stateProvider.state('relevant_reports', {
+      url: '/relevant_reports?keywords&page&before&after&sourceId&status&media&incidentId&author&tags&list&escalated&veracity',
+      templateUrl: '/templates/reports/relevant_reports.html',
+      controller: 'RelevantReportsIndexController',
+      resolve: {
+        reports: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          return Report.query({
+            page: page - 1,
+            keywords: params.keywords,
+            after: params.after,
+            before: params.before,
+            sourceId: params.sourceId,
+            media: params.media,
+            incidentId: params.incidentId,
+            status: params.status,
+            author: params.author,
+            tags: params.tags,
+            list: params.list,
+            escalated: params.escalated,
+            veracity: params.veracity,
+            isRelevantReports: true,
+          }).$promise;
+        }],
+        ctLists: ['CTLists', function(CTLists) {
+          return CTLists.get().$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+        incidents: ['Incident', function(Incident) {
+          return Incident.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
+        }]
+      }
+    });
     $stateProvider.state('batch', {
       url: '/reports/batch?keywords&before&after&sourceId&status&media&incidentId&author&tags&list',
       templateUrl: '/templates/reports/batch.html',
@@ -173,6 +211,9 @@ angular.module('Aggie')
         }],
         users: ['User', function(User) {
           return User.query().$promise;
+        }],
+        smtcTags: ['SMTCTag', function(SMTCTag) {
+          return SMTCTag.query().$promise;
         }]
       }
     });
@@ -247,22 +288,13 @@ angular.module('Aggie')
 
     $stateProvider.state("analysis", {
       url: "/analysis",
-      templateUrl: "/templates/analysis.html",
+      templateUrl: "/templates/analysis/index.html",
       controller: "AnalysisController",
       resolve: {
-        threshold: ['Settings', function(Settings) {
-          return Settings.settings.get({ item: "hateSpeechThreshold" }).$promise
-        }],
         data: [
           "Visualization",
           function (Visualization) {
             return Visualization.get().$promise;
-          },
-        ],
-        smtcTags: [
-          "SMTCTag",
-          function (SMTCTag) {
-            return SMTCTag.query().$promise;
           },
         ],
       },

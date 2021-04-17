@@ -7,13 +7,16 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
+var SchemaTypes = mongoose.SchemaTypes;
 var validator = require('validator');
 var _ = require('underscore');
 var AutoIncrement = require('mongoose-sequence')(mongoose);
 var Report = require('./report');
 var logger = require('../lib/logger');
+var SMTCTag = require('../models/tag');
 
 require('../lib/error');
+
 
 var lengthValidator = function(str) {
   return validator.isLength(str, {min: 0, max: 42})
@@ -28,9 +31,10 @@ var schema = new mongoose.Schema({
   storedAt: Date,
   tags: { type: [String], default: [] },
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
-  veracity: { type: Boolean, default: null},
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   escalated: { type: Boolean, default: false, required: true },
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
@@ -68,8 +72,80 @@ schema.post('remove', function() {
 
 });
 
+schema.methods.addSMTCTag = function(smtcTagId, callback) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to add (if it doesn't exists) then add it.
+  let isRepeat = false;
+  this.smtcTags.forEach(function(tag) {
+    if(smtcTagId === tag.toString()) {
+      isRepeat = true;
+    }
+  });
+  if (isRepeat === false) {
+    this.smtcTags.push({_id: smtcTagId});
+  }
+  callback();
+}
+
+schema.methods.removeSMTCTag = function(smtcTagId, callback) {
+  // TODO: Use Functional Programming
+  // ML This finds the smtcTag to remove (if it exists) then remove it.
+  if (this.smtcTags) {
+    let fndIndex = -1;
+    this.smtcTags.forEach(function(tag, index) {
+      let string = tag.toString();
+      if (smtcTagId === tag.toString()) {
+        fndIndex = index;
+      }
+    })
+    if (fndIndex !== -1) {
+      this.smtcTags.splice(fndIndex, 1);
+    }
+  }
+  callback();
+}
+
+schema.methods.clearSMTCTags = function(callback) {
+
+  const cb = () => {
+    this.smtcTags = [];
+    callback();
+  }
+
+  if (!this.commentTo) {
+    var remaining = this.smtcTags.length;
+    this.smtcTags.forEach((tag) => {
+      const tagId = tag.toString();
+      this.removeSMTCTag(tagId, (err) => {
+        if (err) {
+          logger.error(err);
+        }
+        if (--remaining === 0) {
+          cb();
+        }
+      });
+    });
+    return;
+  }
+  cb();
+}
+
 schema.plugin(AutoIncrement, { inc_field: 'idnum' });
 var Incident = mongoose.model('Incident', schema);
+
+/* We need to be able to find Incidents by smtcTag Id
+SMTCTag.schema.on('tag:removed', function(id) {
+  Incident.find({smtcTags: id}, function(err, reports) {
+    if (err) {
+      logger.error(err);
+    }
+    reports.forEach(function(report) {
+      report.removeSMTCTag(id, () => {
+        report.save();
+      })
+    });
+  });
+})*/
 
 Report.schema.on('change:incident', function(prevIncident, newIncident) {
   if (prevIncident !== newIncident) {
@@ -124,10 +200,9 @@ Incident.queryIncidents = function(query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-  if (query.veracity === 'confirmed true') filter.veracity = true;
-  if (query.veracity === 'confirmed false') filter.veracity = false;
-  if (query.veracity === 'unconfirmed') filter.veracity = null;
-  if (_.isBoolean(query.veracity)) filter.veracity = query.veracity;
+  if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
+  if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
+  if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
 
   if (query.status === 'open') filter.closed = false;
   if (query.status === 'closed') filter.closed = true;
@@ -147,12 +222,10 @@ Incident.queryIncidents = function(query, page, options, callback) {
   else delete filter.locationName;
 
   // Checking for multiple tags in incident
-  if (query.tags) {
-    filter.tags = filter.tags || {};
-    filter.tags.$options = 'i';
-    filter.tags.$all = query.tags;
-  } else delete filter.tags;
-
+  if (filter.tags) {
+    filter.smtcTags = { $all: filter.tags };
+    delete filter.tags;
+  }
   // Re-set search timestamp
   query.since = new Date();
 

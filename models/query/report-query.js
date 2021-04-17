@@ -16,18 +16,19 @@ function ReportQuery(options) {
   }
 
   this._parseIncidentId(options.incidentId);
-
+  this.tags = options.tags;
   this.after = options.after;
   this.before = options.before;
   this.sourceId = options.sourceId;
   this.media = options.media;
   this.author = options.author;
   this.event = 'reports';
-  this.tags = options.tags;
   this.list = options.list;
   this.commentTo = options.commentTo;
   this.escalated = options.escalated;
+  this.veracity = options.veracity;
   this.notes = options.notes;
+  this.isRelevantReports = options.isRelevantReports;
 }
 
 _.extend(ReportQuery, Query);
@@ -41,7 +42,7 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'notes']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'veracity', 'isRelevantReports']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
@@ -52,7 +53,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
     read: this.read,
     commentTo: this.commentTo,
     escalated: this.escalated,
-    notes: this.notes
+    veracity: this.veracity,
   }
   if (this.escalated === 'unescalated') filter.escalated= false;
   if (this.escalated === 'escalated') filter.escalated = true;
@@ -67,27 +68,45 @@ ReportQuery.prototype.toMongooseFilter = function() {
   // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
 
   if (this.keywords) {
-      // Replace ! with NOT
-      this.keywords = this.keywords.replace(/\s!\s/g, " NOT ");
-      // Replace 1 or more & with just AND
-      this.keywords = this.keywords.replace(/\s&+\s/g, " AND ")
-      // Replace 1 or more | with just OR
-      this.keywords = this.keywords.replace(/\s\|+\s/g, " OR ")
-      // Replace " with whitespace, for perfect match
-      this.keywords = this.keywords.replace(/\"/g, " ")
+    // Replace non-operator spacing with % to support perfect match
+    this.keywords = this.keywords.replace(/\s+/gi, "%")
+    // Replace ! with NOT
+    this.keywords = this.keywords.replace(/%!%/g, " NOT ");
+    // Replace 1 or more & with just AND
+    this.keywords = this.keywords.replace(/%&+%/g, " AND ")
+    // Replace 1 or more | with just OR
+    this.keywords = this.keywords.replace(/%\|+%/g, " OR ")
 
+    // Re-add space around operators
+    this.keywords = this.keywords.replace(/%*NOT%*/g, " NOT ");
+    this.keywords = this.keywords.replace(/\(/g, "\\(");
+    this.keywords = this.keywords.replace(/\)/g, "\\)");
+    this.keywords = this.keywords.replace(/%*AND%*/g, " AND ")
+    this.keywords = this.keywords.replace(/%*OR%*/g, " OR ")
+    this.keywords = this.keywords.replace(/\s+/gi, " ")
+    // Replace " with whitespace, for perfect match
+    this.keywords = this.keywords.replace(/\"/g, "%")
+    this.keywords = this.keywords.replace(/\'/g, "%")
 
+    console.log(this.keywords.toString())
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
       let exp = new Expression(this.keywords.toString());
+      console.log(exp)
+
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       let res = exp.generate_seach_query();
       console.log(JSON.stringify(res))
       filter.$and = [res]
-    }
+  }
 
-  if (this.tags)      filter.smtcTags = { $all: this.tags }
-  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] }
-  console.log(filter)
+  if (this.tags) {
+      filter.smtcTags = { $all: this.tags };
+  } else {
+    if (this.isRelevantReports == 'true') {
+      filter.hasSMTCTags = true;
+    }
+  }
+  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };
   return filter;
 };
 
@@ -111,5 +130,6 @@ ReportQuery.prototype._parseIncidentId = function(incidentId) {
     this.incidentId = incidentId;
   }
 };
+
 
 module.exports = ReportQuery;

@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb mb-0">
-    <li class="breadcrumb-item"><a ui-sref="incidents" translate>Incidents</a></li>
+    <li class="breadcrumb-item"><a ui-sref="incidents" translate>Groups</a></li>
     <li class="breadcrumb-item active">{{ incident.title }}</li>
   </ol>
 </nav>
@@ -13,13 +13,21 @@
     </div>
     <div class="col-xl-10">
       <div class="card shadow-sm">
-        <div class="card-header card__header">
-          <div ng-show="currentUser.can('edit data')" class="button-row">
-            <button type="button" ng-click="$back()" class="btn btn-default mr-2">
-              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        <div class="card-header d-flex justify-content-between" ng-class="report.flagged ? 'bg-flagged' : 'card__header'">
+          <h4 class="card-title mb-0">Group Details</h4>
+          <div class="btn-group" role="group" aria-label="Flag/Unflag Buttons">
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Unconfirmed'" ng-click="unconfirm()">
+              <span class="mr-2" translate> Unconfirm </span>
+              <i class="fa fa-circle-o" aria-hidden="true"></i>
             </button>
-            <button ng-controller="IncidentFormModalController" class="btn btn-info margin-right" ng-click="edit(incident)" translate>Edit</button>
-            <button class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete()">Delete</button>
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed True'" ng-click="confirm(true)">
+              <span class="mr-2" translate> Confirm True </span>
+              <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed False'" ng-click="confirm(false)">
+              <span class="mr-2" translate> Confirm False </span>
+              <i class="fa fa-times-circle" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
         <div class="card-body">
@@ -51,7 +59,7 @@
               <tr>
                 <th scope="row" translate>Veracity</th>
                 <td>
-                  {{ incident.veracity ? 'Confirmed True' : (incident.veracity === false ? 'Confirmed False' : 'Unconfirmed') | translate }}
+                  {{ incident.veracity | translate }}
                 </td>
               </tr>
               <tr>
@@ -72,7 +80,7 @@
                 <div class="btn-group ml-2 mr-4">
                   <input ng-select-all items="reports" type="checkbox" />
                 </div>
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Group</button>
               </div>
               <nav class="Report list page navigation">
                 <ul class="list-inline mb-0">
@@ -105,7 +113,7 @@
           <div ng-show="pagination.total > 0">
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
               <div aria-label="Read/Unread Buttons/Selection">
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Incident</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Group</button>
               </div>
               <nav class="Report list page navigation">
                 <ul class="list-inline mb-0">
