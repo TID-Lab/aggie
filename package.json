@@ -48,6 +48,8 @@
     "express-spa-router": "0.0.8",
     "fbgraph": "^1.4.4",
     "feedparser": "^2.2.10",
+    "franc": "^5.0.0",
+    "franc-min": "^5.0.0",
     "graceful-fs": "^4.2.4",
     "gulp": "^4.0.2",
     "gulp-jshint": "^1.11.2",
