@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z0-9*$%\[\]()<>?@#\u1200-\u1399\'\"\/\\]+/i).toString();
+    return this.match(/[A-Za-z0-9*$%\[\]<>?@#\u1200-\u1399\'\"]+/i).toString();
 }
 
 function notop() {
@@ -150,10 +150,16 @@ Expression.prototype = {
         let hasAnds = cnfTerm.indexOf("AND") == -1 ? 0 : 1
         let hasOrs = cnfTerm.indexOf("OR") == -1 ? 0 : 1
         let hasNots = cnfTerm.indexOf("NOT") == -1 ? 0 : 1
-        if ((hasAnds + hasOrs) == 2 || (hasNots == 1) || override) {
+        if ((hasAnds + hasOrs + hasNots != 0) || override) {
             this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
             return evalTree(this.tree);
         }
+        else {
+            cnfTerm = cnfTerm.replace(/\%/gi,  " ")
+            return {"$text": {"$search": "\"" +  cnfTerm + "\""}}
+        }
+        
+        /* Please ignore this code
         else if ((hasAnds + hasOrs + hasNots) == 0) {
             cnfTerm = cnfTerm.replace(/\%/gi,  " ")
             return {"$text": {"$search": "\"" +  cnfTerm + "\""}}
@@ -182,6 +188,7 @@ Expression.prototype = {
             searchTerm = searchTerm.replace(/\%/gi,  " ")
             return  {"$text": {"$search": searchTerm}}
         }
+        */
     }
 }
 

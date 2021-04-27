@@ -65,7 +65,7 @@ ReportQuery.prototype.toMongooseFilter = function() {
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
   // if (this.author || this.keywords) filter.author = [{$text: { $search: `${this.author || ""}` }}];
   if (this.author)    filter.author = {$regex: this.author, $options: 'si'};
-  // if (this.keywords)  filter.$and.push({"content": {$regex: this.keywords, $options: 'si'}});
+  // if (this.keywords)  filter.$and.push({"$text": {"$search": this.keywords}});
 
   if (this.keywords) {
 
@@ -80,8 +80,8 @@ ReportQuery.prototype.toMongooseFilter = function() {
 
     // Re-add space around operators
     this.keywords = this.keywords.replace(/%*NOT%*/g, " NOT ");
-    this.keywords = this.keywords.replace(/\(/g, "\\(");
-    this.keywords = this.keywords.replace(/\)/g, "\\)");
+    // this.keywords = this.keywords.replace(/\(/g, "\\(");
+    // this.keywords = this.keywords.replace(/\)/g, "\\)");
     this.keywords = this.keywords.replace(/%*AND%*/g, " AND ")
     this.keywords = this.keywords.replace(/%*OR%*/g, " OR ")
     this.keywords = this.keywords.replace(/\s+/gi, " ")
@@ -90,15 +90,18 @@ ReportQuery.prototype.toMongooseFilter = function() {
     this.keywords = this.keywords.replace(/\'/g, "%")
 
     console.log(this.keywords.toString())
+    
       // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
       let exp = new Expression(this.keywords.toString());
       console.log(exp)
 
       // Convert the nested logical array into the approriate mongo query with $and, $or and $not
       // Change to true if you want to use $regex for all queries (instead of $text for some queries)
-      let res = exp.generate_search_query(true);
+      let res = exp.generate_search_query(false);
       console.log(JSON.stringify(res))
       filter.$and = [res]
+      
+      //filter.$and.push(res)
   }
 
   if (this.tags) {
