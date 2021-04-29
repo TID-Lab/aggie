@@ -39,7 +39,8 @@ var sourceSchema = new mongoose.Schema({
   lastReportDate: Date,
   lastReportDateSavedSearch: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  tags: { type: [String], default: [] }
+  tags: { type: [String], default: [] },
+  dashboardAPIToken: { type: String },
 });
 
 sourceSchema.pre('save', function(next) {
