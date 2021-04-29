@@ -55,7 +55,7 @@
               </div>
               <div class="form-group col mb-0 pb-2">
                 <div class="input-group input-group-sm">
-                  <select title="{{'Media Type Filter' | translate}}" ng-model="searchParams.media" ng-options="media| replaceCT | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
+                  <select title="{{'Media Type Filter' | translate}}" ng-model="searchParams.media" ng-options="media | capitalize | translate  for media in mediaOptions | orderBy:'toString()'" ng-change="search()" class="form-control filters__select">
                     <option value="" translate>Media</option>
                   </select>
                 </div>

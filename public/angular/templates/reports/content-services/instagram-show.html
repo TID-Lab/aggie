@@ -1,0 +1,37 @@
+<div ng-include="'/templates/reports/content-services/crowdtangle.html'"></div>
+<div class="row">
+    <div class="col">
+    <h5>Statistics</h5>
+    <div class="table-responsive">
+        <table class="table table-sm">
+        <tr>
+            <th translate>Real Statistics</th>
+            <td class="detail-value">
+        <span title="{{'Comments' | translate}}">
+            <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
+        </span>
+            </td>
+            <td class="detail-value">
+        <span title="{{'Favorites' | translate}}">
+            <strong>{{ "❤'s:" | translate }}</strong> {{report.metadata.actualStatistics.favoriteCount}}
+        </span>
+            </td>
+        </tr>
+        <tr>
+            <th translate>Expected Statistics</th>
+            <td class="detail-value">
+        <span title="{{'Comments' | translate}}">
+            <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.expectedStatistics.commentCount}}
+        </span>
+            </td>
+            <td class="detail-value">
+        <span title="{{'Favorites' | translate}}">
+            <strong>{{ "❤'s:" | translate }}</strong> {{report.metadata.expectedStatistics.favoriteCount}}
+        </span>
+            </td>
+        </tr>
+        <!------------------ End Crowdtangle Data ------------------>
+        </table>
+    </div>
+    </div>
+</div>  

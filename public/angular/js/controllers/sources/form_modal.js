@@ -90,8 +90,12 @@ angular.module('Aggie')
         if (!url || url === '') {
           url = 'https://www.facebook.com/';
         }
+      } else if (sourceMedia === 'instagram') {
+        if (!url || url === '') {
+          url = 'https://www.instagram.com/';
+        }
       } else {
-        if (url && url.indexOf('facebook') !== -1) {
+        if (url && (url.indexOf('facebook') !== -1 || url.indexOf('instagram') !== -1)) {
           url = '';
         }
       }
