@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z0-9*$%\[\]()<>?@#\u1200-\u1399\'\"\/\\]+/i).toString();
+    return this.match(/[A-Za-z0-9*$%\[\]<>?@#\u1200-\u1399\'\"]+/i).toString();
 }
 
 function notop() {
@@ -122,6 +122,9 @@ function collectLeaves(tree, leaves, notnot) {
     return leaves;
 }
 
+function generateCNF(tree) {
+    return buildCNF(tree).toCNF().toString()
+}
 // --------------- public interface -------------------
 
 function Expression(query) {
@@ -138,10 +141,54 @@ Expression.prototype = {
     flatten: function() {
         return flattenTree(this.tree);
     },
-    generate_seach_query: function() {
-        let cnfTerm = buildCNF(this.tree).toCNF().toString()
-        this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
-        return evalTree(this.tree);
+    CNF: function() {
+        return generateCNF(this.tree)
+    },
+    generate_search_query: function(override) {
+        let cnfTerm = generateCNF(this.tree);
+
+        let hasAnds = cnfTerm.indexOf("AND") == -1 ? 0 : 1
+        let hasOrs = cnfTerm.indexOf("OR") == -1 ? 0 : 1
+        let hasNots = cnfTerm.indexOf("NOT") == -1 ? 0 : 1
+        if ((hasAnds + hasOrs + hasNots != 0) || override) {
+            this.tree = new ReParse(cnfTerm.toString(), true).start(expr);
+            return evalTree(this.tree);
+        }
+        else {
+            cnfTerm = cnfTerm.replace(/\%/gi,  " ")
+            return {"$text": {"$search": "\"" +  cnfTerm + "\""}}
+        }
+        
+        /* Please ignore this code
+        else if ((hasAnds + hasOrs + hasNots) == 0) {
+            cnfTerm = cnfTerm.replace(/\%/gi,  " ")
+            return {"$text": {"$search": "\"" +  cnfTerm + "\""}}
+        }
+
+        else if (hasAnds == 1) {
+            cnfTerm = cnfTerm.replace(/AND/gi,  "")
+            cnfTerm = cnfTerm.replace(/\\\(/gi,  "")
+            cnfTerm = cnfTerm.replace(/\\\)/gi,  "")
+            let cnfTermSplit = cnfTerm.split("  ")
+            let searchTerm = ""
+            cnfTermSplit.forEach(function(d, i) {
+                console.log(d)
+                searchTerm += "\"" + d + "\"" + " "
+            })
+            console.log(searchTerm)
+            searchTerm = searchTerm.replace(/\%/gi,  " ")
+            return  {"$text": {"$search": searchTerm}}
+        }
+
+        else if (hasOrs == 1) {
+            cnfTerm = cnfTerm.replace(/OR/gi,  "")
+            cnfTerm = cnfTerm.replace(/\\\(/gi,  "")
+            cnfTerm = cnfTerm.replace(/\\\)/gi,  "")
+            let searchTerm = cnfTerm
+            searchTerm = searchTerm.replace(/\%/gi,  " ")
+            return  {"$text": {"$search": searchTerm}}
+        }
+        */
     }
 }
 
