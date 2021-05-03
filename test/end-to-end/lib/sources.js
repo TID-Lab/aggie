@@ -5,7 +5,8 @@ module.exports.addSource = function(sourceName, params) {
     Twitter: 0,
     RSS: 1,
     Elmo: 2,
-    'SMS GH': 3
+    'SMS GH': 3,
+    Telegram: 4,
   };
   browser.get(browser.baseUrl + 'sources');
   element(by.buttonText('Create Source')).click();
@@ -26,7 +27,8 @@ var sourceIconMapping = {
   Twitter: 'twitter-source',
   RSS: 'rss-source',
   Elmo: 'elmo-source',
-  'SMS GH': 'smsgh-source'
+  'SMS GH': 'smsgh-source',
+  Telegram: 'telegram-source'
 };
 module.exports.sourceIconMapping = sourceIconMapping;
 
