@@ -7,13 +7,16 @@ angular.module('Aggie')
   'SMTCTag',
   'FlashService',
   'Socket',
-  function($scope, $rootScope, smtcTags, SMTCTag, flash, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, smtcTags, SMTCTag, flash, Socket, StatsCache) {
     $scope.smtcTags = smtcTags;
     var init = function() {
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     }
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 

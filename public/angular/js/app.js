@@ -101,6 +101,7 @@ require('./services/tags');
 require('./services/smtcTag');
 require('./services/getCTList');
 require('./services/visualization');
+require('./services/stats');
 
 // Controllers
 require('./controllers/application');
@@ -113,6 +114,7 @@ require('./controllers/password_reset_modal');
 require('./controllers/password_reset_admin');
 require('./controllers/reports/index');
 require('./controllers/reports/show');
+require('./controllers/reports/relevant_reports');
 require('./controllers/sources/form_modal');
 require('./controllers/sources/index');
 require('./controllers/sources/show');
@@ -125,7 +127,7 @@ require('./controllers/users/index');
 require('./controllers/users/profile');
 require('./controllers/tags/index');
 require('./controllers/tags/tags_modal');
-require('./controllers/tags/report_tags_modal');
+require('./controllers/tags/report_and_incident_tags_modal');
 require('./controllers/incidents/index');
 require('./controllers/incidents/show');
 require('./controllers/incidents/map');

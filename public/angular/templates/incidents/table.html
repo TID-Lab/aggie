@@ -2,24 +2,51 @@
 <div class="table-responsive">
   <table class="table table-sm" ng-show="pagination.total > 0 || modal" ng-class="{'table-hover': modal}">
     <thead>
-    <tr>
-      <th ng-hide="modal || !currentUser.can('edit data')"></th>
-      <th scope="col" translate>ID#</th>
-      <th scope="col" translate>Title</th>
-      <th scope="col" translate>Location</th>
-      <th scope="col" ng-show="currentUser.can('view other users')" translate>Assigned To</th>
-      <th scope="col" translate>Status</th>
-      <th scope="col" translate>Veracity</th>
-      <th scope="col" translate>Escalated?</th>
-      <th scope="col" translate>Tags</th>
-      <th scope="col" translate>Last Updated</th>
-      <th scope="col" translate>Created</th>
-      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
-      <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
-    </tr>
+      <tr>
+        <th ng-hide="modal || !currentUser.can('edit data')"></th>
+        <th class='th__label' ng-hide="sortByProp =='idnum'" scope="col" ng-click="setSortByProp('idnum')" translate>
+          <span>ID #</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='idnum'" scope="col" ng-click="setSortByProp('idnum')" translate>
+          <span>ID #</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='title'" scope="col" ng-click="setSortByProp('title')" translate>
+          <span>Title</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='title'" scope="col" ng-click="setSortByProp('title')" translate>
+          <span>Title</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='locationName'" scope="col" ng-click="setSortByProp('locationName')" translate>
+          <span>Location</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='locationName'" scope="col" ng-click="setSortByProp('locationName')" translate>
+          <span>Location</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th ng-hide='modal' scope="col" translate>Notes</th>
+        <th class='th__label' ng-hide="sortByProp =='assignedTo'" scope="col" ng-click="setSortByProp('assignedTo')" translate>
+          <span>Assigned To</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='assignedTo'" scope="col" ng-click="setSortByProp('assignedTo')" translate>
+          <span>Assigned To</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='storedAt'" scope="col" ng-click="setSortByProp('storedAt')" translate>
+          <span>Creation Info</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='storedAt'" scope="col" ng-click="setSortByProp('storedAt')" translate>
+          <span>Creation Info</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th class='th__label' ng-hide="sortByProp =='smtcTags'" scope="col" ng-click="setSortByProp('smtcTags')" translate>
+          <span>Tags</span>
+        </th>
+        <th class='text-info th__label' ng-show="sortByProp =='smtcTags'" scope="col" ng-click="setSortByProp('smtcTags')" translate>
+          <span>Tags</span> <span>{{ reverseSortBy ? "&#x25B2;" : "&#9660;" }}</span>
+        </th>
+        <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Edit</th>
+        <th scope="col" ng-hide="modal || !currentUser.can('edit data')">Delete</th>
+      </tr>
     </thead>
     <tbody class="table-bordered">
-    <tr ng-repeat="i in incidents | orderBy:['closed','-idnum']" ng-class="{ item: true, 'bg-gray': i.closed }" ng-click="select(i)" >
+    <tr ng-repeat="i in incidents | orderBy: sortByProp: reverseSortBy" ng-class="{ item: true, 'escalated': i.escalated, 'bg-gray': i.closed }" ng-click="select(i)" >
       <th scope="row" class="text-center table__checkbox" ng-hide="modal || !currentUser.can('edit data')">
         <div class="td__checkbox">
           <input class="checkbox__input" ng-model="i.selected" type="checkbox" ng-model="i._id"/>
@@ -28,46 +55,63 @@
       <td>
         <strong>{{ i.idnum + 1 | tripleDigit }}</strong>
       </td>
-      <td ng-class="modal ? 'modal__incidentTitle' : 'table__incidentTitle'">
-        <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
-        <strong ng-show="modal">{{ i.title }}</strong>
-        <br />
-        <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
+      <td>
+        <div ng-class="modal ? 'modal__incidentTitle' : 'table__incidentTitle'">
+          <a ng-hide="modal" href="incidents/{{i._id}}" class="table-primary-link">{{ i.title }}</a>
+          <span ng-show="i.veracity == 'Confirmed True'" class="text-primary">
+                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+                </span>
+          <span ng-show="i.veracity == 'Confirmed False'" class="text-muted">
+                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+                </span>
+          <span ng-show="i.veracity == 'Unconfirmed'" class='text-muted'>
+                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+                </span>
+          <strong ng-show="modal">{{ i.title }}</strong>
+          <br/>
+          <span class="text-muted">{{i.totalReports}} {{'reports' | translate}}</span>
+        </div>
       </td>
       <td ng-class = "modal ? 'modal__location' : 'table__location'">
         <div class="map-marker" ng-show="i.latitude && i.longitude"></div>
         <span ng-if="i.locationName">{{ i.locationName }}</span>
         <span ng-if="!i.locationName && i.latitude && i.longitude">{{ i.latitude | number:6 }}, {{ i.longitude | number:6 }}</span>
       </td>
-      <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
-      <td>{{ {false: 'Open', true: 'Closed'}[i.closed] | translate }}</td>
-      <td>
-        <div ng-if="i.veracity != null">
-          <div translate>Confirmed</div>
-          <span ng-if="i.veracity" class="text-green" translate>True</span>
-          <span ng-if="!i.veracity" class="text-red" translate>False</span>
-        </div>
+      <td ng-hide="modal">
+        {{i.notes}}
       </td>
-      <td class="table__escalated" title="{{'Escalated?' | translate}}">
-        <span>{{ {false: 'No', true: 'Yes'}[i.escalated] | translate }}</span>
+      <td ng-show="currentUser.can('view other users')"><a href="profile/{{i.assignedTo.username}}">{{ i.assignedTo.username }}</a></td>
+      <td ng-show="currentUser.can('view other users')">
+        <!--<span class="badge badge-pill badge-secondary mb-2" title="{{ i.storedAt | aggieDate:'date' }} at {{ i.storedAt | aggieDate:'time' }}">{{i.updatedAt| interval }} ago</span>-->
+        <a href="profile/{{i.creator.username}}">{{ i.creator.username }}</a>
+        <br/>
+        <span><small>{{ i.storedAt | aggieDate:'date' }}</small>
+          <br/>
+          <small>{{ i.storedAt | aggieDate:'time' }}</small></span>
+        <br/>
+
       </td>
       <td class="td__tags" title="{{'Tags' | translate}}">
-        <span>{{ tagsToString(i.tags) }}</span>
-      </td>
-      <td>
-        <span class="badge badge-pill badge-secondary mb-2" title="">{{i.updatedAt| interval }} ago</span>
-      </td>
-      <td>
-        <small class="time">{{ i.storedAt | aggieDate:'time' }}</small>
-        <br>
-        <small> {{ i.storedAt | aggieDate:'date' }}</small>
+        <a ng-controller="SMTCTagSelectModalController" ng-click="setIncidentSMTCTags(i)" class="table-primary-link">
+          <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+        </a>
+        <tags class="tagify readonly" tabindex="-1">
+          <tag ng-repeat="tag in i.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+               class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+               ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+            <x title="" ng-click="removeTagFromIncident(i, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+            <div>
+              <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+            </div>
+          </tag>
+        </tags>
       </td>
       <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
         <div class="fa fa-pencil text-blue td__edit fa-lg" ng-controller="IncidentFormModalController" ng-click="edit(i)"></div>
       </td>
       <td ng-hide="modal ||  !currentUser.can('edit data')" class="compact actions align-middle">
         <div class="fa fa-trash text-blue td__delete fa-lg"
-             aggie-confirm="{{ 'Are you sure you want to delete this incident?' | translate }}" on-confirm="delete(i)"></div>
+             aggie-confirm="{{ 'Are you sure you want to delete this group?' | translate }}" on-confirm="delete(i)"></div>
       </td>
     </tr>
     </tbody>

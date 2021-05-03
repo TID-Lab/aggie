@@ -17,9 +17,6 @@
         &.td__errors {
           vertical-align: middle;
         }
-        &.flagged {
-          vertical-align: middle;
-        }
         &.tag {
         }
         &.td__sourceInfo {
@@ -65,12 +62,6 @@ tbody {
     }
   }
 
-  tr.flagged {
-    background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-  }
   tr.new-incident {
     background-color: rgba(146, 200, 220, 0.4);
   }
@@ -113,13 +104,6 @@ tbody {
   .date, .time {
     display: block;
   }
-}
-.bg-flagged {
-  background-color: #FFDDDD;
-    &:hover {
-      background-color: darken(#FFDDDD, 5%);
-    }
-
 }
 
 .td__media {
@@ -254,6 +238,7 @@ table, .table {
 
 .td__content {
   height: 100% !important;
+  position: relative;
   max-width: 400px;
   a {
     height: 100%;
@@ -304,7 +289,7 @@ td {
 }
 
 .tr--read {
-  background-color: #f5f6f7;
+  background-color: $gray;
 }
 
 .table__incidentTitle {
@@ -329,26 +314,15 @@ td {
   word-wrap: break-word;
 }
 
-.td__flag {
-  cursor: pointer;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-
-.flag__icon {
-  padding: 5px;
-  background-color: #dee2e6;
-  border-bottom: 2px solid #dee2e6;
-  border-left: 2px solid #dee2e6;
-  border-bottom-left-radius: 5px;
-}
-
 .td__edit {
   cursor: pointer;
 }
 
 .td__delete {
+  cursor: pointer;
+}
+
+.th__label {
   cursor: pointer;
 }
 
@@ -360,6 +334,30 @@ tag.tr__tag {
   position: relative;
   max-width: 120px;
   word-wrap: break-word;
+}
+
+.td__escalate {
+  cursor: pointer;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 50;
+}
+
+.escalate__icon {
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.confirm__span {
+  white-space: nowrap;
+}
+
+.leftmost__confirm {
+  border-top-left-radius: 0px;
+}
+.escalate--hidden {
+  display: none;
 }
 
 .content__shared {
@@ -389,10 +387,6 @@ tag.tr__tag {
 .author__icon {
   color: #929292;
   font-size: 14px;
-}
-
-.flag__icon {
-  font-size: 24px
 }
 
 .content__originalLink {
@@ -430,4 +424,25 @@ input.checkbox__input {
 .incidentShow__table {
   word-break: break-all;
   table-layout: fixed;
+}
+
+.relevant_table {
+  border: 1px solid #6c757d;
+}
+
+.stickbottom {
+  position: absolute;
+  bottom: 0px;
+}
+
+tr.escalated {
+  background-color: #FFDDDD;
+  &:hover {
+    background-color: darken(#FFDDDD, 5%);
+  }
+}
+
+
+.label__button{
+  font-weight: normal;
 }

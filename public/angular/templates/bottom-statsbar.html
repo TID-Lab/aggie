@@ -12,28 +12,40 @@
     <h3>{{stats.totalReportsPerMinute | number}}</h3>
   </li>
   <li class="list-inline-item" id="numUnreadReports" translate>
-    <p class="clear">Unread</p>
+    <p class="clear">Unread Reports</p>
   </li>
   <li class="list-inline-item" aria-labelledby="numUnreadReports">
     <h3>{{stats.totalReportsUnread | number}}</h3>
   </li>
-  <li class="list-inline-item" id="numFlaggedReports" translate>
-    <p class="clear">Flagged</p>
+  <li class="list-inline-item" id="numTaggedReports" translate>
+    <p class="clear">Tagged Reports</p>
   </li>
-  <li class="list-inline-item" aria-labelledby="numFlaggedReports">
-    <h3>{{stats.totalReportsFlagged | number}}</h3>
+  <li class="list-inline-item" aria-labelledby="numUnreadReports">
+    <h3>{{stats.totalReportsEscalated | number}}</h3>
+  </li>
+  <li class="list-inline-item" id="numEscalatedReports" translate>
+    <p class="clear">Escalated Reports</p>
+  </li>
+  <li class="list-inline-item" aria-labelledby="numUnreadReports">
+    <h3>{{stats.totalReportsTagged | number}}</h3>
   </li>
   <li class="list-inline-item" id="numIncidents"translate>
-    <p class="clear">Incidents</p>
+    <p class="clear">Groups</p>
   </li>
   <li class="list-inline-item" aria-labelledby="numIncidents">
     <h3>{{stats.totalIncidents | number}}</h3>
   </li>
   <li class="list-inline-item" id="numEscalatedIncidents" translate>
-    <p class="clear">Escalated Incidents</p>
+    <p class="clear">Escalated Groups</p>
   </li>
   <li class="list-inline-item" aria-labelledby="numEscalatedIncidents">
     <h3>{{stats.totalEscalatedIncidents | number}}</h3>
   </li>
 </ul>
+<div class="stats-timestamp">
+  <small class="text-dark-gray" translate>Last Updated</small>
+  <br/>
+  <i class="fa fa-clock-o text-dark-gray" aria-hidden="true"></i>
+  <small>{{stats.timestamp.toString() | date:'shortTime'}}</small>
+</div>
 

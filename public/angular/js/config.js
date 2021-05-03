@@ -6,10 +6,11 @@ angular.module('Aggie')
 
 .value('widgetSettingsOptions', ['incident map'])
 
-.value('statusOptions', ['Read', 'Unread', 'Flagged', 'Unflagged', 'Read & Unflagged'])
+.value('statusOptions', ['Read', 'Unread'])
 
-.value('linkedtoIncidentOptions', [{ _id: 'any', title: '* Any Incident' },
-                                   { _id: 'none', title: '* Without Incident' }])
+.value('linkedtoIncidentOptions', [{ _id: 'any', title: '* Any Group' },
+                                   { _id: 'none', title: '* Not in any Group' }])
+
 
 .value('userRoles', ['viewer', 'monitor', 'admin'])
 

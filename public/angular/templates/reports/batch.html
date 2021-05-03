@@ -7,7 +7,7 @@
         <div class="d-none d-xl-block">
           <label for="addTagColumn" class="pt-2 mb-0"> <h4 translate>Tags</h4> </label>
           <br>
-          <small translate> Click tags to add/remove to selected reports</small>
+
           <input class="mt-2" type="text" id="tag-search" ng-keyup="filterTags($event, smtcTags)" placeholder="Search tags" title="Type in a tag">
           <div id="addTagColumn" class="mt-2">
             <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
@@ -27,7 +27,7 @@
     </div>
     <!--This is the centered card-->
     <div class="col-xl-10">
-      <div class="card">
+      <div class="card shadow-sm">
         <div class="card-header card__header batchcardheader--withSelect">
           <div class="cardheader__text">
             <div class="btn-toolbar flex-wrap justify-content-between" aria-label="Page title and Hate Speech Ranking">
@@ -59,17 +59,6 @@
               <div class="btn-group mr-3">
                 <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
               </div>
-              <div class="btn-group mr-3">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
-                  <span class="mr-2" translate> Flag </span>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-              </div>
-              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
-                  Add to Incident
-                </button>
-              </div>
             </div>
             <div>
               <button class="btn btn-primary mr-3" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
@@ -85,17 +74,6 @@
             <div role="group" aria-label="Read/Unread Buttons/Selection">
               <div class="btn-group mr-3">
                 <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
-              </div>
-              <div class="btn-group mr-3">
-                <button type="button" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedFlagged()">
-                  <span class="mr-2" translate> Flag </span>
-                  <i class="fa fa-flag" aria-hidden="true"></i>
-                </button>
-              </div>
-              <div class="btn-group mr-3" role="group" aria-label="Incident Buttons">
-                <button type="button" ng-disabled="{{someSelected()}}" ng-class="{highlight: someSelected()}" class="btn btn-default" ng-controller="IncidentSelectModalController" ng-click="(someSelected()? setIncident():null)" translate>
-                  Add to Incident
-                </button>
               </div>
             </div>
             <div>

@@ -33,17 +33,19 @@ angular.module('Aggie')
             if (!reports) {
               reports = $scope.filterSelected($scope.reports);
             }
-
             return reports;
           }
         }
       });
 
-      modalInstance.result.then(function(incidentId) {
+      modalInstance.result.then(function(incident) {
         var ids = reports.map(function(report) {
           return report._id;
         });
-        Report.linkToIncident({ ids: ids, incident: incidentId });
+        reports.forEach(function(report) {
+          report._incident = incident._id;
+        })
+        Report.linkToIncident({ ids: ids, incident: incident._id });
       });
     };
   }
@@ -85,7 +87,7 @@ angular.module('Aggie')
 
     $scope.select = function(incident) {
       // report._incident = incident._id;
-      $modalInstance.close(incident._id);
+      $modalInstance.close(incident);
     };
 
     $scope.showErrors = function() {
@@ -131,19 +133,13 @@ angular.module('Aggie')
     };
 
     $scope.saveReport = function(report) {
+      report.read = true;
       Report.save({ id: report._id }, report, function() {
       }, function() {
         flash.setAlertNow("Sorry, but that report couldn't be saved.");
       });
     };
 
-    $scope.toggleFlagged = function(report) {
-      report.flagged = !report.flagged;
-      if (report.flagged) {
-        report.read = report.flagged;
-      }
-      $scope.saveReport(report);
-    };
 
     $scope.isFirstPage = function() {
       return $scope.pagination.page === 1;

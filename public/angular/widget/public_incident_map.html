@@ -21,9 +21,9 @@
    };
 
    function getVeracity(veracity) {
-     if (veracity === null) return veracityOptions.unverified;
+     if (veracity === 'Unconfirmed') return veracityOptions.unverified;
 
-     if (veracity) return veracityOptions.verifiedTrue;
+     if (veracity === 'Confirmed True') return veracityOptions.verifiedTrue;
      else return veracityOptions.verifiedFalse;
    }
 

@@ -9,6 +9,7 @@ var SchemaTypes = mongoose.SchemaTypes;
 var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
 var { addPost, removePost } = require('../lib/comments');
+var _= require('lodash')
 
 var schema = new Schema({
   authoredAt: {type: Date, index: true},
@@ -16,12 +17,13 @@ var schema = new Schema({
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   url: String,
   metadata: Schema.Types.Mixed,
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   read: { type: Boolean, default: false, required: true, index: true },
-  flagged: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
@@ -30,6 +32,8 @@ var schema = new Schema({
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
+  notes: {type: String},
+  escalated: { type: Boolean, default: false, required: true, index: true }
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -38,6 +42,12 @@ schema.index({ content: 'text', author: 'text' });
 schema.path('_incident').set(function(_incident) {
   this._prevIncident = this._incident;
   return _incident;
+});
+
+// sets the indexed hasSMTCTags boolean
+schema.pre('save', function(next) {
+  this.hasSMTCTags = this.smtcTags.length > 0;
+  next()
 });
 
 schema.pre('save', function(next) {
@@ -65,16 +75,18 @@ schema.post('save', function() {
   }
 });
 
-schema.methods.toggleFlagged = function(flagged) {
-  this.flagged = flagged;
 
-  if (flagged) {
-    this.read = true;
-  }
-};
 
 schema.methods.toggleRead = function(read) {
   this.read = read;
+};
+
+schema.methods.setVeracity = function(veracity) {
+  this.veracity = veracity;
+};
+
+schema.methods.toggleEscalated = function(escalated) {
+  this.escalated = escalated;
 };
 
 schema.methods.addSMTCTag = function(smtcTagId, callback) {
@@ -88,7 +100,7 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   });
   if (isRepeat === false) {
     this.smtcTags.push({_id: smtcTagId});
-
+    this.read = true;
     // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
     if (!this.commentTo && this._media[0] === 'crowdtangle' && !this.url.match(/permalink/)) {
       SMTCTag.findById(smtcTagId, (err, tag) => {
@@ -194,8 +206,16 @@ Report.queryReports = function(query, page, callback) {
   // Re-set search timestamp
   query.since = new Date();
 
+  if (query.escalated === 'escalated') filter.escalated = true;
+  if (query.escalated === 'unescalated') filter.escalated = false;
+  if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
+  if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
+  if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
+
   Report.findSortedPage(filter, page, callback);
 };
+
+
 
 Report.findSortedPage = function(filter, page, callback) {
   Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {

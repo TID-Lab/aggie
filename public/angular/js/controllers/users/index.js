@@ -7,14 +7,17 @@ angular.module('Aggie')
   'users',
   'User',
   'Socket',
-  function($scope, $rootScope, flash, users, User, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, flash, users, User, Socket, StatsCache) {
     $scope.users = users;
 
     var init = function() {
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     }
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
     $scope.delete = function(user) {

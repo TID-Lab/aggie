@@ -12,7 +12,8 @@ angular.module('Aggie')
   'TrendFetching',
   'Socket',
   'tz',
-  function($scope, $rootScope, flash, mediaOptions, sources, incidents, trends, Trend, TrendFetching, Socket, tz) {
+  'StatsCache',
+  function($scope, $rootScope, flash, mediaOptions, sources, incidents, trends, Trend, TrendFetching, Socket, tz, StatsCache) {
     $scope.trend = {};
     $scope.query = {};
     $scope.trends = [];
@@ -42,11 +43,13 @@ angular.module('Aggie')
       renderChart();
 
       Socket.on('trend', onTrend);
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     };
 
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
 

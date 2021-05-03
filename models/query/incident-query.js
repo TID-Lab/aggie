@@ -11,9 +11,11 @@ var IncidentQuery = function(options) {
   this.locationName = options.locationName;
   this.assignedTo = options.assignedTo;
   this.closed = options.status == 'closed';
-  this.veracity = options.veracity == 'Confirmed true' ? true : (options.veracity == 'Confirmed false' ? false : null);
+  this.veracity = options.veracity == 'Confirmed true' ? 'Confirmed True' : (options.veracity == 'Confirmed false' ? 'Confirmed False' : 'Unconfirmed');
   this.event = 'incidents';
   this.tags = options.tags;
+  this.idnum = options.idnum;
+  this.creator = options.creator;
 };
 
 _.extend(IncidentQuery, Query);

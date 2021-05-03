@@ -1,15 +1,15 @@
 <div ng-controller="IncidentFormModalController">
   <div class="modal-header">
     <h5 class="modal-title">
-      <span class="icon-left" ng-show="incident._id == null" translate>Create Incident</span>
-      <span class="icon-left" ng-show="incident._id != null" translate>Edit Incident</span>
+      <span class="icon-left" ng-show="incident._id == null" translate>Create Group</span>
+      <span class="icon-left" ng-show="incident._id != null" translate>Edit Group</span>
     </h5>
     <button class="close" ng-click="close()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p ng-show="report" class="info">{{'Enter the incident details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing incident' | translate}}</button></span>.</p>
+    <p ng-show="report" class="info">{{'Enter the group details below' | translate}}<span ng-show="incidents.length">. {{'Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentSelectModalController" ng-click="setIncident(report)">{{'choose an existing group' | translate}}</button></span>.</p>
     <div class="well bs-component">
       <form name="form">
         <fieldset>
@@ -32,7 +32,7 @@
                 <label for="veracity" translate>Veracity</label>
                 <select id="veracity" ng-model="incident.veracity"
                         class="form-control"
-                        ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: null}, {label: 'Confirmed True', value: true}, {label: 'Confirmed False', value: false}]">
+                        ng-options="v.value as v.label | translate for v in [{label: 'Unconfirmed', value: 'Unconfirmed'}, {label: 'Confirmed True', value: 'Confirmed True'}, {label: 'Confirmed False', value: 'Confirmed False'}]">
                 </select>
               </div>
               <div class="col">
@@ -56,12 +56,6 @@
             <button type="button" class="btn btn-link float-right" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
             <aggie-location show-errors="showErrors" model="incident" form="form" minimal-lat-lng="minimalLatLng"></aggie-location>
           </div>
-
-          <div class="form-group">
-            <label for="tags" translate>Tags</label>
-            <input id="tags" name="tags" type="text" class="form-control" ng-model="incident.tags" ng-focus>
-          </div>
-
           <div class="form-group" ng-hide="minimal">
             <label for="user" translate>Assign To</label>
             <select id="user" name="user" ng-model="incident.assignedTo"
@@ -77,7 +71,7 @@
             <label for="notes" translate>Notes</label>
             <textarea id="notes" name="notes" class="form-control" rows="8" ng-model="incident.notes"></textarea>
           </div>
-
+          <!--
           <div class="form-group">
             <label for="public" translate>Public</label>
             <input type="checkbox" id="public" name="public" ng-model="incident.public" class="form-control">
@@ -86,7 +80,7 @@
           <div class="form-group">
             <label for="public" translate>Public Description</label>
             <textarea id="publicDescription" name="publicDescription" class="form-control" ng-model="incident.publicDescription"></textarea>
-          </div>
+          </div>-->
         </fieldset>
       </form>
     </div>

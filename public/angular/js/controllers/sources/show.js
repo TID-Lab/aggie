@@ -9,14 +9,17 @@ angular.module('Aggie')
   'Tags',
   'FlashService',
   'Socket',
-  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket) {
+  'StatsCache',
+  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket, StatsCache) {
     $scope.source = source;
     Source.resetUnreadErrorCount({ id: source._id }, source);
     var init = function() {
+      $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
       Socket.join('stats');
     }
     var updateStats = function(stats) {
+      StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
     $scope.delete = function() {
