@@ -14,23 +14,31 @@
           ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
         <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
           <div class="td__checkbox">
-            <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
+            <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}"
+                   ng-model="r.selected" ng-model="r._id"/>
           </div>
         </td>
         <td class="td__sourceInfo">
-          <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
+          <span class="badge badge-pill badge-secondary mb-2"
+                title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">
+            {{ r.storedAt | interval }} ago
+          </span>
           <p ng-if="r.author" class="sourceInfo__author">
             <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
-              {{ r.author }}
+            {{ r.author }}
           </p>
           <p>
             <span ng-repeat="s in r._sources">
-            {{ sourcesById[s].nickname || '[Deleted]' }}
+              {{ sourcesById[s].nickname || '[Deleted]' }}
             </span>
             <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
-            <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
+            <span ng-if="r.metadata.ct_tag">
+              {{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}
+            </span>
           </p>
-          <p><a ng-href="{{r.url}}" target="_blank">Link <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
+          <p>
+            <a ng-href="{{r.url}}" target="_blank">Link <i class="fa fa-external-link" aria-hidden="true"></i></a>
+          </p>
           <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
           <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
           <!--<p class="created"><span>{{ r | delay }}</span></p>-->
@@ -52,7 +60,11 @@
           </div>
         </td>
         <td class="td__content" ng-class="{ strong: !isRead(r) }">
-          <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
+          <p class="content__originalPost" ng-if="r.commentTo">
+            <b>Original Post: </b>
+            {{ (r.originalPost || '[No Content]') | stripHtml }}
+            <a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a>
+          </p>
           <a ng-if="!r.commentTo" href="/reports/{{r._id}}" target="_blank">
             <p class="content" > {{ (r.content || '[No Content]') | stripHtml }} </p>
             <p class="content__shared" ng-if="r.metadata.description">
@@ -61,7 +73,12 @@
           </a>
           <a href="/reports/{{r.commentTo}}#{{r._id}}" ng-if="r.commentTo">
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
+              <li>
+                <span class="fa-li">
+                  <i class="fa fa-comment comment__icon" aria-hidden="true"></i>
+                </span>
+                <p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p>
+              </li>
             </ul>
           </a>
         </td>
@@ -70,15 +87,20 @@
             {{tagsToString(r.tags) + ", "}}
           </span>
           <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
-            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+            <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>
+              Edit
+            </strong>
           </a>
           <tags class="tagify readonly" tabindex="-1">
-            <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1" title="{{smtcTagsById[tag].name}}"
-                 class="tags__tag tr__tag tagify__tag tagify reportsTable__tags" __isvalid="true" value="bar"
-                 ng-style="{'--tag-bg': smtcTagsById[tag].color}">
-              <x ng-click="removeTagFromReport(r, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+            <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                 title="{{smtcTagsById[tag].name}}" class="tags__tag tr__tag tagify__tag tagify reportsTable__tags"
+                 __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+              <x ng-click="removeTagFromReport(r, tag)" class="tagify__tag__removeBtn" role="button"
+                 aria-label="remove tag"></x>
               <div>
-                <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                <span class="tagify__tag-text">
+                  {{smtcTagsById[tag].name}}
+                </span>
               </div>
             </tag>
           </tags>

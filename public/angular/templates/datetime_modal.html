@@ -12,17 +12,21 @@
           <div class="form-group">
             <label for="afterDate" class="time-control-label" translate>From:</label>
             <div class="input-group date" id="datetimepickerAfter" data-target-input="nearest">
-              <input id="afterDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter" ng-model="times.after"
+              <input id="afterDate" type="text" class="form-control datetimepicker-input"
+                     data-target="#datetimepickerAfter" ng-model="times.after"
                      placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
               <div class="input-group-append" data-target="#datetimepickerAfter" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                <div class="input-group-text">
+                  <i class="fa fa-calendar"></i>
+                </div>
               </div>
             </div>
           </div>
           <div class="form-group">
             <label for="beforeDate" class="time-control-label" translate>To:</label>
             <div class="input-group date" id="datetimepickerBefore" data-target-input="nearest">
-              <input id="beforeDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore" ng-model="times.before"
+              <input id="beforeDate" type="text" class="form-control datetimepicker-input"
+                     data-target="#datetimepickerBefore" ng-model="times.before"
                      placeholder="{{ 'End date / Time' | translate }}" name="before"/>
               <div class="input-group-append" data-target="#datetimepickerBefore" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>

@@ -39,10 +39,20 @@
               <td ng-class = "modal ? 'modal__location' : 'table__location'">
                 <div class="map-marker" ng-show="selectedIncident.latitude && selectedIncident.longitude"></div>
                 <span ng-if="selectedIncident.locationName">{{ selectedIncident.locationName }}</span>
-                <span ng-if="!selectedIncident.locationName && selectedIncident.latitude && selectedIncident.longitude">{{ selectedIncident.latitude | number:6 }}, {{ selectedIncident.longitude | number:6 }}</span>
+                <span ng-if="!selectedIncident.locationName && selectedIncident.latitude && selectedIncident.longitude">
+                  {{ selectedIncident.latitude | number:6 }}, {{ selectedIncident.longitude | number:6 }}
+                </span>
               </td>
-              <td ng-show="currentUser.can('view other users')"><a href="profile/{{selectedIncident.assignedTo.username}}">{{ selectedIncident.assignedTo.username }}</a></td>
-              <td ng-show="currentUser.can('view other users')"><a href="profile/{{selectedIncident.creator.username}}">{{ selectedIncident.creator.username }}</a></td>
+              <td ng-show="currentUser.can('view other users')">
+                <a href="profile/{{selectedIncident.assignedTo.username}}">
+                  {{ selectedIncident.assignedTo.username }}
+                </a>
+              </td>
+              <td ng-show="currentUser.can('view other users')">
+                <a href="profile/{{selectedIncident.creator.username}}">
+                  {{ selectedIncident.creator.username }}
+                </a>
+              </td>
               <td>{{ {false: 'Open', true: 'Closed'}[selectedIncident.closed] | translate }}</td>
               <td>
                 <div ng-if="selectedIncident.veracity != null">
@@ -55,7 +65,9 @@
                 <span>{{ {false: 'No', true: 'Yes'}[selectedIncident.escalated] | translate }}</span>
               </td>
               <td>
-                <span class="badge badge-pill badge-secondary mb-2" title="">{{selectedIncident.updatedAt| interval }} ago</span>
+                <span class="badge badge-pill badge-secondary mb-2" title="">
+                  {{selectedIncident.updatedAt| interval }} ago
+                </span>
               </td>
               <td>
                 <small class="time">{{ selectedIncident.storedAt | aggieDate:'time' }}</small>
@@ -69,7 +81,8 @@
     </div>
     <br>
     <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
-      <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
+      <span>
+        {{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
       </span>
       <a ui-sref="tags" ng-click="close()"> tag page </a>
       <span>{{ "under settings." | translate}}</span>
@@ -82,7 +95,9 @@
         </div>
       </form>
       <p ng-if="currentUser.can('edit tags')" class='info'> {{'If this requires a new tag, ' | translate}}
-        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">{{'create a new tag' | translate}}</button>.
+        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">
+          {{'create a new tag' | translate}}
+        </button>.
       </p>
     </div>
   </div>

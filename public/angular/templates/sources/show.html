@@ -13,7 +13,8 @@
     <div class="col-md-9">
       <div class="card shadow-sm">
         <div class="card-header card__header">
-          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with Source Edit Buttons" ng-show="currentUser.can('edit data')">
+          <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with Source Edit Buttons"
+               ng-show="currentUser.can('edit data')">
             <div class="btn-group">
               <button type="button" ui-sref="sources" class="btn btn-default">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -21,12 +22,15 @@
             </div>
             <div class="btn-group">
               <div class="mr-2">
-                <button type="button" ng-controller="SourceFormModalController" class="btn btn-info" ng-click="edit()" translate>
+                <button type="button" ng-controller="SourceFormModalController" class="btn btn-info" ng-click="edit()"
+                        translate>
                   <i class="fa fa-pencil" aria-hidden="true"></i>
                 </button>
               </div>
               <div>
-                <button type="button" class="btn btn-info" aggie-confirm="{{ 'Are you sure you want to delete this source?' | translate }}" on-confirm="delete()">
+                <button type="button" class="btn btn-info"
+                        aggie-confirm="{{ 'Are you sure you want to delete this source?' | translate }}"
+                        on-confirm="delete()">
                   <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
               </div>
@@ -78,7 +82,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="e in source.events | orderBy:'-datetime'" ng-class="{ unread: $index < source.unreadErrorCount }">
+                  <tr ng-repeat="e in source.events | orderBy:'-datetime'"
+                      ng-class="{ unread: $index < source.unreadErrorCount }">
                     <td class="td--eventTime">{{ e.datetime | aggieDate:'datetime' }}</td>
                     <td class="td--eventType text-capitalize">{{ e.type }}</td>
                     <td class="td--eventMessage">{{ e.message }}</td>

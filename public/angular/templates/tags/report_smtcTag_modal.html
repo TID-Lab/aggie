@@ -12,13 +12,13 @@
       <div class="table-responsive">
         <table class="table table-condensed">
           <thead>
-          <tr>
-            <th scope="col" translate>Source Info</th>
-            <th scope="col" translate>Thumbnail</th>
-            <th scope="col" translate>Content</th>
-            <th scope="col" translate>Tags</th>
-            <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th><!-- No need to show incident on incident detail page -->
-          </tr>
+            <tr>
+              <th scope="col" translate>Source Info</th>
+              <th scope="col" translate>Thumbnail</th>
+              <th scope="col" translate>Content</th>
+              <th scope="col" translate>Tags</th>
+              <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th><!-- No need to show incident on incident detail page -->
+            </tr>
           </thead>
           <tbody class="table-bordered">
           <tr ng-class="{ item: true}">
@@ -48,21 +48,31 @@
               </div>
             </td>
             <td class="td__content" ng-class="{ strong: !isRead(selectedReport) }">
-              <p class="content__originalPost" ng-if="selectedReport.commentTo"><b>Original Post: </b>{{ (selectedReport.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{selectedReport.commentTo}}">...see report details</a></span></p>
+              <p class="content__originalPost" ng-if="selectedReport.commentTo">
+                <b>Original Post: </b>
+                {{ (selectedReport.originalPost || '[No Content]') | stripHtml }}
+                <a class="content__originalLink" href="/reports/{{selectedReport.commentTo}}">...see report details</a>
+              </p>
               <a href="/reports/{{selectedReport._id}}">
-                <p class="content" ng-if="!selectedReport.commentTo"> {{ (selectedReport.content || '[No Content]') | stripHtml }} </p>
+                <p class="content" ng-if="!selectedReport.commentTo">
+                  {{ (selectedReport.content || '[No Content]') | stripHtml }}
+                </p>
                 <p class="content__shared" ng-if="selectedReport.metadata.description && !selectedReport.commentTo">
                   {{selectedReport.metadata.description | stripHtml}}
                 </p>
                 <ul class="fa-ul" ng-if="selectedReport.commentTo">
-                  <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (selectedReport.content || '[No Content]') | stripHtml }}</p></li>
+                  <li>
+                    <span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span>
+                    <p class="content__comment">{{ (selectedReport.content || '[No Content]') | stripHtml }}</p>
+                  </li>
                 </ul>
               </a>
             </td>
             <td class="tags text-center">
               <tags class="tagify readonly" tabindex="-1">
                 <tag ng-repeat="tag in selectedReport.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                     class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                     title="{{smtcTagsById[tag].name}}" class="tags__tag tr__tag tagify__tag tagify" __isvalid="true"
+                     value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
                   <div>
                     <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
                   </div>
@@ -81,7 +91,8 @@
     </div>
     <br>
     <div ng-hide="smtcTags" ng-if="currentUser.can('edit tags')">
-      <span>{{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
+      <span>
+        {{"Sorry, but we couldn't find any tags. Please create a tag on the" | translate}}
       </span>
       <a ui-sref="tags" ng-click="close()"> tag page </a>
       <span>{{ "under settings." | translate}}</span>
@@ -96,8 +107,11 @@
           </div>
         </div>
       </form>
-      <p ng-if="currentUseselectedReport.can('edit tags')" class='info'> {{'If this requires a new tag, ' | translate}}
-        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">{{'create a new tag' | translate}}</button>.
+      <p ng-if="currentUseselectedReport.can('edit tags')" class='info'>
+        {{'If this requires a new tag, ' | translate}}
+        <button type="button" class="btn-text" ng-controller="SMTCTagFormModalController" ng-click="create(reports)">
+          {{'create a new tag' | translate}}
+        </button>.
       </p>
     </div>
   </div>

@@ -7,13 +7,15 @@
         <div class="d-none d-xl-block">
           <label for="addTagColumn" class="pt-2 mb-0"> <h4 translate>Tags</h4> </label>
           <br>
-
-          <input class="mt-2" type="text" id="tag-search" ng-keyup="filterTags($event, smtcTags)" placeholder="Search tags" title="Type in a tag">
+          <input class="mt-2" type="text" id="tag-search" ng-keyup="filterTags($event, smtcTags)"
+                 placeholder="Search tags" title="Type in a tag">
           <div id="addTagColumn" class="mt-2">
             <tags ng-if="currentUser.can('edit data')" class="tagify readonly" tabindex="-1">
-              <tag ng-repeat="smtcTag in visibleSmtcTags" contenteditable="false" spellcheck="false" tabindex="-1" title="{{smtcTag.name}}"
-                   class="tags__tag tagify__tag tagify--noAnim batchIndex__tags" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}">
-                <x title="Remove Tag from Selected" ng-click="removeTagFromSelected(smtcTag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+              <tag ng-repeat="smtcTag in visibleSmtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                   title="{{smtcTag.name}}" class="tags__tag tagify__tag tagify--noAnim batchIndex__tags"
+                   __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTag.color}">
+                <x title="Remove Tag from Selected" ng-click="removeTagFromSelected(smtcTag)"
+                   class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
                 <div ng-click="addTagToSelected(smtcTag)">
                   <a>
                     <span class="tagify__tag-text">{{smtcTag.name}}</span>
@@ -33,7 +35,9 @@
             <div class="btn-toolbar flex-wrap justify-content-between" aria-label="Page title and Hate Speech Ranking">
               <h4 class="card-title" translate>Batch Mode</h4>
               <div ng-if="detectHateSpeech" class="pt-2 text-right text-secondary">
-                <span ng-if="hateSpeechThreshold.enabled" class="badge badge-pill badge-danger mr-1"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                <span ng-if="hateSpeechThreshold.enabled" class="badge badge-pill badge-danger mr-1">
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </span>
                 <span translate> Indicates a report that is likely to contain hate speech</span>
                 <br>
                 <br>
@@ -48,7 +52,8 @@
             </div>
           </div>
           <div class="dropdown-divider"></div>
-          <div class="btn-toolbar flex-wrap justify-content-between" role="toolbar" aria-label="Toolbar with selection actions">
+          <div class="btn-toolbar flex-wrap justify-content-between" role="toolbar"
+               aria-label="Toolbar with selection actions">
             <div role="group" aria-label="Read/Unread Buttons/Selection">
               <!-- Check all button -->
               <div class="btn-group mr-4" role="group" aria-label="Read/Unread Buttons">
@@ -57,12 +62,19 @@
                 </div>
               </div>
               <div class="btn-group mr-3">
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()"
+                        translate>
+                  Read/Unread
+                </button>
               </div>
             </div>
             <div>
-              <button class="btn btn-primary mr-3" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
-              <button class="btn btn-secondary mr-3" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</button>
+              <button class="btn btn-primary mr-3" ng-click="markAllReadAndGrabAnother()" translate>
+                Mark All Read &amp; Grab Another
+              </button>
+              <button class="btn btn-secondary mr-3" ng-click="markAllReadAndDone()" translate>
+                Mark All Read &amp; Done
+              </button>
               <button class="btn btn-secondary mr-3" ng-click="cancelBatch()" translate>Cancel</button>
             </div>
           </div>
@@ -73,12 +85,19 @@
           <div class="btn-toolbar flex-wrap justify-content-between" role="toolbar" aria-label="Toolbar with selection actions">
             <div role="group" aria-label="Read/Unread Buttons/Selection">
               <div class="btn-group mr-3">
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()" translate>Read/Unread</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="toggleSelectedRead()"
+                        translate>
+                  Read/Unread
+                </button>
               </div>
             </div>
             <div>
-              <button class="btn btn-primary mr-3" ng-click="markAllReadAndGrabAnother()" translate>Mark All Read &amp; Grab Another</button>
-              <button class="btn btn-secondary mr-3" ng-click="markAllReadAndDone()" translate>Mark All Read &amp; Done</button>
+              <button class="btn btn-primary mr-3" ng-click="markAllReadAndGrabAnother()" translate>
+                Mark All Read &amp; Grab Another
+              </button>
+              <button class="btn btn-secondary mr-3" ng-click="markAllReadAndDone()" translate>
+                Mark All Read &amp; Done
+              </button>
               <button class="btn btn-secondary" ng-click="cancelBatch()" translate>Cancel</button>
             </div>
           </div>

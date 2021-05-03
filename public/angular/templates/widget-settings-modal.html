@@ -17,13 +17,17 @@
         <fieldset>
           <div class="form-group">
             <label for="center" class="control-label" translate>Center</label>
-            <input id="center" ng-autocomplete name="center" type="text" class="form-control" details="$parent.details" ng-model="settings.center">
-            <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">{{ "Edit coordinates..." | translate }}</button>
+            <input id="center" ng-autocomplete name="center" type="text" class="form-control" details="$parent.details"
+                   ng-model="settings.center">
+            <button type="button" class="btn-text" ng-show="minimalLatLng" ng-click="minimalLatLng = false">
+              {{ "Edit coordinates..." | translate }}
+            </button>
           </div>
-          <aggie-location show-errors="showErrors" model="settings" form="settingsForm" minimal-lat-lng="minimalLatLng"></aggie-location>
+          <aggie-location show-errors="showErrors" model="settings" form="settingsForm" minimal-lat-lng="minimalLatLng">
+          </aggie-location>
           <div class="form-group">
             <label for="zoom" class="control-label">Zoom</label>
-            <input type="text" ng-model="settings['zoom']" class="form-control" id="zoom" name="zoom" required />
+            <input type="text" ng-model="settings['zoom']" class="form-control" id="zoom" name="zoom" required/>
           </div>
         </fieldset>
       </div>
@@ -33,9 +37,9 @@
         <div class="well bs-component">
           <fieldset>
             <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
-              <label for="{{ settingName }}" class="control-label">{{ settingName }}</label>
+              <label for="{{settingName}}" class="control-label">{{settingName}}</label>
               <input type="text" ng-model="settings[settingName]" class="form-control"
-                     id="{{ settingName }}" name="{{ settingName }}" placeholder="{{ settingValue }}" required />
+                     id="{{settingName}}" placeholder="{{settingValue}}" required/>
             </div>
           </fieldset>
         </div>

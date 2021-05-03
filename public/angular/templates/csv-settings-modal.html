@@ -7,13 +7,16 @@
   </div>
   <div class="modal-body">
     <p class="modal-title">
-      Exports reports as a tsv (similar to a csv, but separated by tabs rather than commas). Enter a date range to filter by, or all reports will be selected automatically.
-      <br><br></p>
+      Exports reports as a tsv (similar to a csv, but separated by tabs rather than commas).
+      Enter a date range to filter by, or all reports will be selected automatically.
+      <br>
+      <br>
+    </p>
     <div class="form-group">
       <label for="afterDate" class="time-control-label" translate>From:</label>
       <div class="input-group date" id="datetimepickerAfter" data-target-input="nearest">
-        <input id="afterDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter" ng-model="times.after"
-               placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
+        <input id="afterDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerAfter"
+               ng-model="times.after" placeholder="{{ 'Start date / Time' | translate }}" name="after"/>
         <div class="input-group-append" data-target="#datetimepickerAfter" data-toggle="datetimepicker">
           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
         </div>
@@ -22,8 +25,8 @@
     <div class="form-group">
       <label for="beforeDate" class="time-control-label" translate>To:</label>
       <div class="input-group date" id="datetimepickerBefore" data-target-input="nearest">
-        <input id="beforeDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore" ng-model="times.before"
-               placeholder="{{ 'End date / Time' | translate }}" name="before"/>
+        <input id="beforeDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepickerBefore"
+               ng-model="times.before" placeholder="{{ 'End date / Time' | translate }}" name="before"/>
         <div class="input-group-append" data-target="#datetimepickerBefore" data-toggle="datetimepicker">
           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
         </div>
@@ -36,29 +39,32 @@
       {{ 'Delete' | translate }}
     </button>
     <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
-    <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="download(times.before,times.after)" translate>Export</button>
+    <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="download(times.before,times.after)"
+            translate>
+      Export
+    </button>
   </div>
 </div>
 
 <!-- This allows the datetimepicker to restrict the range of the picked dates-->
 <!-- ML2020 I'm not a fan of <script> tags but I literally don't know how to do this any other way-->
-  <script type="text/javascript">
-    $('#datetimepickerAfter').datetimepicker({
-      format: 'YYYY-MM-DDTHH:mm'
-    });
+<script type="text/javascript">
+  $('#datetimepickerAfter').datetimepicker({
+    format: 'YYYY-MM-DDTHH:mm'
+  });
+  $('#datetimepickerBefore').datetimepicker({
+    format: 'YYYY-MM-DDTHH:mm'
+  });
+  $(function () {
+    $('#datetimepickerAfter').datetimepicker();
     $('#datetimepickerBefore').datetimepicker({
-      format: 'YYYY-MM-DDTHH:mm'
+      useCurrent: false
     });
-    $(function () {
-      $('#datetimepickerAfter').datetimepicker();
-      $('#datetimepickerBefore').datetimepicker({
-        useCurrent: false
-      });
-      $("#datetimepickerAfter").on("change.datetimepicker", function (e) {
-        $('#datetimepickerBefore').datetimepicker('minDate', e.date);
-      });
-      $("#datetimepickerBefore").on("change.datetimepicker", function (e) {
-        $('#datetimepickerAfter').datetimepicker('maxDate', e.date);
-      });
+    $("#datetimepickerAfter").on("change.datetimepicker", function (e) {
+      $('#datetimepickerBefore').datetimepicker('minDate', e.date);
     });
-  </script>
+    $("#datetimepickerBefore").on("change.datetimepicker", function (e) {
+      $('#datetimepickerAfter').datetimepicker('maxDate', e.date);
+    });
+  });
+</script>

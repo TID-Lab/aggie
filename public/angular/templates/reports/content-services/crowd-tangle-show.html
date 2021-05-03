@@ -5,107 +5,122 @@
       <table class="table table-sm table-hover">
         <tbody>
         <!----------------- General Report Information ----------------->
-        <tr>
-          <th scope="row" translate>Author</th>
-          <td colspan="10" class="detail-value">
-            <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
-          </td>
-        </tr>
-        <!-- Facebook Group/Page Sub Count -->
-        <tr ng-if="report.metadata.subscriberCount">
-          <th scope="row" translate>Subscriber Count</th>
-          <td colspan="10">
-                        <span title="{{'Subscriber Count' | translate}}">
-                        {{report.metadata.subscriberCount}}
-                      </span>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Authored Time</th>
-          <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>URL</th>
-          <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link <i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-        </tr>
-        <tr ng-repeat="source in sources">
-          <th scope="row" class="detail-key" translate>Sources</th>
-          <td colspan="10" class="detail-value">{{ source.nickname }}</td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Fetched Time</th>
-          <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Verified</th>
-          <td colspan="10" class="detail-value">
-            {{report.veracity}}
-            <span ng-show="report.veracity == 'Confirmed True'" class="text-primary">
-                  <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
-                </span>
-            <span ng-show="report.veracity == 'Confirmed False'" class="text-muted">
-                  <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
-                </span>
-            <span ng-show="report.veracity == 'Unconfirmed'" class='text-muted'>
-                  <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
-                </span></td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Escalated</th>
-          <td colspan="10" class="detail-value">
-            <span ng-show="report.escalated">Yes</span>
-            <span ng-hide="report.escalated">No</span>
-            <i class="fa fa-lg" ng-class="report.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
-            </i>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Group</th>
-          <td colspan="10" class="detail-value">
-            <div>
-              <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
-                      <span ng-if="report._incident && incidentsById[report._incident]">
-                        {{ incidentsById[report._incident].title }}
-                      </span>
-                <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Edit</strong>
+          <tr>
+            <th scope="row" translate>Author</th>
+            <td colspan="10" class="detail-value">
+              <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">
+                {{ report.author }}
+                <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-              <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row" class="detail-key" translate>Tags</th>
-          <td colspan="10" class="detail-value">
-                          <span ng-repeat="tag in report.tags">
-                            {{ tag + ', '}}
-                          </span>
-            <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
-              <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
-            </a>
-            <tags class="tagify readonly" tabindex="-1">
-              <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                   class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
-                <div>
-                  <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
-                </div>
-              </tag>
-            </tags>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" class="detail-key" translate>Notes</th>
-          <td colspan="10" class="detail-value">
-            <form>
-              <div class="form-group">
-                <label><a class="label__button" ng-click="editNotes(report)">Edit Notes</a></label>
-                <br>
-                <textarea ng-show="report.notes && !report.editingNotes" class="form-control" rows="3" ng-model="report.notes" disabled></textarea>
-                <textarea ng-show="report.editingNotes" class="form-control" rows="3" ng-blur="saveNotes(report)" ng-model="report.notes"></textarea>
+            </td>
+          </tr>
+          <!-- Facebook Group/Page Sub Count -->
+          <tr ng-if="report.metadata.subscriberCount">
+            <th scope="row" translate>Subscriber Count</th>
+            <td colspan="10">
+              <span title="{{'Subscriber Count' | translate}}">
+                {{report.metadata.subscriberCount}}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Authored Time</th>
+            <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>URL</th>
+            <td colspan="10" class="detail-value">
+              <a ng-href="{{report.url}}">Original Link
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+              </a>
+            </td>
+          </tr>
+          <tr ng-repeat="source in sources">
+            <th scope="row" class="detail-key" translate>Sources</th>
+            <td colspan="10" class="detail-value">{{ source.nickname }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Fetched Time</th>
+            <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Verified</th>
+            <td colspan="10" class="detail-value">
+              {{report.veracity}}
+              <span ng-show="report.veracity == 'Confirmed True'" class="text-primary">
+                <i class="fa fa-lg fa-check-circle" aria-hidden="true"></i>
+              </span>
+              <span ng-show="report.veracity == 'Confirmed False'" class="text-muted">
+                <i class="fa fa-lg fa-times-circle" aria-hidden="true"></i>
+              </span>
+              <span ng-show="report.veracity == 'Unconfirmed'" class='text-muted'>
+                <i class="fa fa-lg fa-circle-o" aria-hidden="true"></i>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Escalated</th>
+            <td colspan="10" class="detail-value">
+              <span ng-show="report.escalated">Yes</span>
+              <span ng-hide="report.escalated">No</span>
+              <i class="fa fa-lg" ng-class="report.escalated ? 'fa-arrow-circle-up' : 'fa-arrow-circle-o-up'">
+              </i>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Group</th>
+            <td colspan="10" class="detail-value">
+              <div>
+                <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])"
+                   class="table-primary-link">
+                  <span ng-if="report._incident && incidentsById[report._incident]">
+                    {{ incidentsById[report._incident].title }}
+                  </span>
+                  <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>
+                    Edit
+                  </strong>
+                </a>
+                <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
               </div>
-            </form>
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Tags</th>
+            <td colspan="10" class="detail-value">
+              <span ng-repeat="tag in report.tags">
+                {{ tag + ', '}}
+              </span>
+              <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
+                <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+              </a>
+              <tags class="tagify readonly" tabindex="-1">
+                <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                     class="tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+                     ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                  <div>
+                    <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                  </div>
+                </tag>
+              </tags>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Notes</th>
+            <td colspan="10" class="detail-value">
+              <form>
+                <div class="form-group">
+                  <label>
+                    <a class="label__button" ng-click="editNotes(report)">Edit Notes</a>
+                  </label>
+                  <br>
+                  <textarea ng-show="report.notes && !report.editingNotes" class="form-control" rows="3"
+                            ng-model="report.notes" disabled></textarea>
+                  <textarea ng-show="report.editingNotes" class="form-control" rows="3" ng-blur="saveNotes(report)"
+                            ng-model="report.notes"></textarea>
+                </div>
+              </form>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -119,10 +134,13 @@
     <!-------------- Crowdtangle Specific Table Elements -------------->
     <div ng-if="report.metadata.crowdtangleId">
       <div ng-repeat="media in report.metadata.mediaUrl">
-        <a id="reportMedia" ng-href="{{report.metadata.externalUrl}}" target="_blank"><img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}"></a>
+        <a id="reportMedia" ng-href="{{report.metadata.externalUrl}}" target="_blank">
+          <img ng-if="media.type === 'photo'" class="img-fluid img-thumbnail" ng-src="{{media.url}}">
+        </a>
       </div>
     </div>
-    <label ng-if="report.metadata.mediaUrl" for="reportMedia" title="{{'Content Type' | translate}}" ng-switch="report.metadata.type">
+    <label ng-if="report.metadata.mediaUrl" for="reportMedia" title="{{'Content Type' | translate}}"
+           ng-switch="report.metadata.type">
       <span ng-switch-when="link">{{'Link' | translate}}</span>
       <span ng-switch-when="native_video">{{'Native Video' | translate}}</span>
       <span ng-switch-when="status">{{'Status' | translate}}</span>
@@ -147,14 +165,14 @@
         <tr>
           <th translate>Real Statistics</th>
           <td class="detail-value">
-        <span title="{{'Comments' | translate}}">
-          <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
-        </span>
+            <span title="{{'Comments' | translate}}">
+              <strong>{{ "Comments:" | translate }}</strong> {{report.metadata.actualStatistics.commentCount}}
+            </span>
           </td>
           <td class="detail-value">
-        <span title="{{'Shares' | translate}}">
-          <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.actualStatistics.shareCount}}
-        </span>
+            <span title="{{'Shares' | translate}}">
+              <strong>{{ "Shares:" | translate }}</strong> {{report.metadata.actualStatistics.shareCount}}
+            </span>
           </td>
           <td class="detail-value">
         <span title="{{'Likes' | translate}}">

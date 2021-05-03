@@ -16,15 +16,19 @@
             <th scope="col" translate>Source Info</th>
             <th scope="col" translate>Thumbnail</th>
             <th scope="col" translate>Content</th>
-            <th scope="col" translate>Tags</th><!-- No need to show incident on incident detail page -->
-            <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th><!-- No need to show incident on incident detail page -->
+            <th scope="col" translate>Tags</th>
+            <!-- No need to show incident on incident detail page -->
+            <th scope="col" translate ng-hide="pageType == 'show-incident'">Group</th>
           </tr>
           </thead>
           <tbody class="table-bordered">
           <tr ng-repeat="r in reports | orderBy:'-storedAt'"
               ng-class="{ item: true, 'bg-gray': r.read, unread: !r.read}">
             <td class="td__sourceInfo">
-              <span class="badge badge-pill badge-secondary mb-2" title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">{{ r.storedAt | interval }} ago</span>
+              <span class="badge badge-pill badge-secondary mb-2"
+                    title="{{ r.storedAt | aggieDate:'date' }} at {{ r.storedAt | aggieDate:'short_time' }}">
+                {{ r.storedAt | interval }} ago
+              </span>
               <p class="sourceInfo__author">
                 <i class="fa fa-user-circle-o author__icon" aria-hidden="true"></i>
                 {{ r.author }}
@@ -34,7 +38,9 @@
             {{ sourcesById[s].nickname || '[Deleted]' }}
             </span>
             <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
-            <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
+            <span ng-if="r.metadata.ct_tag">
+              {{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}
+            </span>
           </span>
               <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>
               <small>{{ r.storedAt | aggieDate:'date' }}</small>-->
@@ -49,21 +55,29 @@
               </div>
             </td>
             <td class="td__content" ng-class="{ strong: !isRead(r) }">
-              <p class="content__originalPost" ng-if="r.commentTo"><b>Original Post: </b>{{ (r.originalPost || '[No Content]') | stripHtml }}<a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a></span></p>
+              <p class="content__originalPost" ng-if="r.commentTo">
+                <b>Original Post: </b>
+                {{ (r.originalPost || '[No Content]') | stripHtml }}
+                <a class="content__originalLink" href="/reports/{{r.commentTo}}">...see report details</a>
+              </p>
               <a href="/reports/{{r._id}}">
                 <p class="content" ng-if="!r.commentTo"> {{ (r.content || '[No Content]') | stripHtml }} </p>
                 <p class="content__shared" ng-if="r.metadata.description && !r.commentTo">
                   {{r.metadata.description | stripHtml}}
                 </p>
                 <ul class="fa-ul" ng-if="r.commentTo">
-                  <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></li>
+                  <li>
+                    <span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span>
+                    <p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p>
+                  </li>
                 </ul>
               </a>
             </td>
             <td class="tags text-center">
               <tags class="tagify readonly" tabindex="-1">
-                <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1" title="{{smtcTag.name}}"
-                     class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                     title="{{smtcTag.name}}" class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+                     ng-style="{'--tag-bg': smtcTagsById[tag].color}">
                   <div>
                     <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
                   </div>
@@ -80,9 +94,20 @@
         </table>
       </div>
     </div>
-    <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any groups. You can" | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new group' | translate}}</button>.</p>
+    <p ng-hide="incidents" class="info">{{"Sorry, but we couldn't find any groups. You can" | translate}}
+      <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">
+        {{'create a new group' | translate}}
+      </button>
+      .
+    </p>
     <div class="container-fluid" ng-show="incidents">
-      <p class='info'>{{'Click an group below to which you would like to add the report. Or you can' | translate}} <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">{{'create a new group' | translate}}</button>.</p>
+      <p class='info'>
+        {{'Click an group below to which you would like to add the report. Or you can' | translate}}
+        <button type="button" class="btn-text" ng-controller="IncidentFormModalController" ng-click="create(reports)">
+          {{'create a new group' | translate}}
+        </button>
+        .
+      </p>
       <div class="row justify-content-end">
         <ul class="list-inline mb-0">
           <li class="list-inline-item">
@@ -94,21 +119,24 @@
             <nav aria-label="Incident page navigation">
               <ul id="topIncidentPagination" class="pagination justify-content-end">
                 <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                  <a title="Previous Page" aria-label="Previous Page" class="page-link"  ng-click="getPage(pagination.page - 1)" ><i class="fa fa-chevron-left"></i></a>
+                  <a title="Previous Page" aria-label="Previous Page"
+                     class="page-link" ng-click="getPage(pagination.page - 1)" >
+                    <i class="fa fa-chevron-left"></i>
+                  </a>
                 </li>
                 <li class="page-item" ng-class="{disabled: isLastPage() }">
-                  <a title="Next Page" class="page-link"  ng-click="getPage(pagination.page + 1)"><i class="fa fa-chevron-right"></i></a>
+                  <a title="Next Page" class="page-link"  ng-click="getPage(pagination.page + 1)">
+                    <i class="fa fa-chevron-right"></i>
+                  </a>
                 </li>
               </ul>
             </nav>
           </li>
         </ul>
       </div>
-
       <a title="Incident Picking">
         <div ng-include="'/templates/incidents/table.html'"></div>
       </a>
-
       <div class="row justify-content-end">
         <ul class="list-inline mb-0">
           <li class="list-inline-item">
@@ -120,10 +148,14 @@
             <nav aria-label="Incident page navigation">
               <ul id="bottomIncidentPagination" class="pagination justify-content-end">
                 <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                  <a title="Previous Page" aria-label="Previous Page" class="page-link"  ng-click="getPage(pagination.page - 1)" ><i class="fa fa-chevron-left"></i></a>
+                  <a title="Previous Page" aria-label="Previous Page" class="page-link"
+                     ng-click="getPage(pagination.page - 1)" ><i class="fa fa-chevron-left"></i>
+                  </a>
                 </li>
                 <li class="page-item" ng-class="{disabled: isLastPage() }">
-                  <a title="Next Page" class="page-link"  ng-click="getPage(pagination.page + 1)"><i class="fa fa-chevron-right"></i></a>
+                  <a title="Next Page" class="page-link"  ng-click="getPage(pagination.page + 1)">
+                    <i class="fa fa-chevron-right"></i>
+                  </a>
                 </li>
               </ul>
             </nav>

@@ -9,17 +9,22 @@
             <fieldset>
               <div class="form-group col">
                 <label for="username" translate>Username</label>
-                <input type="text" ng-model="user.username" class="form-control" aria-describedby="usernameInput" id="username" placeholder="{{'Enter username' | translate}}">
+                <input type="text" ng-model="user.username" class="form-control" aria-describedby="usernameInput"
+                       id="username" placeholder="{{'Enter username' | translate}}">
               </div>
               <div class="form-group col">
                 <label for="password" translate>Password</label>
-                <input type="password" ng-model="user.password" class="form-control" id="password" placeholder="{{'Enter password' | translate}}">
+                <input type="password" ng-model="user.password" class="form-control" id="password"
+                       placeholder="{{'Enter password' | translate}}">
               </div>
               <div class="form-group col">
                 <div class="">
                   <button type="submit" class="btn btn-primary" translate>Log In</button>
-                  <br/><br/>
-                  <a href ng-controller="PasswordResetModalController" ng-click="open()" translate>Forgot password?</a>
+                  <br/>
+                  <br/>
+                  <a href ng-controller="PasswordResetModalController" ng-click="open()" translate>
+                    Forgot password?
+                  </a>
                 </div>
               </div>
             </fieldset>

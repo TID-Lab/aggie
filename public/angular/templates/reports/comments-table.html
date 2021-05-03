@@ -7,7 +7,8 @@
       <th scope="col" translate>Thumbnail</th>
       <th scope="col" translate>Content</th>
       <th scope="col" translate>Tags</th>
-      <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th><!-- No need to show incident on incident detail page -->
+      <!-- No need to show incident on incident detail page -->
+      <th scope="col" translate ng-hide="pageType == 'show-incident'">Incident</th>
     </tr>
     </thead>
     <tbody class="table-bordered">
@@ -15,11 +16,15 @@
         ng-class="{ item: true, 'tr--unread': !r.read, 'tr--read': r.read }">
       <td class="text-center table__checkbox" ng-show="currentUser.can('edit data')">
         <div class="td__checkbox">
-          <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected" ng-model="r._id" />
+          <input class="checkbox__input" type="checkbox" aria-label="{{'Select All' | translate}}" ng-model="r.selected"
+                 ng-model="r._id" />
         </div>
       </td>
       <td class="td__commentTime">
-        <span class="badge badge-pill badge-secondary mb-2" title="{{ r.fetchedAt | aggieDate:'date' }} at {{ r.fetchedAt | aggieDate:'short_time' }}">{{ r.fetchedAt | interval }} ago</span>
+        <span class="badge badge-pill badge-secondary mb-2"
+              title="{{ r.fetchedAt | aggieDate:'date' }} at {{ r.fetchedAt | aggieDate:'short_time' }}">
+          {{ r.fetchedAt | interval }} ago
+        </span>
       </td>
       <td class="thumbnail-image text-center" ng-class="{ strong: !isRead(r) }">
         <div ng-repeat="media in r.metadata.mediaUrl">
@@ -33,13 +38,17 @@
       </td>
       <td id="{{r._id}}" class="td__content" ng-class="{ strong: !isRead(r) }">
         <ul class="fa-ul">
-          <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span><a ng-href="{{r.url}}" target="_blank"><p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p></a></li>
+          <li><span class="fa-li"><i class="fa fa-comment comment__icon" aria-hidden="true"></i></span>
+            <a ng-href="{{r.url}}" target="_blank">
+              <p class="content__comment">{{ (r.content || '[No Content]') | stripHtml }}</p>
+            </a>
+          </li>
         </ul>
       </td>
       <td class="td__tags tag">
-          <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
-            {{tagsToString(r.tags) + ", "}}
-          </span>
+        <span ng-if="r.tags" ng-class="{ strong: !isRead(r) }">
+          {{tagsToString(r.tags) + ", "}}
+        </span>
         <!--
         <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(r)" class="table-primary-link">
           <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
@@ -56,14 +65,16 @@
       </td>
       <td class="td__incident align-middle" ng-hide="pageType == 'show-incident'">
         <div class="text-center incident__addLink">
-            <span>
-              <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
-                <strong ng-if="r._incident && incidentsById[r._incident]">
-                  {{ incidentsById[r._incident].title | strLimit: 40 }}
-                </strong>
-                <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>Add</strong>
-              </a>
-            </span>
+          <span>
+            <a ng-controller="IncidentSelectModalController" ng-click="setIncident([r])" class="table-primary-link">
+              <strong ng-if="r._incident && incidentsById[r._incident]">
+                {{ incidentsById[r._incident].title | strLimit: 40 }}
+              </strong>
+              <strong class="addIdentifier" ng-if="!r._incident && currentUser.can('edit data')" translate>
+                Add
+              </strong>
+            </a>
+          </span>
           <a class="position-relative" ng-show="r._incident" ng-click="unlinkCommentIncident(r)">x</a>
         </div>
       </td>

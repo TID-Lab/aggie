@@ -12,11 +12,10 @@
       </td>
       <td class="action">
         <div data-toggle="buttons">
-          <label ng-click="toggle(false)"
-                 class="toggle-item ng-class:{'active':on===false}" translate>
+          <label ng-click="toggle(false)" class="toggle-item ng-class:{'active':on===false}" translate>
             Off
-          </label><label ng-click="toggle(true)"
-                         class="toggle-item ng-class:{'active':on===true}" translate>
+          </label>
+          <label ng-click="toggle(true)" class="toggle-item ng-class:{'active':on===true}" translate>
             On
           </label>
         </div>
@@ -24,9 +23,7 @@
     </tr>
   </tbody>
 </table>
-
 <h4 translate>API Authentication</h4>
-
 <table class="table table-settings" ng-controller="SettingsController">
   <tr ng-repeat="settingOption in apiSettingOptions">
     <td>
@@ -34,21 +31,26 @@
     </td>
     <td class="action">
       <div class="ng-scope">
-        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
+        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController"
+                ng-click="edit(settingOption, setting[settingOption], 'api')" translate>
+          Edit
+        </button>
       </div>
     </td>
   </tr>
 </table>
 
-<span class="ng-scope"  ng-controller="SettingsController">
+<span class="ng-scope" ng-controller="SettingsController">
   <table ng-if="showCTButton" class="table table-settings ">
-    <tr >
+    <tr>
       <td>
         <label class="settings-label" translate>Update CrowdTangle List</label>
       </td>
       <td class="action">
         <div class="ng-scope" >
-          <button class="btn btn-info ng-scope" ng-disabled="disableCTButton" ng-click="updateCTList()" translate>Update</button>
+          <button class="btn btn-info ng-scope" ng-disabled="disableCTButton" ng-click="updateCTList()" translate>
+            Update
+          </button>
         </div>
       </td>
     </tr>
@@ -62,8 +64,7 @@
       <label class="settings-label" translate>App Email Address</label>
     </td>
     <td class="value text-field">
-      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}"
-             ng-change="formChanged=true"/>
+      <input type="text" class="form-control" ng-model="email" placeholder="{{ email }}" ng-change="formChanged=true"/>
     </td>
     <td class="action">
       <button class="btn btn-info ng-scope" ng-disabled="!formChanged" ng-click="saveEmail()" translate>Save</button>
@@ -92,7 +93,8 @@
     </td>
     <td class="action">
       <div class="ng-scope">
-        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
+        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController"
+                ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
       </div>
     </td>
   </tr>

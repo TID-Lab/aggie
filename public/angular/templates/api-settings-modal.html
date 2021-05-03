@@ -9,7 +9,6 @@
     <div class="modal-body">
       <alert type="info" ng-show="success">{{ "api_settings_modal.success" | translate }}</alert>
       <alert type="danger" ng-show="failure">{{ message }}</alert>
-
       <ol ng-if="item === 'twitter'">
         <li translate>api_settings_modal.twitter.p1</li>
         <li translate>api_settings_modal.twitter.p2</li>
@@ -32,12 +31,13 @@
         <div class="form-group" ng-repeat="(settingName, settingValue) in settings">
           <label for="{{ settingName }}" class="control-label">{{ settingName }}</label>
           <input type="text" ng-model="settings[settingName]" class="form-control"
-                 id="{{ settingName }}" name="{{settingName}}" placeholder="{{ settingValue }}" required />
+                 id="{{ settingName }}" name="{{settingName}}" placeholder="{{ settingValue }}" required/>
         </div>
       </fieldset>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(item, settings)" ng-if="item !== 'elmo' && item !== 'gplaces'">
+      <button class="btn btn-default"  ng-disabled="settingsForm.$invalid" ng-click="test(item, settings)"
+              ng-if="item !== 'elmo' && item !== 'gplaces'">
         <span class="fa fa-refresh refresh-animate" ng-show="loading"></span>
         <span ng-hide="loading">Test</span>
         <span ng-show="loading">Testing</span>
@@ -47,7 +47,8 @@
         {{ 'Delete' | translate }}
       </button>
       <button class="btn btn-default" ng-click="close()" translate>Cancel</button>
-      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, item, settings)" translate>
+      <button class="btn btn-primary" ng-disabled="settingsForm.$invalid" ng-click="save(form, item, settings)"
+              translate>
         Save
       </button>
     </div>

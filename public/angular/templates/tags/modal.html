@@ -15,21 +15,30 @@
         <div class="form-group">
           <label for="tagName" class="required-label" translate>Tag Name</label>
           <input type="text" class="form-control" id="tagName" required maxlength="40" ng-model="smtcTag.name">
-          <small class="input-group-addon"><span ng-show="smtcTag.name.length">{{40 - smtcTag.name.length}} characters remaining</span></small>
-          <small ng-show="!smtcTag.name.length && showErrors" class="input-group-addon"><span class="text-muted">
-            {{ "Please provide a name" | translate}}
-          </span></small>
+          <small class="input-group-addon">
+            <span ng-show="smtcTag.name.length">
+              {{40 - smtcTag.name.length}} characters remaining
+            </span>
+          </small>
+          <small ng-show="!smtcTag.name.length && showErrors" class="input-group-addon">
+            <span class="text-muted">
+              {{ "Please provide a name" | translate}}
+            </span>
+          </small>
         </div>
         <div class="form-group">
           <label for="tagColor" class="required-label" translate>Tag Color</label>
           <br>
-          <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required ng-model="smtcTag.color">
+          <input ng-init="spectrumify()" type="text" class="form-control" id="tagColor" required
+                 ng-model="smtcTag.color">
           <small ng-show="!smtcTag.color.length && showErrors" class="text-muted">
             A color must be specified.
           </small>
         </div>
         <div class="form-group">
-          <label for="tagIsCommentTag" translate>Does tag enable comment acquisition on posts?</label>
+          <label for="tagIsCommentTag" translate>
+            Does tag enable comment acquisition on posts?
+          </label>
           <input type="checkbox" class="form-control" id="tagIsCommentTag" ng-model="smtcTag.isCommentTag">
         </div>
         <div class="form-group">

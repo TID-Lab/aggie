@@ -13,18 +13,22 @@
     </div>
     <div class="col-xl-10">
       <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between" ng-class="report.flagged ? 'bg-flagged' : 'card__header'">
+        <div class="card-header d-flex justify-content-between"
+             ng-class="report.flagged ? 'bg-flagged' : 'card__header'">
           <h4 class="card-title mb-0">Group Details</h4>
           <div class="btn-group" role="group" aria-label="Flag/Unflag Buttons">
-            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Unconfirmed'" ng-click="unconfirm()">
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Unconfirmed'"
+                    ng-click="unconfirm()">
               <span class="mr-2" translate> Unconfirm </span>
               <i class="fa fa-circle-o" aria-hidden="true"></i>
             </button>
-            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed True'" ng-click="confirm(true)">
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed True'"
+                    ng-click="confirm(true)">
               <span class="mr-2" translate> Confirm True </span>
               <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
             </button>
-            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed False'" ng-click="confirm(false)">
+            <button type="button" class="btn btn-light" ng-disabled="incident.veracity == 'Confirmed False'"
+                    ng-click="confirm(false)">
               <span class="mr-2" translate> Confirm False </span>
               <i class="fa fa-times-circle" aria-hidden="true"></i>
             </button>
@@ -37,7 +41,9 @@
                 <th scope="row" translate>Location</th>
                 <td>
                   <span ng-if="incident.locationName">{{ incident.locationName }}</span>
-                  <span ng-if="incident.latitude && incident.longitude">{{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}</span>
+                  <span ng-if="incident.latitude && incident.longitude">
+                    {{ incident.latitude | number:6 }}, {{ incident.longitude | number:6 }}
+                  </span>
                 </td>
               </tr>
               <tr>
@@ -75,29 +81,36 @@
           <!-- Report view under incidents -->
           <p ng-hide="pagination.total > 0" translate>There are no reports to display.</p>
           <div ng-show="pagination.total > 0">
-            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions"
+                 ng-show="currentUser.can('edit data')">
               <div aria-label="Read/Unread Buttons/Selection">
                 <div class="btn-group ml-2 mr-4">
                   <input ng-select-all items="reports" type="checkbox" />
                 </div>
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Group</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default"
+                        ng-click="unlinkSelected()" translate>
+                  Remove from Group
+                </button>
               </div>
               <nav class="Report list page navigation">
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <label>
-                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}}
+                      {{ pagination.total | maxCount:pagination.visibleTotal }}
                     </label>
                   </li>
                   <li class="list-inline-item">
                     <ul class="pagination">
                       <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link"
+                           ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
                           <i class="fa fa-chevron-left"></i>
                         </a>
                       </li>
                       <li class="page-item" ng-class="{disabled: isLastPage() }">
-                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                        <a title="Next Page" aria-label="Next Page" class="page-link"
+                           ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
                           <i class="fa fa-chevron-right"></i>
                         </a>
                       </li>
@@ -111,26 +124,32 @@
           <div ng-include="'/templates/reports/table.html'"></div>
           <div class="dropdown-divider"></div>
           <div ng-show="pagination.total > 0">
-            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions" ng-show="currentUser.can('edit data')">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with selection actions"
+                 ng-show="currentUser.can('edit data')">
               <div aria-label="Read/Unread Buttons/Selection">
-                <button ng-class="{highlight: someSelected()}" class="btn btn-default" ng-click="unlinkSelected()" translate>Remove from Group</button>
+                <button ng-class="{highlight: someSelected()}" class="btn btn-default"
+                        ng-click="unlinkSelected()" translate>Remove from Group
+                </button>
               </div>
               <nav class="Report list page navigation">
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <label>
-                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}} {{ pagination.total | maxCount:pagination.visibleTotal }}
+                      {{ pagination.start }} - {{ pagination.end }} {{'of' | translate}}
+                      {{ pagination.total | maxCount:pagination.visibleTotal }}
                     </label>
                   </li>
                   <li class="list-inline-item">
                     <ul class="pagination">
                       <li class="page-item" ng-class="{disabled: isFirstPage() }">
-                        <a title="Previous Page" aria-label="Previous Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
+                        <a title="Previous Page" aria-label="Previous Page" class="page-link"
+                           ui-sref="incident({ id: incident._id, page: pagination.page - 1 })">
                           <i class="fa fa-chevron-left"></i>
                         </a>
                       </li>
                       <li class="page-item" ng-class="{disabled: isLastPage() }">
-                        <a title="Next Page" aria-label="Next Page" class="page-link" ui-sref="incident({ id: incident._id, page: pagination.page + 1 })" >
+                        <a title="Next Page" aria-label="Next Page" class="page-link"
+                           ui-sref="incident({ id: incident._id, page: pagination.page + 1 })">
                           <i class="fa fa-chevron-right"></i>
                         </a>
                       </li>

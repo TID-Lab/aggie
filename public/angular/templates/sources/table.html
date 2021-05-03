@@ -14,7 +14,9 @@
     <tbody class="table-bordered">
       <tr ng-repeat="s in sources | orderBy:'+nickname'">
         <td class="td__media">
-          <div class="td__source"><div class="icon-left" ng-class="sourceClass(s)"></div></div>
+          <div class="td__source">
+            <div class="icon-left" ng-class="sourceClass(s)"></div>
+          </div>
         </td>
         <td class="td__name">
           <a href="sources/{{s._id}}" class="table-primary-link"> {{ s.nickname }} </a>
