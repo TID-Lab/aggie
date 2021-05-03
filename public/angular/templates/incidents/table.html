@@ -97,7 +97,7 @@
         </a>
         <tags class="tagify readonly" tabindex="-1">
           <tag ng-repeat="tag in i.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-               class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+               class="tags__tag tr__tag tagify__tag tagify incidentTable__tags" __isvalid="true" value="bar" title="{{smtcTag.name}}"
                ng-style="{'--tag-bg': smtcTagsById[tag].color}">
             <x title="" ng-click="removeTagFromIncident(i, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
             <div>

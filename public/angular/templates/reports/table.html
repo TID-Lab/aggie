@@ -73,10 +73,10 @@
             <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
           </a>
           <tags class="tagify readonly" tabindex="-1">
-            <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
-                 class="tags__tag tr__tag tagify__tag tagify" __isvalid="true" value="bar"
+            <tag ng-repeat="tag in r.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1" title="{{smtcTagsById[tag].name}}"
+                 class="tags__tag tr__tag tagify__tag tagify reportsTable__tags" __isvalid="true" value="bar"
                  ng-style="{'--tag-bg': smtcTagsById[tag].color}">
-              <x title="" ng-click="removeTagFromReport(r, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+              <x ng-click="removeTagFromReport(r, tag)" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
               <div>
                 <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
               </div>
