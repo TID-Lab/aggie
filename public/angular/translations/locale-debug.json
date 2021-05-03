@@ -1,0 +1,444 @@
+{
+  "username_not_unique": "__USERNAME_NOT_UNIQUE",
+  "email_not_unique": "__EMAIL_NOT_UNIQUE",
+  "email_invalid": "__EMAIL_INVALID",
+  "password_too_short": "__PASSWORD_TOO_SHORT",
+  "notice": {
+    "report": {
+      "unlinkMultiple": {
+        "success": "__NOTICE.REPORT.UNLINKMULTIPLE.SUCCESS",
+        "error": "__NOTICE.REPORT.UNLINKMULTIPLE.ERROR"
+      }
+    }
+  },
+  "relevant": "__RELEVANT",
+  "irrelevant": "__IRRELEVANT",
+  "assigned": "__ASSIGNED",
+  "unassigned": "__UNASSIGNED",
+  "viewer": "__VIEWER",
+  "monitor": "__MONITOR",
+  "admin": "__ADMIN",
+  "twitter": "__TWITTER",
+  "telegram": "__TELEGRAM",
+  "rss": "__RSS",
+  "elmo": "__ELMO",
+  "facebook": "__FACEBOOK",
+  "smsgh": "__SMSGH",
+  "crowdtangle": "__CROWDTANGLE",
+  "comments": "__COMMENTS",
+  "Smsgh": "__SMSGH",
+  "new": "__NEW",
+  "working": "__WORKING",
+  "alert": "__ALERT",
+  "closed": "__CLOSED",
+  "veracity": {
+    "true": "__VERACITY.TRUE",
+    "false": "__VERACITY.FALSE"
+  },
+  "keywords": "__KEYWORDS",
+  "media": "__MEDIA",
+  "sourceId": "__SOURCEID",
+  "* Any Incident": "__*_ANY_INCIDENT",
+  "* Without Incident": "__*_WITHOUT_INCIDENT",
+  "passwordReset": {
+    "noMatch": "__PASSWORDRESET.NOMATCH",
+    "tooShort": "__PASSWORDRESET.TOOSHORT",
+    "error": "__PASSWORDRESET.ERROR",
+    "success": "__PASSWORDRESET.SUCCESS",
+    "admin": {
+      "success": "__PASSWORDRESET.ADMIN.SUCCESS",
+      "error": "__PASSWORDRESET.ADMIN.ERROR"
+    },
+    "email": {
+      "success": "__PASSWORDRESET.EMAIL.SUCCESS [{{email}}]",
+      "noUser": "__PASSWORDRESET.EMAIL.NOUSER [{{email}}]",
+      "error": "__PASSWORDRESET.EMAIL.ERROR"
+    }
+  },
+  "settings": {
+    "email": {
+      "success": "__SETTINGS.EMAIL.SUCCESS",
+      "error": "__SETTINGS.EMAIL.ERROR",
+      "settingsModal": {
+        "success": "__SETTINGS.EMAIL.SETTINGSMODAL.SUCCESS [{{method}}]",
+        "error": "__SETTINGS.EMAIL.SETTINGSMODAL.ERROR"
+      }
+    },
+    "error": "__SETTINGS.ERROR",
+    "ctUpdate": {
+      "success": "__SETTINGS.CTUPDATE.SUCCESS",
+      "failure": "__SETTINGS.CTUPDATE.FAILURE",
+      "pending": "__SETTINGS.CTUPDATE.PENDING"
+    },
+    "settingsModal": {
+      "success": "__SETTINGS.SETTINGSMODAL.SUCCESS [{{itemName}},{{verb}}]",
+      "error": "__SETTINGS.SETTINGSMODAL.ERROR"
+    },
+    "widget": {
+      "settingsModal": {
+        "title": "__SETTINGS.WIDGET.SETTINGSMODAL.TITLE [{{ widget | capitalize }}]",
+        "field_required": "__SETTINGS.WIDGET.SETTINGSMODAL.FIELD_REQUIRED",
+        "incident_map": {
+          "p1": "__SETTINGS.WIDGET.SETTINGSMODAL.INCIDENT_MAP.P1",
+          "p2": "__SETTINGS.WIDGET.SETTINGSMODAL.INCIDENT_MAP.P2",
+          "p3": "__SETTINGS.WIDGET.SETTINGSMODAL.INCIDENT_MAP.P3"
+        },
+        "confirm_delete": "__SETTINGS.WIDGET.SETTINGSMODAL.CONFIRM_DELETE"
+      }
+    }
+  },
+  "An error has occurred setting the fetching status": "__AN_ERROR_HAS_OCCURRED_SETTING_THE_FETCHING_STATUS",
+  "incident": {
+    "create": {
+      "success": "__INCIDENT.CREATE.SUCCESS",
+      "error": "__INCIDENT.CREATE.ERROR"
+    },
+    "update": {
+      "success": "__INCIDENT.UPDATE.SUCCESS",
+      "error": "__INCIDENT.UPDATE.ERROR"
+    },
+    "delete": {
+      "success": "__INCIDENT.DELETE.SUCCESS",
+      "error": "__INCIDENT.DELETE.ERROR"
+    },
+    "deleteMultiple": {
+      "success": "__INCIDENT.DELETEMULTIPLE.SUCCESS",
+      "error": "__INCIDENT.DELETEMULTIPLE.ERROR"
+    },
+    "save": {
+      "error": "__INCIDENT.SAVE.ERROR"
+    }
+  },
+  "Sorry, but that report couldn't be saved for some reason": "__SORRY,_BUT_THAT_REPORT_COULDN'T_BE_SAVED_FOR_SOME_REASON",
+  "No more unread reports found.": "__NO_MORE_UNREAD_REPORTS_FOUND.",
+  "You have been successfully logged out.": "__YOU_HAVE_BEEN_SUCCESSFULLY_LOGGED_OUT.",
+  "source": {
+    "create": {
+      "success": "__SOURCE.CREATE.SUCCESS",
+      "error": "__SOURCE.CREATE.ERROR"
+    },
+    "update": {
+      "success": "__SOURCE.UPDATE.SUCCESS",
+      "error": "__SOURCE.UPDATE.ERROR"
+    },
+    "save": {
+      "error": "__SOURCE.SAVE.ERROR"
+    },
+    "delete": {
+      "success": "__SOURCE.DELETE.SUCCESS",
+      "error": "__SOURCE.DELETE.ERROR"
+    }
+  },
+  "trend": {
+    "create": {
+      "error": "__TREND.CREATE.ERROR"
+    },
+    "delete": {
+      "success": "__TREND.DELETE.SUCCESS",
+      "error": "__TREND.DELETE.ERROR"
+    }
+  },
+  "user": {
+    "create": {
+      "success": "__USER.CREATE.SUCCESS",
+      "error": "__USER.CREATE.ERROR",
+      "emailNotConfigured": "__USER.CREATE.EMAILNOTCONFIGURED"
+    },
+    "update": {
+      "success": "__USER.UPDATE.SUCCESS",
+      "error": "__USER.UPDATE.ERROR"
+    },
+    "delete": {
+      "success": "__USER.DELETE.SUCCESS",
+      "error": "__USER.DELETE.ERROR"
+    }
+  },
+  "smtcTag": {
+    "create": {
+      "success": "__SMTCTAG.CREATE.SUCCESS",
+      "error": "__SMTCTAG.CREATE.ERROR",
+      "tagAlreadyExists": "__SMTCTAG.CREATE.TAGALREADYEXISTS"
+    },
+    "update": {
+      "success": "__SMTCTAG.UPDATE.SUCCESS",
+      "error": "__SMTCTAG.UPDATE.ERROR",
+      "tagAlreadyExists": "__SMTCTAG.UPDATE.TAGALREADYEXISTS"
+    },
+    "delete": {
+      "success": "__SMTCTAG.DELETE.SUCCESS",
+      "error": "__SMTCTAG.DELETE.ERROR"
+    }
+  },
+  "Uh oh!": "__UH_OH!",
+  "Sorry, but that page could not be found.": "__SORRY,_BUT_THAT_PAGE_COULD_NOT_BE_FOUND.",
+  "Trends (Lines)": "__TRENDS_(LINES)",
+  "Trends (Bars)": "__TRENDS_(BARS)",
+  "Incident Map": "__INCIDENT_MAP",
+  "Set a password for your account": "__SET_A_PASSWORD_FOR_YOUR_ACCOUNT",
+  "Password": "__PASSWORD",
+  "Password Confirmation": "__PASSWORD_CONFIRMATION",
+  "Cancel": "__CANCEL",
+  "Submit": "__SUBMIT",
+  "Confirm": "__CONFIRM",
+  "Date Filters": "__DATE_FILTERS",
+  "From:": "__FROM:",
+  "To:": "__TO:",
+  "Clear": "__CLEAR",
+  "API Authentication": "__API_AUTHENTICATION",
+  "Edit Email Transport Settings": "__EDIT_EMAIL_TRANSPORT_SETTINGS",
+  "Transport": "__TRANSPORT",
+  "Choose transport method": "__CHOOSE_TRANSPORT_METHOD",
+  "Select transport first": "__SELECT_TRANSPORT_FIRST",
+  "Aggie Homepage": "__AGGIE_HOMEPAGE",
+  "Username": "__USERNAME",
+  "Enter username": "__ENTER_USERNAME",
+  "Enter password": "__ENTER_PASSWORD",
+  "Forgot password?": "__FORGOT_PASSWORD?",
+  "Reports": "__REPORTS",
+  "Incidents": "__INCIDENTS",
+  "Sources": "__SOURCES",
+  "Analysis": "__ANALYSIS",
+  "Users": "__USERS",
+  "Settings": "__SETTINGS",
+  "Log in": "__LOG_IN",
+  "Log out": "__LOG_OUT",
+  "Warnings": "__WARNINGS",
+  "Reset Password": "__RESET_PASSWORD",
+  "Email": "__EMAIL",
+  "Enter email": "__ENTER_EMAIL",
+  "Set New Admin Password": "__SET_NEW_ADMIN_PASSWORD",
+  "The admin password must be changed after installation of Aggie. Please do so before continuing.": "__THE_ADMIN_PASSWORD_MUST_BE_CHANGED_AFTER_INSTALLATION_OF_AGGIE._PLEASE_DO_SO_BEFORE_CONTINUING.",
+  "Remember that the password has to be at least 8 characters long.": "__REMEMBER_THAT_THE_PASSWORD_HAS_TO_BE_AT_LEAST_8_CHARACTERS_LONG.",
+  "By default there is no email address associated with your admin account. If you forget your password, you may be unable to recover your account. Please add an email under Settings &gt; Users &gt; admin.": "__BY_DEFAULT_THERE_IS_NO_EMAIL_ADDRESS_ASSOCIATED_WITH_YOUR_ADMIN_ACCOUNT._IF_YOU_FORGET_YOUR_PASSWORD,_YOU_MAY_BE_UNABLE_TO_RECOVER_YOUR_ACCOUNT._PLEASE_ADD_AN_EMAIL_UNDER_SETTINGS_&GT;_USERS_&GT;_ADMIN.",
+  "Fetching": "__FETCHING",
+  "On": "__ON",
+  "Off": "__OFF",
+  "Media Authentication": "__MEDIA_AUTHENTICATION",
+  "Edit": "__EDIT",
+  "edit": "__EDIT",
+  "App Email Address": "__APP_EMAIL_ADDRESS",
+  "Save": "__SAVE",
+  "Email Transport": "__EMAIL_TRANSPORT",
+  "Go": "__GO",
+  "Assigned To": "__ASSIGNED_TO",
+  "Status": "__STATUS",
+  "Veracity": "__VERACITY",
+  "Escalated?": "__ESCALATED?",
+  "Public?": "__PUBLIC?",
+  "Private": "__PRIVATE",
+  "Public": "__PUBLIC",
+  "Public Description": "__PUBLIC_DESCRIPTION",
+  "Delete": "__DELETE",
+  "Create Incident": "__CREATE_INCIDENT",
+  "Sorry, but we couldn't find any incidents.": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_INCIDENTS.",
+  "Edit Incident": "__EDIT_INCIDENT",
+  "Enter the incident details below": "__ENTER_THE_INCIDENT_DETAILS_BELOW",
+  "Or you can": "__OR_YOU_CAN",
+  "choose an existing incident": "__CHOOSE_AN_EXISTING_INCIDENT",
+  "Title": "__TITLE",
+  "Title is required.": "__TITLE_IS_REQUIRED.",
+  "User is required.": "__USER_IS_REQUIRED.",
+  "Escalated": "__ESCALATED",
+  "Location": "__LOCATION",
+  "Edit coordinates...": "__EDIT_COORDINATES...",
+  "Latitude": "__LATITUDE",
+  "Latitude is invalid.": "__LATITUDE_IS_INVALID.",
+  "Latitude is required if longitude is entered.": "__LATITUDE_IS_REQUIRED_IF_LONGITUDE_IS_ENTERED.",
+  "Longitude": "__LONGITUDE",
+  "Longitude is invalid.": "__LONGITUDE_IS_INVALID.",
+  "Longitude is required if latitude is entered.": "__LONGITUDE_IS_REQUIRED_IF_LATITUDE_IS_ENTERED.",
+  "Select User": "__SELECT_USER",
+  "Notes": "__NOTES",
+  "Add report to incident": "__ADD_REPORT_TO_INCIDENT",
+  "Sorry, but we couldn't find any incidents. You can": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_INCIDENTS._YOU_CAN",
+  "create a new incident": "__CREATE_A_NEW_INCIDENT",
+  "Click an incident below to which you would like to add the report. Or you can": "__CLICK_AN_INCIDENT_BELOW_TO_WHICH_YOU_WOULD_LIKE_TO_ADD_THE_REPORT._OR_YOU_CAN",
+  "Creator": "__CREATOR",
+  "Closed": "__CLOSED",
+  "Open": "__OPEN",
+  "Confirmed True": "__CONFIRMED_TRUE",
+  "Confirmed False": "__CONFIRMED_FALSE",
+  "Unconfirmed": "__UNCONFIRMED",
+  "There are no reports to display.": "__THERE_ARE_NO_REPORTS_TO_DISPLAY.",
+  "of": "__OF",
+  "Are you sure you want to delete selected incidents?": "__ARE_YOU_SURE_YOU_WANT_TO_DELETE_SELECTED_INCIDENTS?",
+  "ID#": "__ID#",
+  "Last Updated": "__LAST_UPDATED",
+  "reports": "__REPORTS",
+  "Confirmed": "__CONFIRMED",
+  "True": "__TRUE",
+  "False": "__FALSE",
+  "ago": "__AGO",
+  "Are you sure you want to delete this incident?": "__ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_INCIDENT?",
+  "No": "__NO",
+  "Yes": "__YES",
+  "Sorry, but we couldn't find any sources.": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_SOURCES.",
+  "Media": "__MEDIA",
+  "Name": "__NAME",
+  "Target": "__TARGET",
+  "New Warnings": "__NEW_WARNINGS",
+  "Enabled": "__ENABLED",
+  "Report": "__REPORT",
+  "Authored Time": "__AUTHORED_TIME",
+  "Fetched Time": "__FETCHED_TIME",
+  "Stored Time": "__STORED_TIME",
+  "Source": "__SOURCE",
+  "Update": "__UPDATE",
+  "Update CrowdTangle List": "__UPDATE_CROWDTANGLE_LIST",
+  "URL": "__URL",
+  "Author": "__AUTHOR",
+  "Content": "__CONTENT",
+  "Time": "__TIME",
+  "Incident": "__INCIDENT",
+  "Add": "__ADD",
+  "Batch Mode": "__BATCH_MODE",
+  "new reports available.": "__NEW_REPORTS_AVAILABLE.",
+  "batch": {
+    "intro": "__BATCH.INTRO",
+    "reportsAreFiltered": "__BATCH.REPORTSAREFILTERED",
+    "noReports": "__BATCH.NOREPORTS"
+  },
+  "Mark All Read & Grab Another": "__MARK_ALL_READ_&_GRAB_ANOTHER",
+  "Mark All Read & Done": "__MARK_ALL_READ_&_DONE",
+  "Mark as Read": "__MARK_AS_READ",
+  "Mark as Unread": "__MARK_AS_UNREAD",
+  "Flag": "__FLAG",
+  "Unflag": "__UNFLAG",
+  "Sorry, but we couldn't find any reports assigned to you.": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_REPORTS_ASSIGNED_TO_YOU.",
+  "Widgets": "__WIDGETS",
+  "Incident map": "__INCIDENT_MAP",
+  "Center": "__CENTER",
+  "Zoom": "__ZOOM",
+  "api_settings_modal": {
+    "title": "__API_SETTINGS_MODAL.TITLE [{{ api | capitalize }}]",
+    "success": "__API_SETTINGS_MODAL.SUCCESS",
+    "twitter": {
+      "p1": "__API_SETTINGS_MODAL.TWITTER.P1",
+      "p2": "__API_SETTINGS_MODAL.TWITTER.P2"
+    },
+    "crowdtangle": {
+      "p1": "__API_SETTINGS_MODAL.CROWDTANGLE.P1"
+    },
+    "elmo": {
+      "p1": "__API_SETTINGS_MODAL.ELMO.P1",
+      "p2": "__API_SETTINGS_MODAL.ELMO.P2",
+      "p3": "__API_SETTINGS_MODAL.ELMO.P3",
+      "p4": "__API_SETTINGS_MODAL.ELMO.P4"
+    },
+    "gplaces": {
+      "p1": "__API_SETTINGS_MODAL.GPLACES.P1",
+      "p2": "__API_SETTINGS_MODAL.GPLACES.P2"
+    },
+    "field_required": "__API_SETTINGS_MODAL.FIELD_REQUIRED",
+    "confirm_delete": "__API_SETTINGS_MODAL.CONFIRM_DELETE",
+    "facebook": {
+      "p1": "__API_SETTINGS_MODAL.FACEBOOK.P1",
+      "p2": "__API_SETTINGS_MODAL.FACEBOOK.P2",
+      "p3": "__API_SETTINGS_MODAL.FACEBOOK.P3",
+      "p4": "__API_SETTINGS_MODAL.FACEBOOK.P4"
+    }
+  },
+  "Save & Close": "__SAVE_&_CLOSE",
+  "Create Trend": "__CREATE_TREND",
+  "Sorry, but we couldn't find any results.": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_RESULTS.",
+  "Query": "__QUERY",
+  "Actions": "__ACTIONS",
+  "Keywords:": "__KEYWORDS:",
+  "Media:": "__MEDIA:",
+  "Source:": "__SOURCE:",
+  "Incident:": "__INCIDENT:",
+  "Linked Incident": "__LINKED_INCIDENT",
+  "Date/Time": "__DATE/TIME",
+  "Add to Incident": "__ADD_TO_INCIDENT",
+  "Remove from Incident": "__REMOVE_FROM_INCIDENT",
+  "Grab Batch": "__GRAB_BATCH",
+  "There are currently no trends. Click 'Create Trend' to make one.": "__THERE_ARE_CURRENTLY_NO_TRENDS._CLICK_'CREATE_TREND'_TO_MAKE_ONE.",
+  "Data updated every 10 seconds. Data grouped into 5 minute intervals. Click data points (circles) to view matching reports.": "__DATA_UPDATED_EVERY_10_SECONDS._DATA_GROUPED_INTO_5_MINUTE_INTERVALS._CLICK_DATA_POINTS_(CIRCLES)_TO_VIEW_MATCHING_REPORTS.",
+  "trends_modal_help": "__TRENDS_MODAL_HELP",
+  "Choose media": "__CHOOSE_MEDIA",
+  "Choose source": "__CHOOSE_SOURCE",
+  "Choose incident": "__CHOOSE_INCIDENT",
+  "Close": "__CLOSE",
+  "Choose source media": "__CHOOSE_SOURCE_MEDIA",
+  "Media is required.": "__MEDIA_IS_REQUIRED.",
+  "Source Name": "__SOURCE_NAME",
+  "A short name for this source.": "__A_SHORT_NAME_FOR_THIS_SOURCE.",
+  "Source Name is required.": "__SOURCE_NAME_IS_REQUIRED.",
+  "Keywords": "__KEYWORDS",
+  "Enter tags": "__ENTER_TAGS",
+  "sources_modal": {
+    "help": "__SOURCES_MODAL.HELP",
+    "rss_url": "__SOURCES_MODAL.RSS_URL",
+    "tags": "__SOURCES_MODAL.TAGS",
+    "facebook_url": "__SOURCES_MODAL.FACEBOOK_URL",
+    "elmo_url": "__SOURCES_MODAL.ELMO_URL",
+    "whatsapp_help": "__SOURCES_MODAL.WHATSAPP_HELP"
+  },
+  "URL is required.": "__URL_IS_REQUIRED.",
+  "URL is invalid.": "__URL_IS_INVALID.",
+  "Create": "__CREATE",
+  "There are no events to display.": "__THERE_ARE_NO_EVENTS_TO_DISPLAY.",
+  "Level": "__LEVEL",
+  "Message": "__MESSAGE",
+  "Create User": "__CREATE_USER",
+  "Sorry, but we couldn't find any users.": "__SORRY,_BUT_WE_COULDN'T_FIND_ANY_USERS.",
+  "Role": "__ROLE",
+  "Are you sure you want to delete this user?": "__ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_USER?",
+  "Are you sure you want to delete this source?": "__ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SOURCE?",
+  "Are you sure you want to delete this trend? (All historical data will be lost)": "__ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_TREND?_(ALL_HISTORICAL_DATA_WILL_BE_LOST)",
+  "Recent Events": "__RECENT_EVENTS",
+  "Enter keywords": "__ENTER_KEYWORDS",
+  "Enter a name": "__ENTER_A_NAME",
+  "Enter url": "__ENTER_URL",
+  "Enter author": "__ENTER_AUTHOR",
+  "Enter location": "__ENTER_LOCATION",
+  "Enter title": "__ENTER_TITLE",
+  "Start date / time": "__START_DATE_/_TIME",
+  "End date / time": "__END_DATE_/_TIME",
+  "Create Source": "__CREATE_SOURCE",
+  "User": "__USER",
+  "Profile": "__PROFILE",
+  "Username is required.": "__USERNAME_IS_REQUIRED.",
+  "Username should be less than 15 characters and should contain letters, numbers, and underscores only.": "__USERNAME_SHOULD_BE_LESS_THAN_15_CHARACTERS_AND_SHOULD_CONTAIN_LETTERS,_NUMBERS,_AND_UNDERSCORES_ONLY.",
+  "Email is invalid.": "__EMAIL_IS_INVALID.",
+  "Email is required.": "__EMAIL_IS_REQUIRED.",
+  "Role is required.": "__ROLE_IS_REQUIRED.",
+  "Change password": "__CHANGE_PASSWORD",
+  "password_min_length": "__PASSWORD_MIN_LENGTH [{{passwordMinLength}}]",
+  "Passwords don't match.": "__PASSWORDS_DON'T_MATCH.",
+  "Read": "__READ",
+  "Unread": "__UNREAD",
+  "Flagged": "__FLAGGED",
+  "Unflagged": "__UNFLAGGED",
+  "Read & Unflagged": "__READ_&_UNFLAGGED",
+  "Total Reports": "__TOTAL_REPORTS",
+  "Reports/min": "__REPORTS/MIN",
+  "Escalated Incidents": "__ESCALATED_INCIDENTS",
+  "Mark all Unread": "__MARK_ALL_UNREAD",
+  "Sorry, we had some trouble finding your user account. Please log in again.": "__SORRY,_WE_HAD_SOME_TROUBLE_FINDING_YOUR_USER_ACCOUNT._PLEASE_LOG_IN_AGAIN.",
+  "You must be logged in before accessing that page.": "__YOU_MUST_BE_LOGGED_IN_BEFORE_ACCESSING_THAT_PAGE.",
+  "ELMO": "__ELMO",
+  "Facebook": "__FACEBOOK",
+  "Rss": "__RSS",
+  "Twitter": "__TWITTER",
+  "SMSGh": "__SMSGH",
+  "Whatsapp": "__WHATSAPP",
+  "whatsapp": "__WHATSAPP",
+  "gplaces": "__GPLACES",
+  "Mark all Read": "__MARK_ALL_READ",
+  "Confirmed true": "__CONFIRMED_TRUE",
+  "Confirmed false": "__CONFIRMED_FALSE",
+  "Unescalated": "__UNESCALATED",
+  "Tags": "__TAGS",
+  "Assign To": "__ASSIGN_TO",
+  "entry.created": "__ENTRY.CREATED",
+  "API Key": "__API_KEY",
+  "Enter dashboard key": "__ENTER_DASHBOARD_KEY",
+  "Dashboard API Key is required": "__DASHBOARD_API_KEY_IS_REQUIRED",
+  "The Dashboard API Key for this source.": "__THE_DASHBOARD_API_KEY_FOR_THIS_SOURCE.",
+  "Nickname": "__NICKNAME",
+  "Nickname is required.": "__NICKNAME_IS_REQUIRED.",
+  "Enter a nickname": "__ENTER_A_NICKNAME",
+  "Sorry, but that report couldn't be saved.": "__SORRY,_BUT_THAT_REPORT_COULDN'T_BE_SAVED.",
+  "Non-escalated": "__NON-ESCALATED"
+}
