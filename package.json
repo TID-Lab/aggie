@@ -59,7 +59,7 @@
     "gulp-rename": "^2.0.0",
     "interval-to-human": "^0.1.1",
     "locale": "^0.1.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "merge-stream": "^2.0.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.25.3",
