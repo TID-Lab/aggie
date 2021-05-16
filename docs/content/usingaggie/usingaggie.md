@@ -197,7 +197,7 @@ which marks all the reports in the batch read then returns to the report screen.
 According to the NLP classifier linked with Aggie, Batch mode will order reports based on the likelihood a report is hate speech. This will appear in two ways: the higher scoring (more likely hate speech) reports will appear on the top of the page and reports that meet a threshold will
 show a warning indication in the Source Info column of the report. You can see the icon attached to several reports below. These orderings and icons will not appear in the reports page, only the batch mode.
 
-![Batch Page Hate Speech Indication](batch_NLPindicator.png)
+![Batch Page Hate Speech Indication](batch_NLPIndicator.png)
 
 
 
@@ -345,9 +345,9 @@ Normally, *incidents* are created by Trackers. However, should the need arise, v
 
     ![Creating Incidents](create_incident_tab.png)
 
-2.  From the incidents page, click the  blue colored **Create Incident** tab.
+2.  From the incidents page, click the blue colored **Create Incident** tab.
 
-    ![Creating an Incident](incident_creation.png)
+    ![Creating an Incident](create_incident.png)
 
 3.  Type in the *Title* of the incident (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Incident and a brief note describing the incident. Set the veracity and status fields as applicable.
 
@@ -410,7 +410,7 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 2.  Click **Go** or hit the return key to *filter and display only incidents* that include the entered title.   
 For example by searching the incident title *“attacks”,* there is a display of all incidents containing this keyword.
 
-   ![Filtering by Tittle Search](incident_filtering_by_tittle.png)
+   ![Filtering by Tittle Search](incident_filtering_by_title.png)
 
 #### Filtering by Location Search
 
