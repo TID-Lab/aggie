@@ -1,13 +1,11 @@
 var _ = require("lodash");
 
-angular
-  .module("Aggie")
-
+angular.module("Aggie")
   .controller("AnalysisController", [
     "$scope",
     "Socket",
     "data",
-    function ($scope, Socket, data) {
+    function($scope, Socket, data) {
 
       $scope.read_only = false;
       $scope.tagSelection = 'all-tags';
