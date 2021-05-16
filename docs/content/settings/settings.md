@@ -143,11 +143,11 @@ This must be set up to allow newly created users to receive emails from Aggie wi
 
 ## Widgets
 
-Widgets are web components that can be added to webpages. In Aggie, widgets are used to display information for public consumption outside of the [SMTC](smtc). As usual, there is need to be careful with what information is made public, so use widgets with care so not to link individuals with information that may compromise them. At the moment there is only one widget available, the Public Incident Map. 
+Widgets are web components that can be added to webpages. In Aggie, widgets are used to display information for public consumption outside of the [SMTC](smtc). As usual, there is need to be careful with what information is made public, so use widgets with care so not to link individuals with information that may compromise them. At the moment there is only one widget available, the Public Group Map. 
 
-### Public Incident Map
+### Public Group Map
 
-The Public Incident Map displays those [groups](#groups) that have been marked [public](#creating_incidents) by the escalation team. It uses the Google Places API, and thus, should be [set](#google_places_api) before using the map.
+The Public Group Map displays those [groups](#groups) that have been marked [public](#creating_groups) by the escalation team. It uses the Google Places API, and thus, should be [set](#google_places_api) before using the map.
 
 1. *Center* and *zoom* define the main variables for the map. It will be centered in the country, city or other location you choose. The *zoom* variable specifies how large area will be displayed in the map.
 
@@ -170,19 +170,19 @@ The Public Incident Map displays those [groups](#groups) that have been marked [
 <tbody>
 <tr class="odd">
 <td><img src="marker-green.png" alt="Verified true" /></td>
-<td>confirmed <strong>true</strong> incident</td>
+<td>confirmed <strong>true</strong> group</td>
 </tr>
 <tr class="even">
 <td><img src="marker-orange.png" alt="Verified false" /></td>
-<td>confirmed <strong>false</strong> incident</td>
+<td>confirmed <strong>false</strong> group</td>
 </tr>
 <tr class="odd">
 <td><img src="marker-blue.png" alt="Unverified" /></td>
-<td>unconfirmed incident</td>
+<td>unconfirmed group</td>
 </tr>
 <tr class="even">
 <td><img src="marker-black-plus.png" alt="Click to expand" /></td>
-<td>click to expand incidents</td>
+<td>click to expand groups</td>
 </tr>
 </tbody>
 </table>
