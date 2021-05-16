@@ -117,7 +117,7 @@ When trackers come across reports that, if verified, require action, they create
 
 With the *filter bar*, trackers can narrow down their search for specific types of reports. The screenshot below shows the filter bar and a number of filters that can be used.
 
-    ![Filter Bar](filter_bar.png)  
+   ![Filter Bar](filter_bar.png)  
 
 #### Filtering by Date/Time
 
