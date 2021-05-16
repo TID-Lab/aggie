@@ -132,14 +132,14 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 1.  Click on the **Linked Incident** tab and select an incident to view all related reports tagged to that incident.
 2.  In this example, selecting the incident *Hate Speech* shows the three reports which have been linked to that incident.
 
-    ![Filtering by Incidence](filter_incident.png)
+    ![Filtering by Incidence](filtering_incident.png)
 
 #### Filtering by Source
 
 1.  Click the **Source** menu from the header bar.
 2.  Select the *Source type (e.g. Twitter Search)* to filter and display only reports from that source.
 
-    ![Filtering by Incidence](filter_source.png)
+    ![Filtering by Incidence](filtering_source.png)
 
 #### Filtering by Media Type
 
@@ -410,7 +410,7 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 2.  Click **Go** or hit the return key to *filter and display only incidents* that include the entered title.   
 For example by searching the incident title *“attacks”,* there is a display of all incidents containing this keyword.
 
-    ![Filtering by Tittle Search](incident_filtering_by_tittle.png)
+   ![Filtering by Tittle Search](incident_filtering_by_tittle.png)
 
 #### Filtering by Location Search
 
@@ -418,7 +418,7 @@ For example by searching the incident title *“attacks”,* there is a display 
 2.  Click **Go** to display all incidents associated with that location.
   For example, typing in *Ghana* in the *Location Text box*, display all incidents whose location was entered as *“Ghana”*.
 
-    ![Filtering by Location Search](incident_filtering_by_location.png)
+   ![Filtering by Location Search](incident_filtering_by_location.png)
 
 ## Trend Analysis
 
