@@ -363,7 +363,7 @@ Verifiers can always update the status of groups by editing them. It is recommen
 ### Deleting an Group
 
 If a veracity team member notices a redundancy in groups, they may *delete* an group from the Groups page. To do this:
-1.  Select the *incident(s)* you wish to delete by checking its/their respective *checkbox(es)*.
+1.  Select the *group(s)* you wish to delete by checking its/their respective *checkbox(es)*.
 2.  Click the **Delete** button below the filter bar to the left.
 
     ![Deleting Groups](incident_deletion.png)
