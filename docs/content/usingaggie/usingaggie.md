@@ -46,7 +46,7 @@ From your Aggie header bar, click the **Reports** Tab. This will show you the re
 
 ### Actions on the Reports Page
 
-There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Create Incidents](#creating-incidents),[Filter reports](#filtering-reports)  or add a report to an [Incident](#what-is-an-incident).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
+There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Create Groups](#creating-incidents),[Filter reports](#filtering-reports)  or add a report to an [Group](#what-is-an-incident).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
 
 ### Sections of the Reports Page
 
@@ -62,8 +62,8 @@ This column indicates the name of the source, as set in the Sources tab In the c
 This indicates the social media account of the person who authored the report.
   -   **The Content column**:
 This column shows the exact content of the report published by the author.
-  -   **The Incident column**:
-This column is used to add a report to an existing incident or create a new incident.
+  -   **The Group column**:
+This column is used to add a report to an existing group or create a new group.
 
 ### Navigating within the Reports page.
 
@@ -77,7 +77,7 @@ There are two ways to read reports in Aggie. One way is to grab a batch using th
 
 #### Reading using the "Grab Batch" button
 
-The “*Grab Batch*” automatically pulls a set of ten unread reports that are displayed in batch mode. The batch mode is noted by the indication of a *blue bar* on the reports page. Users can take certain actions on these ten reports – like [“adding reports to incidents”](#creating-incidents).  Upon completely taking desired action on the collected reports, trackers can grab another batch by clicking the “**Mark All Read & Grab Another**” button.
+The “*Grab Batch*” automatically pulls a set of ten unread reports that are displayed in batch mode. The batch mode is noted by the indication of a *blue bar* on the reports page. Users can take certain actions on these ten reports – like [“adding reports to groups”](#creating-groups).  Upon completely taking desired action on the collected reports, trackers can grab another batch by clicking the “**Mark All Read & Grab Another**” button.
 
 ![Grab Batch](grab_batch.png)
 
@@ -85,31 +85,31 @@ The “*Grab Batch*” automatically pulls a set of ten unread reports that are 
 
 A report can be manually marked as read. More than one reports can be marked as read by checking their respective checkboxes or with the “*Mark all Read*” button. When a tracker grabs a new batch, it is recommended that the tracker selects either *“Mark All Read & Grab Another”* or *“Mark All Read & Done”*. If the batch was accidentally grabbed, the tracker should click the *"Cancel"* button.
 
-### Creating Incidents
+### Creating Groups
 
-#### Adding a report to an existing Incident
+#### Adding a report to an existing Group
 
-When trackers come across reports that, if verified, require action, they create an incident from that report. Or, if the report is associated with an already existing incident, the tracker may add the report to the existing incident.
+When trackers come across reports that, if verified, require action, they create a group from that report. Or, if the report is associated with an already existing group, the tracker may add the report to the existing group.
 
-#### Creating a New Incident
+#### Creating a New Group
 
-1.  Select the report(s) you are creating the *Incident* for by checking its/their *checkbox(es)* on the first column to the left fo the reports page.
+1.  Select the report(s) you are creating the *Group* for by checking its/their *checkbox(es)* on the first column to the left fo the reports page.
 
-    ![Incidents](incident_add.png)
+    ![Groups](incident_add.png)
 
-2.  Click the **Add to Incident** button beneath the filter bar.
+2.  Click the **Add to Group** button beneath the filter bar.
 
-    ![Incidents](incidents.png)
+    ![Groups](incidents.png)
 
-3.  Select the related category of an *existing incident* to add the report to that incident or…
-    **If it's a new Incident**;
-4. Click on the *blue* **Create a new Incident** link to create the new incident.
+3.  Select the related category of an *existing group* to add the report to that group or…
+    **If it's a new Group**;
+4. Click on the *blue* **Create a new Group** link to create the new group.
 
-   ![Adding Incident](create_incident.png)
+   ![Adding Group](create_incident.png)
 
-5.  Type in the *Title* of the incident (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the incident and a brief *note* describing the incident. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new incident. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken.
+5.  Type in the *Title* of the group (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the group and a brief *note* describing the group. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new group. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken.
 
-6.  The *Public* and *Public Description* fields are used by the escalation team to add the incident to the list of public incidents. The *Public Description* will appear attached to the incident, for example, in the [Public Incident Map](#public_incident_map).
+6.  The *Public* and *Public Description* fields are used by the escalation team to add the group to the list of public groups. The *Public Description* will appear attached to the group, for example, in the [Public Group Map](#public_incident_map).
 
 ### Filtering Reports
 
@@ -127,19 +127,19 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 
     ![Filtering by Date/Time](filter_date.png)
 
-#### Filtering by Incident
+#### Filtering by Group
 
-1.  Click on the **Linked Incident** tab and select an incident to view all related reports tagged to that incident.
-2.  In this example, selecting the incident *Hate Speech* shows the three reports which have been linked to that incident.
+1.  Click on the **Linked Group** tab and select a group to view all related reports tagged to that group.
+2.  In this example, selecting the group *Hate Speech* shows the three reports which have been linked to that group.
 
-    ![Filtering by Incidence](filter_incident.png)
+    ![Filtering by Group](filter_incident.png)
 
 #### Filtering by Source
 
 1.  Click the **Source** menu from the header bar.
 2.  Select the *Source type (e.g. Twitter Search)* to filter and display only reports from that source.
 
-    ![Filtering by Incidence](filter_source.png)
+    ![Filtering by Group](filter_source.png)
 
 #### Filtering by Media Type
 
@@ -328,13 +328,13 @@ This column shows the place where the incident occurred.
   -   **The Assigned to column:**
 This column indicates the veracity team member who has been assigned to verify the incident for confirmation (and then escalation) or closure.
   -   **The Status column:**
-This column shows whether the incident has been escalated or confirmed false, and closed, or is still open and thus needs to be verified or escalated.
+This column shows whether the group has been escalated or confirmed false, and closed, or is still open and thus needs to be verified or escalated.
   -   **The Veracity column:**
-This shows the verification status of the incident. Whether the investigations confirmed the incident to be true or false.
+This shows the verification status of the group. Whether the investigations confirmed the group to be true or false.
   -   **The Escalated column:**
-This column show whether a confirmed incident been reported to stakeholders and embeds for management and resolution.
+This column show whether a confirmed group been reported to stakeholders and embeds for management and resolution.
   -   **The Last Updated column:**
-This column tracks and indicates the time of the last activity such as editing or updating on the incident.
+This column tracks and indicates the time of the last activity such as editing or updating on the group.
   -   **The Edit/Delete Column:**
 This column contains two tools for editing or deleting an incident; to edit the incident, click the blue **Pencil Icon** or to **delete** the incident click the blue **small bin**.
 
@@ -351,10 +351,10 @@ Normally, *incidents* are created by Trackers. However, should the need arise, v
 
 3.  Type in the *Title* of the incident (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Incident and a brief note describing the incident. Set the veracity and status fields as applicable.
 
-### Editing an Incident
+### Editing a Group
 
-Verifiers can always update the status of incidents by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of an Incident. To do this:
-1.  From the incidents page, click the **blue edit pencil** at the end of the incident row (last column).
+Verifiers can always update the status of groups by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of an Incident. To do this:
+1.  From the groups page, click the **blue edit pencil** at the end of the incident row (last column).
 
     ![Editing an Incident](incident_editing.png)
 
@@ -374,26 +374,26 @@ If a veracity team member notices a redundancy in incidents, they may *delete* a
 
 ### The Incident Filter Bar
 
-With *filters*, verifiers can narrow down their search. In some cases, there might arise the need to search for specific types of incidents. Filters are the best way to achieve this. Below are a number of filters that can be used.
+With *filters*, verifiers can narrow down their search. In some cases, there might arise the need to search for specific types of groups. Filters are the best way to achieve this. Below are a number of filters that can be used.
 
 #### Filtering by Assigned User
 
-1.  From the incidents page, click the **Assigned To** menu on the filter bar.
-2.  Select an *assignee (username)* to display only the incidents assigned to that verifier.
+1.  From the groups page, click the **Assigned To** menu on the filter bar.
+2.  Select an *assignee (username)* to display only the groups assigned to that verifier.
 
     ![Filtering by Assigned User](incident_assignment.png)
 
 #### Filtering by Status
 
 1.  Click the **Status** menu on the filter bar.
-2.  Select *Open* or *Closed* to view incidents in these categories.
+2.  Select *Open* or *Closed* to view groups in these categories.
 
     ![Filtering by Status](incident_filtering_by_veracity.png)
 
 #### Filtering by Veracity
 
 1.  Click the **Veracity** menu on the filter bar.
-2.  Select the veracity status (*unconfirmed, confirmed, confirmed true* etc.) to display all incidents associated with that veracity status.
+2.  Select the veracity status (*unconfirmed, confirmed, confirmed true* etc.) to display all groups associated with that veracity status.
 
     ![filtering by Veracity](incident_filtering_by_veracity.png)
 
@@ -406,27 +406,27 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 
 #### Filtering by Title Search
 
-1.  Type in an *incident title* in the **Enter title** space on the filter bar.
-2.  Click **Go** or hit the return key to *filter and display only incidents* that include the entered title.   
-For example by searching the incident title *“attacks”,* there is a display of all incidents containing this keyword.
+1.  Type in an *group title* in the **Enter title** space on the filter bar.
+2.  Click **Go** or hit the return key to *filter and display only groups* that include the entered title.   
+For example by searching the group title *“attacks”,* there is a display of all groups containing this keyword.
 
     ![Filtering by Tittle Search](incident_filtering_by_tittle.png)
 
 #### Filtering by Location Search
 
 1.  Type in the name of a *location (town, polling station etc.)* in the **Enter Location** text box on the filter bar.
-2.  Click **Go** to display all incidents associated with that location.
-  For example, typing in *Ghana* in the *Location Text box*, display all incidents whose location was entered as *“Ghana”*.
+2.  Click **Go** to display all groups associated with that location.
+  For example, typing in *Ghana* in the *Location Text box*, display all groups whose location was entered as *“Ghana”*.
 
     ![Filtering by Location Search](incident_filtering_by_location.png)
 
 ## Trend Analysis
 
-Trend analysis give snappy and easy graphical visualizations of the occurrences of incidents using keywords, social media type, the Twitter handles, or Facebook groups/pages to build trends.
+Trend analysis give snappy and easy graphical visualizations of the occurrences of groups using keywords, social media type, the Twitter handles, or Facebook groups/pages to build trends.
 
 ### What is an Analytic Trend?
 
-An analytic trend is a graphical visualizations of incidents as bar charts or stacked lines.
+An analytic trend is a graphical visualizations of groups as bar charts or stacked lines.
 
 ### Creating a Trend
 
@@ -452,10 +452,10 @@ To create a trend visualization:
 
     ![Trend Source](trends_source.png)
 
-6. Choose the *Incident* for the trend e.g. *233liveOnline Reports*
+6. Choose the *Group* for the trend e.g. *233liveOnline Reports*
 
-    ![Trend Incidents](trends_incidents.png)
+    ![Trend Groups](trends_incidents.png)
 
-7. Submit and view the analytics by *Trend (Lines or Bars)* and *Incident Maps*.
+7. Submit and view the analytics by *Trend (Lines or Bars)* and *Group Maps*.
 
     ![Analysis](analysis.png)
