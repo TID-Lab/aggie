@@ -125,7 +125,7 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 2.  Select a Date/Time range by specifying the *From* and *To* fields.
 3.  Click **Submit** to filter and display reports aggregated within that date and time range.
 
-    ![Filtering by Date/Time](filter_date.png)
+    ![Filtering by Date/Time](filtering_date.png)
 
 #### Filtering by Incident
 
