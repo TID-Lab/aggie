@@ -203,7 +203,7 @@ show a warning indication in the Source Info column of the report. You can see t
 
 
 ## Tags 
-A tag is a method of categorizing reports at an individual level. Whereas incidents allow for clusters of reports based whether reports require action, tags allow for categorization of reports based on a report's qualities. In order to create a tag, you must have permission to do so.
+A tag is a method of categorizing reports at an individual level. Whereas groups allow for clusters of reports based whether reports require action, tags allow for categorization of reports based on a report's qualities. In order to create a tag, you must have permission to do so.
 
 ### Creating Tags
 1.  Navigate to the Tags page of the Aggie platform in order to create/edit/delete tags.
@@ -303,30 +303,30 @@ There are two methods of adding/removing tags to reports. Tags may be added to e
     
 
 
-## Incidents Page Activities
+## Groups Page Activities
 
-### What is an Incident?
+### What is an Group?
 
-Incidents are groups of one or more [reports](#what-is-a-report) that, once verified, require an action. As Aggie aggregates reports from different sources, tracking team members in the SMTC collect reports into incidents.
+Groups are groups of one or more [reports](#what-is-a-report) that, once verified, require an action. As Aggie aggregates reports from different sources, tracking team members in the SMTC collect reports into groups.
 
-### The Incidents Page
+### The Groups Page
 
-From your Aggie header page, click the **Incidents** Tab. This will show you the incidents page as indicated below.
+From your Aggie header page, click the **Groups** Tab. This will show you the groups page as indicated below.
 
-![Incidents Main Page](incidents_page_main.png)
+![Groups Main Page](incidents_page_main.png)
 
-### Sections of the Incidents Page
+### Sections of the Groups Page
 
   -   **The Checkbox column:**
-This is used to select one or more incidents that some actions can be applied to.
+This is used to select one or more groups that some actions can be applied to.
   -   **The ID# column:**
-This column indicates the unique identification number generated for each incident created. This example starts with 003 because incident 001 and 002 have been deleted.
+This column indicates the unique identification number generated for each group created. This example starts with 003 because group 001 and 002 have been deleted.
   -   **The Title column:**
-This column shows the name given to the incident and the number of reports associated with the particular incident.
+This column shows the name given to the group and the number of reports associated with the particular group.
   -   **The Location column:**
-This column shows the place where the incident occurred.
+This column shows the place where the group occurred.
   -   **The Assigned to column:**
-This column indicates the veracity team member who has been assigned to verify the incident for confirmation (and then escalation) or closure.
+This column indicates the veracity team member who has been assigned to verify the group for confirmation (and then escalation) or closure.
   -   **The Status column:**
 This column shows whether the group has been escalated or confirmed false, and closed, or is still open and thus needs to be verified or escalated.
   -   **The Veracity column:**
@@ -336,43 +336,43 @@ This column show whether a confirmed group been reported to stakeholders and emb
   -   **The Last Updated column:**
 This column tracks and indicates the time of the last activity such as editing or updating on the group.
   -   **The Edit/Delete Column:**
-This column contains two tools for editing or deleting an incident; to edit the incident, click the blue **Pencil Icon** or to **delete** the incident click the blue **small bin**.
+This column contains two tools for editing or deleting an group; to edit the group, click the blue **Pencil Icon** or to **delete** the group click the blue **small bin**.
 
-### Creating an Incident
+### Creating a Group
 
-Normally, *incidents* are created by Trackers. However, should the need arise, verifiers can create *incidents* from the incidents page. To do this, refer to [Creating a New Incident](#creating-a-new-incident) section.
-1.  Click the **Incidents** tab from the header bar.
+Normally, *groups* are created by Trackers. However, should the need arise, verifiers can create *groups* from the groups page. To do this, refer to [Creating a New Group](#creating-a-new-group) section.
+1.  Click the **Groups** tab from the header bar.
 
-    ![Creating Incidents](create_incident_tab.png)
+    ![Creating Groups](create_incident_tab.png)
 
-2.  From the incidents page, click the  blue colored **Create Incident** tab.
+2.  From the groups page, click the  blue colored **Create Group** tab.
 
-    ![Creating an Incident](incident_creation.png)
+    ![Creating a Group](incident_creation.png)
 
-3.  Type in the *Title* of the incident (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Incident and a brief note describing the incident. Set the veracity and status fields as applicable.
+3.  Type in the *Title* of the group (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Group and a brief note describing the group. Set the veracity and status fields as applicable.
 
 ### Editing a Group
 
-Verifiers can always update the status of groups by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of an Incident. To do this:
-1.  From the groups page, click the **blue edit pencil** at the end of the incident row (last column).
+Verifiers can always update the status of groups by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of a Group. To do this:
+1.  From the groups page, click the **blue edit pencil** at the end of the group row (last column).
 
-    ![Editing an Incident](incident_editing.png)
+    ![Editing a Group](incident_editing.png)
 
-2.  Update the incident by editing appropriate sections. For example, you can edit the *veracity* and *status* of the incident, add any helpful *notes* or *escalate* the incident.
+2.  Update the group by editing appropriate sections. For example, you can edit the *veracity* and *status* of the group, add any helpful *notes* or *escalate* the group.
 
-### Deleting an Incident
+### Deleting an Group
 
-If a veracity team member notices a redundancy in incidents, they may *delete* an incident from the Incidents page. To do this:
+If a veracity team member notices a redundancy in groups, they may *delete* an group from the Groups page. To do this:
 1.  Select the *incident(s)* you wish to delete by checking its/their respective *checkbox(es)*.
 2.  Click the **Delete** button below the filter bar to the left.
 
-    ![Deleting Incidents](incident_deletion.png)
+    ![Deleting Groups](incident_deletion.png)
 
-3.  Click **Confirm** to delete the selected incident(s).
+3.  Click **Confirm** to delete the selected group(s).
 
-*Alternatively, you can delete an incident by clicking the little bin on the last column of the incident row.*
+*Alternatively, you can delete an group by clicking the little bin on the last column of the group row.*
 
-### The Incident Filter Bar
+### The Group Filter Bar
 
 With *filters*, verifiers can narrow down their search. In some cases, there might arise the need to search for specific types of groups. Filters are the best way to achieve this. Below are a number of filters that can be used.
 
@@ -400,7 +400,7 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 #### Filtering by Escalation
 
 1.  Click the **Escalated?** menu on the filter bar
-2.  Select the *escalation status (Escalated or Unescalated)* to display incidents accordingly.
+2.  Select the *escalation status (Escalated or Unescalated)* to display groups accordingly.
 
     ![Filtering by Escalation](incident_filtering_by_escalation.png)
 
