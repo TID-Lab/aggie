@@ -32,7 +32,7 @@ function words() {
 }
 
 function word() {
-    return this.match(/[A-Za-z0-9*$%\[\]<>?@#\u1200-\u1399\'\"]+/i).toString();
+    return this.match(/[A-Za-z0-9*$%\[\]<>?&|@#\u1200-\u1399\'\"]+/i).toString();
 }
 
 function notop() {
