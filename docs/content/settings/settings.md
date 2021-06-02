@@ -31,7 +31,7 @@ Fetching can be enabled or disabled by toggling ON/OFF the fetching toggle. To t
 
     ![Media Authentication](toggle3.png)
 
-3. Click on **Edit** to authenticate the Twitter, Crowdtangle, or Elmo feed settings.
+3. Click on **Edit** to authenticate the Twitter, Facebook, or Elmo feed settings.
 
     ![Media Authentication](social_media_feed_authentication.png)
 
