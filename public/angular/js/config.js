@@ -1,8 +1,8 @@
 angular.module('Aggie')
 
-.value('mediaOptions', ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle', 'comments'])
+.value('mediaOptions', ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'crowdtangle', 'comments', 'telegram'])
 
-.value('apiSettingsOptions', ['twitter', 'elmo', 'gplaces', 'crowdtangle'])
+.value('apiSettingsOptions', ['twitter', 'elmo', 'gplaces', 'crowdtangle', 'telegram'])
 
 .value('widgetSettingsOptions', ['incident map'])
 
