@@ -43,6 +43,7 @@
     "connect-roles": "^3.1.2",
     "cross-env": "^7.0.2",
     "deepmerge": "^0.2.10",
+    "downstream": "0.0.68",
     "ejs": "^3.1.3",
     "express": "^3.21.2",
     "express-spa-router": "0.0.8",
