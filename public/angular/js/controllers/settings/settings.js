@@ -30,7 +30,7 @@ angular.module('Aggie')
       Source.getAll().$promise
       .then(function(response) {
         for (var i = 0; i < response.length; i++) {
-          if (response[i].media == 'crowdtangle') {
+          if (response[i].media === 'facebook' || response[i].media === 'instagram') {
             $scope.showCTButton = true;
           };
         }

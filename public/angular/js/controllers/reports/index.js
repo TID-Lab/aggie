@@ -619,6 +619,8 @@ angular.module('Aggie')
                 if (report.metadata && report.metadata.platform === "Facebook") {
                     // set Facebook as source for CrowdTangle reports
                     return 'facebook-source';
+                } else if (report.metadata && report.metadata.platform === "Instagram") {
+                    return 'instagram-source';
                 } else {
                     for (var i = 0; i < report._sources.length; i++) {
                         var sourceId = report._sources[i];

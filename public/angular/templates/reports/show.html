@@ -26,8 +26,9 @@
         </div>
         <div class="card-body">
           <div ng-if="report._media[0] === 'twitter'" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>
-          <div ng-if="report._media[0] === 'crowdtangle'" ng-include="'/templates/reports/content-services/crowd-tangle-show.html'"></div>
-          <div ng-if="report._media[0] !== 'twitter' && report._media[0] !== 'crowdtangle'">
+          <div ng-if="report._media[0] === 'facebook'" ng-include="'/templates/reports/content-services/facebook-show.html'"></div>
+          <div ng-if="report._media[0] === 'instagram'" ng-include="'/templates/reports/content-services/instagram-show.html'"></div>
+          <div ng-if="report._media[0] !== 'twitter' && report._media[0] !== 'facebook' && report._media[0] !== 'instagram'">
             <div class="row">
               <div class="col">
                 <div class="table-responsive">
