@@ -80,7 +80,7 @@ class KeywordExtractor():
         unique_segmented_words = list(set(segmented_words))
 
         ## check 15% of unique words
-        temp_keyword_limit = int(len(unique_segmented_words) * 0.15);
+        temp_keyword_limit = int(len(unique_segmented_words) * 0.15)
 
         ## make sure minimum is 10 keywords
         keyword_limit = max(temp_keyword_limit, 10)
