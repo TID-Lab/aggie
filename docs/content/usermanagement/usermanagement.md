@@ -14,35 +14,35 @@ There are three main user categories in Aggie with varying Privileges: *Viewer, 
   </tr>
 
   <tr>
-    <td>View: Sources, Reports, Incidents and Trends</td>
+    <td>View: Sources, Reports, Groups and Trends</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
   </tr>
 
   <tr>
-    <td>Create: Sources, Incidents and Trends</td>
+    <td>Create: Sources, Groups and Trends</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td></td>
   </tr>
 
   <tr>
-    <td>Edit: Sources, Incidents, Trends</td>
+    <td>Edit: Sources, Groups, Trends</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td></td>
   </tr>
 
   <tr>
-    <td>Delete: Sources, Incidents and Trends</td>
+    <td>Delete: Sources, Groups and Trends</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td></td>
   </tr>
 
   <tr>
-    <td>Add Reports to Incidents</td>
+    <td>Add Reports to Groups</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td></td>
@@ -70,7 +70,7 @@ There are three main user categories in Aggie with varying Privileges: *Viewer, 
   </tr>
 
   <tr>
-    <td>Clear all Reports or Incidents</td>
+    <td>Clear all Reports or Groups</td>
     <td style="text-align:center">X</td>
     <td></td>
     <td></td>
