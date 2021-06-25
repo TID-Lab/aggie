@@ -26,12 +26,17 @@ angular.module('Aggie')
       StatsCache.put('stats', stats);
       $scope.stats = stats;
     };
+
     $scope.delete = function() {
-      Source.delete({ id: $scope.source._id }, function() {
-        flash.setNotice('credentials.delete.success');
-        $rootScope.$state.go('sources');
-      }, function() {
-        flash.setAlertNow('credentials.delete.error');
+      Credentials.delete({ id: credentials._id }, function() {
+        flash.setNoticeNow('credentials.delete.success');
+        $rootScope.$state.go('credentials');
+      }, function(res) {
+        if (res.status === 409) {
+          flash.setAlertNow('credentials.delete.sourcesExist');
+        } else {
+          flash.setAlertNow('credentials.delete.error');
+        }
       });
     };
 

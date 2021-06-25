@@ -23,15 +23,19 @@ angular.module('Aggie')
       Socket.join('stats');
     };
     $scope.delete = function(credentials) {
-      Credentials.delete({ _id: credentials._id }, function() {
+      Credentials.delete({ id: credentials._id }, function() {
         flash.setNoticeNow('credentials.delete.success');
         for (var i in $scope.credentials) {
           if (credentials._id === $scope.credentials[i]._id) {
             $scope.credentials.splice(i, 1);
           }
         }
-      }, function() {
-        flash.setAlertNow('credentials.delete.error');
+      }, function(res) {
+        if (res.status === 409) {
+          flash.setAlertNow('credentials.delete.sourcesExist');
+        } else {
+          flash.setAlertNow('credentials.delete.error');
+        }
       });
     };
     $scope.$on('$destroy', function() {
