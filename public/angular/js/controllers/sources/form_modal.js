@@ -16,6 +16,9 @@ angular.module('Aggie')
           sources: ['Source', function(Source) {
             return Source.query().$promise;
           }],
+          credentials: ['Credentials', function(Credentials) {
+            return Credentials.query().$promise;
+          }],
           locals: function() {
             return {
               action: 'create',
@@ -43,6 +46,9 @@ angular.module('Aggie')
           sources: ['Source', function(Source) {
             return Source.query().$promise;
           }],
+          credentials: ['Credentials', function(Credentials) {
+            return Credentials.query().$promise;
+          }],
           locals: function() {
             return {
               action: 'edit',
@@ -69,12 +75,29 @@ angular.module('Aggie')
   '$modalInstance',
   'mediaOptions',
   'sources',
+  'credentials',
   'locals',
-  function($scope, $modalInstance, mediaOptions, sources, locals) {
+  function($scope, $modalInstance, mediaOptions, sources, credentials, locals) {
     $scope.sources = sources;
     $scope.mediaOptions = mediaOptions;
     $scope.source = angular.copy(locals.source);
     $scope._showErrors = false;
+
+    function filterCredentials() {
+      $scope.filteredCredentials = credentials.filter(function (c) {
+        switch($scope.source.media) {
+          case 'facebook':
+          case 'instagram':
+            return c.type === 'crowdtangle';
+          case 'twitter':
+            return c.type === 'twitter';
+          default:
+            return false;
+        }
+      });
+    }
+
+    filterCredentials();
 
     $scope.sourceClass = function(source) {
       if (source && mediaOptions.indexOf(source.media) !== -1) {
@@ -100,6 +123,8 @@ angular.module('Aggie')
         }
       }
       $scope.source.url = url;
+
+      filterCredentials();
     });
 
     $scope.showErrors = function() {
@@ -111,6 +136,7 @@ angular.module('Aggie')
         $scope._showErrors = true;
         return;
       }
+      $scope.source.credentials = $scope.source.credentials._id;
       $modalInstance.close($scope.source);
     };
 

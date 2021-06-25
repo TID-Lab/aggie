@@ -242,6 +242,17 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('credentials', {
+      url: '/credentials',
+      templateUrl: '/templates/credentials/index.html',
+      controller: 'CredentialsIndexController',
+      resolve: {
+        credentials: ['Credentials', function(Credentials) {
+          return Credentials.query().$promise;
+        }]
+      }
+    });
+
     $stateProvider.state('sources', {
       url: '/sources',
       templateUrl: '/templates/sources/index.html',
@@ -249,6 +260,9 @@ angular.module('Aggie')
       resolve: {
         sources: ['Source', function(Source) {
           return Source.query().$promise;
+        }],
+        credentials: ['Credentials', function(Credentials) {
+          return Credentials.query().$promise;
         }]
       }
     });
@@ -260,6 +274,9 @@ angular.module('Aggie')
       resolve: {
         source: ['Source', '$stateParams', function(Source, params) {
           return Source.get({ id: params.id }).$promise;
+        }],
+        credentials: ['Credentials', function(Credentials) {
+          return Credentials.query().$promise;
         }]
       }
     });

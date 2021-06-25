@@ -169,6 +169,16 @@
       "error": "Tag failed to be deleted."
     }
   },
+  "credentials": {
+    "create": {
+      "success": "Credentials were successfully created.",
+      "error": "Credentials failed to be created. Please contact support."
+    },
+    "delete": {
+      "success": "Credentials were successfully deleted.",
+      "error": "Credentials failed to be deleted."
+    }
+  },
   "Uh oh!": "Uh oh!",
   "Sorry, but that page could not be found.": "Sorry, but that page could not be found.",
   "Trends (Lines)": "Trends (Lines)",

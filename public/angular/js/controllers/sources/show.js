@@ -10,8 +10,14 @@ angular.module('Aggie')
   'FlashService',
   'Socket',
   'StatsCache',
-  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket, StatsCache) {
+  'credentials',
+  function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket, StatsCache, credentials) {
     $scope.source = source;
+
+    $scope.source.credentials = credentials.find(function (c) {
+      return c._id === $scope.source.credentials;
+    });
+
     Source.resetUnreadErrorCount({ id: source._id }, source);
     var init = function() {
       $scope.stats = StatsCache.get('stats');
