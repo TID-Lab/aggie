@@ -261,9 +261,6 @@ angular.module('Aggie')
         sources: ['Source', function(Source) {
           return Source.query().$promise;
         }],
-        credentials: ['Credentials', function(Credentials) {
-          return Credentials.query().$promise;
-        }]
       }
     });
 
@@ -275,9 +272,6 @@ angular.module('Aggie')
         source: ['Source', '$stateParams', function(Source, params) {
           return Source.get({ id: params.id }).$promise;
         }],
-        credentials: ['Credentials', function(Credentials) {
-          return Credentials.query().$promise;
-        }]
       }
     });
 

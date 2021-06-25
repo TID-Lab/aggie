@@ -9,10 +9,8 @@ angular.module('Aggie')
   'Tags',
   'Socket',
   'StatsCache',
-  'credentials',
   function($scope, $rootScope, flash, sources, Source, Tags, Socket, StatsCache) {
     $scope.sources = sources;
-    $scope.credentials = sources.credentials;
     var init = function() {
       $scope.stats = StatsCache.get('stats');
       Socket.on('stats', updateStats);
