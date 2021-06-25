@@ -39,9 +39,6 @@ public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
 lib/translations/locale-debug.json
 hate-speech-api/error.log
-config/secrets.json
-# We can't directly ignore config/crowdtangle_list.json, instead:
-# git update-index --skip-worktree config/crowdtangle_list.json
 
 hate-speech-api/*.log
 
@@ -52,8 +49,10 @@ NOTES
 
 data
 
+config/secrets.json
 config/cert.pem
 config/key.pem
+config/crowdtangle_list.json
 
 docs/_build
 
