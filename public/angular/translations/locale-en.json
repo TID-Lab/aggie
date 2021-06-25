@@ -176,7 +176,8 @@
     },
     "delete": {
       "success": "Credentials were successfully deleted.",
-      "error": "Credentials failed to be deleted."
+      "error": "Credentials failed to be deleted.",
+      "sourcesExist": "Sources are still using those credentials. Swap out those credentials from all Sources before deleting them."
     }
   },
   "Uh oh!": "Uh oh!",
