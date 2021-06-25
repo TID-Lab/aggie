@@ -140,6 +140,7 @@ require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
 require('./controllers/credentials/index');
 require('./controllers/credentials/form_modal');
+require('./controllers/credentials/show');
 
 // Routes
 require('./routes');

@@ -253,6 +253,20 @@ angular.module('Aggie')
       }
     });
 
+    $stateProvider.state('credential', {
+      url: '/credentials/:id',
+      templateUrl: '/templates/credentials/show.html',
+      controller: 'CredentialsShowController',
+      resolve: {
+        credentials: ['Credentials', '$stateParams', function(Credentials, params) {
+          return Credentials.get({ id: params.id }).$promise;
+        }],
+        sources: ['Source', function(Source) {
+          return Source.query().$promise;
+        }],
+      }
+    });
+
     $stateProvider.state('sources', {
       url: '/sources',
       templateUrl: '/templates/sources/index.html',
