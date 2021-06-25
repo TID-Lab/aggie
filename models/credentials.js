@@ -6,6 +6,7 @@ const database = require('../lib/database');
 const mongoose = database.mongoose;
 const Schema = mongoose.Schema;
 const validator = require('validator');
+const { createHash } = require('crypto');
 
 
 // The types of credentials that are possible.
@@ -52,6 +53,15 @@ const credentialsSchema = new Schema({
 
 credentialsSchema.methods.stripSecrets = function() {
   this.secrets = undefined;
+};
+
+/**
+ * Generates a SHA256 hash from the secrets object.
+ */
+credentialsSchema.methods.hashSecrets = function() {
+  const hash = createHash('sha256');
+  const serializedSecrets = JSON.stringify(this.secrets);
+  return hash.update(serializedSecrets).digest('hex');
 };
 
 const Credentials = mongoose.model('Credentials', credentialsSchema);
