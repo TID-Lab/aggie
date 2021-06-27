@@ -90,12 +90,16 @@ sourceSchema.methods.disable = function() {
 };
 
 // Log events in source
-sourceSchema.methods.logEvent = function(level, message, callback) {
-  this.events.push({ datetime: new Date(), type: level, message: message });
-  if (level === 'error') this.disable();
+sourceSchema.methods.logEvent = function (level, message) {
+  this.events.push({
+    datetime: new Date(),
+    type: level,
+    message: message,
+  });
+  // if (level === 'error') this.disable();
   this.unreadErrorCount++;
   this._silent = true;
-  this.save(callback);
+  return this.save();
 };
 
 var Source = mongoose.model('Source', sourceSchema);
