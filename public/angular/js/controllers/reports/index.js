@@ -55,7 +55,7 @@ angular.module('Aggie')
             };
 
             var listOptions = [];
-            var listPairs = Object.values(ctLists);
+            var listPairs = Object.values(ctLists.lists);
             listPairs.forEach(function (listPair) {
                 var lists = Array.from(new Set(Object.values(listPair.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(listPair.crowdtangle_saved_searches).map(function(obj) {
                     return obj.name;
