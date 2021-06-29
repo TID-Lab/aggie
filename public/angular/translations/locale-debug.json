@@ -440,5 +440,6 @@
   "Nickname is required.": "__NICKNAME_IS_REQUIRED.",
   "Enter a nickname": "__ENTER_A_NICKNAME",
   "Sorry, but that report couldn't be saved.": "__SORRY,_BUT_THAT_REPORT_COULDN'T_BE_SAVED.",
-  "Non-escalated": "__NON-ESCALATED"
+  "Non-escalated": "__NON-ESCALATED",
+  "instagram": "__INSTAGRAM"
 }
