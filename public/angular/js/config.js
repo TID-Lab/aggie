@@ -14,6 +14,8 @@ angular.module('Aggie')
 
 .value('userRoles', ['viewer', 'monitor', 'admin'])
 
+.value('credentialsTypes', ['crowdtangle', 'twitter'])
+
 .value('incidentStatusOptions', ['open', 'closed'])
 
 .value('veracityOptions', ['unconfirmed', 'confirmed true', 'confirmed false'])

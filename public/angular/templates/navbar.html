@@ -45,6 +45,11 @@
             <i class="fa fa-gear fa-fw"></i>
             {{'Configuration' | translate}}
           </a>
+          <a class="dropdown-item nav-link" href role="menuitem" ui-sref="credentials"
+              ng-show="currentUser.can('change settings')" role="presentation">
+            <i class="fa fa-gear fa-fw"></i>
+            {{'Credentials' | translate}}
+          </a>
           <a class="dropdown-item nav-link" href role="menuitem" ui-sref="users">
             <i class="fa fa-users fa-fw" aria-hidden="true"></i>
             {{'Users' | translate}}

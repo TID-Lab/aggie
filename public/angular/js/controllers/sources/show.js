@@ -12,6 +12,7 @@ angular.module('Aggie')
   'StatsCache',
   function($scope, $rootScope, $stateParams, Source, source, Tags, flash, Socket, StatsCache) {
     $scope.source = source;
+
     Source.resetUnreadErrorCount({ id: source._id }, source);
     var init = function() {
       $scope.stats = StatsCache.get('stats');

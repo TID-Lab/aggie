@@ -40,7 +40,7 @@ var sourceSchema = new mongoose.Schema({
   lastReportDateSavedSearch: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] },
-  dashboardAPIToken: { type: String },
+  credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: true },
 });
 
 sourceSchema.pre('save', function(next) {
@@ -59,13 +59,14 @@ sourceSchema.pre('save', function(next) {
 });
 
 sourceSchema.post('save', function() {
-  if (!this._silent) {
-    sourceSchema.emit('source:save', { _id: this._id.toString() });
-  }
-
   if (this._sourceStatusChanged) {
+    // emit special events for the enabling & disabling of sources
     var event = this.enabled ? 'source:enable' : 'source:disable';
     sourceSchema.emit(event, { _id: this._id.toString() });
+  } else {
+    if (!this._silent) {
+      sourceSchema.emit('source:save', { _id: this._id.toString() });
+    }
   }
 
   if (this._sourceErrorCountUpdated) {
@@ -89,12 +90,16 @@ sourceSchema.methods.disable = function() {
 };
 
 // Log events in source
-sourceSchema.methods.logEvent = function(level, message, callback) {
-  this.events.push({ datetime: new Date(), type: level, message: message });
-  if (level === 'error') this.disable();
+sourceSchema.methods.logEvent = function (level, message) {
+  this.events.push({
+    datetime: new Date(),
+    type: level,
+    message: message,
+  });
+  // if (level === 'error') this.disable();
   this.unreadErrorCount++;
   this._silent = true;
-  this.save(callback);
+  return this.save();
 };
 
 var Source = mongoose.model('Source', sourceSchema);

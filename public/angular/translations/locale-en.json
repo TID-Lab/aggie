@@ -66,9 +66,9 @@
     },
     "error": "An error has occurred saving the setting",
     "ctUpdate": {
-      "success": "Facebook List was successfully updated.",
-      "failure": "Facebook List failed to be updated.",
-      "pending": "Facebook List is being updated."
+      "success": "CrowdTangle List was successfully updated.",
+      "failure": "CrowdTangle List failed to be updated.",
+      "pending": "CrowdTangle List is being updated."
     },
     "settingsModal": {
       "success": "{{itemName}} settings have been successfully {{verb}}.",
@@ -167,6 +167,17 @@
     "delete": {
       "success": "Tag was successfully deleted.",
       "error": "Tag failed to be deleted."
+    }
+  },
+  "credentials": {
+    "create": {
+      "success": "Credentials were successfully created.",
+      "error": "Credentials failed to be created. Please contact support."
+    },
+    "delete": {
+      "success": "Credentials were successfully deleted.",
+      "error": "Credentials failed to be deleted.",
+      "sourcesExist": "Sources are still using those credentials. You must swap out credentials before deleting them."
     }
   },
   "Uh oh!": "Uh oh!",
@@ -284,7 +295,7 @@
   "Stored Time": "Stored Time",
   "Source": "Source",
   "Update": "Update",
-  "Update CrowdTangle List": "Update Facebook List",
+  "Update CrowdTangle List": "Update CrowdTangle List",
   "URL": "URL",
   "Author": "Author",
   "Content": "Content",

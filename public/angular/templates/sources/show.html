@@ -59,6 +59,10 @@
                 <td class="detail-value">{{ tagsToString(source.tags) }}</td>
               </tr>
               <tr>
+                <th scope="row" translate>Credentials</th>
+                <td class="detail-value">{{ source.credentials.name }}</td>
+              </tr>
+              <tr>
                 <th scope="row" translate>Enabled</th>
                 <td class="detail-value">{{ source.enabled ? 'Yes' : 'No' | translate }}</td>
               </tr>

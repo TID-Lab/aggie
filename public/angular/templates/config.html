@@ -36,45 +36,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-4">
-              <h5 translate>API Authentication</h5>
-              <table class="table table-sm table-bordered" ng-controller="SettingsController">
-                <caption>Edit API authentication and key settings</caption>
-                <tbody>
-                  <tr ng-repeat="settingOption in apiSettingOptions">
-                    <td>
-                      <label class="settings-label">{{ settingOption | translate }}</label>
-                    </td>
-                    <td class="action text-center">
-                      <div class="ng-scope">
-                        <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'api')" translate>Edit</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col">
-              <span class="ng-scope"  ng-controller="SettingsController">
-                <table ng-if="showCTButton" class="table table-settings ">
-                  <tr >
-                    <td>
-                      <label class="settings-label" translate>Update CrowdTangle List</label>
-                    </td>
-                    <td class="action">
-                      <div class="ng-scope" >
-                        <button class="btn btn-info ng-scope" ng-disabled="disableCTButton" ng-click="updateCTList()" translate>Update</button>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </span>
-            </div>
-          </div>
 
           <div class="row">
             <div class="col">
@@ -104,26 +66,6 @@
                       </div>
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-4">
-              <h5 translate>Widgets</h5>
-              <table class="table table-sm table-bordered" ng-controller="SettingsController">
-                <caption>Edit widget settings</caption>
-                <tbody>
-                <tr ng-repeat="settingOption in widgetSettingOptions">
-                  <td>
-                    <label class="settings-label">{{ settingOption | capitalize | translate }}</label>
-                  </td>
-                  <td class="text-center">
-                    <div class="ng-scope">
-                      <button class="btn btn-info ng-scope" ng-controller="SettingsModalController" ng-click="edit(settingOption, setting[settingOption], 'widget')" translate>Edit</button>
-                    </div>
-                  </td>
-                </tr>
                 </tbody>
               </table>
             </div>

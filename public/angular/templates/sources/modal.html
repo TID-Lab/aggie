@@ -57,9 +57,14 @@
           <input ng-model="source.tags" ng-list class="form-control" id="tags" name="tags" placeholder="{{ 'Enter tags' | translate }}">
           <small class="form-text text-muted" translate="sources_modal.tags"></small>
         </div>
-        <div class="form-group" ng-show="source.media && (source.media == 'facebook' || source.media == 'instagram')">
-          <label for="dashboardAPIToken" translate>CrowdTangle Dashboard API Token</label>
-          <input type="text" ng-model="source.dashboardAPIToken" class="form-control" id="dashboardAPIToken" name="dashboardAPIToken" placeholder="{{ 'Dashboard API Token' | translate }}">
+        <div class="form-group" ng-show="source.media">
+          <label for="credentials" translate>Credentials</label>
+          <select id="credentials" name="credentials" class="form-control" ng-model="source.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" required>
+            <option value="" translate>Choose source credentials</option>
+          </select>
+          <div class="has-error" ng-show="showErrors()">
+            <small class="" ng-show="form.credentials.$error.required" translate>Credentials are required.</small>
+          </div>
         </div>
       </fieldset>
     </form>

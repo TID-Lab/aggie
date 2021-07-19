@@ -78,7 +78,6 @@ angular.module('Aggie', ['ui.router', 'ui.bootstrap', 'ngResource',
 
 // Configuration
 require('./config');
-require('./routes');
 require('./translations');
 
 // Services
@@ -102,6 +101,7 @@ require('./services/smtcTag');
 require('./services/getCTList');
 require('./services/visualization');
 require('./services/stats');
+require('./services/credentials');
 
 // Controllers
 require('./controllers/application');
@@ -138,6 +138,9 @@ require('./controllers/trends/lines');
 require('./controllers/analysis');
 require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
+require('./controllers/credentials/index');
+require('./controllers/credentials/form_modal');
+require('./controllers/credentials/show');
 
 // Routes
 require('./routes');

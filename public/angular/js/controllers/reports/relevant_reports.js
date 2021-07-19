@@ -51,15 +51,21 @@ angular.module('Aggie')
       $scope.statusOptions = statusOptions;
       $scope.currentPath = $rootScope.$state.current.name;
       $scope.smtcTags = smtcTags;
-      $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function(obj) {
-        return obj.name;
-      }))), ["Saved Search"]);
       $scope.detectHateSpeech = false;
       // The initial values of hateSpeechThreshold. These determine the warning icon that appears next to a report
       $scope.hateSpeechThreshold = {
         "threshold": 1.1, // the max hate speech score is 1 so this makes it unachievable
         "enabled": false,
       };
+      var listOptions = [];
+      var listPairs = Object.values(ctLists.lists);
+      listPairs.forEach(function (listPair) {
+          var lists = Array.from(new Set(Object.values(listPair.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(listPair.crowdtangle_saved_searches).map(function(obj) {
+              return obj.name;
+          }))), ["Saved Search"]);
+          listOptions = listOptions.concat(lists);
+      });
+      $scope.listOptions = listOptions;
 
       function setDetectHateSpeech() {
         Settings.get('detectHateSpeech', function(data) {
