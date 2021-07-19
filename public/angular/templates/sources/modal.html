@@ -49,7 +49,7 @@
           </textarea>
           <small ng-show="source.media == 'twitter'" class="form-text text-muted" translate="sources_modal.help"></small>
           <div class="has-error" ng-show="showErrors() && form.keywords.$invalid">
-            <small class=" form-text text-muted" ng-show="form.keywords.$error.required">Keywords are required for Twitter sources.</small>
+            <small class=" form-text text-muted" ng-show="form.keywords.$error.required">Keywords are required.</small>
           </div>
         </div>
         <div class="form-group" ng-show="source.media && source.media != 'comments'">

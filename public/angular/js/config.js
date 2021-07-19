@@ -1,6 +1,6 @@
 angular.module('Aggie')
 
-.value('mediaOptions', ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'facebook', 'instagram', 'comments'])
+.value('mediaOptions', ['twitter', 'rss', 'elmo', 'smsgh', 'whatsapp', 'facebook', 'instagram', 'comments' , 'telegram'])
 
 .value('apiSettingsOptions', ['twitter', 'elmo', 'gplaces', 'crowdtangle'])
 
@@ -14,7 +14,7 @@ angular.module('Aggie')
 
 .value('userRoles', ['viewer', 'monitor', 'admin'])
 
-.value('credentialsTypes', ['crowdtangle', 'twitter'])
+.value('credentialsTypes', ['crowdtangle', 'twitter', 'telegram'])
 
 .value('incidentStatusOptions', ['open', 'closed'])
 

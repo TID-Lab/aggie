@@ -91,6 +91,8 @@ angular.module('Aggie')
             return c.type === 'crowdtangle';
           case 'twitter':
             return c.type === 'twitter';
+          case 'telegram':
+            return c.type === 'telegram';
           default:
             return false;
         }
