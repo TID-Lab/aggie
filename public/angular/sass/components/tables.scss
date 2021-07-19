@@ -313,7 +313,6 @@ td {
 }
 
 .td__tags {
-  max-width: 180px;
   word-wrap: break-word;
 }
 
@@ -445,7 +444,8 @@ tr.escalated {
   }
 }
 
-
 .label__button{
   font-weight: normal;
 }
+
+.example { overflow-wrap: break-word;}
