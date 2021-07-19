@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <tbody>
+          <!----------------- General Report Information ----------------->
+          <tr>
+            <th scope="row" translate>Author</th>
+            <td colspan="10" class="detail-value">
+              <a ng-if="report.metadata.accountUrl" ng-href="{{report.metadata.accountUrl}}" target="_blank">{{ report.author }}</a>
+              <span ng-if="!report.metadata.accountUrl">{{ report.author }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>{{ (report.metadata.chatType === 'group') ? 'Group' : 'Channel'}} Title</th>
+            <td colspan="10" class="detail-value">{{ report.metadata.chatTitle }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Authored Time</th>
+            <td colspan="10" class="detail-value">{{ report.authoredAt | aggieDate:'datetime' }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>URL</th>
+            <td colspan="10" class="detail-value"><a ng-href="{{report.url}}">Original Link</a></td>
+          </tr>
+          <tr ng-repeat="source in sources">
+            <th scope="row" class="detail-key" translate>Sources</th>
+            <td colspan="10" class="detail-value">{{ source.nickname }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Fetched Time</th>
+            <td colspan="10" class="detail-value">{{ report.fetchedAt | aggieDate:'datetime' }}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Group</th>
+            <td colspan="10" class="detail-value">
+              <div>
+                <a ng-controller="IncidentSelectModalController" ng-click="setIncident([report])" class="table-primary-link">
+            <span ng-if="report._incident && incidentsById[report._incident]">
+              {{ incidentsById[report._incident].title }}
+            </span>
+                  <strong class="addIdentifier" ng-if="!report._incident && currentUser.can('edit data')" translate>Edit</strong>
+                </a>
+                <a ng-show="report._incident" ng-click="unlinkIncident(report)">x</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="detail-key" translate>Tags</th>
+            <td colspan="10" class="detail-value">
+              <span ng-repeat="tag in report.tags">
+                {{ tag + ', '}}
+              </span>
+              <a ng-controller="SMTCTagSelectModalController" ng-click="setSMTCTags(report)" class="table-primary-link">
+                <strong class="addIdentifier" ng-if="currentUser.can('edit data')" translate>Edit</strong>
+              </a>
+              <tags class="tagify readonly" tabindex="-1">
+                <tag ng-repeat="tag in report.smtcTags" contenteditable="false" spellcheck="false" tabindex="-1"
+                     class="tr__tag tagify__tag tagify" __isvalid="true" value="bar" ng-style="{'--tag-bg': smtcTagsById[tag].color}">
+                  <div>
+                    <span class="tagify__tag-text">{{smtcTagsById[tag].name}}</span>
+                  </div>
+                </tag>
+              </tags>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <h5 class="detail-key" translate>Content</h5>
+        <p class="detail-value" ng-bind-html="report.content">{{ report.content }}</p>
+        <p class="text-wrap content__shared" ng-if="report.metadata.description">
+          {{report.metadata.description | stripHtml}}
+        </p>
+      </div>
+    </div>
+  </div>
