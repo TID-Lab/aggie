@@ -47,7 +47,6 @@ angular.module('Aggie')
       $scope.incidents = incidents.results;
       $scope.incidentsById = {};
       $scope.visibleReports = new Queue(paginationOptions.perPage);
-      $scope.newReports = new Queue(paginationOptions.perPage);
       $scope.mediaOptions = mediaOptions;
       $scope.statusOptions = statusOptions;
       $scope.currentPath = $rootScope.$state.current.name;
@@ -134,7 +133,6 @@ angular.module('Aggie')
           Socket.on('tag:removed',$scope.updateSMTCTag.bind($scope));
           if ($scope.isFirstPage()) {
             Socket.emit('query', searchParams());
-            Socket.on('reports', $scope.handleNewReports.bind($scope));
           }
         }
         // make links clickable
@@ -335,13 +333,6 @@ angular.module('Aggie')
         }
       }
 
-      $scope.handleNewReports = function(reports) {
-        var uniqueReports = removeDuplicates(reports);
-        $scope.pagination.total += uniqueReports.length;
-        $scope.pagination.visibleTotal += uniqueReports.length;
-        $scope.newReports.addMany(uniqueReports);
-      };
-
       $scope.unlinkIncident = function(report) {
         report._incident = '';
         Report.update({ id: report._id }, report);
@@ -359,16 +350,6 @@ angular.module('Aggie')
         }
       };
 
-      $scope.displayNewReports = function() {
-        // TODO: When attempting to add tags to "new Reports" tags breaks the software. Until this is solved, I'm making this function refresh the page, which solves the issue on its own.
-        $window.location.reload();
-        /*
-        var reports = $scope.newReports.toArray();
-        reports.forEach(linkify);
-        $scope.reports.concat(reports);
-        $scope.visibleReports.addMany(reports);
-        $scope.newReports = new Queue(paginationOptions.perPage);*/
-      };
 
       $scope.clearDateFilterFields = function() {
         $scope.searchParams.after = null; $scope.searchParams.before = null;

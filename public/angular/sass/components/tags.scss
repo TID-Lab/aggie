@@ -1,3 +1,5 @@
+
+
 tags.tagify {
   --tags-border-color: transparent;
   --tags-hover-border-color: transparent;
@@ -231,3 +233,33 @@ tags.input--tags {
 .ui-front {
   z-index: 100;
 }
+
+tag.incidentTable__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 20ch;
+}
+
+tag.incidentIndex__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 17ch;
+}
+
+tag.reportsIndex__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 12ch;
+}
+
+tag.relevantIndex__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 12ch;
+}
+tag.batchIndex__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 12ch;
+}
+
+tag.batchTable__tags {
+  --tag--min-width: 1ch;
+  --tag--max-width: 20ch;
+}
+

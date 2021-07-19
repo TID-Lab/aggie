@@ -1,0 +1,10 @@
+{
+  "newUser": {
+    "subject": "__NEWUSER.SUBJECT",
+    "body": "__NEWUSER.BODY"
+  },
+  "forgotPassword": {
+    "subject": "__FORGOTPASSWORD.SUBJECT",
+    "body": "__FORGOTPASSWORD.BODY"
+  }
+}
