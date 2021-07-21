@@ -27,7 +27,7 @@ var urlValidator = function(url) {
 
 var mediaValues = ['facebook', 'instagram', 'comments', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'telegram', 'dummy-pull', 'dummy-fast'];
 
-var credentialedMediaValues = ['facebook', 'instagram', 'elmo', 'twitter'];
+var credentialedMediaValues = ['facebook', 'instagram', 'elmo', 'twitter', 'telegram'];
 
 var sourceSchema = new mongoose.Schema({
   media: { type: String, enum: mediaValues },
