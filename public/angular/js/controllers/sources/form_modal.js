@@ -93,6 +93,8 @@ angular.module('Aggie')
             return c.type === 'twitter';
           case 'telegram':
             return c.type === 'telegram';
+          case 'elmo':
+            return c.type === 'elmo';
           default:
             return false;
         }
@@ -138,7 +140,7 @@ angular.module('Aggie')
         $scope._showErrors = true;
         return;
       }
-      $scope.source.credentials = $scope.source.credentials._id;
+      if ($scope.source.credentials) $scope.source.credentials = $scope.source.credentials._id;
       $modalInstance.close($scope.source);
     };
 

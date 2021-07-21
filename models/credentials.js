@@ -13,7 +13,8 @@ const validator = require('validator');
 const credentialsTypes = [
   'twitter',
   'crowdtangle',
-  'telegram'
+  'telegram',
+  'elmo'
 ];
 
 // validates secrete based on their type
@@ -39,6 +40,8 @@ const secretsValidator = function(secrets) {
     );
   case 'telegram':
     return isValidString(secrets.botAPIToken); // bot API token
+  case 'elmo':
+    return isValidString(secrets.authToken); // ELMO auth token
   default:
   }
 };

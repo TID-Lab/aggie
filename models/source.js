@@ -40,7 +40,7 @@ var sourceSchema = new mongoose.Schema({
   lastReportDateSavedSearch: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] },
-  credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: true },
+  credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: function() { return this.media !== 'rss' } },
 });
 
 sourceSchema.pre('save', function(next) {

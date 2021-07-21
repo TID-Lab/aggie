@@ -14,7 +14,7 @@ angular.module('Aggie')
 
 .value('userRoles', ['viewer', 'monitor', 'admin'])
 
-.value('credentialsTypes', ['crowdtangle', 'twitter', 'telegram'])
+.value('credentialsTypes', ['crowdtangle', 'twitter', 'telegram', 'elmo'])
 
 .value('incidentStatusOptions', ['open', 'closed'])
 

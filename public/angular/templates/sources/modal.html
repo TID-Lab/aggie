@@ -52,14 +52,34 @@
             <small class=" form-text text-muted" ng-show="form.keywords.$error.required">Keywords are required.</small>
           </div>
         </div>
+
+        <div class="form-group" ng-show="source.media == 'rss' || source.media == 'elmo'">
+          <label for="url" translate>URL</label>
+          <div class="input-group">
+            <div>
+              <input type="url" ng-model="source.url" class="form-control" id="url" name="url" placeholder="{{ 'Enter url' | translate }}" ng-init="sourceUrl(source)" ng-required="source.media == 'rss' || source.media == 'elmo'" ng-focus>
+            </div>
+            <div class="input-group-addon"><span ng-show="form.url.$focused && !form.url.$invalid" class="fa fa-check"></span></div>
+          </div>
+          <small class="form-text text-muted" ng-switch="source.media">
+            <span ng-switch-when="rss" translate="sources_modal.rss_url"></span>
+            <span ng-switch-when="elmo" translate="sources_modal.elmo_url"></span>
+          </small>
+          <div class="has-error" ng-show="showErrors() && form.url.$invalid">
+            <small class="form-text text-muted" ng-show="form.url.$error.required" translate>URL is required.</small>
+            <small class="form-text text-muted" ng-show="form.url.$dirty && !form.url.$error.required" translate>URL is invalid.</small>
+          </div>
+        </div>
+
         <div class="form-group" ng-show="source.media && source.media != 'comments'">
           <label for="tags" translate>Tags</label>
           <input ng-model="source.tags" ng-list class="form-control" id="tags" name="tags" placeholder="{{ 'Enter tags' | translate }}">
           <small class="form-text text-muted" translate="sources_modal.tags"></small>
         </div>
-        <div class="form-group" ng-show="source.media">
+
+        <div class="form-group" ng-show="source.media && source.media !== 'rss'">
           <label for="credentials" translate>Credentials</label>
-          <select id="credentials" name="credentials" class="form-control" ng-model="source.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" required>
+          <select id="credentials" name="credentials" class="form-control" ng-model="source.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" ng-required="source.media !== 'rss'">
             <option value="" translate>Choose source credentials</option>
           </select>
           <div class="has-error" ng-show="showErrors()">
