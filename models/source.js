@@ -27,6 +27,8 @@ var urlValidator = function(url) {
 
 var mediaValues = ['facebook', 'instagram', 'comments', 'elmo', 'twitter', 'rss', 'dummy', 'smsgh', 'whatsapp', 'telegram', 'dummy-pull', 'dummy-fast'];
 
+var credentialedMediaValues = ['facebook', 'instagram', 'elmo', 'twitter'];
+
 var sourceSchema = new mongoose.Schema({
   media: { type: String, enum: mediaValues },
   nickname: { type: String, required: true, validate: lengthValidator },
@@ -40,7 +42,7 @@ var sourceSchema = new mongoose.Schema({
   lastReportDateSavedSearch: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] },
-  credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: function() { return this.media !== 'rss' } },
+  credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: function() { return credentialedMediaValues.includes(this.media) } },
 });
 
 sourceSchema.pre('save', function(next) {

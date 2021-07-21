@@ -77,9 +77,9 @@
           <small class="form-text text-muted" translate="sources_modal.tags"></small>
         </div>
 
-        <div class="form-group" ng-show="source.media && source.media !== 'rss'">
+        <div class="form-group" ng-show="source.media && source.media === 'facebook' || source.media === 'instagram' || source.media === 'twitter' || source.media === 'elmo'">
           <label for="credentials" translate>Credentials</label>
-          <select id="credentials" name="credentials" class="form-control" ng-model="source.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" ng-required="source.media !== 'rss'">
+          <select id="credentials" name="credentials" class="form-control" ng-model="source.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" ng-required="source.media === 'facebook' || source.media === 'instagram' || source.media === 'twitter' || source.media === 'elmo'">
             <option value="" translate>Choose source credentials</option>
           </select>
           <div class="has-error" ng-show="showErrors()">
