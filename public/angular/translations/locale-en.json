@@ -60,7 +60,7 @@
       "success": "The mail setting has been correctly saved",
       "error": "An error has occurred saving the email setting",
       "settingsModal": {
-        "success": "{{method}} setting has been successfully saved.",
+        "success": "{{method | translate}} setting has been successfully saved.",
         "error": "An error has occurred"
       }
     },
