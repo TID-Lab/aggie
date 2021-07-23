@@ -14,7 +14,10 @@ const credentialsTypes = [
   'twitter',
   'crowdtangle',
   'telegram',
-  'elmo'
+  'elmo',
+  'smtp',
+  'aws_ses',
+  'sendgrid'
 ];
 
 // validates secrete based on their type
@@ -42,6 +45,18 @@ const secretsValidator = function(secrets) {
     return isValidString(secrets.botAPIToken); // bot API token
   case 'elmo':
     return isValidString(secrets.authToken); // ELMO auth token
+  case 'smtp':
+    return isValidString(secrets.username)
+      && isValidString(secrets.password)
+      && isValidString(secrets.host)
+      && typeof secrets.port === 'number'
+      && typeof secrets.secure === 'boolean';
+  case 'aws_ses':
+    return isValidString(secrets.accessKeyID)
+      && isValidString(secrets.secretAccessKey)
+      && isValidString(secrets.region);
+  case 'sendgrid':
+    return isValidString(secrets.apiKey);
   default:
   }
 };

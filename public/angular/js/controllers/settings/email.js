@@ -8,11 +8,11 @@ angular.module('Aggie')
   'FlashService',
   '$modal',
   function($scope, Settings, $timeout, $filter, flash, $modal) {
-    $scope.mail = '';
-    $scope.transport = {};
+    $scope.credentials = $scope.$parent.credentials;
     Settings.get('email', function success(data) {
       $scope.email = data.email.from;
-      $scope.transport = angular.copy(data.email.transport);
+      $scope.method = data.email.transport.method;
+      $scope.selectedCredentials = $scope.credentials.find(function (c) { return c._id === data.email.transport.credentialsID });
     }, failure);
 
     function success() {
@@ -20,21 +20,32 @@ angular.module('Aggie')
     }
 
     $scope.saveEmail = function() {
-      Settings.set('email', { from: $scope.email, transport: $scope.transport }, success, failure);
+      Settings.set('email', {
+        from: $scope.email,
+        method: $scope.method,
+        credentialsID: $scope.selectedCredentials._id
+      }, success, failure);
     };
 
-    $scope.editTransport = function() {
+    $scope.editCredentials = function() {
       var modalInstance = $modal.open({
         controller: 'EmailSettingsModalInstanceController',
         templateUrl: 'templates/email_modal.html',
         resolve: {
-          settingsValues: function() {
-            return $scope.transport || {};
+          transport: function() {
+            return {
+              method: $scope.method,
+              credentials: $scope.selectedCredentials
+            }
+          },
+          credentials: function() {
+            return $scope.credentials
           }
         }
       });
-      modalInstance.result.then(function(method) {
-        $scope.transport.method = method;
+      modalInstance.result.then(function(transport) {
+        $scope.method = transport.method;
+        $scope.selectedCredentials = transport.credentials;
       });
     };
 

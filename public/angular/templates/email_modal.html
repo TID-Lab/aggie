@@ -13,8 +13,7 @@
           <fieldset>
             <div class="form-group">
               <label for="transport" class="control-label" translate>Transport</label>
-              <select id="transport" name="method" class="form-control" ng-model="transport.method"
-                        ng-options="name as name for (name, settings) in emailTransportOptions">
+              <select id="method" name="method" class="form-control" ng-model="transport.method" ng-options="m as m | translate for m in emailTransportOptions" required>
                 <option value="" translate>Choose transport method</option>
               </select>
               <div class="has-error" ng-show="showErrors()">
@@ -22,16 +21,13 @@
               </div>
             </div>
 
-            <div class="form-group" ng-repeat="setting in emailTransportOptions[transport.method]">
-              <label for="{{ setting }}" class="control-label">{{ setting }}</label>
-              <div ng-if="!(setting === 'secure' && transport.method === 'SMTP')">
-                <input type="text" ng-model="transport.options[setting]" class="form-control"
-                       id="{{ setting }}" name="{{ setting }}" placeholder="{{ transport.options[setting] }}"
-                       required size="80" maxlength="120"/>
-              </div>
-              <div ng-if="setting === 'secure' && transport.method === 'SMTP'">
-                <input type="checkbox" ng-model="transport.options[setting]" class="form-control"
-                       id="{{ setting }}" name="{{ setting }}"/>
+            <div class="form-group">
+              <label for="credentials" translate>Credentials</label>
+              <select id="credentials" name="credentials" class="form-control" ng-model="transport.credentials" ng-options="c as c.name | translate for c in filteredCredentials track by c._id" required>
+                <option value="" translate>Choose email credentials</option>
+              </select>
+              <div class="has-error" ng-show="showErrors()">
+                <small class="" ng-show="form.credentials.$error.required" translate>Credentials are required.</small>
               </div>
             </div>
           </fieldset>
@@ -40,7 +36,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-default" ng-click="close()" translate>Close</button>
-      <button class="btn btn-primary" ng-click="save()" translate>Submit</button>
+      <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
     </div>
   </div>
 </div>

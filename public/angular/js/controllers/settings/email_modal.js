@@ -6,19 +6,39 @@ angular.module('Aggie')
   'Settings',
   'emailTransportOptions',
   'FlashService',
-  'settingsValues',
-  function($scope, $modalInstance, Settings, emailTransportOptions, flash, settings) {
-    $scope.transport = {};
-    $scope.transport.method = settings.method || {};
-    $scope.transport.options = settings.options || {};
-    $scope.transport.from = settings.from || {};
+  'transport',
+  'credentials',
+  function($scope, $modalInstance, Settings, emailTransportOptions, flash, transport, credentials) {
+    $scope.credentials = credentials;
+    $scope.transport = angular.copy(transport);
     $scope._showErrors = false;
     $scope.emailTransportOptions = emailTransportOptions;
 
-    $scope.save = function() {
+    function filterCredentials() {
+      $scope.filteredCredentials = $scope.credentials.filter(function (c) {
+        return c.type === $scope.transport.method;
+      });
+    }
+
+    filterCredentials();
+
+    $scope.$watch('transport.method', function(newMethod, oldMethod) {
+      filterCredentials();
+
+      if (newMethod && newMethod !== oldMethod) {
+        delete $scope.transport.credentials;
+      }
+    });
+
+    $scope.save = function(form) {
+      if (form.$invalid) {
+        $scope._showErrors = true;
+        return;
+      }
+
       // We first clear previous settings in the configuration
       Settings.clear('email:transport', setSetting, failure);
-      $modalInstance.close($scope.transport.method);
+      $modalInstance.close($scope.transport);
     };
 
     $scope.close = function() {
@@ -26,13 +46,12 @@ angular.module('Aggie')
     };
 
     function setSetting() {
-      // We produce a clean settings object with only the settings for a given method
-      settings = { method: $scope.transport.method, options: {} };
-      emailTransportOptions[settings.method].forEach(function(setting) {
-        settings.options[setting] = $scope.transport.options[setting];
-      });
+      var transport = {
+        method: $scope.transport.method,
+        credentialsID: $scope.transport.credentials._id,
+      }
 
-      Settings.set('email:transport', settings, success(settings.method), failure);
+      Settings.set('email:transport', transport, success($scope.transport.method), failure);
     }
 
     function success(method) {
@@ -43,5 +62,9 @@ angular.module('Aggie')
       flash.setAlertNow('settings.email.settingsModal.error');
       console.log('failure: ', data);
     }
+
+    $scope.showErrors = function() {
+      return $scope._showErrors;
+    };
   }
 ]);

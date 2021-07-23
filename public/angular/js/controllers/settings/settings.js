@@ -12,7 +12,10 @@ angular.module('Aggie')
   'FlashService',
   'Socket',
   'StatsCache',
-  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, Socket, StatsCache) {
+  'credentials',
+  function($scope, $rootScope, $window, Settings, UpdateCTList, Source, $timeout, $filter, flash, Socket, StatsCache, credentials) {
+
+    $scope.credentials = credentials;
 
     var init = function() {
       $scope.stats = StatsCache.get('stats');

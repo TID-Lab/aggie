@@ -14,7 +14,7 @@ angular.module('Aggie')
 
 .value('userRoles', ['viewer', 'monitor', 'admin'])
 
-.value('credentialsTypes', ['crowdtangle', 'twitter', 'telegram', 'elmo'])
+.value('credentialsTypes', ['crowdtangle', 'twitter', 'telegram', 'elmo', 'smtp', 'aws_ses', 'sendgrid'])
 
 .value('incidentStatusOptions', ['open', 'closed'])
 
@@ -27,11 +27,7 @@ angular.module('Aggie')
 // Note: This should be the same as PAGE_LIMIT in database.js.
 .value('paginationOptions', { perPage: 25 })
 
-.value('emailTransportOptions', {
-  SES: ['accessKeyId', 'secretAccessKey', 'region'],
-  SMTP: ['host', 'port', 'secure', 'user', 'pass'],
-  SendGrid: ['apiKey']
-})
+.value('emailTransportOptions', ['smtp', 'aws_ses', 'sendgrid'])
 
 .value('matomoConfig', {
   "enabled": false,

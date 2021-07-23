@@ -377,6 +377,9 @@
     "elmo_url": "The URL of the ELMO instance, e.g. <strong>https://abc.getelmo.org</strong>",
     "whatsapp_help": "Check <a href=\"http://aggie.readthedocs.io/en/latest/content/settings/settings.html#whatsapp-messages\">Aggie documentation</a> for instructions on how to set the keyword and WhatsApp forwarding in Firefox"
   },
+  "credentials_modal": {
+    "smtp_secure_helper": "We try to automatically set <strong>Secure Mode</strong> for you based on your <strong>port</strong>. If you don't know why, we recommend you leave this value alone."
+  },
   "URL is required.": "URL is required.",
   "URL is invalid.": "URL is invalid.",
   "Create": "Create",
@@ -442,5 +445,8 @@
   "Nickname": "Nickname",
   "Nickname is required.": "Nickname is required.",
   "Enter a nickname": "Enter a nickname",
-  "telegram": "Telegram"
+  "telegram": "Telegram",
+  "smtp": "SMTP",
+  "aws_ses": "AWS SES",
+  "sendgrid": "SendGrid"
 }

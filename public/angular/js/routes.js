@@ -391,7 +391,12 @@ angular.module('Aggie')
     $stateProvider.state('config', {
       url: '/config',
       templateUrl: '/templates/config.html',
-      controller: 'SettingsController'
+      controller: 'SettingsController',
+      resolve: {
+        credentials: ['Credentials', function(Credentials) {
+          return Credentials.query({ type: { $in: [ 'smtp', 'aws_ses', 'sendgrid' ] } }).$promise;
+        }]
+      }
     });
 
     $stateProvider.state('password_reset', {

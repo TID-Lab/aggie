@@ -70,5 +70,13 @@ angular.module('Aggie')
     $scope.close = function() {
       $modalInstance.dismiss('cancel');
     };
+
+    $scope.$watch('credentials.secrets.port', function(port) {
+      if (port === 587 || port === 25) {
+        $scope.credentials.secrets.secure = false;
+      } else if (port === 465) {
+        $scope.credentials.secrets.secure = true;
+      }
+    });
   }
 ]);
