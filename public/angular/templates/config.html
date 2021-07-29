@@ -38,10 +38,10 @@
           </div>
 
 
-          <div class="row">
+          <div class="row" ng-controller="EmailSettingsController">
             <div class="col">
               <h5 translate>Email</h5>
-              <table class="table table-sm table-bordered" ng-controller="EmailSettingsController">
+              <table class="table table-sm table-bordered">
                 <caption>Edit system email and transport settings</caption>
                 <tbody>
                   <tr>
@@ -68,6 +68,7 @@
                   </tr>
                 </tbody>
               </table>
+              <button class="btn btn-info ng-scope" ng-click="testEmail()" translate>Test Email Configuration</button>
             </div>
           </div>
         </div>

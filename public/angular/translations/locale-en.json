@@ -62,6 +62,10 @@
       "settingsModal": {
         "success": "{{method | translate}} setting has been successfully saved.",
         "error": "An error has occurred"
+      },
+      "testModal": {
+        "success": "A test email has been successfully sent.",
+        "error": "An error occurred while trying to send a test email."
       }
     },
     "error": "An error has occurred saving the setting",

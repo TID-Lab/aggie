@@ -122,6 +122,7 @@ require('./controllers/settings/settings');
 require('./controllers/settings/settings_modal');
 require('./controllers/settings/email');
 require('./controllers/settings/email_modal');
+require('./controllers/settings/email_test_modal');
 require('./controllers/users/form_modal');
 require('./controllers/users/index');
 require('./controllers/users/profile');

@@ -1,0 +1,31 @@
+<div>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <div class="transport">
+        <div translate>Test Email Transport Settings</div>
+      </div>
+    </h4>
+    <button class="close" ng-click="close()" aria-hidden="true" aria-label="Close Email Test Modal">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="well bs-component">
+        <form name="form" class="form-horizontal" novalidate>
+          <fieldset>
+            <div class="form-group">
+              <label for="email" class="control-label" translate>Email Address</label>
+              <input type="email" class="form-control" name="email" ng-model="email" required>
+              <div class="has-error" ng-show="showErrors()">
+                <div class="help-block" ng-show="form.email.$error.required" translate>Email address required</div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="help-block" ng-show="form.email.$error.required" translate>A test email will be sent to the email address above.</div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="close()" translate>Close</button>
+      <button class="btn btn-primary" ng-click="save(form)" translate>Submit</button>
+    </div>
+  </div>
+</div>

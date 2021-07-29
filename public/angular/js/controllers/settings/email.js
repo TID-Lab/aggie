@@ -49,6 +49,13 @@ angular.module('Aggie')
       });
     };
 
+    $scope.testEmail = function() {
+      $modal.open({
+        controller: 'EmailSettingsTestModalInstanceController',
+        templateUrl: 'templates/email_test_modal.html',
+      });
+    };
+
     function failure(data) {
       flash.setAlertNow('settings.email.error');
       console.log('failure: ', data);
