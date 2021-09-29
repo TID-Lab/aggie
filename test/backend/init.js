@@ -9,7 +9,6 @@ var dbTools = require('../database-tools');
 var Report = require('../../models/report');
 var User = require('../../models/user');
 var Source = require('../../models/source');
-var Trend = require('../../models/trend');
 var Incident = require('../../models/incident');
 var SMTCTag = require('../../models/tag');
 var expect = require('chai').expect;
@@ -31,7 +30,7 @@ function expectModelsEmpty(done) {
   User.find({}, function(err, results) {
     if (err) return done(err);
     expect(results).to.have.length(1);
-    async.each([Report, Source, Trend, Incident, SMTCTag], expectEmpty, done);
+    async.each([Report, Source, Incident, SMTCTag], expectEmpty, done);
   });
 }
 module.exports.expectModelsEmpty = expectModelsEmpty;

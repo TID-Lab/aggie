@@ -5,7 +5,6 @@ var async = require('async');
 var User = require('../models/user');
 var Report = require('../models/report');
 var Source = require('../models/source');
-var Trend = require('../models/trend');
 var Incident = require('../models/incident');
 var SMTCTag = require('../models/tag');
 
@@ -46,7 +45,7 @@ exports.wipeModels = function(models) {
 
 exports.resetDb = function(callback) {
   async.series([
-    exports.wipeModels([Report, Source, Trend, Incident, User, SMTCTag]),
+    exports.wipeModels([Report, Source, Incident, User, SMTCTag]),
     function(next) {
       // Create admin user for testing
       User.create({
