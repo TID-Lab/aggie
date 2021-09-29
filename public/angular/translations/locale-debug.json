@@ -441,5 +441,16 @@
   "Enter a nickname": "__ENTER_A_NICKNAME",
   "Sorry, but that report couldn't be saved.": "__SORRY,_BUT_THAT_REPORT_COULDN'T_BE_SAVED.",
   "Non-escalated": "__NON-ESCALATED",
-  "instagram": "__INSTAGRAM"
+  "instagram": "__INSTAGRAM",
+  "credentials": {
+    "create": {
+      "success": "__CREDENTIALS.CREATE.SUCCESS",
+      "error": "__CREDENTIALS.CREATE.ERROR"
+    },
+    "delete": {
+      "success": "__CREDENTIALS.DELETE.SUCCESS",
+      "error": "__CREDENTIALS.DELETE.ERROR",
+      "sourcesExist": "__CREDENTIALS.DELETE.SOURCESEXIST"
+    }
+  }
 }
