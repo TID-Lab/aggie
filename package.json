@@ -95,7 +95,7 @@
     "twit": "^2.2.11",
     "underscore": "^1.12.1",
     "uuid": "^8.0.0",
-    "validator": "^13.0.0",
+    "validator": "^13.7.0",
     "vinyl-source-stream": "^2.0.0",
     "winston": "^3.2.1",
     "winston-slack-webhook-transport": "^1.2.4"
