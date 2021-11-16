@@ -37,7 +37,7 @@
     "netmask": ">=2.0.1",
     "growl": ">=1.10.0",
     "async": "^3.2.0",
-    "aws-sdk": "^2.674.0",
+    "aws-sdk": "^2.814.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "browserify": "^16.5.1",
