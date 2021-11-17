@@ -12,7 +12,8 @@ const validator = require('validator');
 // Add more as you see fit.
 const credentialsTypes = [
   'twitter',
-  'crowdtangle'
+  'crowdtangle',
+  'telegram'
 ];
 
 // validates secrete based on their type
@@ -36,6 +37,8 @@ const secretsValidator = function(secrets) {
       && isValidString(secrets.accessToken)
       && isValidString(secrets.accessTokenSecret)
     );
+  case 'telegram':
+    return isValidString(secrets.botAPIToken); // bot API token
   default:
   }
 };

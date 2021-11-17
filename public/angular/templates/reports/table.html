@@ -27,8 +27,9 @@
             <span ng-repeat="s in r._sources">
             {{ sourcesById[s].nickname || '[Deleted]' }}
             </span>
-            <i ng-if="r.metadata.ct_tag" class="fa fa-angle-right" aria-hidden="true"></i>
+            <i ng-if="r.metadata.ct_tag || r.metadata.chatTitle" class="fa fa-angle-right" aria-hidden="true"></i>
             <span ng-if="r.metadata.ct_tag">{{typeof(r.metadata.ct_tag) === "string" ? r.metadata.ct_tag : r.metadata.ct_tag.join(', ')}}</span>
+            <span ng-if="r.metadata.chatTitle">{{r.metadata.chatTitle}}</span>
           </p>
           <p><a ng-href="{{r.url}}" target="_blank">Link <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
           <!--<small class="text-wrap">{{ r.storedAt | aggieDate:'short_time' }}</small>

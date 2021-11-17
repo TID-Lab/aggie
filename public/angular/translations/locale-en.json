@@ -441,5 +441,6 @@
   "The Dashboard API Key for this source.": "The Dashboard API Key for this source",
   "Nickname": "Nickname",
   "Nickname is required.": "Nickname is required.",
-  "Enter a nickname": "Enter a nickname"
+  "Enter a nickname": "Enter a nickname",
+  "telegram": "Telegram"
 }

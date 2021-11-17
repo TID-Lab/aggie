@@ -28,7 +28,8 @@
           <div ng-if="report._media[0] === 'twitter'" ng-include="'/templates/reports/content-services/twitter-show.html'"></div>
           <div ng-if="report._media[0] === 'facebook'" ng-include="'/templates/reports/content-services/facebook-show.html'"></div>
           <div ng-if="report._media[0] === 'instagram'" ng-include="'/templates/reports/content-services/instagram-show.html'"></div>
-          <div ng-if="report._media[0] !== 'twitter' && report._media[0] !== 'facebook' && report._media[0] !== 'instagram'">
+          <div ng-if="report._media[0] === 'telegram'" ng-include="'/templates/reports/content-services/telegram-show.html'"></div>
+          <div ng-if="report._media[0] !== 'twitter' && report._media[0] !== 'facebook' && report._media[0] !== 'instagram' && report._media[0] !== 'telegram'">
             <div class="row">
               <div class="col">
                 <div class="table-responsive">
