@@ -14,6 +14,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var plumber = require('gulp-plumber');
 var livereload = require('gulp-livereload');
 var jsoncombine = require('gulp-jsoncombine');
+var sass = require('gulp-sass')(require('sass'));
 var path = require('path');
 var _ = require('lodash');
 var merge = require('merge-stream');
@@ -35,6 +36,8 @@ var paths = {
     'public/angular/**/*.html',
     '!public/angular/js/app.min.js'
   ],
+  sass: 'public/angular/sass/app.scss',
+  css: 'public/angular/css/',
   translations: 'public/angular/translations/',
   translationsEmail: 'lib/translations/'
 };
@@ -83,6 +86,10 @@ gulp.task('angular', function() {
   return pipes.buildAngular();
 });
 
+gulp.task('sass', function() {
+  return pipes.buildStyles();
+});
+
 // Reload browser
 gulp.task('angular.watch', function() {
   livereload.listen();
@@ -123,11 +130,16 @@ pipes.debugTranslations = function(dirname) {
     .pipe(gulp.dest(dirname));
 };
 
+pipes.buildStyles = function() {
+  return gulp.src(paths.sass)
+      .pipe(sass.sync().on('error', sass.logError))
+      .pipe(gulp.dest(paths.css));
+}
 gulp.task('debugTranslations', function() {
   var stream1 = pipes.debugTranslations(paths.translations);
   var stream2 = pipes.debugTranslations(paths.translationsEmail);
   return merge(stream1, stream2);
 });
 
-gulp.task('build', gulp.parallel('debugTranslations', 'angular'));
+gulp.task('build', gulp.parallel('debugTranslations', 'angular', 'sass'));
 //TO DO: Code updated assuming the purpose is to run multiple tasks in parallel. Need to Verify this.
