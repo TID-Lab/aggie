@@ -16,19 +16,19 @@ Helvetica,
 Arial,
 sans-serif;
 
-@import 'shared/general';
-@import 'shared/forms';
-@import 'shared/navbar';
-@import 'shared/buttons';
-@import 'components/modals';
-@import 'components/tables';
-@import 'components/tabs';
-@import 'components/tags';
-@import 'sections/trend-bars';
-@import 'sections/trend-lines';
-@import 'sections/profile';
-@import 'sections/settings';
-@import 'sections/visualization';
+@import 'shared/_general';
+@import 'shared/_forms';
+@import 'shared/_navbar';
+@import 'shared/_buttons';
+@import 'components/_modals';
+@import 'components/_tables';
+@import 'components/_tabs';
+@import 'components/_tags';
+@import 'sections/_trend-bars';
+@import 'sections/_trend-lines';
+@import 'sections/_profile';
+@import 'sections/_settings';
+@import 'sections/_visualization';
 
 // NOTE: Over time, the styles below should be refactored into separate files. See https://github.com/styleguide/css
 // for directory structure.
