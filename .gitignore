@@ -34,7 +34,7 @@ migrations/.migrate
 .migrate
 
 public/css/styles.css
-public/angular/css/app.css
+public/angular/css/app_la.css
 public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
 lib/translations/locale-debug.json

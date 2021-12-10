@@ -10,6 +10,7 @@ var logger = require('../lib/logger');
 var SMTCTag = require('../models/tag');
 var { addPost, removePost } = require('../lib/comments');
 var _= require('lodash')
+var moment = require('../node_modules/moment');
 
 var schema = new Schema({
   authoredAt: {type: Date, index: true},
@@ -33,7 +34,8 @@ var schema = new Schema({
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
   notes: {type: String},
-  escalated: { type: Boolean, default: false, required: true, index: true }
+  escalated: { type: Boolean, default: false, required: true, index: true },
+  simScores: [{"report": { type: Schema.ObjectId, ref: 'Report', index: true }, "score": Number}]
 });
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
@@ -199,12 +201,14 @@ Report.queryReports = function(query, page, callback) {
     callback = page;
     page = 0;
   }
-  if (page < 0) page = 0;
+  //if (page < 0) page = 0;
 
   var filter = query.toMongooseFilter();
 
   // Re-set search timestamp
   query.since = new Date();
+
+  //var la = moment("Thu Apr 01 2021 00:00:00 GMT-0400 (Eastern Daylight Time)").format("YYYY-MM-DD");
 
   if (query.escalated === 'escalated') filter.escalated = true;
   if (query.escalated === 'unescalated') filter.escalated = false;
@@ -212,10 +216,13 @@ Report.queryReports = function(query, page, callback) {
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
 
-  Report.findSortedPage(filter, page, callback);
+  if(page == -1) {
+    Report.findSortedPageAll(filter, callback);
+  } else {
+    Report.findSortedPage(filter, page, callback);
+  }
+
 };
-
-
 
 Report.findSortedPage = function(filter, page, callback) {
   Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {
@@ -223,5 +230,14 @@ Report.findSortedPage = function(filter, page, callback) {
     callback(null, reports);
   });
 };
+
+Report.findSortedPageAll = function(filter, callback) {
+  Report.findAll(filter, { sort: '-storedAt' }, function(err, reports) {
+    if (err) return callback(err);
+    callback(null, reports);
+  });
+};
+
+
 
 module.exports = Report;

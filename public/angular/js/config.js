@@ -23,7 +23,7 @@ angular.module('Aggie')
 .value('publicOptions', ['public', 'private'])
 
 // Note: This should be the same as PAGE_LIMIT in database.js.
-.value('paginationOptions', { perPage: 25 })
+.value('paginationOptions', { perPage: 200 })
 
 .value('emailTransportOptions', {
   SES: ['accessKeyId', 'secretAccessKey', 'region'],

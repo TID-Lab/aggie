@@ -1,5 +1,17 @@
 <!-- Main Section -->
 <div class="container-fluid mt-4">
+  <style>
+    .links line {
+      stroke: #999;
+      stroke-opacity: 0.6;
+    }
+
+    .nodes circle {
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+
+  </style>
   <div class="row">
     <div class="col"></div>
     <!--This is the centered card-->
@@ -8,7 +20,7 @@
         <!-- This is the Toolbar with selection actions -->
         <div title="Selection Actions" class="card-header card__header cardheader--withSelect"
           aria-label="Top Selection Actions Toolbar" role="toolbar">
-          <h4>Analysis</h4>
+          <h4>Network Graph</h4>
           <div class="btn-toolbar justify-content-between" aria-label="Top Toolbar with selection actions"
             ng-show="currentUser.can('edit data')">
             <div class="checkbox vis-checkbox">
@@ -29,12 +41,12 @@
               <h5>Network Graph</h5>
               <p id="net_graph-text">
               </p>
-              <p><span style="color: #ff7f0e; font-weight: bold;">Orange</span> nodes are authors of posts which were similar to posts of the connected author.
-                <span style="color: #1DA1F2; font-weight: bold;">Light Blue</span> are posts with the selected tag.
-                <!--span style="color: #4267B2; font-weight: bold;">Dark Blue</span> are Facebook posts.</p-->
+              <p><span style="color: #ff7f0e; font-weight: bold;">Orange</span> nodes are authors.
+                <span style="color: #1DA1F2; font-weight: bold;">Light Blue</span> are twitter posts.
+                <span style="color: #4267B2; font-weight: bold;">Dark Blue</span> are Facebook posts.</p>
               <svg class="analysis-svg" viewBox="0 0 800 800" id="net_graph-view"></svg>
             </div>
-            <!--div class="col-xl-6">
+            <div class="col-xl-6">
               <h5>Author and Post Node Details</h5>
               <p id="nDetails-text"></p>
               <div id="nDetails-view" style="display: none;">
@@ -49,47 +61,6 @@
                   <tr><td>Sample</td><td>Sample</td><td>Sample</td></tr>
                 </table>
               </div>
-            </div>
-          </div-->
-          <div class="row">
-            <div class="col-xl-6">
-              <h5>Reports by Tags</h5>
-              <p>
-                Distribution of READ Reports by Tags. Click on a tag to filter all views.
-              </p>
-              <svg class="analysis-svg" viewBox="0 0 400 300" ng-init="init()" id="tags-view"></svg>
-            </div>
-            <div class="col-xl-6">
-              <h5>Reports by Time</h5>
-              <p id="time-text">
-                
-              </p>
-              <svg class="analysis-svg" viewBox="0 0 400 300" id="time-view"></svg>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-12">
-              <h5>Content Word Cloud</h5>
-              <p id="word-text">
-                
-              </p>
-              <svg class="analysis-svg" viewBox="0 0 1600 900" id="word-view"></svg>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-6">
-              <h5>Reports by Author</h5>
-              <p id="author-text">
-                
-              </p>
-              <svg class="analysis-svg" viewBox="0 0 400 300" id="author-view"></svg>
-            </div>
-            <div class="col-xl-6">
-              <h5>Reports by Media</h5>
-              <p id="media-text">
-                
-              </p>
-              <svg class="analysis-svg" viewBox="0 0 400 300" id="media-view"></svg>
             </div>
           </div>
 

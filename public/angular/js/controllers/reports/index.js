@@ -23,13 +23,13 @@ angular.module('Aggie')
         'paginationOptions',
         '$translate',
         'Settings',
-        function($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
-                 mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
-                 Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
-                 $translate, Settings) {
+        function ($state, $scope, $rootScope, $stateParams, $window, flash, reports, sources, smtcTags,
+                  mediaOptions, incidents, statusOptions, linkedtoIncidentOptions, ctLists,
+                  Report, Incident, Batch, Socket, Queue, Tags, paginationOptions,
+                  $translate, Settings) {
 
             $scope.smtcTags = smtcTags;
-            $scope.smtcTagNames = $scope.smtcTags.map(function(smtcTag) {
+            $scope.smtcTagNames = $scope.smtcTags.map(function (smtcTag) {
                 return smtcTag.name;
             });
             $scope.visibleSmtcTags = smtcTags;
@@ -47,7 +47,7 @@ angular.module('Aggie')
             $scope.statusOptions = statusOptions;
             $scope.currentPath = $rootScope.$state.current.name;
             $scope.smtcTags = smtcTags;
-            $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function(obj) {
+            $scope.listOptions = Array.from(new Set(Object.values(ctLists.crowdtangle_list_account_pairs).flat())).concat(Array.from(new Set(Object.values(ctLists.crowdtangle_saved_searches).map(function (obj) {
                 return obj.name;
             }))), ["Saved Search"]);
             $scope.detectHateSpeech = false;
@@ -58,9 +58,9 @@ angular.module('Aggie')
             };
 
             function setDetectHateSpeech() {
-                Settings.get('detectHateSpeech', function(data) {
+                Settings.get('detectHateSpeech', function (data) {
                     $scope.detectHateSpeech = data.detectHateSpeech;
-                }, function(error) {
+                }, function (error) {
                     console.log(error);
                 });
             }
@@ -80,9 +80,9 @@ angular.module('Aggie')
             }
 
             function setHateSpeechThreshold() {
-                Settings.get('hateSpeechThreshold', function(data) {
+                Settings.get('hateSpeechThreshold', function (data) {
                     $scope.hateSpeechThreshold = data.hateSpeechThreshold;
-                }, function(error) {
+                }, function (error) {
                     console.log(error);
                 });
             }
@@ -103,7 +103,7 @@ angular.module('Aggie')
             };
 
 
-            var init = function() {
+            var init = function () {
                 $scope.reportsById = $scope.reports.reduce(groupById, {});
                 $scope.sourcesById = $scope.sources.reduce(groupById, {});
                 $scope.incidentsById = $scope.incidents.reduce(groupById, {});
@@ -118,7 +118,7 @@ angular.module('Aggie')
                     Socket.join('stats');
                     Socket.join('tags');
                     Socket.on('tag:new', $scope.updateSMTCTag.bind($scope));
-                    Socket.on('tag:removed',$scope.updateSMTCTag.bind($scope));
+                    Socket.on('tag:removed', $scope.updateSMTCTag.bind($scope));
                     if ($scope.isFirstPage()) {
                         Socket.emit('query', searchParams());
                         Socket.on('reports', $scope.handleNewReports.bind($scope));
@@ -132,19 +132,19 @@ angular.module('Aggie')
                 setSortingScore();
             };
 
-            var updateStats = function(stats) {
+            var updateStats = function (stats) {
                 $scope.stats = stats;
             };
 
-            var linkify = function(report) {
+            var linkify = function (report) {
                 if (report.content !== null) {
                     report.content = Autolinker.link(report.content);
                 }
                 return report;
             };
 
-            var removeDuplicates = function(reports) {
-                return reports.reduce(function(memo, report) {
+            var removeDuplicates = function (reports) {
+                return reports.reduce(function (memo, report) {
                     if (!(report._id in $scope.reportsById)) {
                         $scope.reportsById[report._id] = report;
                         memo.push(report);
@@ -153,37 +153,42 @@ angular.module('Aggie')
                 }, []);
             };
 
-            var groupById = function(memo, item) {
+            var groupById = function (memo, item) {
                 memo[item._id] = item;
                 return memo;
             };
 
-            $scope.search = function(newParams) {
-                $scope.$evalAsync(function() {
+            $scope.search = function (newParams) {
+                $scope.$evalAsync(function () {
                     // Remove empty params.
                     var params = searchParams(newParams)
                     for (var key in params) {
                         if (!params[key]) params[key] = null;
                     }
-                    $state.go('reports', params, { reload: true });
+                    $state.go('reports', params, {reload: true});
                 });
             };
 
-            var smtcTagNamesToIds = function(tagNames) {
+            var smtcTagNamesToIds = function (tagNames) {
                 // This runs on the start of the page
                 // This is here because the autocomplete adds , and breaks the search by searching a blank tag Id
                 if (tagNames.length !== 1) {
                     tagNames = tagNames.split(',');
-                    if (tagNames[tagNames.length - 1] === '') { tagNames.pop(); }
+                    if (tagNames[tagNames.length - 1] === '') {
+                        tagNames.pop();
+                    }
                 }
                 //TODO: This can be done with functional programming (whenever I try it breaks)
-                var searchedTagIds = tagNames.map(function(smtcTagName) {
+                var searchedTagIds = tagNames.map(function (smtcTagName) {
                     smtcTagName = smtcTagName.trim();
                     var foundId = "";
-                    $scope.smtcTags.forEach(function(smtcTag){
+                    $scope.smtcTags.forEach(function (smtcTag) {
                         // Case doesn't matter
-                        if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) { foundId = smtcTag._id; }
-                        else if (smtcTag._id === smtcTagName) { foundId = smtcTag._id; }
+                        if (smtcTag.name.toLowerCase() === smtcTagName.toLowerCase()) {
+                            foundId = smtcTag._id;
+                        } else if (smtcTag._id === smtcTagName) {
+                            foundId = smtcTag._id;
+                        }
                     });
                     if (foundId === "") return null;
                     return foundId;
@@ -194,22 +199,25 @@ angular.module('Aggie')
                 return searchedTagIds;
             }
 
-            var updateTagSearchNames = function() {
+            var updateTagSearchNames = function () {
                 var tempTags = $scope.searchParams.tags;
                 if (tempTags) {
-                    if(typeof tempTags=="string"){
+                    if (typeof tempTags == "string") {
                         tempTags = [tempTags];
                     }
                     var tagNames = "";
-                    tagNames = tempTags.map(function(tagId) {
-                        if ($scope.smtcTagsById[tagId]) { return $scope.smtcTagsById[tagId].name; }
-                        else { return tagId; }
+                    tagNames = tempTags.map(function (tagId) {
+                        if ($scope.smtcTagsById[tagId]) {
+                            return $scope.smtcTagsById[tagId].name;
+                        } else {
+                            return tagId;
+                        }
                     });
                     $scope.searchParams.tags = tagNames.join(', ');
                 }
             }
 
-            var searchParams = function(newParams) {
+            var searchParams = function (newParams) {
                 var params = $scope.searchParams;
                 params.page = 1;
                 for (var key in newParams) {
@@ -221,7 +229,7 @@ angular.module('Aggie')
                 return params;
             };
 
-            var paginate = function(items) {
+            var paginate = function (items) {
                 var page = $scope.pagination.page,
                     perPage = $scope.pagination.perPage,
                     total = $scope.pagination.total,
@@ -234,45 +242,49 @@ angular.module('Aggie')
                 return items;
             };
 
-            $scope.filterSelected = function(items) {
-                return items.reduce(function(memo, item) {
+            $scope.filterSelected = function (items) {
+                return items.reduce(function (memo, item) {
                     if (item.selected) memo.push(item);
                     return memo;
                 }, []);
             };
 
 
-            var toggleRead = function(items, read) {
-                return items.map(function(item) {
+            var toggleRead = function (items, read) {
+                return items.map(function (item) {
                     item.read = read;
                     return item;
                 });
             };
 
-            var removeSMTCTag = function(items, smtcTag) {
-                return items.map(function(item) {
-                    item.smtcTags.splice(item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}), 1);
+            var removeSMTCTag = function (items, smtcTag) {
+                return items.map(function (item) {
+                    item.smtcTags.splice(item.smtcTags.findIndex(function (tag) {
+                        return tag === smtcTag._id
+                    }), 1);
                     return item;
                 })
             }
-            var addSMTCTag = function(items, smtcTag) {
-                return items.map(function(item) {
-                    if (item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1) {
+            var addSMTCTag = function (items, smtcTag) {
+                return items.map(function (item) {
+                    if (item.smtcTags.findIndex(function (tag) {
+                        return tag === smtcTag._id
+                    }) === -1) {
                         item.smtcTags.push(smtcTag);
                     }
                     return item;
                 });
             }
 
-            var clearSMTCTags = function(items) {
-                return items.map(function(item) {
+            var clearSMTCTags = function (items) {
+                return items.map(function (item) {
                     item.smtcTags = [];
                     return item;
                 });
             }
 
-            var getIds = function(items) {
-                return items.map(function(item) {
+            var getIds = function (items) {
+                return items.map(function (item) {
                     return item._id;
                 });
             };
@@ -281,14 +293,14 @@ angular.module('Aggie')
              * For use with socket.io. This function updates report when their properties are changed by another user.
              * @param {!Report} report
              */
-            $scope.updateReport = function(report) {
-                var foundReport = $scope.visibleReports.find(function(item) {
+            $scope.updateReport = function (report) {
+                var foundReport = $scope.visibleReports.find(function (item) {
                     return item._id === report._id;
                 });
                 if (!foundReport) return;
                 angular.extend(foundReport, report);
                 if (!$scope.incidentsById[report._incident]) {
-                    Incident.get({ id: report._incident }, function(inc) {
+                    Incident.get({id: report._incident}, function (inc) {
                         incidents.results.push(inc);
                         $scope.incidentsById[report._incident] = inc;
                     });
@@ -302,7 +314,7 @@ angular.module('Aggie')
             $scope.updateSMTCTag = function (updatedTag) {
                 // remove deleted tag
                 if (updatedTag.name == null) {
-                    var delIndex = $scope.smtcTags.map(function(item) {
+                    var delIndex = $scope.smtcTags.map(function (item) {
                         return item._id
                     }).indexOf(updatedTag);
                     $scope.smtcTags.splice(delIndex, 1);
@@ -312,19 +324,19 @@ angular.module('Aggie')
                 }
             }
 
-            $scope.handleNewReports = function(reports) {
+            $scope.handleNewReports = function (reports) {
                 var uniqueReports = removeDuplicates(reports);
                 $scope.pagination.total += uniqueReports.length;
                 $scope.pagination.visibleTotal += uniqueReports.length;
                 $scope.newReports.addMany(uniqueReports);
             };
 
-            $scope.unlinkIncident = function(report) {
+            $scope.unlinkIncident = function (report) {
                 report._incident = '';
-                Report.update({ id: report._id }, report);
+                Report.update({id: report._id}, report);
             };
 
-            $scope.displayNewReports = function() {
+            $scope.displayNewReports = function () {
                 // TODO: When attempting to add tags to "new Reports" tags breaks the software. Until this is solved, I'm making this function refresh the page, which solves the issue on its own.
                 $window.location.reload();
                 /*
@@ -335,27 +347,28 @@ angular.module('Aggie')
                 $scope.newReports = new Queue(paginationOptions.perPage);*/
             };
 
-            $scope.clearDateFilterFields = function() {
-                $scope.searchParams.after = null; $scope.searchParams.before = null;
+            $scope.clearDateFilterFields = function () {
+                $scope.searchParams.after = null;
+                $scope.searchParams.before = null;
             };
 
-            $scope.clearSearch = function() {
-                $scope.search({ page: null, keywords: null });
+            $scope.clearSearch = function () {
+                $scope.search({page: null, keywords: null});
             };
 
-            $scope.clearAuthor = function() {
-                $scope.search({ author: null });
+            $scope.clearAuthor = function () {
+                $scope.search({author: null});
             };
 
-            $scope.clearTags = function() {
-                $scope.search({ tags: null });
+            $scope.clearTags = function () {
+                $scope.search({tags: null});
             };
 
-            $scope.clearDateFilter = function() {
-                $scope.search({ after: null, before: null });
+            $scope.clearDateFilter = function () {
+                $scope.search({after: null, before: null});
             };
 
-            $scope.noFilters = function() {
+            $scope.noFilters = function () {
                 return $scope.searchParams.before === null &&
                     $scope.searchParams.after === null &&
                     $scope.searchParams.status === null &&
@@ -368,7 +381,7 @@ angular.module('Aggie')
                     $scope.searchParams.keywords === null;
             };
 
-            $scope.clearFilters = function() {
+            $scope.clearFilters = function () {
                 $scope.search({
                     before: null,
                     after: null,
@@ -383,30 +396,30 @@ angular.module('Aggie')
                 });
             };
 
-            $scope.isFirstPage = function() {
+            $scope.isFirstPage = function () {
                 return $scope.pagination.page == 1;
             };
 
-            $scope.isLastPage = function() {
+            $scope.isLastPage = function () {
                 return $scope.pagination.end >= $scope.pagination.visibleTotal;
             };
-            $scope.nextPage = function() {
+            $scope.nextPage = function () {
                 if (!$scope.isLastPage()) {
                     $scope.search($scope.currentPage + 1);
                 }
             };
 
-            $scope.prevPage = function() {
+            $scope.prevPage = function () {
                 if (!$scope.isFirstPage()) {
                     search($scope.currentPage - 1);
                 }
             };
 
-            $scope.isUnassigned = function(report) {
+            $scope.isUnassigned = function (report) {
                 return !this.isRelevant(report) && !this.isIrrelevant(report);
             };
 
-            $scope.isRead = function(report) {
+            $scope.isRead = function (report) {
                 return report.read;
             };
 
@@ -414,9 +427,9 @@ angular.module('Aggie')
              * Saves a front-end report to the back end.
              * @param {Report} report
              */
-            $scope.saveReport = function(report) {
-                Report.save({ id: report._id }, report, function() {
-                }, function() {
+            $scope.saveReport = function (report) {
+                Report.save({id: report._id}, report, function () {
+                }, function () {
                     flash.setAlertNow("Sorry, but that report couldn't be saved.");
                 });
             };
@@ -425,18 +438,17 @@ angular.module('Aggie')
              * Sets selected reports' read property to read value
              * @param {boolean} read
              */
-            $scope.setSelectedReadStatus = function(read) {
+            $scope.setSelectedReadStatus = function (read) {
                 var items = $scope.filterSelected($scope.reports);
                 if (!items.length) return;
                 var ids = getIds(toggleRead(items, read));
-                Report.toggleRead({ ids: ids, read: read });
+                Report.toggleRead({ids: ids, read: read});
             };
 
-            $scope.toggleSelectedRead = function() {
+            $scope.toggleSelectedRead = function () {
                 if (!$scope.someSelected()) {
                     flash.setAlertNow("Please first select a report to toggle read.");
-                }
-                else {
+                } else {
                     var items = $scope.filterSelected($scope.reports);
                     if (!items.length) return; // If empty, return
                     if (items.findIndex(function (item) {
@@ -449,17 +461,17 @@ angular.module('Aggie')
              * Sets all reports' read property in the scope to read
              * @param {boolean} read
              */
-            $scope.setAllReadStatus = function(read) {
+            $scope.setAllReadStatus = function (read) {
                 var ids = getIds(toggleRead($scope.reports, read));
-                Report.toggleRead({ ids: ids, read: read });
+                Report.toggleRead({ids: ids, read: read});
             };
 
             /**
              * Returned value is meant to be used as a boolean to check if any reports are selected.
              * @returns {boolean}
              */
-            $scope.someSelected = function() {
-                return $scope.reports.some(function(report) {
+            $scope.someSelected = function () {
+                return $scope.reports.some(function (report) {
                     return report.selected;
                 });
             };
@@ -469,11 +481,13 @@ angular.module('Aggie')
              * from all selected reports. Otherwise this function adds the smtcTag to each selected report.
              * @param {SMTCTag} smtcTag
              */
-            $scope.toggleTagOnSelected = function(smtcTag) {
+            $scope.toggleTagOnSelected = function (smtcTag) {
                 var items = $scope.filterSelected($scope.reports);
                 if (!items.length) return;
-                if (items.findIndex(function(item) {
-                    return item.smtcTags.findIndex(function(tag) {return tag === smtcTag._id}) === -1;
+                if (items.findIndex(function (item) {
+                    return item.smtcTags.findIndex(function (tag) {
+                        return tag === smtcTag._id
+                    }) === -1;
                 }) !== -1) $scope.addTagToSelected(smtcTag);
                 else $scope.removeTagFromSelected(smtcTag);
             }
@@ -483,8 +497,8 @@ angular.module('Aggie')
              * @param {*} event the DOM event from the text input
              * @param {*} tags the smtc tags, because apparently we can't just reference $scope.smtcTags directly?
              */
-            $scope.filterTags = function(event, tags) {
-                $scope.visibleSmtcTags = tags.filter(function(tag) {
+            $scope.filterTags = function (event, tags) {
+                $scope.visibleSmtcTags = tags.filter(function (tag) {
                     return tag.name.toLowerCase().includes(event.target.value.toLowerCase())
                 })
             }
@@ -493,12 +507,11 @@ angular.module('Aggie')
              * Adds a smtcTag to selected reports.
              * @param {SMTCTag} smtcTag
              */
-            $scope.addTagToSelected = function(smtcTag) {
+            $scope.addTagToSelected = function (smtcTag) {
                 //TODO: There should be a validation that the tag is not already added to the report
                 if (!$scope.someSelected()) {
                     flash.setAlertNow("Please first select a report to add a tag to.");
-                }
-                else {
+                } else {
                     var items = $scope.filterSelected($scope.reports);
                     if (!items.length) return;
                     var ids = getIds(addSMTCTag(items, smtcTag));
@@ -510,11 +523,10 @@ angular.module('Aggie')
              * Removes a smtcTag from selected reports.
              * @param {SMTCTag} smtcTag
              */
-            $scope.removeTagFromSelected = function(smtcTag) {
+            $scope.removeTagFromSelected = function (smtcTag) {
                 if (!$scope.someSelected()) {
                     flash.setAlertNow("Please first select a report to remove a tag from.");
-                }
-                else {
+                } else {
                     var items = $scope.filterSelected($scope.reports);
                     if (!items.length) return;
                     var ids = getIds(removeSMTCTag(items, smtcTag));
@@ -525,7 +537,7 @@ angular.module('Aggie')
             /**
              * Removes all tags from all selected reports.
              */
-            $scope.clearTagsFromSelected = function() {
+            $scope.clearTagsFromSelected = function () {
                 var items = $scope.filterSelected($scope.reports);
                 if (!items.length) return;
 
@@ -538,13 +550,15 @@ angular.module('Aggie')
              * @param {Report} report
              * @param {SMTCTag} smtcTag
              */
-            $scope.removeTagFromReport = function(report, smtcTag) {
-                report.smtcTags.splice(report.smtcTags.findIndex(function(tag) {return tag === smtcTag}), 1);
+            $scope.removeTagFromReport = function (report, smtcTag) {
+                report.smtcTags.splice(report.smtcTags.findIndex(function (tag) {
+                    return tag === smtcTag
+                }), 1);
                 Report.removeSMTCTag({ids: [report._id], smtcTag: smtcTag});
             }
 
             // Batch Mode Functions
-            $scope.grabBatch = function() {
+            $scope.grabBatch = function () {
                 // Before we go to batch, the searched query tag is going to be the name of the tag not the ID.
                 // This is because the backend sends us back a objectId and we quickly change it to a smtcTag Name instead.
                 // TODO: Make the backend return a smtcTagObject instead then populate just the searchbar with the name.
@@ -555,7 +569,7 @@ angular.module('Aggie')
                         batchSearchParams.tags = smtcTagNamesToIds($scope.searchParams.tags);
                     }
                 }
-                Batch.checkout(batchSearchParams, function(resource) {
+                Batch.checkout(batchSearchParams, function (resource) {
                     // no more results found
                     if (!resource.results || !resource.results.length) {
                         var message = 'No more unread reports found.';
@@ -569,21 +583,21 @@ angular.module('Aggie')
                         return;
                     }
                     Batch.resource = resource;
-                    $rootScope.$state.go('batch', batchSearchParams, { reload: true });
+                    $rootScope.$state.go('batch', batchSearchParams, {reload: true});
                 });
             };
 
-            $scope.cancelBatch = function() {
-                Batch.cancel({}, function() {
+            $scope.cancelBatch = function () {
+                Batch.cancel({}, function () {
                     $rootScope.$state.go('reports', $scope.searchParams);
                 });
             };
 
-            $scope.markAllReadAndGrabAnother = function() {
+            $scope.markAllReadAndGrabAnother = function () {
                 if (!$scope.reports) return;
 
                 var ids = getIds($scope.reports);
-                Report.toggleRead({ ids: ids, read: true }, function() {
+                Report.toggleRead({ids: ids, read: true}, function () {
                     $scope.grabBatch();
                 });
             };
@@ -591,11 +605,11 @@ angular.module('Aggie')
             /**
              * Marks all reports in the batch to read and exits batch mode.
              */
-            $scope.markAllReadAndDone = function() {
+            $scope.markAllReadAndDone = function () {
                 if (!$scope.reports) return;
                 var ids = getIds($scope.reports);
-                Report.toggleRead({ ids: ids, read: true }, function() {
-                    $rootScope.$state.go('reports', $scope.searchParams, { reload: true });
+                Report.toggleRead({ids: ids, read: true}, function () {
+                    $rootScope.$state.go('reports', $scope.searchParams, {reload: true});
                 });
             };
 
@@ -604,14 +618,14 @@ angular.module('Aggie')
              * @param event
              * @param {!Report} report
              */
-            $scope.viewReport = function(event, report) {
+            $scope.viewReport = function (event, report) {
                 if (angular.element(event.target)[0].tagName === 'TD') {
-                    $state.go('report', { id: report._id });
+                    $state.go('report', {id: report._id});
                 }
             };
 
             // CSS functions
-            $scope.sourceClass = function(report) {
+            $scope.sourceClass = function (report) {
                 // Pick one of the sources that has a media type. For now, it happens that
                 // if a report has multiple sources, they all have the same type, or are
                 // deleted
@@ -631,39 +645,39 @@ angular.module('Aggie')
                 }
             };
 
-            var splitInput = function(val) {
-                return val.split( /,\s*/ );
+            var splitInput = function (val) {
+                return val.split(/,\s*/);
             }
             var extractLast = function extractLast(term) {
-                return splitInput( term ).pop();
+                return splitInput(term).pop();
             }
 
-            $scope.onTagSearchInputLoad = function() {
-                $( "#tagSearchInput" )
+            $scope.onTagSearchInputLoad = function () {
+                $("#tagSearchInput")
                     .autocomplete({
                         minLength: 0,
-                        source: function( request, response ) {
-                            response( $.ui.autocomplete.filter(
-                                $scope.smtcTagNames, extractLast( request.term ) ) );
+                        source: function (request, response) {
+                            response($.ui.autocomplete.filter(
+                                $scope.smtcTagNames, extractLast(request.term)));
                         },
-                        focus: function() {
+                        focus: function () {
                             return false;
                         },
-                        select: function( event, ui ) {
-                            var terms = splitInput( this.value );
+                        select: function (event, ui) {
+                            var terms = splitInput(this.value);
                             // remove the current input
                             terms.pop();
                             // add the selected item
-                            terms.push( ui.item.value );
+                            terms.push(ui.item.value);
                             // add placeholder to get the comma-and-space at the end
-                            terms.push( "" );
-                            this.value = terms.join( ", " );
+                            terms.push("");
+                            this.value = terms.join(", ");
                             return false;
                         }
                     });
             }
 
-            $scope.$on('$destroy', function() {
+            $scope.$on('$destroy', function () {
                 Socket.leave('reports');
                 Socket.removeAllListeners('reports');
                 Socket.leave('stats');

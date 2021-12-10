@@ -136,6 +136,7 @@ require('./controllers/incidents/report_incident_modal');
 require('./controllers/trends/bars');
 require('./controllers/trends/lines');
 require('./controllers/analysis');
+require('./controllers/net_graph');
 require('./controllers/trends/form_modal');
 require('./controllers/datetime_modal');
 

@@ -297,6 +297,58 @@ angular.module('Aggie')
             return Visualization.get().$promise;
           },
         ],
+        reports: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          return Report.query({
+            page: page - 1,
+            keywords: params.keywords,
+            after: params.after,
+            before: params.before,
+            sourceId: params.sourceId,
+            media: params.media,
+            incidentId: params.incidentId,
+            status: params.status,
+            author: params.author,
+            tags: params.tags,
+            list: params.list,
+            escalated: params.escalated,
+            veracity: params.veracity,
+            isRelevantReports: true,
+          }).$promise;
+        }]
+      },
+    });
+
+    $stateProvider.state("net_graph", {
+      url: "/net_graphs",
+      templateUrl: "/templates/net_graph/index.html",
+      controller: "NetGraphController",
+      resolve: {
+        /*data: [
+          "Visualization",
+          function (Visualization) {
+            return Visualization.get().$promise;
+          },
+        ] */
+        reports: ['Report', '$stateParams', function(Report, params) {
+          var page = params.page || 1;
+          return Report.query({
+            page: page - 1,
+            keywords: params.keywords,
+            after: params.after,
+            before: params.before,
+            sourceId: params.sourceId,
+            media: params.media,
+            incidentId: params.incidentId,
+            status: params.status,
+            author: params.author,
+            tags: params.tags,
+            list: params.list,
+            escalated: params.escalated,
+            veracity: params.veracity,
+            isRelevantReports: true,
+          }).$promise;
+        }]
       },
     });
 

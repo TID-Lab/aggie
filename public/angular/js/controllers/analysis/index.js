@@ -7,17 +7,20 @@ angular
     "$scope",
     "Socket",
     "data",
-    function ($scope, Socket, data) {
+    "reports",
+    function ($scope, Socket, data, reports) {
 
       $scope.read_only = false;
       $scope.tagSelection = 'all-tags';
+      $scope.graph = null;
 
       $scope.initiateText = function (textToShow) {
         d3.select('#time-text').html('Distribution of ' + textToShow + ' reports by time.');
+        d3.select('#net_graph-text').html('Relationships of ' + textToShow + ' reports by author and report.');
         d3.select('#word-text').html('Distribution of ' + textToShow + ' reports by word.');
         d3.select('#author-text').html('Distribution of ' + textToShow + ' reports by author.');
         d3.select('#media-text').html('Distribution of ' + textToShow + ' reports by media.');
-      }
+      };
 
       $scope.updateTimestamp = function () {
         var d = new Date();
@@ -56,6 +59,373 @@ angular
           $scope.timeData = data.tagData.time[$scope.tagSelection];
         }
         $scope.initiateText($scope.textToShow);
+        //$scope.createNetworkGraphData();
+      }
+
+      $scope.createSocialGraphData = function ()
+      {
+        console.log("Create social graph data");
+
+        // Get users who have tagged reports from filter that is set
+        // If there are no tags set then don't display graph
+        // Show scores over at least 1 deviation from standard deviation
+
+      };
+
+      $scope.createNetworkGraphData = function () {
+        console.log("Hello");
+        var graph = {"nodes": [], "links": []};
+        var authors = new Set()
+        var next_author_id = 0;
+        var id_to_author = new Object();
+        var author_to_id = new Object();
+        var posts = new Set();
+        var post_id = 0;
+        var id_to_post = new Object();
+
+
+        reports.results.forEach(function (item, idx) {
+          // Check to see if the author has been seen before
+          var author_id = null;
+          if (!authors.has(item.author)) {
+            authors.add(item.author);
+            id_to_author[next_author_id] = {
+              "name": item.author,
+              "id": next_author_id,
+              "num_posts": 0,
+              "group": 1
+            };
+            author_id = next_author_id;
+            author_to_id[item.author] = next_author_id;
+            next_author_id += 1;
+          } else {
+            author_id = author_to_id[item.author];
+          }
+          // Classify post type
+          if (!(item._id in id_to_post)) {
+            var post_type = "Unknown";
+            if ("metadata" in item) {
+              if ("tweetID" in item["metadata"]) {
+                //post_type = "Twitter";
+                post_type = 0;
+              } else if ("platform" in item["metadata"]
+                  && item['metadata']['platform'] == "Facebook") {
+                // post_type = "Facebook";
+                post_type = 1;
+              }
+            }
+            var the_post = {
+              "id": item._id,
+              "type": post_type,
+              "name": "",
+              "group": 2
+            };
+            posts.add(the_post._id);
+            id_to_post[item._id] = the_post;
+            id_to_author[author_id]["num_posts"] += 1;
+          }
+
+          // Link post to author
+          graph["links"].push({"source": author_id, "target": the_post.id});
+
+          console.log("Index: " + idx + ", " + "Item: " + item.author);
+        });
+        graph["nodes"] = graph["nodes"].concat(Object.values(id_to_author));
+        graph["nodes"] = graph["nodes"].concat(Object.values(id_to_post));
+
+        $scope.graph = graph;
+      }
+
+      $scope.createNetworkGraph = function () {
+
+        var width = 400;
+        var height = 250;
+
+        var svg = d3.select('#net_graph-view').append('g').attr('class', 'container-group');
+        var tagType = $scope.tagSelection;
+
+        if(tagType == undefined || tagType == "all-tags") {
+          svg.append('text')
+              .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+              .attr('text-anchor', 'middle')
+              .text('No network graph data to present; please select a tag.');
+          return;
+        }
+
+        var graph_data = data.net_graph[tagType]["graph"];
+
+        if (graph_data == undefined || graph_data == null) {
+        //if ($scope.graph == undefined || $scope.graph == null) {
+          svg.append('text')
+              .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+              .attr('text-anchor', 'middle')
+              .text('No network graph data to present');
+          return;
+        }
+
+
+
+        //var color = d3.scaleOrdinal(d3.schemeCategory10);
+        var color = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"];
+
+        var sn_colors = ["#1DA1F2", "#4267B2"]
+
+        try {
+          var label = {
+            'nodes': [],
+            'links': []
+          };
+
+          graph_data.nodes.forEach(function (d, i) {
+            label.nodes.push({node: d});
+            label.nodes.push({node: d});
+            label.links.push({
+              source: i * 2,
+              target: i * 2 + 1
+            });
+          });
+
+
+          var adjlist = [];
+
+          graph_data.links.forEach(function (d) {
+            adjlist[d.source.index + "-" + d.target.index] = true;
+            adjlist[d.target.index + "-" + d.source.index] = true;
+          });
+
+          function neigh(a, b) {
+            return a == b || adjlist[a + "-" + b];
+          }
+
+          svg.selectAll("*").remove();
+          var container = svg.append("g");
+
+          svg.call(
+              d3.zoom()
+                  .scaleExtent([.1, 4])
+                  .on("zoom", function () {
+                    container.attr("transform", d3.event.transform);
+                  })
+          );
+
+          var link = container.append("g").attr("class", "links")
+              .selectAll("line")
+              .data(graph_data.links)
+              .enter()
+              .append("line")
+              .attr("stroke", "#aaa")
+              .attr("stroke-width", "1px");
+
+
+          var node = container.append("g").attr("class", "nodes")
+              .selectAll("g")
+              .data(graph_data.nodes)
+              .enter()
+              .append("circle")
+              .attr("r", 5)
+              .attr("fill", function (d) {
+                if ("author_type" in d && d.author_type === "taggedAuthor") {
+                  return sn_colors[0];
+                } else {
+                  return color[1];
+                }
+
+              }).on("click", function (event, d)
+              {
+                // group: 1 - authors, 2 - posts
+
+                if("author_type" in d && d.author_type === "taggedAuthor") {
+                  $state.go('reports');
+                }
+
+                // Update the model of the selected worker/reviewer
+
+                /*
+                if (d.group === 1) {
+                  $scope.selected_author = d.id;
+                  $scope.selected_post = null;
+                  $("#nDetails-author-name").text(d.name);
+                  $("#nDetails-author-num-posts").text(d.num_posts);
+                  // Get relevant posts filtered by author
+                  var author_posts = reports.results.filter(
+                      function (report) {
+                        return report.author == d.name;
+                      });
+                  $("#author_posts_details").html("");
+
+                  author_posts.forEach(function (post, idx) {
+
+                    var post_type = "Unknown";
+                    if ("metadata" in post) {
+                      if ("tweetID" in post["metadata"]) {
+                        post_type = "Twitter";
+                      } else if ("platform" in post["metadata"]
+                          && post['metadata']['platform'] == "Facebook") {
+                        post_type = "Facebook";
+                      }
+                    }
+
+                    $("#author_posts_details").append(
+                        $(
+                            "<tr><td>" + post._id + "</td>"
+                            + "<td>" + post.content + "</td>"
+                            + "<td>" + post_type +"</td>"
+                            + "</tr>")
+                    );
+                  });
+
+                  $("#nDetails-view").show()
+
+                } else {
+                  $scope.selected_post = d.id;
+                  $scope.selected_author = null;
+                  $("#nDetails-view").hide();
+                }
+                */
+
+              });
+
+          node.on("mouseover", focus).on("mouseout", unfocus);
+
+          node.call(
+              d3.drag()
+                  .on("start", dragstarted)
+                  .on("drag", dragged)
+                  .on("end", dragended)
+          );
+
+          var labelNode = container.append("g").attr("class", "labelNodes")
+              .selectAll("text")
+              .data(label.nodes)
+              .enter()
+              .append("text")
+              .text(function (d, i) {
+                return i % 2 == 0 ? "" : d.node.name;
+              })
+              .style("fill", "#555")
+              .style("font-family", "Arial")
+              .style("font-size", 12)
+              .style("pointer-events", "none"); // to prevent mouseover/drag capture
+
+          node.on("mouseover", focus).on("mouseout", unfocus);
+
+          var labelLayout = d3.forceSimulation(label.nodes)
+              .force("charge", d3.forceManyBody().strength(-50))
+              .force("link", d3.forceLink(label.links).distance(0).strength(2));
+
+          var graphLayout = d3.forceSimulation(graph_data.nodes)
+              .force("charge", d3.forceManyBody().strength(-3000))
+              .force("center", d3.forceCenter(width / 2, height / 2))
+              .force("x", d3.forceX(width / 2).strength(1))
+              .force("y", d3.forceY(height / 2).strength(1))
+              .force("link", d3.forceLink(graph_data.links).id(function (d) {
+                return d.id;
+              }).distance(50).strength(1))
+              .on("tick", ticked);
+
+          //window.addEventListener("resize", resize);
+          //resize();
+
+          //d3.select(window).on("onresize", resize);
+
+
+          function ticked() {
+
+            node.call(updateNode);
+            link.call(updateLink);
+
+            labelLayout.alphaTarget(0.3).restart();
+            labelNode.each(function (d, i) {
+              if (i % 2 == 0) {
+                d.x = d.node.x;
+                d.y = d.node.y;
+              } else {
+                var b = this.getBBox();
+
+                var diffX = d.x - d.node.x;
+                var diffY = d.y - d.node.y;
+
+                var dist = Math.sqrt(diffX * diffX + diffY * diffY);
+
+                var shiftX = b.width * (diffX - dist) / (dist * 2);
+                shiftX = Math.max(-b.width, Math.min(0, shiftX));
+                var shiftY = 16;
+                this.setAttribute("transform", "translate(" + shiftX + "," + shiftY + ")");
+              }
+            });
+            labelNode.call(updateNode);
+
+          }
+
+          function fixna(x) {
+            if (isFinite(x)) return x;
+            return 0;
+          }
+
+          function focus(event, d) {
+            var index = d3.select(event.target).datum().index;
+            node.style("opacity", function (o) {
+              return neigh(index, o.index) ? 1 : 0.1;
+            });
+            labelNode.attr("display", function (o) {
+              return neigh(index, o.node.index) ? "block" : "none";
+            });
+            link.style("opacity", function (o) {
+              return o.source.index == index || o.target.index == index ? 1 : 0.1;
+            });
+          }
+
+          function unfocus() {
+            labelNode.attr("display", "block");
+            node.style("opacity", 1);
+            link.style("opacity", 1);
+          }
+
+          function updateLink(link) {
+            link.attr("x1", function (d) {
+              return fixna(d.source.x);
+            })
+                .attr("y1", function (d) {
+                  return fixna(d.source.y);
+                })
+                .attr("x2", function (d) {
+                  return fixna(d.target.x);
+                })
+                .attr("y2", function (d) {
+                  return fixna(d.target.y);
+                });
+          }
+
+          function updateNode(node) {
+            node.attr("transform", function (d) {
+              return "translate(" + fixna(d.x) + "," + fixna(d.y) + ")";
+            });
+          }
+
+          function dragstarted(event, d) {
+            event.sourceEvent.stopPropagation();
+            if (!event.active) graphLayout.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          }
+
+          function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+          }
+
+          function dragended(event, d) {
+            if (!event.active) graphLayout.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          }
+
+        } catch (error) {
+
+          console.log(error);
+
+        }
+
       }
 
       $scope.createTagChart = function () {
@@ -596,10 +966,11 @@ angular
       }
 
       $scope.drawAllGraphs = function () {
-        $scope.createTimelineChart();
-        $scope.createWordCloud();
-        $scope.createAuthorChart();
-        $scope.createMediaChart();
+        $scope.createNetworkGraph();
+        //$scope.createTimelineChart();
+        //$scope.createWordCloud();
+        //$scope.createAuthorChart();
+        //$scope.createMediaChart();
       }
 
       var init = function () {
