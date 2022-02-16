@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var settingsController = require('../../lib/api/v1/settings-controller');
+var settingsController = require('../../lib/api/controllers/settings-controller');
 var botMaster = require('../../lib/fetching/bot-master');
 var Source = require('../../models/source');
 var Report = require('../../models/report');
@@ -39,19 +39,19 @@ describe('Settings controller', function() {
     Source.remove({}, done);
   });
 
-  describe('GET /api/v1/settings/twitter', function() {
+  describe('GET /api/controllers/settings/twitter', function() {
     it('should return the settings JSON of twitter', function(done) {
       request(settingsController)
-        .get('/api/v1/settings/twitter')
+        .get('/api/controllers/settings/twitter')
         .expect(200, { twitter: config.get({ reload: true }).twitter, setting: 'twitter' }, done);
     });
   });
 
-  describe('POST /api/v1/settings/media/twitter/test', function() {
+  describe('POST /api/controllers/settings/media/twitter/test', function() {
 
     it('should test the settings of twitter', function(done) {
       request(settingsController)
-        .post('/api/v1/settings/media/twitter/test')
+        .post('/api/controllers/settings/media/twitter/test')
         .send({ settings: testSettings })
         .expect(200)
         .end(function(err, res) {
@@ -63,7 +63,7 @@ describe('Settings controller', function() {
 
     it('should not change the settings of twitter ', function(done) {
       request(settingsController)
-        .post('/api/v1/settings/media/twitter/test')
+        .post('/api/controllers/settings/media/twitter/test')
         .send({ settings: testSettings })
         .expect(200)
         .end(function(err, res) {
@@ -74,12 +74,12 @@ describe('Settings controller', function() {
     });
   });
 
-  describe('PUT /api/v1/settings/twitter', function() {
+  describe('PUT /api/controllers/settings/twitter', function() {
 
     it('should update twitter settings', function(done) {
 
       request(settingsController)
-        .put('/api/v1/settings/twitter')
+        .put('/api/controllers/settings/twitter')
         .send({ settings: testSettings })
         .end(function(err, res) {
           if (err) return done(err);
@@ -93,13 +93,13 @@ describe('Settings controller', function() {
 
       // Revert changes to settings
       request(settingsController)
-        .put('/api/v1/settings/twitter')
+        .put('/api/controllers/settings/twitter')
         .send({ settings: twitterSettings })
         .end(done);
     });
   });
 
-  describe('PUT /api/v1/settings/dummy', function() {
+  describe('PUT /api/controllers/settings/dummy', function() {
 
 //    originalDummyBot;
 //    newDummyBot;
@@ -108,7 +108,7 @@ describe('Settings controller', function() {
       newSettings = { set: 'dummySetting' };
       botStatus = botMaster.bots[0].enabled;
       request(settingsController)
-        .put('/api/v1/settings/dummy')
+        .put('/api/controllers/settings/dummy')
         .send({ settings: newSettings })
         .end(function(err, res) {
           if (err) return done(err);
@@ -136,18 +136,18 @@ describe('Settings controller', function() {
 
   });
 
-  describe('GET /api/v1/settings/fetching', function() {
+  describe('GET /api/controllers/settings/fetching', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
-        .get('/api/v1/settings/fetching')
+        .get('/api/controllers/settings/fetching')
         .expect(200, { fetching: false, setting: 'fetching' }, done);
     });
   });
 
-  describe('PUT /api/v1/settings/fetching/on', function() {
+  describe('PUT /api/controllers/settings/fetching/on', function() {
     it('should enable all bots', function(done) {
       request(settingsController)
-        .put('/api/v1/settings/fetching/on')
+        .put('/api/controllers/settings/fetching/on')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -163,18 +163,18 @@ describe('Settings controller', function() {
     });
   });
 
-  describe('GET /api/v1/settings/fetching', function() {
+  describe('GET /api/controllers/settings/fetching', function() {
     it('should return fetching status as enabled', function(done) {
       request(settingsController)
-        .get('/api/v1/settings/fetching')
+        .get('/api/controllers/settings/fetching')
         .expect(200, { fetching: true, setting: 'fetching' }, done);
     });
   });
 
-  describe('PUT /api/v1/settings/fetching/off', function() {
+  describe('PUT /api/controllers/settings/fetching/off', function() {
     it('should disable all bots', function(done) {
       request(settingsController)
-        .put('/api/v1/settings/fetching/off')
+        .put('/api/controllers/settings/fetching/off')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -190,10 +190,10 @@ describe('Settings controller', function() {
     });
   });
 
-  describe('GET /api/v1/settings/fetching', function() {
+  describe('GET /api/controllers/settings/fetching', function() {
     it('should return fetching status as disabled', function(done) {
       request(settingsController)
-        .get('/api/v1/settings/fetching')
+        .get('/api/controllers/settings/fetching')
         .expect(200, { fetching: false, setting: 'fetching' }, done);
     });
   });

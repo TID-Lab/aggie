@@ -38,7 +38,7 @@ var finished = false;
 // fire request to the server
 function fireRequest(cb) {
   var page = _.random(0, args.maxpages);
-  request.get(args.baseurl + '/api/v1/report?page=' + page, function(err, res, body) {
+  request.get(args.baseurl + '/api/controllers/report?page=' + page, function(err, res, body) {
     return cb(err, res, body);
   });
 }

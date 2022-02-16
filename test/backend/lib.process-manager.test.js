@@ -93,7 +93,7 @@ describe('Process manager', function() {
   it('should simulate a full inter-process messaging workflow', function(done) {
     var getReports = function(callback) {
       request('https://localhost:3000')
-        .get('/api/v1/report')
+        .get('/api/controllers/report')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -104,7 +104,7 @@ describe('Process manager', function() {
     };
     var createSource = function(data, callback) {
       request('https://localhost:3000')
-        .post('/api/v1/source')
+        .post('/api/controllers/source')
         .send(data)
         .expect(200)
         .end(function(err, res) {
@@ -116,7 +116,7 @@ describe('Process manager', function() {
     };
     var toggleFetching = function(state, callback) {
       request('https://localhost:3000')
-        .put('/api/v1/settings/fetching/' + state)
+        .put('/api/controllers/settings/fetching/' + state)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var trendController = require('../../lib/api/v1/trend-controller')();
+var trendController = require('../../lib/api/controllers/trend-controller')();
 var Trend = require('../../models/trend');
 var Query = require('../../models/query');
 var ReportQuery = require('../../models/query/report-query');
@@ -14,10 +14,10 @@ describe('Trend controller', function() {
     done();
   });
 
-  describe('POST /api/v1/trend', function() {
+  describe('POST /api/controllers/trend', function() {
     it('should create a new trend', function(done) {
       request(trendController)
-        .post('/api/v1/trend')
+        .post('/api/controllers/trend')
         .send(trend)
         .expect(200)
         .end(function(err, res) {
@@ -32,10 +32,10 @@ describe('Trend controller', function() {
     });
   });
 
-  describe('GET /api/v1/trend/:_id', function() {
+  describe('GET /api/controllers/trend/:_id', function() {
     it('should return trend', function(done) {
       request(trendController)
-        .get('/api/v1/trend/' + trend._id)
+        .get('/api/controllers/trend/' + trend._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -45,7 +45,7 @@ describe('Trend controller', function() {
     });
   });
 
-  describe('GET /api/v1/trend', function() {
+  describe('GET /api/controllers/trend', function() {
     it('should get a list of all trends', function(done) {
       // Add an additional 3 trends
       Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '123' })) });
@@ -53,7 +53,7 @@ describe('Trend controller', function() {
       Trend.create({ _query: Query.hash(new ReportQuery({ keywords: '789' })) });
       setTimeout(function() {
         request(trendController)
-          .get('/api/v1/trend')
+          .get('/api/controllers/trend')
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
@@ -66,14 +66,14 @@ describe('Trend controller', function() {
     });
   });
 
-  describe('PUT /api/v1/trend/:_id/:op', function() {
+  describe('PUT /api/controllers/trend/:_id/:op', function() {
     it('should disable trend', function(done) {
       Trend.schema.on('trend:disable', function(trendId) {
         expect(trendId._id).to.equal(trend._id);
         done();
       });
       request(trendController)
-        .put('/api/v1/trend/' + trend._id + '/disable')
+        .put('/api/controllers/trend/' + trend._id + '/disable')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -85,7 +85,7 @@ describe('Trend controller', function() {
         done();
       });
       request(trendController)
-        .put('/api/v1/trend/' + trend._id + '/enable')
+        .put('/api/controllers/trend/' + trend._id + '/enable')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -93,32 +93,32 @@ describe('Trend controller', function() {
     });
     it('should fail when sending something else', function(done) {
       request(trendController)
-        .put('/api/v1/trend/' + trend._id + '/toggle')
+        .put('/api/controllers/trend/' + trend._id + '/toggle')
         .expect(422, done);
     });
   });
 
-  describe('DELETE /api/v1/trend/:_id', function() {
+  describe('DELETE /api/controllers/trend/:_id', function() {
     it('should delete trend', function(done) {
       request(trendController)
-        .del('/api/v1/trend/' + trend._id)
+        .del('/api/controllers/trend/' + trend._id)
         .expect(200)
         .end(function(err, res) {
           request(trendController)
-            .get('/api/v1/trend/' + trend._id)
+            .get('/api/controllers/trend/' + trend._id)
             .expect(404, done);
         });
     });
   });
 
-  describe('DELETE /api/v1/trend/_all', function() {
+  describe('DELETE /api/controllers/trend/_all', function() {
     it('should delete all trends', function(done) {
       request(trendController)
-        .del('/api/v1/trend/_all')
+        .del('/api/controllers/trend/_all')
         .expect(200)
         .end(function(err, res) {
           request(trendController)
-            .get('/api/v1/trend')
+            .get('/api/controllers/trend')
             .expect(200, [], done);
         });
     });

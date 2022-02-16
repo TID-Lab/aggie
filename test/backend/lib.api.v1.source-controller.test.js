@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var sourceController = require('../../lib/api/v1/source-controller')();
+var sourceController = require('../../lib/api/controllers/source-controller')();
 var Source = require('../../models/source');
 
 describe('Source controller', function() {
@@ -17,10 +17,10 @@ describe('Source controller', function() {
     done();
   });
 
-  describe('POST /api/v1/source', function() {
+  describe('POST /api/controllers/source', function() {
     it('should create a new source', function(done) {
       request(sourceController)
-        .post('/api/v1/source')
+        .post('/api/controllers/source')
         .send(source)
         .expect(200)
         .end(function(err, res) {
@@ -33,10 +33,10 @@ describe('Source controller', function() {
     });
   });
 
-  describe('GET /api/v1/source/:_id', function() {
+  describe('GET /api/controllers/source/:_id', function() {
     it('should return source', function(done) {
       request(sourceController)
-        .get('/api/v1/source/' + source._id)
+        .get('/api/controllers/source/' + source._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -51,7 +51,7 @@ describe('Source controller', function() {
         // Log a new event
         foundSource.logEvent('warning', 'This is a test', function(err) {
           request(sourceController)
-            .get('/api/v1/source/' + source._id)
+            .get('/api/controllers/source/' + source._id)
             .expect(200)
             .end(function(err, res) {
               if (err) return done(err);
@@ -68,11 +68,11 @@ describe('Source controller', function() {
     });
   });
 
-  describe('PUT /api/v1/source/:_id', function() {
+  describe('PUT /api/controllers/source/:_id', function() {
     it('should update source', function(done) {
       source.keywords = 'e';
       request(sourceController)
-        .put('/api/v1/source/' + source._id)
+        .put('/api/controllers/source/' + source._id)
         .send(source)
         .expect(200)
         .end(function(err, res) {
@@ -83,17 +83,17 @@ describe('Source controller', function() {
     });
     it('should not allow updating source media', function(done) {
       request(sourceController)
-        .put('/api/v1/source/' + source._id)
+        .put('/api/controllers/source/' + source._id)
         .send({ media: 'dummy' })
         .expect(422, 'source_media_change_not_allowed', done);
     });
   });
 
-  describe('PUT /api/v1/source/_events/:_id', function() {
+  describe('PUT /api/controllers/source/_events/:_id', function() {
     it('should reset unread error count', function(done) {
       expect(source.unreadErrorCount).to.equal(1);
       request(sourceController)
-        .put('/api/v1/source/_events/' + source._id)
+        .put('/api/controllers/source/_events/' + source._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -105,7 +105,7 @@ describe('Source controller', function() {
     });
     it('should return an empty events array', function(done) {
       request(sourceController)
-        .get('/api/v1/source/' + source._id)
+        .get('/api/controllers/source/' + source._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -116,10 +116,10 @@ describe('Source controller', function() {
     });
   });
 
-  describe('GET /api/v1/source', function() {
+  describe('GET /api/controllers/source', function() {
     it('should get a list of all sources', function(done) {
       request(sourceController)
-        .get('/api/v1/source')
+        .get('/api/controllers/source')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -131,27 +131,27 @@ describe('Source controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/source/:_id', function() {
+  describe('DELETE /api/controllers/source/:_id', function() {
     it('should delete source', function(done) {
       request(sourceController)
-        .del('/api/v1/source/' + source._id)
+        .del('/api/controllers/source/' + source._id)
         .expect(200)
         .end(function(err, res) {
           request(sourceController)
-            .get('/api/v1/source/' + source._id)
+            .get('/api/controllers/source/' + source._id)
             .expect(404, done);
         });
     });
   });
 
-  describe('DELETE /api/v1/source/_all', function() {
+  describe('DELETE /api/controllers/source/_all', function() {
     it('should delete all sources', function(done) {
       request(sourceController)
-        .del('/api/v1/source/_all')
+        .del('/api/controllers/source/_all')
         .expect(200)
         .end(function(err, res) {
           request(sourceController)
-            .get('/api/v1/source')
+            .get('/api/controllers/source')
             .expect(200, [], done);
         });
     });

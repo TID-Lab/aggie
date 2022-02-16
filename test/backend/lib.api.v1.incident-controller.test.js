@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var incidentController = require('../../lib/api/v1/incident-controller')();
+var incidentController = require('../../lib/api/controllers/incident-controller')();
 var Incident = require('../../models/incident');
 
 describe('Incident controller', function() {
@@ -12,10 +12,10 @@ describe('Incident controller', function() {
     done();
   });
 
-  describe('POST /api/v1/incident', function() {
+  describe('POST /api/controllers/incident', function() {
     it('should create a new incident', function(done) {
       request(incidentController)
-        .post('/api/v1/incident')
+        .post('/api/controllers/incident')
         .send(incident)
         .expect(200)
         .end(function(err, res) {
@@ -32,10 +32,10 @@ describe('Incident controller', function() {
     });
   });
 
-  describe('GET /api/v1/incident/:_id', function() {
+  describe('GET /api/controllers/incident/:_id', function() {
     it('should return incident', function(done) {
       request(incidentController)
-        .get('/api/v1/incident/' + incident._id)
+        .get('/api/controllers/incident/' + incident._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -45,11 +45,11 @@ describe('Incident controller', function() {
     });
   });
 
-  describe('PUT /api/v1/incident/:_id', function() {
+  describe('PUT /api/controllers/incident/:_id', function() {
     it('should update incident', function(done) {
       incident.status = 'working';
       request(incidentController)
-        .put('/api/v1/incident/' + incident._id)
+        .put('/api/controllers/incident/' + incident._id)
         .send(incident)
         .expect(200)
         .end(function(err, res) {
@@ -60,16 +60,16 @@ describe('Incident controller', function() {
     });
     it('should whitelist status values', function(done) {
       request(incidentController)
-        .put('/api/v1/incident/' + incident._id)
+        .put('/api/controllers/incident/' + incident._id)
         .send({ status: 'undefined' })
         .expect(422, 'status_error', done);
     });
   });
 
-  describe('GET /api/v1/incident', function() {
+  describe('GET /api/controllers/incident', function() {
     it('should get a list of all incidents', function(done) {
       request(incidentController)
-        .get('/api/v1/incident')
+        .get('/api/controllers/incident')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -82,7 +82,7 @@ describe('Incident controller', function() {
     });
     it('should get a filtered list of incidents', function(done) {
       request(incidentController)
-        .get('/api/v1/incident?status=working')
+        .get('/api/controllers/incident?status=working')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -95,7 +95,7 @@ describe('Incident controller', function() {
     });
     it('should get an empty list of incidents', function(done) {
       request(incidentController)
-        .get('/api/v1/incident?title=notexistingtitle')
+        .get('/api/controllers/incident?title=notexistingtitle')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -108,7 +108,7 @@ describe('Incident controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/incident/', function() {
+  describe('DELETE /api/controllers/incident/', function() {
     var incidents;
     beforeEach(function(done) {
       Incident.create(
@@ -127,34 +127,34 @@ describe('Incident controller', function() {
 
     it(':id should delete incident with id', function(done) {
       request(incidentController)
-        .del('/api/v1/incident/' + incidents[0]._id)
+        .del('/api/controllers/incident/' + incidents[0]._id)
         .expect(200)
         .end(function(err, res) {
           request(incidentController)
-            .get('/api/v1/incident/' + incidents[0]._id)
+            .get('/api/controllers/incident/' + incidents[0]._id)
             .expect(404, done);
         });
     });
 
     it('_all should delete all incidents', function(done) {
       request(incidentController)
-        .del('/api/v1/incident/_all')
+        .del('/api/controllers/incident/_all')
         .expect(200)
         .end(function(err, res) {
           request(incidentController)
-            .get('/api/v1/incident')
+            .get('/api/controllers/incident')
             .expect(200, { total: 0, results: [] }, done);
         });
     });
 
     it('_selected should delete selected incidents', function(done) {
       request(incidentController)
-        .post('/api/v1/incident/_selected')
+        .post('/api/controllers/incident/_selected')
         .send({ ids: [incidents[0]._id, incidents[1]._id] })
         .expect(200)
         .end(function(err, res) {
           request(incidentController)
-            .get('/api/v1/incident')
+            .get('/api/controllers/incident')
             .expect(200)
             .end(function(err, res) {
               expect(res.body.total).to.equal(1);

@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var userController = require('../../lib/api/v1/user-controller')();
+var userController = require('../../lib/api/controllers/user-controller')();
 var User = require('../../models/user');
 var users;
 
@@ -21,10 +21,10 @@ describe('User controller', function() {
   // it's here else we'd break existing tests.
   afterEach(utils.removeUsersExceptAdmin);
 
-  describe('GET /api/v1/user', function() {
+  describe('GET /api/controllers/user', function() {
     it('should get a list of all users', function(done) {
       request(userController)
-        .get('/api/v1/user')
+        .get('/api/controllers/user')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -36,10 +36,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('GET /api/v1/user/:_id', function() {
+  describe('GET /api/controllers/user/:_id', function() {
     it('should return user', function(done) {
       request(userController)
-        .get('/api/v1/user/' + users[1]._id)
+        .get('/api/controllers/user/' + users[1]._id)
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -50,10 +50,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('POST /api/v1/user', function() {
+  describe('POST /api/controllers/user', function() {
     it('should create a new user', function(done) {
       request(userController)
-        .post('/api/v1/user')
+        .post('/api/controllers/user')
         .send({ provider: 'test', email: 'baz@example.com', username: 'baz', password: 'letmein4' })
         .expect(200)
         .end(function(err, res) {
@@ -68,10 +68,10 @@ describe('User controller', function() {
     });
   });
 
-  describe('PUT /api/v1/user/:_id', function() {
+  describe('PUT /api/controllers/user/:_id', function() {
     it('should update user', function(done) {
       request(userController)
-        .put('/api/v1/user/' + users[0]._id)
+        .put('/api/controllers/user/' + users[0]._id)
         .send({ email: 'updated@example.com' })
         .expect(200)
         .end(function(err, res) {
@@ -85,18 +85,18 @@ describe('User controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/user/:_id', function() {
+  describe('DELETE /api/controllers/user/:_id', function() {
     it('should delete user', function(done) {
       request(userController)
-        .del('/api/v1/user/' + users[0]._id)
+        .del('/api/controllers/user/' + users[0]._id)
         .expect(200)
         .end(function(err, res) {
           request(userController)
-            .get('/api/v1/user/' + users[0]._id)
+            .get('/api/controllers/user/' + users[0]._id)
             .expect(404)
             .end(function(err, res) {
               request(userController)
-                .get('/api/v1/user/' + users[1]._id)
+                .get('/api/controllers/user/' + users[1]._id)
                 .expect(200, done);
             });
         });

@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var tagController = require('../../lib/api/v1/tag-controller')();
+var tagController = require('../../lib/api/controllers/tag-controller')();
 var SMTCTag = require('../../models/tag');
 var tags;
 
@@ -19,10 +19,10 @@ describe('Tag controller', function() {
 
     afterEach(utils.wipeModels([ SMTCTag ]));
 
-    describe('GET /api/v1/tag', function() {
+    describe('GET /api/controllers/tag', function() {
         it('should get a list of all tags', function(done) {
             request(tagController)
-                .get('/api/v1/tag')
+                .get('/api/controllers/tag')
                 .expect(200)
                 .end(function(err, res) {
                     if (err) return done(err);
@@ -33,10 +33,10 @@ describe('Tag controller', function() {
         });
     });
 
-    describe('POST /api/v1/tag', function() {
+    describe('POST /api/controllers/tag', function() {
         it('should create a new tag', function(done) {
             request(tagController)
-                .post('/api/v1/tag')
+                .post('/api/controllers/tag')
                 .send({ name: 'baz' })
                 .expect(200)
                 .end(function(err, res) {
@@ -51,15 +51,15 @@ describe('Tag controller', function() {
         });
     });
 
-    describe('DELETE /api/v1/tag/:_id', function() {
+    describe('DELETE /api/controllers/tag/:_id', function() {
         it('should delete tag', function(done) {
             request(tagController)
-                .delete('/api/v1/tag/' + tags[0]._id)
+                .delete('/api/controllers/tag/' + tags[0]._id)
                 .expect(200)
                 .end(function(err, res) {
                     if (err) return done(err);
                     request(tagController)
-                    .get('/api/v1/tag')
+                    .get('/api/controllers/tag')
                     .expect(200)
                     .end(function(err, res) {
                         if (err) return done(err);

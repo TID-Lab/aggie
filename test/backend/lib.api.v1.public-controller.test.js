@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var request = require('supertest');
-var publicController = require('../../lib/api/v1/public-controller');
+var publicController = require('../../lib/api/controllers/public-controller');
 var Incident = require('../../models/incident');
 
 describe('Public controller', function() {
@@ -31,10 +31,10 @@ describe('Public controller', function() {
     Incident.remove({}, done);
   });
 
-  describe('GET /api/v1/public/incident', function() {
+  describe('GET /api/controllers/public/incident', function() {
     it('should return the public incidents', function(done) {
       request(publicController)
-        .get('/api/v1/public/incident')
+        .get('/api/controllers/public/incident')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

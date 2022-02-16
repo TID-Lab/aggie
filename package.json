@@ -6,7 +6,6 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "postinstall": "gulp build",
     "dev": "node install.js && cross-env DEBUG=socket.io:* node app.js",
     "prestart": "node install.js",
     "start": "node app.js",
@@ -29,6 +28,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "JSONStream": "^1.3.5",
     "angular-cookies": "^1.2.29",
     "angular-translate": "^2.11.1",
     "angular-translate-handler-log": "^2.11.1",
@@ -43,6 +43,7 @@
     "connect-roles": "^3.1.2",
     "cross-env": "^7.0.2",
     "deepmerge": "^0.2.10",
+    "dotenv": "^16.0.0",
     "downstream": "0.0.72",
     "ejs": "^3.1.3",
     "express": "^3.21.2",
@@ -54,14 +55,7 @@
     "franc-min": "^5.0.0",
     "graceful-fs": "^4.2.4",
     "growl": ">=1.10.0",
-    "gulp": "^4.0.2",
-    "gulp-jshint": "^1.11.2",
-    "gulp-livereload": "^4.0.2",
-    "gulp-mocha": "^8.0.0",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^2.0.0",
     "interval-to-human": "^0.1.1",
-    "JSONStream": "^1.3.5",
     "langdetect-ensemble": "0.2.0",
     "locale": "^0.1.0",
     "lodash": "^4.17.21",

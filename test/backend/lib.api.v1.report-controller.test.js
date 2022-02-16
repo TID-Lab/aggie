@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 var request = require('supertest');
 require('../../lib/database');
 require('../../models/incident');
-var reportController = require('../../lib/api/v1/report-controller')();
+var reportController = require('../../lib/api/controllers/report-controller')();
 var Report = require('../../models/report');
 var Incident = require('../../models/incident');
 var Source = require('../../models/source');
@@ -65,7 +65,7 @@ describe('Report controller', function() {
 
   afterEach(utils.wipeModels([Report, Source, Incident]));
 
-  describe('GET /api/v1/report', function() {
+  describe('GET /api/controllers/report', function() {
 
     // Create some reports.
     beforeEach(function(done) {
@@ -80,7 +80,7 @@ describe('Report controller', function() {
 
     it('should get a list of all reports', function(done) {
       request(reportController)
-        .get('/api/v1/report')
+        .get('/api/controllers/report')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -94,7 +94,7 @@ describe('Report controller', function() {
 
     it('should query for reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one')
+        .get('/api/controllers/report?keywords=one')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -108,7 +108,7 @@ describe('Report controller', function() {
 
     it('should query and filter reports', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=one&flagged=true')
+        .get('/api/controllers/report?keywords=one&flagged=true')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -120,7 +120,7 @@ describe('Report controller', function() {
 
     it('should query and filter reports with no results', function(done) {
       request(reportController)
-        .get('/api/v1/report?keywords=seven&read=true')
+        .get('/api/controllers/report?keywords=seven&read=true')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -132,7 +132,7 @@ describe('Report controller', function() {
 
     it('should filter by date range', function(done) {
       request(reportController)
-        .get('/api/v1/report?after=' + new Date(2000, 0, 31, 12, 0, 0) + '&before=' + new Date(2000, 1, 2, 12, 0, 0))
+        .get('/api/controllers/report?after=' + new Date(2000, 0, 31, 12, 0, 0) + '&before=' + new Date(2000, 1, 2, 12, 0, 0))
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
@@ -143,7 +143,7 @@ describe('Report controller', function() {
     });
   });
 
-  describe('DELETE /api/v1/report/_all', function() {
+  describe('DELETE /api/controllers/report/_all', function() {
     beforeEach(function(done) {
       Report.create([
         { authoredAt: new Date(), content: 'one', _source: source._id },
@@ -153,25 +153,25 @@ describe('Report controller', function() {
 
     it('should delete all reports', function(done) {
       request(reportController)
-        .del('/api/v1/report/_all')
+        .del('/api/controllers/report/_all')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           request(reportController)
-            .get('/api/v1/report')
+            .get('/api/controllers/report')
             .expect(200, { total: 0, results: [] }, done);
         });
     });
   });
 
-  describe('PATCH api/v1/report/_read', function() {
+  describe('PATCH api/controllers/report/_read', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports], done);
     });
 
     it('should mark reports as read', function(done) {
       request(reportController)
-        .patch('/api/v1/report/_read')
+        .patch('/api/controllers/report/_read')
         .send({ ids: [reports[0].id, reports[1].id], read: true })
         .expect(200)
         .end(function(err, res) {
@@ -181,21 +181,21 @@ describe('Report controller', function() {
     });
   });
 
-  describe('PATCH api/v1/report/_link', function() {
+  describe('PATCH api/controllers/report/_link', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
     });
 
     it('should link 2 reports to specific Incident', function(done) {
       request(reportController)
-        .patch('/api/v1/report/_link')
+        .patch('/api/controllers/report/_link')
         .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
 
           request(reportController)
-          .get('/api/v1/report/' + reports[0]._id)
+          .get('/api/controllers/report/' + reports[0]._id)
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
@@ -203,7 +203,7 @@ describe('Report controller', function() {
             expect(res.body._incident).to.equal(String(incidents[0]._id));
 
             request(reportController)
-            .get('/api/v1/report/' + reports[1]._id)
+            .get('/api/controllers/report/' + reports[1]._id)
             .expect(200)
             .end(function(err, res) {
               if (err) return done(err);
@@ -221,7 +221,7 @@ describe('Report controller', function() {
       async.waterfall([
         function(callback) {
           request(reportController)
-            .patch('/api/v1/report/_link')
+            .patch('/api/controllers/report/_link')
             .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
             .expect(200)
             .end(callback);
@@ -236,7 +236,7 @@ describe('Report controller', function() {
         function(incident, callback) {
           expect(incident.totalReports).to.equal(2);
           request(reportController)
-            .patch('/api/v1/report/_link')
+            .patch('/api/controllers/report/_link')
             .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
             .expect(200)
             .end(callback);
@@ -258,28 +258,28 @@ describe('Report controller', function() {
     });
   });
 
-  describe('PATCH api/v1/report/_unlink', function() {
+  describe('PATCH api/controllers/report/_unlink', function() {
     beforeEach(function(done) {
       async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
     });
 
     it('should unlink 2 reports from specific Incident', function(done) {
       request(reportController)
-        .patch('/api/v1/report/_link')
+        .patch('/api/controllers/report/_link')
         .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
 
           request(reportController)
-          .patch('/api/v1/report/_unlink')
+          .patch('/api/controllers/report/_unlink')
           .send({ ids: [reports[0]._id, reports[1]._id] })
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
 
             request(reportController)
-            .get('/api/v1/report/' + reports[0]._id)
+            .get('/api/controllers/report/' + reports[0]._id)
             .expect(200)
             .end(function(err, res) {
               if (err) return done(err);
@@ -287,7 +287,7 @@ describe('Report controller', function() {
               expect(res.body._incident).to.equal(null);
 
               request(reportController)
-              .get('/api/v1/report/' + reports[1]._id)
+              .get('/api/controllers/report/' + reports[1]._id)
               .expect(200)
               .end(function(err, res) {
                 if (err) return done(err);
@@ -306,7 +306,7 @@ describe('Report controller', function() {
       async.waterfall([
         function(callback) {
           request(reportController)
-            .patch('/api/v1/report/_link')
+            .patch('/api/controllers/report/_link')
             .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
             .expect(200)
             .end(callback);
@@ -317,7 +317,7 @@ describe('Report controller', function() {
         },
         function(callback) {
           request(reportController)
-            .patch('/api/v1/report/_unlink')
+            .patch('/api/controllers/report/_unlink')
             .send({ ids: [reports[0]._id, reports[1]._id] })
             .expect(200)
             .end(callback);

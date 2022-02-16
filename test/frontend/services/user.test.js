@@ -8,7 +8,7 @@ describe('User', function() {
   beforeEach(module('Aggie'));
   beforeEach(inject(function($injector) {
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('POST', '/api/v1/user/1').respond({ id: 1 });
+    $httpBackend.when('POST', '/api/controllers/user/1').respond({ id: 1 });
   }));
 
   it('should exist', inject(function(User) {

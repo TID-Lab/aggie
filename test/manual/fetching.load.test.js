@@ -47,7 +47,7 @@ describe('Fetching load test', function() {
     };
     var remaining = args.sources;
     _.times(args.sources, function(i) {
-      request.post(args.baseurl + '/api/v1/source', { form: { nickname: chance.word(), media: 'dummy-fast', keywords: JSON.stringify(options) } }, function(err, res, body) {
+      request.post(args.baseurl + '/api/controllers/source', { form: { nickname: chance.word(), media: 'dummy-fast', keywords: JSON.stringify(options) } }, function(err, res, body) {
         if (err) return done(err);
         if (--remaining === 0) done();
       });
@@ -55,7 +55,7 @@ describe('Fetching load test', function() {
   });
 
   it('should start fetching data', function(done) {
-    request.put(args.baseurl + '/api/v1/settings/fetching/on', function() {
+    request.put(args.baseurl + '/api/controllers/settings/fetching/on', function() {
       done();
     });
   });
