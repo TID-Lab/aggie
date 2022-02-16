@@ -2,7 +2,7 @@
 
 var database = require('../lib/database');
 var mongoose = database.mongoose;
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
 var validator = require('validator');
 var _ = require('underscore');
@@ -99,7 +99,7 @@ User.checkUnique = function(user, callback) {
   });
   var remaining = queries.length;
   _.each(queries, function(query) {
-    User.count(query, function(err, count) {
+    User.countDocuments(query, function(err, count) {
       if (err) {
         logger.warning(err);
       }

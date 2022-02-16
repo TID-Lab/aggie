@@ -11,7 +11,7 @@ module.exports = function(app, user) {
   app = app || express();
   user = user || require('../authorization')(app);
 
-  app.use(bodyParser.urlencoded());
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
 
   // Create a new Source
