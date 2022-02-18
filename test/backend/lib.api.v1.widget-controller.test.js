@@ -2,10 +2,10 @@ var request = require('supertest');
 var widgetController = require('../../lib/api/controllers/widget-controller')();
 
 describe('Widget controller', function() {
-  describe('GET /widget/public_incident.map.html', function() {
+  describe('GET /widget/public_group.map.html', function() {
     it('should return html of the map', function(done) {
       request(widgetController)
-        .get('/widget/public_incident_map.html')
+        .get('/widget/public_group_map.html')
         .expect('Content-Type', /html/)
         .expect(200, done);
     });

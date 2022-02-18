@@ -1,4 +1,4 @@
-// Represents a request for a subset of objects (reports, incidents, etc.; see subclasses).
+// Represents a request for a subset of objects (reports, groups, etc.; see subclasses).
 // For example, a query might be 'All reports with status = relevant and keyword foo'
 
 var Query = function(attributes) {

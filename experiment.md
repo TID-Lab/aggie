@@ -19,7 +19,7 @@ To play a recording:
 
 1. Set fetching off
 1. Stop Aggie.
-1. Drop sources, incidents, reports. Drop other collections if not needed in your experiment.
+1. Drop sources, groups, reports. Drop other collections if not needed in your experiment.
 1. Load previous reports if needed:
    `mongoimport --db aggie --collection reports --file previous_reports.json`
 1. Set the experimental variables of `secrets.json`: `experiment` to `true`

@@ -27,7 +27,7 @@ var schema = new Schema({
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
-  _incident: { type: String, ref: 'Incident', index: true },
+  _group: { type: String, ref: 'Group', index: true },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
@@ -40,9 +40,9 @@ var schema = new Schema({
 schema.index({'metadata.ct_tag': 1}, {background: true});
 // Add fulltext index to the `content` and `author` field.
 schema.index({ content: 'text', author: 'text' });
-schema.path('_incident').set(function(_incident) {
-  this._prevIncident = this._incident;
-  return _incident;
+schema.path('_group').set(function(_group) {
+  this._prevGroup = this._group;
+  return _group;
 });
 
 // sets the indexed hasSMTCTags boolean
@@ -59,8 +59,8 @@ schema.pre('save', function(next) {
 
   } else {
     // Capture updates before saving report
-    if (this.isModified('_incident')) {
-      this._incidentWasModified = true;
+    if (this.isModified('_group')) {
+      this._groupWasModified = true;
     }
 
   }
@@ -71,8 +71,8 @@ schema.pre('save', function(next) {
 schema.post('save', function() {
   if (this._wasNew) schema.emit('report:new', { _id: this._id.toString() });
   if (!this._wasNew) schema.emit('report:updated', this);
-  if (this._incidentWasModified) {
-    schema.emit('change:incident', this._prevIncident, this._incident);
+  if (this._groupWasModified) {
+    schema.emit('change:group', this._prevGroup, this._group);
   }
 });
 

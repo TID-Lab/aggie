@@ -4,7 +4,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var statsMaster = require('../../lib/analytics/stats-master');
 var Report = require('../../models/report');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var async = require('async');
 
 describe('StatsMaster', function() {
@@ -16,23 +16,23 @@ describe('StatsMaster', function() {
     ], done);
   }
 
-  function createIncidents(done) {
-    Incident.create([
-      { title: 'Incident 1', veracity: false, escalated: false, status: 'new' },
-      { title: 'Incident 2', veracity: true, escalated: false, status: 'new' },
-      { title: 'Incident 3', veracity: true, escalated: true, status: 'new' }
+  function createGroups(done) {
+    Group.create([
+      { title: 'Group 1', veracity: false, escalated: false, status: 'new' },
+      { title: 'Group 2', veracity: true, escalated: false, status: 'new' },
+      { title: 'Group 3', veracity: true, escalated: true, status: 'new' }
     ], done);
   }
 
   before(function() {
     statsMaster.addListeners('report', Report.schema);
-    statsMaster.addListeners('incident', Incident.schema);
+    statsMaster.addListeners('group', Group.schema);
   });
 
   var stats;
   beforeEach(function(done) {
     stats = new utils.EventCounter(statsMaster, 'stats');
-    async.parallel([createReports, createIncidents], function(err) {
+    async.parallel([createReports, createGroups], function(err) {
       stats.waitForEvents(3, done.bind({}, err));
     });
   });
@@ -41,7 +41,7 @@ describe('StatsMaster', function() {
   });
 
   afterEach(function(done) {
-    async.parallel([Incident.remove.bind(Incident, {}), Report.remove.bind(Report, {})], done);
+    async.parallel([Group.remove.bind(Group, {}), Report.remove.bind(Report, {})], done);
   });
 
   it('should have stats object', function() {
@@ -72,16 +72,16 @@ describe('StatsMaster', function() {
     expect(stats.totalReportsPerMinute).to.equal(2);
   });
 
-  it('should count total incidents', function() {
+  it('should count total groups', function() {
     var stats = statsMaster.stats;
-    expect(stats).to.have.property('totalIncidents');
-    expect(stats.totalIncidents).to.equal(3);
+    expect(stats).to.have.property('totalGroups');
+    expect(stats.totalGroups).to.equal(3);
   });
 
-  it('should count escalated incidents', function() {
+  it('should count escalated groups', function() {
     var stats = statsMaster.stats;
-    expect(stats).to.have.property('totalEscalatedIncidents');
-    expect(stats.totalEscalatedIncidents).to.equal(1);
+    expect(stats).to.have.property('totalEscalatedGroups');
+    expect(stats.totalEscalatedGroups).to.equal(1);
   });
 
   it('should count all stats', function(done) {
@@ -90,8 +90,8 @@ describe('StatsMaster', function() {
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
       expect(stats.totalReportsPerMinute).to.equal(2);
-      expect(stats.totalIncidents).to.equal(3);
-      expect(stats.totalEscalatedIncidents).to.equal(1);
+      expect(stats.totalGroups).to.equal(3);
+      expect(stats.totalEscalatedGroups).to.equal(1);
       done();
     });
   });
@@ -102,15 +102,15 @@ describe('StatsMaster', function() {
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
       expect(stats.totalReportsPerMinute).to.equal(2);
-      expect(stats.totalIncidents).not.exist;
+      expect(stats.totalGroups).not.exist;
       done();
     });
   });
 
-  it('should count only incidents', function(done) {
-    statsMaster.countStats('incidents', function(err, stats) {
-      expect(stats.totalIncidents).to.equal(3);
-      expect(stats.totalEscalatedIncidents).to.equal(1);
+  it('should count only groups', function(done) {
+    statsMaster.countStats('groups', function(err, stats) {
+      expect(stats.totalGroups).to.equal(3);
+      expect(stats.totalEscalatedGroups).to.equal(1);
       expect(stats.totalReports).not.exist;
       done();
     });

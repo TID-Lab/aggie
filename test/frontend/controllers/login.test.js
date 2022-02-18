@@ -17,7 +17,7 @@ describe('LoginController', function() {
 
     httpBackend.when('GET', '/api/controllers/report?page=0').respond(200, {});
     httpBackend.when('GET', '/api/controllers/source').respond(200, []);
-    httpBackend.when('GET', '/api/controllers/incident').respond(200, {});
+    httpBackend.when('GET', '/api/controllers/group').respond(200, {});
     httpBackend.when('GET', '/session').respond(200, {});
     httpBackend.when('GET', '/translations/locale-en.json').respond(200, {});
     httpBackend.when('GET', '/translations/locale-debug.json').respond(200, {});

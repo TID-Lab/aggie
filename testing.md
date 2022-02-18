@@ -41,30 +41,30 @@ Sources, APIs, and fetching
 
 
 
-Incidents
+Groups
 ---------
 
-1. With at least a few reports and no incidents, go to `/reports`.
-2. Click `Add` in the incident column of one of the reports [modal appears
-suggesting you create a new incident]
-3. Click `create a new incident` [create incident modal appears]
-4. Add a title for the incident
+1. With at least a few reports and no groups, go to `/reports`.
+2. Click `Add` in the group column of one of the reports [modal appears
+suggesting you create a new group]
+3. Click `create a new group` [create group modal appears]
+4. Add a title for the group
 5. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
-6. Select a location and save the incident [modal closes]
-7. Select 3 reports with the checkboxes and click `Add to incident` [modal opens
-with the previously created incident]
-8. Add the reports to that incident [incident column updates]
-9. Go to `/incidents` [in `Title` column incident shows correct number of
+6. Select a location and save the group [modal closes]
+7. Select 3 reports with the checkboxes and click `Add to group` [modal opens
+with the previously created group]
+8. Add the reports to that group [group column updates]
+9. Go to `/groups` [in `Title` column group shows correct number of
 reports]
-10. View the incident you have just created [incident shows the 3 reports that were added]
+10. View the group you have just created [group shows the 3 reports that were added]
 11. Click the `Edit` button [edit modal appears]
-12. Add one tag and save the incident [incident is updated]
-13. Flag one report in the incident view page [the report is flagged]
+12. Add one tag and save the group [group is updated]
+13. Flag one report in the group view page [the report is flagged]
 14. Click `Create Group` [modal appears]
 15. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
-16. Pick a a location, enter a title and save the incident [incident is saved successfully]
+16. Pick a a location, enter a title and save the group [group is saved successfully]
 
 
 Users and emails
@@ -86,13 +86,13 @@ Users and emails
 Batches
 -------
 
-Prerequisites: at least 1 incident, 2 users, and 21 reports.
-1. With at least 11 reports and at least 1 incident, go to `reports` and click
+Prerequisites: at least 1 group, 2 users, and 21 reports.
+1. With at least 11 reports and at least 1 group, go to `reports` and click
 `Grab Batch` [goes to /reports/batch]
-2. Click `Add` in the incident column of one report [modal appears showing
-the incidents already created]
-3. Click an incident [modal closes, text `Add` is updated to the name of the
-incident]
+2. Click `Add` in the group column of one report [modal appears showing
+the groups already created]
+3. Click an group [modal closes, text `Add` is updated to the name of the
+group]
 4. Click `Mark All and Done` [goes back to /reports and the reports from the
 batch are marked as read]
 5. Navigate to `/reports/batch` [the previous batch is displayed, and the

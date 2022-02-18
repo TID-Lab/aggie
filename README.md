@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Aggie is a web application for using social media and other resources to track incidents around real-time events such as elections or natural disasters.
+Aggie is a web application for using social media and other resources to track groups around real-time events such as elections or natural disasters.
 
 Aggie can retrieve data from several sources:
 
@@ -14,7 +14,7 @@ Aggie can retrieve data from several sources:
 
 Items (called *reports*) from all sources are streamed into the application. Monitors can quickly triage incoming reports by marking them as *relevant* or *irrelevant*.
 
-Relevant reports can be grouped into *incidents* for further monitoring and follow-up.
+Relevant reports can be grouped into *groups* for further monitoring and follow-up.
 
 Reports are fully searchable and filterable via a fast web interface.
 

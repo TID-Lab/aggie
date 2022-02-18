@@ -10,7 +10,7 @@ var Report = require('../../models/report');
 var User = require('../../models/user');
 var Source = require('../../models/source');
 var Trend = require('../../models/trend');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var SMTCTag = require('../../models/tag');
 var expect = require('chai').expect;
 var async = require('async');
@@ -31,7 +31,7 @@ function expectModelsEmpty(done) {
   User.find({}, function(err, results) {
     if (err) return done(err);
     expect(results).to.have.length(1);
-    async.each([Report, Source, Trend, Incident, SMTCTag], expectEmpty, done);
+    async.each([Report, Source, Trend, Group, SMTCTag], expectEmpty, done);
   });
 }
 module.exports.expectModelsEmpty = expectModelsEmpty;
@@ -125,9 +125,9 @@ function tagQueryTester(model, tags, n) {
     if (model === 'report') {
       var ReportQuery = require('../../models/query/report-query');
       query = new ReportQuery({ tags: tags });
-    } else { // model === 'incident'
-      var IncidentQuery = require('../../models/query/incident-query');
-      query = new IncidentQuery({
+    } else { // model === 'group'
+      var GroupQuery = require('../../models/query/group-query');
+      query = new GroupQuery({
         veracity: 'Confirmed false',
         status: 'closed',
         tags: tags

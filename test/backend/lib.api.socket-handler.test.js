@@ -5,7 +5,7 @@ var streamer = require('../../lib/api/streamer');
 var io = require('socket.io-client');
 var Source = require('../../models/source');
 var Report = require('../../models/report');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var settingsController = require('../../lib/api/controllers/settings-controller');
 var request = require('supertest');
 var authentication = require('../../lib/api/authentication');
@@ -41,7 +41,7 @@ var client;
 describe('Socket handler', function() {
   before(function(done) {
     streamer.addListeners('report', Report.schema);
-    streamer.addListeners('incident', Incident.schema);
+    streamer.addListeners('group', Group.schema);
     socketHandler.addListeners('source', Source.schema);
     socketHandler.server.listen(3000);
 
@@ -90,8 +90,8 @@ describe('Socket handler', function() {
     Report.create({ content: 'one two three' });
   });
 
-  it('should establish connections with an incident query', function(done) {
-    client.emit('incidentQuery', { title: 'quick brown' });
+  it('should establish connections with an group query', function(done) {
+    client.emit('groupQuery', { title: 'quick brown' });
     setTimeout(function() {
       expect(streamer.queries).to.be.an.instanceof(Array);
       expect(streamer.queries).to.not.be.empty;
@@ -101,16 +101,16 @@ describe('Socket handler', function() {
     }, 100);
   });
 
-  it('should receive new incidents that match the query', function(done) {
-    client.once('incidents', function(incidents) {
-      expect(incidents).to.be.an.instanceof(Array);
-      expect(incidents).to.have.length(1);
-      expect(incidents[0]).to.have.property('title');
-      expect(incidents[0].title).to.equal('The quick brown fox');
+  it('should receive new groups that match the query', function(done) {
+    client.once('groups', function(groups) {
+      expect(groups).to.be.an.instanceof(Array);
+      expect(groups).to.have.length(1);
+      expect(groups[0]).to.have.property('title');
+      expect(groups[0].title).to.equal('The quick brown fox');
       done();
     });
-    Incident.create({ title: 'The slow white fox' });
-    Incident.create({ title: 'The quick brown fox' });
+    Group.create({ title: 'The slow white fox' });
+    Group.create({ title: 'The quick brown fox' });
   });
 
   it('should stream a list of sources when a source changes', function(done) {
@@ -139,6 +139,6 @@ describe('Socket handler', function() {
   });
 
   // Clean up the database
-  after(utils.wipeModels([Report, Incident, Source]));
+  after(utils.wipeModels([Report, Group, Source]));
   after(utils.expectModelsEmpty);
 });

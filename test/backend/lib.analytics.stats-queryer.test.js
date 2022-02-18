@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var StatsQueryer = require('../../lib/analytics/stats-queryer');
 var Report = require('../../models/report');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var async = require('async');
 
 describe('StatsQueryer', function() {
@@ -15,11 +15,11 @@ describe('StatsQueryer', function() {
     ], done);
   }
 
-  function createIncidents(done) {
-    Incident.create([
-      { title: 'Incident 1', veracity: false, escalated: false, status: 'new' },
-      { title: 'Incident 2', veracity: true, escalated: false, status: 'new' },
-      { title: 'Incident 3', veracity: true, escalated: true, status: 'new' }
+  function createGroups(done) {
+    Group.create([
+      { title: 'Group 1', veracity: false, escalated: false, status: 'new' },
+      { title: 'Group 2', veracity: true, escalated: false, status: 'new' },
+      { title: 'Group 3', veracity: true, escalated: true, status: 'new' }
     ], done);
   }
 
@@ -28,11 +28,11 @@ describe('StatsQueryer', function() {
   });
 
   beforeEach(function(done) {
-    async.parallel([createReports, createIncidents], done);
+    async.parallel([createReports, createGroups], done);
   });
 
   afterEach(function(done) {
-    async.parallel([Incident.remove.bind(Incident, {}), Report.remove.bind(Report, {})], done);
+    async.parallel([Group.remove.bind(Group, {}), Report.remove.bind(Report, {})], done);
   });
 
   it('should count all stats', function(done) {
@@ -41,8 +41,8 @@ describe('StatsQueryer', function() {
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
       expect(stats.totalReportsPerMinute).to.equal(2);
-      expect(stats.totalIncidents).to.equal(3);
-      expect(stats.totalEscalatedIncidents).to.equal(1);
+      expect(stats.totalGroups).to.equal(3);
+      expect(stats.totalEscalatedGroups).to.equal(1);
       done();
     });
   });
@@ -53,24 +53,24 @@ describe('StatsQueryer', function() {
       expect(stats.totalReportsFlagged).to.equal(2);
       expect(stats.totalReportsUnread).to.equal(2);
       expect(stats.totalReportsPerMinute).to.equal(2);
-      expect(stats.totalIncidents).not.exist;
+      expect(stats.totalGroups).not.exist;
       done();
     });
   });
 
-  it('should count reports incidents', function(done) {
-    this.statsQueryer.count('incidents', function(err, stats) {
-      expect(stats.totalIncidents).to.equal(3);
-      expect(stats.totalEscalatedIncidents).to.equal(1);
+  it('should count reports groups', function(done) {
+    this.statsQueryer.count('groups', function(err, stats) {
+      expect(stats.totalGroups).to.equal(3);
+      expect(stats.totalEscalatedGroups).to.equal(1);
       expect(stats.totalReports).not.exist;
       done();
     });
   });
 
-  it('should count reports incidents', function(done) {
-    this.statsQueryer.count('incidents', function(err, stats) {
-      expect(stats.totalIncidents).to.equal(3);
-      expect(stats.totalEscalatedIncidents).to.equal(1);
+  it('should count reports groups', function(done) {
+    this.statsQueryer.count('groups', function(err, stats) {
+      expect(stats.totalGroups).to.equal(3);
+      expect(stats.totalEscalatedGroups).to.equal(1);
       expect(stats.totalReports).not.exist;
       done();
     });

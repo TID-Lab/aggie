@@ -40,7 +40,7 @@ describe('grab batch', function() {
     this.slow(10000);
     element(by.buttonText('Grab Batch')).click();
     var firstSet = getReports(true).map(getText);
-    browser.get(browser.baseUrl + 'incidents');
+    browser.get(browser.baseUrl + 'groups');
     browser.get(browser.baseUrl + 'reports');
     element(by.buttonText('Grab Batch')).click();
     var secondSet = getReports(true).map(getText);

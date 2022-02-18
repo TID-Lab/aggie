@@ -6,7 +6,7 @@ var User = require('../models/user');
 var Report = require('../models/report');
 var Source = require('../models/source');
 var Trend = require('../models/trend');
-var Incident = require('../models/group');
+var Group = require('../models/group');
 var SMTCTag = require('../models/tag');
 
 exports.initDb = function(callback) {
@@ -46,7 +46,7 @@ exports.wipeModels = function(models) {
 
 exports.resetDb = function(callback) {
   async.series([
-    exports.wipeModels([Report, Source, Trend, Incident, User, SMTCTag]),
+    exports.wipeModels([Report, Source, Trend, Group, User, SMTCTag]),
     function(next) {
       // Create admin user for testing
       User.create({
@@ -57,8 +57,8 @@ exports.resetDb = function(callback) {
         hasDefaultPassword: true,
         role: 'admin'
       }, next);
-      // Reset Incident counter
-      Incident.counterReset('idnum')
+      // Reset Group counter
+      Group.counterReset('idnum')
     }
   ], callback);
 };

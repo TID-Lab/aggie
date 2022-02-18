@@ -15,7 +15,7 @@ function ReportQuery(options) {
     this._parseStatus(options.status);
   }
 
-  this._parseIncidentId(options.incidentId);
+  this._parseGroupId(options.groupId);
   this.tags = options.tags;
   this.after = options.after;
   this.before = options.before;
@@ -42,14 +42,14 @@ ReportQuery.prototype.run = function(callback) {
 
 // Normalize query for comparison
 ReportQuery.prototype.normalize = function() {
-  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'incidentId', 'author', 'list', 'tags', 'escalated', 'veracity', 'isRelevantReports']);
+  return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'groupId', 'author', 'list', 'tags', 'escalated', 'veracity', 'isRelevantReports']);
 };
 
 ReportQuery.prototype.toMongooseFilter = function() {
   var filter = {
     _sources: this.sourceId,
     _media: this.media,
-    _incident: this.incidentId,
+    _group: this.groupId,
     read: this.read,
     commentTo: this.commentTo,
     escalated: this.escalated,
@@ -124,13 +124,13 @@ ReportQuery.prototype._parseStatus = function(status) {
   }
 };
 
-ReportQuery.prototype._parseIncidentId = function(incidentId) {
-  if (incidentId === 'any') {
-    this.incidentId = { $nin: [null, ''] };
-  } else if (incidentId === 'none') {
-    this.incidentId = { $in: [null, ''] };
+ReportQuery.prototype._parseGroupId = function(groupId) {
+  if (groupId === 'any') {
+    this.groupId = { $nin: [null, ''] };
+  } else if (groupId === 'none') {
+    this.groupId = { $in: [null, ''] };
   } else {
-    this.incidentId = incidentId;
+    this.groupId = groupId;
   }
 };
 

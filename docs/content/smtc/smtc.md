@@ -8,11 +8,11 @@ The **Social Media Tracking Centre** (SMTC) serves as a physical space in which 
 
 ### Tracking Team
 
-The *tracking team* is responsible for reading through the real-time streams of social media reports aggregated by Aggie either in batches or by navigating through pages. Their workflow involves going through each report and creating an incident from actionable reports.
+The *tracking team* is responsible for reading through the real-time streams of social media reports aggregated by Aggie either in batches or by navigating through pages. Their workflow involves going through each report and creating an group from actionable reports.
 
 ### Veracity Team
 
-After the tracking team creates an incident, the *veracity team* takes over to investigate and verify the truthfulness of the incident created by trackers using some of the below strategies:
+After the tracking team creates an group, the *veracity team* takes over to investigate and verify the truthfulness of the group created by trackers using some of the below strategies:
 1.  Using social media platforms to communicate with the author of the report  (i.e. Tweeting at the author).
 2.  Using triangulation to build evidence from other reports and sources.
 3.  Contacting formal monitors in the field.
@@ -20,11 +20,11 @@ After the tracking team creates an incident, the *veracity team* takes over to i
 
 ### Escalation Team
 
-Once the veracity team has confidently verified an incident to be true, the *escalation team* reports the incident to the SMTC embed assigned to  relevant stakeholders, providing all relevant information gathered.  The escalation team will move swiftly to communicate verified incidents so that relevant stakeholders may respond in real-time.
+Once the veracity team has confidently verified an group to be true, the *escalation team* reports the group to the SMTC embed assigned to  relevant stakeholders, providing all relevant information gathered.  The escalation team will move swiftly to communicate verified groups so that relevant stakeholders may respond in real-time.
 
 ### Stakeholder/Embedded Team
 
-Embeds are key persons placed in civil organizations or government institutions invested in the coordination and supervision of the event being monitored. Embeds communicate verified incidents to these organizations, called stakeholders, which get more details about and respond to these incidents. Ideally, embeds are known and trusted by stakeholders to ensure information reported from the SMTC is valued.
+Embeds are key persons placed in civil organizations or government institutions invested in the coordination and supervision of the event being monitored. Embeds communicate verified groups to these organizations, called stakeholders, which get more details about and respond to these groups. Ideally, embeds are known and trusted by stakeholders to ensure information reported from the SMTC is valued.
 
 ## Public Event Monitoring Checklist
 

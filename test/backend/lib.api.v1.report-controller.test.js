@@ -7,14 +7,14 @@ require('../../lib/database');
 require('../../models/group');
 var reportController = require('../../lib/api/controllers/report-controller')();
 var Report = require('../../models/report');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var Source = require('../../models/source');
 var User = require('../../models/user');
 var async = require('async');
 var source;
 var user;
 var reports;
-var incidents;
+var groups;
 
 describe('Report controller', function() {
   function createSource(done) {
@@ -39,10 +39,10 @@ describe('Report controller', function() {
     ], done);
   }
 
-  function createIncidents(done) {
-    Incident.create([
-      { authoredAt: new Date(), title: 'First incident' },
-      { authoredAt: new Date(), title: 'Second incident' }
+  function createGroups(done) {
+    Group.create([
+      { authoredAt: new Date(), title: 'First group' },
+      { authoredAt: new Date(), title: 'Second group' }
     ], done);
   }
 
@@ -53,9 +53,9 @@ describe('Report controller', function() {
     });
   }
 
-  function loadIncidents(done) {
-    Incident.find({}, function(err, results) {
-      incidents = results;
+  function loadGroups(done) {
+    Group.find({}, function(err, results) {
+      groups = results;
       done(err);
     });
   }
@@ -63,7 +63,7 @@ describe('Report controller', function() {
 
   beforeEach(createSource);
 
-  afterEach(utils.wipeModels([Report, Source, Incident]));
+  afterEach(utils.wipeModels([Report, Source, Group]));
 
   describe('GET /api/controllers/report', function() {
 
@@ -183,13 +183,13 @@ describe('Report controller', function() {
 
   describe('PATCH api/controllers/report/_link', function() {
     beforeEach(function(done) {
-      async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
+      async.series([loadUser, createReports, loadReports, createGroups, loadGroups], done);
     });
 
-    it('should link 2 reports to specific Incident', function(done) {
+    it('should link 2 reports to specific Group', function(done) {
       request(reportController)
         .patch('/api/controllers/report/_link')
-        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+        .send({ ids: [reports[0]._id, reports[1]._id], group: groups[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
@@ -199,60 +199,60 @@ describe('Report controller', function() {
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
-            expect(res.body).to.have.property('_incident');
-            expect(res.body._incident).to.equal(String(incidents[0]._id));
+            expect(res.body).to.have.property('_group');
+            expect(res.body._group).to.equal(String(groups[0]._id));
 
             request(reportController)
             .get('/api/controllers/report/' + reports[1]._id)
             .expect(200)
             .end(function(err, res) {
               if (err) return done(err);
-              expect(res.body).to.have.property('_incident');
-              expect(res.body._incident).to.equal(String(incidents[0]._id));
+              expect(res.body).to.have.property('_group');
+              expect(res.body._group).to.equal(String(groups[0]._id));
               done();
             });
           });
         });
     });
 
-    it('should update the totalReports field in incident', function(done) {
-      var incidentChanges = new utils.EventCounter(Incident.schema,
-                                                   'incident:update');
+    it('should update the totalReports field in group', function(done) {
+      var groupChanges = new utils.EventCounter(Group.schema,
+                                                   'group:update');
       async.waterfall([
         function(callback) {
           request(reportController)
             .patch('/api/controllers/report/_link')
-            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+            .send({ ids: [reports[0]._id, reports[1]._id], group: groups[0]._id })
             .expect(200)
             .end(callback);
         },
         function(res, callback) {
-          // Wait for incident to be updated in the database
-          incidentChanges.waitForEvents(2, callback);
+          // Wait for group to be updated in the database
+          groupChanges.waitForEvents(2, callback);
         },
         function(callback) {
-          Incident.findById(incidents[0]._id, callback);
+          Group.findById(groups[0]._id, callback);
         },
-        function(incident, callback) {
-          expect(incident.totalReports).to.equal(2);
+        function(group, callback) {
+          expect(group.totalReports).to.equal(2);
           request(reportController)
             .patch('/api/controllers/report/_link')
-            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[1]._id })
+            .send({ ids: [reports[0]._id, reports[1]._id], group: groups[1]._id })
             .expect(200)
             .end(callback);
         },
         function(res, callback) {
-          // Incident 0 has two reports removed and incident 1 has two added,
+          // Group 0 has two reports removed and group 1 has two added,
           // for a total of 4 additional events, plus the 2 we already had
-          incidentChanges.waitForEvents(6, callback);
+          groupChanges.waitForEvents(6, callback);
         },
         function(callback) {
-          Incident.findById(incidents[0]._id, callback);
+          Group.findById(groups[0]._id, callback);
         },
-        function(incident, callback) {
-          expect(incident.totalReports).to.equal(0);
+        function(group, callback) {
+          expect(group.totalReports).to.equal(0);
           setImmediate(callback);
-          incidentChanges.kill();
+          groupChanges.kill();
         }
       ], done);
     });
@@ -260,13 +260,13 @@ describe('Report controller', function() {
 
   describe('PATCH api/controllers/report/_unlink', function() {
     beforeEach(function(done) {
-      async.series([loadUser, createReports, loadReports, createIncidents, loadIncidents], done);
+      async.series([loadUser, createReports, loadReports, createGroups, loadGroups], done);
     });
 
-    it('should unlink 2 reports from specific Incident', function(done) {
+    it('should unlink 2 reports from specific Group', function(done) {
       request(reportController)
         .patch('/api/controllers/report/_link')
-        .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+        .send({ ids: [reports[0]._id, reports[1]._id], group: groups[0]._id })
         .expect(200)
         .end(function(err) {
           if (err) return done(err);
@@ -283,16 +283,16 @@ describe('Report controller', function() {
             .expect(200)
             .end(function(err, res) {
               if (err) return done(err);
-              expect(res.body).to.have.property('_incident');
-              expect(res.body._incident).to.equal(null);
+              expect(res.body).to.have.property('_group');
+              expect(res.body._group).to.equal(null);
 
               request(reportController)
               .get('/api/controllers/report/' + reports[1]._id)
               .expect(200)
               .end(function(err, res) {
                 if (err) return done(err);
-                expect(res.body).to.have.property('_incident');
-                expect(res.body._incident).to.equal(null);
+                expect(res.body).to.have.property('_group');
+                expect(res.body._group).to.equal(null);
                 done();
               });
             });
@@ -300,20 +300,20 @@ describe('Report controller', function() {
         });
     });
 
-    it('should update the totalReports field in incident', function(done) {
-      var incidentChanges = new utils.EventCounter(Incident.schema,
-                                                   'incident:update');
+    it('should update the totalReports field in group', function(done) {
+      var groupChanges = new utils.EventCounter(Group.schema,
+                                                   'group:update');
       async.waterfall([
         function(callback) {
           request(reportController)
             .patch('/api/controllers/report/_link')
-            .send({ ids: [reports[0]._id, reports[1]._id], incident: incidents[0]._id })
+            .send({ ids: [reports[0]._id, reports[1]._id], group: groups[0]._id })
             .expect(200)
             .end(callback);
         },
         function(res, callback) {
-          // Wait for incident to be updated in the database
-          incidentChanges.waitForEvents(2, callback);
+          // Wait for group to be updated in the database
+          groupChanges.waitForEvents(2, callback);
         },
         function(callback) {
           request(reportController)
@@ -323,16 +323,16 @@ describe('Report controller', function() {
             .end(callback);
         },
         function(res, callback) {
-          // Wait for incident to be updated in the database
-          incidentChanges.waitForEvents(2, callback);
+          // Wait for group to be updated in the database
+          groupChanges.waitForEvents(2, callback);
         },
         function(callback) {
-          Incident.findById(incidents[0]._id, callback);
+          Group.findById(groups[0]._id, callback);
         },
-        function(incident, callback) {
-          expect(incident.totalReports).to.equal(0);
+        function(group, callback) {
+          expect(group.totalReports).to.equal(0);
           setImmediate(callback);
-          incidentChanges.kill();
+          groupChanges.kill();
         },
       ], done);
     });

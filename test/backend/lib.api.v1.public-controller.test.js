@@ -1,40 +1,40 @@
 var expect = require('chai').expect;
 var request = require('supertest');
 var publicController = require('../../lib/api/controllers/public-controller');
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 
 describe('Public controller', function() {
-  var incident = [];
+  var group = [];
 
   before(function(done) {
-    incident.push({
+    group.push({
       title: 'test',
       public: true
     });
 
-    incident.push({
+    group.push({
       title: 'test',
       public: false
     });
 
-    incident.push({
+    group.push({
       title: 'test',
       public: true
     });
 
-    Incident.create(incident, function(err) {
+    Group.create(group, function(err) {
       done();
     });
   });
 
   after(function(done) {
-    Incident.remove({}, done);
+    Group.remove({}, done);
   });
 
-  describe('GET /api/controllers/public/incident', function() {
-    it('should return the public incidents', function(done) {
+  describe('GET /api/controllers/public/group', function() {
+    it('should return the public groups', function(done) {
       request(publicController)
-        .get('/api/controllers/public/incident')
+        .get('/api/controllers/public/group')
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err);

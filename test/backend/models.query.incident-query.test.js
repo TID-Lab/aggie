@@ -3,16 +3,16 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
-var Incident = require('../../models/group');
-var IncidentQuery = require('../../models/query/incident-query');
+var Group = require('../../models/group');
+var GroupQuery = require('../../models/query/group-query');
 
 var query;
-describe('Incident query attributes', function() {
+describe('Group query attributes', function() {
   before(function(done) {
-    query = new IncidentQuery({
+    query = new GroupQuery({
       title: 'Quick Brown'
     });
-    Incident.remove(function(err) {
+    Group.remove(function(err) {
       if (err) return done(err);
       async.each([
         {
@@ -51,7 +51,7 @@ describe('Incident query attributes', function() {
           closed: true,
           tags: ['wellohorld', 'hello']
         }
-      ], Incident.create.bind(Incident), done);
+      ], Group.create.bind(Group), done);
     });
   });
 
@@ -62,73 +62,73 @@ describe('Incident query attributes', function() {
   });
 
   it('should hash a query into a string', function() {
-    var otherQuery = new IncidentQuery({ title: 'Test' });
-    var hash = IncidentQuery.hash(otherQuery);
+    var otherQuery = new GroupQuery({ title: 'Test' });
+    var hash = GroupQuery.hash(otherQuery);
     expect(hash).to.equal('{"title":"test","veracity":null}');
   });
 
   it('should compare queries', function() {
-    var otherQuery = new IncidentQuery({ title: 'qUiCk BrOwN' });
-    var similar = IncidentQuery.compare(otherQuery, query);
+    var otherQuery = new GroupQuery({ title: 'qUiCk BrOwN' });
+    var similar = GroupQuery.compare(otherQuery, query);
     expect(similar).to.be.true;
   });
 
   it('should query by title substring', function(done) {
-    (new IncidentQuery({ title: 'The Quick Brown', status: 'closed' })).run(function(err, incidents) {
+    (new GroupQuery({ title: 'The Quick Brown', status: 'closed' })).run(function(err, groups) {
       if (err) return done(err);
 
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(1);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(1);
-      expect(incidents.results[0].title).to.contain('quick brown');
+      expect(groups).to.have.keys(['total', 'results']);
+      expect(groups.total).to.equal(1);
+      expect(groups.results).to.be.an.instanceof(Array);
+      expect(groups.results).to.have.length(1);
+      expect(groups.results[0].title).to.contain('quick brown');
       done();
     });
   });
 
   it('should query by veracity value', function(done) {
-    (new IncidentQuery({ veracity: 'Confirmed true' })).run(function(err, incidents) {
+    (new GroupQuery({ veracity: 'Confirmed true' })).run(function(err, groups) {
       if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(1);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(1);
-      expect(incidents.results[0].veracity).to.be.true;
-      expect(incidents.results[0].title).to.contain('The slow white fox');
+      expect(groups).to.have.keys(['total', 'results']);
+      expect(groups.total).to.equal(1);
+      expect(groups.results).to.be.an.instanceof(Array);
+      expect(groups.results).to.have.length(1);
+      expect(groups.results[0].veracity).to.be.true;
+      expect(groups.results[0].title).to.contain('The slow white fox');
       done();
     });
   });
 
   it('should query by status value', function(done) {
-    (new IncidentQuery({ status: 'open' })).run(function(err, incidents) {
+    (new GroupQuery({ status: 'open' })).run(function(err, groups) {
       if (err) return done(err);
 
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(1);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(1);
-      expect(incidents.results[0].closed).to.equal(false);
-      expect(incidents.results[0].title).to.contain('The quick brown chicken');
+      expect(groups).to.have.keys(['total', 'results']);
+      expect(groups.total).to.equal(1);
+      expect(groups.results).to.be.an.instanceof(Array);
+      expect(groups.results).to.have.length(1);
+      expect(groups.results[0].closed).to.equal(false);
+      expect(groups.results[0].title).to.contain('The quick brown chicken');
       done();
     });
   });
 
   it('should query by multiple properties', function(done) {
-    (new IncidentQuery({ title: 'quick', status: 'open' })).run(function(err, incidents) {
+    (new GroupQuery({ title: 'quick', status: 'open' })).run(function(err, groups) {
       if (err) return done(err);
-      expect(incidents).to.have.keys(['total', 'results']);
-      expect(incidents.total).to.equal(1);
-      expect(incidents.results).to.be.an.instanceof(Array);
-      expect(incidents.results).to.have.length(1);
-      expect(incidents.results[0].title).to.contain('quick');
+      expect(groups).to.have.keys(['total', 'results']);
+      expect(groups.total).to.equal(1);
+      expect(groups.results).to.be.an.instanceof(Array);
+      expect(groups.results).to.have.length(1);
+      expect(groups.results[0].title).to.contain('quick');
       done();
     });
   });
 
-  it('should query by single full tag', utils.tagQueryTester('incident', ['foobar'], 2));
+  it('should query by single full tag', utils.tagQueryTester('group', ['foobar'], 2));
 
-  it('should query by multiple full tags', utils.tagQueryTester('incident', ['wellohorld', 'foobar'], 1));
+  it('should query by multiple full tags', utils.tagQueryTester('group', ['wellohorld', 'foobar'], 1));
 
-  after(utils.wipeModels([Incident]));
+  after(utils.wipeModels([Group]));
   after(utils.expectModelsEmpty);
 });

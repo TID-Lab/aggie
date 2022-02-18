@@ -46,7 +46,7 @@ From your Aggie header bar, click the **Reports** Tab. This will show you the re
 
 ### Actions on the Reports Page
 
-There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Create Groups](#creating-incidents),[Filter reports](#filtering-reports)  or add a report to an [Group](#what-is-an-incident).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
+There are several actions you can take on the reports page of Aggie. You can [Read reports](#reading-reports), [Create Groups](#creating-groups),[Filter reports](#filtering-reports)  or add a report to an [Group](#what-is-an-group).  Besides the *filter bar* and the *action* and *navigation buttons*, there are eight columns on the Reports Page of Aggie.
 
 ### Sections of the Reports Page
 
@@ -95,21 +95,21 @@ When trackers come across reports that, if verified, require action, they create
 
 1.  Select the report(s) you are creating the *Group* for by checking its/their *checkbox(es)* on the first column to the left fo the reports page.
 
-    ![Groups](incident_add.png)
+    ![Groups](group_add.png)
 
 2.  Click the **Add to Group** button beneath the filter bar.
 
-    ![Groups](incidents.png)
+    ![Groups](groups.png)
 
 3.  Select the related category of an *existing group* to add the report to that group or…
     **If it's a new Group**;
 4. Click on the *blue* **Create a new Group** link to create the new group.
 
-   ![Adding Group](create_incident.png)
+   ![Adding Group](create_group.png)
 
 5.  Type in the *Title* of the group (*e.g. Polling station not open, Voter intimidation etc*), the *Location* of the group and a brief *note* describing the group. Leave out the *veracity* and *assignment* fields for the veracity team and click **submit** to create a new group. The verification and escalation team will be using the *note* field to keep track of the verification and escalation steps taken.
 
-6.  The *Public* and *Public Description* fields are used by the escalation team to add the group to the list of public groups. The *Public Description* will appear attached to the group, for example, in the [Public Group Map](#public_incident_map).
+6.  The *Public* and *Public Description* fields are used by the escalation team to add the group to the list of public groups. The *Public Description* will appear attached to the group, for example, in the [Public Group Map](#public_group_map).
 
 ### Filtering Reports
 
@@ -132,7 +132,7 @@ With the *filter bar*, trackers can narrow down their search for specific types 
 1.  Click on the **Linked Group** tab and select a group to view all related reports tagged to that group.
 2.  In this example, selecting the group *Hate Speech* shows the three reports which have been linked to that group.
 
-    ![Filtering by Group](filter_incident.png)
+    ![Filtering by Group](filter_group.png)
 
 #### Filtering by Source
 
@@ -313,7 +313,7 @@ Groups are groups of one or more [reports](#what-is-a-report) that, once verifie
 
 From your Aggie header page, click the **Groups** Tab. This will show you the groups page as indicated below.
 
-![Groups Main Page](incidents_page_main.png)
+![Groups Main Page](groups_page_main.png)
 
 ### Sections of the Groups Page
 
@@ -343,11 +343,11 @@ This column contains two tools for editing or deleting an group; to edit the gro
 Normally, *groups* are created by Trackers. However, should the need arise, verifiers can create *groups* from the groups page. To do this, refer to [Creating a New Group](#creating-a-new-group) section.
 1.  Click the **Groups** tab from the header bar.
 
-    ![Creating Groups](create_incident_tab.png)
+    ![Creating Groups](create_group_tab.png)
 
 2.  From the groups page, click the  blue colored **Create Group** tab.
 
-    ![Creating a Group](incident_creation.png)
+    ![Creating a Group](group_creation.png)
 
 3.  Type in the *Title* of the group (*e.g. Polling Station not open, Voter Intimidation etc*), the *Location* of the Group and a brief note describing the group. Set the veracity and status fields as applicable.
 
@@ -356,7 +356,7 @@ Normally, *groups* are created by Trackers. However, should the need arise, veri
 Verifiers can always update the status of groups by editing them. It is recommended that you keep a log of the actions taken while confirming or denying veracity in the notes section of a Group. To do this:
 1.  From the groups page, click the **blue edit pencil** at the end of the group row (last column).
 
-    ![Editing a Group](incident_editing.png)
+    ![Editing a Group](group_editing.png)
 
 2.  Update the group by editing appropriate sections. For example, you can edit the *veracity* and *status* of the group, add any helpful *notes* or *escalate* the group.
 
@@ -366,7 +366,7 @@ If a veracity team member notices a redundancy in groups, they may *delete* an g
 1.  Select the *group(s)* you wish to delete by checking its/their respective *checkbox(es)*.
 2.  Click the **Delete** button below the filter bar to the left.
 
-    ![Deleting Groups](incident_deletion.png)
+    ![Deleting Groups](group_deletion.png)
 
 3.  Click **Confirm** to delete the selected group(s).
 
@@ -381,28 +381,28 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 1.  From the groups page, click the **Assigned To** menu on the filter bar.
 2.  Select an *assignee (username)* to display only the groups assigned to that verifier.
 
-    ![Filtering by Assigned User](incident_assignment.png)
+    ![Filtering by Assigned User](group_assignment.png)
 
 #### Filtering by Status
 
 1.  Click the **Status** menu on the filter bar.
 2.  Select *Open* or *Closed* to view groups in these categories.
 
-    ![Filtering by Status](incident_filtering_by_veracity.png)
+    ![Filtering by Status](group_filtering_by_veracity.png)
 
 #### Filtering by Veracity
 
 1.  Click the **Veracity** menu on the filter bar.
 2.  Select the veracity status (*unconfirmed, confirmed, confirmed true* etc.) to display all groups associated with that veracity status.
 
-    ![filtering by Veracity](incident_filtering_by_veracity.png)
+    ![filtering by Veracity](group_filtering_by_veracity.png)
 
 #### Filtering by Escalation
 
 1.  Click the **Escalated?** menu on the filter bar
 2.  Select the *escalation status (Escalated or Unescalated)* to display groups accordingly.
 
-    ![Filtering by Escalation](incident_filtering_by_escalation.png)
+    ![Filtering by Escalation](group_filtering_by_escalation.png)
 
 #### Filtering by Title Search
 
@@ -410,7 +410,7 @@ With *filters*, verifiers can narrow down their search. In some cases, there mig
 2.  Click **Go** or hit the return key to *filter and display only groups* that include the entered title.   
 For example by searching the group title *“attacks”,* there is a display of all groups containing this keyword.
 
-   ![Filtering by Tittle Search](incident_filtering_by_title.png)
+   ![Filtering by Tittle Search](group_filtering_by_title.png)
 
 #### Filtering by Location Search
 
@@ -418,4 +418,4 @@ For example by searching the group title *“attacks”,* there is a display of 
 2.  Click **Go** to display all groups associated with that location.
   For example, typing in *Ghana* in the *Location Text box*, display all groups whose location was entered as *“Ghana”*.
 
-    ![Filtering by Location Search](incident_filtering_by_location.png)
+    ![Filtering by Location Search](group_filtering_by_location.png)

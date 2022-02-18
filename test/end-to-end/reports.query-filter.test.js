@@ -41,9 +41,9 @@ describe(' query report filter', function() {
     browser.wait(utils.sendSmsghRequest(reports[3]));
 
     browser.get(browser.baseUrl + 'reports');
-    // filter by tags (such that they are from the second incident)
+    // filter by tags (such that they are from the second group)
     var res2 = utils.filterReportsByTag(['sms', 'monitor']);
-    // expect the results to be details of incident `response`
+    // expect the results to be details of group `response`
     return expect(res2).to.eventually.have.length(1);
   });
 });

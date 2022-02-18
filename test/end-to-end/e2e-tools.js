@@ -1,7 +1,7 @@
 'use strict';
 
 var dbTools = require('../database-tools');
-var incidentTools = require('./lib/incidents');
+var groupTools = require('./lib/groups');
 var sourceTools = require('./lib/sources');
 var reportTools = require('./lib/reports');
 var _ = require('lodash');
@@ -10,7 +10,7 @@ var chaiAsPromised = require('chai-as-promised');
 var request = require('supertest');
 
 module.exports = _.assign(_.clone(dbTools),
-                          incidentTools,
+                          groupTools,
                           sourceTools,
                           reportTools);
 

@@ -1,13 +1,13 @@
-var Incident = require('../models/group');
+var Group = require('../models/group');
 var each = require('async').eachSeries;
 
 exports.up = function(next) {
-  Incident.find({}, function(err, incidents) {
-    if (err || !incidents) return;
-    each(incidents, function(incident, done) {
-      var incidentRaw = incident.toObject();
-      incident.veracity = incidentRaw.verified;
-      incident.save(function(err) {
+  Group.find({}, function(err, groups) {
+    if (err || !groups) return;
+    each(groups, function(group, done) {
+      var groupRaw = group.toObject();
+      group.veracity = groupRaw.verified;
+      group.save(function(err) {
         done();
       });
     }, next);

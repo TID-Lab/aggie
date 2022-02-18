@@ -1,76 +1,76 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var Incident = require('../../models/group');
+var Group = require('../../models/group');
 var Report = require('../../models/report');
 var async = require('async');
 
 var id1;
 var id2;
 
-function createIncidents(done) {
-  Incident.create([
-    { title: 'Not so important incident', veracity: null, closed: true },
-    { title: 'Very important incident', veracity: null, closed: true }
-  ], function(err, incidents) {
-    id1 = incidents[0]._id.toString();
-    id2 = incidents[1]._id.toString();
+function createGroups(done) {
+  Group.create([
+    { title: 'Not so important group', veracity: null, closed: true },
+    { title: 'Very important group', veracity: null, closed: true }
+  ], function(err, groups) {
+    id1 = groups[0]._id.toString();
+    id2 = groups[1]._id.toString();
     done();
   });
 }
 
 function createReports(done) {
   Report.create([
-    { _incident: id1 },
-    { _incident: id1 },
-    { _incident: id2 },
-    { _incident: id2 },
-    { _incident: id2 }
+    { _group: id1 },
+    { _group: id1 },
+    { _group: id2 },
+    { _group: id2 },
+    { _group: id2 }
   ], done);
 }
 
-function removeIncident(done) {
-  Incident.findOne({ _id: id1 }, function(err, incident) {
-    incident.remove(done);
+function removeGroup(done) {
+  Group.findOne({ _id: id1 }, function(err, group) {
+    group.remove(done);
   });
 }
 
-describe('Deleting an incident that has associated reports', function() {
+describe('Deleting an group that has associated reports', function() {
   before(function(done) {
-    async.series([createIncidents, createReports, removeIncident], done);
+    async.series([createGroups, createReports, removeGroup], done);
   });
 
-  it('should remove the incident', function(done) {
-    Incident.find({ _id: id1 }, function(err, incidents) {
+  it('should remove the group', function(done) {
+    Group.find({ _id: id1 }, function(err, groups) {
       if (err) return done(err);
-      expect(incidents.length).to.equal(0);
+      expect(groups.length).to.equal(0);
       done();
     });
   });
 
-  it('should not remove the other incident', function(done) {
-    Incident.find({ _id: id2 }, function(err, incidents) {
+  it('should not remove the other group', function(done) {
+    Group.find({ _id: id2 }, function(err, groups) {
       if (err) return done(err);
-      expect(incidents.length).to.equal(1);
+      expect(groups.length).to.equal(1);
       done();
     });
   });
 
   it('should not affect other reports', function(done) {
-    Report.find({ _incident: id2 }, function(err, reports) {
+    Report.find({ _group: id2 }, function(err, reports) {
       if (err) return done(err);
       expect(reports.length).to.equal(3);
       done();
     });
   });
 
-  it('should remove reference to the incidents in the right reports', function(done) {
-    Report.find({ _incident: id1 }, function(err, reports) {
+  it('should remove reference to the groups in the right reports', function(done) {
+    Report.find({ _group: id1 }, function(err, reports) {
       if (err) return done(err);
       expect(reports.length).to.equal(0);
       done();
     });
   });
 
-  after(utils.wipeModels([Report, Incident]));
+  after(utils.wipeModels([Report, Group]));
   after(utils.expectModelsEmpty);
 });

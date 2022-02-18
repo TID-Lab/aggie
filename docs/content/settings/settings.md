@@ -151,11 +151,11 @@ The Public Group Map displays those [groups](#groups) that have been marked [pub
 
 1. *Center* and *zoom* define the main variables for the map. It will be centered in the country, city or other location you choose. The *zoom* variable specifies how large area will be displayed in the map.
 
-1. You can see the result at https://<your-domain>/widget/public_incident_map.html
+1. You can see the result at https://<your-domain>/widget/public_group_map.html
 
 1. You can add the map to any webpage with the following code:
 ```
-<iframe src="https://<your-domain>/widget/public_incident_map.html" width="xxx" height="yyy"></iframe>
+<iframe src="https://<your-domain>/widget/public_group_map.html" width="xxx" height="yyy"></iframe>
 ```
 
 1. Markers in the map have different meanings according to the their color, as shown in the table below. You can copy this table for your site if needed.
