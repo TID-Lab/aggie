@@ -1,7 +1,7 @@
-// An incident is an occurrence that is being monitored by the team.
+// An group is an occurrence that is being monitored by the team.
 // It is generally associated with one or more reports.
-// Other metadata is stored with the incident to assist tracking.
-// This class is responsible for executing IncidentQuerys.
+// Other metadata is stored with the group to assist tracking.
+// This class is responsible for executing GroupQuerys.
 /* eslint-disable no-invalid-this */
 'use strict';
 
@@ -47,7 +47,7 @@ var schema = new mongoose.Schema({
 schema.pre('save', function(next) {
   if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
-  if (!_.contains(Incident.statusOptions, this.status)) {
+  if (!_.contains(Group.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
 
@@ -55,17 +55,17 @@ schema.pre('save', function(next) {
 });
 
 schema.post('save', function() {
-  schema.emit('incident:save', { _id: this._id.toString() });
+  schema.emit('group:save', { _id: this._id.toString() });
 });
 
 schema.post('remove', function() {
-  // Unlink removed incident from reports
-  Report.find({ _incident: this._id.toString() }, function(err, reports) {
+  // Unlink removed group from reports
+  Report.find({ _group: this._id.toString() }, function(err, reports) {
     if (err) {
       logger.error(err);
     }
     reports.forEach(function(report) {
-      report._incident = null;
+      report._group = null;
       report.save();
     });
   });
@@ -131,11 +131,11 @@ schema.methods.clearSMTCTags = function(callback) {
 }
 
 schema.plugin(AutoIncrement, { inc_field: 'idnum' });
-var Incident = mongoose.model('Incident', schema);
+var Group = mongoose.model('Group', schema);
 
-/* We need to be able to find Incidents by smtcTag Id
+/* We need to be able to find Groups by smtcTag Id
 SMTCTag.schema.on('tag:removed', function(id) {
-  Incident.find({smtcTags: id}, function(err, reports) {
+  Group.find({smtcTags: id}, function(err, reports) {
     if (err) {
       logger.error(err);
     }
@@ -147,32 +147,32 @@ SMTCTag.schema.on('tag:removed', function(id) {
   });
 })*/
 
-Report.schema.on('change:incident', function(prevIncident, newIncident) {
-  if (prevIncident !== newIncident) {
-    if (prevIncident) {
+Report.schema.on('change:group', function(prevGroup, newGroup) {
+  if (prevGroup !== newGroup) {
+    if (prevGroup) {
       // Callbacks added to execute query immediately
-      Incident.findByIdAndUpdate(prevIncident, { $inc: { totalReports: -1 } }, function(err) {
+      Group.findByIdAndUpdate(prevGroup, { $inc: { totalReports: -1 } }, function(err) {
         if (err) {
           logger.error(err);
         }
-        schema.emit('incident:update');
+        schema.emit('group:update');
       });
     }
   }
 
-  if (newIncident) {
-    Incident.findByIdAndUpdate(newIncident, { $inc: { totalReports: 1 } }, function(err) {
+  if (newGroup) {
+    Group.findByIdAndUpdate(newGroup, { $inc: { totalReports: 1 } }, function(err) {
       if (err) {
         logger.error(err);
       }
-      schema.emit('incident:update');
+      schema.emit('group:update');
     });
   }
 });
 
-// Query incidents based on passed query data
-Incident.queryIncidents = function(query, page, options, callback) {
-  if (typeof query === 'function') return Incident.findPage(query);
+// Query groups based on passed query data
+Group.queryGroups = function(query, page, options, callback) {
+  if (typeof query === 'function') return Group.findPage(query);
   if (typeof page === 'function') {
     callback = page;
     page = 0;
@@ -190,7 +190,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
   options.limit = 100;
 
   // Create filter object
-  Incident.filterAttributes.forEach(function(attr) {
+  Group.filterAttributes.forEach(function(attr) {
     if (!_.isUndefined(query[attr])) filter[attr] = query[attr];
   });
 
@@ -221,7 +221,7 @@ Incident.queryIncidents = function(query, page, options, callback) {
   if (query.locationName) filter.locationName = new RegExp(query.locationName, 'i');
   else delete filter.locationName;
 
-  // Checking for multiple tags in incident
+  // Checking for multiple tags in group
   if (filter.tags) {
     filter.smtcTags = { $all: filter.tags };
     delete filter.tags;
@@ -230,12 +230,12 @@ Incident.queryIncidents = function(query, page, options, callback) {
   query.since = new Date();
 
   // Just use filters when no keywords are provided
-  Incident.findPage(filter, page, options, callback);
+  Group.findPage(filter, page, options, callback);
 };
 
-// Mixin shared incident methods
-var Shared = require('../shared/incident');
-for (var staticVar in Shared) Incident[staticVar] = Shared[staticVar];
+// Mixin shared group methods
+var Shared = require('../shared/group');
+for (var staticVar in Shared) Group[staticVar] = Shared[staticVar];
 for (var proto in Shared.prototype) schema.methods[proto] = Shared[proto];
 
-module.exports = Incident;
+module.exports = Group;

@@ -4,7 +4,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var statsMaster = require('../../lib/analytics/stats-master');
 var Report = require('../../models/report');
-var Incident = require('../../models/incident');
+var Incident = require('../../models/group');
 var async = require('async');
 
 describe('StatsMaster', function() {

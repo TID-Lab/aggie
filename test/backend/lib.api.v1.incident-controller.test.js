@@ -2,8 +2,8 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var incidentController = require('../../lib/api/controllers/incident-controller')();
-var Incident = require('../../models/incident');
+var incidentController = require('../../lib/api/controllers/group-controller')();
+var Incident = require('../../models/group');
 
 describe('Incident controller', function() {
   var incident;

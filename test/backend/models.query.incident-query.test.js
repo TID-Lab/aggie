@@ -3,7 +3,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
-var Incident = require('../../models/incident');
+var Incident = require('../../models/group');
 var IncidentQuery = require('../../models/query/incident-query');
 
 var query;

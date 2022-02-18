@@ -1,6 +1,6 @@
 // Subclass of Query. Represents a query of the incident collection.
 
-var Incident = require('../incident');
+var Incident = require('../group');
 var Query = require('../query');
 var util = require('util');
 var _ = require('underscore');

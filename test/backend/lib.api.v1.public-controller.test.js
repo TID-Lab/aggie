@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var request = require('supertest');
 var publicController = require('../../lib/api/controllers/public-controller');
-var Incident = require('../../models/incident');
+var Incident = require('../../models/group');
 
 describe('Public controller', function() {
   var incident = [];

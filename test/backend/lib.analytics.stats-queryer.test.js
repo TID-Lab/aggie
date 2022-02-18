@@ -2,7 +2,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var StatsQueryer = require('../../lib/analytics/stats-queryer');
 var Report = require('../../models/report');
-var Incident = require('../../models/incident');
+var Incident = require('../../models/group');
 var async = require('async');
 
 describe('StatsQueryer', function() {

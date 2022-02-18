@@ -1,6 +1,6 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var Incident = require('../../models/incident');
+var Incident = require('../../models/group');
 var Report = require('../../models/report');
 var async = require('async');
 var ReportQuery = require('../../models/query/report-query');

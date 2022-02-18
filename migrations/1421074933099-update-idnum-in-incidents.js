@@ -1,4 +1,4 @@
-var Incident = require('../models/incident');
+var Incident = require('../models/group');
 var each = require('async').eachSeries;
 
 exports.up = function(next) {

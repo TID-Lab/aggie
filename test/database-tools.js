@@ -6,7 +6,7 @@ var User = require('../models/user');
 var Report = require('../models/report');
 var Source = require('../models/source');
 var Trend = require('../models/trend');
-var Incident = require('../models/incident');
+var Incident = require('../models/group');
 var SMTCTag = require('../models/tag');
 
 exports.initDb = function(callback) {

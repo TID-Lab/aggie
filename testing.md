@@ -61,7 +61,7 @@ reports]
 11. Click the `Edit` button [edit modal appears]
 12. Add one tag and save the incident [incident is updated]
 13. Flag one report in the incident view page [the report is flagged]
-14. Click `Create Incident` [modal appears]
+14. Click `Create Group` [modal appears]
 15. Begin typing `mac` in the location field [locations starting with `mac`
 should be suggested]
 16. Pick a a location, enter a title and save the incident [incident is saved successfully]
