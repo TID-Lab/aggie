@@ -1,9 +1,9 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var contentServiceFactory = require('../../lib/fetching/content-service-factory');
-var ContentService = require('../../lib/fetching/content-service');
-var DummyContentService = require('../../lib/fetching/content-services/dummy-content-service');
-var Source = require('../../models/source');
+var contentServiceFactory = require('../../backend/fetching/content-service-factory');
+var ContentService = require('../../backend/fetching/content-service');
+var DummyContentService = require('../../backend/fetching/content-services/dummy-content-service');
+var Source = require('../../backend/models/source');
 
 describe('Content service', function() {
   before(function(done) {

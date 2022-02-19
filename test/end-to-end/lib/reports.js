@@ -1,6 +1,6 @@
 'use strict';
 
-var Report = require('../../../models/report');
+var Report = require('../../../backend/models/report');
 var _ = require('lodash');
 
 module.exports.makeReports = function(n, author, time, content) {

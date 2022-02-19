@@ -1,7 +1,7 @@
 var utils = require('./init');
 var chai = require('chai');
 var should = chai.should();
-var SMTCTag = require('../../models/tag');
+var SMTCTag = require('../../backend/models/tag');
 
 describe('SMTCTag attributes', function() {
     before(function(done) {

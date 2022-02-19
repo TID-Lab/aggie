@@ -2,17 +2,17 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var fs = require('fs');
 var path = require('path');
-var CTListUpdateService = require('../../lib/api/CT-list-update-service');
+var CTListUpdateService = require('../../backend/api/CT-list-update-service');
 
 // Stubs the _httpRequest method of the content service to return the data in the given fixture file.
 function stubWithFixture(fixtureFile, service) {
   // fixture to write all output to
-  CTListUpdateService.prototype.OUTPUT_DIR = path.join('../../test', 'backend', 'fixtures', 'ct-list-output.json');
+  CTListUpdateService.prototype.OUTPUT_DIR = path.join('../../test', 'app', 'fixtures', 'ct-list-output.json');
   // If service is null, creates a CrowdTangleContentService
   service = service || new CTListUpdateService();
 
   // Make the stub function return the expected args (err, res, body).
-  fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
+  fixtureFile = path.join('test', 'app', 'fixtures', fixtureFile);
   service._httpRequest = async function(params) {
     if (params.url.slice(0,4) != 'http') {
       fixtureFile = path.resolve(__dirname, `../../test/backend/fixtures/${params.url}.json`);
@@ -86,7 +86,7 @@ describe('CrowdTangle list update service', function() {
   it('should fetch and update empty content', function(done) {
     var service = stubWithFixture('ct-list-0.json');
     service._updateCTList().then(function(data) {
-      fs.readFile(path.join('test', 'backend', 'fixtures', 'ct-list-output.json'), function(err,file) {
+      fs.readFile(path.join('test', 'app', 'fixtures', 'ct-list-output.json'), function(err,file) {
         output = JSON.parse(file);
         expect(output).to.have.keys("crowdtangle_list_account_pairs");
         expect(output.crowdtangle_list_account_pairs).to.be.empty;
@@ -101,7 +101,7 @@ describe('CrowdTangle list update service', function() {
   it('should fetch and update lists', function(done) {
     var service = stubWithFixture('ct-list-1.json');
     service._updateCTList().then(function(data) {
-      fs.readFile(path.join('test', 'backend', 'fixtures', 'ct-list-output.json'), function(err,file) {
+      fs.readFile(path.join('test', 'app', 'fixtures', 'ct-list-output.json'), function(err,file) {
         output = JSON.parse(file);
         expect(output).to.have.keys("crowdtangle_list_account_pairs");
         expect(output.crowdtangle_list_account_pairs).to.contain({
@@ -120,7 +120,7 @@ describe('CrowdTangle list update service', function() {
   });
 
   after(function(done) {
-    fs.writeFileSync(path.join('test', 'backend', 'fixtures', 'ct-list-output.json'), JSON.stringify({}))
+    fs.writeFileSync(path.join('test', 'app', 'fixtures', 'ct-list-output.json'), JSON.stringify({}))
     done();
   });
 });

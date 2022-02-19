@@ -1,8 +1,8 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var tagController = require('../../lib/api/controllers/tag-controller')();
-var SMTCTag = require('../../models/tag');
+var tagController = require('../../backend/api/controllers/tag-controller')();
+var SMTCTag = require('../../backend/models/tag');
 var tags;
 
 describe('Tag controller', function() {

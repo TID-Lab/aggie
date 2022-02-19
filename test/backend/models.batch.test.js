@@ -2,10 +2,10 @@
 
 var utils = require('./init');
 var expect = require('chai').expect;
-var Report = require('../../models/report');
-var User = require('../../models/user');
-var batch = require('../../models/batch');
-var ReportQuery = require('../../models/query/report-query');
+var Report = require('../../backend/models/report');
+var User = require('../../backend/models/user');
+var batch = require('../../backend/models/batch');
+var ReportQuery = require('../../backend/models/query/report-query');
 var async = require('async');
 var _ = require('lodash');
 

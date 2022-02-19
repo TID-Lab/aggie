@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var Group = require('../../models/group');
-var Report = require('../../models/report');
+var Group = require('../../backend/models/group');
+var Report = require('../../backend/models/report');
 var async = require('async');
 
 var id1;

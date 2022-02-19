@@ -1,4 +1,4 @@
-var Source = require('../models/source');
+var Source = require('../backend/models/source');
 var each = require('async').eachSeries;
 
 exports.up = function(next) {

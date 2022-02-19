@@ -4,7 +4,7 @@ var utils = require('./init');
 var request = require('supertest');
 var expect = require('chai').expect;
 var async = require('async');
-var WhatsAppContentService = require('../../lib/fetching/content-services/whatsapp-content-service');
+var WhatsAppContentService = require('../../backend/fetching/content-services/whatsapp-content-service');
 
 // This can be modified as more fields are added
 // Req corresponding to source 1

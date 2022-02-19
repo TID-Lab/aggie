@@ -1,6 +1,6 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var RSSContentService = require('../../lib/fetching/content-services/rss-content-service');
+var RSSContentService = require('../../backend/fetching/content-services/rss-content-service');
 var fs = require('fs');
 var path = require('path');
 
@@ -11,7 +11,7 @@ function stubWithFixture(fixtureFile, service) {
   service = service || new RSSContentService({ url: 'http://example.com' });
 
   // Make the stub function return the expected args (err, data).
-  fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
+  fixtureFile = path.join('test', 'app', 'fixtures', fixtureFile);
   service._doRequest = function(callback) {
     callback(null, { statusCode: 200 }, fs.createReadStream(fixtureFile));
   };

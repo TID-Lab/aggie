@@ -3,7 +3,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
-var Source = require('../../models/source');
+var Source = require('../../backend/models/source');
 
 describe('Source attributes', function() {
   it('should return validation errors', function(done) {

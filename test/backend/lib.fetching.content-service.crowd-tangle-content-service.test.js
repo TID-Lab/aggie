@@ -2,9 +2,9 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var fs = require('fs');
 var path = require('path');
-var CrowdTangleContentService = require('../../lib/fetching/content-services/crowd-tangle-content-service');
-var ContentService = require('../../lib/fetching/content-service');
-var contentServiceFactory = require('../../lib/fetching/content-service-factory');
+var CrowdTangleContentService = require('../../backend/fetching/content-services/crowd-tangle-content-service');
+var ContentService = require('../../backend/fetching/content-service');
+var contentServiceFactory = require('../../backend/fetching/content-service-factory');
 
 
 // Stubs the _httpRequest method of the content service to return the data in the given fixture file.
@@ -14,7 +14,7 @@ function stubWithFixture(fixtureFile, service) {
   service = service || new CrowdTangleContentService({});
 
   // Make the stub function return the expected args (err, res, body).
-  fixtureFile = path.join('test', 'backend', 'fixtures', fixtureFile);
+  fixtureFile = path.join('test', 'app', 'fixtures', fixtureFile);
   service._httpRequest = function(params, callback) {
     callback(null, { statusCode: 200 }, fs.readFileSync(fixtureFile).toString());
   };

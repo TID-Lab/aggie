@@ -9,7 +9,7 @@ var cluster = require('cluster');
  * Cluster setup.
  */
 
-// Setup the cluster to use app.js
+// Setup the cluster to use backend.js
 cluster.setupMaster({
   exec: 'app.js'
 });

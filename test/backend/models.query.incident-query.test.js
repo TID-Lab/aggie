@@ -3,8 +3,8 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
-var Group = require('../../models/group');
-var GroupQuery = require('../../models/query/group-query');
+var Group = require('../../backend/models/group');
+var GroupQuery = require('../../backend/models/query/group-query');
 
 var query;
 describe('Group query attributes', function() {

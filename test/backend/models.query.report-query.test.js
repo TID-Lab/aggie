@@ -1,8 +1,8 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var async = require('async');
-var ReportQuery = require('../../models/query/report-query');
-var Report = require('../../models/report');
+var ReportQuery = require('../../backend/models/query/report-query');
+var Report = require('../../backend/models/report');
 
 var query;
 describe('Query attributes', function() {

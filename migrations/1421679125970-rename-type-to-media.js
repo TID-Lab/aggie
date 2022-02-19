@@ -1,4 +1,4 @@
-var Report = require('../models/report');
+var Report = require('../backend/models/report');
 var each = require('async').eachSeries;
 
 exports.up = function(next) {

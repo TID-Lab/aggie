@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this, no-console */
 'use strict';
 
-var Report = require('../models/report');
+var Report = require('../backend/models/report');
 var THROTTLE = 20;
 
 function streamingUpdate(Model, throttle, which, editFn, next) {

@@ -2,11 +2,11 @@
 
 var utils = require('./init');
 var expect = require('chai').expect;
-var reportQueue = require('../../lib/fetching/report-queue');
-var botFactory = require('../../lib/fetching/bot-factory');
-var botMaster = require('../../lib/fetching/bot-master');
-var Source = require('../../models/source');
-var Report = require('../../models/report');
+var reportQueue = require('../../backend/fetching/report-queue');
+var botFactory = require('../../backend/fetching/bot-factory');
+var botMaster = require('../../backend/fetching/bot-master');
+var Source = require('../../backend/models/source');
+var Report = require('../../backend/models/report');
 
 describe('Report queue', function() {
   var one, two, three;

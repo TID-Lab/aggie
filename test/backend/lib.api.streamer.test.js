@@ -1,8 +1,8 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var streamer = require('../../lib/api/streamer');
-var ReportQuery = require('../../models/query/report-query');
-var Report = require('../../models/report');
+var streamer = require('../../backend/api/streamer');
+var ReportQuery = require('../../backend/models/query/report-query');
+var Report = require('../../backend/models/report');
 
 describe('Streamer', function() {
   before(function(done) {

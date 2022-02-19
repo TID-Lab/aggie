@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var request = require('supertest');
-var publicController = require('../../lib/api/controllers/public-controller');
-var Group = require('../../models/group');
+var publicController = require('../../backend/api/controllers/public-controller');
+var Group = require('../../backend/models/group');
 
 describe('Public controller', function() {
   var group = [];

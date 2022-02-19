@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var SMTCTag = require('../../models/tag');
-var Report = require('../../models/report');
+var SMTCTag = require('../../backend/models/tag');
+var Report = require('../../backend/models/report');
 var async = require('async');
 
 var id1;

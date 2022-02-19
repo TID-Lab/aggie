@@ -37,7 +37,7 @@ public/css/styles.css
 public/angular/css/app.css
 public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
-lib/translations/locale-debug.json
+backend/translations/locale-debug.json
 hate-speech-api/error.log
 
 hate-speech-api/*.log
@@ -49,10 +49,10 @@ NOTES
 
 data
 
-config/secrets.json
-config/cert.pem
-config/key.pem
-config/crowdtangle_list.json
+backend/config/secrets.json
+backend/config/cert.pem
+backend/config/key.pem
+backend/config/crowdtangle_list.json
 
 docs/_build
 

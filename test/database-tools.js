@@ -1,13 +1,13 @@
 'use strict';
 
-var database = require('../lib/database');
+var database = require('../backend/database');
 var async = require('async');
-var User = require('../models/user');
-var Report = require('../models/report');
-var Source = require('../models/source');
-var Trend = require('../models/trend');
-var Group = require('../models/group');
-var SMTCTag = require('../models/tag');
+var User = require('../backend/models/user');
+var Report = require('../backend/models/report');
+var Source = require('../backend/models/source');
+var Trend = require('../backend/models/trend');
+var Group = require('../backend/models/group');
+var SMTCTag = require('../backend/models/tag');
 
 exports.initDb = function(callback) {
   async.series([

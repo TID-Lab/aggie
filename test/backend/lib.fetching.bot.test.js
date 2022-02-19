@@ -1,8 +1,8 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var botFactory = require('../../lib/fetching/bot-factory');
-var ContentService = require('../../lib/fetching/content-service');
-var Report = require('../../models/report');
+var botFactory = require('../../backend/fetching/bot-factory');
+var ContentService = require('../../backend/fetching/content-service');
+var Report = require('../../backend/models/report');
 
 describe('Bot', function() {
   before(function(done) {

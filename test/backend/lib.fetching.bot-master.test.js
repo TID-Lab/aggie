@@ -2,9 +2,9 @@
 
 var utils = require('./init');
 var expect = require('chai').expect;
-var botMaster = require('../../lib/fetching/bot-master');
-var Report = require('../../models/report');
-var Source = require('../../models/source');
+var botMaster = require('../../backend/fetching/bot-master');
+var Report = require('../../backend/models/report');
+var Source = require('../../backend/models/source');
 
 describe('BotMaster', function() {
   before(utils.expectModelsEmpty);
@@ -91,7 +91,7 @@ describe('BotMaster', function() {
   // We have to remove all the reports here for a very sneaky reason. If you run
   // this test file alone, there's no problem; no reports get created. But when
   // you use mocha to run this file and one which imports
-  // '../../lib/fetching/report-writer', the bots will start adding reports to the
+  // '../../backend/fetching/report-writer', the bots will start adding reports to the
   // queue and they'll get saved. With enough latency, this call actually won't
   // be enough to stop these reports from interacting with other tests, as
   // this test file could exit with reports still in the queue. The moral is

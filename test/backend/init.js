@@ -6,12 +6,12 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var dbTools = require('../database-tools');
-var Report = require('../../models/report');
-var User = require('../../models/user');
-var Source = require('../../models/source');
-var Trend = require('../../models/trend');
-var Group = require('../../models/group');
-var SMTCTag = require('../../models/tag');
+var Report = require('../../backend/models/report');
+var User = require('../../backend/models/user');
+var Source = require('../../backend/models/source');
+var Trend = require('../../backend/models/trend');
+var Group = require('../../backend/models/group');
+var SMTCTag = require('../../backend/models/tag');
 var expect = require('chai').expect;
 var async = require('async');
 var _ = require('lodash');
@@ -123,10 +123,10 @@ function tagQueryTester(model, tags, n) {
   return function(done) {
     var query;
     if (model === 'report') {
-      var ReportQuery = require('../../models/query/report-query');
+      var ReportQuery = require('../../backend/models/query/report-query');
       query = new ReportQuery({ tags: tags });
     } else { // model === 'group'
-      var GroupQuery = require('../../models/query/group-query');
+      var GroupQuery = require('../../backend/models/query/group-query');
       query = new GroupQuery({
         veracity: 'Confirmed false',
         status: 'closed',

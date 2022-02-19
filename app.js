@@ -1,18 +1,18 @@
 process.title = 'aggie';
 
-var processManager = require('./lib/process-manager');
-var initLogger = require('./lib/master-logger').init;
-var log = require('./lib/master-logger').log;
+const processManager = require('./backend/process-manager');
+const initLogger = require('./backend/master-logger').init;
+const log = require('./backend/master-logger').log;
 
 // fork child at specific module path
 function _fork(modulePath) {
-  var child = processManager.fork(modulePath);
+  const child = processManager.fork(modulePath);
   initLogger(child.moduleName);
   log(child.moduleName, 'debug', 'Aggie started');
 }
 
 // initialize master logger
-var masterLoggerName = 'master';
+const masterLoggerName = 'master';
 initLogger(masterLoggerName);
 log(masterLoggerName, 'debug', 'Aggie started');
 
@@ -22,10 +22,10 @@ process.on('uncaughtException', function(err) {
   log(masterLoggerName, 'debug', err.stack);
 });
 
-// Begins the three main app processes API, fetching, and analytics.
-// See Readme files in lib subdirectores for more on each.
-_fork('/lib/api');
-_fork('/lib/fetching');
-_fork('/lib/analytics');
+// Begins the three main backend processes API, fetching, and analytics.
+// See Readme files in backend subdirectores for more on each.
+_fork('/backend/api');
+_fork('/backend/fetching');
+_fork('/backend/analytics');
 
 module.exports = processManager;

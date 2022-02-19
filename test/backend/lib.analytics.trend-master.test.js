@@ -1,10 +1,10 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var trendMaster = require('../../lib/analytics/trend-master');
-var TrendQueryer = require('../../lib/analytics/trend-queryer');
-var Trend = require('../../models/trend');
-var Report = require('../../models/report');
-var ReportQuery = require('../../models/query/report-query');
+var trendMaster = require('../../backend/analytics/trend-master');
+var TrendQueryer = require('../../backend/analytics/trend-queryer');
+var Trend = require('../../backend/models/trend');
+var Report = require('../../backend/models/report');
+var ReportQuery = require('../../backend/models/query/report-query');
 var _ = require('underscore');
 
 describe('Trend master', function() {

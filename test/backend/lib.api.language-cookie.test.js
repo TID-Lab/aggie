@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 
 before(function() {
-  require('../../lib/api/language-cookie.js')(app);
+  require('../../backend/api/language-cookie.js')(app);
   app.use('/', function(req, res) {
     res.send();
   });

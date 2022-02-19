@@ -3,12 +3,12 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var _ = require('underscore');
-var reportWriter = require('../../lib/fetching/report-writer');
-var reportQueue = require('../../lib/fetching/report-queue');
-var botFactory = require('../../lib/fetching/bot-factory');
-var botMaster = require('../../lib/fetching/bot-master');
-var Report = require('../../models/report');
-var Source = require('../../models/source');
+var reportWriter = require('../../backend/fetching/report-writer');
+var reportQueue = require('../../backend/fetching/report-queue');
+var botFactory = require('../../backend/fetching/bot-factory');
+var botMaster = require('../../backend/fetching/bot-master');
+var Report = require('../../backend/models/report');
+var Source = require('../../backend/models/source');
 
 describe('Report writer', function() {
   var bot;

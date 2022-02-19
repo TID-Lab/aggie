@@ -1,9 +1,9 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var PushBot = require('../../lib/fetching/bots/push-bot');
-var Bot = require('../../lib/fetching/bot');
-var contentServiceFactory = require('../../lib/fetching/content-service-factory');
-var Source = require('../../models/source');
+var PushBot = require('../../backend/fetching/bots/push-bot');
+var Bot = require('../../backend/fetching/bot');
+var contentServiceFactory = require('../../backend/fetching/content-service-factory');
+var Source = require('../../backend/models/source');
 
 describe('Push bot', function() {
   before(function(done) {

@@ -1,9 +1,9 @@
 // Performs some basic setup tasks. Should be run as part of deploy process.
 
-var database = require('./lib/database');
-var Report = require('./models/report');
-var User = require('./models/user');
-var config = require('./config/secrets').get();
+var database = require('./backend/database');
+var Report = require('./backend/models/report');
+var User = require('./backend/models/user');
+var config = require('./backend/config/secrets').get();
 
 var tasks = [];
 

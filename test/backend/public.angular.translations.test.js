@@ -4,7 +4,7 @@
  * directly, rather than their api endpoint /translations/, for a variety of
  * reasons.
  *   (1) These files are served statically, which is very simple
- *   (2) the code that serves these files is in lib/api.js which is monolithic
+ *   (2) the code that serves these files is in backend/api.js which is monolithic
  *       and difficult to unit test
  *   (3) The filesystem is part of the internationalization feature which is
  *       externally exposed, in the sense that it is exposed to users who may
@@ -115,4 +115,4 @@ function testTranslationDir(dirname) {
 }
 
 testTranslationDir('./public/angular/translations');
-testTranslationDir('./lib/translations');
+testTranslationDir('./backend/translations');

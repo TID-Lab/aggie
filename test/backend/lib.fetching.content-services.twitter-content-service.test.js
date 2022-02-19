@@ -4,7 +4,7 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var _ = require('lodash');
 var EventEmitter = require('events').EventEmitter;
-var TwitterContentService = require('../../lib/fetching/content-services/twitter-content-service');
+var TwitterContentService = require('../../backend/fetching/content-services/twitter-content-service');
 
 describe('Twitter content service', function() {
 

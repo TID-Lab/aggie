@@ -2,10 +2,10 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var trendController = require('../../lib/api/controllers/trend-controller')();
-var Trend = require('../../models/trend');
-var Query = require('../../models/query');
-var ReportQuery = require('../../models/query/report-query');
+var trendController = require('../../backend/api/controllers/trend-controller')();
+var Trend = require('../../backend/models/trend');
+var Query = require('../../backend/models/query');
+var ReportQuery = require('../../backend/models/query/report-query');
 
 var trend;
 describe('Trend controller', function() {

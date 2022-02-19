@@ -2,8 +2,8 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var groupController = require('../../lib/api/controllers/group-controller')();
-var Group = require('../../models/group');
+var groupController = require('../../backend/api/controllers/group-controller')();
+var Group = require('../../backend/models/group');
 
 describe('Group controller', function() {
   var group;

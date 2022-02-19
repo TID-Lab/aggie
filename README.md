@@ -199,7 +199,7 @@ npm start
 # Now verify Aggie is online at your URL, then kill this process (ctrl+c) when you're done.
 # Optional troubleshooting if it doesn't work:
 curl localhost:3000
-# This should return an HTML response starting with something like <html lang="en" ng-app="Aggie">
+# This should return an HTML response starting with something like <html lang="en" ng-backend="Aggie">
 # If this works but you can't access Aggie publicly, check your network config to make sure ports 80 and 443 are exposed.
 ```
 
@@ -214,7 +214,7 @@ npx pm2 startup
 npm run serve
 npx pm2 save
 
-# If you ever modify secrets.json, restart the app by running (in the `aggie` directory):
+# If you ever modify secrets.json, restart the backend by running (in the `aggie` directory):
 npx pm2 restart aggie
 
 # OPTIONAL User input: Restart Aggie every 6 hours if you have high traffic. Memory leaks are in the process of being addressed.
@@ -238,7 +238,7 @@ sudo $EDITOR /etc/logrotate.conf
   copytruncate
 }
 
-# Whenever you need to, you can view app logs by running (in the `aggie` directory):
+# Whenever you need to, you can view backend logs by running (in the `aggie` directory):
 npx pm2 logs
 ```
 

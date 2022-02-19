@@ -1,13 +1,13 @@
 var utils = require('./init');
 var expect = require('chai').expect;
-var processManager = require('../../lib/process-manager');
+var processManager = require('../../backend/process-manager');
 var request = require('supertest');
-var Source = require('../../models/source');
-var Report = require('../../models/report');
+var Source = require('../../backend/models/source');
+var Report = require('../../backend/models/report');
 
 /**
  * BEWARE, this test suite has side effects. The practical result is that no
- * other test suite should fork the '/lib/api' or '/lib/fetching' modules at
+ * other test suite should fork the '/backend/api' or '/backend/fetching' modules at
  * this time. In addition, there is inter-dependence between the tests within
  * this suite. Precisely, all tests depend on the first ('should fork a
  * process').
@@ -17,35 +17,35 @@ var Report = require('../../models/report');
  * When a process is forked, it registers routes with the process manager to
  * subscribe to interprocess messages. As a reasonable precaution, the process
  * manager does not allow duplicate routes, and when a process is killed its
- * routes are not removed. As a result, if e.g. the /lib/fetching module is
+ * routes are not removed. As a result, if e.g. the /backend/fetching module is
  * forked, killed, and forked again, the routes for the second copy will fail to
- * be registered. The second copy of the /lib/fetching module then cannot
- * receive messages from other processes (e.g. /lib/api).
+ * be registered. The second copy of the /backend/fetching module then cannot
+ * receive messages from other processes (e.g. /backend/api).
  *
  * Inter-dependence
  * ----------------
- * All of the tests in this module rely on the /lib/fetching and /lib/api
+ * All of the tests in this module rely on the /backend/fetching and /backend/api
  * processes. Per the above discussion, each of these processes can only exist
  * once, so they must be shared by the tests here. As the first test creates
- * the /lib/fetching process, it cannot be done without.
+ * the /backend/fetching process, it cannot be done without.
  *
  * Resolution
  * ----------
  * Generally, tests with side effects and tests depending on each other should
  * be discouraged where possible. To fix this, I recommend that each test get
- * its own /lib/api and /lib/fetching process. To make this possible, the
+ * its own /backend/api and /backend/fetching process. To make this possible, the
  * process manager should remove routes for processes when they are killed.
  */
 describe('Process manager', function() {
   before('Let API server start listening', function(done) {
-    processManager.fork('/lib/api');
+    processManager.fork('/backend/api');
     setTimeout(done, 500);
   });
 
   it('should fork a process', function() {
     expect(processManager.children).to.be.an.instanceOf(Array);
     var children = processManager.children.length;
-    var child = processManager.fork('/lib/fetching');
+    var child = processManager.fork('/backend/fetching');
     expect(child).to.have.property('pid');
     expect(child.pid).to.be.above(process.pid);
     expect(processManager.children).to.have.length(children + 1);
@@ -76,14 +76,14 @@ describe('Process manager', function() {
       done();
     });
     // "API" module to send
-    var api = processManager.fork('/lib/api');
+    var api = processManager.fork('/backend/api');
     process.nextTick(function() {
       api.send('ping');
     });
     // Register "Fetching" as a listener of "API" for the "pong" event
     processManager.registerRoute({
       events: ['pong'],
-      emitter: '/lib/api',
+      emitter: '/backend/api',
       emitterModule: 'api',
       listenerModule: 'fetching',
       event: 'register'

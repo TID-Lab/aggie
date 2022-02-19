@@ -1,7 +1,7 @@
 'use strict';
 
-var mailer = require('../../lib/mailer');
-var config = require('../../config/secrets.js').get().email;
+var mailer = require('../../backend/mailer');
+var config = require('../../backend/config/secrets.js').get().email;
 if (!process.argv[2]) {
   console.log('Usage: node test/manual/email.outgoing.test.js <destination-email-address>');
   process.exit();

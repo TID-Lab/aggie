@@ -1,11 +1,11 @@
 'use strict';
 var utils = require('./init');
 var expect = require('chai').expect;
-var TrendQueryer = require('../../lib/analytics/trend-queryer');
-var Trend = require('../../models/trend');
-var Query = require('../../models/query');
-var ReportQuery = require('../../models/query/report-query');
-var Report = require('../../models/report');
+var TrendQueryer = require('../../backend/analytics/trend-queryer');
+var Trend = require('../../backend/models/trend');
+var Query = require('../../backend/models/query');
+var ReportQuery = require('../../backend/models/query/report-query');
+var Report = require('../../backend/models/report');
 var timekeeper = require('timekeeper');
 var _ = require('underscore');
 var async = require('async');

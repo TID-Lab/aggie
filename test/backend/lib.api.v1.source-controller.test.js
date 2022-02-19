@@ -2,8 +2,8 @@ var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
 var _ = require('underscore');
-var sourceController = require('../../lib/api/controllers/source-controller')();
-var Source = require('../../models/source');
+var sourceController = require('../../backend/api/controllers/source-controller')();
+var Source = require('../../backend/models/source');
 
 describe('Source controller', function() {
   var source;

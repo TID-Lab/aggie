@@ -1,5 +1,5 @@
 var request = require('supertest');
-var widgetController = require('../../lib/api/controllers/widget-controller')();
+var widgetController = require('../../backend/api/controllers/widget-controller')();
 
 describe('Widget controller', function() {
   describe('GET /widget/public_group.map.html', function() {

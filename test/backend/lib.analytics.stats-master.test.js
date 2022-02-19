@@ -2,9 +2,9 @@
 
 var utils = require('./init');
 var expect = require('chai').expect;
-var statsMaster = require('../../lib/analytics/stats-master');
-var Report = require('../../models/report');
-var Group = require('../../models/group');
+var statsMaster = require('../../backend/analytics/stats-master');
+var Report = require('../../backend/models/report');
+var Group = require('../../backend/models/group');
 var async = require('async');
 
 describe('StatsMaster', function() {
