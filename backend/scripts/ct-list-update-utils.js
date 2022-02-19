@@ -1,4 +1,4 @@
-var CTListUpdateService = require('../backend/api/CT-list-update-service.js');
+var CTListUpdateService = require('../api/CT-list-update-service.js');
 
 module.exports = function update(emitter) {
   console.log("Updating CT lists...");

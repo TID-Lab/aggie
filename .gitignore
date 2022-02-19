@@ -30,7 +30,7 @@ Thumbs.db
 .settings
 server-prefs.json
 
-migrations/.migrate
+backend/migrations/.migrate
 .migrate
 
 public/css/styles.css

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 'use strict';
 
-var User = require('../backend/models/user');
+var User = require('../models/user');
 
 exports.up = function(next) {
   User.update({ role: 'manager' }, { role: 'monitor' }, { multi: true }, function(err, numAffected) {

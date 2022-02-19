@@ -1,4 +1,4 @@
-var Group = require('../backend/models/group');
+var Group = require('../models/group');
 var each = require('async').eachSeries;
 
 exports.up = function(next) {
