@@ -1,7 +1,7 @@
 // Logger for the child processes
-
-var childProcess = require('./child-process');
-var logger = {};
+'use strict'
+let childProcess = require('./child-process');
+const logger = {};
 
 // Log debug message, or an object, or both
 logger.debug = function(message, metadata) {

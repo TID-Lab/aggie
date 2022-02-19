@@ -38,7 +38,7 @@ public/angular/css/app.css
 public/angular/js/app.min.js
 public/angular/translations/locale-debug.json
 backend/translations/locale-debug.json
-hate-speech-api/error.log
+backend/hate-speech-api/error.log
 
 hate-speech-api/*.log
 

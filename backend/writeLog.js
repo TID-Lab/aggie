@@ -1,12 +1,12 @@
 'use strict';
 
-var config = require('./config/secrets');
-var logger = require('./logger');
-var userLogger = require('./userLogger');
+const config = require('./config/secrets');
+const logger = require('./logger');
+const userLogger = require('./userLogger');
 
 var logFlag = config.get().logger.api.log_user_activity;
 
-var writer = {};
+const writer = {};
 
 writer.writeGroup = function(req, group, action) {
   if (!logFlag) return;
