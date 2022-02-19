@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var Group = require('../../models/group');
 var _ = require('lodash');
 var writelog = require('../../writeLog');
-var tags = require('../../../shared/tags');
+var tags = require('../../shared/tags');
 
 module.exports = function(app, user) {
   app = app || express();

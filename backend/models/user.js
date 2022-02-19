@@ -110,7 +110,7 @@ User.checkUnique = function(user, callback) {
 };
 
 // Mixin shared user methods
-var Shared = require('../../shared/user');
+var Shared = require('../shared/user');
 for (var static in Shared) User[static] = Shared[static];
 for (var proto in Shared.prototype) userSchema.methods[proto] = Shared[proto];
 

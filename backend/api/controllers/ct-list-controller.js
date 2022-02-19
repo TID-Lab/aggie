@@ -2,7 +2,7 @@
 'use strict';
 
 var express = require('express');
-var tags = require('../../../shared/tags');
+var tags = require('../../shared/tags');
 var fs = require('fs');
 var path = require('path');
 

@@ -7,7 +7,7 @@ var batch = require('../../models/batch');
 var ReportQuery = require('../../models/query/report-query');
 var _ = require('underscore');
 var writelog = require('../../writeLog');
-var tags = require('../../../shared/tags');
+var tags = require('../../shared/tags');
 
 module.exports = function(app, user) {
   app = app || express();

@@ -1,0 +1,37 @@
+.content__link {
+    color:#000000;
+    text-decoration:none;
+}
+
+.content__link:hover {
+    text-decoration: underline;
+}
+
+.sourceInfo {
+    font-size: 12px;
+}
+.sourceInfo__link {
+    color:#000000;
+    text-decoration:none;
+}
+
+.sourceInfo__source {
+    text-decoration: underline;
+}
+
+.sourceInfo__link:hover {
+    text-decoration: underline;
+}
+
+.content {
+    font-size: 12px;
+}
+
+button.rbt-close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}

@@ -3,7 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var User = require('../../models/user');
-var UserPermissions = require('../../../shared/user');
+var UserPermissions = require('../../shared/user');
 var mailer = require('../../mailer');
 var _ = require('underscore');
 

@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var express = require('express');
 var config = require('../config/secrets').get();
-var User = require('../../shared/user');
+var User = require('../shared/user');
 
 module.exports = function(app, roles) {
   app = app || express();

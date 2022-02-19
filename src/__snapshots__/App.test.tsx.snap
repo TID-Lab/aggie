@@ -1,0 +1,327 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should take a snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark"
+    >
+      <div
+        class="container-fluid"
+      >
+        <span
+          class="navbar-brand"
+        >
+          <a
+            href="/reports"
+          >
+            <img
+              alt="Aggie Logo"
+              class=""
+              src="/images/logo-v1.png"
+            />
+             
+          </a>
+        </span>
+        <button
+          aria-controls="responsive-navbar-nav"
+          aria-label="Toggle navigation"
+          class="navbar-toggler collapsed"
+          type="button"
+        >
+          <span
+            class="navbar-toggler-icon"
+          />
+        </button>
+        <div
+          class="navbar-collapse collapse"
+          id="responsive-navbar-nav"
+        >
+          <div
+            class="me-auto navbar-nav nav-pills"
+          >
+            <a
+              class="nav-link"
+              data-rb-event-key="1"
+              href="/reports"
+            >
+              Reports
+            </a>
+            <div
+              class="nav-item"
+            >
+              <a
+                class="nav-link"
+                data-rb-event-key="2"
+                href="/relevant_reports"
+                title="Item"
+              >
+                Relevant Reports
+              </a>
+            </div>
+            <div
+              class="nav-item"
+            >
+              <a
+                class="nav-link"
+                data-rb-event-key="3"
+                href="/groups"
+              >
+                Groups
+              </a>
+            </div>
+            <a
+              class="nav-link"
+              data-rb-event-key="4"
+              href="/analysis"
+            >
+              Analysis
+            </a>
+          </div>
+          <div
+            class="navbar-nav"
+          >
+            <div
+              class="nav-item dropdown"
+            >
+              <a
+                aria-expanded="false"
+                aria-haspopup="true"
+                class="dropdown-toggle nav-link"
+                href="#"
+                id="nav-dropdown"
+                role="button"
+              >
+                Settings
+              </a>
+            </div>
+            <a
+              class="nav-link"
+              data-rb-event-key="7"
+              href="/logout"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-sign-out-alt fa-w-16 "
+                data-icon="sign-out-alt"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                 Log Out 
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div
+      class=""
+    >
+      <div
+        class="container-fluid"
+      >
+        <div
+          class="row"
+        >
+          <div
+            class="col"
+          >
+            <div
+              class="d-none d-xl-block"
+            >
+              <div>
+                <div
+                  class="container-fluid"
+                >
+                  <h1>
+                    Tags
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-xl-9"
+          >
+            <div
+              class="mb-4 card"
+            >
+              <div
+                class="container-fluid"
+              >
+                <div
+                  class="g-2 row"
+                >
+                  <div
+                    class="col-md"
+                  >
+                    <div
+                      class="form-floating"
+                    >
+                      <input
+                        class="form-control"
+                        id="floatingInputGrid"
+                        placeholder="Keywords"
+                      />
+                      <label
+                        for="floatingInputGrid"
+                      >
+                        Keywords
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md"
+                  >
+                    <div
+                      class="form-floating"
+                    >
+                      <input
+                        class="form-control"
+                        id="floatingSelectGrid"
+                        placeholder="Author"
+                      />
+                      <label
+                        for="floatingSelectGrid"
+                      >
+                        Works with selects
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md"
+                  >
+                    <div
+                      class="form-floating"
+                    >
+                      <input
+                        class="form-control"
+                        id="floatingSelectGrid"
+                        placeholder="Tags"
+                      />
+                      <label
+                        for="floatingSelectGrid"
+                      >
+                        Works with selects
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <table
+              class="table table-sm table-striped table-bordered table-hover"
+            >
+              <thead>
+                <tr>
+                  <th>
+                    #
+                  </th>
+                  <th>
+                    First Name
+                  </th>
+                  <th>
+                    Last Name
+                  </th>
+                  <th>
+                    Username
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    No reports found.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="col"
+          >
+            <div
+              class="d-none d-xl-block"
+            >
+              <div>
+                <div
+                  class="container"
+                >
+                  <span>
+                    Total Reports
+                  </span>
+                  <h3>
+                    10000
+                  </h3>
+                  <span>
+                    Reports/Last min
+                  </span>
+                  <h3>
+                    2
+                  </h3>
+                  <span>
+                    Unread Reports
+                  </span>
+                  <h3>
+                    5000
+                  </h3>
+                  <span>
+                    Tagged Reports
+                  </span>
+                  <h3>
+                    359
+                  </h3>
+                  <span>
+                    Escalated Reports
+                  </span>
+                  <h3>
+                    141
+                  </h3>
+                  <span>
+                    Groups
+                  </span>
+                  <h3>
+                    30
+                  </h3>
+                  <span>
+                    Escalated Groups
+                  </span>
+                  <h3>
+                    9
+                  </h3>
+                  <div
+                    class="stats-timestamp"
+                  >
+                    <small
+                      class="text-dark-gray"
+                    >
+                      Last Updated
+                    </small>
+                    <br />
+                    <i
+                      aria-hidden="true"
+                      class="fa fa-clock-o text-dark-gray"
+                    />
+                    <small>
+                      14:23:20
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

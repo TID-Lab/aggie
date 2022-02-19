@@ -234,7 +234,7 @@ Group.queryGroups = function(query, page, options, callback) {
 };
 
 // Mixin shared group methods
-var Shared = require('../../shared/group');
+var Shared = require('../shared/group');
 for (var staticVar in Shared) Group[staticVar] = Shared[staticVar];
 for (var proto in Shared.prototype) schema.methods[proto] = Shared[proto];
 
