@@ -24,7 +24,15 @@
 }
 
 .content {
-    font-size: 12px;
+    font-size: 14px;
+}
+
+.tr--read {
+    background-color: ghostwhite;
+}
+
+.tr--unread {
+    background-color: white;
 }
 
 button.rbt-close {

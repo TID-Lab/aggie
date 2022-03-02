@@ -4,7 +4,6 @@ import ReportsByTags from '../components/analysis/ReportsByTags';
 import ReportsByAuthor from '../components/analysis/ReportsByAuthor';
 import ReportsByTime from '../components/analysis/ReportsByTime';
 import ReportsByMedia from '../components/analysis/ReportsByMedia';
-import ContentWorldCloud from '../components/analysis/ContentWorldCloud';
 import {Container, Card, Col, Row} from "react-bootstrap";
 import {Group, Groups, Report, Reports, Source, Tag} from "../objectTypes";
 
@@ -50,7 +49,7 @@ class Analysis extends Component<IProps, IState> {
         })
   }
   getGroups = () => {
-    axios.get('/api/incident')
+    axios.get('/api/group')
         .then(res => {
           const groups = res.data;
           this.setState({ groups });
@@ -100,7 +99,7 @@ class Analysis extends Component<IProps, IState> {
 
     return (
         <div>
-          <Container className={"mt-2"}>
+          <Container className={"mt-4"}>
             <Row>
               <Col className={"mb-3"}>
                 <Card>
@@ -116,7 +115,6 @@ class Analysis extends Component<IProps, IState> {
                   <Card.Body>
                     <Card.Title>Content Word Cloud</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">Distribution of ALL Reports by Word</Card.Subtitle>
-                    <ContentWorldCloud visibileReports={reports}/>
                   </Card.Body>
                 </Card>
               </Col>

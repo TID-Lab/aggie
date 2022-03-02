@@ -11,15 +11,18 @@ const UsersIndex = () => {
   const usersQuery = useQuery("users", getUsers);
 
   return (
-      <div className="mt-2" >
+      <div className="mt-4" >
         <Container fluid>
           <Row>
             <Col>
             </Col>
             <Col xl={9}>
-              { usersQuery.isFetched &&
-              <UserTable users={usersQuery.data}></UserTable>
-              }
+              <Container fluid>
+                <h3 className={"mb-2"}>Users</h3>
+                { usersQuery.isFetched &&
+                <UserTable users={usersQuery.data}></UserTable>
+                }
+              </Container>
             </Col>
             <Col>
               <div className="d-none d-xl-block">

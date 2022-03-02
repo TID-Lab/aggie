@@ -8,16 +8,13 @@ const ENDPOINT = "http://localhost:3000";
 
 const StatsBar = () => {
   const [response, setResponse] = useState("");
-
-  /*
+/*
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("stats", data => {
       setResponse(data);
     });
-  }, []);
-  * TODO: Make sure cors doesn't cause problems on actual use. Using static hardcoded data for now.
-   */
+  }, []);*/
 
   const stats = {
     totalReports: 10000,

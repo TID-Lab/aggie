@@ -14,15 +14,18 @@ const TagsIndex = (props: IProps) => {
   const tagsQuery = useQuery("tags", getTags);
 
   return (
-      <div className="mt-2">
+      <div className="mt-4">
         <Container fluid>
           <Row>
             <Col>
             </Col>
             <Col xl={9}>
-              { tagsQuery.isFetched &&
-              <TagTable tags={tagsQuery.data}></TagTable>
-              }
+              <Container fluid>
+                <h3 className={"mb-2"}>Tags</h3>
+                { tagsQuery.isFetched &&
+                <TagTable tags={tagsQuery.data}></TagTable>
+                }
+              </Container>
             </Col>
             <Col>
               <div className="d-none d-xl-block">

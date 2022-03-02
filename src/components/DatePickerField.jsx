@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 export const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
+  // If you're wondering why this works. Formik uses the name attribute on JSX tags to determine what to change.
   return (
       <DatePicker
           {...field}

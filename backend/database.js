@@ -74,10 +74,11 @@ var Database = function() {
 
 Database.prototype.getConnectURL = function() {
   // Override secrets.json if environment variable is set
-  var connectionURL = process.env.MONGO_URL;
+  const connectionURL = process.env.MONGO_URL + "/" + process.env.MONGO_NAME;
   if (!connectionURL) {
     console.error("Please add a field in the .env file that is equal to MONGO_CONNECTION_URL");
   }
+  console.log("Attempting to connect to " + connectionURL)
   return connectionURL;
 };
 

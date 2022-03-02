@@ -12,14 +12,14 @@ import {
   Table,
   ButtonToolbar,
   Image,
-  Placeholder, PlaceholderButton,
+  Placeholder, PlaceholderButton, Pagination,
 } from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEnvelopeOpen, faPlusCircle, faSearch, faSlidersH} from "@fortawesome/free-solid-svg-icons";
+import {faClose, faEnvelopeOpen, faPlusCircle, faSearch, faSlidersH} from "@fortawesome/free-solid-svg-icons";
 import ReportTable from "../../components/report/ReportTable";
 import StatsBar from "../../components/StatsBar";
 import {AlertContent} from "../../components/AlertService";
-import { Formik } from "formik";
+import {Formik, FormikValues, useFormik} from "formik";
 import * as Yup from "yup";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
@@ -28,14 +28,14 @@ import {getSources} from "../../api/sources";
 import {getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
-import {CTList, Groups, Reports, Source, Tag} from "../../objectTypes";
+import {CTList, Groups, Reports, ReportSearchState, Source, Tag} from "../../objectTypes";
 import {
-  ctListToOptions, parseFilterFields,
+  ctListToOptions, parseFilterFields, searchParamsToObj,
 } from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
-import AggiePagination from "../../components/AggiePagination";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 
+const ITEMS_PER_PAGE = 25; // This also needs to be set on the backend. Make sure to do so when changing.
 const reportQuerySchema = Yup.object().shape({
   keywords: Yup.string(),
   tags: Yup.array(),
@@ -53,23 +53,68 @@ interface IProps {
 }
 
 const ReportsIndex = (props: IProps) => {
-  // This is a react-router hook
-  const [filterParams, setFilterParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  // This is the state of the URL
+  const [searchParams, setSearchParams] = useSearchParams();
+  // This is the state of the Report Query
+  const [searchState, setSearchState] = useState<ReportSearchState>({
+    tags: null,
+    keywords: searchParams.get("keywords"),
+    author: searchParams.get("author"),
+    groupId: searchParams.get("groupId"),
+    media: searchParams.get("media"),
+    sourceId: searchParams.get("sourceId"),
+    list: searchParams.get("list"),
+    before: searchParams.get("before"),
+    after: searchParams.get("after"),
+    page: Number(searchParams.get("page") || "0")
+  });
+
+  const clearFilterParams = () => { setSearchParams({}); setSearchState({
+    tags: null,
+    keywords: null,
+    author: null,
+    groupId: null,
+    media: null,
+    sourceId: null,
+    list: null,
+    before: null,
+    after: null,
+    page: null
+  }) }
+  const goToPage = (pageNum: number) => {
+    setSearchParams({
+      ...searchParams,
+      page: String(pageNum)
+    });
+    setSearchState({
+      ...searchState,
+      page: pageNum
+    });
+  }
+  const hasSearchParams = () => {
+    // TODO: Is there a better way of finding the length of searchParams?
+    let counter = 0;
+    for (const [index, element] of searchParams.entries()) { counter++; }
+    if (searchParams.has("page") && counter == 1) return false;
+    else if (searchParams.toString() !== "") return true;
+    else return false;
+  }
+
   // Querying data
   // This is a react-query hook
-  const reportsQuery = useQuery<Reports | undefined>(["reports", filterParams], () => getReports(filterParams));
+  const reportsQuery = useQuery<Reports | undefined>(["reports", searchState], () => getReports(searchState), {keepPreviousData: true});
   const sourcesQuery = useQuery<Source[] | undefined>("sources", getSources);
   const ctListsQuery = useQuery<CTList | undefined>("ctLists", getCTLists);
   const groupsQuery = useQuery<Groups | undefined>(["groups", "all"], getGroups);
   const tagsQuery = useQuery("tags", getTags, {
     onSuccess: (data: Tag[]) => {
-
     }
   });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
-  const [queryTags, setQueryTags] = useState<Tag[] | [] | string[]>([]);
+  const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>([]);
   return (
-      <div className="mt-2">
+      <div className="mt-4">
         <Container fluid>
           <Row>
             <Col>
@@ -86,7 +131,7 @@ const ReportsIndex = (props: IProps) => {
                     <Button
                         variant="outline-secondary"
                         onClick={() => setShowFilterParams(!showFilterParams)}
-                        aria-controls="filterParams"
+                        aria-controls="searchParams"
                         aria-expanded={showFilterParams}
                     >
                       <FontAwesomeIcon icon={faSlidersH}/>
@@ -94,16 +139,19 @@ const ReportsIndex = (props: IProps) => {
                   </InputGroup>
                   <Formik
                       initialValues={{
-                        tags: filterParams.get("tags") || [],
-                        keywords: filterParams.get("keywords") || "",
-                        author: filterParams.get("author") || "",
-                        groupId: filterParams.get("groupId") || "",
-                        media: filterParams.get("media") || "",
-                        sourceId: filterParams.get("sourceId") || "",
-                        list: filterParams.get("ctlist") || "",
+                        tags: searchParams.get("tags") || [],
+                        keywords: searchParams.get("keywords") || "",
+                        author: searchParams.get("author") || "",
+                        groupId: searchParams.get("groupId") || "",
+                        media: searchParams.get("media") || "",
+                        sourceId: searchParams.get("sourceId") || "",
+                        list: searchParams.get("list") || "",
+                        before: searchParams.get("before") || "",
+                        after: searchParams.get("after") || "",
                       }}
                       onSubmit={(values, {setSubmitting, resetForm}) => {
-                        setFilterParams(parseFilterFields(values));
+                        setSearchParams(parseFilterFields(values));
+                        setSearchState(parseFilterFields(values));
                       }}
                   >
                     {({
@@ -113,15 +161,16 @@ const ReportsIndex = (props: IProps) => {
                         handleChange,
                         handleSubmit,
                         setFieldValue,
+                        resetForm,
                         isSubmitting,
                         /* and other goodies */
                       }) => (
                         <Form noValidate onSubmit={handleSubmit}>
                           <Collapse in={showFilterParams}>
-                            <div id="filterParams">
-                              <Row className="mb-3 mt-3">
+                            <div id="searchParams">
+                              <Row>
                                 <Col md>
-                                  <Form.Group controlId="searchKeyword">
+                                  <Form.Group controlId="searchKeyword" className={"mt-2 mb-2"}>
                                     <Form.Label>Keyword</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -133,20 +182,20 @@ const ReportsIndex = (props: IProps) => {
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group controlId="searchTag">
+                                  <Form.Group controlId="searchTag" className={"mt-2 mb-2"}>
                                     <Form.Label>Tag</Form.Label>
                                     { tagsQuery.isFetched &&
                                     <TagsTypeahead
                                         options={tagsQuery.data}
-                                        selected={queryTags}
-                                        onChange={setQueryTags}
+                                        selected={searchTags}
+                                        onChange={setSearchTags}
                                         variant={"search"}
                                     />
                                     }
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group controlId="searchAuthor">
+                                  <Form.Group controlId="searchAuthor" className={"mt-2 mb-2"}>
                                     <Form.Label>Author</Form.Label>
                                     <Form.Control
                                         placeholder="Search by author"
@@ -157,7 +206,7 @@ const ReportsIndex = (props: IProps) => {
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group controlId="searchAuthor">
+                                  <Form.Group controlId="searchGroupId" className={"mt-2 mb-2"}>
                                     <Form.Label>Group #</Form.Label>
                                     <Form.Control
                                         placeholder="Search by group #"
@@ -170,7 +219,7 @@ const ReportsIndex = (props: IProps) => {
                               </Row>
                               <Row className="mb-3">
                                 <Col md>
-                                  <Form.Group controlId="searchPlatform">
+                                  <Form.Group controlId="searchPlatform" className={"mt-2 mb-2"}>
                                     <Form.Label>Platform</Form.Label>
                                     <Form.Select
                                         name="media"
@@ -183,7 +232,7 @@ const ReportsIndex = (props: IProps) => {
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group controlId="searchPlatform">
+                                  <Form.Group controlId="searchSource" className={"mt-2 mb-2"}>
                                     <Form.Label>Source</Form.Label>
                                     <Form.Select
                                         name="sourceId"
@@ -203,7 +252,7 @@ const ReportsIndex = (props: IProps) => {
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group controlId="search">
+                                  <Form.Group controlId="searchCTList" className={"mt-2 mb-2"}>
                                     <Form.Label>CT List</Form.Label>
                                     <Form.Select
                                         name="list"
@@ -218,22 +267,42 @@ const ReportsIndex = (props: IProps) => {
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group>
+                                  <Form.Group controlId="searchAfter" className={"mt-2 mb-2"}>
                                     <Form.Label>Authored after</Form.Label>
                                     <DatePickerField className={"form-control"} name="after"/>
                                   </Form.Group>
                                 </Col>
                                 <Col md>
-                                  <Form.Group>
+                                  <Form.Group controlId="searchBefore" className={"mt-2 mb-2"}>
                                     <Form.Label>Authored before</Form.Label>
                                     <DatePickerField className={'form-control'} name="before"/>
                                   </Form.Group>
                                 </Col>
                               </Row>
                               <Row className={"float-end"}>
-                                <Form.Group>
-                                <Button variant="primary" type="submit"><FontAwesomeIcon icon={faSearch}/> Search </Button>
-                                </Form.Group>
+                                <ButtonToolbar>
+                                  { hasSearchParams() &&
+                                      <Button variant={"outline-secondary"} onClick={()=>{
+                                        clearFilterParams();
+                                        values.keywords = "";
+                                        values.tags = [];
+                                        values.groupId = "";
+                                        values.media = "";
+                                        values.author = "";
+                                        values.sourceId = "";
+                                        values.list = "";
+                                        values.before = "";
+                                        values.after = "";
+                                      }} className={"me-3"}>
+                                        <FontAwesomeIcon icon={faClose} className={"me-2"}/>
+                                        Clear Filter
+                                      </Button>
+                                  }
+                                  <Button variant="primary" type="submit">
+                                    <FontAwesomeIcon icon={faSearch} className={"me-2"}/>
+                                    Search
+                                  </Button>
+                                </ButtonToolbar>
                               </Row>
                             </div>
                           </Collapse>
@@ -242,16 +311,59 @@ const ReportsIndex = (props: IProps) => {
                   </Formik>
                 </Card.Body>
               </Card>
-              {sourcesQuery.isFetched && reportsQuery.isFetched && tagsQuery.isFetched && groupsQuery.isFetched &&
-                  tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
-              <ReportTable
-                  visibleReports={reportsQuery.data.results}
-                  sources={sourcesQuery.data}
-                  tags={tagsQuery.data}
-                  groups={groupsQuery.data.results}
-                  variant="default"
-              />
-              }
+              <Card>
+
+                {sourcesQuery.isFetched && reportsQuery.isFetched && tagsQuery.isFetched && groupsQuery.isFetched &&
+                    tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
+                    <ReportTable
+                        visibleReports={reportsQuery.data.results}
+                        sources={sourcesQuery.data}
+                        tags={tagsQuery.data}
+                        groups={groupsQuery.data.results}
+                        variant="default"
+                    />
+                }
+                <Card.Footer>
+                  <ButtonToolbar className={"justify-content-center"}>
+                    { reportsQuery.data && reportsQuery.data.total &&
+                        <Pagination className={"mb-0"}>
+                          {Number(searchParams.get('page')) === 0 &&
+                              <>
+                                <Pagination.First disabled/>
+                                <Pagination.Prev disabled aria-disabled="true"/>
+                              </>
+                          }
+                          {Number(searchParams.get('page')) > 0 &&
+                              <>
+                                <Pagination.First onClick={()=>goToPage(0)}/>
+                                <Pagination.Prev onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}/>
+                                <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}>
+                                  {Number(searchParams.get('page')) - 1}
+                                </Pagination.Item>
+                              </>
+                          }
+                          <Pagination.Item disabled aria-disabled="true">{Number(searchParams.get('page'))}</Pagination.Item>
+                          {Number(searchParams.get('page')) + 1 < (reportsQuery.data.total/ITEMS_PER_PAGE) &&
+                              <>
+                                <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}>
+                                  {Number(searchParams.get('page')) + 1}
+                                </Pagination.Item>
+                                <Pagination.Next onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}/>
+                                {/*@ts-ignore*/}
+                                <Pagination.Last onClick={()=>goToPage(reportsQuery.data.total/ITEMS_PER_PAGE - 1)}/>
+                              </>
+                          }
+                          {Number(searchParams.get('page')) + 1 >= (reportsQuery.data.total/ITEMS_PER_PAGE) &&
+                              <>
+                                <Pagination.Next disabled/>
+                                <Pagination.Last disabled/>
+                              </>
+                          }
+                        </Pagination>
+                    }
+                  </ButtonToolbar>
+                </Card.Footer>
+              </Card>
               {/* QUERY ERROR STATE: TODO: Put this in the Report Table Component, it makes more sense there. */}
               {reportsQuery.isError &&
                   <Card>
@@ -316,7 +428,6 @@ const ReportsIndex = (props: IProps) => {
                           </Placeholder>
                         </td>
                         <td>
-
                         </td>
                         <td>
                           <Placeholder as={Card.Text} animation="glow">
@@ -326,13 +437,15 @@ const ReportsIndex = (props: IProps) => {
                             {/* Not sure why this minWidth thing makes it like 3/4 of the screen */}
                           </Placeholder>
                         </td>
-                        <Form.Group>
-                          <Form.Control
-                              as="textarea"
-                              style={{ height: '144px' }}
-                              disabled
-                          />
-                        </Form.Group>
+                        <td>
+                          <Form.Group>
+                            <Form.Control
+                                as="textarea"
+                                style={{ height: '144px' }}
+                                disabled
+                            />
+                          </Form.Group>
+                        </td>
                         <td className={"align-middle"}>
                           <Placeholder animation="glow">
                             <Placeholder.Button variant="link" xs={12}/>
@@ -343,14 +456,7 @@ const ReportsIndex = (props: IProps) => {
                     </Table>
                   </Card>
               }
-              {reportsQuery.data && reportsQuery.data.total &&
-              <AggiePagination
-                  variant="reports"
-                  currentPage={Number(filterParams.get("page")) || 0}
-                  total={reportsQuery.data.total}
-                  itemsPerPage={25}
-              />
-              }
+              <div className={"pb-5"}></div>
             </Col>
             <Col>
               <div className="d-none d-xl-block">

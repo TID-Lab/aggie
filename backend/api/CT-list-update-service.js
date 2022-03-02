@@ -10,7 +10,7 @@ let CTListUpdateService = function() {
     }
     this._listResponse = [];
 }
-CTListUpdateService.prototype.OUTPUT_DIR = '../../config/crowdtangle_list.json';
+CTListUpdateService.prototype.OUTPUT_DIR = '../config/crowdtangle_list.json';
 CTListUpdateService.prototype._updateCTLists = async function() {
     var credentials = await Credentials.find({ type: 'crowdtangle' }).exec();
 

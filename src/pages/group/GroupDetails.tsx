@@ -18,13 +18,12 @@ import {editGroup, getGroup, getGroupReports, getGroups} from "../../api/groups"
 import {getSources} from "../../api/sources";
 import {getTags} from "../../api/tags";
 import {Group, Report, Reports, Source, Tag} from "../../objectTypes";
-import {tagById, useQueryParse} from "../../helpers";
+import {tagById} from "../../helpers";
 import ReportTable from "../../components/report/ReportTable";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 
 const GroupDetails = () => {
   let { id } = useParams<{id: string}>();
-  const query = useQueryParse();
   const queryClient = useQueryClient();
   const groupMutation = useMutation((group: Group) => { return editGroup(group) });
   const sourcesQuery = useQuery<Source[], AxiosError>("sources", getSources);
@@ -54,7 +53,7 @@ const GroupDetails = () => {
   }
 
   return (
-      <div className="mt-2">
+      <div className="mt-4">
         <Container fluid>
           <Row>
             <Col>

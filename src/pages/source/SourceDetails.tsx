@@ -36,7 +36,7 @@ const SourceDetails = () => {
     }
   }
   return (
-      <div className="mt-2">
+      <div className="mt-4">
         <Container fluid>
           <Row>
             <Col>

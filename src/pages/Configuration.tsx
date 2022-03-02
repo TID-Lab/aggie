@@ -24,15 +24,15 @@ const Configuration = () => {
   });
 
   return (
-      <div className={"mt-2"}>
-        <Container fluid>
+      <div>
+        <Container fluid className={"mt-4"}>
           <Row>
             <Col>
             </Col>
             <Col xs={9}>
               <Container fluid>
+                <h3 className="mb-3">Configuration</h3>
                 <Card>
-                  <Card.Header as="h5">Configuration</Card.Header>
                   <Card.Body>
                     <Card.Title>Turn fetching on/off</Card.Title>
                     <Form className={"mb-3"}>

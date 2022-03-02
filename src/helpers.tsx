@@ -173,6 +173,7 @@ export const ctListToOptions = (ctList: CTList) => {
           Object.values(ctListTypes["crowdtangle_saved_searches"]).forEach((value: string[]) => ctListSet.add(value[0]));
           //@ts-ignore
           let optionJSX = [];
+
           //@ts-ignore
           ctListSet.forEach((option: string) => {
             if (option) {
@@ -189,17 +190,15 @@ export const ctListToOptions = (ctList: CTList) => {
   return <></>
 }
 
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-export function useQueryParse() {
-  return new URLSearchParams(useLocation().search);
-}
-
 export const parseFilterFields = (values: FormikValues) => {
-  const parsedFields = Object.assign(removeEmptyStrings(values));
+  let parsedFields = Object.assign(removeEmptyStrings(values));
+  if (parsedFields.tags.length === 0) delete parsedFields.tags;
+  if (parsedFields.after) parsedFields.after = Date.parse(parsedFields.after);
   return parsedFields;
 }
 
 function removeEmptyStrings(obj: FormikValues) {
   return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== ""));
 }
+
+export const searchParamsToObj = (searchParams: URLSearchParams) => {return Object.fromEntries(searchParams.entries())};

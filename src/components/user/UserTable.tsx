@@ -43,28 +43,25 @@ export default function UserTable(props: IProps) {
     userRows = <tr><td>No Users Found.</td></tr>
   }
   return (
-      <Container fluid>
-        <h3>Users</h3>
-        <Card className="mt-3">
-          <Card.Header as={ButtonToolbar} className="justify-content-end">
-            <UserModal variant="button"></UserModal>
-          </Card.Header>
-          <Card.Body>
-            <Table hover>
-              <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              {userRows}
-              </tbody>
-            </Table>
-          </Card.Body>
-        </Card>
-      </Container>
+      <Card className="mt-4">
+        <Card.Header as={ButtonToolbar} className="justify-content-end">
+          <UserModal variant="button"></UserModal>
+        </Card.Header>
+        <Card.Body>
+          <Table hover>
+            <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {userRows}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
   );
 }

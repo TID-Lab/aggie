@@ -13,7 +13,7 @@ const UserProfile = () => {
     else return null;
   });
   return (
-      <div className={"mt-2"}>
+      <div className={"mt-5"}>
         <Container fluid>
           <Row>
             <Col>

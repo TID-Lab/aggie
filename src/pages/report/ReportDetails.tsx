@@ -44,14 +44,13 @@ const ReportDetails = () => {
   const tagsQuery = useQuery<Tag[], AxiosError>("tags", getTags);
 
   return (
-      <div className={"mt-2"}>
+      <div className={"mt-4"}>
         <Container fluid>
           <Row>
             <Col></Col>
             <Col xl={9}>
-              <h3>Report details</h3>
+              <h3 className={"mb-4"}>Report details</h3>
               <Card>
-                <Card.Header as={ButtonToolbar}></Card.Header>
                 {reportQuery.isFetched && tagsQuery.isFetched && sourcesQuery.isFetched && groupsQuery.isFetched &&
                 <Card.Body>
                   {reportQuery.data && groupsQuery.data && sourcesQuery.data && tagsQuery.data &&
@@ -152,7 +151,7 @@ const FacebookDetails = (props: DetailsIProps) => {
                       <tr>
                         <th>Crowdtangle Id</th>
                         <td>
-                          {props.report.metadata.crowdtangleId}
+                          <span className="me-2">{props.report.metadata.crowdtangleId}</span>
                           <CopyToClipboard text={props.report.metadata.crowdtangleId}>
                             <Button variant={"outline-secondary"}><FontAwesomeIcon icon={faCopy}/></Button>
                           </CopyToClipboard>
@@ -195,7 +194,7 @@ const FacebookDetails = (props: DetailsIProps) => {
                         {props.report && props.report._incident &&
                         <td>{groupById(props.report._incident, props.groups)}</td>
                         }
-                        {props.report && !!props.report._incident &&
+                        {props.report && !props.report._incident &&
                         <td></td>
                         }
                       </tr>

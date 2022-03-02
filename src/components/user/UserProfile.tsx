@@ -12,8 +12,8 @@ interface IProps {
 export default function UserProfile(props: IProps) {
   return (
       <Container fluid>
+        <h3>User profile</h3>
         <Card>
-          <Card.Header as="h5">User profile</Card.Header>
           <Card.Body>
             <Table>
               <thead>

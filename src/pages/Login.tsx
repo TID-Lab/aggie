@@ -1,5 +1,5 @@
-import React from 'react';
-import {Container, Col, Row, Card, Form, Button} from "react-bootstrap";
+import React, {useState} from 'react';
+import {Container, Col, Row, Card, Form, Button, Image, Alert} from "react-bootstrap";
 import { Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
@@ -17,45 +17,69 @@ interface IProps {
 const Login = (props: IProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [ showIncorrectMessage, setShowIncorrectMessage ] = useState<boolean>(false);
   return (
-      <div className={"mt-5"}>
-        <Container fluid>
-          <Row>
-            <Col>
-            </Col>
-            <Col lg={4} sm={6}>
-              <Card>
-                <Card.Header as={"h5"}>Login</Card.Header>
-                <Card.Body>
-                  <Formik
-                      initialValues={{loginUsername: "", loginPassword: ""}}
-                      validationSchema={loginFormSchema}
-                      onSubmit={async (values, {setSubmitting, resetForm}) => {
-                        axios({
-                          method: "POST",
-                          url: "/login",
-                          data: {
-                            username: values.loginUsername,
-                            password: values.loginPassword,
-                          },
-                          withCredentials: true,
-                        }).then((res) => {
-                          if (res.status === 200) {
-                            console.log("huzzah");
-                          } else {
-                           console.log("ERR")
-                          }
-                        });
-                      }}
-                  >
-                    {({
-                        values,
-                        errors,
-                        touched,
-                        handleChange,
-                        handleSubmit,
-                        isSubmitting,
-                      }) => (
+      <div style={{
+        background: "linear-gradient(to bottom right, #2D9242, #0d6efd)",
+        width: "100%",
+        height: "100%",
+      }}>
+          <Container fluid className={"pt-5"}>
+            <Row>
+              <Col>
+              </Col>
+              <Col lg={4} sm={6}>
+                <Card className={"mt-5"}>
+                  <Card.Body>
+                    <Row className="justify-content-center mb-4">
+                      <Col></Col>
+                      <Col>
+                        <Image
+                            alt="Aggie Logo"
+                            src="/images/logo-green.png"
+                            width={160}
+                            className={"me-1"}
+                        />
+                      </Col>
+                      <Col></Col>
+                    </Row>
+                    <Alert show={showIncorrectMessage} variant={"danger"}>
+                      <span>{"Your username and password combination was not correct, please try again."}</span>
+                    </Alert>
+
+                    <Formik
+                        initialValues={{loginUsername: "", loginPassword: ""}}
+                        validationSchema={loginFormSchema}
+                        onSubmit={async (values, {setSubmitting, resetForm}) => {
+                          axios({
+                            method: "POST",
+                            url: "/login",
+                            data: {
+                              username: values.loginUsername,
+                              password: values.loginPassword,
+                            },
+                            withCredentials: true,
+                          }).then((res) => {
+                            if (res.status === 200) {
+                              console.log("huzzah");
+                              window.location.reload();
+                            } else {
+                              console.log("fail");
+
+                            }
+                          }).catch(() => {
+                            setShowIncorrectMessage(true);
+                          });
+                        }}
+                    >
+                      {({
+                          values,
+                          errors,
+                          touched,
+                          handleChange,
+                          handleSubmit,
+                          isSubmitting,
+                        }) => (
                           <Form noValidate onSubmit={handleSubmit}>
                             <Form.Group controlId="loginForm.formUsername" className={"mb-3"}>
                               <Form.Label>Username</Form.Label>
@@ -84,15 +108,15 @@ const Login = (props: IProps) => {
                               <Button variant="primary" type="submit" disabled={isSubmitting}>Sign in</Button>
                             </div>
                           </Form>
-                        )}
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-            </Col>
-          </Row>
-        </Container>
+                      )}
+                    </Formik>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col>
+              </Col>
+            </Row>
+          </Container>
       </div>
   );
 }

@@ -51,7 +51,7 @@ const GroupsIndex = (props: IProps) => {
 
   return (
       <div>
-        <Container fluid className={"mt-2"}>
+        <Container fluid className={"mt-4"}>
           <Row>
             <Col>
             </Col>

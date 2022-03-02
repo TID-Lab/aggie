@@ -72,7 +72,7 @@ export default function SourceTable(props: IProps) {
             <SourceModal variant={"dropdown"} credentials={props.credentials}></SourceModal>
         </Card.Header>
         <Card.Body>
-          <Table hover>
+          <Table hover responsive>
             <thead>
             <tr>
               <th>Media</th>

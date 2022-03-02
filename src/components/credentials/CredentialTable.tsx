@@ -16,23 +16,15 @@ interface IProps {
 }
 
 export default function CredentialTable(props: IProps) {
-  const [credentials, setCredentials] = useState<Credential[] | []>([])
-  useEffect(() => {
-    setCredentials(props.credentials);
-  });
-  let credentialRows
+  const [credentials, setCredentials] = useState<Credential[] | []>(props.credentials)
+  let credentialRows;
   if (props.credentials.length > 0) {
     credentialRows = credentials.map((credential: Credential) =>
         <tr key={credential._id}>
           <td>{credential.name}</td>
           <td><Image src={"/images/" + credential.type + ".png"} rounded/></td>
           <td>
-            <Dropdown>
-              <Dropdown.Toggle as={EllipsisToggle}/>
-              <Dropdown.Menu variant={"dark"}>
-                <ConfirmModal type={"delete"} variant="dropdown" credential={credential}/>
-              </Dropdown.Menu>
-            </Dropdown>
+              <ConfirmModal type={"delete"} variant="icon" credential={credential}/>
           </td>
         </tr>
     );
@@ -41,27 +33,24 @@ export default function CredentialTable(props: IProps) {
   }
 
   return (
-      <Container fluid>
-        <h3>Credentials</h3>
-        <Card className="mt-3">
-          <Card.Header as={ButtonToolbar} className="justify-content-end">
-            <CredentialModal/>
-          </Card.Header>
-          <Card.Body>
-            <Table hover>
-              <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              {credentialRows}
-              </tbody>
-            </Table>
-          </Card.Body>
-        </Card>
-      </Container>
+      <Card className="mt-3">
+        <Card.Header as={ButtonToolbar} className="justify-content-end">
+          <CredentialModal/>
+        </Card.Header>
+        <Card.Body>
+          <Table hover>
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {credentialRows}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
   );
 }

@@ -102,7 +102,7 @@ class BatchIndex extends Component<IProps, IState> {
     let tags: Tag[] | null;
     tags = this.state.tags;
     return (
-        <div className="mt-2">
+        <div className="mt-4">
           <Container fluid>
             <Row>
               <Col>

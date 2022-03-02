@@ -5,6 +5,7 @@ import {faPlusCircle, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {capitalizeFirstLetter} from "../../helpers";
 import * as Yup from "yup";
 import { Formik, FormikValues } from "formik";
+import { Field } from "formik";
 import {Credential, MediaType, Source} from "../../objectTypes";
 import {useMutation, useQueryClient} from "react-query";
 import {newSource, editSource} from "../../api/sources";
@@ -18,6 +19,11 @@ interface IProps {
 const twitterFormSchema = Yup.object().shape({
   sourceNickname: Yup.string().required('Source nickname required'),
   sourceKeywords: Yup.string().required("Keywords required"),
+  sourceCredentials: Yup.string().required('Credentials required'),
+});
+
+const CrowdTangleFormSchema = Yup.object().shape({
+  sourceNickname: Yup.string().required('Source nickname required'),
   sourceCredentials: Yup.string().required('Credentials required'),
 });
 
@@ -81,11 +87,12 @@ export default function SourceModal(props: IProps) {
           sourceMedia: props.source?.media || "",
           sourceKeywords: props.source?.keywords || "",
           sourceTags: props.source?.tags || "",
-          sourceCredentials: props.source?.credentials._id || defaultCredential?._id || "",
+          sourceCredentials: props.source?.credentials._id || defaultCredential?._id,
           sourceURL: props.source?.url || "",
         }}
         validationSchema={sourceFormSchema}
         onSubmit={async (values, {setSubmitting, resetForm}) => {
+          console.log(values);
           if (props.source) {editSourceMutation.mutate(formValuesToSource(values));}
           else {newSourceMutation.mutate(formValuesToSource(values));}
         }}
@@ -180,19 +187,17 @@ export default function SourceModal(props: IProps) {
         )}
       </Formik>
   );
-  const facebookInstagramFormJSX = (
+  const crowdtangleFormJSX = (
       <Formik
           initialValues={{
             sourceNickname: props.source?.nickname || "",
-            sourceCredentials: props.source?.credentials._id || defaultCredential?._id || "",
+            sourceCredentials: props.source?.credentials._id || defaultCredential?._id,
           }}
-          validationSchema={sourceFormSchema}
+          validationSchema={CrowdTangleFormSchema}
           onSubmit={async (values, {setSubmitting, resetForm}) => {
+            console.log(values.sourceCredentials);
             if (props.source) {editSourceMutation.mutate(formValuesToSource(values));}
-            else {
-              newSourceMutation.mutate(formValuesToSource(values));
-              console.log("hello")
-            }
+            else { newSourceMutation.mutate(formValuesToSource(values)); }
           }}
       >
         {({
@@ -231,34 +236,30 @@ export default function SourceModal(props: IProps) {
                         )
                       })}
                     </Form.Select>
-
                   </Form.Group>
                   <Form.Group controlId="sourceNickname" className={"mb-3"}>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        name="sourceNickname"
-                        placeholder="Enter name"
-                        value={values.sourceNickname}
-                        onChange={handleChange}
-                    />
+                    {errors.sourceNickname &&
+                        <p>{errors.sourceNickname}</p>
+                    }
+                    <Field name={"sourceNickname"} className={"form-control"}/>
                     <Form.Text muted>
                       Providing a name keeps track of which source a report is from.
                     </Form.Text>
                   </Form.Group>
-                  <Form.Group controlId="sourceCredentials" className="mb-3">
+                  <Form.Group className="mb-3">
                     <Form.Label>Credentials</Form.Label>
-                    <Form.Select
-                        value={values.sourceCredentials}
-                        onChange={handleChange}
-                    >
+                    {errors.sourceCredentials &&
+                        <p>{errors.sourceCredentials}</p>
+                    }
+                    <Field as="select" name="sourceCredentials" className={"form-select"}>
+                      <option value="none"> Select credential </option>
                       {props.credentials.map((cred: Credential)=>{
                         if (cred.type === "crowdtangle") {
                           return <option key={cred._id} value={cred._id}>{cred.name}</option>
                         }
                       })}
-                    </Form.Select>
+                    </Field>
                     <Form.Text muted>
                       Select which API credentials will be used for API calls. Find more info on the Crowdtangle API
                       {" "}<a href="https://help.crowdtangle.com/en/articles/1189612-crowdtangle-api">here</a>.
@@ -301,7 +302,7 @@ export default function SourceModal(props: IProps) {
           <>{twitterFormJSX}</>
           }
           {(sourceMediaType === "facebook" || sourceMediaType === "instagram") &&
-          <>{facebookInstagramFormJSX}</>
+          <>{crowdtangleFormJSX}</>
           }
         </Modal>
       </>

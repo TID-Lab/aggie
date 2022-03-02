@@ -17,7 +17,7 @@ import {logOut} from "../api/session";
 interface IProps {
   type: "cancel" | "delete" | "logout",
   //TODO: I want to make variant into "as" as bootstrap react uses
-  variant: "button" | "dropdown",
+  variant: "button" | "dropdown" | "icon",
   tag?: Tag,
   group?: Group,
   user?: User,
@@ -112,6 +112,9 @@ export default function ConfirmModal(props: IProps) {
           >
             <FontAwesomeIcon icon={faTrash} className="me-2"/> Delete</Button>
           }
+          {props.variant === "icon" &&
+              <FontAwesomeIcon onClick={()=>setModalShow(true)} icon={faTrash}/>
+          }
           <Modal
               show={modalShow}
               onHide={()=>setModalShow(false)}
@@ -174,11 +177,12 @@ export default function ConfirmModal(props: IProps) {
               keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Log out</Modal.Title>
+              <Modal.Title>Confirm your log out</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Container fluid>
                 <p>Are you sure you want to log out?</p>
+                <small className={"text-muted"}>You will have to log in again to use Aggie.</small>
               </Container>
             </Modal.Body>
             <Modal.Footer>

@@ -14,15 +14,18 @@ const CredentialsIndex = (props: IProps) => {
   const credentialsQuery = useQuery("credentials", getCredentials);
 
   return (
-      <div className="mt-2" >
+      <div className="mt-4" >
         <Container fluid>
           <Row>
             <Col>
             </Col>
             <Col xl={9}>
-              { credentialsQuery.isFetched && credentialsQuery.data &&
-              <CredentialTable credentials={credentialsQuery.data}></CredentialTable>
-              }
+              <Container fluid>
+                <h3 className={"mb-2"}>Credentials</h3>
+                { credentialsQuery.isFetched && credentialsQuery.data &&
+                <CredentialTable credentials={credentialsQuery.data}></CredentialTable>
+                }
+              </Container>
             </Col>
             <Col>
               <div className="d-none d-xl-block">

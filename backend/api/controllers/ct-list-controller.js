@@ -14,13 +14,15 @@ module.exports = function(app, user) {
     let ctLists;
 
     try {
-      const filePath = path.resolve(__dirname, '../../../config/crowdtangle_list.json');
+      const filePath = path.resolve(__dirname, '../../../backend/config/crowdtangle_list.json');
       ctLists = JSON.parse(fs.readFileSync(filePath));
+      console.log("ctLists");
+      res.header("Content-Type",'application/json');
+      res.send(200, { lists: ctLists });
     } catch (err) {
       ctLists = {};
+      res.send(504, { err: "Cannot get ctlists"});
     }
 
-    res.header("Content-Type",'application/json');
-    res.send(200, { lists: ctLists });
   });
 }

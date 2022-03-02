@@ -29,7 +29,6 @@ interface IProps {
 }
 
 export default function ReportTable(props: IProps) {
-
   const [selectedReports, setSelectedReports] = useState<Set<string>>(new Set());
   const handleAllSelectChange = () => {
     let newSelectedReports;
@@ -40,99 +39,102 @@ export default function ReportTable(props: IProps) {
     }
     setSelectedReports(newSelectedReports);
   }
+  const toggleSelectedReportsRead = () => {
+    console.log(selectedReports);
+  }
+  const addSelectedReportsToGroup = () => {
+    console.log(selectedReports)
+  }
+
   return (
-      <Card>
+      <>
         <Card.Header>
           <ButtonToolbar>
-            <Button variant={"secondary"} className="me-3">
+            <Button variant={"secondary"} className="me-3" onClick={toggleSelectedReportsRead}>
               <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
               Read/Unread
             </Button>
-            {props.variant !== "group-details" &&
             <Button variant={"secondary"} className="me-3">
-                <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
-                Add to Group
+              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
+              Add to Group
             </Button>
-            }
-            {props.variant !== "group-details" &&
             <Link to={'/batch'}>
-                <Button variant={"primary"}>
-                    Batch Mode
-                </Button>
+              <Button variant={"primary"}>
+                Batch Mode
+              </Button>
             </Link>
-            }
           </ButtonToolbar>
         </Card.Header>
-        <Table bordered hover size="sm">
+        <Table bordered hover size="sm" className={"m-0"}>
           <thead>
-            <tr>
-              <th>
-                <Form>
-                  <Form.Check
-                      type="checkbox"
-                      id={"select-all"}
-                      onChange={handleAllSelectChange}
-                      checked={selectedReports.size > 0}
-                  />
-                </Form>
-              </th>
-              <th>Source Info</th>
-              <th>Thumbnail</th>
-              <th>Content</th>
-              <th>Tags</th>
-              {props.variant !== "group-details" &&
-              <th>Group</th>
-              }
-            </tr>
+          <tr>
+            <th>
+              <Form>
+                <Form.Check
+                    type="checkbox"
+                    id={"select-all"}
+                    onChange={handleAllSelectChange}
+                    checked={selectedReports.size > 0}
+                />
+              </Form>
+            </th>
+            <th>Source Info</th>
+            <th>Thumbnail</th>
+            <th>Content</th>
+            <th>Tags</th>
+            {props.variant !== "group-details" &&
+                <th>Group</th>
+            }
+          </tr>
           </thead>
           <tbody>
           { props.visibleReports && props.visibleReports.length > 0 && props.variant !== "group-details"
-          && props.visibleReports.map((report: Report) => {
-              return (
-                  <ReportRow
-                      variant={"table"}
-                      key={report._id}
-                      report={report}
-                      tags={props.tags}
-                      groups={props.groups}
-                      sources={props.sources}
-                      setSelectedReports={setSelectedReports}
-                      selectedReports={selectedReports}
-                  />
-                  )
-            })
+              && props.visibleReports.map((report: Report) => {
+                return (
+                    <ReportRow
+                        variant={"table"}
+                        key={report._id}
+                        report={report}
+                        tags={props.tags}
+                        groups={props.groups}
+                        sources={props.sources}
+                        setSelectedReports={setSelectedReports}
+                        selectedReports={selectedReports}
+                    />
+                )
+              })
           }
           { props.visibleReports && props.visibleReports.length > 0 && props.variant === "group-details" &&
-          props.visibleReports.map((report: Report) => {
-            return (
-                <ReportRow
-                    variant={"group-details"}
-                    key={report._id}
-                    report={report}
-                    tags={props.tags}
-                    groups={props.groups}
-                    sources={props.sources}
-                    setSelectedReports={setSelectedReports}
-                    selectedReports={selectedReports}
-                />
-            )
-          })
+              props.visibleReports.map((report: Report) => {
+                return (
+                    <ReportRow
+                        variant={"group-details"}
+                        key={report._id}
+                        report={report}
+                        tags={props.tags}
+                        groups={props.groups}
+                        sources={props.sources}
+                        setSelectedReports={setSelectedReports}
+                        selectedReports={selectedReports}
+                    />
+                )
+              })
           }
           { props.visibleReports && props.visibleReports.length === 0 &&
-          <tr key="empty">
-            <td>
-              No reports found.
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+              <tr key="empty">
+                <td>
+                  No reports found.
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
           }
           </tbody>
         </Table>
-      </Card>
+      </>
   );
 }
 
@@ -178,7 +180,7 @@ export function ReportRow(props: ReportRowIProps) {
           // @ts-ignore
           // @ts-ignore
           return (
-            <tr key={props.report._id}>
+            <tr key={props.report._id} className={(props.report.read) ? "tr--read" : "tr--unread"}>
               <td>
                 <Form>
                   { props.selectedReports &&
@@ -188,9 +190,9 @@ export function ReportRow(props: ReportRowIProps) {
                 </Form>
               </td>
               <td className="sourceInfo">
-                Posted at {stringToDate(props.report.authoredAt).toLocaleString("en-us")} by {" "}
+                <span>{stringToDate(props.report.authoredAt).toLocaleString("en-us")} {"\n"}</span>
                 <a href={reportAuthorUrl(props.report)} target="_blank" className="sourceInfo__link">
-                  {props.report.author}
+                  <b>{props.report.author}</b>
                 </a>
                 <br/>
                 <br/>

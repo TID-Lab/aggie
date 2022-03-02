@@ -49,30 +49,27 @@ export default function TagTable(props: IProps) {
   }
 
   return (
-      <Container fluid className="pb-5">
-        <h3>Tags</h3>
-        <Card className="mt-3">
-          <Card.Header as={ButtonToolbar} className="justify-content-end">
-            <TagModal/>
-          </Card.Header>
-          <Card.Body>
-            <Table hover>
-              <thead>
-              <tr>
-                <th>Name</th>
-                <th>Color</th>
-                <th>Creator</th>
-                <th>Description</th>
-                <th>FB Comments</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              {tagRows}
-              </tbody>
-            </Table>
-          </Card.Body>
-        </Card>
-      </Container>
+      <Card className="mt-3">
+        <Card.Header as={ButtonToolbar} className="justify-content-end">
+          <TagModal/>
+        </Card.Header>
+        <Card.Body>
+          <Table hover>
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Color</th>
+              <th>Creator</th>
+              <th>Description</th>
+              <th>FB Comments</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {tagRows}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
   );
 }
