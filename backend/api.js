@@ -2,13 +2,11 @@
 // Sets up necessary event proxies.
 
 process.title = 'aggie-api';
-
 var childProcess = require('./child-process');
 var path = require('path');
 var fs = require('fs');
 var logger = require('./logger');
 var config = require('./config/secrets');
-var ejs = require('ejs');
 var exec = require('child_process').exec;
 var mailer = require('./mailer.js');
 var _ = require("underscore");
@@ -247,3 +245,4 @@ server.listen(app.get('port'), function() {
 
 module.exports = childProcess;
 module.exports.app = app;
+

@@ -20,7 +20,12 @@ module.exports = function(app) {
   auth.key = 'connect.sid';
   auth.stubKey = 'aggie.auth';
   auth.stubCookie = { path: '/', httpOnly: true, maxAge: 864e9 };
-  auth.store = new MongoStore({ mongooseConnection: database.mongoose.connection });
+  auth.store = new MongoStore({
+    mongooseConnection: database.mongoose.connection,
+    ttl:24 * 60 * 60 * 1000,
+    autoRemove: 'interval',
+    autoRemoveInterval: 10 // Value in minutes (default is 10)
+  });
   auth.secret = config.secret;
   auth.session = express.session({
     key: auth.key,

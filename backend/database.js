@@ -63,23 +63,27 @@ mongoose.Model.findPage = function(filters, page, options, callback) {
 
 var Database = function() {
   this.mongoose = mongoose;
-  this.connectURL = this.getConnectURL();
+  if (!process.env.DATABASE_URL) {
+    console.log("There does not seem to be a value for the database connection string in DATABASE_URL");
+    throw new Error("No value in DATABASE_URL for the connection string. Defaulting to mongodb://localhost:27017/aggie");
+  }
+  this.DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost:27017/"
+  this.DATABASE_NAME = process.env.DATABASE_NAME || 'aggie';
+
   // Initialize database connection
-  mongoose.connect(this.connectURL, {
+  mongoose.connect(this.DATABASE_URL, {
+    dbName: this.DATABASE_NAME,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   });
-};
-
-Database.prototype.getConnectURL = function() {
-  // Override secrets.json if environment variable is set
-  const connectionURL = process.env.MONGO_URL + "/" + process.env.MONGO_NAME;
-  if (!connectionURL) {
-    console.error("Please add a field in the .env file that is equal to MONGO_CONNECTION_URL");
-  }
-  console.log("Attempting to connect to " + connectionURL)
-  return connectionURL;
+  mongoose.connection
+      .on('open', () => {
+        console.log('Mongoose connection open to database.');
+      })
+      .on('error', (err) => {
+        console.log(`Connection error: ${err.message}\n`);
+      });
 };
 
 module.exports = new Database();

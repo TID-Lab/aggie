@@ -13,8 +13,9 @@ function enableIndexing(callback) {
   database.mongoose.connection.on('error', function(err) {
     console.error('mongoose connection error (retrying): ', err);
     setTimeout(function() {
-      database.mongoose.connect(database.connectURL,
+      database.mongoose.connect(database.DATABASE_URL,
         {
+          dbName: database.DATABASE_NAME,
           useNewUrlParser: true,
           useUnifiedTopology: true,
           useCreateIndex: true,

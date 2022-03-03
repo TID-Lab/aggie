@@ -36,7 +36,7 @@ let schema = new Schema({
 
 schema.index({'metadata.ct_tag': 1}, {background: true});
 // Add fulltext index to the `content` and `author` field.
-schema.index({ content: 'text', author: 'text' });
+//schema.index({ content: 'text', author: 'text' });
 schema.path('_group').set(function(_group) {
   this._prevGroup = this._group;
   return _group;

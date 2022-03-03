@@ -6,11 +6,8 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "dev": "node install.js && cross-env DEBUG=socket.io:* node app.js",
-    "prestart": "node install.js",
-    "start": "node app.js",
-    "serve": "pm2 startOrRestart ecosystem.config.js",
-    "stop": "pm2 stop ecosystem.config.js",
+    "dev": "node install.js && cross-env DEBUG=socket.io:* nodemon app.js",
+    "start": "node install.js && node app.js",
     "premocha": "node install.js",
     "mocha": "mocha test/backend",
     "karma": "karma start --single-run",
@@ -21,7 +18,6 @@
     "protractor-with-apis": "protractor test/end-to-end/with-apis/protractor.conf.js",
     "update-ct-lists": "node backend/scripts/ct-list-update.js",
     "start frontend": "BROWSER=none cross-env PORT=8000 react-scripts start",
-    "build": "CI=false react-scripts build",
     "test frontend": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -29,6 +25,12 @@
   "engines": {
     "node": "^16.13.0",
     "npm": "^8.1.4"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ]
   },
   "browserslist": {
     "production": [
@@ -59,13 +61,11 @@
     "chance": "^1.1.5",
     "connect-mongo": "^3.2.0",
     "connect-roles": "^3.1.2",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "deepmerge": "^0.2.10",
     "dotenv": "^16.0.0",
     "downstream": "0.0.72",
-    "ejs": "^3.1.3",
     "express": "^3.21.2",
-    "express-spa-router": "0.0.8",
     "fasttext.js": "^1.1.2",
     "fbgraph": "^1.4.4",
     "feedparser": "^2.2.10",
@@ -99,6 +99,7 @@
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.7.0",
     "pm2": "^4.4.0",
+    "production": "^0.0.2",
     "promise": "^8.1.0",
     "prop-types": "^15.8.1",
     "react-bootstrap": "^2.1.2",
@@ -181,6 +182,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "migrate": "^1.7.0",
     "mocha": "^7.1.2",
+    "nodemon": "^2.0.15",
     "protractor": "^7.0.0",
     "socket.io-client": "^4.4.1",
     "supertest": "^4.0.2"
