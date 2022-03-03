@@ -6,6 +6,9 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import {QueryClient, QueryClientProvider, useQuery, useQueryClient} from "react-query";
 import reportWebVitals from './reportWebVitals';
+import axios from "axios";
+
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 
 const queryClient = new QueryClient()
 ReactDOM.render((
