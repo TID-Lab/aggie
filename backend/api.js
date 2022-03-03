@@ -120,7 +120,8 @@ function logRequests(req, res, next) {
   next();
 }
 
-
+app.use(express.static(path.join(__dirname, "..", "build")));
+app.use(express.static("public"));
 // Add middleware
 //require('./api/language-cookie.js')(app);
 

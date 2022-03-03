@@ -1,5 +1,4 @@
 // Performs some basic setup tasks. Should be run as part of deploy process.
-
 var database = require('./backend/database');
 var Report = require('./backend/models/report');
 var User = require('./backend/models/user');

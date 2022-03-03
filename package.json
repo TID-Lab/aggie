@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "node install.js && cross-env DEBUG=socket.io:* nodemon app.js",
     "start": "node install.js && node app.js",
-    "serve": "pm2 startOrRestart ecosystem.config.js",
-    "stop": "pm2 stop ecosystem.config.js",
+    "postinstall": "node install.js",
     "premocha": "node install.js",
     "mocha": "mocha test/backend",
     "karma": "karma start --single-run",
