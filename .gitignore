@@ -41,7 +41,7 @@ backend/translations/locale-debug.json
 backend/hate-speech-api/error.log
 
 hate-speech-api/*.log
-
+.env
 buildAssets
 docs/_build
 
