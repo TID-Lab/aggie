@@ -57,3 +57,5 @@ backend/config/crowdtangle_list.json
 docs/_build
 
 .vscode/settings.json
+
+build
