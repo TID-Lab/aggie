@@ -6,10 +6,11 @@ var authentication = require('./authentication');
 var mailer = require('../mailer');
 var User = require('../models/user');
 var config = require('../config/secrets').get();
-var crypto = require('crypto');
-var Buffer = require('buffer').Buffer;
+const {createCipheriv, scryptSync, createDecipheriv, randomFillSync} = require('crypto');
 var _ = require('underscore');
 
+const iv = randomFillSync(new Uint8Array(16));
+const algorithm = 'aes-256-cbc';
 var PASSWORD_RESET_TIMEOUT = 86400000;
 
 module.exports = function(app, auth) {
@@ -51,26 +52,33 @@ module.exports = function(app, auth) {
 
   // Encode user token
   function encodeToken(user) {
-    var cipher = crypto.createCipher('aes-256-cbc', config.secret);
-    var hash = { username: user.username, timestamp: Date.now() };
-    var encryptedHash = cipher.update(JSON.stringify(hash), 'utf8', 'hex');
-    var token = encryptedHash + cipher.final('hex');
-    return token;
+    // TODO: Do this async. I'm not good at Async. ML
+    const data = JSON.stringify({ username: user.username, timestamp: Date.now() });
+    const key = scryptSync(config.secret, 'salt', 32);
+    const cipher = createCipheriv(algorithm, key, iv);
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
   }
 
-  // Decode user token
+// Decode user token
   function decodeToken(token) {
-    var decipher = crypto.createDecipher('aes-256-cbc', config.secret);
-    var decryptedHash = decipher.update(token, 'hex', 'utf8');
-    var hash;
+    // TODO: Do this async. I'm not good at Async. ML
+    // Change 'salt' to a unique string.
+    const key = scryptSync(config.secret, 'sa2t', 32);
+    const decipher = createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(token, 'hex', "utf8");
+    let data = null;
     try {
-      hash = decryptedHash + decipher.final('utf8');
-      hash = JSON.parse(hash);
-    } catch (e) {}
-    if (hash) {
-      if (hash.timestamp + PASSWORD_RESET_TIMEOUT > Date.now()) {
-        return hash.username;
+      decrypted += decipher.final('utf8');
+      data = JSON.parse(decrypted);
+      if (data) {
+        if (data.timestamp + PASSWORD_RESET_TIMEOUT > Date.now()) {
+          return data.username;
+        }
       }
+    } catch(e) {
+      console.error(e);
     }
   }
 

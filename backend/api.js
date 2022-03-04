@@ -212,6 +212,11 @@ app.use('/explorer', express.static(path.join(__dirname, '../public/explorer')))
 app.use('/shared', express.static(path.join(__dirname, '../shared')));
 app.use('/client', express.static(path.join(__dirname, '../client')));
 
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendfile(path.join(__dirname, '..', 'build', 'index.html'));
+});
+
 // get git version
 var version;
 exec('git rev-parse --short HEAD', function(err, stdout, stderr) {

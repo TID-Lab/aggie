@@ -1,5 +1,5 @@
 process.title = 'aggie';
-
+require('dotenv').config(); // Get Environment Variables from .env
 const processManager = require('./backend/process-manager');
 const initLogger = require('./backend/master-logger').init;
 const log = require('./backend/master-logger').log;

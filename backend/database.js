@@ -1,9 +1,9 @@
 // Connects to database.
-
+require('dotenv').config(); // Get Environment Variables from .env
 var mongoose = require('mongoose');
-require('dotenv').config();
 var async = require('async');
 var _ = require('underscore');
+
 
 // Find database records using pagination.
 // Note: This should be the same as `perPage` in config.js.

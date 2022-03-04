@@ -5,7 +5,7 @@ var config = require('./config/secrets');
 var _ = require('underscore');
 var logger = require('./logger');
 var aws = require('aws-sdk');
-var sendgrid = require('nodemailer-sendgrid')
+const sgMail = require('@sendgrid/mail');
 var locale = require('locale');
 var path = require('path');
 var fs = require('graceful-fs');
@@ -32,9 +32,10 @@ Mailer.prototype.reloadTransport = function() {
         apiVersion: '2010-12-01'
       })
     }
+    this.transport = nodemailer.createTransport(transportConfig);
     break;
   case 'SendGrid':
-    transportConfig = sendgrid(options);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     break;
   case 'SMTP':
     // Creating transport for SMTP does not require special method, just the transportConfig.options
@@ -45,12 +46,13 @@ Mailer.prototype.reloadTransport = function() {
         pass: options.pass
       }
     }
+    this.transport = nodemailer.createTransport(transportConfig);
     break;
   default:
     logger.error('No valid email transport method defined in configuration');
     return;
   }
-  this.transport = nodemailer.createTransport(transportConfig);
+
 };
 
 Mailer.prototype.reloadConfig = function() {
@@ -70,10 +72,18 @@ Mailer.prototype.send = function(subject, body, to, from, callback) {
     subject: subject,
     html: body
   };
-  this.transport.sendMail(mailOptions, function(err, res) {
-    if (err) return callback(err);
-    callback(null, res);
-  });
+  if (this.config.email.transport.method !== "SendGrid") {
+    this.transport.sendMail(mailOptions, function (err, res) {
+      if (err) return callback(err);
+      callback(null, res);
+    });
+  } else {
+    sgMail.send(mailOptions).then((res)=>{
+      callback(null, res);
+    }).catch((error)=> {
+      return callback(error);
+    })
+  }
 };
 
 Mailer.prototype.pickTemplate = function pickTemplate(templateName, acceptLanguage, templates, callback) {
