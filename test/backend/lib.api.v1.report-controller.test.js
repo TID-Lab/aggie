@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 var request = require('supertest');
 require('../../backend/database');
 require('../../backend/models/group');
-var reportController = require('../../backend/api/controllers/report-controller')();
+var reportController = require('../../backend/api/controllers/reportController')();
 var Report = require('../../backend/models/report');
 var Group = require('../../backend/models/group');
 var Source = require('../../backend/models/source');

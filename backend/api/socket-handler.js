@@ -1,7 +1,7 @@
 // Listens for socket connections. Passes queries to streamer for monitoring.
 // Watches for updates to sourceErrorCount
 'use strict'
-const express = require('express');
+const cookieParser = require('cookie-parser');
 const { Server: SocketIOServer, Socket } = require('socket.io');
 const passportSocketIo = require('passport.socketio');
 const _ = require('underscore');
@@ -98,7 +98,7 @@ SocketHandler.prototype._configureSocketIO = function() {
   var io = this.io;
   // Authorize sockets
   io.use(passportSocketIo.authorize({
-    cookieParser: express.cookieParser,
+    cookieParser: cookieParser,
     key: self.auth.key,
     secret: self.auth.secret,
     store: self.auth.store,

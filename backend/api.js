@@ -6,6 +6,7 @@ var childProcess = require('./child-process');
 var path = require('path');
 var fs = require('fs');
 var logger = require('./logger');
+var morgan = require('morgan');
 var config = require('./config/secrets');
 var exec = require('child_process').exec;
 var mailer = require('./mailer.js');
@@ -73,7 +74,7 @@ function handleRequestTimeouts(req, res, next) {
     // timeout has happened, something bad has happened, send 500 back
     logger.error('Timeout has occurred, request cannot be processed', { url: req.url });
 
-    res.send(500);
+    res.sendStatus(500);
   }, requestTimeout);
 
   var end = res.end;
@@ -120,8 +121,7 @@ function logRequests(req, res, next) {
   next();
 }
 
-app.use(express.static(path.join(__dirname, "..", "build")));
-app.use(express.static("public"));
+
 // Add middleware
 //require('./api/language-cookie.js')(app);
 
@@ -131,7 +131,7 @@ var resetPassword = require('./api/reset-password')(app, auth);
 var user = require('./api/authorization')(app, auth);
 
 // setup api logging
-app.all('/api/*', express.logger('dev'));
+app.all('/api/*', morgan('combined'));
 
 // setup request timeout
 app.all('/api/*', handleRequestTimeouts);
@@ -145,19 +145,16 @@ app.all('/api/*', auth.ensureAuthenticated);
 
 
 // Add all API controllers
-
-const settingsController = require('./api/controllers/settings-controller');
-app.use(settingsController);
-
-require('./api/controllers/group-controller')(app, user);
-require('./api/controllers/report-controller')(app, user);
-require('./api/controllers/source-controller')(app, user);
-require('./api/controllers/tag-controller')(app, user);
-require('./api/controllers/ct-list-controller')(app, user);
-require("./api/controllers/visualization-controller")(app, user);
-require("./api/controllers/credentials-controller")(app, user);
-require("./api/controllers/csv-controller")(app, user);
-require('./api/controllers/user-controller')(app, user);
+require('./api/controllers/settingsController')(app, user);
+require('./api/controllers/groupController')(app, user);
+require('./api/controllers/reportController')(app, user);
+require('./api/controllers/sourceController')(app, user);
+require('./api/controllers/tagController')(app, user);
+require('./api/controllers/ctListController')(app, user);
+require("./api/controllers/visualizationController")(app, user);
+require("./api/controllers/credentialsController")(app, user);
+require("./api/controllers/csvController")(app, user);
+require('./api/controllers/userController')(app, user);
 
 var SocketHandler = require('./api/socket-handler');
 var socketHandler = new SocketHandler(app, server, auth);
@@ -201,20 +198,13 @@ setTimeout(function() {
 }, 500);
 
 // Add CRON job for updating CrowdTangle List
-app.use(require('./cron/ct-list-update'));
+//app.use(require('./cron/ct-list-update'));
 
-
-
-// The API explorer is a client-side thing so it's loaded as static.
-app.use('/explorer', express.static(path.join(__dirname, '../public/explorer')));
-
-// Exposed shared classes to the client
-app.use('/shared', express.static(path.join(__dirname, '../shared')));
-app.use('/client', express.static(path.join(__dirname, '../client')));
-
+app.use(express.static(path.join(__dirname, "..", "build")));
+app.use(express.static("public"));
 // All other GET requests not handled before will return our React app
-app.get('*', (req, res) => {
-  res.sendfile(path.join(__dirname, '..', 'build', 'index.html'));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 // get git version
@@ -234,7 +224,7 @@ process.on('uncaughtException', function(err) {
 app.use(function(err, req, res, next) {
   if (err) {
     logger.error(err);
-    res.send(500);
+    res.sendStatus(500);
   }
   else {
     next();

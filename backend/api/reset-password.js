@@ -1,7 +1,6 @@
 // Allows resetting of password using email.
 
 var express = require('express');
-var bodyParser = require('body-parser');
 var authentication = require('./authentication');
 var mailer = require('../mailer');
 var User = require('../models/user');
@@ -14,12 +13,6 @@ const algorithm = 'aes-256-cbc';
 var PASSWORD_RESET_TIMEOUT = 86400000;
 
 module.exports = function(app, auth) {
-  app = app || express();
-  auth = auth || authentication(app);
-
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(bodyParser.json());
-
   app.post('/reset-password', authEmail.bind(this));
   app.put('/reset-password', tokenLogin.bind(this), resetPassword.bind(this));
   app.put('/reset-admin-password', resetAdminPassword.bind(this));

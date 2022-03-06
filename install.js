@@ -4,8 +4,6 @@ var database = require('./backend/database');
 var Report = require('./backend/models/report');
 var User = require('./backend/models/user');
 var config = require('./backend/config/secrets').get();
-require('dotenv').config();
-
 var tasks = [];
 
 // Enable full-text indexing for Reports

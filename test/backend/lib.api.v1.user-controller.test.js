@@ -1,7 +1,7 @@
 var utils = require('./init');
 var expect = require('chai').expect;
 var request = require('supertest');
-var userController = require('../../backend/api/controllers/user-controller')();
+var userController = require('../../backend/api/controllers/userController')();
 var User = require('../../backend/models/user');
 var users;
 

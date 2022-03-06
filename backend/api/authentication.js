@@ -1,9 +1,9 @@
 // Handles login, logout, and obtaining current user session object.
 // Uses Passport node package.
-
-var express = require('express');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var MongoStore = require('connect-mongo')(express);
+var MongoStore = require('connect-mongo');
 var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -13,25 +13,24 @@ var database = require('../database.js');
 var _ = require('underscore');
 
 module.exports = function(app) {
-  app = app || express();
   var auth = {};
 
   // Configure session storage
   auth.key = 'connect.sid';
   auth.stubKey = 'aggie.auth';
   auth.stubCookie = { path: '/', httpOnly: true, maxAge: 864e9 };
-  auth.store = new MongoStore({
-    mongooseConnection: database.mongoose.connection,
-    ttl:24 * 60 * 60 * 1000,
-    autoRemove: 'interval',
-    autoRemoveInterval: 10 // Value in minutes (default is 10)
+  auth.store = MongoStore.create({
+    mongoUrl: database.DATABASE_URL,
+    dbName: database.DATABASE_NAME
   });
   auth.secret = config.secret;
-  auth.session = express.session({
+  auth.session = session({
     key: auth.key,
     secret: auth.secret,
     store: auth.store,
-    cookie: auth.stubCookie
+    cookie: auth.stubCookie,
+    resave: false,
+    saveUninitialized: true
   });
   auth.session.key = auth.key;
   auth.adminParty = config.adminParty;
@@ -72,14 +71,13 @@ module.exports = function(app) {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(methodOverride('X-HTTP-Method-Override'))
-  app.use(express.cookieParser());
+  app.use(cookieParser());
   app.use(auth.session);
 
   // Initialize Passport. Also use passport.session() middleware, to support
   // persistent login sessions.
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(app.router);
 
   // Passively instantiate the session via cookie in request
   app.use(function(req, res, next) {
@@ -96,14 +94,14 @@ module.exports = function(app) {
       // Keep the session fresh
       req.session.touch();
       res.cookie(auth.stubKey, 'yes', auth.stubCookie);
-      res.send(200, _.omit(req.session.user, 'password'));
+      res.status(200).send(_.omit(req.session.user, 'password'));
     } else {
       // There's no user object, so we'll just destroy the session
       res.cookie(auth.key, '', _.defaults({ maxAge: -864e9 }, req.session.cookie));
       res.cookie(auth.stubKey, 'no', auth.stubCookie);
       req.session.destroy(function(err) {
         if (err) return next(err);
-        res.send(200, {});
+        res.status(200).send({});
       });
     }
   }
@@ -114,7 +112,7 @@ module.exports = function(app) {
       if (err) return next(err);
       if (!user) {
         req.session.messages = [info.message];
-        return res.send(403, info.message);
+        return res.status(403).send(info.message);
       }
       req.logIn(user, function(err) {
         if (err) return next(err);
@@ -145,7 +143,7 @@ module.exports = function(app) {
     if (auth.adminParty || req.skipAuthentication || req.isAuthenticated()) {
       return next();
     }
-    res.send(403);
+    res.sendStatus(403);
   };
 
   // Use this route middleware on any resource that is public, so that it
