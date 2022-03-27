@@ -79,7 +79,6 @@ module.exports = async function postToReport(post, next) {
             } = post;
 
             const isRetweet = referenced_tweets.findIndex((t) => t.type === 'retweeted') !== -1;
-            post.tags.push(isRetweet ? 'RT' : 'NO_RT');
             
             const {
                 retweet_count,

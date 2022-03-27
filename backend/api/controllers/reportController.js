@@ -19,7 +19,7 @@ const parseQueryData = (queryString) => {
 }
 
 // Get a list of all Reports
-exports.report_reports = (req, res, allowed) => {
+exports.report_reports = (req, res) => {
   const page = req.query.page;
   // Parse query string
   const queryData = parseQueryData(req.query);
@@ -27,23 +27,23 @@ exports.report_reports = (req, res, allowed) => {
     let query = new ReportQuery(queryData);
     // Query for reports using fti
     Report.queryReports(query, page, (err, reports) => {
-      if (err) res.status(err.status).send(err.message);
+      if (err) return res.status(err.status).send(err.message);
       else {
         writelog.writeReport(req, reports, 'filter', query);
-        res.status(200).send(reports);
+        return res.send(reports);
       }
     });
   } else {
     // Return all reports using pagination
     Report.findSortedPage({}, page, (err, reports) => {
-      if (err) res.status(err.status).send(err.message);
-      else res.status(200).send(reports);
+      if (err) return res.status(err.status).send(err.message);
+      else return res.status(200).send(reports);
     });
   }
 }
 
   // Load batch
-exports.report_batch = (req, res, allowed) => {
+exports.report_batch = (req, res) => {
   batch.load(req.session.user._id, (err, reports) => {
     if (err) res.status(err.status).send(err.message);
     else {
@@ -54,7 +54,7 @@ exports.report_batch = (req, res, allowed) => {
 }
 
 // Checkout new batch
-exports.report_batch_new = (req, res, allowed) => {
+exports.report_batch_new = (req, res) => {
   const query = new ReportQuery(req.body);
   batch.checkout(req.session.user._id, query, (err, reports) => {
     if (err) res.status(err.status).send(err.message);
@@ -66,7 +66,7 @@ exports.report_batch_new = (req, res, allowed) => {
 }
 
   // Cancel batch
-exports.report_batch_cancel = (req, res, allowed) => {
+exports.report_batch_cancel = (req, res) => {
   batch.cancel(req.session.user._id, (err) => {
     if (err) res.status(err.status).send(err.message);
     else {
@@ -77,7 +77,7 @@ exports.report_batch_cancel = (req, res, allowed) => {
 }
 
   // Get Report by id
-exports.report_details = (req, res, allowed) => {
+exports.report_details = (req, res) => {
   Report.findById(req.params._id, (err, report) => {
     if (err) res.status(err.status).send(err.message);
     else if (!report) res.sendStatus(404);
@@ -89,7 +89,7 @@ exports.report_details = (req, res, allowed) => {
 }
 
   // Get Report Comments by id
-exports.report_comments = (req, res, allowed) => {
+exports.report_comments = (req, res) => {
   const page = req.query.page;
   const queryData = { commentTo: req.params._id };
   const query = new ReportQuery(queryData);
@@ -103,7 +103,7 @@ exports.report_comments = (req, res, allowed) => {
 }
 
 // Update Report data
-exports.report_update = (req, res, allowed) => {
+exports.report_update = (req, res) => {
   // Find report to update
   Report.findById(req.params._id, (err, report) => {
     if (err) return res.status(err.status).send(err.message);
@@ -211,7 +211,7 @@ exports.report_selected_group_update = (req, res) => {
       report._group = req.body.group;
       report.save((err) => {
         if (err) {
-          if (!res.headersSent) res.status(err.status).send(err.message)
+          if (!res.headersSent) return res.status(err.status).send(err.message)
           return;
         }
         writelog.writeReport(req, report, 'addToGroup');

@@ -227,7 +227,6 @@ const ReportsIndex = (props: IProps) => {
                                         value={values.media}
                                     >
                                       <option>All</option>
-
                                     </Form.Select>
                                   </Form.Group>
                                 </Col>
@@ -259,7 +258,7 @@ const ReportsIndex = (props: IProps) => {
                                         onChange={handleChange}
                                         value={values.list}
                                     >
-                                      <option value={""}>All</option>
+                                      <option key={"none"} value={""}>All</option>
                                       {ctListsQuery.isFetched && ctListsQuery.data &&
                                       ctListToOptions(ctListsQuery.data)
                                       }

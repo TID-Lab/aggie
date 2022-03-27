@@ -1,7 +1,7 @@
 // Handles CRUD requests for users.
 var User = require('../../models/user');
-var UserPermissions = require('../../shared/user');
 var mailer = require('../../mailer');
+const passport = require("passport");
 
 const sendEmail = (user, req, callback) => {
   // Only send email if not in test mode.
@@ -25,12 +25,11 @@ const sendEmail = (user, req, callback) => {
 
 exports.user_users = (req, res) => {
   let query = {};
-  if (req.user && !(new UserPermissions(req.user)).can('view other users'))
-    query.username = req.user.username;
+  if (req.user) query.username = req.user.username;
 
   User.find(query, '-password', function(err, users) {
     if (err) res.status(err.status).send(err.message);
-    else res.send(200, users);
+    else res.status(200).send(users);
   });
 }
 
@@ -39,7 +38,7 @@ exports.user_detail = (req, res) => {
   User.findById(req.params._id, '-password', function(err, user) {
     if (err) res.status(err.status).send(err.message);
     else if (!user) res.sendStatus(404);
-    else res.send(200, user);
+    else res.status(200).send(user);
   });
 }
 
@@ -52,7 +51,7 @@ exports.user_create = (req, res) => {
       // Send password reset email
       sendEmail(user, req, (err) => {
         if (err) res.send(502, err.message); // send status code "Bad Gateway" to indicate email failure
-        else res.send(200, user);
+        else res.status(200).send(user);
       });
     }
   });
@@ -72,7 +71,7 @@ exports.user_update = (req, res) => {
     user.save((err) => {
       err = Error.decode(err);
       if (err) res.status(err.status).send(err.message);
-      else res.send(200, user);
+      else res.status(200).send(user);
     });
   });
 }
@@ -89,3 +88,22 @@ exports.user_delete = (req, res) => {
     });
   });
 }
+
+// Use passport.authenticate() as route middleware to authenticate the request
+exports.user_login = (req, res) => {
+  User.authenticate('local', (err, user, info) => {
+    if (err) res.status(err.status).send(err.message);
+    if (!user) res.sendStatus(403);
+    res.sendStatus(200);
+  })
+}
+// Log the user out
+exports.user_logout = (req, res, next) => {
+  req.logout();
+}
+
+// Return the currently logged-in user object
+exports.user_session = (req, res) => {
+
+}
+

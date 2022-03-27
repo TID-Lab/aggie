@@ -2,8 +2,6 @@
 // Stops running queries if no new reports arriving. Resumes when report flow resumes.
 // Watches for changes to report status and group. Streams them as they occur.
 'use strict'
-const Query = require('../models/query');
-const Report = require('../models/report');
 const _ = require('underscore');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;

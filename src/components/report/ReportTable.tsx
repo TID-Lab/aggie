@@ -1,8 +1,8 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import Table from 'react-bootstrap/Table';
-import {Card, Button, ButtonToolbar, Form, Image, Container} from "react-bootstrap";
+import {Card, Button, ButtonToolbar, Form, Image, Container, ButtonGroup} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faPlusCircle, faEnvelopeOpen} from "@fortawesome/free-solid-svg-icons";
+import {faPlusCircle, faEnvelopeOpen, faClose} from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import EditGroupModal from "../group/EditGroupModal";
 import "./ReportTable.css"
@@ -49,20 +49,31 @@ export default function ReportTable(props: IProps) {
   return (
       <>
         <Card.Header>
-          <ButtonToolbar>
-            <Button variant={"secondary"} className="me-3" onClick={toggleSelectedReportsRead}>
-              <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
-              Read/Unread
-            </Button>
-            <Button variant={"secondary"} className="me-3">
-              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
-              Add to Group
-            </Button>
-            <Link to={'/batch'}>
-              <Button variant={"primary"}>
-                Batch Mode
+          <ButtonToolbar className={"justify-content-between"}>
+            <div>
+              <Button variant={"secondary"} className="me-2" onClick={toggleSelectedReportsRead}>
+                <FontAwesomeIcon icon={faEnvelopeOpen}/>
               </Button>
-            </Link>
+              <Button variant={"secondary"}>
+                <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
+                Add to group
+              </Button>
+              { props.variant === "default" &&
+                  <Link to={'/batch'} className={"ms-2"}>
+                    <Button variant={"primary"}>
+                      Batch mode
+                    </Button>
+                  </Link>
+              }
+            </div>
+            { props.variant === "batch" &&
+                <div>
+                  <Button className={"me-2"}>Grab new batch</Button>
+                  <Button variant={"outline-danger"}>
+                    <FontAwesomeIcon icon={faClose}/>
+                  </Button>
+                </div>
+            }
           </ButtonToolbar>
         </Card.Header>
         <Table bordered hover size="sm" className={"m-0"}>

@@ -1,20 +1,10 @@
 // Represents a user of the system.
-
 var database = require('../database');
-var mongoose = database.mongoose;
-var bcrypt = require('bcryptjs');
-var crypto = require('crypto');
-var validator = require('validator');
-var _ = require('underscore');
-var logger = require('../logger');
+const mongoose = database.mongoose;
+const Schema = mongoose.Schema;
+const passportLocalMongoose = require('passport-local-mongoose');
 
-var SALT_WORK_FACTOR = 10;
-
-var isEmail = function(email) {
-  return (typeof email === 'string' && validator.isEmail(email));
-};
-
-var userSchema = new mongoose.Schema({
+var userSchema = new Schema({
   provider: { type: String, default: 'local' },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -23,95 +13,29 @@ var userSchema = new mongoose.Schema({
   role: { type: String, default: 'viewer' }
 });
 
-userSchema.pre('save', function(next) {
-  var user = this;
-
-  if (!user.email) return next(new Error.Validation('email_required'));
-  if (!user.username) return next(new Error.Validation('username_required'));
-  if (!isEmail(user.email)) return next(new Error.Validation('email_invalid'));
-  if (user.password && user.password.length < User.PASSWORD_MIN_LENGTH) return next(new Error.Validation('password_too_short'));
-
-  // Check for uniqueness in certain fields
-  User.checkUnique(user, function(unique, errors) {
-    if (!unique) return next(new Error.Validation(errors[0]));
-
-    // Re-hash password if necessary
-    if (user.isModified('password')) {
-      user.hashPassword(next);
-    } else {
-      process.nextTick(next);
-    }
-  });
-});
-
-userSchema.post('save', function(user) {
-  // Nullify the password once save is done, for security.
-  user.password = null;
-});
-
-userSchema.methods.hashPassword = function(callback) {
-  var user = this;
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-    if (err) return callback(err);
-
-    bcrypt.hash(user.password, salt, function(err, hash) {
-      if (err) return callback(err);
-      user.password = hash;
-      callback();
-    });
-  });
-};
-
-// Password verification
-userSchema.methods.comparePassword = function(candidatePassword, callback) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if (err) return callback(err);
-    callback(null, isMatch);
-  });
-};
-
-// Get URL to a user's gravatar
-userSchema.methods.gravatar = function(size, defaults) {
-  if (!size) size = 200;
-  if (!defaults) defaults = 'retro';
-
-  if (!this.email) {
-    return 'https://gravatar.com/avatar/?s=' + size + '&d=' + defaults;
-  }
-
-  var md5 = crypto.createHash('md5').update(this.email);
-  return 'https://gravatar.com/avatar/' + md5.digest('hex').toString() + '?s=' + size + '&d=' + defaults;
-};
+userSchema.plugin(passportLocalMongoose);
 
 var User = mongoose.model('User', userSchema);
 
-User.checkUnique = function(user, callback) {
-  var errors = [];
-  var queries = [];
-  _.each(userSchema.tree, function(meta, field) {
-    var query = { $and: [{
-      _id: { $ne: user._id }
-    }] };
-    var filter = {};
-    filter[field] = user[field];
-    query.$and.push(filter);
-    if (meta.unique) queries.push(query);
-  });
-  var remaining = queries.length;
-  _.each(queries, function(query) {
-    User.countDocuments(query, function(err, count) {
-      if (err) {
-        logger.warning(err);
-      }
-      if (count) errors.push(_.keys(_.last(query.$and))[0] + '_not_unique');
-      if (--remaining === 0) callback(!errors.length, errors);
-    });
-  });
+User.permissions = {
+  'manage trends': ['admin'],
+  'view data': ['viewer', 'monitor', 'admin'],
+  'edit data': ['monitor', 'admin'],
+  'change settings': ['admin'],
+  'view users': ['viewer', 'monitor', 'admin'],
+  'view other users': ['manager', 'admin'],
+  'update users': ['viewer', 'monitor', 'admin'],
+  'admin users': ['admin'],
+  'change admin password': ['admin'],
+  'edit tags': ['manager', 'admin']
 };
 
-// Mixin shared user methods
-var Shared = require('../shared/user');
-for (var static in Shared) User[static] = Shared[static];
-for (var proto in Shared.prototype) userSchema.methods[proto] = Shared[proto];
+// Determine if a user can do a certain action
+User.can = function(user, permission) {
+  if (User.permissions[permission]) {
+    return User.permissions[permission].indexOf(user.role) > -1;
+  }
+  return false;
+};
 
 module.exports = User;

@@ -108,7 +108,9 @@ class BatchIndex extends Component<IProps, IState> {
               <Col>
               </Col>
               <Col xl={9}>
-                <ReportTable visibleReports={reports} sources={sources} tags={tags} groups={groups} variant="batch"></ReportTable>
+                <Card>
+                  <ReportTable visibleReports={reports} sources={sources} tags={tags} groups={groups} variant="batch"/>
+                </Card>
               </Col>
               <Col>
                 <div className="d-none d-xl-block">

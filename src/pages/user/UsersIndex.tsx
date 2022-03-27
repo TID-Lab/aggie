@@ -7,7 +7,6 @@ import {getUsers} from "../../api/users";
 
 const UsersIndex = () => {
   const queryClient = useQueryClient();
-
   const usersQuery = useQuery("users", getUsers);
 
   return (

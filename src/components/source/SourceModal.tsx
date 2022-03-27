@@ -36,6 +36,11 @@ const sourceFormSchema = Yup.object().shape({
 });
 
 const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "whatsapp", "facebook", "comments"];
+const mediaUrls = {
+  twitter: "https://twitter.com/",
+  facebook: "https://www.facebook.com/",
+  instagram: "https://www.instagram.com/",
+}
 
 export default function SourceModal(props: IProps) {
   const [sourceMediaType, setSourceMediaType] = useState<MediaType>("twitter"); // Default state of media type
@@ -65,6 +70,7 @@ export default function SourceModal(props: IProps) {
           keywords: values.sourceKeywords,
           media: sourceMediaType,
           nickname: values.sourceNickname,
+          url: mediaUrls["twitter"]
         }
         break;
       case "facebook":
@@ -72,6 +78,7 @@ export default function SourceModal(props: IProps) {
           credentials: values.sourceCredentials,
           media: sourceMediaType,
           nickname: values.sourceNickname,
+          url: mediaUrls["facebook"]
         }
       default:
         return {

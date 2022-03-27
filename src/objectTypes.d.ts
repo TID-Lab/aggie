@@ -109,6 +109,19 @@ interface Group {
   locationName: string
 }
 
+export interface GroupCreateData {
+  title: string,
+  notes: string,
+  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed',
+  closed: boolean,
+  assignedTo: string,
+  locationName: string,
+  public: boolean,
+  escalated: boolean,
+  _id?: string,
+  user: User
+}
+
 export interface GroupEditableData {
   title: string,
   notes: string,
@@ -234,6 +247,11 @@ interface Session {
   username: string,
   __v: number,
   _id: string
+}
+
+interface LoginData {
+  username: string,
+  password: string
 }
 
 interface CTList {

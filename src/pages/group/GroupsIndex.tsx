@@ -28,14 +28,6 @@ import {getSources} from "../../api/sources";
 import {getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import {getUsers} from "../../api/users";
-import GroupModal from "../../components/group/GroupModal";
-import {Link} from "react-router-dom";
-import {faCircle} from "@fortawesome/free-regular-svg-icons";
-import Linkify from "linkify-react";
-import {stringToDate} from "../../helpers";
-import TagsTypeahead from "../../components/tag/TagsTypeahead";
-import EllipsisToggle from "../../components/EllipsisToggle";
-import ConfirmModal from "../../components/ConfirmModal";
 
 interface IProps {
 }

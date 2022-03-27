@@ -20,14 +20,14 @@ exports.setting_update_fetch = (req, res, app) => {
   // save fetching status
   config.updateFetching(fetching, (err) => {
     if (err) return res.sendStatus(500);
-    router.emit(fetching ? 'fetching:start' : 'fetching:stop');
+    app.emit(fetching ? 'fetching:start' : 'fetching:stop');
     res.sendStatus(200);
   });
 }
 
 exports.setting_update_ctlist = async (req, res, app) => {
   (new CTListUpdateService())._updateCTList().then(function(data) {
-    router.emit('ctListUpdated');
+    app.emit('ctListUpdated');
     res.status(200).send("Successfully Updated CT List");
   }).catch((err) => {
     res.send(500, err);
@@ -54,7 +54,7 @@ exports.setting_update = (req, res, app) => {
   config.update(req.params.entry, req.body.settings, (err) => {
     if (err) return res.send(500);
     // Updating settings may require to reload or reset bots or other modules
-    router.emit('settingsUpdated', { setting: req.params.entry });
+    app.emit('settingsUpdated', { setting: req.params.entry });
     res.sendStatus(200);
   });
 }
@@ -77,4 +77,5 @@ exports.setting_delete = (req, res) => {
     res.sendStatus(200);
   });
 }
+
 

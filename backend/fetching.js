@@ -26,11 +26,10 @@ const saveToDatabase = require('./fetching/hooks/saveToDatabase');
 
 // Extend global error class
 require('./error');
-const logger = require("./logger");
 
 // handle uncaught errors
 process.on('uncaughtException', function(err) {
-    logger.error(err);
+    console.error(err);
 });
 
 // Use hooks

@@ -2,20 +2,20 @@
 const express = require('express');
 const router = express.Router();
 const credentialsController = require('../controllers/credentialsController');
-const {credential_credentials} = require("../controllers/credentialsController");
 
-//user.can('change settings'),
-router.post('/credentials', credentialsController.credential_create);
+module.exports = function(user) {
+  //user.can('change settings')
+  router.get('', user.can('change settings'), credentialsController.credential_credentials);
 
-// Delete credentials
-//user.can('change settings'),
-router.delete('/credentials/:_id',credentialsController.credential_delete);
+  //user.can('change settings'),
+  router.post('', user.can('change settings'), credentialsController.credential_create);
 
-//user.can('change settings')
-router.get('/credentials', credentialsController.credential_credentials);
+  // Delete credentials
+  //user.can('change settings'),
+  router.delete('/:_id', user.can('change settings'), credentialsController.credential_delete);
 
-// Get a set of (stripped) credentials by its ID
-//user.can('change settings')
-router.get('/credentials/:_id', credentialsController.credential_details);
-
-module.exports = router;
+  // Get a set of (stripped) credentials by its ID
+  //user.can('change settings')
+  router.get('/:_id', user.can('change settings'), credentialsController.credential_details);
+  return router;
+}

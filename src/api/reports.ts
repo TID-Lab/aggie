@@ -19,6 +19,11 @@ export const editReport = async (report: Report) => {
   return data;
 }
 
+export const getBatch = async (searchState: ReportSearchState) => {
+  const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState));
+  return data;
+}
+
 const generateSearchURL = (searchState: ReportSearchState) => {
   let url = "";
   if (searchState.tags) { url += "tags=" + searchState.tags; }

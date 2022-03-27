@@ -5,15 +5,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var MongoStore = require('connect-mongo');
 var User = require('../models/user');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 var config = require('../config/secrets').get();
-var methodOverride = require('method-override');
 var database = require('../database.js');
 var _ = require('underscore');
 
 module.exports = function(app) {
-  var auth = {};
+  let auth = {};
 
   // Configure session storage
   auth.key = 'connect.sid';
@@ -21,7 +20,7 @@ module.exports = function(app) {
   auth.stubCookie = { path: '/', httpOnly: true, maxAge: 864e9 };
   auth.store = MongoStore.create({
     mongoUrl: database.DATABASE_URL,
-    dbName: database.DATABASE_NAME
+    dbName: database.DATABASE_NAME,
   });
   auth.secret = config.secret;
   auth.session = session({
@@ -30,7 +29,7 @@ module.exports = function(app) {
     store: auth.store,
     cookie: auth.stubCookie,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   });
   auth.session.key = auth.key;
   auth.adminParty = config.adminParty;
@@ -40,119 +39,51 @@ module.exports = function(app) {
   //   serialize users into and deserialize users out of the session.  Typically,
   //   this will be as simple as storing the user ID when serializing, and finding
   //   the user by ID when deserializing.
-  passport.serializeUser(function(user, done) {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      done(err, user ? user.toJSON() : {});
-    });
-  });
+  passport.use(User.createStrategy());
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());
 
   // Use the LocalStrategy within Passport
   //   Strategies in passport require a `verify` function, which accept
   //   credentials (in this case, a username and password), and invoke a callback
   //   with a user object.
-  passport.use(new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) return done(err);
-      if (!user) return done(null, false, { message: 'Unknown user ' + username });
-      user.comparePassword(password, function(err, isMatch) {
-        if (err) return done(err);
-        if (isMatch) return done(null, user.toJSON());
-        return done(null, false, { message: 'Invalid password' });
-      });
-    });
-  }));
+
 
   // Configure Express
-
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(bodyParser.json());
-  app.use(methodOverride('X-HTTP-Method-Override'))
-  app.use(cookieParser());
   app.use(auth.session);
-
   // Initialize Passport. Also use passport.session() middleware, to support
   // persistent login sessions.
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(bodyParser.json());
 
-  // Passively instantiate the session via cookie in request
-  app.use(function(req, res, next) {
-    if ((req.session && req.session.user) || auth.adminParty) {
-      res.cookie(auth.stubKey, 'yes', auth.stubCookie);
-    } else {
-      res.cookie(auth.stubKey, 'no', auth.stubCookie);
-    }
-    auth.session(req, res, next);
-  });
-
-  function sessionStatus(req, res, next) {
-    if (req.session.user) {
-      // Keep the session fresh
-      req.session.touch();
-      res.cookie(auth.stubKey, 'yes', auth.stubCookie);
-      res.status(200).send(_.omit(req.session.user, 'password'));
-    } else {
-      // There's no user object, so we'll just destroy the session
-      res.cookie(auth.key, '', _.defaults({ maxAge: -864e9 }, req.session.cookie));
-      res.cookie(auth.stubKey, 'no', auth.stubCookie);
-      req.session.destroy(function(err) {
-        if (err) return next(err);
-        res.status(200).send({});
-      });
-    }
-  }
-
-  // Use passport.authenticate() as route middleware to authenticate the request
-  app.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) return next(err);
-      if (!user) {
-        req.session.messages = [info.message];
-        return res.status(403).send(info.message);
+  app.post('/register', function(req, res) {
+    User.register(new User({ username: req.body.username, email: req.body.email }), req.body.password, function(err, account) {
+      if (err) {
+        return res.status(err.status).send(err._message);
       }
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        // Store user object in session
-        req.session.user = _.clone(req.user);
-        sessionStatus(req, res, next);
+      passport.authenticate('local')(req, res, function () {
+        res.redirect('/');
       });
-    })(req, res, next);
+    });
   });
 
-  // Log the user out
-  app.get('/logout', function(req, res, next) {
+  app.get('/login', function(req, res) {
+    res.render('login', { user : req.user });
+  });
+
+  app.post('/login', passport.authenticate('local'), function(req, res) {
+    res.redirect('/');
+  });
+
+  app.get('/logout', function(req, res) {
     req.logout();
-    delete req.session.user;
-    // The cookie will be deleted by `sessionStatus()`
-    sessionStatus(req, res, next);
+    res.redirect('/');
   });
 
-  // Return the currently logged-in user object
-  app.get('/session', sessionStatus.bind(this));
-
-  // Simple route middleware to ensure user is authenticated.
-  //   Use this route middleware on any resource that needs to be protected.  If
-  //   the request is authenticated (typically via a persistent login session),
-  //   the request will proceed.
-  auth.ensureAuthenticated = function(req, res, next) {
-    // Verify if user is authenticated
-    if (auth.adminParty || req.skipAuthentication || req.isAuthenticated()) {
-      return next();
-    }
-    res.sendStatus(403);
-  };
-
-  // Use this route middleware on any resource that is public, so that it
-  // skips the above authentication, as by default all API routes are to be
-  // authenticated.
-  auth.skipAuthentication = function(req, res, next) {
-    req.skipAuthentication = true;
-    return next();
-  };
+  app.get('/ping', function(req, res){
+    res.send("pong!", 200);
+  });
 
   return auth;
 };

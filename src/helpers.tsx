@@ -178,7 +178,7 @@ export const ctListToOptions = (ctList: CTList) => {
           ctListSet.forEach((option: string) => {
             if (option) {
               //@ts-ignore
-              optionJSX.push(<option value={option}>{option}</option>)
+              optionJSX.push(<option key={option} value={option}>{option}</option>)
             }
           })
           //@ts-ignore

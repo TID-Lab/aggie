@@ -29,7 +29,7 @@ exports.source_sources = (req, res) => {
     ])
     .exec(function(err, sources) {
       if (err) res.status(err.status).send(err.message);
-      else res.send(200, sources);
+      else res.status(200).send(sources);
     });
 }
 

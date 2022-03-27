@@ -15,7 +15,6 @@ import {
 import {Group, GroupEditableData, Report, Source, Tag, User} from "../../objectTypes";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import {useMutation} from "react-query";
-import {editReport} from "../../api/reports";
 import {editGroup} from "../../api/groups";
 
 interface IProps {

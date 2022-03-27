@@ -6,7 +6,12 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import {QueryClient, QueryClientProvider} from "react-query";
 import reportWebVitals from './reportWebVitals';
+import axios from "axios";
 
+if (process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+}
+//https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b
 const queryClient = new QueryClient()
 ReactDOM.render((
     <React.StrictMode>
@@ -17,7 +22,7 @@ ReactDOM.render((
       </QueryClientProvider>
     </React.StrictMode>
 ), document.getElementById('root'));
-
+// React Query in 100 seconds https://www.youtube.com/watch?v=novnyCaa7To
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA

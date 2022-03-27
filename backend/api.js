@@ -9,10 +9,14 @@ var logger = require('./logger');
 var morgan = require('morgan');
 var config = require('./config/secrets');
 var exec = require('child_process').exec;
+var bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 var mailer = require('./mailer.js');
 var _ = require("underscore");
 var readLineSync = require('readline-sync');
 var { version: packageVersion } = require("../package.json");
+const cors = require('cors');
 // Extend global error class
 require('./error');
 
@@ -33,7 +37,6 @@ try {
     throw e;
   }
 }
-
 
 var protocol;
 var server;
@@ -63,6 +66,16 @@ if (cert) {
   server = require('http').createServer(app);
 }
 
+if (process.env.ENVIRONMENT === "development") {
+  app.use(
+      cors({
+        origin: "http://localhost:8000", // allow to server to accept request from different origin
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true, // allow session cookie from browser to pass through
+      })
+  );
+}
+
 // Handle request time outs, return 500 in case of timeouts
 function handleRequestTimeouts(req, res, next) {
   var requestTimeout = parseInt(config.get().api_request_timeout) * 1000;
@@ -90,72 +103,54 @@ function handleRequestTimeouts(req, res, next) {
   next();
 }
 
-// Log incoming api requests
-function logRequests(req, res, next) {
-  var requestLoggingEnabled = !!(config.get().logger.api.log_requests);
-  var responseLoggingEnabled = !!(config.get().logger.api.log_responses);
-
-  if (!requestLoggingEnabled && !responseLoggingEnabled) return next();
-
-  var start = new Date();
-  var clientIP = req.clientIP;
-  var requestId = Math.floor((Math.random() * 1000000));
-
-  if (requestLoggingEnabled) {
-    logger.debug(`>>>> [${requestId}, ${clientIP}] ${req.method} ${req.url}`);
-  }
-
-  if (responseLoggingEnabled) {
-    var end = res.end;
-    res.end = function(chunk, encoding) {
-      res.end = end;
-      var duration = new Date() - start;
-      logger.debug(`>>>> [${requestId}, ${clientIP}] ${req.method} ${req.url} ${req.statusCode} ${duration}ms`);
-      if (chunk) {
-        logger.debug('RESPONSE {0}', chunk);
-      }
-      res.end(chunk, encoding);
-    };
-  }
-
-  next();
-}
-
-
 // Add middleware
 //require('./api/language-cookie.js')(app);
 
 // Enable user authentication and authorization
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 var auth = require('./api/authentication')(app);
 var resetPassword = require('./api/reset-password')(app, auth);
-var user = require('./api/authorization')(app, auth);
-
+var user = require('./api/authorization');
 // setup api logging
-app.all('/api/*', morgan('combined'));
+app.all("/api/*", morgan('combined'));
 
 // setup request timeout
 app.all('/api/*', handleRequestTimeouts);
 
-// logging middleware
-app.all('/api/*', logRequests);
-
-// Ensure that all API calls but public ones are authenticated
-app.all('/api/controllers/public/*', auth.skipAuthentication);
-app.all('/api/*', auth.ensureAuthenticated);
-
-
 // Add all API controllers
-require('./api/controllers/settingsController')(app, user);
-require('./api/controllers/groupController')(app, user);
-require('./api/controllers/reportController')(app, user);
-require('./api/controllers/sourceController')(app, user);
-require('./api/controllers/tagController')(app, user);
-require('./api/controllers/ctListController')(app, user);
-require("./api/controllers/visualizationController")(app, user);
-require("./api/controllers/credentialsController")(app, user);
-require("./api/controllers/csvController")(app, user);
-require('./api/controllers/userController')(app, user);
+const apiRouter = require('./api/routes/apiRoutes');
 
+app.use('/api', apiRouter(user));
+
+if (process.env.ENVIRONMENT === "production") {
+  // Handle Front-end Routes & Resources
+// TODO: Why does express.static make all of the routes go through the file system, even when it fails.
+  app.use('/static', express.static(path.join(__dirname, "..", 'build', "static")));
+  app.use('/images', express.static(path.join(__dirname, "..", 'build', "images")));
+  app.get('/manifest.json', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'manifest.json'));
+  });
+  app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'favicon.ico'));
+  });
+  app.get('/logo192.png', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'logo192.png'));
+  });
+  app.get('/logo512.png', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'logo512.png'));
+  });
+  app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'robots.txt'));
+  });
+// All other GET requests not handled before will return our React app
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  });
+}
+
+
+/*
 var SocketHandler = require('./api/socket-handler');
 var socketHandler = new SocketHandler(app, server, auth);
 var streamer = require('./api/streamer');
@@ -199,13 +194,9 @@ setTimeout(function() {
 
 // Add CRON job for updating CrowdTangle List
 //app.use(require('./cron/ct-list-update'));
+*/
 
-app.use(express.static(path.join(__dirname, "..", "build")));
-app.use(express.static("public"));
-// All other GET requests not handled before will return our React app
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-});
+
 
 // get git version
 var version;
@@ -224,7 +215,6 @@ process.on('uncaughtException', function(err) {
 app.use(function(err, req, res, next) {
   if (err) {
     logger.error(err);
-    res.sendStatus(500);
   }
   else {
     next();

@@ -76,6 +76,7 @@ var Database = function() {
     useUnifiedTopology: true,
     useCreateIndex: true,
   });
+
   mongoose.connection
       .on('open', () => {
         console.log('Mongoose connection open to database.');

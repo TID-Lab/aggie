@@ -10,7 +10,7 @@ exports.ctList_ctLists = (req, res) => {
     ctLists = JSON.parse(fs.readFileSync(filePath));
     console.log("ctLists");
     res.header("Content-Type",'application/json');
-    res.send(200, { lists: ctLists });
+    res.status(200).send({ lists: ctLists });
   } catch (err) {
     res.send(504, { err: "Cannot get ctlists"});
   }

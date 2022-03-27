@@ -1,77 +1,115 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import {Container, Col, Row, Card, Form} from "react-bootstrap";
-import StatsBar from '../components/StatsBar';
-import {User} from "../objectTypes";
 
-type TParams = { id: string };
+
+import React, {useState} from 'react';
+import {Container, Col, Row, Card, Form, Button, Image, Alert} from "react-bootstrap";
+import { Formik } from "formik";
+import axios from "axios";
+import * as Yup from "yup";
+import {useLocation, useNavigate} from "react-router-dom";
+
+const resetFormSchema = Yup.object().shape({
+  resetOldPassword: Yup.string().required('Old Password required'),
+  resetNewPassword: Yup.string().required('New Password required'),
+  resetNewPasswordConfirm: Yup.string().required('New Password required')
+});
 
 interface IProps {
-    match: {
-        params: {
-            id: string;
-        }
-    }
 }
 
-interface IState {
-    user: User | null;
-}
-class ResetPassword extends Component<IProps, IState> {
-    // Initialize the state
-    constructor(props: IProps){
-        super(props);
-        this.state = {
-            user: null,
-        }
-    }
-    //{ match }: RouteComponentProps<TParams>)
-    // Fetch the sources on first mount.
-
-    // Retrieves the list of sources from the Express app
-    // Fetch the user info on first mount.
-    componentDidMount() {
-        this.getUser();
-    }
-
-    // Retrieves the list of sources from the Express app
-    getUser = () => {
-        axios.get('/api/v1/user/' + this.props.match.params.id).then(res => {
-            const user = res.data;
-            this.setState({ user });
-        })
-    }
-
-    render() {
-        let user: User | null;
-        user = this.state.user;
-        return (
-            <div>
-                <Container fluid>
-                    <Row>
-                        <Col>
-                        </Col>
-                        <Col xl={9}>
-                            <Form noValidate>
-                                <Form.Group controlId="loginForm.formUsername" className={"mb-3"}>
-                                    <Form.Label>Tag name</Form.Label>
-                                    <Form.Control required type="name" placeholder="Username"/>
-                                </Form.Group>
-                                <Form.Group controlId="loginForm.formPassword" className={"mb-3"}>
-                                    <Form.Label>Tag name</Form.Label>
-                                    <Form.Control required type="password" placeholder="Username"/>
-                                </Form.Group>
-                            </Form>
-                        </Col>
-                        <Col>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        );
-    }
+const ResetPassword = (props: IProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [ showIncorrectMessage, setShowIncorrectMessage ] = useState<boolean>(false);
+  return (
+      <div style={{
+        background: "linear-gradient(to bottom right, #2D9242, #0d6efd)",
+        width: "100%",
+        height: "100%",
+      }}>
+        <Container fluid className={"pt-5"}>
+          <Row>
+            <Col>
+            </Col>
+            <Col lg={4} sm={6}>
+              <Card className={"mt-5"}>
+                <Card.Body>
+                  <h2 className={"mb-3 text-center"}>Reset Password</h2>
+                  <Alert show={showIncorrectMessage} variant={"danger"}>
+                    <span>{"Your username and password combination was not correct, please try again."}</span>
+                  </Alert>
+                  <Formik
+                      initialValues={{resetNewPassword: "", resetNewPasswordConfirm: ""}}
+                      validationSchema={resetFormSchema}
+                      onSubmit={async (values, {setSubmitting, resetForm}) => {
+                        axios({
+                          method: "POST",
+                          url: "/login",
+                          data: {
+                            password: values.resetNewPassword,
+                          },
+                          withCredentials: true,
+                        }).then((res) => {
+                          if (res.status === 200) {
+                            console.log("huzzah");
+                            window.location.reload();
+                          } else {
+                            console.log("fail");
+                          }
+                        }).catch(() => {
+                          setShowIncorrectMessage(true);
+                        });
+                      }}
+                  >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleSubmit,
+                        isSubmitting,
+                      }) => (
+                        <Form noValidate onSubmit={handleSubmit}>
+                          <Form.Group controlId="loginForm.formNewPassword" className={"mb-3"}>
+                            <Form.Label>New password</Form.Label>
+                            <Form.Control
+                                required
+                                type="password"
+                                placeholder="New Password"
+                                name="resetNewPassword"
+                                onChange={handleChange}
+                                value={values.resetNewPassword}
+                            />
+                          </Form.Group>
+                          <Form.Group controlId="loginForm.formNewPassword" className={"mb-3"}>
+                            <Form.Label>Confirm new password</Form.Label>
+                            <Form.Control
+                                required
+                                type="password"
+                                placeholder="New Password"
+                                name="resetNewPasswordConfirm"
+                                onChange={handleChange}
+                                value={values.resetNewPasswordConfirm}
+                            />
+                          </Form.Group>
+                          <div className="d-flex justify-content-end">
+                            <Button variant="primary" type="submit" disabled={isSubmitting}>Submit</Button>
+                          </div>
+                        </Form>
+                    )}
+                  </Formik>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+  );
 }
 
 export default ResetPassword;
+
+
 
 
