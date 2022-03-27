@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {Container, Col, Row, Card, Form, Button, Image, Alert} from "react-bootstrap";
+import {Container, Col, Row, Card, Form, Button, Image, Alert, InputGroup} from "react-bootstrap";
 import {Formik, FormikValues} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import {LoginData, Session} from "../objectTypes";
-import {useLocation, useNavigate} from "react-router-dom";
+import {LoginData} from "../objectTypes";
 import {logIn} from "../api/session";
 import {useMutation} from "react-query";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const loginFormSchema = Yup.object().shape({
   loginUsername: Yup.string().required('Username required'),
@@ -18,6 +19,7 @@ interface IProps {
 
 const Login = (props: IProps) => {
   const loginQuery = useMutation((logInData: LoginData)=>{return logIn(logInData)});
+  const [ passwordVisibility, setPasswordVisibility ] = useState(false);
   const formValuesToLogin = (values: FormikValues) => {
     return {
       username: values.loginUsername,
@@ -71,15 +73,26 @@ const Login = (props: IProps) => {
                           </Form.Group>
                           <Form.Group controlId="loginForm.formPassword" className={"mb-3"}>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                required
-                                type="password"
-                                placeholder="Password"
-                                name="loginPassword"
-                                onChange={handleChange}
-                                value={values.loginPassword}
-                            />
+                            <InputGroup>
+                              <Form.Control
+                                  required
+                                  type={passwordVisibility ? "text" : "password"}
+                                  placeholder="Password"
+                                  name="loginPassword"
+                                  onChange={handleChange}
+                                  value={values.loginPassword}
+                                  spellCheck={false}
+                                  autoCorrect={"off"}
+                                  autoCapitalize={"off"}
+                                  autoComplete={"loginPassword"}
+                              />
+                              <Button onClick={()=>setPasswordVisibility(!passwordVisibility)}>
+                                {passwordVisibility ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/>}
+                              </Button>
+                            </InputGroup>
+
                           </Form.Group>
+
                           <div className="d-flex justify-content-between">
                             <Button variant="link">Forgot your username?</Button>
                             <Button variant="primary" type="submit">Sign in</Button>
