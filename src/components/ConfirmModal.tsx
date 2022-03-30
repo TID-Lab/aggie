@@ -12,6 +12,7 @@ import {deleteGroup} from "../api/groups";
 import {deleteSource} from "../api/sources";
 import {deleteCredential} from "../api/credentials";
 import {logOut} from "../api/session";
+import {useNavigate} from "react-router-dom";
 
 // Should have more obsticles to deleting credentials and sources.
 interface IProps {
@@ -28,6 +29,7 @@ interface IProps {
 export default function ConfirmModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const queryClient = useQueryClient();
+  let navigate = useNavigate();
   const deleteTagMutation = useMutation((tag: Tag) => {return deleteTag(tag)}, {
     onSuccess: () => {
       setModalShow(false);
@@ -61,17 +63,12 @@ export default function ConfirmModal(props: IProps) {
     }
   });
   const logOutMutation = useMutation(logOut, {
-    onSuccess: () => {
-      // TODO: Maybe we shouldn't reload but idk?
-      window.location.reload();
+    onSuccess: data => {
+      setModalShow(false);
+      queryClient.invalidateQueries('session');
+      navigate('/login');
     }
   })
-
-  /* Server state handling */
-  const [serverState, setServerState] = useState({ok: false, msg: "", res: null});
-  const handleServerResponse = (ok: boolean, msg: string, res: any) => {
-    setServerState({ok: ok, msg: msg, res: res})
-  };
 
   const handleSubmit = () => {
     // Pick which api endpoint to use

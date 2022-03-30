@@ -63,7 +63,7 @@ const ReportDetails = () => {
                   />
                   }
                   {reportQuery.data && groupsQuery.data && sourcesQuery.data && tagsQuery.data &&
-                  reportQuery.data._media[0] === "facebook" &&
+                      (reportQuery.data._media[0] === "crowdtangle" || reportQuery.data._media[0] === "facebook") &&
                   <FacebookDetails
                       report={reportQuery.data}
                       tags={tagsQuery.data}

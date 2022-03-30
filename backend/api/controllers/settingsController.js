@@ -42,7 +42,7 @@ exports.setting_gplaces = (req, res) => {
 }
 
 // Get any setting
-exports.setting = (req, res) => {
+exports.setting_setting = (req, res) => {
   let result = {};
   result[req.params.setting] = config.get({ reload: true })[req.params.setting];
   result.setting = req.params.setting;
@@ -60,7 +60,7 @@ exports.setting_update = (req, res, app) => {
 }
 
   // We use post to test the media settings with the service provider but not to save
-  // backend.post('/api/settings/media/:media/test', user.can('change settings'), (req, res) => {
+  // backend.post('/api/settings/media/:media/test', User.can('change settings'), (req, res) => {
   //   test.testContentService(req.params.media, req.body.settings, function(err, data, response) {
   //     if (err) {
   //       return res.status(200).send({ success: false, message: err.message });

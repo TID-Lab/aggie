@@ -10,8 +10,12 @@ var morgan = require('morgan');
 var config = require('./config/secrets');
 var exec = require('child_process').exec;
 var bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const methodOverride = require('method-override');
+const cookieParser = require("cookie-parser");
+const auth = require('./api/authentication')();
+const passport = require("passport");
+const LocalStrategy = require('passport-local');
+const authRoutes = require("./api/routes/authRoutes");
+const User = require('./models/user');
 var mailer = require('./mailer.js');
 var _ = require("underscore");
 var readLineSync = require('readline-sync');
@@ -70,10 +74,22 @@ if (process.env.ENVIRONMENT === "development") {
   app.use(
       cors({
         origin: "http://localhost:8000", // allow to server to accept request from different origin
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        optionsSuccessStatus:200,
         credentials: true, // allow session cookie from browser to pass through
       })
   );
+
+  app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    } else {
+      next();
+    }
+  });
 }
 
 // Handle request time outs, return 500 in case of timeouts
@@ -106,12 +122,20 @@ function handleRequestTimeouts(req, res, next) {
 // Add middleware
 //require('./api/language-cookie.js')(app);
 
-// Enable user authentication and authorization
+
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(cookieParser());
-var auth = require('./api/authentication')(app);
-var resetPassword = require('./api/reset-password')(app, auth);
-var user = require('./api/authorization');
+
+// Enable user authentication and authorization
+app.use(auth.initialize());
+passport.use(new LocalStrategy(User.authenticate()));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+app.use(authRoutes);
+
 // setup api logging
 app.all("/api/*", morgan('combined'));
 
@@ -121,7 +145,7 @@ app.all('/api/*', handleRequestTimeouts);
 // Add all API controllers
 const apiRouter = require('./api/routes/apiRoutes');
 
-app.use('/api', apiRouter(user));
+app.use('/api', auth.authenticate(), apiRouter);
 
 if (process.env.ENVIRONMENT === "production") {
   // Handle Front-end Routes & Resources

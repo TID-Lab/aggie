@@ -3,6 +3,7 @@ var database = require('../database');
 const mongoose = database.mongoose;
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
+const config = require('../config/secrets.json');
 
 var userSchema = new Schema({
   provider: { type: String, default: 'local' },
@@ -10,7 +11,8 @@ var userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String },
   hasDefaultPassword: { type: Boolean, default: true },
-  role: { type: String, default: 'viewer' }
+  role: { type: String, default: 'viewer' },
+  active: { type: Boolean, default: true },
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -31,11 +33,25 @@ User.permissions = {
 };
 
 // Determine if a user can do a certain action
-User.can = function(user, permission) {
-  if (User.permissions[permission]) {
-    return User.permissions[permission].indexOf(user.role) > -1;
-  }
-  return false;
+User.can = (permission) => {
+  return (req, res, next) => {
+    const user = req.user;
+    if (config.adminParty) {
+      next();
+    }
+    User.findById(user.id, (err, foundUser) => {
+      if (err) {
+        res.status(422).send("No user found.");
+        return next(err);
+      }
+      if (User.permissions[permission]) {
+        if (User.permissions[permission].indexOf(foundUser.role) > -1) {
+          return next();
+        }
+      }
+      res.status(401).send("You are not authorized to " + permission + ".");
+    });
+  };
 };
 
 module.exports = User;

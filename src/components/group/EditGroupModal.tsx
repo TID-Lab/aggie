@@ -39,9 +39,9 @@ export default function EditGroupModal(props: IProps) {
       if (reports.length === 1) {
         axios({
           method: "PUT",
-          url: "/api/v1/report/" + reports[0]._id,
+          url: "/api/report/" + reports[0]._id,
           data: {
-            _incident: group._id,
+            _group: group._id,
           }
         }).then(response => {
           if (props.reports) {

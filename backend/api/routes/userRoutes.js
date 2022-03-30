@@ -2,21 +2,21 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-module.exports = function(user) {
+const User = require('../../models/user');
+
 // Get a list of all Users
-// user.can('view users')
-  router.get('', userController.user_users);
+router.get('', User.can('view users'), userController.user_users);
 
-// user.can('admin users')
-  router.post('', userController.user_create);
+// Create a user
+router.post('', User.can('admin users'), userController.user_create);
 
-//.can('admin users')
-  router.get('/:_id', userController.user_detail);
+// Get Individual User
+router.get('/:_id', User.can('view users'), userController.user_detail);
 
-// user.can('update users')
-  router.put('/:_id', userController.user_update);
+// Update Users
+router.put('/:_id', User.can('update users'), userController.user_update);
 
-// user.can('admin users')
-  router.delete('/:_id', userController.user_delete);
-  return router;
-}
+// Delete User
+router.delete('/:_id', User.can('admin users'), userController.user_delete);
+
+module.exports = router;

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 // Find database records using pagination.
 // Note: This should be the same as `perPage` in config.js.
-var PAGE_LIMIT = 25;
+var PAGE_LIMIT = 50;
 
 mongoose.Model.findPage = function(filters, page, options, callback) {
   var model = mongoose.models[this.modelName];

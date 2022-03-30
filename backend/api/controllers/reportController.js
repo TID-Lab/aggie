@@ -44,7 +44,7 @@ exports.report_reports = (req, res) => {
 
   // Load batch
 exports.report_batch = (req, res) => {
-  batch.load(req.session.user._id, (err, reports) => {
+  batch.load(req.user._id, (err, reports) => {
     if (err) res.status(err.status).send(err.message);
     else {
       writelog.writeBatch(req, 'loadBatch', reports);
@@ -56,7 +56,7 @@ exports.report_batch = (req, res) => {
 // Checkout new batch
 exports.report_batch_new = (req, res) => {
   const query = new ReportQuery(req.body);
-  batch.checkout(req.session.user._id, query, (err, reports) => {
+  batch.checkout(req.user._id, query, (err, reports) => {
     if (err) res.status(err.status).send(err.message);
     else {
       writelog.writeBatch(req, 'getNewBatch', reports);
@@ -67,7 +67,7 @@ exports.report_batch_new = (req, res) => {
 
   // Cancel batch
 exports.report_batch_cancel = (req, res) => {
-  batch.cancel(req.session.user._id, (err) => {
+  batch.cancel(req.user._id, (err) => {
     if (err) res.status(err.status).send(err.message);
     else {
       writelog.writeBatch(req, 'cancelBatch');
@@ -112,6 +112,9 @@ exports.report_update = (req, res) => {
     _.each(_.pick(req.body, ['_group', 'read', 'smtcTags', 'notes', 'escalated', 'veracity']), (val, key) => {
       report[key] = val;
     });
+    if (!report.read) {
+      report.toggleRead(true);
+    }
     // Save report
     report.save((err, numberAffected) => {
       if (err) res.status(err.status).send(err.message);
@@ -123,7 +126,7 @@ exports.report_update = (req, res) => {
   });
 }
 /* Delete all reports
-router.delete('/api/report/_all', user.can('edit data'), (req, res) => {
+router.delete('/api/report/_all', User.can('edit data'), (req, res) => {
   Report.remove((err) {
     if (err) res.status(err.status).send(err.message);
     else {

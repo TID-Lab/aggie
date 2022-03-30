@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const csvController = require('../controllers/csvController');
+const User = require('../../models/user');
 
-//
-module.exports = function(user) {
-  router.get("", user.can("view data"), csvController.csv_csv);
-  return router;
-}
+// Get CSV
+router.get("", User.can("view data"), csvController.csv_csv);
+
+module.exports = router;

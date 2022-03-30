@@ -6,11 +6,7 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import {QueryClient, QueryClientProvider} from "react-query";
 import reportWebVitals from './reportWebVitals';
-import axios from "axios";
 
-if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-}
 //https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b
 const queryClient = new QueryClient()
 ReactDOM.render((

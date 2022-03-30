@@ -3,8 +3,14 @@ import {FormikValues} from "formik";
 import {Report, ReportQuery, ReportSearchState, Source, Tag} from "../objectTypes";
 
 export const getReports = async (searchState: ReportSearchState) => {
-  const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState));
-  return data;
+  if (generateSearchURL(searchState) != "") {
+    const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState));
+    return data;
+  } else {
+    const { data } = await axios.get('/api/report');
+    return data;
+  }
+
 }
 
 export const getReport = async (id: string | undefined) => {
@@ -19,8 +25,28 @@ export const editReport = async (report: Report) => {
   return data;
 }
 
-export const getBatch = async (searchState: ReportSearchState) => {
-  const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState));
+export const getBatch = async () => {
+  const { data } = await axios.get('/api/report/batch');
+  return data;
+}
+
+export const getNewBatch = async () => {
+  const { data } = await axios.patch('/api/report/batch');
+  return data;
+}
+
+export const cancelBatch = async () => {
+  const { data } = await axios.put('/api/report/batch');
+  return data;
+}
+
+export const setSelectedRead = async (reportIds: string[]) => {
+  const { data } = await axios.patch('/api/report/_read', {ids: reportIds, read: true});
+  return data;
+}
+
+export const setGroup = async (groupId: string) => {
+  const { data } = await axios.put('/api/batch');
   return data;
 }
 

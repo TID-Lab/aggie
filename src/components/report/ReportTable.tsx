@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import {Card, Button, ButtonToolbar, Form, Image, Container, ButtonGroup} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faPlusCircle, faEnvelopeOpen, faClose} from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
+import {Link, useSearchParams} from 'react-router-dom';
 import EditGroupModal from "../group/EditGroupModal";
 import "./ReportTable.css"
 import {
@@ -13,7 +13,8 @@ import {
   stringToDate,
   groupById,
   sourceById,
-  tagById
+  tagById,
+  reportAuthor
 } from "../../helpers";
 import {Group, Report, Source, Tag} from "../../objectTypes";
 import {editReport} from "../../api/reports";
@@ -25,11 +26,14 @@ interface IProps {
   sources: Source[] | [];
   tags: Tag[] | [];
   groups: Group[] | [];
+  batchMode?: boolean;
+  setBatchMode?: (batchMode: boolean) => void,
   variant: 'batch' | 'relevant' | 'default' | 'group-details';
 }
 
 export default function ReportTable(props: IProps) {
   const [selectedReports, setSelectedReports] = useState<Set<string>>(new Set());
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleAllSelectChange = () => {
     let newSelectedReports;
     if (selectedReports.size === 0) {
@@ -59,21 +63,21 @@ export default function ReportTable(props: IProps) {
                 Add to group
               </Button>
               { props.variant === "default" &&
-                  <Link to={'/batch'} className={"ms-2"}>
-                    <Button variant={"primary"}>
-                      Batch mode
-                    </Button>
-                  </Link>
+                  <Button variant={"primary"} className={"ms-2"} onClick={()=>{
+                    if (props.setBatchMode) {
+                      setSearchParams(
+                          {
+                            ...searchParams,
+                            batch: "true"
+                          }
+                      )
+                      props.setBatchMode(true);
+                    }
+                  }}>
+                    Batch mode
+                  </Button>
               }
             </div>
-            { props.variant === "batch" &&
-                <div>
-                  <Button className={"me-2"}>Grab new batch</Button>
-                  <Button variant={"outline-danger"}>
-                    <FontAwesomeIcon icon={faClose}/>
-                  </Button>
-                </div>
-            }
           </ButtonToolbar>
         </Card.Header>
         <Table bordered hover size="sm" className={"m-0"}>
@@ -160,7 +164,13 @@ interface ReportRowIProps {
 }
 
 export function ReportRow(props: ReportRowIProps) {
-  const reportMutation = useMutation((report: Report) => { return editReport(report) });
+  const reportMutation = useMutation((report: Report) => {return editReport(report)}, {
+    onSuccess: ()=> {
+      if (props.report && props.report.read === false) {
+        props.report.read = true
+      }
+    }
+  });
   //@ts-ignore
   const [queryTags, setQueryTags] = useState<Tag[]>(props.report.smtcTags.map((tag) => {return tagById(tag, props.tags)}));
   /**
@@ -202,15 +212,16 @@ export function ReportRow(props: ReportRowIProps) {
               </td>
               <td className="sourceInfo">
                 <span>{stringToDate(props.report.authoredAt).toLocaleString("en-us")} {"\n"}</span>
+                <br/>
                 <a href={reportAuthorUrl(props.report)} target="_blank" className="sourceInfo__link">
-                  <b>{props.report.author}</b>
+                  <b>{reportAuthor(props.report)}</b>
                 </a>
                 <br/>
                 <br/>
                 <span>
                     {sourceById(props.report._sources[0], props.sources)?.nickname}
                 </span>
-                {props.report.metadata.ct_tag && props.report.metadata.ct_tag.length &&
+                {props.report.metadata && props.report.metadata.ct_tag && props.report.metadata.ct_tag.length && props.report.metadata.ct_tag.map &&
                 <> {'>'} {props.report.metadata.ct_tag.map((tag: string) => {return <>{tag}</>})} </>
                 }
               </td>

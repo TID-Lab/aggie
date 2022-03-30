@@ -1,4 +1,4 @@
-import {CTList, Group, Report, Source, Tag} from "./objectTypes";
+import {CTList, Group, hasId, Report, ReportSearchState, Source, Tag} from "./objectTypes";
 import {useLocation} from "react-router-dom";
 import {FormikValues} from "formik";
 
@@ -143,7 +143,27 @@ export const reportFullContent = (report: Report) => {
 }
 
 export const reportAuthorUrl = (report: Report) => {
-  return report.metadata.accountUrl;
+  if (report.metadata.accountUrl) {
+    return report.metadata.accountUrl;
+  } else {
+    // Twitter
+    return "https://twitter.com/" + report.author;
+  }
+}
+
+export const reportAuthor = (report: Report) => {
+  if (report._media[0] === "twitter") {
+    return "@" + report.author;
+  } else {
+    return report.author;
+  }
+}
+
+export const objectsToIds = (objects: hasId[]) => {
+  const listOfIds = objects.map((object) => {
+    return object._id;
+  })
+  return listOfIds;
 }
 
 export const stringToDate = (str: string) => {
@@ -153,6 +173,15 @@ export const stringToDate = (str: string) => {
 export const facebookUrlToEmbedUrl = (url: string) => {
   let embedUrl = url.slice(8, url.length);
   return "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2F" + embedUrl + "&width=500&show_text=true";
+}
+
+export const hasSearchParams = (searchParams: URLSearchParams) => {
+  // TODO: Is there a better way of finding the length of searchParams?
+  let counter = 0;
+  for (const [index, element] of searchParams.entries()) { counter++; }
+  if (searchParams.has("page") && counter == 1) return false;
+  else if (searchParams.toString() !== "") return true;
+  else return false;
 }
 
 export const ctListToOptions = (ctList: CTList) => {

@@ -5,9 +5,10 @@ import axios from "axios";
 import * as Yup from "yup";
 import {LoginData} from "../objectTypes";
 import {logIn} from "../api/session";
-import {useMutation} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
 
 const loginFormSchema = Yup.object().shape({
   loginUsername: Yup.string().required('Username required'),
@@ -18,7 +19,13 @@ interface IProps {
 }
 
 const Login = (props: IProps) => {
-  const loginQuery = useMutation((logInData: LoginData)=>{return logIn(logInData)});
+  let navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const loginQuery = useMutation((logInData: LoginData)=>{return logIn(logInData)}, {
+    onSuccess: data => {
+      navigate("/reports");
+    }
+  });
   const [ passwordVisibility, setPasswordVisibility ] = useState(false);
   const formValuesToLogin = (values: FormikValues) => {
     return {
@@ -48,7 +55,9 @@ const Login = (props: IProps) => {
                       initialValues={{loginUsername: "", loginPassword: ""}}
                       validationSchema={loginFormSchema}
                       onSubmit={(values, {setSubmitting, resetForm}) => {
-                        loginQuery.mutate(formValuesToLogin(values))
+                        loginQuery.mutate(formValuesToLogin(values), {
+                          onSuccess: data => queryClient.invalidateQueries('session')
+                        })
                       }}
                   >
                     {({

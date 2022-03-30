@@ -1,34 +1,26 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-
 // Require controller modules.
 const settingController = require('../controllers/settingsController');
-module.exports = function(user) {
+const User = require('../../models/user');
+
 // Turn fetching on or off
-  router.put('/fetching/:op', (req, res) => {
-    settingController.setting_update_fetch(req, res, user.can('change settings'))
-  });
+router.put('/fetching/:op', User.can('change settings'), settingController.setting_update_fetch);
 
 // Request to update CTLists
-  router.put('/updateCTList', settingController.setting_update_ctlist);
+router.put('/updateCTList', User.can('change settings'), settingController.setting_update_ctlist);
 
 // Get Google Places API
-  router.get('/gplaces', settingController.setting_gplaces);
+router.get('/gplaces', User.can('change settings'), settingController.setting_gplaces);
 
 // Get a setting
-  router.get('/:setting', (req, res) => {
-    settingController.setting(req, res, user.can('change settings'))
-  });
+router.get('/:setting', User.can('change settings'), settingController.setting_setting);
 
 // Update a setting
-  router.put('/:entry', (req, res) => {
-    settingController.setting_update(req, res, user.can('change settings'));
-  });
+router.put('/:entry', User.can('change settings'), settingController.setting_update);
 
 // Delete a setting
-  router.delete('/:entry', (req, res) => {
-    settingController.setting_delete(req, res, user.can('change settings'));
-  });
-  return router;
-}
+router.delete('/:entry', User.can('change settings'), settingController.setting_delete);
+
+module.exports = router;

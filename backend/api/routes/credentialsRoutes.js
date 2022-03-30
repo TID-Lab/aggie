@@ -1,21 +1,19 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/user');
 const credentialsController = require('../controllers/credentialsController');
 
-module.exports = function(user) {
-  //user.can('change settings')
-  router.get('', user.can('change settings'), credentialsController.credential_credentials);
+// Get all credentials
+router.get('', User.can('change settings'), credentialsController.credential_credentials);
 
-  //user.can('change settings'),
-  router.post('', user.can('change settings'), credentialsController.credential_create);
+// Create credentials
+router.post('', User.can('change settings'), credentialsController.credential_create);
 
-  // Delete credentials
-  //user.can('change settings'),
-  router.delete('/:_id', user.can('change settings'), credentialsController.credential_delete);
+// Delete credentials
+router.delete('/:_id', User.can('change settings'), credentialsController.credential_delete);
 
-  // Get a set of (stripped) credentials by its ID
-  //user.can('change settings')
-  router.get('/:_id', user.can('change settings'), credentialsController.credential_details);
-  return router;
-}
+// Get a set of (stripped) credentials by its ID
+router.get('/:_id', User.can('change settings'), credentialsController.credential_details);
+
+module.exports = router;

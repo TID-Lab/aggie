@@ -1,22 +1,23 @@
 import React from 'react';
 import {Nav, Navbar, NavDropdown, Image, Container} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faTags, faUsersCog, faCog, faCloud, faKey } from "@fortawesome/free-solid-svg-icons";
 import ConfirmModal from "./ConfirmModal";
 import {Session, User} from "../objectTypes";
 import "./AggieNavbar.css";
+import {useQuery} from "react-query";
+import {getSession} from "../api/session";
 
-interface IProps {
-  sessionToken: Session | null;
-}
 
-const AggieNavbar = (props: IProps) => {
+const AggieNavbar = () => {
+  const sessionQuery = useQuery<Session | null>("session", getSession);
+  let location = useLocation();
   return (
     <Navbar className="color-nav" variant="dark" collapseOnSelect expand="lg">
       <Container fluid>
-        { !props.sessionToken &&
+        { location.pathname === "/login" &&
         <Navbar.Brand>
           <Image
               alt="Aggie Logo"
@@ -24,7 +25,7 @@ const AggieNavbar = (props: IProps) => {
           />
         </Navbar.Brand>
         }
-        { props.sessionToken &&
+        { location.pathname != "/login" && sessionQuery.data &&
             <>
               <Navbar.Brand>
                 <Link to={'/reports'}>
@@ -63,12 +64,12 @@ const AggieNavbar = (props: IProps) => {
                   </LinkContainer>
                 </Nav>
                 <Nav>
-                  {props.sessionToken.role ? (
-                      <LinkContainer to={'/user/' + props.sessionToken._id}>
+                  {sessionQuery.data.role ? (
+                      <LinkContainer to={'/user/' + sessionQuery.data._id}>
                         <Nav.Link eventKey="5">
                           <FontAwesomeIcon className="me-2" icon={faUser}/>
-                          {props.sessionToken ? (
-                              <span> {props.sessionToken.username} </span>
+                          {sessionQuery.data ? (
+                              <span> {sessionQuery.data.username} </span>
                           ) : (
                               <span> Undefined </span>
                           )}

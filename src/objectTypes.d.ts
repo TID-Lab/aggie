@@ -1,6 +1,10 @@
 import {Option} from "react-bootstrap-typeahead";
 
-interface Report {
+interface hasId {
+    _id: string,
+}
+
+interface Report extends hasId{
   veracity: "Unconfirmed" | "Confirmed true" | "Confirmed false",
   tags: string[],
   smtcTags: string[],
@@ -10,7 +14,6 @@ interface Report {
   _media: string[],
   _sourceNicknames: string[],
   escalated: boolean,
-  _id: string,
   _incident?: string,
   authoredAt: string,
   fetchedAt: string,
@@ -62,12 +65,11 @@ interface SourceEvent {
   message: string
 }
 
-interface Source {
+interface Source extends hasId{
   enabled: boolean,
   unreadErrorCount: number,
   tags?: string[],
   url: string,
-  _id: string,
   media: string,
   nickname: string,
   credentials: Credential,
@@ -81,7 +83,7 @@ interface Source {
   lastReportDate?: string
 }
 
-interface Group {
+interface Group extends hasId{
   tags: string[],
   id?: number,
   smtcTags: string[],
@@ -91,7 +93,6 @@ interface Group {
   closed: boolean,
   public: boolean,
   totalReports: number,
-  _id: string,
   title: string,
   assignedTo?: {
     _id: string,
@@ -155,11 +156,10 @@ interface Groups {
 }
 
 
-interface User {
+interface User extends hasId{
   provider: string,
   hasDefaultPassword: boolean,
   role: string,
-  _id: string,
   email: string,
   username: string,
   __v: number
@@ -172,9 +172,8 @@ export interface UserEditableData {
   _id?: string
 }
 
-interface Tag {
+interface Tag extends hasId{
   isCommentTag: boolean,
-  _id: string,
   name: string,
   color: string,
   description: string,
@@ -228,8 +227,7 @@ interface Setting {
   setting: string
 }
 
-interface Credential {
-  _id: string,
+interface Credential extends hasId{
   id: string,
   name: string,
   type: string,
@@ -239,14 +237,13 @@ interface Credential {
   __v: number
 }
 
-interface Session {
+interface Session extends hasId{
   email: string,
   hasDefaultPassword: boolean,
   provider: string,
   role: admin | monitor | undefined,
   username: string,
   __v: number,
-  _id: string
 }
 
 interface LoginData {
