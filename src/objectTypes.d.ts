@@ -42,7 +42,6 @@ interface ReportQuery {
 }
 
 interface ReportSearchState {
-  tags : Tag[] | [] | null,
   keywords: string | null,
   author: string | null,
   groupId: string | null,

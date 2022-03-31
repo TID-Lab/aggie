@@ -1,10 +1,10 @@
 import axios from "axios";
 import {FormikValues} from "formik";
-import {Report, ReportQuery, ReportSearchState, Source, Tag} from "../objectTypes";
+import {hasId, Report, ReportQuery, ReportSearchState, Source, Tag} from "../objectTypes";
 
-export const getReports = async (searchState: ReportSearchState) => {
-  if (generateSearchURL(searchState) != "") {
-    const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState));
+export const getReports = async (searchState: ReportSearchState, tagIds: hasId[] = [], isRelevantReports = false) => {
+  if (generateSearchURL(searchState, tagIds, isRelevantReports) != "") {
+    const { data } = await axios.get('/api/report/?' + generateSearchURL(searchState, tagIds, isRelevantReports));
     return data;
   } else {
     const { data } = await axios.get('/api/report');
@@ -50,9 +50,10 @@ export const setGroup = async (groupId: string) => {
   return data;
 }
 
-const generateSearchURL = (searchState: ReportSearchState) => {
+const generateSearchURL = (searchState: ReportSearchState, tagIds: hasId[], isRelevantReports: boolean ) => {
   let url = "";
-  if (searchState.tags) { url += "tags=" + searchState.tags; }
+  if (isRelevantReports) { url += "isRelevantReports=true"; }
+  if (tagIds.length > 0) { url += "tags=" + tagIds; }
   if (searchState.keywords) { url += "keywords=" + searchState.keywords; }
   if (searchState.author) { url += "author=" + searchState.author; }
   if (searchState.groupId) { url += "groupId=" + searchState.groupId; }

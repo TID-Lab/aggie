@@ -1,4 +1,4 @@
-import {Source} from "../../objectTypes";
+import {Source, User} from "../../objectTypes";
 import React, {useState} from 'react';
 import {
   Container,
@@ -16,12 +16,10 @@ import GroupTable, {GroupRow} from "../../components/group/GroupTable";
 import StatsBar from '../../components/StatsBar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-  faCheckCircle,
   faEllipsisV,
   faPlusCircle,
   faSearch,
   faSlidersH,
-  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {useQuery, useQueryClient} from "react-query";
 import {getSources} from "../../api/sources";
@@ -38,9 +36,8 @@ const GroupsIndex = (props: IProps) => {
   const groupsQuery = useQuery("groups", getGroups);
   const tagsQuery = useQuery("tags", getTags);
   const usersQuery = useQuery("users", getUsers);
-
   const [showFilterParams, setShowFilterParams] = useState(false);
-
+  const placeHolderValues = [3, 4, 2, 3, 4, 5, 2, 2, 5];
   return (
       <div>
         <Container fluid className={"mt-4"}>
@@ -94,6 +91,9 @@ const GroupsIndex = (props: IProps) => {
                               <Form.Label>Veracity</Form.Label>
                               <Form.Select aria-label="Default select example">
                                 <option>All</option>
+                                <option value={"confirmed true"}>Confirmed true</option>
+                                <option value={"confirmed false"}>Confirmed false</option>
+                                <option value={"unconfirmed"}>Unconfirmed</option>
                               </Form.Select>
                             </Form.Group>
                           </Col>
@@ -102,14 +102,8 @@ const GroupsIndex = (props: IProps) => {
                               <Form.Label>Escalated</Form.Label>
                               <Form.Select aria-label="Default select example">
                                 <option>All</option>
-                                {sourcesQuery.isFetched && sourcesQuery.data &&
-                                sourcesQuery.data.map((source: Source) => {
-                                  return (
-                                      <option value={source._id} key={source._id}>
-                                        {source.nickname}
-                                      </option>
-                                  )
-                                })}
+                                <option value={"true"}>Yes</option>
+                                <option value={"false"}>No</option>
                               </Form.Select>
                             </Form.Group>
                           </Col>
@@ -118,6 +112,13 @@ const GroupsIndex = (props: IProps) => {
                               <Form.Label>Assigned To</Form.Label>
                               <Form.Select aria-label="Source search select">
                                 <option>All</option>
+                                {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
+                                  return (
+                                      <option value={user._id} key={user._id}>
+                                        {user.username}
+                                      </option>
+                                  )
+                                })}
                               </Form.Select>
                             </Form.Group>
                           </Col>
@@ -126,9 +127,13 @@ const GroupsIndex = (props: IProps) => {
                               <Form.Label>Created By</Form.Label>
                               <Form.Select aria-label="Default select example">
                                 <option>All</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
+                                  return (
+                                      <option value={user._id} key={user._id}>
+                                        {user.username}
+                                      </option>
+                                  )
+                                })}
                               </Form.Select>
                             </Form.Group>
                           </Col>
@@ -205,68 +210,73 @@ const GroupsIndex = (props: IProps) => {
                       </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <Form>
-                              <Form.Check
-                                  type="checkbox"
-                                  disabled
-                              />
-                            </Form>
-                          </td>
-                          <td><Placeholder animation="glow">
-                            <Placeholder xs={6} ></Placeholder>
-                          </Placeholder></td>
-                          <td>
-                            <Placeholder animation="glow">
-                              <Placeholder xs={12} ></Placeholder>
-                            </Placeholder>
-                            <br/>
-                            <small>
-                              <Placeholder animation="glow">
-                                <Placeholder xs={3} ></Placeholder>
-                              </Placeholder>
-                              {' '}reports
-                            </small>
-                          </td>
-                          <td className="text-break">
-                            <Placeholder animation="glow">
-                              <Placeholder xs={12} ></Placeholder>
-                            </Placeholder>
-                          </td>
-                          <td>
-                            <Placeholder animation="glow">
-                              <Placeholder xs={12} ></Placeholder>
-                              <Placeholder xs={12} ></Placeholder>
-                            </Placeholder>
-                          </td>
-                          <td>
-                            <Placeholder animation="glow">
-                              <Placeholder xs={8} ></Placeholder>
-                            </Placeholder>
-                          </td>
-                          <td>
-                            <Placeholder animation="glow">
-                              <Placeholder xs={9} ></Placeholder>
-                            </Placeholder>
-                            <br/>
-                            <small>
-                              <Placeholder animation="glow">
-                                <Placeholder xs={3} ></Placeholder>
-                              </Placeholder>
-                            </small>
-                          </td>
-                          <td>
-                            <Form.Control
-                                as="textarea"
-                                style={{ height: '80px' }}
-                                disabled
-                            />
-                          </td>
-                          <td>
-                            <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>
-                          </td>
-                        </tr>
+                      { placeHolderValues.map(value => {
+                        return (
+                            <tr>
+                              <td>
+                                <Form>
+                                  <Form.Check
+                                      type="checkbox"
+                                      disabled
+                                  />
+                                </Form>
+                              </td>
+                              <td><Placeholder animation="glow">
+                                <Placeholder xs={6} ></Placeholder>
+                              </Placeholder></td>
+                              <td>
+                                <Placeholder animation="glow">
+                                  <Placeholder xs={12} ></Placeholder>
+                                </Placeholder>
+                                <br/>
+                                <small>
+                                  <Placeholder animation="glow">
+                                    <Placeholder xs={3} ></Placeholder>
+                                  </Placeholder>
+                                  {' '}reports
+                                </small>
+                              </td>
+                              <td className="text-break">
+                                <Placeholder animation="glow">
+                                  <Placeholder xs={12} ></Placeholder>
+                                </Placeholder>
+                              </td>
+                              <td>
+                                <Placeholder animation="glow">
+                                  <Placeholder xs={12} ></Placeholder>
+                                  <Placeholder xs={12} ></Placeholder>
+                                </Placeholder>
+                              </td>
+                              <td>
+                                <Placeholder animation="glow">
+                                  <Placeholder xs={8} ></Placeholder>
+                                </Placeholder>
+                              </td>
+                              <td>
+                                <Placeholder animation="glow">
+                                  <Placeholder xs={9} ></Placeholder>
+                                </Placeholder>
+                                <br/>
+                                <small>
+                                  <Placeholder animation="glow">
+                                    <Placeholder xs={3} ></Placeholder>
+                                  </Placeholder>
+                                </small>
+                              </td>
+                              <td>
+                                <Form.Control
+                                    as="textarea"
+                                    style={{ height: '80px' }}
+                                    disabled
+                                />
+                              </td>
+                              <td>
+                                <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>
+                              </td>
+                            </tr>
+                        );
+                      })
+                      }
                       </tbody>
                     </Table>
                     <Card.Footer className="justify-center">

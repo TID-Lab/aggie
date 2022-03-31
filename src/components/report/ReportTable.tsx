@@ -32,36 +32,36 @@ interface IProps {
 }
 
 export default function ReportTable(props: IProps) {
-  const [selectedReports, setSelectedReports] = useState<Set<string>>(new Set());
+  const [selectedReports, setSelectedReports] = useState<Set<Report>>(new Set());
   const [searchParams, setSearchParams] = useSearchParams();
   const handleAllSelectChange = () => {
     let newSelectedReports;
     if (selectedReports.size === 0) {
-      newSelectedReports = new Set(props.visibleReports.map(report => report._id));
+      newSelectedReports = new Set(props.visibleReports);
     } else {
-      newSelectedReports = new Set<string>();
+      newSelectedReports = new Set<Report>();
     }
     setSelectedReports(newSelectedReports);
   }
-  const toggleSelectedReportsRead = () => {
-    console.log(selectedReports);
-  }
-  const addSelectedReportsToGroup = () => {
-    console.log(selectedReports)
-  }
-
   return (
       <>
         <Card.Header>
           <ButtonToolbar className={"justify-content-between"}>
             <div>
-              <Button variant={"secondary"} className="me-2" onClick={toggleSelectedReportsRead}>
-                <FontAwesomeIcon icon={faEnvelopeOpen}/>
+              <Button variant={"secondary"} className="me-2" disabled={selectedReports.size === 0} onClick={()=> {
+                console.log(selectedReports);
+              }}>
+                <FontAwesomeIcon className={"me-2"} icon={faEnvelopeOpen}/>
+                Read/Unread
               </Button>
-              <Button variant={"secondary"}>
-                <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
-                Add to group
-              </Button>
+              <EditGroupModal
+                  reports={selectedReports}
+                  tags={props.tags}
+                  groups={props.groups}
+                  sources={props.sources}
+                  groupId={undefined}
+                  variant={"selection"}
+              />
               { props.variant === "default" &&
                   <Button variant={"primary"} className={"ms-2"} onClick={()=>{
                     if (props.setBatchMode) {
@@ -159,8 +159,8 @@ interface ReportRowIProps {
   groups: Group[] | [],
   sources: Source[] | [],
   variant: "modal" | "table" | "group-details",
-  setSelectedReports?: Dispatch<SetStateAction<Set<string>>>,
-  selectedReports?: Set<string>,
+  setSelectedReports?: Dispatch<SetStateAction<Set<Report>>>,
+  selectedReports?: Set<Report>,
 }
 
 export function ReportRow(props: ReportRowIProps) {
@@ -180,10 +180,10 @@ export function ReportRow(props: ReportRowIProps) {
   const handleSelected = () => {
     if (props.setSelectedReports && props.selectedReports && props.report?._id) {
       let newSelectedReports = new Set(props.selectedReports);
-      if (newSelectedReports.has(props.report._id)) {
-        newSelectedReports.delete(props.report._id);
+      if (newSelectedReports.has(props.report)) {
+        newSelectedReports.delete(props.report);
       } else {
-        newSelectedReports.add(props.report._id);
+        newSelectedReports.add(props.report);
       }
       props.setSelectedReports(newSelectedReports);
     }
@@ -199,14 +199,13 @@ export function ReportRow(props: ReportRowIProps) {
     switch (props.variant) {
       case 'table': case 'group-details':
           // @ts-ignore
-          // @ts-ignore
           return (
             <tr key={props.report._id} className={(props.report.read) ? "tr--read" : "tr--unread"}>
               <td>
                 <Form>
                   { props.selectedReports &&
                       <Form.Check type="checkbox" id={props.report._id} onChange={handleSelected}
-                                  checked={props.selectedReports.has(props.report._id)}/>
+                                  checked={props.selectedReports.has(props.report)}/>
                   }
                 </Form>
               </td>
@@ -253,11 +252,12 @@ export function ReportRow(props: ReportRowIProps) {
               <td className="align-middle">
                 <div className="d-flex justify-content-center">
                   <EditGroupModal
-                      reports={[props.report]}
+                      reports={new Set([props.report])}
                       groups={props.groups}
                       groupId={props.report._incident}
                       tags={props.tags}
                       sources={props.sources}
+                      variant={'inline'}
                   />
                 </div>
               </td>

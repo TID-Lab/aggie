@@ -2,7 +2,6 @@ import axios from "axios";
 import {LoginData} from "../objectTypes";
 
 export const logIn = async (loginData: LoginData) => {
-  console.log(loginData);
   const { data } = await axios.request({
     method: 'POST',
     url: "/login",
@@ -18,6 +17,6 @@ export const getSession = async () => {
 }
 
 export const logOut = async () => {
-  const {data} = await axios.get('/logout', {withCredentials: true});
+  const {data} = await axios.post('/logout', {withCredentials: true});
   return data;
 }

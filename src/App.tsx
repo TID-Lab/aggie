@@ -20,10 +20,23 @@ import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
+import {useQuery} from "react-query";
+import {getSources} from "./api/sources";
+import {getSession} from "./api/session";
+import {AxiosError} from "axios";
 
 const App = () => {
+  let sessionFetching = true;
+  const sessionQuery = useQuery("session", getSession, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        sessionFetching = false;
+      }
+    },
+    onSuccess: data => {sessionFetching = true},
+    retry: sessionFetching
+  });
   // This is how we "globalize" the primary alert.
-
   const [globalAlert, setGlobalAlert] = useState<AlertContent>({
     heading: "",
     message: "",
@@ -35,23 +48,34 @@ const App = () => {
         <AlertService globalAlert={globalAlert} setGlobalAlert={setGlobalAlert}/>
         <Routes>
           <Route path="/">
-            <Route path='login' element={<Login/>}></Route>
-            <Route index element={<Navigate to={'reports'}/>}/>
-            <Route path='reports' element={<ReportsIndex setGlobalAlert={setGlobalAlert}/>}/>
-            <Route path='report/:id' element={<ReportDetails/>}/>
-            <Route path='groups' element={<GroupsIndex/>}/>
-            <Route path='group/:id' element={<GroupDetails/>}/>
-            <Route path='sources' element={<SourcesIndex/>}/>
-            <Route path='source/:id' element={<SourceDetails/>}/>
-            <Route path='users' element={<UsersIndex/>}/>
-            <Route path='user/:id' element={<UserProfile/>}/>
-            <Route path='tags' element={<TagsIndex/>}/>
-            <Route path='config' element={<Configuration/>}/>
-            <Route path='credentials' element={<CredentialsIndex/>}/>
-            <Route path='analysis' element={<Analysis/>}/>
-            <Route path='reset-password' element={<ResetPassword/>}/>
-            <Route path='404' element={<NotFound/>}/>
-            <Route path="*" element={<Navigate replace to="/404"/>}/>
+            {(sessionQuery.isSuccess || sessionQuery.isFetching) &&
+                <>
+                  <Route index element={<Navigate to={'reports'}/>}/>
+                  <Route path="login" element={<Login/>}/>
+                  <Route path='reports' element={<ReportsIndex setGlobalAlert={setGlobalAlert}/>}/>
+                  <Route path='report/:id' element={<ReportDetails/>}/>
+                  <Route path='groups' element={<GroupsIndex/>}/>
+                  <Route path='group/:id' element={<GroupDetails/>}/>
+                  <Route path='sources' element={<SourcesIndex/>}/>
+                  <Route path='source/:id' element={<SourceDetails/>}/>
+                  <Route path='users' element={<UsersIndex/>}/>
+                  <Route path='user/:id' element={<UserProfile/>}/>
+                  <Route path='tags' element={<TagsIndex/>}/>
+                  <Route path='config' element={<Configuration/>}/>
+                  <Route path='credentials' element={<CredentialsIndex/>}/>
+                  <Route path='analysis' element={<Analysis/>}/>
+                  <Route path='reset-password' element={<ResetPassword/>}/>
+                  <Route path='404' element={<NotFound/>}/>
+                  <Route path="*" element={<Navigate replace to="/404"/>}/>
+                </>
+            }
+            {/*@ts-ignore*/}
+            {sessionQuery.isError && sessionQuery.error && sessionQuery.error.response && sessionQuery.error.response.status === 401 &&
+                <>
+                  <Route path="login" element={<Login/>}/>
+                  <Route path="*" element={<Navigate replace to="login"/>}/>
+                </>
+            }
           </Route>
         </Routes>
       </>

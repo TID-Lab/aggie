@@ -2,11 +2,9 @@ import {Button, Container, Dropdown, Form, Modal, Nav} from "react-bootstrap";
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOutAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 import {Group, Source, Tag, User, Credential} from "../objectTypes";
 import {useMutation, useQueryClient} from "react-query";
-import {deleteUser, newUser} from "../api/users";
-import {UserEditableData} from "../objectTypes";
+import {deleteUser} from "../api/users";
 import {deleteTag} from "../api/tags";
 import {deleteGroup} from "../api/groups";
 import {deleteSource} from "../api/sources";
@@ -65,6 +63,7 @@ export default function ConfirmModal(props: IProps) {
   const logOutMutation = useMutation(logOut, {
     onSuccess: data => {
       setModalShow(false);
+      console.log("hello");
       queryClient.invalidateQueries('session');
       navigate('/login');
     }

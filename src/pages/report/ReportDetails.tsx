@@ -38,11 +38,10 @@ const editReportFormSchema = Yup.object().shape({
 const ReportDetails = () => {
   let { id } = useParams<{id: string}>();
   const queryClient = useQueryClient();
-  const reportQuery = useQuery<Report, AxiosError>(["report", id], () => getReport(id));
-  const sourcesQuery = useQuery<Source[], AxiosError>("sources", getSources);
-  const groupsQuery = useQuery<Groups, AxiosError>("groups", getGroups);
-  const tagsQuery = useQuery<Tag[], AxiosError>("tags", getTags);
-
+  const reportQuery = useQuery<Report, undefined>(["report", id], () => getReport(id));
+  const sourcesQuery = useQuery<Source[], undefined>("sources", getSources);
+  const groupsQuery = useQuery<Groups, undefined>("groups", getGroups);
+  const tagsQuery = useQuery<Tag[], undefined>("tags", getTags);
   return (
       <div className={"mt-4"}>
         <Container fluid>

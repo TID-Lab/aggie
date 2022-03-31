@@ -19,7 +19,7 @@ if (process.env.ENVIRONMENT === "development") {
           cookieDomainRewrite: 'http://127.0.0.1'
         })
     )
-    app.use(
+    app.post(
         '/logout',
         createProxyMiddleware({
           target: 'http://127.0.0.1:3000/',

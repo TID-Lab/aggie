@@ -62,4 +62,5 @@ exports.session = (req, res, next) => {
 
 exports.logout = (req, res) => {
   req.logout();
+  res.status(200).send("Logged Out")
 };

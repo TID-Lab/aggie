@@ -12,7 +12,7 @@ import {
   stringToDate, tagById,
   tagsById
 } from "../../helpers";
-import {Group, GroupEditableData, Report, Source, Tag, User} from "../../objectTypes";
+import {Group, Source, Tag, User} from "../../objectTypes";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import {useMutation} from "react-query";
 import {editGroup} from "../../api/groups";
@@ -188,7 +188,7 @@ export function GroupRow(props: GroupRowIProps) {
                 <small>{stringToDate(props.group.updatedAt).toLocaleString("en-US")}</small>
               </td>
               <td>
-                {props.tags && props.group && props.group._id &&
+                {props.tags && props.group && props.group._id && queryTags &&
                 <TagsTypeahead
                     id={props.group._id}
                     options={props.tags}
@@ -215,14 +215,6 @@ export function GroupRow(props: GroupRowIProps) {
       case 'modal':
         return (
             <tr key={props.group._id}>
-              <td>
-                <Form>
-                  <Form.Check
-                      type="checkbox"
-                      id={props.group._id}
-                  />
-                </Form>
-              </td>
               <td>{props.group.idnum}</td>
               <td><Link to={"/group/" + props.group._id}>{props.group.title}</Link></td>
               <td className="text-break">
@@ -242,16 +234,16 @@ export function GroupRow(props: GroupRowIProps) {
                 <small>{stringToDate(props.group.updatedAt).toLocaleString("en-US")}</small>
               </td>
               <td>
-              </td>
-              <td>
-                <Dropdown>
-                  <Dropdown.Toggle as={EllipsisToggle}/>
-                  <Dropdown.Menu variant={"dark"}>
-                    <GroupModal group={props.group} users={props.users}/>
-                    <Dropdown.Divider/>
-                    <ConfirmModal type={"delete"} variant="dropdown" group={props.group}/>
-                  </Dropdown.Menu>
-                </Dropdown>
+                {props.tags.length > 0 &&
+                    <TagsTypeahead
+                        id={props.group._id}
+                        options={props.tags}
+                        selected={queryTags}
+                        onChange={setQueryTags}
+                        onBlur={handleTagsBlur}
+                        variant={"modal"}
+                    />
+                }
               </td>
             </tr>
         )

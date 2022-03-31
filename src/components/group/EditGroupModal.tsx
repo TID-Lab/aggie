@@ -7,21 +7,29 @@ import {groupById, tagsById} from "../../helpers";
 import {ReportRow} from "../report/ReportTable";
 import './EditGroupModal.css';
 import axios from "axios";
-import {Group, Report, Source, Tag} from "../../objectTypes";
+import {Group, Groups, Report, Reports, Source, Tag, User} from "../../objectTypes";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlusCircle} from "@fortawesome/free-solid-svg-icons";
+import {GroupRow} from "./GroupTable";
+import {useQuery} from "react-query";
+import {getGroups} from "../../api/groups";
+import {getUsers} from "../../api/users";
 
 interface IProps {
-  reports?: Report[],
+  reports: Set<Report>,
   tags: Tag[] | null,
   groups: Group[] | [],
   sources: Source[] | [],
-  groupId: string | undefined
+  groupId: string | undefined,
+  variant: "inline" | "selection"
 }
 
 export default function EditGroupModal(props: IProps) {
+  const groupQuery = useQuery<Groups | undefined>(["groups", "all"], getGroups)
+  const userQuery = useQuery<User[] | undefined>("users", getUsers);
   const [show, setShow] = useState(false);
-  const [reports, setReports] = useState(props.reports);
-  const [groups, setGroups] = useState(props.groups);
-
+  const [reports, setReports] = useState<Report[]>(Array.from(props.reports));
+  console.log(reports);
   const handleClose = () => {
     setShow(false);
   }
@@ -35,43 +43,21 @@ export default function EditGroupModal(props: IProps) {
   };
 
   const setGroup = (group: Group) => {
-    if (reports) {
-      if (reports.length === 1) {
-        axios({
-          method: "PUT",
-          url: "/api/report/" + reports[0]._id,
-          data: {
-            _group: group._id,
-          }
-        }).then(response => {
-          if (props.reports) {
-            props.reports[0]._incident = group._id;
-            setReports ([props.reports[0]]);
-          }
-        }).catch(error => {
-          console.error(error);
-        });
-      } else {
 
-      }
-    }
+  }
+
+  const ReportRows = () => {
+
   }
 
   const ReportGroupModalJSX = () => {
-    if (props.reports) {
-      let tagifyRef;
-      let tagifySettings = {
-        whitelist: props.tags,
-        autoComplete: {
-          enabled: true
-        }
-      }
+    if (reports.length > 0 && show) {
       return (
           <>
             <Modal.Header closeButton>
-              {props.reports.length === 1
-                  ? <Modal.Title>Edit report group</Modal.Title>
-                  : <Modal.Title>Edit multiple reports' groups</Modal.Title>
+              {reports.length > 1
+                  ? <Modal.Title>Edit multiple reports' groups</Modal.Title>
+                  : <Modal.Title>Edit report group</Modal.Title>
               }
             </Modal.Header>
             <Modal.Body>
@@ -87,7 +73,7 @@ export default function EditGroupModal(props: IProps) {
                     </tr>
                   </thead>
                   <tbody>
-                  { reports && reports.map((report) => {
+                  { reports.map((report) => {
                     return(
                         <ReportRow
                             variant="modal"
@@ -115,18 +101,18 @@ export default function EditGroupModal(props: IProps) {
                     </tr>
                   </thead>
                   <tbody>
-                  { groups && groups.map((group)=>{
-                    return (
-                        <tr key={group._id} className={"group__select"} onClick={()=>{setGroup(group)}}>
-                          <td><b>{group.idnum}</b></td>
-                          <td>{group.title}</td>
-                          <td>{group.locationName}</td>
-                          <td>{group.notes}</td>
-                          <td>{group.assignedTo && <>{group.assignedTo.username}</>}</td>
-                          <td>{group.creator.username}</td>
-                          <td>{group.smtcTags}</td>
-                        </tr>
-                        )
+                  { userQuery.data && props.groups && props.groups.map((group)=>{
+                    if (props.tags && userQuery.data) {
+                      return (
+                          <GroupRow
+                              key={group._id}
+                              variant='modal'
+                              tags={props.tags}
+                              group={group}
+                              users={userQuery.data}
+                              sources={props.sources}
+                          />);
+                    }
                   })}
                   </tbody>
                 </Table>
@@ -142,9 +128,17 @@ export default function EditGroupModal(props: IProps) {
   }
   return (
       <>
-        { props.groupId
-            ? <Button variant="link" onClick={handleShow}>{groupById(props.groupId, groups)}</Button>
-            : <Button variant="link" onClick={handleShow}>Edit</Button>
+        { props.variant === "inline" &&
+            <Button variant="link" onClick={handleShow}>
+              {props.groupId ? groupById(props.groupId, props.groups) : "Edit"}
+            </Button>
+        }
+        { props.variant === "selection" &&
+            <Button variant={"secondary"} onClick={handleShow} disabled={reports.length === 0}>
+              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"} onClick={()=>{
+              }}/>
+              Add to group
+            </Button>
         }
         <Modal
             show={show}

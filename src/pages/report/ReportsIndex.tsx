@@ -47,7 +47,6 @@ const ReportsIndex = (props: IProps) => {
   const [batchMode, setBatchMode] = useState(searchParams.get("batch") === "true" || false);
   // This is the state of the Report Query
   const [searchState, setSearchState] = useState<ReportSearchState>({
-    tags: null,
     keywords: searchParams.get("keywords"),
     author: searchParams.get("author"),
     groupId: searchParams.get("groupId"),
@@ -60,7 +59,6 @@ const ReportsIndex = (props: IProps) => {
   });
 
   const clearSearchParams = () => { setSearchParams({}); setSearchState({
-    tags: null,
     keywords: null,
     author: null,
     groupId: null,
@@ -106,46 +104,13 @@ const ReportsIndex = (props: IProps) => {
   const groupsQuery = useQuery<Groups | undefined>(["groups", "all"], getGroups);
   const tagsQuery = useQuery("tags", getTags);
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
-  const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>([]);
+  const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
   return (
       <Container fluid className={"pt-4"}>
         <Row>
           <Col>
           </Col>
           <Col xl={9}>
-            { batchMode &&
-              <Card className="mb-4">
-                <Card.Body>
-                  <Row className="justify-content-between">
-                    <Card.Text as={"h2"} >Batch Mode</Card.Text>
-                    <Card.Text>A set of reports has been picked out for you.</Card.Text>
-                  </Row>
-                </Card.Body>
-                <Card.Footer>
-                  <Button className={"float-end ms-2"} onClick={()=>{
-                    if (batchQuery.data && batchQuery.data.results) {
-                      setSelectedReadMutation.mutateAsync(objectsToIds(batchQuery.data.results)).then(
-                          ()=>{
-                            newBatchMutation.mutate();
-                          }
-                      )
-                    }
-                  }}>
-                    Grab new batch
-                  </Button>
-                  <Button className={"float-end"} variant={"secondary"} onClick={()=> {
-                    cancelBatchMutation.mutate();
-                    setBatchMode(false);
-                    setSearchParams({
-                      batch: "false",
-                    });
-                  }
-                  }>
-                    Cancel batch
-                  </Button>
-                </Card.Footer>
-              </Card>
-            }
             { !batchMode &&
                 <Card className="mb-4">
                   <Card.Body>
@@ -165,8 +130,8 @@ const ReportsIndex = (props: IProps) => {
                       </Button>
                     </InputGroup>
                     <Formik
+                        validationSchema={reportQuerySchema}
                         initialValues={{
-                          tags: searchParams.get("tags") || [],
                           keywords: searchParams.get("keywords") || "",
                           author: searchParams.get("author") || "",
                           groupId: searchParams.get("groupId") || "",
@@ -266,7 +231,7 @@ const ReportsIndex = (props: IProps) => {
                                           value={values.sourceId}
                                       >
                                         <option value={""}>All</option>
-                                        {sourcesQuery.isFetched && sourcesQuery.data &&
+                                        {sourcesQuery.isSuccess && sourcesQuery.data &&
                                             sourcesQuery.data.map((source: Source) => {
                                               return (
                                                   <option value={source._id} key={source._id}>
@@ -286,7 +251,7 @@ const ReportsIndex = (props: IProps) => {
                                           value={values.list}
                                       >
                                         <option key={"none"} value={""}>All</option>
-                                        {ctListsQuery.isFetched && ctListsQuery.data &&
+                                        {ctListsQuery.isSuccess && ctListsQuery.data &&
                                             ctListToOptions(ctListsQuery.data)
                                         }
                                       </Form.Select>
@@ -311,7 +276,6 @@ const ReportsIndex = (props: IProps) => {
                                         <Button variant={"outline-secondary"} onClick={()=>{
                                           clearSearchParams();
                                           values.keywords = "";
-                                          values.tags = [];
                                           values.groupId = "";
                                           values.media = "";
                                           values.author = "";
@@ -338,9 +302,42 @@ const ReportsIndex = (props: IProps) => {
                   </Card.Body>
                 </Card>
             }
-            <Card>
-              {!batchMode && sourcesQuery.isFetched && reportsQuery.isFetched && tagsQuery.isFetched && groupsQuery.isFetched &&
-                  tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
+            { batchMode &&
+                <Card className="mb-4">
+                  <Card.Body>
+                    <Row className="justify-content-between">
+                      <Card.Text as={"h2"} >Batch Mode</Card.Text>
+                      <Card.Text>A set of reports has been picked out for you.</Card.Text>
+                    </Row>
+                  </Card.Body>
+                  <Card.Footer>
+                    <Button className={"float-end ms-2"} onClick={()=>{
+                      if (batchQuery.data && batchQuery.data.results) {
+                        setSelectedReadMutation.mutateAsync(objectsToIds(batchQuery.data.results)).then(
+                            ()=>{
+                              newBatchMutation.mutate();
+                            }
+                        )
+                      }
+                    }}>
+                      Grab new batch
+                    </Button>
+                    <Button className={"float-end"} variant={"secondary"} onClick={()=> {
+                      cancelBatchMutation.mutate();
+                      setBatchMode(false);
+                      setSearchParams({
+                        batch: "false",
+                      });
+                    }
+                    }>
+                      Cancel batch
+                    </Button>
+                  </Card.Footer>
+                </Card>
+            }
+            { !batchMode && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
+                tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
+                <Card>
                   <ReportTable
                       visibleReports={reportsQuery.data.results}
                       sources={sourcesQuery.data}
@@ -350,21 +347,7 @@ const ReportsIndex = (props: IProps) => {
                       batchMode={batchMode}
                       variant={batchMode ? "batch" : "default"}
                   />
-              }
-              {batchMode && sourcesQuery.isFetched && batchQuery.isFetched && tagsQuery.isFetched && groupsQuery.isFetched &&
-                  tagsQuery.data && batchQuery.data && groupsQuery.data && sourcesQuery.data &&
-                  <ReportTable
-                      visibleReports={batchQuery.data.results}
-                      sources={sourcesQuery.data}
-                      tags={tagsQuery.data}
-                      groups={groupsQuery.data.results}
-                      setBatchMode={setBatchMode}
-                      batchMode={batchMode}
-                      variant={batchMode ? "batch" : "default"}
-                  />
-              }
-              <Card.Footer>
-                { !batchMode &&
+                  <Card.Footer>
                     <ButtonToolbar className={"justify-content-center"}>
                       { reportsQuery.data && reportsQuery.data.total &&
                           <Pagination className={"mb-0"}>
@@ -403,23 +386,45 @@ const ReportsIndex = (props: IProps) => {
                           </Pagination>
                       }
                     </ButtonToolbar>
-                }
-              </Card.Footer>
-            </Card>
+                  </Card.Footer>
+                </Card>
+            }
+            {batchMode && sourcesQuery.isSuccess && batchQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
+                tagsQuery.data && batchQuery.data && groupsQuery.data && sourcesQuery.data &&
+                <Card>
+                  <ReportTable
+                      visibleReports={batchQuery.data.results}
+                      sources={sourcesQuery.data}
+                      tags={tagsQuery.data}
+                      groups={groupsQuery.data.results}
+                      setBatchMode={setBatchMode}
+                      batchMode={batchMode}
+                      variant={batchMode ? "batch" : "default"}
+                  />
+                  <Card.Footer></Card.Footer>
+                </Card>
+            }
             {/* QUERY ERROR STATE: TODO: Put this in the Report Table Component, it makes more sense there. */}
-            {reportsQuery.isError &&
+            {((!batchMode && reportsQuery.isError) || (batchMode && batchQuery.isError)) &&
                 <Card>
                   <Card.Body>
-                    { /*@ts-ignore*/}
-                    <h1 className={"text-danger"}>{reportsQuery.error.response.status} Error</h1>
+                    <h1 className={"text-danger"}>
+                      { /*@ts-ignore*/}
+                      {batchMode ? batchQuery.error.response.status : reportsQuery.error.response.status} Error
+                    </h1>
                     <p>Please contact your system administrator with the error code below. </p>
                     { /*@ts-ignore*/}
-                    <small>{reportsQuery.error.response.status}: {reportsQuery.error.response.data}</small>
+                    <small>
+                      { /*@ts-ignore*/}
+                      {batchMode ? batchQuery.error.response.status : reportsQuery.error.response.status}:
+                      { /*@ts-ignore*/}
+                      {batchMode ? batchQuery.error.response.data : reportsQuery.error.response.data}
+                    </small>
                   </Card.Body>
                 </Card>
             }
             {/* QUERY LOADING STATE: TODO: Put this in the Report Table Component, it makes more sense there.*/}
-            {reportsQuery.isLoading &&
+            {((!batchMode && reportsQuery.isLoading ) || (batchMode && batchQuery.isLoading)) &&
                 <Card>
                   <Card.Header>
                     <ButtonToolbar>

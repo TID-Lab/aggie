@@ -26,10 +26,10 @@ const GroupDetails = () => {
   let { id } = useParams<{id: string}>();
   const queryClient = useQueryClient();
   const groupMutation = useMutation((group: Group) => { return editGroup(group) });
-  const sourcesQuery = useQuery<Source[], AxiosError>("sources", getSources);
-  const tagsQuery = useQuery<Tag[], AxiosError>("tags", getTags);
+  const sourcesQuery = useQuery<Source[], undefined>("sources", getSources);
+  const tagsQuery = useQuery<Tag[], undefined>("tags", getTags);
   //@ts-ignore
-  const groupQuery = useQuery<Group, AxiosError>(["group", id], () => getGroup(id), {
+  const groupQuery = useQuery<Group, undefined>(["group", id], () => getGroup(id), {
     enabled: tagsQuery.isFetched,
     onSuccess: data => {
       if (tagsQuery.data) {
@@ -39,7 +39,7 @@ const GroupDetails = () => {
       }
     }
   });
-  const groupReportsQuery = useQuery<Reports, AxiosError>(
+  const groupReportsQuery = useQuery<Reports, undefined>(
       ["reports", {groupId: id}], ()=> getGroupReports(id),
   );
   const [queryTags, setQueryTags] = useState<Tag[]>([]);
