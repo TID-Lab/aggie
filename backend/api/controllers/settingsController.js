@@ -7,7 +7,7 @@ var CTListUpdateService = require('../CT-list-update-service');
   // Enable/disable global fetching
 exports.setting_update_fetch = (req, res, app) => {
   var fetching = null;
-  switch (req.params.op) {
+  switch (req.params.status) {
     case 'on':
       fetching = true;
       break;

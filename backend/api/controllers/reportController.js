@@ -113,7 +113,7 @@ exports.report_update = (req, res) => {
       report[key] = val;
     });
     if (!report.read) {
-      report.toggleRead(true);
+      report.setReadStatus(true);
     }
     // Save report
     report.save((err, numberAffected) => {
@@ -137,7 +137,7 @@ router.delete('/api/report/_all', User.can('edit data'), (req, res) => {
 }); */
 
   // Edit veracity selected reports
-exports.report_selected_veracity_update = (req, res) => {
+exports.reports_veracity_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -145,7 +145,7 @@ exports.report_selected_veracity_update = (req, res) => {
     let remaining = reports.length;
     reports.forEach((report) => {
       // Edit veracity to catch it in model
-      report.toggleVeracity(req.body.veracity);
+      report.setVeracity(req.body.veracity);
       report.save((err) => {
         if (err) {
           if (!res.headersSent) res.status(err.status).send(err.message)
@@ -159,7 +159,7 @@ exports.report_selected_veracity_update = (req, res) => {
 }
 
   // Mark selected reports as read
-exports.report_selected_read_update = (req, res) => {
+exports.reports_read_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -167,7 +167,7 @@ exports.report_selected_read_update = (req, res) => {
     let remaining = reports.length;
     reports.forEach((report) => {
       // Mark each report as read only to catch it in model
-      report.toggleRead(req.body.read);
+      report.setReadStatus(req.body.read);
       report.save((err) => {
         if (err) {
           if (!res.headersSent) res.status(err.status).send(err.message)
@@ -181,15 +181,15 @@ exports.report_selected_read_update = (req, res) => {
 }
 
   // Escalate selected reports
-exports.report_selected_escalated_update = (req, res) => {
+exports.reports_escalated_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
     if (reports.length === 0) return res.sendStatus(200);
-    var remaining = reports.length;
+    let remaining = reports.length;
     reports.forEach((report) => {
       // Mark each report as escalated to catch it in model
-      report.toggleEscalated(req.body.escalated);
+      report.setEscalated(req.body.escalated);
       report.save((err) => {
         if (err) {
           if (!res.headersSent) res.status(err.status).send(err.message)
@@ -203,7 +203,7 @@ exports.report_selected_escalated_update = (req, res) => {
 }
 
   // Link selected reports to one group
-exports.report_selected_group_update = (req, res) => {
+exports.reports_group_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({_id: { $in: req.body.ids }}, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -225,7 +225,7 @@ exports.report_selected_group_update = (req, res) => {
 }
 
   // Unlink selected reports from an group
-exports.report_selected_ungroup_update = (req, res) => {
+exports.reports_ungroup_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -246,7 +246,7 @@ exports.report_selected_ungroup_update = (req, res) => {
 }
 
   // Update Notes
-exports.report_selected_notes_update = (req, res) => {
+exports.reports_notes_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -266,7 +266,28 @@ exports.report_selected_notes_update = (req, res) => {
   });
 }
 
-exports.report_selected_tags_add = (req, res) => {
+// Update Tags
+exports.reports_tags_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (reports.length === 0) return res.sendStatus(200);
+    var remaining = reports.length;
+    reports.forEach((report) => {
+      report.smtcTags = req.body.tags;
+      report.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, report, 'updateTags');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
+exports.reports_tags_add = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -289,7 +310,7 @@ exports.report_selected_tags_add = (req, res) => {
   });
 }
 
-exports.report_selected_tags_remove = (req, res) => {
+exports.reports_tags_remove = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
@@ -311,7 +332,7 @@ exports.report_selected_tags_remove = (req, res) => {
   });
 }
 
-exports.report_selected_tags_clear = (req, res) => {
+exports.reports_tags_clear = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);

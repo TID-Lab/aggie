@@ -17,8 +17,8 @@ const UsersIndex = () => {
             </Col>
             <Col xl={9}>
               <Container fluid>
-                <h3 className={"mb-2"}>Users</h3>
-                { usersQuery.isFetched &&
+                <h3 className={"mb-3"}>Users</h3>
+                { usersQuery.isSuccess &&
                 <UserTable users={usersQuery.data}></UserTable>
                 }
               </Container>

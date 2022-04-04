@@ -36,7 +36,7 @@ const Configuration = () => {
                   <Card.Body>
                     <Card.Title>Turn fetching on/off</Card.Title>
                     <Form className={"mb-3"}>
-                      { fetchStatusQuery.isFetched && fetchStatusQuery.data &&
+                      { fetchStatusQuery.isSuccess && fetchStatusQuery.data &&
                       <Form.Check
                           type="switch"
                           id="custom-switch"
@@ -47,7 +47,7 @@ const Configuration = () => {
                     </Form>
                     <h5>Email Settings</h5>
                     <Form>
-                      { emailSettingsQuery.isFetched && emailSettingsQuery.data &&
+                      { emailSettingsQuery.isSuccess && emailSettingsQuery.data &&
                       <Form.Group className={"mb-3"}>
                         <Form.Label>App Email Address</Form.Label>
                         <Form.Control

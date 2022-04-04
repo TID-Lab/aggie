@@ -21,8 +21,8 @@ const TagsIndex = (props: IProps) => {
             </Col>
             <Col xl={9}>
               <Container fluid>
-                <h3 className={"mb-2"}>Tags</h3>
-                { tagsQuery.isFetched &&
+                <h3 className={"mb-3"}>Tags</h3>
+                { tagsQuery.isSuccess &&
                 <TagTable tags={tagsQuery.data}></TagTable>
                 }
               </Container>

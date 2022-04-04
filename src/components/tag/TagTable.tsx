@@ -3,14 +3,12 @@ import { Table, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {Card, ButtonToolbar, Dropdown} from "react-bootstrap";
 import ConfirmModal from "../ConfirmModal";
-import { Container } from 'react-bootstrap';
 import TagModal from "./TagModal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 import EllipsisToggle from "../EllipsisToggle";
-import UserModal from "../user/UserModal";
 import {Tag} from "../../objectTypes";
-
+import "./TagTable.css";
 interface IProps {
   tags: Tag[] | [];
 }
@@ -21,18 +19,18 @@ export default function TagTable(props: IProps) {
   if (props.tags.length > 0) {
     tagRows = props.tags.map((tag: Tag) =>
         <tr key={tag._id}>
-          <td>{tag.name}</td>
-          <td style={{backgroundColor: tag.color}}>{tag.color}</td>
-          <td><Link to={"/user/" + tag.user._id}>{tag.user.username}</Link></td>
-          <td>{ tag.description ? <>{tag.description}</> : <></> }</td>
-          <td>{ tag.isCommentTag ? <Form.Check disabled type="switch" checked/>
+          <td className={"align-middle"}>{tag.name}</td>
+          <td className={"align-middle"}><Link to={"/user/" + tag.user._id}>{tag.user.username}</Link></td>
+          <td className={"align-middle"}>{ tag.description ? <>{tag.description}</> : <></> }</td>
+          <td className={"align-middle"}>
+            { tag.isCommentTag ? <Form.Check disabled type="switch" checked/>
               : <Form.Check
                   disabled
                   type="switch"
               /> }
           </td>
-          <td>
-            <Dropdown>
+          <td className={"align-middle"}>
+            <Dropdown className={"float-end"}>
               <Dropdown.Toggle as={EllipsisToggle}/>
               <Dropdown.Menu variant={"dark"}>
                 <TagModal tag={tag}></TagModal>
@@ -58,7 +56,6 @@ export default function TagTable(props: IProps) {
             <thead>
             <tr>
               <th>Name</th>
-              <th>Color</th>
               <th>Creator</th>
               <th>Description</th>
               <th>FB Comments</th>

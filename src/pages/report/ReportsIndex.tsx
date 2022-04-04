@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import {Button, Card, Col, Container, Form, Row, Collapse, InputGroup, FormControl, Table, ButtonToolbar, Placeholder,
-  Pagination,
+import {
+  Button, Card, Col, Container, Form, Row, Collapse, InputGroup, FormControl, Table, ButtonToolbar, Placeholder,
+  Pagination, Stack,
 } from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faClose, faEnvelopeOpen, faPlusCircle, faSearch, faSlidersH} from "@fortawesome/free-solid-svg-icons";
-import ReportTable from "../../components/report/ReportTable";
+import ReportTable, {LoadingReportTable} from "../../components/report/ReportTable";
 import StatsBar from "../../components/StatsBar";
 import {AlertContent} from "../../components/AlertService";
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {cancelBatch, getBatch, getNewBatch, getReports, setSelectedRead} from "../../api/reports";
 import {getSources} from "../../api/sources";
@@ -20,6 +21,9 @@ import {CTList, Groups, Reports, ReportSearchState, Source, Tag} from "../../obj
 import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
+import {AxiosError} from "axios";
+import ErrorCard from "../../components/ErrorCard";
+import AggiePagination from "../../components/AggiePagination";
 
 const ITEMS_PER_PAGE = 50; // This also needs to be set on the backend. Make sure to do so when changing.
 
@@ -40,6 +44,7 @@ interface IProps {
 }
 
 const ReportsIndex = (props: IProps) => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   // This is the state of the URL
   const [searchParams, setSearchParams] = useSearchParams();
@@ -89,20 +94,56 @@ const ReportsIndex = (props: IProps) => {
   const setSelectedReadMutation = useMutation((reportIds: string[])=>setSelectedRead(reportIds));
   // Querying data
   // This is the batch query, it normally remains disabled until the batch mode is activated.
-  const batchQuery = useQuery<Reports | undefined>('reports', () => getBatch(), {
+  const batchQuery = useQuery<Reports | undefined, AxiosError>('batch', () => getBatch(), {
     enabled: batchMode,
     onSuccess: data => {
       if (data && data.total === 0) {
         // If this is true either we have no reports left, or the user has not checked out a batch
         newBatchMutation.mutate();
       }
-    }
+    },
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
   });
-  const reportsQuery = useQuery<Reports | undefined>(["reports", searchState], () => getReports(searchState), {keepPreviousData: true});
-  const sourcesQuery = useQuery<Source[] | undefined>("sources", getSources);
-  const ctListsQuery = useQuery<CTList | undefined>("ctLists", getCTLists);
-  const groupsQuery = useQuery<Groups | undefined>(["groups", "all"], getGroups);
-  const tagsQuery = useQuery("tags", getTags);
+  const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", searchState], () => getReports(searchState), {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+    keepPreviousData: true
+  });
+  const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+  const ctListsQuery = useQuery<CTList | undefined, AxiosError>("ctLists", getCTLists, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", "all"], ()=> {return getGroups();}, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+  const tagsQuery = useQuery("tags", getTags, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
   const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
   return (
@@ -142,6 +183,7 @@ const ReportsIndex = (props: IProps) => {
                           after: searchParams.get("after") || "",
                         }}
                         onSubmit={(values, {setSubmitting, resetForm}) => {
+                          console.log("hello");
                           setSearchParams(parseFilterFields(values));
                           setSearchState(parseFilterFields(values));
                         }}
@@ -345,47 +387,16 @@ const ReportsIndex = (props: IProps) => {
                       groups={groupsQuery.data.results}
                       setBatchMode={setBatchMode}
                       batchMode={batchMode}
-                      variant={batchMode ? "batch" : "default"}
+                      variant={"default"}
                   />
                   <Card.Footer>
-                    <ButtonToolbar className={"justify-content-center"}>
-                      { reportsQuery.data && reportsQuery.data.total &&
-                          <Pagination className={"mb-0"}>
-                            {Number(searchParams.get('page')) === 0 &&
-                                <>
-                                  <Pagination.First disabled/>
-                                  <Pagination.Prev disabled aria-disabled="true"/>
-                                </>
-                            }
-                            {Number(searchParams.get('page')) > 0 &&
-                                <>
-                                  <Pagination.First onClick={()=>goToPage(0)}/>
-                                  <Pagination.Prev onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}/>
-                                  <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}>
-                                    {Number(searchParams.get('page')) - 1}
-                                  </Pagination.Item>
-                                </>
-                            }
-                            <Pagination.Item disabled aria-disabled="true">{Number(searchParams.get('page'))}</Pagination.Item>
-                            {Number(searchParams.get('page')) + 1 < (reportsQuery.data.total/ITEMS_PER_PAGE) &&
-                                <>
-                                  <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}>
-                                    {Number(searchParams.get('page')) + 1}
-                                  </Pagination.Item>
-                                  <Pagination.Next onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}/>
-                                  {/*@ts-ignore*/}
-                                  <Pagination.Last onClick={()=>goToPage(Math.ceil(reportsQuery.data.total/ITEMS_PER_PAGE - 1))}/>
-                                </>
-                            }
-                            {Number(searchParams.get('page')) + 1 >= (reportsQuery.data.total/ITEMS_PER_PAGE) &&
-                                <>
-                                  <Pagination.Next disabled/>
-                                  <Pagination.Last disabled/>
-                                </>
-                            }
-                          </Pagination>
-                      }
-                    </ButtonToolbar>
+                    { reportsQuery.data.total !== null &&
+                        <AggiePagination
+                            goToPage={goToPage}
+                            total={reportsQuery.data.total}
+                            itemsPerPage={ITEMS_PER_PAGE}
+                        />
+                    }
                   </Card.Footer>
                 </Card>
             }
@@ -399,107 +410,43 @@ const ReportsIndex = (props: IProps) => {
                       groups={groupsQuery.data.results}
                       setBatchMode={setBatchMode}
                       batchMode={batchMode}
-                      variant={batchMode ? "batch" : "default"}
+                      variant={"batch"}
                   />
-                  <Card.Footer></Card.Footer>
-                </Card>
-            }
-            {/* QUERY ERROR STATE: TODO: Put this in the Report Table Component, it makes more sense there. */}
-            {((!batchMode && reportsQuery.isError) || (batchMode && batchQuery.isError)) &&
-                <Card>
-                  <Card.Body>
-                    <h1 className={"text-danger"}>
-                      { /*@ts-ignore*/}
-                      {batchMode ? batchQuery.error.response.status : reportsQuery.error.response.status} Error
-                    </h1>
-                    <p>Please contact your system administrator with the error code below. </p>
-                    { /*@ts-ignore*/}
-                    <small>
-                      { /*@ts-ignore*/}
-                      {batchMode ? batchQuery.error.response.status : reportsQuery.error.response.status}:
-                      { /*@ts-ignore*/}
-                      {batchMode ? batchQuery.error.response.data : reportsQuery.error.response.data}
-                    </small>
-                  </Card.Body>
-                </Card>
-            }
-            {/* QUERY LOADING STATE: TODO: Put this in the Report Table Component, it makes more sense there.*/}
-            {((!batchMode && reportsQuery.isLoading ) || (batchMode && batchQuery.isLoading)) &&
-                <Card>
-                  <Card.Header>
-                    <ButtonToolbar>
-                      <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
-                        <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
-                        Read/Unread
-                      </Button>
-                      <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
-                        <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
-                        Add to Group
-                      </Button>
-                      <Button variant={"primary"} disabled aria-disabled={true} onClick={()=>setBatchMode(true)}>
-                        Batch Mode
+                  <Card.Footer>
+                    <ButtonToolbar className="justify-content-end">
+                      <Button className={"float-end ms-2"} onClick={()=>{
+                        if (batchQuery.data && batchQuery.data.results) {
+                          setSelectedReadMutation.mutateAsync(objectsToIds(batchQuery.data.results)).then(
+                              ()=>{
+                                newBatchMutation.mutate();
+                              }
+                          )
+                        }
+                      }}>
+                        Grab new batch
                       </Button>
                     </ButtonToolbar>
-                  </Card.Header>
-                  <Table bordered hover size="sm">
-                    <thead>
-                      <tr>
-                        <th><Form><Form.Check type="checkbox" id={"select-all"} disabled/></Form></th>
-                        <th>Source Info</th>
-                        <th>Thumbnail</th>
-                        <th>Content</th>
-                        <th>Tags</th>
-                        <th>Group</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td><Form><Form.Check type="checkbox" disabled/></Form></td>
-                      <td className="sourceInfo">
-                        <Placeholder as={Card.Text} animation="glow">
-                          <Placeholder xs={4} />
-                          <br/>
-                          <Placeholder xs={5} />
-                          <br/>
-                          <Placeholder xs={4} />
-                        </Placeholder>
-                        <br/>
-                        <Placeholder as={Card.Text} animation="glow">
-                          <Placeholder xs={4}/>
-                          <br/>
-                          <Placeholder xs={5}/>
-                          <br/>
-                          <Placeholder xs={4}/>
-                        </Placeholder>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                        <Placeholder as={Card.Text} animation="glow">
-                          <Placeholder xs={12} />
-                          <Placeholder xs={12} />
-                          <Placeholder style={{ minWidth: 400 }}/>
-                          {/* Not sure why this minWidth thing makes it like 3/4 of the screen */}
-                        </Placeholder>
-                      </td>
-                      <td>
-                        <Form.Group>
-                          <Form.Control
-                              as="textarea"
-                              style={{ height: '144px' }}
-                              disabled
-                          />
-                        </Form.Group>
-                      </td>
-                      <td className={"align-middle"}>
-                        <Placeholder animation="glow">
-                          <Placeholder.Button variant="link" xs={12}/>
-                        </Placeholder>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </Table>
+                  </Card.Footer>
                 </Card>
+            }
+            {((!batchMode && reportsQuery.isError) || (batchMode && batchQuery.isError)) &&
+                <>
+                  {batchMode && batchQuery.error && batchQuery.error.response && batchQuery.error.response.status &&
+                      batchQuery.error.response.data &&
+                      <ErrorCard
+                          errorStatus={batchQuery.error.response.status}
+                          errorData={batchQuery.error.response.data}/>
+                  }
+                  {!batchMode && reportsQuery.error && reportsQuery.error.response && reportsQuery.error.response.status &&
+                      reportsQuery.error.response.data &&
+                      <ErrorCard
+                          errorStatus={reportsQuery.error.response.status}
+                          errorData={reportsQuery.error.response.data}/>
+                  }
+                </>
+            }
+            {((!batchMode && reportsQuery.isLoading ) || (batchMode && batchQuery.isLoading)) &&
+                <LoadingReportTable/>
             }
             <div className={"pb-5"}></div>
           </Col>

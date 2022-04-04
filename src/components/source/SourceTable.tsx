@@ -27,19 +27,19 @@ export default function SourceTable(props: IProps) {
   if (props.sources.length > 0) {
     sourceRows = props.sources.map((source: Source) =>
         <tr key={source._id}>
-          <td><Image src={"/images/" + source.media + ".png"} rounded/></td>
-          <td><Link to={"/source/" + source._id}>{source.nickname}</Link></td>
+          <td className={"align-middle"}><Image src={"/images/" + source.media + ".png"} rounded/></td>
+          <td className={"align-middle"}><Link to={"/source/" + source._id}>{source.nickname}</Link></td>
           {source.user
-              ? <td>{source.credentials.name}</td>
+              ? <td className={"align-middle"}>{source.credentials.name}</td>
               : <td></td>
           }
           {source.keywords
-              ? <td>{source.keywords}</td>
+              ? <td className={"align-middle"}>{source.keywords}</td>
               : <td></td>
           }
-          <td>{source.tags}</td>
-          <td>{source.unreadErrorCount}</td>
-          <td>
+          <td className={"align-middle"}>{source.tags}</td>
+          <td className={"align-middle"}>{source.unreadErrorCount}</td>
+          <td className={"align-middle"}>
             <Form>
               <Form.Switch
                   id={source._id}
@@ -48,8 +48,8 @@ export default function SourceTable(props: IProps) {
               />
             </Form>
           </td>
-          <td>
-            <Dropdown>
+          <td className={"align-middle"}>
+            <Dropdown className={"float-end"}>
               <Dropdown.Toggle as={EllipsisToggle}/>
               <Dropdown.Menu variant={"dark"}>
                 <SourceModal source={source} variant={"dropdown"} credentials={props.credentials}></SourceModal>
@@ -72,7 +72,7 @@ export default function SourceTable(props: IProps) {
             <SourceModal variant={"dropdown"} credentials={props.credentials}></SourceModal>
         </Card.Header>
         <Card.Body>
-          <Table hover responsive>
+          <Table hover>
             <thead>
             <tr>
               <th>Media</th>

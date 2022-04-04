@@ -44,7 +44,7 @@ const Login = (props: IProps) => {
             <Col>
             </Col>
             <Col lg={4} sm={6}>
-              <Card className={"mt-5"}>
+              <Card className={"mt-4"}>
                 <Card.Body>
                   <h2 className={"mb-3 text-center"}>Login</h2>
                   <Alert show={loginQuery.isError} variant={"danger"}>

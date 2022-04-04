@@ -27,30 +27,33 @@ router.get('/comments/:_id', User.can('view data'), reportController.report_comm
 router.put('/:_id', User.can('edit data'), reportController.report_update);
 
 // Update reports veracity
-router.patch('/_veracity', User.can('edit data'), reportController.report_selected_veracity_update);
+router.patch('/_veracity', User.can('edit data'), reportController.reports_veracity_update);
 
 // Update reports read
-router.patch('/_read', User.can('edit data'), reportController.report_selected_read_update);
+router.patch('/_read', User.can('edit data'), reportController.reports_read_update);
 
 // Update reports escalation
-router.patch('/_escalate', User.can('edit data'), reportController.report_selected_escalated_update);
+router.patch('/_escalated', User.can('edit data'), reportController.reports_escalated_update);
 
 // Add reports group
-router.patch('/_link', User.can('edit data'), reportController.report_selected_group_update);
+router.patch('/_link', User.can('edit data'), reportController.reports_group_update);
 
 // Remove reports group
-router.patch('/_unlink', User.can('edit data'), reportController.report_selected_ungroup_update);
+router.patch('/_unlink', User.can('edit data'), reportController.reports_ungroup_update);
 
 // Update reports notes
-router.patch('/_updateNotes', User.can('edit data'), reportController.report_selected_notes_update);
+router.patch('/_notes', User.can('edit data'), reportController.reports_notes_update);
 
 // Add tag to reports
-router.patch('/_tag', User.can('edit data'), reportController.report_selected_tags_add);
+router.patch('/_tag', User.can('edit data'), reportController.reports_tags_add);
 
 // Remove tag from reports
-router.patch('/_untag', User.can('edit data'), reportController.report_selected_tags_remove);
+router.patch('/_untag', User.can('edit data'), reportController.reports_tags_remove);
+
+// Update tags from reports
+router.patch('/_tags', User.can('edit data'), reportController.reports_tags_update);
 
 // Clear tags from reports
-router.patch('/_clearTags', User.can('edit data'), reportController.report_selected_tags_clear);
+router.patch('/_clearTags', User.can('edit data'), reportController.reports_tags_clear);
 
 module.exports = router;

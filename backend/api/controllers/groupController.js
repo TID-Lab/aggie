@@ -5,6 +5,7 @@ var Group = require('../../models/group');
 const _ = require('lodash');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
+const Report = require("../../models/report");
 
 exports.group_create = (req, res) => {
   req.body.creator = req.user;
@@ -145,6 +146,94 @@ exports.group_tags_remove = (req, res) => {
             res.sendStatus(200);
           }
         });
+      });
+    });
+  });
+}
+
+// Escalate selected groups
+exports.group_escalated_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.setEscalated(req.body.escalated);
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'escalatedGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
+// Update group notes
+exports.group_closed_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.closed = req.body.closed;
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'notesGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
+// Update group veracity
+exports.group_veracity_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.setVeracity(req.body.veracity);
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'veracityGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
+// Update group notes
+exports.group_notes_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.notes = req.body.notes;
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'notesGroup');
+        if (--remaining === 0) return res.sendStatus(200);
       });
     });
   });

@@ -1,21 +1,21 @@
 import axios from "axios";
 
 export const getFetchStatus = async () => {
-  const { data } = await axios.get('/api/settings/fetching');
+  const { data } = await axios.get('/api/setting/fetching');
   return data;
 }
 
 export const getEmailSettings = async () => {
-  const { data } = await axios.get('/api/settings/email');
+  const { data } = await axios.get('/api/setting/email');
   return data;
 }
 
 export const putFetchingStatus = async (fetching: boolean) => {
   if (fetching) {
-    const { data } = await axios.put('/api/settings/fetching/on');
+    const { data } = await axios.put('/api/setting/fetching/on');
     return data;
   } else {
-    const { data } = await axios.put('/api/settings/fetching/off');
+    const { data } = await axios.put('/api/setting/fetching/off');
     return data;
   }
 }

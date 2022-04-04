@@ -1,12 +1,23 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import { Link } from 'react-router-dom';
 import Linkify from 'linkify-react';
-import {Card, Pagination, ButtonToolbar, Form, ButtonGroup, Dropdown, Image, Container, Table} from "react-bootstrap";
+import {
+  Card,
+  Pagination,
+  ButtonToolbar,
+  Form,
+  ButtonGroup,
+  Dropdown,
+  Image,
+  Container,
+  Table,
+  Button, Placeholder
+} from "react-bootstrap";
 import ConfirmModal from "../ConfirmModal";
 import EllipsisToggle from "../EllipsisToggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
-import {faCheckCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {faCheckCircle, faEllipsisV, faPlusCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import GroupModal from "./GroupModal";
 import {
   stringToDate, tagById,
@@ -16,6 +27,9 @@ import {Group, Source, Tag, User} from "../../objectTypes";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import {useMutation} from "react-query";
 import {editGroup} from "../../api/groups";
+import "./GroupTable.css";
+import VeracityIndication from "../VeracityIndication";
+import EscalatedIndication from "../EscalatedIndication";
 
 interface IProps {
   visibleGroups: Group[] | [];
@@ -36,41 +50,38 @@ export default function GroupTable(props: IProps) {
     setSelectedGroups(newSelectedGroups);
   }
   return (
-    <Card>
-      <Card.Header>
-        <ButtonToolbar
-            className="justify-content-end"
-            aria-label="Toolbar with Button groups"
-        >
-          <ButtonGroup className={"me-2"}>
+      <>
+        <Card.Header>
+          <ButtonToolbar
+              className="justify-content-end"
+              aria-label="Toolbar with Button groups"
+          >
             <GroupModal users={props.users}/>
-          </ButtonGroup>
-        </ButtonToolbar>
-      </Card.Header>
-      <Table striped bordered hover>
-        <thead>
+          </ButtonToolbar>
+        </Card.Header>
+        <Table bordered hover size="sm" className={"m-0"}>
+          <thead>
           <tr>
             <th>
               <Form>
-              <Form.Check
-                  type="checkbox"
-                  id={"select-all"}
-                  onChange={handleAllSelectChange}
-                  checked={selectedGroups.size > 0}
-              />
+                <Form.Check
+                    type="checkbox"
+                    id={"select-all"}
+                    onChange={handleAllSelectChange}
+                    checked={selectedGroups.size > 0}
+                />
               </Form>
             </th>
-            <th>#</th>
-            <th>Title</th>
+            <th>Group Info</th>
             <th>Location</th>
+            <th>Created</th>
             <th>Notes</th>
-            <th>Assigned To</th>
-            <th>Creation Info</th>
+            <th>Assignee</th>
             <th>Tags</th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {props.visibleGroups && props.visibleGroups.map((group) => {
             return <GroupRow
                 group={group}
@@ -84,28 +95,9 @@ export default function GroupTable(props: IProps) {
             />
           })
           }
-        </tbody>
-      </Table>
-      <Card.Footer className="justify-center">
-        <div className="d-flex justify-content-center">
-          <Pagination size={'sm'}>
-            <Pagination.First />
-            <Pagination.Prev />
-            <Pagination.Item>{1}</Pagination.Item>
-            <Pagination.Ellipsis />
-            <Pagination.Item>{10}</Pagination.Item>
-            <Pagination.Item>{11}</Pagination.Item>
-            <Pagination.Item active>{12}</Pagination.Item>
-            <Pagination.Item>{13}</Pagination.Item>
-            <Pagination.Item disabled>{14}</Pagination.Item>
-            <Pagination.Ellipsis />
-            <Pagination.Item>{20}</Pagination.Item>
-            <Pagination.Next />
-            <Pagination.Last />
-          </Pagination>
-        </div>
-      </Card.Footer>
-    </Card>
+          </tbody>
+        </Table>
+      </>
   );
 }
 
@@ -156,37 +148,36 @@ export function GroupRow(props: GroupRowIProps) {
                       checked={props.selectedGroups?.has(props.group._id)}/>
                 </Form>
               </td>
-              <td>{props.group.idnum}</td>
-              <td>
-                <Link to={"/group/" + props.group._id} className={"me-1"}>{props.group.title}</Link>
-                {props.group.veracity === "Confirmed true" &&
-                <FontAwesomeIcon icon={faCheckCircle} className={"text-primary"}/>
-                }
-                {props.group.veracity === "Confirmed false" &&
-                <FontAwesomeIcon icon={faTimesCircle} className={"text-secondary"}/>
-                }
-                {props.group.veracity === "Unconfirmed" &&
-                <FontAwesomeIcon icon={faCircle}/>
-                }
+              <td className={"td__groupInfo"}>
+                <VeracityIndication veracity={props.group.veracity} id={props.group._id} />
+                <EscalatedIndication escalated={props.group.escalated} id={props.group._id}/>
+                <Link to={"/group/" + props.group._id} className={"me-1 title__link"}>
+                  {props.group.title}
+                </Link>
                 <br/>
-                <small>{props.group.totalReports} reports</small>
+                <span>{props.group.totalReports === 1 ? props.group.totalReports + " report" : props.group.totalReports + " reports"}</span>
+                <br/>
+                <span>ID: {props.group.idnum}</span>
               </td>
-              <td className="text-break">
+              <td className="text-break td__location">
                 <Linkify options={{target: '_blank'}}>{props.group.locationName}</Linkify>
               </td>
+              <td className={"td__creationInfo"}>
+                <span className={"creationInfo__user"}>{props.group.creator.username}</span>
+                <br/>
+                <span>{stringToDate(props.group.storedAt).toLocaleTimeString()}</span>
+                <br/>
+                <span>{stringToDate(props.group.storedAt).toLocaleDateString()}</span>
+              </td>
               {props.group.notes
-                  ? <td>{props.group.notes}</td>
+                  ? <td className={"td__notes"}><Form.Control
+                      as="textarea" rows={4} disabled defaultValue={props.group.notes}/></td>
                   : <td></td>
               }
               {props.group.assignedTo
                   ? <td>{props.group.assignedTo.username}</td>
                   : <td></td>
               }
-              <td>
-                {props.group.creator.username}
-                <br/>
-                <small>{stringToDate(props.group.updatedAt).toLocaleString("en-US")}</small>
-              </td>
               <td>
                 {props.tags && props.group && props.group._id && queryTags &&
                 <TagsTypeahead
@@ -199,8 +190,8 @@ export function GroupRow(props: GroupRowIProps) {
                 />
                 }
               </td>
-              <td>
-                <Dropdown>
+              <td style={{width: 32}}>
+                <Dropdown className={"float-end"}>
                   <Dropdown.Toggle as={EllipsisToggle}/>
                   <Dropdown.Menu variant={"dark"}>
                     <GroupModal group={props.group} users={props.users}/>
@@ -228,10 +219,10 @@ export function GroupRow(props: GroupRowIProps) {
                   ? <td>{props.group.assignedTo.username}</td>
                   : <td></td>
               }
-              <td>
+              <td className={"td__creationInfo"}>
                 {props.group.creator.username}
                 <br/>
-                <small>{stringToDate(props.group.updatedAt).toLocaleString("en-US")}</small>
+                {stringToDate(props.group.updatedAt).toLocaleString("en-US")}
               </td>
               <td>
                 {props.tags.length > 0 &&
@@ -264,4 +255,114 @@ export function GroupRow(props: GroupRowIProps) {
         </tr>
     )
   }
+}
+
+export const LoadingGroupTable = () => {
+  const placeHolderValues = [3, 4, 2, 3, 4, 5, 2, 2, 5];
+  return (
+      <Card>
+        <Card.Header>
+          <ButtonToolbar
+              className="justify-content-end"
+              aria-label="Toolbar with Button groups"
+          >
+            <Button variant={"primary"} disabled>
+              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}></FontAwesomeIcon>
+              <span> Create group </span>
+            </Button>
+          </ButtonToolbar>
+        </Card.Header>
+        <Table striped bordered hover>
+          <thead>
+          <tr>
+            <th>
+              <Form>
+                <Form.Check
+                    type="checkbox"
+                    id={"select-all"}
+                />
+              </Form>
+            </th>
+            <th>#</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Notes</th>
+            <th>Assigned To</th>
+            <th>Creation Info</th>
+            <th>Tags</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          { placeHolderValues.map(value => {
+            return (
+                <tr>
+                  <td>
+                    <Form>
+                      <Form.Check
+                          type="checkbox"
+                          disabled
+                      />
+                    </Form>
+                  </td>
+                  <td><Placeholder animation="glow">
+                    <Placeholder xs={6} ></Placeholder>
+                  </Placeholder></td>
+                  <td>
+                    <Placeholder animation="glow">
+                      <Placeholder xs={12} ></Placeholder>
+                    </Placeholder>
+                    <br/>
+                    <small>
+                      <Placeholder animation="glow">
+                        <Placeholder xs={3} ></Placeholder>
+                      </Placeholder>
+                      {' '}reports
+                    </small>
+                  </td>
+                  <td className="text-break">
+                    <Placeholder animation="glow">
+                      <Placeholder xs={12} ></Placeholder>
+                    </Placeholder>
+                  </td>
+                  <td>
+                    <Placeholder animation="glow">
+                      <Placeholder xs={12} ></Placeholder>
+                      <Placeholder xs={12} ></Placeholder>
+                    </Placeholder>
+                  </td>
+                  <td>
+                    <Placeholder animation="glow">
+                      <Placeholder xs={8} ></Placeholder>
+                    </Placeholder>
+                  </td>
+                  <td>
+                    <Placeholder animation="glow">
+                      <Placeholder xs={9} ></Placeholder>
+                    </Placeholder>
+                    <br/>
+                    <small>
+                      <Placeholder animation="glow">
+                        <Placeholder xs={3} ></Placeholder>
+                      </Placeholder>
+                    </small>
+                  </td>
+                  <td>
+                    <Form.Control
+                        as="textarea"
+                        style={{ height: '80px' }}
+                        disabled
+                    />
+                  </td>
+                  <td>
+                    <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>
+                  </td>
+                </tr>
+            );
+          })
+          }
+          </tbody>
+        </Table>
+      </Card>
+  )
 }

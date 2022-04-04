@@ -25,11 +25,10 @@ interface IProps {
 }
 
 export default function EditGroupModal(props: IProps) {
-  const groupQuery = useQuery<Groups | undefined>(["groups", "all"], getGroups)
+  const groupQuery = useQuery<Groups | undefined>(["groups", "all"], ()=>{return getGroups()})
   const userQuery = useQuery<User[] | undefined>("users", getUsers);
   const [show, setShow] = useState(false);
   const [reports, setReports] = useState<Report[]>(Array.from(props.reports));
-  console.log(reports);
   const handleClose = () => {
     setShow(false);
   }

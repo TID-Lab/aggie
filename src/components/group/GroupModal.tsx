@@ -208,7 +208,7 @@ export default function GroupModal(props: IProps) {
     return (
         <>
           <Button variant={"primary"} onClick={()=>setModalShow(true)}>
-            <FontAwesomeIcon icon={faPlusCircle} className={"me-1"}></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}></FontAwesomeIcon>
             <span> Create group </span>
           </Button>
           <Modal

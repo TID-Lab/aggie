@@ -39,7 +39,7 @@ var schema = new mongoose.Schema({
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
   publicDescription: String,
-  // idnum: { type: Number, required: true }, mongoose-sequence now creates this field for us
+  reports: {type: [{type: SchemaTypes.ObjectId, ref: 'Report'}], default: []},
   totalReports: { type: Number, default: 0, min: 0 },
   notes: String
 });
@@ -71,6 +71,14 @@ schema.post('remove', function() {
   });
 
 });
+
+schema.methods.setVeracity = function(veracity) {
+  this.veracity = veracity;
+};
+
+schema.methods.setEscalated = function(escalated) {
+  this.escalated = escalated;
+};
 
 schema.methods.addSMTCTag = function(smtcTagId, callback) {
   // TODO: Use Functional Programming

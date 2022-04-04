@@ -40,3 +40,15 @@
 .color-nav {
   background-color: #0e7c41;
 }
+
+button.toolTipIcon {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: 0;
+}
+button.toolTipIcon:hover {
+  color: transparent;
+  background-color: transparent;
+  border: 0;
+}

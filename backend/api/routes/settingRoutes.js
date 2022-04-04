@@ -6,7 +6,7 @@ const settingController = require('../controllers/settingsController');
 const User = require('../../models/user');
 
 // Turn fetching on or off
-router.put('/fetching/:op', User.can('change settings'), settingController.setting_update_fetch);
+router.put('/fetching/:status', User.can('change settings'), settingController.setting_update_fetch);
 
 // Request to update CTLists
 router.put('/updateCTList', User.can('change settings'), settingController.setting_update_ctlist);

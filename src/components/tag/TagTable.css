@@ -1,0 +1,7 @@
+div.color-thumbnail {
+    padding: 0.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    width: 5rem;
+    height: 5rem;
+}

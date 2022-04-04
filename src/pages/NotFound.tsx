@@ -3,7 +3,7 @@ import {Container, Col, Row, Card, Form, Button} from "react-bootstrap";
 
 const NotFound = () => {
   return (
-      <div className={"mt-5"}>
+      <div className={"mt-4"}>
         <Container fluid>
           <Row>
             <Col>

@@ -1,6 +1,5 @@
 const User = require("../../models/user");
 const jwt = require('jsonwebtoken');
-const path = require("path");
 const config = require('../../config/secrets').get();
 
 exports.login = (req, res) => {
@@ -8,12 +7,14 @@ exports.login = (req, res) => {
     if (err) {
       res.status(err.status).send(err.message);
     } else {
+
       const payload = {
         id: user.id,
         username: user.username,
         role: user.role,
       };
-      const token = jwt.sign(payload, config.secret, {expiresIn: '24h'});
+
+      const token = jwt.sign(payload, config.secret, {expiresIn: '24hr'});
       res.cookie('jwt', token, {
         httpOnly: true,
         expires: new Date(Date.now() + 86400000), // +1 day

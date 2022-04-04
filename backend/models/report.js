@@ -24,7 +24,7 @@ let schema = new Schema({
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },
   _sourceNicknames: [String],
-  _group: { type: String, ref: 'Group', index: true },
+  _group: { type: SchemaTypes.ObjectId, ref: 'Group', index: true },
   checkedOutBy: { type: Schema.ObjectId, ref: 'User', index: true },
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
@@ -75,15 +75,15 @@ schema.post('save', function() {
 
 
 
-schema.methods.toggleRead = function(read) {
-  this.read = read;
+schema.methods.setReadStatus = function(readStatus) {
+  this.read = readStatus;
 };
 
 schema.methods.setVeracity = function(veracity) {
   this.veracity = veracity;
 };
 
-schema.methods.toggleEscalated = function(escalated) {
+schema.methods.setEscalated = function(escalated) {
   this.escalated = escalated;
 };
 

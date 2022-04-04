@@ -17,9 +17,9 @@ export default function UserTable(props: IProps) {
   if (props.users.length > 0) {
     userRows = props.users.map((user: User) =>
         <tr key={user._id}>
-          <td>{user.username}</td>
-          <td><a href={"mailto:" + user.email}>{user.email}</a></td>
-          <td>
+          <td className={"align-middle"}>{user.username}</td>
+          <td className={"align-middle"}><a href={"mailto:" + user.email}>{user.email}</a></td>
+          <td className={"align-middle"}>
               {user.role !== "" &&
               <>{user.role}</>
               }
@@ -28,7 +28,7 @@ export default function UserTable(props: IProps) {
               }
           </td>
           <td>
-            <Dropdown>
+            <Dropdown className={"float-end"}>
               <Dropdown.Toggle as={EllipsisToggle}/>
               <Dropdown.Menu variant={"dark"}>
                 <UserModal user={user} variant="dropdown"></UserModal>

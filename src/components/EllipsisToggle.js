@@ -1,9 +1,11 @@
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
+import {Button} from "react-bootstrap";
 
 const EllipsisToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <a
+    <Button
+        variant="light"
         href=""
         ref={ref}
         onClick={e => {
@@ -13,7 +15,7 @@ const EllipsisToggle = React.forwardRef(({ children, onClick }, ref) => (
     >
         {<FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>}
         {children}
-    </a>
+    </Button>
 ));
 
 export default EllipsisToggle;

@@ -1,4 +1,4 @@
-import {CTList, Group, hasId, Report, ReportSearchState, Source, Tag} from "./objectTypes";
+import {CTList, Group, hasId, Report, ReportSearchState, Source, Tag, Veracity} from "./objectTypes";
 import {useLocation} from "react-router-dom";
 import {FormikValues} from "formik";
 
@@ -15,7 +15,7 @@ export function tagById (tagId: string, tags: Tag[] | null) {
   return null;
 }
 
-export function tagsById (tagIds: string[] | null, tags: Tag[] | null) {
+export const tagsById = (tagIds: string[] | null | undefined, tags: Tag[] | null | undefined) => {
   // This is O(n^2) but should be fine if n is low
   if (tags && tagIds) {
     if (tags.length === 0) return []; // No tags, no return
@@ -219,9 +219,13 @@ export const ctListToOptions = (ctList: CTList) => {
   return <></>
 }
 
+export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
+  return objectOne._id === objectTwo._id;
+}
+
 export const parseFilterFields = (values: FormikValues) => {
   let parsedFields = Object.assign(removeEmptyStrings(values));
-  if (parsedFields.tags.length === 0) delete parsedFields.tags;
+  if (parsedFields.tags && parsedFields.tags.length === 0) delete parsedFields.tags;
   if (parsedFields.after) parsedFields.after = Date.parse(parsedFields.after);
   return parsedFields;
 }
@@ -231,3 +235,5 @@ function removeEmptyStrings(obj: FormikValues) {
 }
 
 export const searchParamsToObj = (searchParams: URLSearchParams) => {return Object.fromEntries(searchParams.entries())};
+
+export const aggieVeracityOptions: Veracity[] = ["Unconfirmed", "Confirmed False", "Confirmed True"];

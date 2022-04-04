@@ -21,10 +21,12 @@ export default function CredentialTable(props: IProps) {
   if (props.credentials.length > 0) {
     credentialRows = credentials.map((credential: Credential) =>
         <tr key={credential._id}>
-          <td>{credential.name}</td>
-          <td><Image src={"/images/" + credential.type + ".png"} rounded/></td>
-          <td>
+          <td className={"align-middle"}>{credential.name}</td>
+          <td className={"align-middle"}><Image src={"/images/" + credential.type + ".png"} rounded/></td>
+          <td className={"align-middle"}>
+            <div className={"float-end"}>
               <ConfirmModal type={"delete"} variant="icon" credential={credential}/>
+            </div>
           </td>
         </tr>
     );

@@ -5,19 +5,20 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faTags, faUsersCog, faCog, faCloud, faKey } from "@fortawesome/free-solid-svg-icons";
 import ConfirmModal from "./ConfirmModal";
-import {Session, User} from "../objectTypes";
 import "./AggieNavbar.css";
-import {useQuery} from "react-query";
-import {getSession} from "../api/session";
+import {Session} from "../objectTypes";
 
+interface IProps {
+  isAuthenticated: boolean,
+  session: Session | undefined,
+}
 
-const AggieNavbar = () => {
-  const sessionQuery = useQuery<Session | null>("session", getSession);
+const AggieNavbar = (props: IProps) => {
   let location = useLocation();
   return (
     <Navbar className="color-nav" variant="dark" collapseOnSelect expand="lg">
       <Container fluid>
-        { location.pathname === "/login" &&
+        { !props.isAuthenticated &&
         <Navbar.Brand>
           <Image
               alt="Aggie Logo"
@@ -25,7 +26,7 @@ const AggieNavbar = () => {
           />
         </Navbar.Brand>
         }
-        { location.pathname != "/login" && sessionQuery.data &&
+        { props.isAuthenticated &&
             <>
               <Navbar.Brand>
                 <Link to={'/reports'}>
@@ -44,7 +45,7 @@ const AggieNavbar = () => {
                     </Nav.Link>
                   </LinkContainer>
                   <Nav.Item>
-                    <LinkContainer to={'/relevant_reports'}>
+                    <LinkContainer to={'/relevant-reports'}>
                       <Nav.Link className="aggie-nav-link" eventKey="2" title="Item">
                         Relevant Reports
                       </Nav.Link>
@@ -64,12 +65,12 @@ const AggieNavbar = () => {
                   </LinkContainer>
                 </Nav>
                 <Nav>
-                  {sessionQuery.data.role ? (
-                      <LinkContainer to={'/user/' + sessionQuery.data._id}>
+                  {props.session && props.session.role ? (
+                      <LinkContainer to={'/user/' + props.session._id}>
                         <Nav.Link eventKey="5">
                           <FontAwesomeIcon className="me-2" icon={faUser}/>
-                          {sessionQuery.data ? (
-                              <span> {sessionQuery.data.username} </span>
+                          {props.session ? (
+                              <span> {props.session.username} </span>
                           ) : (
                               <span> Undefined </span>
                           )}

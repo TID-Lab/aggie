@@ -43,7 +43,7 @@ const SourceDetails = () => {
             <Col md={9}>
               <Container>
                 <h3>Source details</h3>
-                { sourceQuery.isFetched &&
+                { sourceQuery.isSuccess &&
                 <Card className="mt-3">
                   <Card.Header>
                     <ButtonToolbar

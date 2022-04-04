@@ -1,0 +1,44 @@
+.title__link {
+    color:#000000;
+    text-decoration:none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.title__link:hover {
+    text-decoration: underline;
+}
+
+.icon__veracity {
+    font-size: 18px;
+}
+
+.td__notes {
+    width: 40%;
+}
+
+.td__groupInfo {
+    font-size: 12px;
+}
+
+.td__location {
+    font-size: 12px;
+    width: 10%;
+}
+
+.td__location a {
+    color:#000000;
+    text-decoration:none;
+}
+
+.td__location a:hover {
+    text-decoration: underline;
+}
+
+span.creationInfo__user {
+    font-size: 14px;
+}
+.td__creationInfo {
+    font-size: 12px;
+}
+

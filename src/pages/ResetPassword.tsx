@@ -31,7 +31,7 @@ const ResetPassword = (props: IProps) => {
             <Col>
             </Col>
             <Col lg={4} sm={6}>
-              <Card className={"mt-5"}>
+              <Card className={"mt-4"}>
                 <Card.Body>
                   <h2 className={"mb-3 text-center"}>Reset Password</h2>
                   <Alert show={showIncorrectMessage} variant={"danger"}>

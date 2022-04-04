@@ -5,7 +5,7 @@ interface hasId {
 }
 
 interface Report extends hasId{
-  veracity: "Unconfirmed" | "Confirmed true" | "Confirmed false",
+  veracity: Veracity,
   tags: string[],
   smtcTags: string[],
   hasSMTCTags: boolean,
@@ -14,7 +14,7 @@ interface Report extends hasId{
   _media: string[],
   _sourceNicknames: string[],
   escalated: boolean,
-  _incident?: string,
+  _group?: string,
   authoredAt: string,
   fetchedAt: string,
   content: string,
@@ -50,7 +50,7 @@ interface ReportSearchState {
   list: string | null,
   before: string | null,
   after: string | null,
-  page:  Number | null,
+  page:  number | null,
 }
 
 interface Reports {
@@ -87,7 +87,7 @@ interface Group extends hasId{
   id?: number,
   smtcTags: string[],
   status: string,
-  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed',
+  veracity: Veracity,
   escalated: boolean,
   closed: boolean,
   public: boolean,
@@ -135,18 +135,18 @@ export interface GroupEditableData {
 }
 
 interface GroupSearchState {
-  tags: string[] | [] | null,
-  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed' | null,
-  escalated: boolean | null,
-  closed: boolean | null,
-  public: boolean | null,
-  totalReports: number | null,
-  assignedTo: string | null,
-  creator: string | null,
-  after: string | null,
-  before: string | null,
-  idnum: number | null,
-  locationName: string | null,
+  veracity?: string | null,
+  escalated?: boolean | null,
+  closed?: boolean | null,
+  title?: string | null,
+  totalReports?: number | null,
+  assignedTo?: string | null,
+  creator?: string | null,
+  after?: string | null,
+  before?: string | null,
+  idnum?: number | null,
+  locationName?: string | null,
+  page?:  number | null,
 }
 
 interface Groups {
@@ -255,4 +255,5 @@ interface CTList {
 }
 
 type MediaType = "twitter" | "instagram" | "RSS" | "elmo" | "SMS GH" | "whatsapp" | "facebook" | "comments"
-type veracityOption = 'Confirmed true' | 'Confirmed false' | 'Unconfirmed'
+type Veracity = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
+

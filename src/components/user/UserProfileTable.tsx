@@ -3,16 +3,22 @@ import Table from 'react-bootstrap/Table';
 import {Card, Image} from "react-bootstrap";
 import { Container } from 'react-bootstrap';
 import UserModal from "./UserModal";
-import {User} from "../../objectTypes";
+import {Tag, User} from "../../objectTypes";
+import GroupTable from "../group/GroupTable";
+import {useQuery} from "react-query";
+import {getGroups} from "../../api/groups";
+import {AxiosError} from "axios";
+import {getTags} from "../../api/tags";
 
 interface IProps {
-  user: User | null
+  user: User | null,
+  isCurrentUser: boolean | null
 }
 
-export default function UserProfile(props: IProps) {
+const UserProfileTable = (props: IProps) => {
   return (
       <Container fluid>
-        <h3>User profile</h3>
+        <h3 className={"mb-4"}>{props.isCurrentUser ? "Your profile" : "User profile" }</h3>
         <Card>
           <Card.Body>
             <Table>
@@ -50,7 +56,9 @@ export default function UserProfile(props: IProps) {
               </thead>
             </Table>
             {props.user &&
-            <UserModal user={props.user} variant={"button"}/>
+                <div className={"float-end"}>
+                  <UserModal user={props.user} variant={"button"}/>
+                </div>
             }
           </Card.Body>
         </Card>
@@ -58,3 +66,4 @@ export default function UserProfile(props: IProps) {
   );
 }
 
+export default UserProfileTable;

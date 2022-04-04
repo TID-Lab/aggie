@@ -25,7 +25,7 @@ const SourcesIndex = (props: IProps) => {
             <Col>
             </Col>
             <Col xl={9}>
-              { sourcesQuery.isFetched && credentialsQuery.isFetched && sourcesQuery.data && credentialsQuery.data &&
+              { sourcesQuery.isSuccess && credentialsQuery.isSuccess && sourcesQuery.data && credentialsQuery.data &&
               <SourceTable sources={sourcesQuery.data} credentials={credentialsQuery.data}/>
               }
               {/* QUERY ERROR STATE: TODO: Put this in the SourceTable Component, it makes more sense there. */}

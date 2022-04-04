@@ -10,6 +10,7 @@
 .sourceInfo {
     font-size: 12px;
 }
+
 .sourceInfo__link {
     color:#000000;
     text-decoration:none;
@@ -31,8 +32,19 @@
     background-color: ghostwhite;
 }
 
+.td__image {
+    width: 15%;
+}
 .tr--unread {
     background-color: white;
+}
+
+.icon__veracity {
+    font-size: 18px;
+}
+
+.td__notes {
+    width: 25%;
 }
 
 button.rbt-close {
@@ -43,3 +55,4 @@ button.rbt-close {
     -moz-appearance: none;
     appearance: none;
 }
+

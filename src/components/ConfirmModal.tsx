@@ -103,13 +103,15 @@ export default function ConfirmModal(props: IProps) {
           {props.variant === "button" &&
           <Button
               type={"button"}
-              variant={"primary"}
+              variant={"danger"}
               onClick={()=>setModalShow(true)}
           >
             <FontAwesomeIcon icon={faTrash} className="me-2"/> Delete</Button>
           }
           {props.variant === "icon" &&
-              <FontAwesomeIcon onClick={()=>setModalShow(true)} icon={faTrash}/>
+              <Button variant="light" onClick={()=>setModalShow(true)}>
+                <FontAwesomeIcon icon={faTrash}/>
+              </Button>
           }
           <Modal
               show={modalShow}
@@ -164,7 +166,7 @@ export default function ConfirmModal(props: IProps) {
         <>
           <Nav.Link eventKey="7" onClick={()=>setModalShow(true)}>
             <FontAwesomeIcon icon={faSignOutAlt}/>
-            <span> Log Out </span>
+            <span> Logout </span>
           </Nav.Link>
           <Modal
               show={modalShow}
