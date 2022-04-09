@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import EllipsisToggle from "../EllipsisToggle";
 import ConfirmModal from "../ConfirmModal";
 import SourceModal from "./SourceModal";
-import axios from "axios";
 import {Source, Credential} from "../../objectTypes";
 import {useMutation} from "react-query";
 import {editSource, newSource} from "../../api/sources";
+import './SourceTable.css';
 
 interface IProps {
   sources: Source[] | [];
@@ -28,7 +28,7 @@ export default function SourceTable(props: IProps) {
     sourceRows = props.sources.map((source: Source) =>
         <tr key={source._id}>
           <td className={"align-middle"}><Image src={"/images/" + source.media + ".png"} rounded/></td>
-          <td className={"align-middle"}><Link to={"/source/" + source._id}>{source.nickname}</Link></td>
+          <td className={"align-middle"}><Link to={"/source/" + source._id} className="source__link">{source.nickname}</Link></td>
           {source.user
               ? <td className={"align-middle"}>{source.credentials.name}</td>
               : <td></td>

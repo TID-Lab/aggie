@@ -38,7 +38,7 @@ interface IProps {
   visibleReports: Report[],
   sources: Source[] | [],
   tags: Tag[] | [],
-  groups: Group[] | [],
+  groups: Group[] | [] | undefined,
   batchMode?: boolean,
   setBatchMode?: (batchMode: boolean) => void,
   variant: "modal" | "default" | "group-details" | "relevant" | "batch",
@@ -188,7 +188,7 @@ export default function ReportTable(props: IProps) {
 interface ReportRowIProps {
   report: Report | null,
   tags: Tag[] | null,
-  groups: Group[] | [],
+  groups: Group[] | [] | undefined,
   sources: Source[] | [],
   variant: "modal" | "default" | "group-details" | "relevant" | "batch",
   setSelectedReports?: Dispatch<SetStateAction<Set<Report>>>,
@@ -286,7 +286,7 @@ export function ReportRow(props: ReportRowIProps) {
                 }
               </td>
               {props.variant !== "group-details" &&
-              <td className="align-middle">
+              <td className="td__groupInfo align-middle">
                 <div className="d-flex justify-content-center">
                   <EditGroupModal
                       reports={new Set([props.report])}
@@ -306,9 +306,23 @@ export function ReportRow(props: ReportRowIProps) {
         return (
             <tr key={props.report._id}>
               <td className="sourceInfo">
-                Posted at {new Date(props.report.authoredAt).toLocaleString("en-us")} by {" "}
-                <a href={reportAuthorUrl(props.report)} className="sourceInfo__link">
-                  {props.report.author}
+                <span>{stringToDate(props.report.authoredAt).toLocaleTimeString()}</span>
+                <br/>
+                <span>{stringToDate(props.report.authoredAt).toLocaleDateString()}</span>
+                <br/>
+                <a href={reportAuthorUrl(props.report)} target="_blank" className="sourceInfo__link">
+                  <b>{reportAuthor(props.report)}</b>
+                </a>
+                <br/>
+                <span>
+                    {sourceById(props.report._sources[0], props.sources)?.nickname}
+                </span>
+                {props.report.metadata && props.report.metadata.ct_tag && props.report.metadata.ct_tag.length && props.report.metadata.ct_tag.map &&
+                    <> {'>'} {props.report.metadata.ct_tag.map((tag: string) => {return <>{tag}</>})} <br/></>
+                }
+                <br/>
+                <a href={props.report.url} target="_blank" className="sourceInfo__link">
+                  {capitalizeFirstLetter(props.report._media[0])} <FontAwesomeIcon icon={faArrowUpRightFromSquare}></FontAwesomeIcon>
                 </a>
               </td>
               <td>{reportImageUrl(props.report) &&
@@ -325,13 +339,25 @@ export function ReportRow(props: ReportRowIProps) {
               <td>
 
               </td>
-              <td>
-                <Container fluid>
-                  {props.report._group
-                      ? <>{groupById(props.report._group, props.groups)}</>
-                      : <i>No group selected</i>
-                  }
-                </Container>
+              <td className={"td__groupInfo"}>
+                {props.report._group
+                    ? <>
+                        {props.groups &&
+                            <>
+                              {groupById(props.report._group, props.groups) &&
+                                  <>
+                                    <span className={"group__title"}>{groupById(props.report._group, props.groups)?.title}</span>
+                                    <br/>
+                                    <span className={"group__idnum"}>{groupById(props.report._group, props.groups)?.totalReports} reports</span>
+                                    <br/>
+                                    <span className={"group__idnum"}>ID: {groupById(props.report._group, props.groups)?.idnum}</span>
+                                  </>
+                              }
+                            </>
+                        }
+                      </>
+                    : <i>No group selected</i>
+                }
               </td>
             </tr>
         )
@@ -348,8 +374,8 @@ export function ReportRow(props: ReportRowIProps) {
                 </Form>
               </td>
               <td className="sourceInfo">
-                <VeracityIndication veracity={props.report.veracity} id={props.report._id}/>
-                <EscalatedIndication escalated={props.report.escalated} id={props.report._id}/>
+                <VeracityIndication veracity={props.report.veracity} id={props.report._id} variant={"table"}/>
+                <EscalatedIndication escalated={props.report.escalated} id={props.report._id} variant={"table"}/>
                 <span>{stringToDate(props.report.authoredAt).toLocaleTimeString()}</span>
                 <br/>
                 <span>{stringToDate(props.report.authoredAt).toLocaleDateString()}</span>
@@ -396,7 +422,18 @@ export function ReportRow(props: ReportRowIProps) {
                     />
                 }
               </td>
-              <td></td>
+              <td className="td__groupInfo align-middle">
+                <div className="d-flex justify-content-center">
+                  <EditGroupModal
+                      reports={new Set([props.report])}
+                      groups={props.groups}
+                      groupId={props.report._group}
+                      tags={props.tags}
+                      sources={props.sources}
+                      variant={'inline'}
+                  />
+                </div>
+              </td>
             </tr>
         );
     }
@@ -416,82 +453,172 @@ export function ReportRow(props: ReportRowIProps) {
   }
 }
 
-export const LoadingReportTable = () => {
-  return (
-      <Card>
-        <Card.Header>
-          <ButtonToolbar>
-            <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
-              <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
-              Read/Unread
-            </Button>
-            <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
-              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
-              Add to Group
-            </Button>
-            <Button variant={"primary"} disabled aria-disabled={true}>
-              Batch Mode
-            </Button>
-          </ButtonToolbar>
-        </Card.Header>
-        <Table bordered hover size="sm">
-          <thead>
-          <tr>
-            <th><Form><Form.Check type="checkbox" id={"select-all"} disabled/></Form></th>
-            <th>Source Info</th>
-            <th>Thumbnail</th>
-            <th>Content</th>
-            <th>Tags</th>
-            <th>Group</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td><Form><Form.Check type="checkbox" disabled/></Form></td>
-            <td className="sourceInfo">
-              <Placeholder as={Card.Text} animation="glow">
-                <Placeholder xs={4} />
-                <br/>
-                <Placeholder xs={5} />
-                <br/>
-                <Placeholder xs={4} />
-              </Placeholder>
-              <br/>
-              <Placeholder as={Card.Text} animation="glow">
-                <Placeholder xs={4}/>
-                <br/>
-                <Placeholder xs={5}/>
-                <br/>
-                <Placeholder xs={4}/>
-              </Placeholder>
-            </td>
-            <td>
-            </td>
-            <td>
-              <Placeholder as={Card.Text} animation="glow">
-                <Placeholder xs={12} />
-                <Placeholder xs={12} />
-                <Placeholder style={{ minWidth: 400 }}/>
-                {/* Not sure why this minWidth thing makes it like 3/4 of the screen */}
-              </Placeholder>
-            </td>
-            <td>
-              <Form.Group>
-                <Form.Control
-                    as="textarea"
-                    style={{ height: '144px' }}
-                    disabled
-                />
-              </Form.Group>
-            </td>
-            <td className={"align-middle"}>
-              <Placeholder animation="glow">
-                <Placeholder.Button variant="link" xs={12}/>
-              </Placeholder>
-            </td>
-          </tr>
-          </tbody>
-        </Table>
-      </Card>
-  )
+interface LoadingReportTableIProps {
+  variant: "default" | "relevant",
+}
+export const LoadingReportTable = (props: LoadingReportTableIProps) => {
+  const placeholderValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+  if (props.variant === "default") {
+    return (
+        <Card>
+          <Card.Header>
+            <ButtonToolbar>
+              <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
+                <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
+                Read/Unread
+              </Button>
+              <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
+                <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
+                Add to Group
+              </Button>
+              <Button variant={"primary"} disabled aria-disabled={true}>
+                Batch Mode
+              </Button>
+            </ButtonToolbar>
+          </Card.Header>
+          <Table bordered hover size="sm">
+            <thead>
+            <tr>
+              <th><Form><Form.Check type="checkbox" id={"select-all"} disabled/></Form></th>
+              <th>Source Info</th>
+              <th>Thumbnail</th>
+              <th>Content</th>
+              <th>Tags</th>
+              <th>Group</th>
+            </tr>
+            </thead>
+            <tbody>
+            {placeholderValues.map((value=> {
+              return(
+                  <tr key={"placeholderRow" + value}>
+                    <td><Form><Form.Check type="checkbox" disabled/></Form></td>
+                    <td className="sourceInfo">
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={4} />
+                        <br/>
+                        <Placeholder xs={5} />
+                        <br/>
+                        <Placeholder xs={4} />
+                      </Placeholder>
+                      <br/>
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={4}/>
+                        <br/>
+                        <Placeholder xs={5}/>
+                        <br/>
+                        <Placeholder xs={4}/>
+                      </Placeholder>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={12} />
+                        <Placeholder xs={12} />
+                        <Placeholder style={{ minWidth: 400 }}/>
+                        {/* Not sure why this minWidth thing makes it like 3/4 of the screen */}
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                            as="textarea"
+                            style={{ height: '144px' }}
+                            disabled
+                        />
+                      </Form.Group>
+                    </td>
+                    <td className={"align-middle"}>
+                      <Placeholder animation="glow">
+                        <Placeholder.Button variant="link" xs={12}/>
+                      </Placeholder>
+                    </td>
+                  </tr>
+              )
+            }))}
+            </tbody>
+          </Table>
+        </Card>
+    )
+  } else {
+    return (
+        <Card>
+          <Card.Header>
+            <ButtonToolbar>
+              <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
+                <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>
+                Read/Unread
+              </Button>
+              <Button variant={"secondary"} disabled aria-disabled={true} className="me-3">
+                <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}/>
+                Add to Group
+              </Button>
+            </ButtonToolbar>
+          </Card.Header>
+          <Table bordered hover size="sm">
+            <thead>
+            <tr>
+              <th><Form><Form.Check type="checkbox" id={"select-all"} disabled/></Form></th>
+              <th>Source Info</th>
+              <th>Thumbnail</th>
+              <th>Content</th>
+              <th>Tags</th>
+              <th>Group</th>
+            </tr>
+            </thead>
+            <tbody>
+            {placeholderValues.map((value=> {
+              return(
+                  <tr key={"placeholderRow" + value}>
+                    <td><Form><Form.Check type="checkbox" disabled/></Form></td>
+                    <td className="sourceInfo">
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={4} />
+                        <br/>
+                        <Placeholder xs={5} />
+                        <br/>
+                        <Placeholder xs={4} />
+                      </Placeholder>
+                      <br/>
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={4}/>
+                        <br/>
+                        <Placeholder xs={5}/>
+                        <br/>
+                        <Placeholder xs={4}/>
+                      </Placeholder>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder xs={12} />
+                        <Placeholder xs={12} />
+                        <Placeholder style={{ minWidth: 400 }}/>
+                        {/* Not sure why this minWidth thing makes it like 3/4 of the screen */}
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                            as="textarea"
+                            style={{ height: '144px' }}
+                            disabled
+                        />
+                      </Form.Group>
+                    </td>
+                    <td className={"align-middle"}>
+                      <Placeholder animation="glow">
+                        <Placeholder.Button variant="link" xs={12}/>
+                      </Placeholder>
+                    </td>
+                  </tr>
+              )
+            }))}
+            </tbody>
+          </Table>
+        </Card>
+    )
+  }
+
 }

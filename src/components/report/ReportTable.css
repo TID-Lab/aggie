@@ -1,5 +1,5 @@
 .content__link {
-    color:#000000;
+    color:#212529;
     text-decoration:none;
 }
 
@@ -56,3 +56,12 @@ button.rbt-close {
     appearance: none;
 }
 
+.group__idnum {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.group__title {
+    font-size: 14px;
+    font-weight: bold;
+}

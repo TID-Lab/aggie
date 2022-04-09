@@ -16,13 +16,14 @@ import {getSources} from "../../api/sources";
 import {getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
-import {CTList, Groups, Reports, ReportSearchState, Source, Tag} from "../../objectTypes";
+import {CTList, Groups, Reports, ReportSearchState, Session, Source, Tag} from "../../objectTypes";
 import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination from "../../components/AggiePagination";
+import {getSession} from "../../api/session";
 const ITEMS_PER_PAGE = 50;
 const reportQuerySchema = Yup.object().shape({
   keywords: Yup.string(),
@@ -350,7 +351,7 @@ const RelevantReportsIndex = (props: IProps) => {
                 </>
             }
             {reportsQuery.isLoading &&
-                <LoadingReportTable/>
+                <LoadingReportTable variant={"relevant"}/>
             }
             <div className={"pb-5"}></div>
           </Col>

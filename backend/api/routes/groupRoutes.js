@@ -9,9 +9,12 @@ const User = require('../../models/user');
 // User.can('edit data')
 router.post('/', User.can('edit data'), groupController.group_create);
 
-// Get a list of all Groups
+// Get a list of paginated Groups
 //User.can('view data')
 router.get('/', User.can('view data'), groupController.group_groups);
+
+// Get a list of all Groups
+router.get('/all', User.can('view data'), groupController.group_all_groups);
 
 // Get a Group by _id
 //User.can('view data')

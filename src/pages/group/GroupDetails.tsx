@@ -27,6 +27,8 @@ import {setSelectedVeracity} from "../../api/groups";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
+import VeracityIndication from "../../components/VeracityIndication";
+import EscalatedIndication from "../../components/EscalatedIndication";
 const ITEMS_PER_PAGE = 50;
 
 interface VeracityUpdateInfo {
@@ -187,19 +189,10 @@ const GroupDetails = () => {
             </Col>
             <Col md={9}>
               <Container>
-                {groupQuery.isSuccess &&
+                {groupQuery.isSuccess && groupQuery.data &&
                     <>
                       <h3>
                         <span className={"me-2"}>Group details</span>
-                        {groupQuery.data.veracity === "Confirmed True" &&
-                            <FontAwesomeIcon icon={faCheckCircle} className={"text-primary"}/>
-                        }
-                        {groupQuery.data.veracity === "Confirmed False" &&
-                            <FontAwesomeIcon icon={faTimesCircle} className={"text-secondary"}/>
-                        }
-                        {groupQuery.data.veracity === "Unconfirmed" &&
-                            <FontAwesomeIcon icon={faCircle}/>
-                        }
                       </h3>
                       <Card className="mt-4">
                         <Card.Header>
@@ -210,9 +203,7 @@ const GroupDetails = () => {
                             <ButtonGroup className={"me-2"}>
                             </ButtonGroup>
                             <ButtonGroup>
-                              {groupQuery.data &&
                               <ConfirmModal type={"delete"} group={groupQuery.data} variant={"button"}></ConfirmModal>
-                              }
                             </ButtonGroup>
                           </ButtonToolbar>
                         </Card.Header>
@@ -236,7 +227,8 @@ const GroupDetails = () => {
                               <tr>
                                 <th>Created by</th>
                                 <td>
-                                  {groupQuery.data.creator.username} at {(stringToDate(groupQuery.data.storedAt)).toLocaleString("en-US")}
+                                  {groupQuery.data.creator ? groupQuery.data.creator.username + " at " + (stringToDate(groupQuery.data.storedAt)).toLocaleString("en-US")
+                                      : "Deleted user"}
                                 </td>
                               </tr>
                               <tr>
@@ -244,7 +236,10 @@ const GroupDetails = () => {
                                 <td>{(stringToDate(groupQuery.data.updatedAt)).toLocaleString("en-US")}</td>
                               </tr>
                               <tr>
-                                <th>Veracity</th>
+                                <th>
+                                  <VeracityIndication veracity={groupQuery.data.veracity} id={groupQuery.data._id} variant={"title"}/>
+                                  Veracity
+                                </th>
                                 <td>
                                   <Form.Select
                                       onChange={handleVeracityChange}
@@ -263,7 +258,10 @@ const GroupDetails = () => {
                                 </td>
                               </tr>
                               <tr>
-                                <th>Escalated</th>
+                                <th>
+                                  <EscalatedIndication escalated={groupQuery.data.escalated} id={groupQuery.data._id} variant={"title"}/>
+                                  <span>Escalated</span>
+                                </th>
                                 <td>
                                   <Form.Switch
                                       onBlur={()=> {

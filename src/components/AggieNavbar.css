@@ -1,3 +1,7 @@
+div.aggie-nav {
+    flex-direction: row;
+}
+
 .navbar-nav a.aggie-nav-link.nav-link.active {
     background-color: #094b26;
 }

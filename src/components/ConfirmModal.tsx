@@ -1,4 +1,4 @@
-import {Button, Container, Dropdown, Form, Modal, Nav} from "react-bootstrap";
+import {Alert, Button, Container, Dropdown, Form, Modal, Nav} from "react-bootstrap";
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOutAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +26,10 @@ interface IProps {
 
 export default function ConfirmModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
+  const [alertMessage, setAlertMessage] = useState({
+    header: "",
+    body: "",
+  })
   const queryClient = useQueryClient();
   let navigate = useNavigate();
   const deleteTagMutation = useMutation((tag: Tag) => {return deleteTag(tag)}, {
@@ -137,6 +141,12 @@ export default function ConfirmModal(props: IProps) {
               }
             </Modal.Header>
             <Modal.Body>
+              <Alert variant={"danger"}>
+                <Alert.Heading>{alertMessage.header}</Alert.Heading>
+                <p>
+
+                </p>
+              </Alert>
               {props.tag && props.tag.name &&
               <p>Are you sure you want to delete the tag: <b>{props.tag.name}</b>?</p>
               }
@@ -164,9 +174,9 @@ export default function ConfirmModal(props: IProps) {
   } else if (props.type === "logout") {
     return (
         <>
-          <Nav.Link eventKey="7" onClick={()=>setModalShow(true)}>
+          <Nav.Link eventKey="11" className="ps-2" onClick={()=>setModalShow(true)}>
             <FontAwesomeIcon icon={faSignOutAlt}/>
-            <span> Logout </span>
+            <span> Switch users </span>
           </Nav.Link>
           <Modal
               show={modalShow}

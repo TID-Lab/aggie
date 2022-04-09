@@ -5,6 +5,10 @@
     font-weight: bold;
 }
 
+.group__select {
+    cursor: pointer;
+}
+
 .title__link:hover {
     text-decoration: underline;
 }

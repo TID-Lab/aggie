@@ -13,9 +13,13 @@ var userSchema = new Schema({
   hasDefaultPassword: { type: Boolean, default: true },
   role: { type: String, default: 'viewer' },
   active: { type: Boolean, default: true },
+  attempts: { type: Number, default: 0 },
+  last: { type: Date }
 });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, {
+  usernameLowerCase: true,
+});
 
 var User = mongoose.model('User', userSchema);
 

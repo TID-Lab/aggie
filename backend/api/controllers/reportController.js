@@ -7,6 +7,7 @@ var ReportQuery = require('../../models/query/report-query');
 var _ = require('underscore');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
+const Group = require("../../models/group");
 
 // Determine the search keywords
 const parseQueryData = (queryString) => {
@@ -217,28 +218,22 @@ exports.reports_group_update = (req, res) => {
           if (!res.headersSent) return res.status(err.status).send(err.message)
           return;
         }
+        Group.findById(req.body.group._id, (err, group)=> {
+          if (err) {
+            if (!res.headersSent) {
+              return res.status(err.status).send(err.message);
+            }
+            return;
+          }
+          group.reports.push(report);
+          group.save((err) => {
+            if (err) {
+              if (!res.headersSent) return res.status(err.status).send(err.message)
+              return;
+            }
+          })
+        })
         writelog.writeReport(req, report, 'addToGroup');
-        if (--remaining === 0) return res.sendStatus(200);
-      });
-    });
-  });
-}
-
-  // Unlink selected reports from an group
-exports.reports_ungroup_update = (req, res) => {
-  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
-  Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
-    if (err) return res.status(err.status).send(err.message);
-    if (reports.length === 0) return res.sendStatus(200);
-    var remaining = reports.length;
-    reports.forEach((report) => {
-      report._group = null;
-      report.save((err) => {
-        if (err) {
-          if (!res.headersSent) res.status(err.status).send(err.message)
-          return;
-        }
-        writelog.writeReport(req, report, 'removeFromGroup');
         if (--remaining === 0) return res.sendStatus(200);
       });
     });

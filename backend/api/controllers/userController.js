@@ -24,10 +24,7 @@ const sendEmail = (user, req, callback) => {
 }
 
 exports.user_users = (req, res) => {
-  let query = {};
-  if (req.user) query.username = req.user.username;
-
-  User.find(query, '-password', function(err, users) {
+  User.find({}, function(err, users) {
     if (err) res.status(err.status).send(err.message);
     else res.status(200).send(users);
   });
@@ -44,7 +41,23 @@ exports.user_detail = (req, res) => {
 
 // Create a new User
 exports.user_create = (req, res) => {
-  User.create(req.body, function(err, user) {
+  console.log("Attempting to register user with username: " + req.body.username + " and email: " + req.body.email + ".")
+  User.register({
+    username: req.body.username,
+    email: req.body.email,
+  }, req.body.password, (err, user) => {
+    if (err) {
+      res.status(err.status).send(err.message);
+    } else {
+      const authenticate = User.authenticate();
+      authenticate(req.body.username, req.body.password, (err, result) => {
+        if (err) res.status(err.status).send(error.message)
+        else res.status(200).send(user);
+      })
+    }
+  });
+  /*
+  User.register(req.body, function(err, user) {
     err = Error.decode(err);
     if (err) res.status(err.status).send(err.message);
     else {
@@ -54,7 +67,7 @@ exports.user_create = (req, res) => {
         else res.status(200).send(user);
       });
     }
-  });
+  });*/
 }
 
   // Update a User

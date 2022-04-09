@@ -13,15 +13,19 @@ var tagSchema = new mongoose.Schema({
   color: String,
   description: String,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  isCommentTag: { type: Boolean, default: false }
+  isCommentTag: { type: Boolean, default: false },
+  updatedAt: Date,
+  storedAt: Date,
 });
 
 tagSchema.pre('save', function(next) {
   var tag = this;
+  if (this.isNew) this.storedAt = new Date();
+  this.updatedAt = new Date();
   if(!tag.name) return next(new Error.Validation("name_required"));
   // Check for uniqueness
   SMTCTag.checkNewUnique(tag, function(unique, err) {
-    if (!unique) return next(new Error.Validation(err));
+    if (!unique) return next(new Error.Validation(tag.name + " is not a unique tag name. Please use a unique name for new tags."));
     else next();
   });
 });

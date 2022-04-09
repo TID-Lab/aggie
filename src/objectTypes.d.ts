@@ -96,11 +96,11 @@ interface Group extends hasId{
   assignedTo?: {
     _id: string,
     username: string
-  },
+  } | null,
   creator: {
     _id: string,
     username: string
-  },
+  } | null,
   storedAt: string,
   updatedAt: string,
   idnum: number,
@@ -164,7 +164,15 @@ interface User extends hasId{
   __v: number
 }
 
-export interface UserEditableData {
+export interface UserCreationData {
+  username: string,
+  email: string,
+  password: string,
+  role: 'viewer' | 'monitor'| 'admin',
+  _id?: string
+}
+
+export interface UserEditableData{
   username: string,
   email: string,
   role: 'viewer' | 'monitor'| 'admin',
@@ -180,6 +188,8 @@ interface Tag extends hasId{
     _id: string,
     username: string
   },
+  updatedAt: string,
+  storedAt: string,
   __v: number
 }
 
@@ -254,6 +264,80 @@ interface CTList {
   lists: any,
 }
 
+interface VisualizationAuthor {
+  _id: string,
+  tag: string,
+  subCount: number,
+  reportCount: number,
+  read_only: boolean,
+  name: string
+}
+
+type VisualizationMediaTypes = "link" | "live_video_complete" | "status" | "live_video" | "video" | "youtube" | "live_video_scheduled" | "photo" | "native_video"
+interface VisualizationMedia {
+  count: number,
+  name: VisualizationMediaTypes,
+  read_only: boolean,
+  tag: string,
+  _id: string
+}
+
+interface VisualizationTag {
+  count: number,
+  name: VisualizationMediaTypes,
+  color: string
+  _id: string
+}
+
+interface VisualizationTime {
+  count: number,
+  day: number,
+  hour: number,
+  month: number,
+  read_only: boolean,
+  tag: string,
+  year: number,
+  _id: string
+}
+
+interface VisualizationWord {
+  count: number,
+  name: string,
+  read_only: boolean,
+  _id: string
+}
+
+interface VisualizationAuthors {
+  authors: VisualizationAuthor[],
+  authors_read: VisualizationAuthor[],
+}
+
+interface VisualizationTags {
+  tagData: {
+    author: any,
+    media: any,
+    time: any,
+    word: any
+  },
+  tags: VisualizationTag[],
+}
+
+interface VisualizationWords {
+  words: VisualizationWord[],
+  words_read: VisualizationWord[],
+}
+
+interface VisualizationMedias {
+  media: VisualizationMedia[],
+  media_read: VisualizationMedia[],
+}
+
+interface VisualizationTimes {
+  time: VisualizationTime[],
+  time_read: VisualizationTime[],
+  maxTimeCount: number,
+  avgTimeCount: number
+}
 type MediaType = "twitter" | "instagram" | "RSS" | "elmo" | "SMS GH" | "whatsapp" | "facebook" | "comments"
 type Veracity = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
 

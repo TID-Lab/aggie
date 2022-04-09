@@ -12,7 +12,14 @@ import {
   tagById,
   groupById, sourcesNamesById, aggieVeracityOptions
 } from "../../helpers";
-import {faCopy, faFlag, faEnvelope, faEnvelopeOpen} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCopy,
+  faFlag,
+  faEnvelope,
+  faEnvelopeOpen,
+  faCheckCircle,
+  faTimesCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {useParams} from "react-router-dom";
@@ -25,13 +32,17 @@ import {
   setSelectedVeracity
 } from "../../api/reports";
 import {getSources} from "../../api/sources";
-import {getGroups} from "../../api/groups";
+import {getGroup, getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import "./ReportDetails.css";
 // @ts-ignore
 import { FacebookProvider, Like } from 'react-facebook';
 import {Group, Groups, hasId, Report, Source, Tag, Veracity} from "../../objectTypes";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
+import ErrorCard from "../../components/ErrorCard";
+import {faCircle} from "@fortawesome/free-regular-svg-icons";
+import VeracityIndication from "../../components/VeracityIndication";
+import EscalatedIndication from "../../components/EscalatedIndication";
 
 interface ReadUpdateInfo {
   reportId: string,
@@ -168,19 +179,23 @@ const ReportDetails = () => {
       }
     }
   });
-  const tagsQuery = useQuery<Tag[], undefined>("tags", getTags);
-  const reportQuery = useQuery<Report, undefined>(["report", id], () => getReport(id), {
-    enabled: tagsQuery.isSuccess,
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags);
+  const reportQuery = useQuery<Report | undefined, AxiosError>(["report", id], () => getReport(id), {
     onSuccess: data => {
-      setVeracity(data.veracity);
-      setNotes(data.notes);
-      setEscalated(data.escalated);
-      //@ts-ignore TODO: WHYYYYY??? Typescript function return values need to be set.
-      setTags(tagsById(data.smtcTags, tagsQuery.data));
+      if (data) {
+        setVeracity(data.veracity);
+        setNotes(data.notes);
+        setEscalated(data.escalated);
+        //@ts-ignore TODO: WHYYYYY??? Typescript function return values need to be set.
+        setTags(tagsById(data.smtcTags, tagsQuery.data));
+      }
     }
   });
-  const sourcesQuery = useQuery<Source[], undefined>("sources", getSources);
-  const groupsQuery = useQuery<Groups, undefined>("groups", ()=>{return getGroups()});
+  const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources);
+  const reportGroupQuery = useQuery<Group | undefined, AxiosError>(["group", reportQuery.data?._group], ()=> getGroup(reportQuery.data?._group), {
+    enabled: (reportQuery.isSuccess && reportQuery.data && reportQuery.data._group != ""),
+  })
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>("groups", ()=>{return getGroups()});
 
   return (
       <div className={"mt-4"}>
@@ -188,16 +203,19 @@ const ReportDetails = () => {
           <Row>
             <Col></Col>
             <Col xl={9}>
-              <h3 className={"mb-4"}>Report details</h3>
-              <Card>
-                <Card.Header>
-                  <ButtonToolbar className="justify-content-end">
-                    {reportQuery.isSuccess && reportQuery.data &&
-                        <>
-                          <Button variant={reportQuery.data.read ? "outline-primary" : "primary"} onClick={()=>{
+              {reportQuery.isSuccess && tagsQuery.isSuccess && sourcesQuery.isSuccess && groupsQuery.isSuccess &&
+                  reportQuery.data && tagsQuery.data && sourcesQuery.data && groupsQuery.data &&
+                  <>
+                    <h3 className={"mb-4"}>
+                      <span className={"me-2"}>Report details</span>
+                    </h3>
+                    <Card>
+                      <Card.Header>
+                        <ButtonToolbar className="justify-content-end">
+                          <Button variant={reportQuery.data.read ? "outline-primary" : "primary"} onClick={() => {
                             readStatusMutation.mutate({
-                              reportId: reportQuery.data._id,
-                              read: reportQuery.data.read ? false : true,
+                              reportId: reportQuery.data?._id || "",
+                              read: reportQuery.data?.read ? false : true,
                             })
                           }}>
                             {reportQuery.data.read ?
@@ -207,173 +225,181 @@ const ReportDetails = () => {
                                 "Mark unread" :
                                 "Mark read"}
                           </Button>
-                        </>
-                    }
-                  </ButtonToolbar>
-                </Card.Header>
-                {reportQuery.isSuccess && tagsQuery.isSuccess && sourcesQuery.isSuccess && groupsQuery.isSuccess &&
-                <Card.Body className={reportQuery.data.read ? "bg-light" : "bg-white"}>
-                  <Row>
-                    <Col>
-                      <Alert variant="danger" onClose={() => setShowAlert(false)} show={showAlert} dismissible>
-                        <Alert.Heading>{alertMessage.header}</Alert.Heading>
-                        <p>
-                          {alertMessage.body}
-                        </p>
-                      </Alert>
-                    </Col>
-                  </Row>
-                  {reportQuery.data && groupsQuery.data && sourcesQuery.data && tagsQuery.data &&
-                      <Row>
-                        <Col>
-                          <Table>
-                            <tbody>
-                            <tr key="reportAuthor">
-                              <th className="details__th">Author</th>
-                              <td>
-                                <a href={reportAuthorUrl(reportQuery.data)}>
-                                  {reportQuery.data._media[0] === "twitter" ? "@" : ""}
-                                  {reportQuery.data.author}
-                                </a>
-                              </td>
-                            </tr>
-                            <tr key="reportAuthoredAt">
-                              <th className="details__th">Authored time</th>
-                              <td>{stringToDate(reportQuery.data.authoredAt).toLocaleString("en-us")}</td>
-                            </tr>
-                            {reportQuery.data.metadata.subscriberCount &&
-                                <tr key="reportSubscriberCount">
-                                  <th className="details__th">Subscriber count</th>
-                                  <td>{reportQuery.data.metadata.subscriberCount}</td>
-                                </tr>
-                            }
-                            {reportQuery.data.metadata.followerCount &&
-                                <tr key="reportFollowerCount">
-                                  <th className="details__th">Followers</th>
-                                  <td>{reportQuery.data.metadata.followerCount}</td>
-                                </tr>
-                            }
-                            {reportQuery.data.metadata.crowdtangleId &&
-                                <tr key="reportCrowdtangleId">
-                                  <th className="details__th">Crowdtangle Id</th>
-                                  <td>
-                                    <span className="me-2">{reportQuery.data.metadata.crowdtangleId}</span>
-                                    <CopyToClipboard text={reportQuery.data.metadata.crowdtangleId}>
-                                      <Button variant={"outline-secondary"}><FontAwesomeIcon icon={faCopy}/></Button>
-                                    </CopyToClipboard>
-                                  </td>
-                                </tr>
-                            }
-                            <tr key="reportUrl">
-                              <th className="details__th">URL</th>
-                              <td><a href={reportQuery.data.url}>External link</a></td>
-                            </tr>
-                            { reportQuery.data.metadata.location && reportQuery.data.metadata.location !== "" &&
-                                <tr key="reportLocation">
-                                  <th>Location</th>
-                                  <td>{reportQuery.data.metadata.location}</td>
-                                </tr>
-                            }
-                            <tr key="reportSource">
-                              <th className="details__th">Source</th>
-                              <td>
-                                { sourcesQuery.data && !sourcesNamesById(reportQuery.data._sources, sourcesQuery.data) &&
-                                    <s>Source not found.</s>
-                                }
-                                { sourcesQuery.data && sourcesNamesById(reportQuery.data._sources, sourcesQuery.data) &&
-                                    <>{sourcesNamesById(reportQuery.data._sources, sourcesQuery.data)}</>
-                                }
-                              </td>
-                            </tr>
-                            <tr key="reportFetchedAt">
-                              <th className="details__th">Fetched Time</th>
-                              <td>{stringToDate(reportQuery.data.fetchedAt).toLocaleString()}</td>
-                            </tr>
-                            <tr key="reportVeracity">
-                              <th className="details__th">Veracity</th>
-                              <td>
-                                <Form.Select
-                                    onChange={(event)=> {handleVeracityChange(event)}}
-                                    onBlur={()=> {
-                                      veracityStatusMutation.mutate({
-                                        reportId: reportQuery.data._id,
-                                        veracity: veracity,
-                                      });
-                                    }}
-                                    value={veracity}
-                                >
-                                  {aggieVeracityOptions.map((veracityOption) => {
-                                    return <option key={veracityOption} value={veracityOption}>{veracityOption}</option>
-                                  })}
-                                </Form.Select>
-                              </td>
-                            </tr>
-                            <tr key="reportEscalated">
-                              <th className="details__th">Escalated</th>
-                              <td>
-                                <Form.Switch
-                                    onBlur={()=> {
-                                      escalatedStatusMutation.mutate({
-                                        reportId: reportQuery.data._id,
-                                        escalated: escalated,
-                                      })
-                                    }}
-                                    onChange={handleEscalatedChange}
-                                    checked={escalated}
-                                ></Form.Switch>
-                              </td>
-                            </tr>
-                            <tr key="reportGroup">
-                              <th className="details__th">Group</th>
-                              <td>{reportQuery.data._group}</td>
-                            </tr>
-                            <tr key="reportTags">
-                              <th className="details__th">Tags</th>
-                              <td>
-                                {tagsQuery.data && reportQuery.data._id &&
-                                    <TagsTypeahead
-                                        id={reportQuery.data._id}
-                                        options={tagsQuery.data}
-                                        selected={tags}
-                                        onChange={setTags}
-                                        onBlur={() => {
-                                          tagsUpdateMutation.mutate({
-                                            reportId: reportQuery.data._id,
-                                            tags: tags,
-                                          })
-                                        }}
-                                        variant={"table"}
-                                    />
-                                }
-                              </td>
-                            </tr>
-                            <tr key="reportNotes">
-                              <th className="details__th">Notes</th>
-                              <td>
-                                <Form.Control
-                                    as="textarea"
-                                    name="reportNotes"
-                                    placeholder="Write notes here"
-                                    style={{height: '100px'}}
-                                    onChange={handleNotesChange}
-                                    onBlur={()=>{
-                                      notesUpdateMutation.mutate({
-                                        notes: notes,
-                                        reportId: reportQuery.data._id
-                                      });
-                                    }}
-                                    value={notes}
-                                />
-                              </td>
-                            </tr>
-                            </tbody>
-                          </Table>
-                        </Col>
-                        {reportQuery.data && (reportQuery.data._media[0] === "twitter") &&
-                            <Col>
-                              <TwitterDetails report={reportQuery.data}/>
-                            </Col>
-                        }
+                        </ButtonToolbar>
+                      </Card.Header>
+                      <Card.Body className={reportQuery.data.read ? "bg-light" : "bg-white"}>
+                        <Row>
+                          <Col>
+                            <Alert variant="danger" onClose={() => setShowAlert(false)} show={showAlert} dismissible>
+                              <Alert.Heading>{alertMessage.header}</Alert.Heading>
+                              <p>
+                                {alertMessage.body}
+                              </p>
+                            </Alert>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Table>
+                              <tbody>
+                              <tr key="reportAuthor">
+                                <th className="details__th">Author</th>
+                                <td>
+                                  <a href={reportAuthorUrl(reportQuery.data)}>
+                                    {reportQuery.data._media[0] === "twitter" ? "@" : ""}
+                                    {reportQuery.data.author}
+                                  </a>
+                                </td>
+                              </tr>
+                              <tr key="reportAuthoredAt">
+                                <th className="details__th">Authored time</th>
+                                <td>{stringToDate(reportQuery.data.authoredAt).toLocaleString("en-us")}</td>
+                              </tr>
+                              {reportQuery.data.metadata.subscriberCount &&
+                                  <tr key="reportSubscriberCount">
+                                    <th className="details__th">Subscriber count</th>
+                                    <td>{reportQuery.data.metadata.subscriberCount}</td>
+                                  </tr>
+                              }
+                              {reportQuery.data.metadata.followerCount &&
+                                  <tr key="reportFollowerCount">
+                                    <th className="details__th">Followers</th>
+                                    <td>{reportQuery.data.metadata.followerCount}</td>
+                                  </tr>
+                              }
+                              {reportQuery.data.metadata.crowdtangleId &&
+                                  <tr key="reportCrowdtangleId">
+                                    <th className="details__th">Crowdtangle Id</th>
+                                    <td>
+                                      <span className="me-2">{reportQuery.data.metadata.crowdtangleId}</span>
+                                      <CopyToClipboard text={reportQuery.data.metadata.crowdtangleId}>
+                                        <Button variant={"outline-secondary"}><FontAwesomeIcon icon={faCopy}/></Button>
+                                      </CopyToClipboard>
+                                    </td>
+                                  </tr>
+                              }
+                              <tr key="reportUrl">
+                                <th className="details__th">URL</th>
+                                <td><a href={reportQuery.data.url}>External link</a></td>
+                              </tr>
+                              {reportQuery.data.metadata.location && reportQuery.data.metadata.location !== "" &&
+                                  <tr key="reportLocation">
+                                    <th>Location</th>
+                                    <td>{reportQuery.data.metadata.location}</td>
+                                  </tr>
+                              }
+                              <tr key="reportSource">
+                                <th className="details__th">Source</th>
+                                <td>
+                                  {sourcesQuery.data && !sourcesNamesById(reportQuery.data._sources, sourcesQuery.data) &&
+                                      <s>Source not found.</s>
+                                  }
+                                  {sourcesQuery.data && sourcesNamesById(reportQuery.data._sources, sourcesQuery.data) &&
+                                      <>{sourcesNamesById(reportQuery.data._sources, sourcesQuery.data)}</>
+                                  }
+                                </td>
+                              </tr>
+                              <tr key="reportFetchedAt">
+                                <th className="details__th">Fetched Time</th>
+                                <td>{stringToDate(reportQuery.data.fetchedAt).toLocaleString()}</td>
+                              </tr>
+                              <tr key="reportVeracity">
+                                <th className="details__th">
+                                  <VeracityIndication veracity={reportQuery.data.veracity} id={reportQuery.data._id} variant={"title"}/>
+                                  Veracity
+                                </th>
+                                <td>
+                                  <Form.Select
+                                      onChange={(event) => {
+                                        handleVeracityChange(event)
+                                      }}
+                                      onBlur={() => {
+                                        veracityStatusMutation.mutate({
+                                          reportId: reportQuery.data?._id || "",
+                                          veracity: veracity,
+                                        });
+                                      }}
+                                      value={veracity}
+                                  >
+                                    {aggieVeracityOptions.map((veracityOption) => {
+                                      return <option key={veracityOption} value={veracityOption}>{veracityOption}</option>
+                                    })}
+                                  </Form.Select>
+                                </td>
+                              </tr>
+                              <tr key="reportEscalated">
+                                <th className="details__th">
+                                  <EscalatedIndication escalated={reportQuery.data.escalated} id={reportQuery.data._id} variant={"title"}/>
+                                  Escalated
+                                </th>
+                                <td>
+                                  <Form.Switch
+                                      onBlur={() => {
+                                        escalatedStatusMutation.mutate({
+                                          reportId: reportQuery.data?._id || "",
+                                          escalated: escalated,
+                                        })
+                                      }}
+                                      onChange={handleEscalatedChange}
+                                      checked={escalated}
+                                  ></Form.Switch>
+                                </td>
+                              </tr>
+                              <tr key="reportGroup">
+                                <th className="details__th">Group</th>
+                                <td>
+                                  {reportGroupQuery.isSuccess && reportGroupQuery.data &&
+                                      <span>{reportGroupQuery.data.title}</span>
+                                  }
+                                </td>
+                              </tr>
+                              <tr key="reportTags">
+                                <th className="details__th">Tags</th>
+                                <td>
+                                  {tagsQuery.data && reportQuery.data._id &&
+                                      <TagsTypeahead
+                                          id={reportQuery.data._id}
+                                          options={tagsQuery.data}
+                                          selected={tags}
+                                          onChange={setTags}
+                                          onBlur={() => {
+                                            tagsUpdateMutation.mutate({
+                                              reportId: reportQuery.data?._id || "",
+                                              tags: tags,
+                                            })
+                                          }}
+                                          variant={"table"}
+                                      />
+                                  }
+                                </td>
+                              </tr>
+                              <tr key="reportNotes">
+                                <th className="details__th">Notes</th>
+                                <td>
+                                  <Form.Control
+                                      as="textarea"
+                                      name="reportNotes"
+                                      placeholder="Write notes here"
+                                      style={{height: '100px'}}
+                                      onChange={handleNotesChange}
+                                      onBlur={() => {
+                                        notesUpdateMutation.mutate({
+                                          notes: notes,
+                                          reportId: reportQuery.data?._id || ""
+                                        });
+                                      }}
+                                      value={notes}
+                                  />
+                                </td>
+                              </tr>
+                              </tbody>
+                            </Table>
+                          </Col>
+                          {reportQuery.data && (reportQuery.data._media[0] === "twitter") &&
+                              <Col>
+                                <TwitterDetails report={reportQuery.data}/>
+                              </Col>
+                          }
                           {reportQuery.data && (reportQuery.data._media[0] === "crowdtangle" || reportQuery.data._media[0] === "facebook") &&
                               <Col>
                                 <FacebookMedia
@@ -381,12 +407,28 @@ const ReportDetails = () => {
                                 />
                               </Col>
                           }
-                      </Row>
-                  }
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                  </>
+              }
+              {reportQuery.isError && reportQuery.error && reportQuery.error.response && reportQuery.error.response.data && reportQuery.error.response.status &&
+                  <ErrorCard errorData={reportQuery.error.response.data} errorStatus={reportQuery.error.response.status}/>
+              }
+              {reportQuery.isLoading &&
+                  <Card>
+                    <Card.Header>
+                      <ButtonToolbar className="justify-content-end">
+                        <Button variant="primary" disabled>
+                          <FontAwesomeIcon icon={faEnvelope} className={"me-2"}/> {"Mark read"}
+                        </Button>
+                      </ButtonToolbar>
+                    </Card.Header>
+                    <Card.Body>
 
-                </Card.Body>
-                }
-              </Card>
+                    </Card.Body>
+                  </Card>
+              }
               <div className={"pb-4"}></div>
             </Col>
             <Col>

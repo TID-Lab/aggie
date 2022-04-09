@@ -1,3 +1,14 @@
-.group__select {
-    cursor: pointer;
+button.group__button {
+    text-align:justify;
+    width: 100%;
+}
+
+.edit__group__modal {
+    background-color: white;
+}
+
+.group--selected {
+    background-color: rgba(12, 65, 40, 0.24);
+    outline-style: solid;
+    outline-color:#0c4128;
 }

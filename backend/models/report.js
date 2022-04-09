@@ -2,6 +2,7 @@
 // This class is responsible for executing ReportQuerys.
 const database = require('../database');
 const mongoose = database.mongoose;
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
 const SchemaTypes = mongoose.SchemaTypes;
 const logger = require('../logger');
@@ -173,7 +174,7 @@ schema.methods.clearSMTCTags = function(callback) {
   }
   cb();
 }
-
+schema.plugin(AutoIncrement, { inc_field: 'reportId' });
 const Report = mongoose.model('Report', schema);
 
 SMTCTag.schema.on('tag:removed', function(id) {

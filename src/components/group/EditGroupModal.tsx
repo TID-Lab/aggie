@@ -1,4 +1,4 @@
-import {Button, Container, Form, Modal, Table} from "react-bootstrap";
+import {Alert, Button, Container, Form, Modal, Table} from "react-bootstrap";
 import React, {useState} from "react";
 // @ts-ignore
 import Tags from "@yaireo/tagify/dist/react.tagify";
@@ -6,51 +6,78 @@ import {Link} from "react-router-dom";
 import {groupById, tagsById} from "../../helpers";
 import {ReportRow} from "../report/ReportTable";
 import './EditGroupModal.css';
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {Group, Groups, Report, Reports, Source, Tag, User} from "../../objectTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle} from "@fortawesome/free-solid-svg-icons";
 import {GroupRow} from "./GroupTable";
-import {useQuery} from "react-query";
-import {getGroups} from "../../api/groups";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {getAllGroups, getGroups} from "../../api/groups";
 import {getUsers} from "../../api/users";
+import {setSelectedEscalated, setSelectedGroup} from "../../api/reports";
 
 interface IProps {
   reports: Set<Report>,
   tags: Tag[] | null,
-  groups: Group[] | [],
+  groups: Group[] | [] | undefined,
   sources: Source[] | [],
   groupId: string | undefined,
   variant: "inline" | "selection"
 }
 
+interface ReportGroupUpdateInfo {
+  reportIds: string[] | [],
+  _group: Group | null,
+}
 export default function EditGroupModal(props: IProps) {
-  const groupQuery = useQuery<Groups | undefined>(["groups", "all"], ()=>{return getGroups()})
+  const queryClient = useQueryClient();
   const userQuery = useQuery<User[] | undefined>("users", getUsers);
-  const [show, setShow] = useState(false);
+  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState({
+    header: "",
+    body: "",
+  })
   const [reports, setReports] = useState<Report[]>(Array.from(props.reports));
+  const [tempSelectedGroup, setTempSelectedGroup] = useState<Group | null>(null);
+
+  const reportGroupUpdateMutation = useMutation((reportGroupUpdateInfo: ReportGroupUpdateInfo) => {
+    return setSelectedGroup(reportGroupUpdateInfo.reportIds, reportGroupUpdateInfo._group);
+  }, {
+    onSuccess: data => {
+      queryClient.invalidateQueries("reports");
+    },
+    onError: (error: AxiosError) => {
+      if (error && error.response && error.response.status && error.response.data) {
+        setShowAlert(false);
+        setAlertMessage({
+          header: "Failed to update group status " + error.response.status,
+          body: error.response.data,
+        });
+        setShowAlert(true);
+      } else {
+        console.error("Uncaught group update error.")
+      }
+    }
+  });
+
   const handleClose = () => {
-    setShow(false);
+    setShowGroupModal(false);
   }
 
   const handleShow = () => {
-    setShow(true);
-  }
-  // @ts-ignore
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-  };
-
-  const setGroup = (group: Group) => {
-
+    setShowGroupModal(true);
   }
 
-  const ReportRows = () => {
-
+  const handleSubmit = () => {
+    reportGroupUpdateMutation.mutate({
+      reportIds: reports.map((report=>{return report._id;})),
+      _group: tempSelectedGroup,
+    })
   }
 
   const ReportGroupModalJSX = () => {
-    if (reports.length > 0 && show) {
+    if (reports.length > 0 && showGroupModal) {
       return (
           <>
             <Modal.Header closeButton>
@@ -59,9 +86,15 @@ export default function EditGroupModal(props: IProps) {
                   : <Modal.Title>Edit report group</Modal.Title>
               }
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="edit__group__modal">
               <Container fluid>
-                <Table bordered responsive>
+                <Alert variant="danger" onClose={() => setShowAlert(false)} show={showAlert} dismissible>
+                  <Alert.Heading>{alertMessage.header}</Alert.Heading>
+                  <p>
+                    {alertMessage.body}
+                  </p>
+                </Alert>
+                <Table bordered>
                   <thead>
                     <tr>
                       <th>Source info</th>
@@ -86,16 +119,15 @@ export default function EditGroupModal(props: IProps) {
                   })}
                   </tbody>
                 </Table>
-                <h5>Groups</h5>
-                <Table hover responsive size={"sm"}>
+                <Table hover bordered size={"sm"} className={"m-0"}>
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Name</th>
+                      <th></th>
+                      <th>Group Info</th>
                       <th>Location</th>
+                      <th>Created</th>
                       <th>Notes</th>
-                      <th>Assigned to</th>
-                      <th>Creation info</th>
+                      <th>Assignee</th>
                       <th>Tags</th>
                     </tr>
                   </thead>
@@ -107,9 +139,13 @@ export default function EditGroupModal(props: IProps) {
                               key={group._id}
                               variant='modal'
                               tags={props.tags}
+                              className={tempSelectedGroup === group ? "group--selected" : ""}
                               group={group}
                               users={userQuery.data}
                               sources={props.sources}
+                              onClick={()=>{
+                                setTempSelectedGroup(group);
+                              }}
                           />);
                     }
                   })}
@@ -117,7 +153,7 @@ export default function EditGroupModal(props: IProps) {
                 </Table>
               </Container>
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className="edit__group__modal">
               <Button variant="secondary" onClick={handleClose}>Cancel</Button>
               <Button variant="primary" type="submit">Save</Button>
             </Modal.Footer>
@@ -128,9 +164,34 @@ export default function EditGroupModal(props: IProps) {
   return (
       <>
         { props.variant === "inline" &&
-            <Button variant="link" onClick={handleShow}>
-              {props.groupId ? groupById(props.groupId, props.groups) : "Edit"}
-            </Button>
+            <>
+              {props.groups ?
+                  <>
+                    {props.groupId ?
+                        <Button variant={"secondary"} className={"group__button"} onClick={handleShow}>
+                          {groupById(props.groupId, props.groups) &&
+                              <>
+                                <span className={"group__title"}>{groupById(props.groupId, props.groups)?.title}</span>
+                                <br/>
+                                <span className={"group__idnum"}>
+                                  {groupById(props.groupId, props.groups)?.totalReports === 1 ?
+                                    groupById(props.groupId, props.groups)?.totalReports + " report" :
+                                    groupById(props.groupId, props.groups)?.totalReports + " reports"}</span>
+                                <br/>
+                                <span className={"group__idnum"}>ID: {groupById(props.groupId, props.groups)?.idnum}</span>
+                              </>
+                          }
+                        </Button>
+                        : <Button variant={"link"} onClick={handleShow}>
+                          Edit
+                        </Button>
+                    }
+                  </> :
+                  <Button variant="link" onClick={handleShow}>
+                    Edit
+                  </Button>
+              }
+            </>
         }
         { props.variant === "selection" &&
             <Button variant={"secondary"} onClick={handleShow} disabled={reports.length === 0}>
@@ -140,11 +201,9 @@ export default function EditGroupModal(props: IProps) {
             </Button>
         }
         <Modal
-            show={show}
-            size={"xl"}
+            show={showGroupModal}
             onHide={handleClose}
-            fullscreen={"xl-down"}
-            backdrop="static"
+            fullscreen={true}
             keyboard={false}
         >
           <Form onSubmit={handleSubmit}>

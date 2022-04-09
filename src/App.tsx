@@ -20,13 +20,14 @@ import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
-import {useQuery} from "react-query";
+import {useQuery, useQueryClient} from "react-query";
 import {getSession} from "./api/session";
 import {AxiosError} from "axios";
 import {Session} from "./objectTypes";
 import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
 
 const App = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
   let sessionFetching = true;
@@ -34,6 +35,7 @@ const App = () => {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         sessionFetching = false;
+        navigate('/reports');
       }
     },
     onSuccess: data => {

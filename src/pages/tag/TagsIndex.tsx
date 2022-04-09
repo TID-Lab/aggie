@@ -4,6 +4,8 @@ import StatsBar from '../../components/StatsBar';
 import TagTable from "../../components/tag/TagTable";
 import {useQuery, useQueryClient} from "react-query";
 import {getTags} from "../../api/tags";
+import {Tag} from "../../objectTypes";
+import {AxiosError} from "axios";
 
 interface IProps {
 }
@@ -11,7 +13,7 @@ interface IProps {
 
 const TagsIndex = (props: IProps) => {
   const queryClient = useQueryClient();
-  const tagsQuery = useQuery("tags", getTags);
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags);
 
   return (
       <div className="mt-4">
@@ -22,7 +24,7 @@ const TagsIndex = (props: IProps) => {
             <Col xl={9}>
               <Container fluid>
                 <h3 className={"mb-3"}>Tags</h3>
-                { tagsQuery.isSuccess &&
+                { tagsQuery.isSuccess && tagsQuery.data &&
                 <TagTable tags={tagsQuery.data}></TagTable>
                 }
               </Container>

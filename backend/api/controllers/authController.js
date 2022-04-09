@@ -9,15 +9,14 @@ exports.login = (req, res) => {
     } else {
 
       const payload = {
-        id: user.id,
+        id: user._id,
         username: user.username,
         role: user.role,
       };
-
-      const token = jwt.sign(payload, config.secret, {expiresIn: '24hr'});
+      const token = jwt.sign(payload, config.secret, {expiresIn: '12hr'});
       res.cookie('jwt', token, {
         httpOnly: true,
-        expires: new Date(Date.now() + 86400000), // +1 day
+        expires: new Date(Date.now() + 43200000), // +1 day
         secure: true,
       });
       res.json({

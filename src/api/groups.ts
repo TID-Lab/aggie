@@ -33,6 +33,11 @@ export const getGroups = async (searchState: GroupSearchState = {
   }
 }
 
+export const getAllGroups = async () => {
+  const { data } = await axios.get('/api/group/all');
+  return data;
+}
+
 export const getGroup = async (id: string | undefined) => {
   if (id) {
     const { data } = await axios.get('/api/group/' + id);

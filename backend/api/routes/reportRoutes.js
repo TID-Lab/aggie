@@ -36,10 +36,7 @@ router.patch('/_read', User.can('edit data'), reportController.reports_read_upda
 router.patch('/_escalated', User.can('edit data'), reportController.reports_escalated_update);
 
 // Add reports group
-router.patch('/_link', User.can('edit data'), reportController.reports_group_update);
-
-// Remove reports group
-router.patch('/_unlink', User.can('edit data'), reportController.reports_ungroup_update);
+router.patch('/_group', User.can('edit data'), reportController.reports_group_update);
 
 // Update reports notes
 router.patch('/_notes', User.can('edit data'), reportController.reports_notes_update);

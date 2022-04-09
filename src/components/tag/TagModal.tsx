@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown } from "react-bootstrap";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {Formik, FormikValues} from "formik";
 import * as Yup from "yup";
 import {Tag, TagEditableData} from "../../objectTypes";
@@ -30,12 +30,28 @@ export default function TagModal(props: IProps) {
     onSuccess: () => {
       handleModalClose();
       queryClient.invalidateQueries("tags");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 422) {
+        setAlertMessage({
+          header: "Non-unique name",
+          body: err.response.data
+        });
+      }
     }
   })
   const editTagMutation = useMutation((tagData: TagEditableData) => {return editTag(tagData)}, {
     onSuccess: () => {
       handleModalClose();
       queryClient.invalidateQueries("tags");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: "Non-unique name",
+          body: err.response.data
+        });
+      }
     }
   });
   const formValuesToTag = (values: FormikValues) => {
@@ -63,17 +79,12 @@ export default function TagModal(props: IProps) {
   const handleModalShow = () => setModalShow(true);
 
   /* Alert state handling */
-  const [alertShow, setAlertShow] = useState(false);
-
-  /* Server state handling */
-  const [serverState, setServerState] = useState({ok: false, msg: "", res: null});
-  const handleServerResponse = (ok: boolean, msg: string, res: any) => {
-    if (!ok) setAlertShow(true)
-    setServerState({ok: ok, msg: msg, res: res})
-  };
+  const [alertShow, setAlertShow] = useState(true);
+  const [alertMessage, setAlertMessage] = useState({header: "", body: ""})
 
   // This is the edit tag modal.
   if (props.tag) {
+    console.log(props.tag);
     return (
         <>
           <Dropdown.Item onClick={handleModalShow}>
@@ -112,14 +123,12 @@ export default function TagModal(props: IProps) {
                       </Modal.Header>
                       <Modal.Body>
                         <Container>
-                          {alertShow &&
-                              <Alert variant="danger" onClose={() => setAlertShow(false)} dismissible>
-                                <Alert.Heading>Oops an error occured!</Alert.Heading>
-                                <p>
-                                  {serverState.msg}
-                                </p>
-                              </Alert>
-                          }
+                          <Alert variant="danger" show={editTagMutation.isError} >
+                            <Alert.Heading>{alertMessage.header}</Alert.Heading>
+                            <p>
+                              {alertMessage.body}
+                            </p>
+                          </Alert>
                           <Form.Group controlId="tagName" className={"mb-3"}>
                             <Form.Label>Tag name</Form.Label>
                             <Form.Control
@@ -209,10 +218,16 @@ export default function TagModal(props: IProps) {
                 }) => (
                   <Form noValidate onSubmit={handleSubmit}>
                     <Modal.Header closeButton>
-                      <Modal.Title>Edit tag</Modal.Title>
+                      <Modal.Title>Create tag</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       <Container>
+                        <Alert variant="danger" show={newTagMutation.isError} >
+                          <Alert.Heading>{alertMessage.header}</Alert.Heading>
+                          <p>
+                            {alertMessage.body}
+                          </p>
+                        </Alert>
                         <Form.Group controlId="tagName" className={"mb-3"}>
                           <Form.Label>Tag name</Form.Label>
                           <Form.Control

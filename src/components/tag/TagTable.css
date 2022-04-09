@@ -5,3 +5,17 @@ div.color-thumbnail {
     width: 5rem;
     height: 5rem;
 }
+
+.td__description {
+    font-size: 12px;
+}
+
+.td__userLink {
+    text-decoration: none;
+    color: black;
+}
+
+.td__userLink:hover {
+    text-decoration: underline;
+    color: -webkit-link;
+}

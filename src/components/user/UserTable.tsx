@@ -17,7 +17,7 @@ export default function UserTable(props: IProps) {
   if (props.users.length > 0) {
     userRows = props.users.map((user: User) =>
         <tr key={user._id}>
-          <td className={"align-middle"}>{user.username}</td>
+          <td className={"align-middle"}><Link to={'/user/' + user._id}><b>{user.username}</b></Link></td>
           <td className={"align-middle"}><a href={"mailto:" + user.email}>{user.email}</a></td>
           <td className={"align-middle"}>
               {user.role !== "" &&

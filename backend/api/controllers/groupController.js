@@ -19,6 +19,12 @@ exports.group_create = (req, res) => {
   });
 }
 
+exports.group_all_groups = (req, res) => {
+  Group.find({}, (err, groups) => {
+    if (err) res.status(err.status).send(err.message);
+    else res.status(200).send(groups);
+  });
+}
 
 exports.group_groups = (req, res) => {
   // Read query string parameters

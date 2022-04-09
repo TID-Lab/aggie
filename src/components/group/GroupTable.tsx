@@ -11,7 +11,7 @@ import {
   Image,
   Container,
   Table,
-  Button, Placeholder
+  Button, Placeholder, InputGroup
 } from "react-bootstrap";
 import ConfirmModal from "../ConfirmModal";
 import EllipsisToggle from "../EllipsisToggle";
@@ -109,6 +109,8 @@ interface GroupRowIProps {
   variant: "modal" | "table"
   setSelectedGroups?: Dispatch<SetStateAction<Set<string>>>,
   selectedGroups?: Set<string>,
+  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
+  className?: string
 }
 
 export function GroupRow(props: GroupRowIProps) {
@@ -138,7 +140,7 @@ export function GroupRow(props: GroupRowIProps) {
     switch (props.variant) {
       case 'table':
         return (
-            <tr key={props.group._id}>
+            <tr key={props.group._id} className={props.className}>
               <td>
                 <Form>
                   <Form.Check
@@ -149,8 +151,8 @@ export function GroupRow(props: GroupRowIProps) {
                 </Form>
               </td>
               <td className={"td__groupInfo"}>
-                <VeracityIndication veracity={props.group.veracity} id={props.group._id} />
-                <EscalatedIndication escalated={props.group.escalated} id={props.group._id}/>
+                <VeracityIndication veracity={props.group.veracity} id={props.group._id} variant={"table"}/>
+                <EscalatedIndication escalated={props.group.escalated} id={props.group._id} variant={"table"}/>
                 <Link to={"/group/" + props.group._id} className={"me-1 title__link"}>
                   {props.group.title}
                 </Link>
@@ -163,7 +165,9 @@ export function GroupRow(props: GroupRowIProps) {
                 <Linkify options={{target: '_blank'}}>{props.group.locationName}</Linkify>
               </td>
               <td className={"td__creationInfo"}>
-                <span className={"creationInfo__user"}>{props.group.creator.username}</span>
+                <span className={"creationInfo__user"}>
+                  {props.group.creator ? props.group.creator.username : "Deleted user"}
+                </span>
                 <br/>
                 <span>{stringToDate(props.group.storedAt).toLocaleTimeString()}</span>
                 <br/>
@@ -175,7 +179,7 @@ export function GroupRow(props: GroupRowIProps) {
                   : <td></td>
               }
               {props.group.assignedTo
-                  ? <td>{props.group.assignedTo.username}</td>
+                  ? <td>{props.group.assignedTo.username ? props.group.assignedTo.username : "Deleted user"}</td>
                   : <td></td>
               }
               <td>
@@ -205,36 +209,49 @@ export function GroupRow(props: GroupRowIProps) {
         break;
       case 'modal':
         return (
-            <tr key={props.group._id}>
-              <td>{props.group.idnum}</td>
-              <td><Link to={"/group/" + props.group._id}>{props.group.title}</Link></td>
-              <td className="text-break">
+            <tr key={props.group._id} className={"group__select " + props.className} onClick={props.onClick}>
+              <td>
+                <div>
+                  <Form.Check
+                      type="radio"
+                      id={props.group._id}
+                  />
+                </div>
+              </td>
+              <td className={"td__groupInfo"}>
+                <VeracityIndication veracity={props.group.veracity} id={props.group._id} variant={"table"}/>
+                <EscalatedIndication escalated={props.group.escalated} id={props.group._id} variant={"table"}/>
+                <Link to={"/group/" + props.group._id} className={"me-1 title__link"}>
+                  {props.group.title}
+                </Link>
+                <br/>
+                <span>{props.group.totalReports === 1 ? props.group.totalReports + " report" : props.group.totalReports + " reports"}</span>
+                <br/>
+                <span>ID: {props.group.idnum}</span>
+              </td>
+              <td className="text-break td__location">
                 <Linkify options={{target: '_blank'}}>{props.group.locationName}</Linkify>
               </td>
+              <td className={"td__creationInfo"}>
+                <span className={"creationInfo__user"}>
+                  {props.group.creator ? props.group.creator.username : "Deleted user"}
+                </span>
+                <br/>
+                <span>{stringToDate(props.group.storedAt).toLocaleTimeString()}</span>
+                <br/>
+                <span>{stringToDate(props.group.storedAt).toLocaleDateString()}</span>
+              </td>
               {props.group.notes
-                  ? <td>{props.group.notes}</td>
+                  ? <td className={"td__notes"}><Form.Control
+                      as="textarea" rows={4} disabled defaultValue={props.group.notes}/></td>
                   : <td></td>
               }
               {props.group.assignedTo
-                  ? <td>{props.group.assignedTo.username}</td>
+                  ? <td>{props.group.assignedTo.username ? props.group.assignedTo.username : "Deleted user"}</td>
                   : <td></td>
               }
-              <td className={"td__creationInfo"}>
-                {props.group.creator.username}
-                <br/>
-                {stringToDate(props.group.updatedAt).toLocaleString("en-US")}
-              </td>
               <td>
-                {props.tags.length > 0 &&
-                    <TagsTypeahead
-                        id={props.group._id}
-                        options={props.tags}
-                        selected={queryTags}
-                        onChange={setQueryTags}
-                        onBlur={handleTagsBlur}
-                        variant={"modal"}
-                    />
-                }
+
               </td>
             </tr>
         )
@@ -258,7 +275,7 @@ export function GroupRow(props: GroupRowIProps) {
 }
 
 export const LoadingGroupTable = () => {
-  const placeHolderValues = [3, 4, 2, 3, 4, 5, 2, 2, 5];
+  const placeHolderValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
       <Card>
         <Card.Header>
@@ -296,7 +313,7 @@ export const LoadingGroupTable = () => {
           <tbody>
           { placeHolderValues.map(value => {
             return (
-                <tr>
+                <tr key={value}>
                   <td>
                     <Form>
                       <Form.Check

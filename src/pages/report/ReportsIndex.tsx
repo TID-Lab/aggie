@@ -14,16 +14,17 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {cancelBatch, getBatch, getNewBatch, getReports, setSelectedRead} from "../../api/reports";
 import {getSources} from "../../api/sources";
-import {getGroups} from "../../api/groups";
+import {getAllGroups, getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
-import {CTList, Groups, Reports, ReportSearchState, Source, Tag} from "../../objectTypes";
+import {CTList, Groups, Reports, ReportSearchState, Session, Source, Tag} from "../../objectTypes";
 import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination from "../../components/AggiePagination";
+import {getSession} from "../../api/session";
 
 const ITEMS_PER_PAGE = 50; // This also needs to be set on the backend. Make sure to do so when changing.
 
@@ -108,6 +109,22 @@ const ReportsIndex = (props: IProps) => {
       }
     },
   });
+  let sessionFetching = true;
+  const sessionQuery = useQuery<Session | undefined, AxiosError>("session", getSession, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        sessionFetching = false;
+        navigate('/reports');
+      }
+    },
+    onSuccess: data => {
+      sessionFetching = true
+      if (location.pathname === "/login") {
+        navigate('/reports');
+      }
+    },
+    retry: sessionFetching
+  });
   const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", searchState], () => getReports(searchState), {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
@@ -130,12 +147,14 @@ const ReportsIndex = (props: IProps) => {
       }
     },
   });
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", "all"], ()=> {return getGroups();}, {
+  // Depending on the number of groups, this could take a WHILE. Therefore we do this Async to other queries.
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", "all"], ()=> {return getAllGroups();}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
       }
     },
+    refetchOnWindowFocus: false,
   });
   const tagsQuery = useQuery("tags", getTags, {
     onError: (err: AxiosError) => {
@@ -183,7 +202,6 @@ const ReportsIndex = (props: IProps) => {
                           after: searchParams.get("after") || "",
                         }}
                         onSubmit={(values, {setSubmitting, resetForm}) => {
-                          console.log("hello");
                           setSearchParams(parseFilterFields(values));
                           setSearchState(parseFilterFields(values));
                         }}
@@ -349,7 +367,11 @@ const ReportsIndex = (props: IProps) => {
                   <Card.Body>
                     <Row className="justify-content-between">
                       <Card.Text as={"h2"} >Batch Mode</Card.Text>
-                      <Card.Text>A set of reports has been picked out for you.</Card.Text>
+                      {sessionQuery.isSuccess && sessionQuery.data &&
+                          <Card.Text>Hello, <strong>{sessionQuery.data.username}</strong>,
+                            a set of reports has been picked out for
+                            you.</Card.Text>
+                      }
                     </Row>
                   </Card.Body>
                   <Card.Footer>
@@ -377,14 +399,14 @@ const ReportsIndex = (props: IProps) => {
                   </Card.Footer>
                 </Card>
             }
-            { !batchMode && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
-                tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
+            { !batchMode && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess &&
+                tagsQuery.data && reportsQuery.data && sourcesQuery.data &&
                 <Card>
                   <ReportTable
                       visibleReports={reportsQuery.data.results}
                       sources={sourcesQuery.data}
                       tags={tagsQuery.data}
-                      groups={groupsQuery.data.results}
+                      groups={groupsQuery.data?.results}
                       setBatchMode={setBatchMode}
                       batchMode={batchMode}
                       variant={"default"}
@@ -400,14 +422,14 @@ const ReportsIndex = (props: IProps) => {
                   </Card.Footer>
                 </Card>
             }
-            {batchMode && sourcesQuery.isSuccess && batchQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
-                tagsQuery.data && batchQuery.data && groupsQuery.data && sourcesQuery.data &&
+            {batchMode && sourcesQuery.isSuccess && batchQuery.isSuccess && tagsQuery.isSuccess &&
+                tagsQuery.data && batchQuery.data && sourcesQuery.data &&
                 <Card>
                   <ReportTable
                       visibleReports={batchQuery.data.results}
                       sources={sourcesQuery.data}
                       tags={tagsQuery.data}
-                      groups={groupsQuery.data.results}
+                      groups={groupsQuery.data?.results}
                       setBatchMode={setBatchMode}
                       batchMode={batchMode}
                       variant={"batch"}
@@ -446,7 +468,7 @@ const ReportsIndex = (props: IProps) => {
                 </>
             }
             {((!batchMode && reportsQuery.isLoading ) || (batchMode && batchQuery.isLoading)) &&
-                <LoadingReportTable/>
+                <LoadingReportTable variant="default"/>
             }
             <div className={"pb-5"}></div>
           </Col>

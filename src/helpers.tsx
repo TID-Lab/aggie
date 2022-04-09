@@ -76,11 +76,11 @@ export function groupById (groupId: string, groups: Group[]) {
     if (groups.length === 0) return null; // No tags, no return
     var len = groups.length;
     while (len--) {
-      if (groups[len]._id === groupId) return groups[len].title;
+      if (groups[len]._id === groupId) return groups[len];
     }
-    return "";
+    return null;
   }
-  return "";
+  return null;
 }
 
 export function capitalizeFirstLetter(s: string) {

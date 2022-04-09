@@ -5,7 +5,7 @@ import {faPlusCircle, faEdit} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import * as Yup from "yup";
 import { Formik, FormikValues } from "formik";
-import {User} from "../../objectTypes";
+import {User, UserCreationData} from "../../objectTypes";
 import {useMutation, useQueryClient} from "react-query";
 import {editUser, newUser} from "../../api/users";
 import {UserEditableData} from "../../objectTypes";
@@ -20,6 +20,7 @@ const userFormSchema = Yup.object().shape({
       .required('Tag name required'),
   userUserRole: Yup.string(),
   userUserEmail: Yup.string(),
+  userPassword: Yup.string(),
 });
 
 const userRoles = ['viewer', 'monitor', 'admin'];
@@ -27,23 +28,23 @@ const userRoles = ['viewer', 'monitor', 'admin'];
 
 export default function UserModal(props: IProps) {
   const queryClient = useQueryClient();
-  const formValuesToUser = (values: FormikValues) => {
-    if (props.user) {
-      return {
-        _id: props.user._id,
-        username: values.userUsername,
-        email: values.userEmail,
-        role: values.userRole
-      }
-    } else {
-      return {
-        username: values.userUsername,
-        email: values.userEmail,
-        role: values.userRole
-      }
+  const formValuesToEditUser = (values: FormikValues) => {
+    return {
+      _id: props.user?._id,
+      username: values.userUsername,
+      email: values.userEmail,
+      role: values.userRole
     }
   };
-  const newUserMutation = useMutation((userData: UserEditableData) => {return newUser(userData)}, {
+  const formValuesToCreateUser = (values: FormikValues) => {
+    return {
+      username: values.userUsername,
+      email: values.userEmail,
+      role: values.userRole,
+      password: values.userPassword,
+    }
+  };
+  const newUserMutation = useMutation((userData: UserCreationData) => {return newUser(userData)}, {
     onSuccess: () => {
       handleModalClose();
       queryClient.invalidateQueries("users");
@@ -89,7 +90,7 @@ export default function UserModal(props: IProps) {
                   userRole: props.user.role}}
                 validationSchema={userFormSchema}
                 onSubmit={async (values, {setSubmitting, resetForm}) => {
-                  editUserMutation.mutate(formValuesToUser(values));
+                  editUserMutation.mutate(formValuesToEditUser(values));
                 }}
             >
               {({
@@ -168,10 +169,10 @@ export default function UserModal(props: IProps) {
               keyboard={false}
           >
             <Formik
-                initialValues={{userUsername: "", userEmail: "", userRole: ""}}
+                initialValues={{userUsername: "", userEmail: "", userRole: "", userPassword: ""}}
                 validationSchema={userFormSchema}
                 onSubmit={async (values, {setSubmitting, resetForm}) => {
-                  newUserMutation.mutate(formValuesToUser(values));
+                  newUserMutation.mutate(formValuesToCreateUser(values));
                 }}
             >
               {({
@@ -213,6 +214,17 @@ export default function UserModal(props: IProps) {
                           <Form.Text className="text-muted">
                             We'll never share your email with anyone else.
                           </Form.Text>
+                        </Form.Group>
+                        <Form.Group controlId="userPassword" className={"mb-3"}>
+                          <Form.Label>Password</Form.Label>
+                          <Form.Control
+                              required
+                              type="text"
+                              name="userPassword"
+                              placeholder="Enter password"
+                              value={values.userPassword}
+                              onChange={handleChange}
+                          />
                         </Form.Group>
                         <Form.Group controlId="userRole">
                           <Form.Label>User Role</Form.Label>

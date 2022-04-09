@@ -9,6 +9,7 @@ import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 import EllipsisToggle from "../EllipsisToggle";
 import {Tag} from "../../objectTypes";
 import "./TagTable.css";
+import {stringToDate} from "../../helpers";
 interface IProps {
   tags: Tag[] | [];
 }
@@ -19,9 +20,19 @@ export default function TagTable(props: IProps) {
   if (props.tags.length > 0) {
     tagRows = props.tags.map((tag: Tag) =>
         <tr key={tag._id}>
-          <td className={"align-middle"}>{tag.name}</td>
-          <td className={"align-middle"}><Link to={"/user/" + tag.user._id}>{tag.user.username}</Link></td>
-          <td className={"align-middle"}>{ tag.description ? <>{tag.description}</> : <></> }</td>
+          <td className={"align-middle"}><strong>{tag.name}</strong></td>
+          <td className={"align-middle td__creationInfo"}>
+            {tag.user ?
+                <Link className={"td__userLink"} to={"/user/" + tag.user._id}><span className={"creationInfo__user "}>{tag.user.username}</span></Link>
+                : <span className={"creationInfo__user"}>Deleted user</span>
+            }
+
+            <br/>
+            <span>{stringToDate(tag.storedAt).toLocaleTimeString()}</span>
+            <br/>
+            <span>{stringToDate(tag.storedAt).toLocaleDateString()}</span>
+          </td>
+          <td className={"td__description"}>{ tag.description ? <>{tag.description}</> : <></> }</td>
           <td className={"align-middle"}>
             { tag.isCommentTag ? <Form.Check disabled type="switch" checked/>
               : <Form.Check
@@ -47,18 +58,18 @@ export default function TagTable(props: IProps) {
   }
 
   return (
-      <Card className="mt-3">
+      <Card className="mt-4">
         <Card.Header as={ButtonToolbar} className="justify-content-end">
           <TagModal/>
         </Card.Header>
         <Card.Body>
-          <Table hover>
+          <Table hover className={"m-0"}>
             <thead>
             <tr>
               <th>Name</th>
-              <th>Creator</th>
+              <th>Details</th>
               <th>Description</th>
-              <th>FB Comments</th>
+              <th>Comments</th>
               <th></th>
             </tr>
             </thead>
