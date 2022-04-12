@@ -25,7 +25,7 @@ const ReportsByTags = (props: IProps) => {
           <YAxis/>
           <Tooltip/>
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
-          <Bar dataKey="count" stackId="media" fill="#82ca9d"/>
+          <Bar dataKey="count" name="Tagged reports" stackId="media" fill="#82ca9d"/>
         </BarChart>
       </ResponsiveContainer>
   );

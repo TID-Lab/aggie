@@ -336,7 +336,9 @@ interface VisualizationTimes {
   time: VisualizationTime[],
   time_read: VisualizationTime[],
   maxTimeCount: number,
-  avgTimeCount: number
+  avgTimeCount: number,
+  maxReadTimeCount: number,
+  avgReadTimeCount: number
 }
 type MediaType = "twitter" | "instagram" | "RSS" | "elmo" | "SMS GH" | "whatsapp" | "facebook" | "comments"
 type Veracity = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';

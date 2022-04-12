@@ -1,6 +1,7 @@
 import {Pagination, Stack} from "react-bootstrap";
 import React from "react";
 import {useSearchParams} from "react-router-dom";
+const commaNumber = require('comma-number')
 
 interface IProps {
   goToPage: (pageNum: number) => void,
@@ -20,10 +21,10 @@ const AggiePagination = (props: IProps) => {
           <small>
             {Number(searchParams.get('page')) != null &&
                 <>
-                  {Number(searchParams.get('page')) * props.itemsPerPage + 1} - {Number(searchParams.get('page')) * props.itemsPerPage + props.itemsPerPage + 1}
+                  {commaNumber(Number(searchParams.get('page')) * props.itemsPerPage + 1)} - {commaNumber(Number(searchParams.get('page')) * props.itemsPerPage + props.itemsPerPage + 1)}
                 </>
             }
-            {" "} of {props.total}
+            {" "} of {commaNumber(props.total)}
           </small>
           <Pagination className={"mb-0"}>
             {Number(searchParams.get('page')) === 0 &&

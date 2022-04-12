@@ -35,14 +35,14 @@ const ReportsByAuthor = (props: IProps) => {
             }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="name" name="Author"/>
           <YAxis/>
           <Tooltip/>
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
           <ReferenceLine y={0} stroke="#000" />
           <Brush dataKey="name" height={30} stroke="#8884d8" />
-          <Bar dataKey="readCount" stackId="a" fill="#82ca9d"/>
-          <Bar dataKey="unreadCount" stackId="a" fill="#8884d8"/>
+          <Bar dataKey="readCount" name="Read reports" stackId="a" fill="#82ca9d"/>
+          <Bar dataKey="unreadCount" name="Unread reports" stackId="a" fill="#8884d8"/>
         </BarChart>
       </ResponsiveContainer>
   );

@@ -30,6 +30,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import GroupModal from "../../components/group/GroupModal";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
+import AggiePagination from "../../components/AggiePagination";
 const ITEMS_PER_PAGE = 50;
 
 interface IProps {
@@ -214,6 +215,16 @@ const GroupsIndex = (props: IProps) => {
               { groupsQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && usersQuery.isSuccess &&
                   groupsQuery.data && sourcesQuery.data && tagsQuery.data && usersQuery.data &&
                   <Card>
+                    <Card.Header>
+                      <ButtonToolbar className={"justify-content-between"}>
+                        <GroupModal users={usersQuery.data}/>
+                        <div>
+                          { groupsQuery.data.total &&
+                              <AggiePagination itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
+                          }
+                        </div>
+                      </ButtonToolbar>
+                    </Card.Header>
                     <GroupTable
                         visibleGroups={groupsQuery.data.results}
                         sources={sourcesQuery.data}
@@ -221,46 +232,9 @@ const GroupsIndex = (props: IProps) => {
                         users={usersQuery.data}
                     />
                     <Card.Footer>
-                      <ButtonToolbar className={"justify-content-center"}>
+                      <ButtonToolbar className={"justify-content-end"}>
                         { groupsQuery.data && groupsQuery.data.total &&
-                            <Pagination className={"mb-0"}>
-                              {Number(searchParams.get('page')) === 0 &&
-                                  <>
-                                    <Pagination.First disabled/>
-                                    <Pagination.Prev disabled aria-disabled="true"/>
-                                  </>
-                              }
-                              {Number(searchParams.get('page')) > 0 &&
-                                  <>
-                                    <Pagination.First onClick={()=>goToPage(0)}/>
-                                    <Pagination.Prev
-                                        onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}
-                                    />
-                                    <Pagination.Item
-                                        onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}
-                                    >
-                                      {Number(searchParams.get('page')) - 1}
-                                    </Pagination.Item>
-                                  </>
-                              }
-                              <Pagination.Item disabled aria-disabled="true">{Number(searchParams.get('page'))}</Pagination.Item>
-                              {Number(searchParams.get('page')) + 1 < (groupsQuery.data.total/ITEMS_PER_PAGE) &&
-                                  <>
-                                    <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}>
-                                      {Number(searchParams.get('page')) + 1}
-                                    </Pagination.Item>
-                                    <Pagination.Next onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}/>
-                                    {/*@ts-ignore*/}
-                                    <Pagination.Last onClick={()=>goToPage(Math.ceil(groupsQuery.data.total/ITEMS_PER_PAGE - 1))}/>
-                                  </>
-                              }
-                              {Number(searchParams.get('page')) + 1 >= (groupsQuery.data.total/ITEMS_PER_PAGE) &&
-                                  <>
-                                    <Pagination.Next disabled/>
-                                    <Pagination.Last disabled/>
-                                  </>
-                              }
-                            </Pagination>
+                            <AggiePagination itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
                         }
                       </ButtonToolbar>
                     </Card.Footer>

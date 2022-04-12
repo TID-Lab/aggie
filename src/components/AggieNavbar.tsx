@@ -58,6 +58,13 @@ const AggieNavbar = (props: IProps) => {
                       </Nav.Link>
                     </LinkContainer>
                   </Nav.Item>
+                  <Nav.Item>
+                    <LinkContainer to={'/analysis'}>
+                      <Nav.Link  className={"ps-2 pe-2 aggie-nav-link"} eventKey="4">
+                        Analysis
+                      </Nav.Link>
+                    </LinkContainer>
+                  </Nav.Item>
                 </Nav>
                 <Nav>
                   <Navbar.Toggle aria-controls="offcanvasNavbar" />
@@ -73,14 +80,6 @@ const AggieNavbar = (props: IProps) => {
                   </Offcanvas.Header>
                   <Offcanvas.Body>
                     <Nav variant={"pills"}>
-                      <Nav.Item>
-                        <LinkContainer to={'/analysis'} >
-                          <Nav.Link className={"ps-2"} eventKey="4">
-                            <FontAwesomeIcon className="me-2" icon={faChartLine}/>
-                            <span>Analysis</span>
-                          </Nav.Link>
-                        </LinkContainer>
-                      </Nav.Item>
                       { props.session && props.session.role ? (
                           <Nav.Item>
                             <LinkContainer to={'/user/' + props.session._id}>

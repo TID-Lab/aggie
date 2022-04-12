@@ -51,14 +51,6 @@ export default function GroupTable(props: IProps) {
   }
   return (
       <>
-        <Card.Header>
-          <ButtonToolbar
-              className="justify-content-end"
-              aria-label="Toolbar with Button groups"
-          >
-            <GroupModal users={props.users}/>
-          </ButtonToolbar>
-        </Card.Header>
         <Table bordered hover size="sm" className={"m-0"}>
           <thead>
           <tr>
@@ -210,8 +202,8 @@ export function GroupRow(props: GroupRowIProps) {
       case 'modal':
         return (
             <tr key={props.group._id} className={"group__select " + props.className} onClick={props.onClick}>
-              <td>
-                <div>
+              <td className={"align-middle"}>
+                <div className="d-flex justify-content-center">
                   <Form.Check
                       type="radio"
                       id={props.group._id}
