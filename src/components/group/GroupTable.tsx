@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Linkify from 'linkify-react';
 import {
   Card,
@@ -23,13 +23,14 @@ import {
   stringToDate, tagById,
   tagsById
 } from "../../helpers";
-import {Group, Source, Tag, User} from "../../objectTypes";
+import {Group, Groups, GroupSearchState, Source, Tag, User} from "../../objectTypes";
 import TagsTypeahead from "../tag/TagsTypeahead";
-import {useMutation} from "react-query";
-import {editGroup} from "../../api/groups";
+import {useMutation, useQuery} from "react-query";
+import {editGroup, getGroups} from "../../api/groups";
 import "./GroupTable.css";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";
+import {AxiosError} from "axios";
 
 interface IProps {
   visibleGroups: Group[] | [];
@@ -50,53 +51,51 @@ export default function GroupTable(props: IProps) {
     setSelectedGroups(newSelectedGroups);
   }
   return (
-      <>
-        <Table bordered hover size="sm" className={"m-0"}>
-          <thead>
-          <tr>
-            <th>
-              <Form>
-                <Form.Check
-                    type="checkbox"
-                    id={"select-all"}
-                    onChange={handleAllSelectChange}
-                    checked={selectedGroups.size > 0}
-                />
-              </Form>
-            </th>
-            <th>Group Info</th>
-            <th>Location</th>
-            <th>Created</th>
-            <th>Notes</th>
-            <th>Assignee</th>
-            <th>Tags</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          {props.visibleGroups && props.visibleGroups.map((group) => {
-            return <GroupRow
-                group={group}
-                sources={props.sources}
-                variant={"table"}
-                tags={props.tags}
-                users={props.users}
-                key={group._id}
-                selectedGroups={selectedGroups}
-                setSelectedGroups={setSelectedGroups}
-            />
-          })
-          }
-          </tbody>
-        </Table>
-      </>
+      <Table bordered hover size="sm" className={"m-0"}>
+        <thead>
+        <tr>
+          <th>
+            <Form>
+              <Form.Check
+                  type="checkbox"
+                  id={"select-all"}
+                  onChange={handleAllSelectChange}
+                  checked={selectedGroups.size > 0}
+              />
+            </Form>
+          </th>
+          <th>Group Info</th>
+          <th>Location</th>
+          <th>Created</th>
+          <th>Notes</th>
+          <th>Assignee</th>
+          <th>Tags</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {props.visibleGroups && props.visibleGroups.map((group) => {
+          return <GroupRow
+              group={group}
+              sources={props.sources}
+              variant={"table"}
+              tags={props.tags}
+              users={props.users}
+              key={group._id}
+              selectedGroups={selectedGroups}
+              setSelectedGroups={setSelectedGroups}
+          />
+        })
+        }
+        </tbody>
+      </Table>
   );
 }
 
 interface GroupRowIProps {
   group: Group | null,
   tags: Tag[],
-  users: User[] | [],
+  users: User[] | undefined,
   sources: Source[] | [],
   variant: "modal" | "table"
   setSelectedGroups?: Dispatch<SetStateAction<Set<string>>>,
@@ -149,7 +148,7 @@ export function GroupRow(props: GroupRowIProps) {
                   {props.group.title}
                 </Link>
                 <br/>
-                <span>{props.group.totalReports === 1 ? props.group.totalReports + " report" : props.group.totalReports + " reports"}</span>
+                <span>{props.group._reports.length === 1 ? props.group._reports.length + " report" : props.group._reports.length + " reports"}</span>
                 <br/>
                 <span>ID: {props.group.idnum}</span>
               </td>
@@ -190,7 +189,7 @@ export function GroupRow(props: GroupRowIProps) {
                 <Dropdown className={"float-end"}>
                   <Dropdown.Toggle as={EllipsisToggle}/>
                   <Dropdown.Menu variant={"dark"}>
-                    <GroupModal group={props.group} users={props.users}/>
+                    <GroupModal group={props.group}/>
                     <Dropdown.Divider/>
                     <ConfirmModal type={"delete"} variant="dropdown" group={props.group}/>
                   </Dropdown.Menu>
@@ -217,7 +216,7 @@ export function GroupRow(props: GroupRowIProps) {
                   {props.group.title}
                 </Link>
                 <br/>
-                <span>{props.group.totalReports === 1 ? props.group.totalReports + " report" : props.group.totalReports + " reports"}</span>
+                <span>{props.group._reports.length === 1 ? props.group._reports.length + " report" : props.group._reports.length + " reports"}</span>
                 <br/>
                 <span>ID: {props.group.idnum}</span>
               </td>

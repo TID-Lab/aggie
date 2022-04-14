@@ -5,12 +5,13 @@ import {faPlusCircle, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {Group, GroupEditableData, User} from "../../objectTypes";
 import {Formik, FormikValues} from "formik";
 import * as Yup from "yup";
-import {useMutation, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {editGroup, newGroup} from "../../api/groups";
+import {AxiosError} from "axios";
+import {getUsers} from "../../api/users";
 
 interface IProps {
   group?: Group,
-  users: User[],
 }
 
 const groupEditSchema = Yup.object().shape({
@@ -30,6 +31,7 @@ const veracityOptions = ['Confirmed true', 'Confirmed false', 'Unconfirmed'];
 export default function GroupModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const queryClient = useQueryClient();
+  const usersQuery = useQuery<User[] | undefined, AxiosError>("users", getUsers);
   const editGroupMutation = useMutation((groupData: GroupEditableData) => {return editGroup(groupData)}, {
     onSuccess: () => {
       setModalShow(false);
@@ -175,7 +177,7 @@ export default function GroupModal(props: IProps) {
                                 onChange={handleChange}
                             >
                               <option key="none" value={""}>None</option>
-                              {props.users && props.users.map((user) => {
+                              {usersQuery.isSuccess && usersQuery.data && usersQuery.data.map((user) => {
                                 return <option key={user._id} value={user._id}>{user.username}</option>
                               })}
                             </Form.Select>
@@ -301,7 +303,7 @@ export default function GroupModal(props: IProps) {
                               onChange={handleChange}
                           >
                             <option key="none" value={""}>None</option>
-                            {props.users && props.users.map((user) => {
+                            {usersQuery.isSuccess && usersQuery.data && usersQuery.data.map((user) => {
                               return <option key={user._id} value={user._id}>{user.username}</option>
                             })}
                           </Form.Select>

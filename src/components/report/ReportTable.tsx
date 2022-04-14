@@ -8,10 +8,9 @@ import {
   Image,
   Container,
   Placeholder,
-  Tooltip, OverlayTrigger,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {Link, useSearchParams} from 'react-router-dom';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import EditGroupModal from "../group/EditGroupModal";
 import "./ReportTable.css"
 import {
@@ -24,175 +23,124 @@ import {
   tagById,
   reportAuthor, capitalizeFirstLetter
 } from "../../helpers";
-import {Group, Report, Source, Tag} from "../../objectTypes";
-import {editReport, setSelectedRead} from "../../api/reports";
-import {useMutation, useQueryClient} from "react-query";
+import {Group, Groups, Report, Source, Tag} from "../../objectTypes";
+import {editReport} from "../../api/reports";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import TagsTypeahead from "../tag/TagsTypeahead";
-import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
 import {faCheckCircle, faEnvelopeOpen, faLink, faPlusCircle, faTimesCircle, faWarning} from "@fortawesome/free-solid-svg-icons";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";
-
+import {AxiosError} from "axios";
+import {getAllGroups} from "../../api/groups";
+const ITEMS_PER_PAGE = 50;
 interface IProps {
   visibleReports: Report[],
   sources: Source[] | [],
   tags: Tag[] | [],
-  groups: Group[] | [] | undefined,
-  batchMode?: boolean,
-  setBatchMode?: (batchMode: boolean) => void,
   variant: "modal" | "default" | "group-details" | "relevant" | "batch",
+  setSelectedReportIds?: Dispatch<SetStateAction<Set<string>>>,
+  selectedReportIds?: Set<string>,
 }
 
 export default function ReportTable(props: IProps) {
   const queryClient = useQueryClient();
-  const [selectedReports, setSelectedReports] = useState<Set<Report>>(new Set());
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedReadStatusMutation = useMutation(() => {
-    let allRead = true;
-    selectedReports.forEach((report)=> {
-      if (!report.read) {
-        allRead = false;
-      }
-    })
-    let selectedReportsArr = Array.from(selectedReports);
-    return setSelectedRead(selectedReportsArr.map((selectedReport)=>{return selectedReport._id}), !allRead);
-  }, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries("batch")
-    }
-  });
 
   const handleAllSelectChange = () => {
-    let newSelectedReports;
-    if (selectedReports.size === 0) {
-      newSelectedReports = new Set(props.visibleReports);
-    } else {
-      newSelectedReports = new Set<Report>();
+    if (props.selectedReportIds && props.setSelectedReportIds) {
+      let newSelectedReportIds;
+      if (props.selectedReportIds && props.selectedReportIds.size === 0) {
+        newSelectedReportIds = new Set(props.visibleReports.map(value => {return value._id}));
+      } else {
+        newSelectedReportIds = new Set<string>();
+      }
+      props.setSelectedReportIds(newSelectedReportIds);
     }
-    setSelectedReports(newSelectedReports);
   }
+
   return (
-      <>
-        <Card.Header>
-          <ButtonToolbar className={"justify-content-between"}>
-            <div>
-              <Button variant={"secondary"} className="me-2" disabled={selectedReports.size === 0} onClick={()=> {
-                selectedReadStatusMutation.mutate();
-              }}>
-                <FontAwesomeIcon className={"me-2"} icon={faEnvelopeOpen}/>
-                Read/Unread
-              </Button>
-              <EditGroupModal
-                  reports={selectedReports}
-                  tags={props.tags}
-                  groups={props.groups}
-                  sources={props.sources}
-                  groupId={undefined}
-                  variant={"selection"}
-              />
-              { props.variant === "default" &&
-                  <Button variant={"primary"} className={"ms-2"} onClick={()=>{
-                    if (props.setBatchMode) {
-                      setSearchParams(
-                          {
-                            ...searchParams,
-                            batch: "true"
-                          }
-                      )
-                      props.setBatchMode(true);
-                    }
-                  }}>
-                    Batch mode
-                  </Button>
+      <Table bordered hover size="sm" className={"m-0"}>
+        <thead>
+        <tr>
+          <th>
+            <Form>
+              {props.selectedReportIds &&
+                  <Form.Check
+                      type="checkbox"
+                      id={"select-all-reports"}
+                      onChange={handleAllSelectChange}
+                      checked={props.selectedReportIds.size > 0}
+                  />
               }
-            </div>
-          </ButtonToolbar>
-        </Card.Header>
-        <Table bordered hover size="sm" className={"m-0"}>
-          <thead>
-          <tr>
-            <th>
-              <Form>
-                <Form.Check
-                    type="checkbox"
-                    id={"select-all"}
-                    onChange={handleAllSelectChange}
-                    checked={selectedReports.size > 0}
-                />
-              </Form>
-            </th>
-            <th>Source Info</th>
-            <th>Thumbnail</th>
-            <th>Content</th>
-            {props.variant === "relevant" &&
-                <th>Notes</th>
-            }
-            <th>Tags</th>
-            {props.variant !== "group-details" &&
-                <th>Group</th>
-            }
-          </tr>
-          </thead>
-          <tbody>
-          { props.visibleReports && props.visibleReports.length > 0 && props.variant !== "group-details"
-              && props.visibleReports.map((report: Report) => {
-                return (
-                    <ReportRow
-                        variant={props.variant}
-                        key={report._id}
-                        report={report}
-                        tags={props.tags}
-                        groups={props.groups}
-                        sources={props.sources}
-                        setSelectedReports={setSelectedReports}
-                        selectedReports={selectedReports}
-                    />
-                )
-              })
+            </Form>
+          </th>
+          <th>Source Info</th>
+          <th>Thumbnail</th>
+          <th>Content</th>
+          {props.variant === "relevant" &&
+              <th>Notes</th>
           }
-          { props.visibleReports && props.visibleReports.length > 0 && props.variant === "group-details" &&
-              props.visibleReports.map((report: Report) => {
-                return (
-                    <ReportRow
-                        variant={props.variant}
-                        key={report._id}
-                        report={report}
-                        tags={props.tags}
-                        groups={props.groups}
-                        sources={props.sources}
-                        setSelectedReports={setSelectedReports}
-                        selectedReports={selectedReports}
-                    />
-                )
-              })
+          <th>Tags</th>
+          {props.variant !== "group-details" &&
+              <th>Group</th>
           }
-          { props.visibleReports && props.visibleReports.length === 0 &&
-              <tr key="empty">
-                <td>
-                  No reports found.
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-          }
-          </tbody>
-        </Table>
-      </>
+        </tr>
+        </thead>
+        <tbody>
+        { props.visibleReports && props.visibleReports.length > 0 && props.variant !== "group-details"
+            && props.setSelectedReportIds && props.selectedReportIds && props.visibleReports.map((report: Report) => {
+              return (
+                  <ReportRow
+                      variant={props.variant}
+                      key={report._id}
+                      report={report}
+                      tags={props.tags}
+                      sources={props.sources}
+                      setSelectedReportIds={props.setSelectedReportIds}
+                      selectedReportIds={props.selectedReportIds}
+                  />
+              )
+            })
+        }
+        { props.visibleReports && props.visibleReports.length > 0 && props.variant === "group-details" &&
+            props.visibleReports.map((report: Report) => {
+              console.log(report);
+              return (
+                  <ReportRow
+                      variant="group-details"
+                      key={report._id}
+                      report={report}
+                      tags={props.tags}
+                      sources={props.sources}
+                  />
+              )
+            })
+        }
+        { props.visibleReports && props.visibleReports.length === 0 &&
+            <tr key="empty">
+              <td>
+                No reports found.
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+        }
+        </tbody>
+      </Table>
   );
 }
 
 interface ReportRowIProps {
   report: Report | null,
   tags: Tag[] | null,
-  groups: Group[] | [] | undefined,
   sources: Source[] | [],
   variant: "modal" | "default" | "group-details" | "relevant" | "batch",
-  setSelectedReports?: Dispatch<SetStateAction<Set<Report>>>,
-  selectedReports?: Set<Report>,
+  setSelectedReportIds?: Dispatch<SetStateAction<Set<string>>>,
+  selectedReportIds?: Set<string>,
+  selectedGroup?: Group | null,
 }
 
 export function ReportRow(props: ReportRowIProps) {
@@ -210,14 +158,14 @@ export function ReportRow(props: ReportRowIProps) {
    * a set that contains selected report _ids to represent selected reports.
    */
   const handleSelected = () => {
-    if (props.setSelectedReports && props.selectedReports && props.report?._id) {
-      let newSelectedReports = new Set(props.selectedReports);
-      if (newSelectedReports.has(props.report)) {
-        newSelectedReports.delete(props.report);
+    if (props.setSelectedReportIds && props.selectedReportIds && props.report?._id) {
+      let newSelectedReportIds = new Set(props.selectedReportIds);
+      if (newSelectedReportIds.has(props.report._id)) {
+        newSelectedReportIds.delete(props.report._id);
       } else {
-        newSelectedReports.add(props.report);
+        newSelectedReportIds.add(props.report._id);
       }
-      props.setSelectedReports(newSelectedReports);
+      props.setSelectedReportIds(newSelectedReportIds);
     }
   }
   const handleTagsBlur = () => {
@@ -227,7 +175,19 @@ export function ReportRow(props: ReportRowIProps) {
     }
   }
 
+  const navigate = useNavigate();
+  // Depending on the number of groups, this could take a WHILE. Therefore we do this Async to other queries.
+  const allGroupsQuery = useQuery<Group[] | undefined, AxiosError>("all-groups", ()=> {return getAllGroups();}, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
   if (props.report) {
+    console.log(props.report._group);
     switch (props.variant) {
       case 'default': case "batch": case 'group-details':
           // @ts-ignore
@@ -235,9 +195,9 @@ export function ReportRow(props: ReportRowIProps) {
             <tr key={props.report._id} className={(props.report.read) ? "tr--read" : "tr--unread"}>
               <td>
                 <Form>
-                  { props.selectedReports &&
+                  { props.selectedReportIds &&
                       <Form.Check type="checkbox" id={props.report._id} onChange={handleSelected}
-                                  checked={props.selectedReports.has(props.report)}/>
+                                  checked={props.selectedReportIds.has(props.report._id)}/>
                   }
                 </Form>
               </td>
@@ -290,7 +250,6 @@ export function ReportRow(props: ReportRowIProps) {
                 <div className="d-flex justify-content-center">
                   <EditGroupModal
                       reports={new Set([props.report])}
-                      groups={props.groups}
                       groupId={props.report._group}
                       tags={props.tags}
                       sources={props.sources}
@@ -340,23 +299,31 @@ export function ReportRow(props: ReportRowIProps) {
 
               </td>
               <td className={"td__groupInfo"}>
-                {props.report._group
-                    ? <>
-                        {props.groups &&
-                            <>
-                              {groupById(props.report._group, props.groups) &&
-                                  <>
-                                    <span className={"group__title"}>{groupById(props.report._group, props.groups)?.title}</span>
-                                    <br/>
-                                    <span className={"group__idnum"}>{groupById(props.report._group, props.groups)?.totalReports} reports</span>
-                                    <br/>
-                                    <span className={"group__idnum"}>ID: {groupById(props.report._group, props.groups)?.idnum}</span>
-                                  </>
-                              }
-                            </>
-                        }
-                      </>
-                    : <i>No group selected</i>
+                {props.selectedGroup &&
+                    <>
+                      <span className={"group__title"}>{props.selectedGroup.title}</span>
+                      <br/>
+                      <span className={"group__idnum"}>{props.selectedGroup._reports.length} reports</span>
+                      <br/>
+                      <span className={"group__idnum"}>ID: {props.selectedGroup.idnum}</span>
+                    </>
+                }
+                {!props.selectedGroup && props.report._group && allGroupsQuery.isSuccess && allGroupsQuery.data &&
+                    <>
+                      {allGroupsQuery.data &&
+                          <>
+                            {groupById(props.report._group, allGroupsQuery.data) &&
+                                <>
+                                  <span className={"group__title"}>{groupById(props.report._group, allGroupsQuery.data)?.title}</span>
+                                  <br/>
+                                  <span className={"group__idnum"}>{groupById(props.report._group, allGroupsQuery.data)?._reports.length} reports</span>
+                                  <br/>
+                                  <span className={"group__idnum"}>ID: {groupById(props.report._group, allGroupsQuery.data)?.idnum}</span>
+                                </>
+                            }
+                          </>
+                      }
+                    </>
                 }
               </td>
             </tr>
@@ -367,9 +334,9 @@ export function ReportRow(props: ReportRowIProps) {
             <tr key={props.report._id}>
               <td>
                 <Form>
-                  { props.selectedReports &&
+                  { props.selectedReportIds &&
                       <Form.Check type="checkbox" id={props.report._id} onChange={handleSelected}
-                                  checked={props.selectedReports.has(props.report)}/>
+                                  checked={props.selectedReportIds.has(props.report._id)}/>
                   }
                 </Form>
               </td>
@@ -426,7 +393,6 @@ export function ReportRow(props: ReportRowIProps) {
                 <div className="d-flex justify-content-center">
                   <EditGroupModal
                       reports={new Set([props.report])}
-                      groups={props.groups}
                       groupId={props.report._group}
                       tags={props.tags}
                       sources={props.sources}

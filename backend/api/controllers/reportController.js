@@ -19,7 +19,7 @@ const parseQueryData = (queryString) => {
   return query;
 }
 
-// Get a list of all Reports
+// Get a list of queried Reports
 exports.report_reports = (req, res) => {
   const page = req.query.page;
   // Parse query string
@@ -212,7 +212,7 @@ exports.reports_group_update = (req, res) => {
     let remaining = reports.length;
     reports.forEach((report) => {
       report.read = true;
-      report._group = req.body.group;
+      report._group = req.body.group._id;
       report.save((err) => {
         if (err) {
           if (!res.headersSent) return res.status(err.status).send(err.message)
@@ -225,7 +225,7 @@ exports.reports_group_update = (req, res) => {
             }
             return;
           }
-          group.reports.push(report);
+          group._reports.push(report._id);
           group.save((err) => {
             if (err) {
               if (!res.headersSent) return res.status(err.status).send(err.message)

@@ -2,12 +2,12 @@ import {Alert, Button, Container, Form, Modal, Table} from "react-bootstrap";
 import React, {useState} from "react";
 // @ts-ignore
 import Tags from "@yaireo/tagify/dist/react.tagify";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {groupById, tagsById} from "../../helpers";
 import {ReportRow} from "../report/ReportTable";
 import './EditGroupModal.css';
 import axios, {AxiosError} from "axios";
-import {Group, Groups, Report, Reports, Source, Tag, User} from "../../objectTypes";
+import {Group, Groups, GroupSearchState, Report, Reports, Source, Tag, User} from "../../objectTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle} from "@fortawesome/free-solid-svg-icons";
 import {GroupRow} from "./GroupTable";
@@ -15,13 +15,14 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {getAllGroups, getGroups} from "../../api/groups";
 import {getUsers} from "../../api/users";
 import {setSelectedEscalated, setSelectedGroup} from "../../api/reports";
+import {getSources} from "../../api/sources";
+import {getTags} from "../../api/tags";
 
 interface IProps {
   reports: Set<Report>,
   tags: Tag[] | null,
-  groups: Group[] | [] | undefined,
   sources: Source[] | [],
-  groupId: string | undefined,
+  groupId?: string,
   variant: "inline" | "selection"
 }
 
@@ -31,13 +32,60 @@ interface ReportGroupUpdateInfo {
 }
 export default function EditGroupModal(props: IProps) {
   const queryClient = useQueryClient();
-  const userQuery = useQuery<User[] | undefined>("users", getUsers);
+  // Depending on the number of groups, this could take a WHILE. Therefore we do this Async to other queries.
+  const allGroupsQuery = useQuery<Group[] | undefined, AxiosError>("all-groups", ()=> {return getAllGroups();}, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
   const [showGroupModal, setShowGroupModal] = useState(false);
+  const usersQuery = useQuery<User[] | undefined, AxiosError>("users", getUsers);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     header: "",
     body: "",
   })
+
+  const navigate = useNavigate();
+  const [searchState, setSearchState] = useState<GroupSearchState>({
+    locationName: null,
+    veracity: null,
+    escalated: null,
+    closed: null,
+    totalReports: null,
+    assignedTo: null,
+    creator: null,
+    title: null,
+    after: null,
+    before: null,
+    idnum: null,
+    page: 0
+  });
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>("groups", ()=>{return getGroups(searchState)}, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+  const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+  const tagsQuery = useQuery("tags", getTags, {
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+
   const [reports, setReports] = useState<Report[]>(Array.from(props.reports));
   const [tempSelectedGroup, setTempSelectedGroup] = useState<Group | null>(null);
 
@@ -70,10 +118,12 @@ export default function EditGroupModal(props: IProps) {
   }
 
   const handleSubmit = () => {
-    reportGroupUpdateMutation.mutate({
-      reportIds: reports.map((report=>{return report._id;})),
-      _group: tempSelectedGroup,
-    })
+    if (tempSelectedGroup) {
+      reportGroupUpdateMutation.mutate({
+        reportIds: reports.map((report=>{return report._id;})),
+        _group: tempSelectedGroup,
+      })
+    }
   }
 
   const ReportGroupModalJSX = () => {
@@ -112,7 +162,7 @@ export default function EditGroupModal(props: IProps) {
                             key={report._id}
                             report={report}
                             tags={props.tags}
-                            groups={props.groups}
+                            selectedGroup={tempSelectedGroup}
                             sources={props.sources}
                         />
                     )
@@ -132,22 +182,21 @@ export default function EditGroupModal(props: IProps) {
                     </tr>
                   </thead>
                   <tbody>
-                  { userQuery.data && props.groups && props.groups.map((group)=>{
-                    if (props.tags && userQuery.data) {
+                  { usersQuery.isSuccess && groupsQuery.isSuccess && tagsQuery.isSuccess && sourcesQuery.isSuccess &&
+                      usersQuery.data && groupsQuery.data && tagsQuery.data && sourcesQuery.data && groupsQuery.data.results.map((group)=>{
                       return (
                           <GroupRow
                               key={group._id}
                               variant='modal'
-                              tags={props.tags}
+                              tags={tagsQuery.data}
                               className={tempSelectedGroup === group ? "group--selected" : ""}
                               group={group}
-                              users={userQuery.data}
+                              users={usersQuery.data}
                               sources={props.sources}
                               onClick={()=>{
                                 setTempSelectedGroup(group);
                               }}
                           />);
-                    }
                   })}
                   </tbody>
                 </Table>
@@ -165,20 +214,20 @@ export default function EditGroupModal(props: IProps) {
       <>
         { props.variant === "inline" &&
             <>
-              {props.groups ?
+              {allGroupsQuery.isSuccess && allGroupsQuery.data ?
                   <>
                     {props.groupId ?
                         <Button variant={"secondary"} className={"group__button"} onClick={handleShow}>
-                          {groupById(props.groupId, props.groups) &&
+                          {groupById(props.groupId, allGroupsQuery.data) &&
                               <>
-                                <span className={"group__title"}>{groupById(props.groupId, props.groups)?.title}</span>
+                                <span className={"group__title"}>{groupById(props.groupId, allGroupsQuery.data)?.title}</span>
                                 <br/>
                                 <span className={"group__idnum"}>
-                                  {groupById(props.groupId, props.groups)?.totalReports === 1 ?
-                                    groupById(props.groupId, props.groups)?.totalReports + " report" :
-                                    groupById(props.groupId, props.groups)?.totalReports + " reports"}</span>
+                                  {groupById(props.groupId, allGroupsQuery.data)?._reports.length === 1 ?
+                                    groupById(props.groupId, allGroupsQuery.data)?._reports.length + " report" :
+                                    groupById(props.groupId, allGroupsQuery.data)?._reports.length + " reports"}</span>
                                 <br/>
-                                <span className={"group__idnum"}>ID: {groupById(props.groupId, props.groups)?.idnum}</span>
+                                <span className={"group__idnum"}>ID: {groupById(props.groupId, allGroupsQuery.data)?.idnum}</span>
                               </>
                           }
                         </Button>
@@ -188,7 +237,7 @@ export default function EditGroupModal(props: IProps) {
                     }
                   </> :
                   <Button variant="link" onClick={handleShow}>
-                    Edit
+                    Loading Groups
                   </Button>
               }
             </>

@@ -70,6 +70,19 @@ export function sourcesNamesById (sourceIds: string[], sources: Source[]) {
   return out;
 }
 
+export function reportById (reportId: string, reports: Report[]) {
+  // Written for speed, not for best functional programming practices
+  if (reports) {
+    if (reports.length === 0) return null; // No tags, no return
+    var len = reports.length;
+    while (len--) {
+      if (reports[len]._id === reportId) return reports[len];
+    }
+    return null;
+  }
+  return null;
+}
+
 export function groupById (groupId: string, groups: Group[]) {
   // Written for speed, not for best functional programming practices
   if (groups) {

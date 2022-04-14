@@ -17,14 +17,15 @@ import {getSources} from "../../api/sources";
 import {getAllGroups, getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
-import {CTList, Groups, Reports, ReportSearchState, Session, Source, Tag} from "../../objectTypes";
-import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
+import {CTList, Groups, Report, Reports, ReportSearchState, Session, Source, Tag} from "../../objectTypes";
+import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields, reportById} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination from "../../components/AggiePagination";
 import {getSession} from "../../api/session";
+import EditGroupModal from "../../components/group/EditGroupModal";
 
 const ITEMS_PER_PAGE = 50; // This also needs to be set on the backend. Make sure to do so when changing.
 
@@ -147,15 +148,6 @@ const ReportsIndex = (props: IProps) => {
       }
     },
   });
-  // Depending on the number of groups, this could take a WHILE. Therefore we do this Async to other queries.
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", "all"], ()=> {return getAllGroups();}, {
-    onError: (err: AxiosError) => {
-      if (err.response && err.response.status === 401) {
-        navigate('/login');
-      }
-    },
-    refetchOnWindowFocus: false,
-  });
   const tagsQuery = useQuery("tags", getTags, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
@@ -163,8 +155,24 @@ const ReportsIndex = (props: IProps) => {
       }
     },
   });
+  const selectedReadStatusMutation = useMutation(() => {
+    let allRead = true;
+    selectedReportIds.forEach((id)=> {
+      if (reportsQuery.data && reportById(id, reportsQuery.data.results)?.read === false) {
+        allRead = false;
+      }
+    })
+    let selectedReportIdsArr = Array.from(selectedReportIds);
+    return setSelectedRead(selectedReportIdsArr, !allRead);
+  }, {
+    onSuccess: (data) => {
+      reportsQuery.refetch();
+    }
+  });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
   const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
+  const [selectedReportIds, setSelectedReportIds] = useState<Set<string>>(new Set());
+
   return (
       <Container fluid className={"pt-4"}>
         <Row>
@@ -402,13 +410,44 @@ const ReportsIndex = (props: IProps) => {
             { !batchMode && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess &&
                 tagsQuery.data && reportsQuery.data && sourcesQuery.data &&
                 <Card>
+                  <Card.Header>
+                    <ButtonToolbar className={"justify-content-between"}>
+                      <div>
+                        <Button variant={"secondary"} className="me-1" disabled={selectedReportIds.size === 0} onClick={()=> {
+                          selectedReadStatusMutation.mutate();
+                        }}>
+                          <FontAwesomeIcon className={"me-2"} icon={faEnvelopeOpen}/>
+                          Read/Unread
+                        </Button>
+                        <Button variant={"primary"} className={"ms-1"} onClick={()=>{
+                          if (setBatchMode) {
+                            setSearchParams(
+                                {
+                                  ...searchParams,
+                                  batch: "true"
+                                }
+                            )
+                            setBatchMode(true);
+                          }
+                        }}>
+                          Batch mode
+                        </Button>
+                      </div>
+                      { reportsQuery.data.total !== null &&
+                          <AggiePagination
+                              goToPage={goToPage}
+                              total={reportsQuery.data.total}
+                              itemsPerPage={ITEMS_PER_PAGE}
+                          />
+                      }
+                    </ButtonToolbar>
+                  </Card.Header>
                   <ReportTable
                       visibleReports={reportsQuery.data.results}
                       sources={sourcesQuery.data}
                       tags={tagsQuery.data}
-                      groups={groupsQuery.data?.results}
-                      setBatchMode={setBatchMode}
-                      batchMode={batchMode}
+                      setSelectedReportIds={setSelectedReportIds}
+                      selectedReportIds={selectedReportIds}
                       variant={"default"}
                   />
                   <Card.Footer>
@@ -429,9 +468,8 @@ const ReportsIndex = (props: IProps) => {
                       visibleReports={batchQuery.data.results}
                       sources={sourcesQuery.data}
                       tags={tagsQuery.data}
-                      groups={groupsQuery.data?.results}
-                      setBatchMode={setBatchMode}
-                      batchMode={batchMode}
+                      selectedReportIds={selectedReportIds}
+                      setSelectedReportIds={setSelectedReportIds}
                       variant={"batch"}
                   />
                   <Card.Footer>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Button, Card, Col, Container, Form, Row, Collapse, InputGroup, FormControl, Table, ButtonToolbar, Placeholder,
-  Pagination,
+import {
+  Button, Card, Col, Container, Form, Row, Collapse, InputGroup, FormControl, Table, ButtonToolbar, Placeholder,
+  Pagination, ButtonGroup,
 } from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faClose, faEnvelopeOpen, faFilter, faPlusCircle, faSearch, faSlidersH} from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +25,8 @@ import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination from "../../components/AggiePagination";
 import {getSession} from "../../api/session";
+import EditGroupModal from "../../components/group/EditGroupModal";
+import ReportCards from "../../components/report/ReportCards";
 const ITEMS_PER_PAGE = 50;
 const reportQuerySchema = Yup.object().shape({
   keywords: Yup.string(),
@@ -46,6 +49,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const queryClient = useQueryClient();
   // This is the state of the URL
   const [searchParams, setSearchParams] = useSearchParams();
+  const [cardView, setCardView] = useState(false);
 
   // This is the state of the Report Query
   const [searchState, setSearchState] = useState<ReportSearchState>({
@@ -121,6 +125,7 @@ const RelevantReportsIndex = (props: IProps) => {
     },
   });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
+  const [selectedReportIds, setSelectedReportIds] = useState<Set<string>>(new Set());
   const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
   return (
       <Container fluid className={"pt-4"}>
@@ -140,11 +145,17 @@ const RelevantReportsIndex = (props: IProps) => {
                       variant="outline-secondary"
                       onClick={() => setShowFilterParams(!showFilterParams)}
                       aria-controls="searchParams"
+                      className={"me-2"}
                       aria-expanded={showFilterParams}
                   >
                     <FontAwesomeIcon icon={faFilter}/>
                   </Button>
+                  <ButtonGroup>
+                    <Button variant={"secondary"} disabled={!cardView} onClick={()=>setCardView(false)}> List </Button>
+                    <Button variant={"secondary"} disabled={cardView} onClick={()=>setCardView(true)}> Card </Button>
+                  </ButtonGroup>
                 </InputGroup>
+
                 <Formik
                     validationSchema={reportQuerySchema}
                     initialValues={{
@@ -317,14 +328,25 @@ const RelevantReportsIndex = (props: IProps) => {
                 </Formik>
               </Card.Body>
             </Card>
-            { sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
+            { !cardView && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
                 tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
                 <Card>
+                  <Card.Header>
+                    <ButtonToolbar className={"justify-content-between"}>
+                      <div>
+                        <Button variant={"secondary"} className="me-2">
+                          <FontAwesomeIcon className={"me-2"} icon={faEnvelopeOpen}/>
+                          Read/Unread
+                        </Button>
+                      </div>
+                    </ButtonToolbar>
+                  </Card.Header>
                   <ReportTable
                       visibleReports={reportsQuery.data.results}
                       sources={sourcesQuery.data}
                       tags={tagsQuery.data}
-                      groups={groupsQuery.data.results}
+                      selectedReportIds={selectedReportIds}
+                      setSelectedReportIds={setSelectedReportIds}
                       variant={"relevant"}
                   />
                   <Card.Footer>
@@ -352,6 +374,16 @@ const RelevantReportsIndex = (props: IProps) => {
             }
             {reportsQuery.isLoading &&
                 <LoadingReportTable variant={"relevant"}/>
+            }
+            { cardView && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
+                tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
+                <ReportCards
+                    groups={groupsQuery.data.results}
+                    sources={sourcesQuery.data}
+                    visibleReports={reportsQuery.data.results}
+                    tags={tagsQuery.data}
+                    variant={"relevant"}
+                ></ReportCards>
             }
             <div className={"pb-5"}></div>
           </Col>

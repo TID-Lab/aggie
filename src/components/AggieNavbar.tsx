@@ -28,15 +28,15 @@ const AggieNavbar = (props: IProps) => {
           }
           { props.isAuthenticated &&
               <>
-                <LinkContainer to={'/reports'}>
-                  <Navbar.Brand>
-                    <Image
-                        alt="Aggie Logo"
-                        src="/images/logo-v1.png"
-                    />
-                  </Navbar.Brand>
-                </LinkContainer>
                 <Nav variant={"pills"} className={"me-auto aggie-nav"}>
+                  <LinkContainer to={'/reports'}>
+                    <Navbar.Brand>
+                      <Image
+                          alt="Aggie Logo"
+                          src="/images/logo-v1.png"
+                      />
+                    </Navbar.Brand>
+                  </LinkContainer>
                   <Nav.Item>
                     <LinkContainer to={'/reports'}>
                       <Nav.Link className={"ps-2 pe-2 aggie-nav-link"} eventKey="1">

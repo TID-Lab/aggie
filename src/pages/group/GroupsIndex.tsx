@@ -217,7 +217,7 @@ const GroupsIndex = (props: IProps) => {
                   <Card>
                     <Card.Header>
                       <ButtonToolbar className={"justify-content-between"}>
-                        <GroupModal users={usersQuery.data}/>
+                        <GroupModal/>
                         <div>
                           { groupsQuery.data.total &&
                               <AggiePagination itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>

@@ -65,7 +65,7 @@ export const setSelectedTags = async (reportIds: string[], tagIds: hasId[]) => {
 }
 
 export const setSelectedGroup = async (reportIds: string[], groupId: hasId | null) => {
-  const { data } = await axios.patch('/api/report/_group', {ids: reportIds, _group: groupId});
+  const { data } = await axios.patch('/api/report/_group', {ids: reportIds, group: groupId});
   return data;
 }
 

@@ -60,9 +60,9 @@ export const deleteGroup = async (group: Group) => {
   return data;
 }
 
-export const getGroupReports = async (groupId: string | undefined) => {
+export const getGroupReports = async (groupId: string | undefined, page: number) => {
   if (groupId) {
-    const { data } = await axios.get('/api/report?groupId=' + groupId);
+    const { data } = await axios.get('/api/report?groupId=' + groupId + "&page=" + page);
     return data;
   }
 }

@@ -29,6 +29,7 @@ import {faCheckCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import VeracityIndication from "../../components/VeracityIndication";
 import EscalatedIndication from "../../components/EscalatedIndication";
+import AggiePagination from "../../components/AggiePagination";
 const ITEMS_PER_PAGE = 50;
 
 interface VeracityUpdateInfo {
@@ -169,7 +170,7 @@ const GroupDetails = () => {
     }
   });
   const groupReportsQuery = useQuery<Reports, undefined>(
-      ["reports", {groupId: id}], ()=> getGroupReports(id),
+      ["reports", {groupId: id}], ()=> getGroupReports(id, pageNumber),
   );
   const [queryTags, setQueryTags] = useState<Tag[]>([]);
   const handleTagsBlur = () => {
@@ -336,50 +337,15 @@ const GroupDetails = () => {
                       <Card>
                         <ReportTable
                             visibleReports={groupReportsQuery.data.results}
-                            groups={[groupQuery.data]}
                             sources={sourcesQuery.data}
                             tags={tagsQuery.data}
                             variant={"group-details"}
                         />
                         <Card.Footer>
-                          <ButtonToolbar className={"justify-content-center"}>
-                            { groupReportsQuery.data && groupReportsQuery.data.total &&
-                                <Pagination className={"mb-0"}>
-                                  {Number(searchParams.get('page')) === 0 &&
-                                      <>
-                                        <Pagination.First disabled/>
-                                        <Pagination.Prev disabled aria-disabled="true"/>
-                                      </>
-                                  }
-                                  {Number(searchParams.get('page')) > 0 &&
-                                      <>
-                                        <Pagination.First onClick={()=>goToPage(0)}/>
-                                        <Pagination.Prev onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}/>
-                                        <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) - 1)}>
-                                          {Number(searchParams.get('page')) - 1}
-                                        </Pagination.Item>
-                                      </>
-                                  }
-                                  <Pagination.Item disabled aria-disabled="true">{Number(searchParams.get('page'))}</Pagination.Item>
-                                  {Number(searchParams.get('page')) + 1 < (groupReportsQuery.data.total/ITEMS_PER_PAGE) &&
-                                      <>
-                                        <Pagination.Item onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}>
-                                          {Number(searchParams.get('page')) + 1}
-                                        </Pagination.Item>
-                                        <Pagination.Next onClick={()=>goToPage(Number(searchParams.get('page')) + 1)}/>
-                                        {/*@ts-ignore*/}
-                                        <Pagination.Last onClick={()=>goToPage(Math.ceil(groupReportsQuery.data.total/ITEMS_PER_PAGE - 1))}/>
-                                      </>
-                                  }
-                                  {Number(searchParams.get('page')) + 1 >= (groupReportsQuery.data.total/ITEMS_PER_PAGE) &&
-                                      <>
-                                        <Pagination.Next disabled/>
-                                        <Pagination.Last disabled/>
-                                      </>
-                                  }
-                                </Pagination>
-                            }
-                          </ButtonToolbar>
+                          {groupReportsQuery.data.total > ITEMS_PER_PAGE &&
+                              <AggiePagination goToPage={goToPage} total={groupReportsQuery.data.total}
+                                               itemsPerPage={ITEMS_PER_PAGE}/>
+                          }
                         </Card.Footer>
                       </Card>
                   }

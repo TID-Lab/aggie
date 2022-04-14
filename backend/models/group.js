@@ -39,8 +39,7 @@ var schema = new mongoose.Schema({
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
   publicDescription: String,
-  reports: {type: [{type: SchemaTypes.ObjectId, ref: 'Report'}], default: []},
-  totalReports: { type: Number, default: 0, min: 0 },
+  _reports: {type: [{type: SchemaTypes.ObjectId, ref: 'Report'}], default: []},
   notes: String
 });
 
@@ -155,28 +154,6 @@ SMTCTag.schema.on('tag:removed', function(id) {
   });
 })*/
 
-Report.schema.on('change:group', function(prevGroup, newGroup) {
-  if (prevGroup !== newGroup) {
-    if (prevGroup) {
-      // Callbacks added to execute query immediately
-      Group.findByIdAndUpdate(prevGroup, { $inc: { totalReports: -1 } }, function(err) {
-        if (err) {
-          logger.error(err);
-        }
-        schema.emit('group:update');
-      });
-    }
-  }
-
-  if (newGroup) {
-    Group.findByIdAndUpdate(newGroup, { $inc: { totalReports: 1 } }, function(err) {
-      if (err) {
-        logger.error(err);
-      }
-      schema.emit('group:update');
-    });
-  }
-});
 
 // Query groups based on passed query data
 Group.queryGroups = function(query, page, options, callback) {

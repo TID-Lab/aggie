@@ -91,7 +91,7 @@ interface Group extends hasId{
   escalated: boolean,
   closed: boolean,
   public: boolean,
-  totalReports: number,
+  _reports: string[],
   title: string,
   assignedTo?: {
     _id: string,

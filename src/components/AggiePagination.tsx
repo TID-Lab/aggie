@@ -18,7 +18,7 @@ const AggiePagination = (props: IProps) => {
   } else {
     return (
         <Stack direction={"horizontal"} gap={2} className={"justify-content-end"}>
-          <small>
+          <small className={"me-2"}>
             {Number(searchParams.get('page')) != null &&
                 <>
                   {commaNumber(Number(searchParams.get('page')) * props.itemsPerPage + 1)} - {commaNumber(Number(searchParams.get('page')) * props.itemsPerPage + props.itemsPerPage + 1)}

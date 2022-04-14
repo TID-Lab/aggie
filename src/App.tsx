@@ -25,6 +25,7 @@ import {getSession} from "./api/session";
 import {AxiosError} from "axios";
 import {Session} from "./objectTypes";
 import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
+import {getAllGroups} from "./api/groups";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -46,7 +47,9 @@ const App = () => {
     },
     retry: sessionFetching
   });
-  // This is how we "globalize" the primary alert.
+
+  queryClient.prefetchQuery('all-groups', getAllGroups)
+  // This is how we "globalize" an alert. This is only for alerts that should remain over multiple views
   const [globalAlert, setGlobalAlert] = useState<AlertContent>({
     heading: "",
     message: "",
