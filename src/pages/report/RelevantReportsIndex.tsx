@@ -17,7 +17,7 @@ import {getSources} from "../../api/sources";
 import {getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
-import {CTList, Groups, Reports, ReportSearchState, Session, Source, Tag} from "../../objectTypes";
+import {CTList, Groups, ReportQueryState, Reports, Source, Tag} from "../../objectTypes";
 import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
@@ -52,7 +52,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const [cardView, setCardView] = useState(false);
 
   // This is the state of the Report Query
-  const [searchState, setSearchState] = useState<ReportSearchState>({
+  const [searchState, setSearchState] = useState<ReportQueryState>({
     keywords: searchParams.get("keywords"),
     author: searchParams.get("author"),
     groupId: searchParams.get("groupId"),

@@ -1,15 +1,23 @@
-import {Alert, Button, Container, Form, Modal, Table} from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  ButtonToolbar,
+  Card, Col,
+  Container,
+  Modal, Row,
+  Table
+} from "react-bootstrap";
 import React, {useState} from "react";
 // @ts-ignore
 import Tags from "@yaireo/tagify/dist/react.tagify";
 import {Link, useNavigate} from "react-router-dom";
-import {groupById, tagsById} from "../../helpers";
+import {groupById, parseFilterFields, tagsById} from "../../helpers";
 import {ReportRow} from "../report/ReportTable";
 import './EditGroupModal.css';
 import axios, {AxiosError} from "axios";
 import {Group, Groups, GroupSearchState, Report, Reports, Source, Tag, User} from "../../objectTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlusCircle} from "@fortawesome/free-solid-svg-icons";
+import {faEdit, faFilter, faGrip, faList, faPlus, faPlusCircle, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {GroupRow} from "./GroupTable";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {getAllGroups, getGroups} from "../../api/groups";
@@ -17,6 +25,10 @@ import {getUsers} from "../../api/users";
 import {setSelectedEscalated, setSelectedGroup} from "../../api/reports";
 import {getSources} from "../../api/sources";
 import {getTags} from "../../api/tags";
+import AggiePagination from "../AggiePagination";
+import { Field, Formik, Form } from "formik";
+
+const ITEMS_PER_PAGE = 50;
 
 interface IProps {
   reports: Set<Report>,
@@ -33,7 +45,7 @@ interface ReportGroupUpdateInfo {
 export default function EditGroupModal(props: IProps) {
   const queryClient = useQueryClient();
   // Depending on the number of groups, this could take a WHILE. Therefore we do this Async to other queries.
-  const allGroupsQuery = useQuery<Group[] | undefined, AxiosError>("all-groups", ()=> {return getAllGroups();}, {
+  const allGroupsQuery = useQuery<Group[] | undefined, AxiosError>(["groups", "all"], ()=> {return getAllGroups();}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
@@ -50,7 +62,7 @@ export default function EditGroupModal(props: IProps) {
   })
 
   const navigate = useNavigate();
-  const [searchState, setSearchState] = useState<GroupSearchState>({
+  const [queryState, setQueryState] = useState<GroupSearchState>({
     locationName: null,
     veracity: null,
     escalated: null,
@@ -64,13 +76,15 @@ export default function EditGroupModal(props: IProps) {
     idnum: null,
     page: 0
   });
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>("groups", ()=>{return getGroups(searchState)}, {
+
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", queryState], ()=>{return getGroups(queryState)}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
       }
     },
   });
+
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
@@ -117,42 +131,36 @@ export default function EditGroupModal(props: IProps) {
     setShowGroupModal(true);
   }
 
-  const handleSubmit = () => {
-    if (tempSelectedGroup) {
-      reportGroupUpdateMutation.mutate({
-        reportIds: reports.map((report=>{return report._id;})),
-        _group: tempSelectedGroup,
-      })
-    }
+  const goToPage = (pageNum: number) => {
+    setQueryState({
+      ...queryState,
+      page: pageNum
+    });
+    groupsQuery.refetch();
   }
 
   const ReportGroupModalJSX = () => {
     if (reports.length > 0 && showGroupModal) {
       return (
-          <>
-            <Modal.Header closeButton>
-              {reports.length > 1
-                  ? <Modal.Title>Edit multiple reports' groups</Modal.Title>
-                  : <Modal.Title>Edit report group</Modal.Title>
-              }
-            </Modal.Header>
-            <Modal.Body className="edit__group__modal">
-              <Container fluid>
-                <Alert variant="danger" onClose={() => setShowAlert(false)} show={showAlert} dismissible>
-                  <Alert.Heading>{alertMessage.header}</Alert.Heading>
-                  <p>
-                    {alertMessage.body}
-                  </p>
-                </Alert>
+          <Container fluid>
+            <Alert variant="danger" onClose={() => setShowAlert(false)} show={showAlert} dismissible>
+              <Alert.Heading>{alertMessage.header}</Alert.Heading>
+              <p>
+                {alertMessage.body}
+              </p>
+            </Alert>
+            <Card className="mb-4">
+              <Card.Body className="p-0">
                 <Table bordered>
                   <thead>
-                    <tr>
-                      <th>Source info</th>
-                      <th>Thumbnail</th>
-                      <th>Content</th>
-                      <th>Tags</th>
-                      <th>Group</th>
-                    </tr>
+                  <tr>
+                    <th>Source info</th>
+                    <th>Thumbnail</th>
+                    <th>Content</th>
+                    <th>Notes</th>
+                    <th>Tags</th>
+                    <th>Group</th>
+                  </tr>
                   </thead>
                   <tbody>
                   { reports.map((report) => {
@@ -169,47 +177,90 @@ export default function EditGroupModal(props: IProps) {
                   })}
                   </tbody>
                 </Table>
+              </Card.Body>
+            </Card>
+            <Card>
+              <Card.Header className="pe-2 ps-2">
+                <ButtonToolbar className={"justify-content-between"}>
+                  <div>
+                    <Row className="justify-content-start">
+                      <Col xs={5} className="pe-1">
+                        <Field id="title" name="title" placeholder="Search by name" className="form-control form-control-sm"/>
+                      </Col>
+                      <Col xs={4} className="pe-0">
+                        <Field id="idnum" name="idnum" placeholder="Search by ID" className="form-control form-control-sm"/>
+                      </Col>
+                    </Row>
+                  </div>
+                  {groupsQuery.data && groupsQuery.data.total &&
+                      <AggiePagination
+                          goToPage={goToPage}
+                          total={groupsQuery.data.total}
+                          itemsPerPage={ITEMS_PER_PAGE}
+                          variant="modal"
+                          size="sm"
+                          page={queryState.page}/>
+                  }
+                </ButtonToolbar>
+              </Card.Header>
+              <Card.Body className="p-0">
+                {/* TODO: See if we can move this into Group Table as it makes more sense there. */}
                 <Table hover bordered size={"sm"} className={"m-0"}>
                   <thead>
-                    <tr>
-                      <th></th>
-                      <th>Group Info</th>
-                      <th>Location</th>
-                      <th>Created</th>
-                      <th>Notes</th>
-                      <th>Assignee</th>
-                      <th>Tags</th>
-                    </tr>
+                  <tr>
+                    <th></th>
+                    <th>Group Info</th>
+                    <th>Location</th>
+                    <th>Created</th>
+                    <th>Notes</th>
+                    <th>Assignee</th>
+                    <th>Tags</th>
+                  </tr>
                   </thead>
                   <tbody>
                   { usersQuery.isSuccess && groupsQuery.isSuccess && tagsQuery.isSuccess && sourcesQuery.isSuccess &&
                       usersQuery.data && groupsQuery.data && tagsQuery.data && sourcesQuery.data && groupsQuery.data.results.map((group)=>{
-                      return (
-                          <GroupRow
-                              key={group._id}
-                              variant='modal'
-                              tags={tagsQuery.data}
-                              className={tempSelectedGroup === group ? "group--selected" : ""}
-                              group={group}
-                              users={usersQuery.data}
-                              sources={props.sources}
-                              onClick={()=>{
-                                setTempSelectedGroup(group);
-                              }}
-                          />);
-                  })}
+                        if (group == tempSelectedGroup) {
+                          return (
+                              <GroupRow
+                                  key={group._id}
+                                  variant='modal'
+                                  tags={tagsQuery.data}
+                                  selected
+                                  className={tempSelectedGroup === group ? "group--selected" : ""}
+                                  group={group}
+                                  users={usersQuery.data}
+                                  sources={props.sources}
+                                  onClick={()=>{
+                                    setTempSelectedGroup(group);
+                                  }}
+                              />
+                          )
+                        } else {
+                          return (
+                              <GroupRow
+                                  key={group._id}
+                                  variant='modal'
+                                  tags={tagsQuery.data}
+                                  className={tempSelectedGroup === group ? "group--selected" : ""}
+                                  group={group}
+                                  users={usersQuery.data}
+                                  sources={props.sources}
+                                  onClick={()=>{
+                                    setTempSelectedGroup(group);
+                                  }}
+                              />);
+                        }
+                      })}
                   </tbody>
                 </Table>
-              </Container>
-            </Modal.Body>
-            <Modal.Footer className="edit__group__modal">
-              <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-              <Button variant="primary" type="submit">Save</Button>
-            </Modal.Footer>
-          </>
-      )
+              </Card.Body>
+            </Card>
+          </Container>
+      );
     }
   }
+  // @ts-ignore
   return (
       <>
         { props.variant === "inline" &&
@@ -232,7 +283,7 @@ export default function EditGroupModal(props: IProps) {
                           }
                         </Button>
                         : <Button variant={"link"} onClick={handleShow}>
-                          Edit
+                          <FontAwesomeIcon icon={faPlus}/>
                         </Button>
                     }
                   </> :
@@ -249,16 +300,52 @@ export default function EditGroupModal(props: IProps) {
               Add to group
             </Button>
         }
-        <Modal
-            show={showGroupModal}
-            onHide={handleClose}
-            fullscreen={true}
-            keyboard={false}
+        <Formik
+            initialValues={{
+              idnum: "",
+              title: "",
+            }}
+            onSubmit={(values, {setSubmitting, resetForm}) => {
+              if (tempSelectedGroup) {
+                reportGroupUpdateMutation.mutate({
+                  reportIds: reports.map((report=>{return report._id;})),
+                  _group: tempSelectedGroup,
+                }, {
+                  onSuccess: ()=>setShowGroupModal(false)
+                })
+              }
+            }}
         >
-          <Form onSubmit={handleSubmit}>
-            {ReportGroupModalJSX()}
-          </Form>
-        </Modal>
+          {({
+              values,
+              errors,
+              handleSubmit,
+            }) => (
+              <Form>
+                <Modal
+                    show={showGroupModal}
+                    onHide={handleClose}
+                    fullscreen={true}
+                    keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    {reports.length > 1
+                        ? <Modal.Title>Edit multiple reports' groups</Modal.Title>
+                        : <Modal.Title>Edit report's group</Modal.Title>
+                    }
+                  </Modal.Header>
+                  <Modal.Body className="edit__group__modal">
+                    {ReportGroupModalJSX()}
+                  </Modal.Body>
+                  <Modal.Footer className="edit__group__modal">
+                    <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+                    {/*@ts-ignore*/}
+                    <Button variant="primary" type="submit" onClick={handleSubmit}>Save</Button>
+                  </Modal.Footer>
+                </Modal>
+              </Form>
+          )}
+        </Formik>
       </>
   )
 }

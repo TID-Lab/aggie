@@ -10,6 +10,7 @@ import ConfirmModal from "../ConfirmModal";
 import CredentialModal from "./CredentialModal";
 import {useEffect, useState} from "react";
 import { Credential } from "../../objectTypes";
+import "./CredentialsTable.css"
 
 interface IProps {
   credentials: Credential[] | [];
@@ -21,8 +22,8 @@ export default function CredentialTable(props: IProps) {
   if (props.credentials.length > 0) {
     credentialRows = credentials.map((credential: Credential) =>
         <tr key={credential._id}>
-          <td className={"align-middle"}>{credential.name}</td>
-          <td className={"align-middle"}><Image src={"/images/" + credential.type + ".png"} rounded/></td>
+          <td className={"td__credentialType align-middle"}><Image src={"/images/" + credential.type + ".png"} rounded/></td>
+          <td className={"td__credentialName align-middle"}>{credential.name}</td>
           <td className={"align-middle"}>
             <div className={"float-end"}>
               <ConfirmModal type={"delete"} variant="icon" credential={credential}/>
@@ -43,8 +44,8 @@ export default function CredentialTable(props: IProps) {
           <Table hover>
             <thead>
             <tr>
-              <th>Name</th>
               <th>Type</th>
+              <th>Name</th>
               <th></th>
             </tr>
             </thead>

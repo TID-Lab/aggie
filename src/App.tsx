@@ -26,7 +26,8 @@ import {AxiosError} from "axios";
 import {Session} from "./objectTypes";
 import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
 import {getAllGroups} from "./api/groups";
-
+//TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
+//TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
 const App = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -43,7 +44,10 @@ const App = () => {
       sessionFetching = true
       if (location.pathname === "/login") {
         navigate('/reports');
+        // For some reason, when there is a navigation here, the session sometimes doesn't tell the navbar it's signed in. Refetching on navigation fixes that.
+        sessionQuery.refetch();
       }
+
     },
     retry: sessionFetching
   });

@@ -69,7 +69,7 @@ exports.source_update = (req, res, next) => {
         writelog.writeSource(req, source, 'enable/disable/editSource');
         res.sendStatus(200);
       }
-    });e
+    });
   });
 }
 

@@ -8,33 +8,39 @@ import {
   Table,
   ButtonGroup,
   ButtonToolbar,
-  Form, Pagination
+  Form, Pagination, Button
 } from "react-bootstrap";
 import StatsBar from '../../components/StatsBar';
 import ConfirmModal from "../../components/ConfirmModal";
 import {useParams, useSearchParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {editGroup, getGroup, getGroupReports, getGroups, setSelectedClosed} from "../../api/groups";
+import {
+  editGroup,
+  getGroup,
+  getGroupReports,
+  getGroups,
+  setSelectedClosed,
+  setSelectedLocationName, setSelectedTitle
+} from "../../api/groups";
 import {getSources} from "../../api/sources";
 import {getTags} from "../../api/tags";
-import {Group, hasId, Report, Reports, Source, Tag, Veracity} from "../../objectTypes";
-import {aggieVeracityOptions, stringToDate, tagById, tagsById} from "../../helpers";
+import {Group, hasId, Report, Reports, Source, Tag, VeracityOptions} from "../../objectTypes";
+import {stringToDate, tagById, VERACITY_OPTIONS} from "../../helpers";
 import ReportTable from "../../components/report/ReportTable";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {setSelectedEscalated} from "../../api/groups";
 import {setSelectedNotes} from "../../api/groups";
 import {setSelectedVeracity} from "../../api/groups";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import VeracityIndication from "../../components/VeracityIndication";
 import EscalatedIndication from "../../components/EscalatedIndication";
 import AggiePagination from "../../components/AggiePagination";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 const ITEMS_PER_PAGE = 50;
 
 interface VeracityUpdateInfo {
   groupId: string,
-  veracity: Veracity | string,
+  veracity: VeracityOptions | string,
 }
 interface NotesUpdateInfo {
   groupId: string,
@@ -53,13 +59,25 @@ interface TagsUpdateInfo {
   tags: hasId[]
 }
 
+interface LocationNameUpdateInfo {
+  groupId: string,
+  locationName: string,
+}
+interface TitleUpdateInfo {
+  groupId: string,
+  title: string,
+}
+
 const GroupDetails = () => {
   let { id } = useParams<{id: string}>();
   // This is the state of the URL
   const [searchParams, setSearchParams] = useSearchParams();
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState({header: "", body: ""});
-  const [veracity, setVeracity] = useState<Veracity | string>("Unconfirmed");
+  const [editMode, setEditMode] = useState(false);
+  const [title, setTitle] = useState<string>("");
+  const [veracity, setVeracity] = useState<VeracityOptions | string>("Unconfirmed");
+  const [locationName, setLocationName] = useState<string>("");
   const [escalated, setEscalated] = useState(true);
   const [closed, setClosed] = useState(true);
   const [notes, setNotes] = useState("");
@@ -70,9 +88,12 @@ const GroupDetails = () => {
     });
     setPageNumber(page);
   }
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => setTitle(event.target.value);
   const handleEscalatedChange = (event: React.ChangeEvent<HTMLInputElement>) => setEscalated(event.target.checked);
   const handleClosedChange = (event: React.ChangeEvent<HTMLInputElement>) => setClosed(event.target.checked);
   const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => setNotes(event.target.value);
+  const handleLocationNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setLocationName(event.target.value);
   const handleVeracityChange = (event: React.ChangeEvent<HTMLSelectElement>) => setVeracity(event.target.value);
   const groupMutation = useMutation((group: Group) => { return editGroup(group) });
   const escalatedStatusMutation = useMutation((escalatedUpdateInfo: EscalatedUpdateInfo) => {
@@ -112,6 +133,26 @@ const GroupDetails = () => {
       }
     }
   });
+  const locationNameUpdateMutation = useMutation((locationNameUpdateInfo: LocationNameUpdateInfo) => {
+    return setSelectedLocationName([locationNameUpdateInfo.groupId], locationNameUpdateInfo.locationName);
+  }, {
+    onSuccess: data => {
+      // TODO: Instead of refetching, just use a React useState to adjust the UI on Success
+      groupQuery.refetch();
+    },
+    onError: (error: AxiosError) => {
+      if (error && error.response && error.response.status && error.response.data) {
+        setShowAlert(false);
+        setAlertMessage({
+          header: "Failed to update location (" + error.response.status + ")",
+          body: error.response.data,
+        });
+        setShowAlert(true);
+      } else {
+        console.error("Uncaught location update error.")
+      }
+    }
+  });
   const notesUpdateMutation = useMutation((notesUpdateInfo: NotesUpdateInfo) => {
     return setSelectedNotes([notesUpdateInfo.groupId], notesUpdateInfo.notes);
   }, {
@@ -129,6 +170,26 @@ const GroupDetails = () => {
         setShowAlert(true);
       } else {
         console.error("Uncaught note update error.")
+      }
+    }
+  });
+  const titleUpdateMutation = useMutation((titleUpdateInfo: TitleUpdateInfo) => {
+    return setSelectedTitle([titleUpdateInfo.groupId], titleUpdateInfo.title);
+  }, {
+    onSuccess: data => {
+      // TODO: Instead of refetching, just use a React useState to adjust the UI on Success
+      groupQuery.refetch();
+    },
+    onError: (error: AxiosError) => {
+      if (error && error.response && error.response.status && error.response.data) {
+        setShowAlert(false);
+        setAlertMessage({
+          header: "Failed to update title (" + error.response.status + ")",
+          body: error.response.data,
+        });
+        setShowAlert(true);
+      } else {
+        console.error("Uncaught title update error.")
       }
     }
   });
@@ -167,6 +228,8 @@ const GroupDetails = () => {
       setClosed(data.closed);
       setNotes(data.notes || "");
       setVeracity(data.veracity);
+      setLocationName(data.locationName);
+      setTitle(data.title);
     }
   });
   const groupReportsQuery = useQuery<Reports, undefined>(
@@ -202,6 +265,15 @@ const GroupDetails = () => {
                               aria-label="Toolbar with Button groups"
                           >
                             <ButtonGroup className={"me-2"}>
+                              {editMode ?
+                                  <Button variant="outline-primary" onClick={()=>setEditMode(false)}>
+                                    <FontAwesomeIcon icon={faEdit} className="me-2"/>
+                                    Edit Mode
+                                  </Button> : <Button variant="primary" onClick={()=>setEditMode(true)}>
+                                    <FontAwesomeIcon icon={faEdit} className="me-2"/>
+                                    Edit Mode
+                                  </Button>
+                              }
                             </ButtonGroup>
                             <ButtonGroup>
                               <ConfirmModal type={"delete"} group={groupQuery.data} variant={"button"}></ConfirmModal>
@@ -215,7 +287,21 @@ const GroupDetails = () => {
                             <>
                               <tr>
                                 <th>Name</th>
-                                <td>{groupQuery.data.title}</td>
+                                <td>
+                                  <Form.Control
+                                      type="text"
+                                      name="groupTitle"
+                                      placeholder="Write title here."
+                                      disabled={!editMode}
+                                      onBlur={()=> {
+                                        titleUpdateMutation.mutate({
+                                          groupId: groupQuery.data._id,
+                                          title: title,
+                                        })
+                                      }}
+                                      onChange={handleTitleChange} value={title}
+                                  />
+                                </td>
                               </tr>
                               <tr>
                                 <th>ID</th>
@@ -223,7 +309,24 @@ const GroupDetails = () => {
                               </tr>
                               <tr>
                                 <th>Location</th>
-                                <td>{groupQuery.data.locationName}</td>
+                                <td>
+                                  <Form>
+                                    <Form.Control
+                                        as="textarea"
+                                        name="groupLocationName"
+                                        placeholder="Write location here."
+                                        style={{height: '60px'}}
+                                        disabled={!editMode}
+                                        onBlur={()=> {
+                                          locationNameUpdateMutation.mutate({
+                                            groupId: groupQuery.data._id,
+                                            locationName: locationName,
+                                          })
+                                        }}
+                                        onChange={handleLocationNameChange} value={locationName}
+                                    />
+                                  </Form>
+                                </td>
                               </tr>
                               <tr>
                                 <th>Created by</th>
@@ -244,6 +347,7 @@ const GroupDetails = () => {
                                 <td>
                                   <Form.Select
                                       onChange={handleVeracityChange}
+                                      disabled={!editMode}
                                       onBlur={()=> {
                                         veracityStatusMutation.mutate({
                                           groupId: groupQuery.data._id,
@@ -252,7 +356,7 @@ const GroupDetails = () => {
                                       }}
                                       value={veracity}
                                   >
-                                    {aggieVeracityOptions.map((veracityOption) => {
+                                    {VERACITY_OPTIONS.map((veracityOption) => {
                                       return <option key={veracityOption} value={veracityOption}>{veracityOption}</option>
                                     })}
                                   </Form.Select>
@@ -265,6 +369,7 @@ const GroupDetails = () => {
                                 </th>
                                 <td>
                                   <Form.Switch
+                                      disabled={!editMode}
                                       onBlur={()=> {
                                         escalatedStatusMutation.mutate({
                                           groupId: groupQuery.data._id,
@@ -286,6 +391,7 @@ const GroupDetails = () => {
                                           closed: closed,
                                         })
                                       }}
+                                      disabled={!editMode}
                                       onChange={handleClosedChange}
                                       checked={closed}
                                   />
@@ -315,6 +421,7 @@ const GroupDetails = () => {
                                         name="reportNotes"
                                         placeholder="Write notes here"
                                         style={{height: '100px'}}
+                                        disabled={!editMode}
                                         onBlur={()=> {
                                           notesUpdateMutation.mutate({
                                             groupId: groupQuery.data._id,

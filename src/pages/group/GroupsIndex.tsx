@@ -1,25 +1,33 @@
-import {Groups, GroupSearchState, ReportSearchState, Source, Tag, User} from "../../objectTypes";
+import {
+  ClosedOptions,
+  EscalatedOptions,
+  Groups,
+  GroupSearchState,
+  Source,
+  Tag,
+  User,
+  VeracityOptions
+} from "../../objectTypes";
 import React, {useState} from 'react';
 import {
   Container,
   Card,
   Col,
   Row,
-  Form,
   Button,
   InputGroup,
-  FormControl,
+  FormLabel,
+  FormGroup,
   Collapse,
-  ButtonToolbar, ButtonGroup, Table, Pagination, Dropdown, Placeholder
+  ButtonToolbar
 } from "react-bootstrap";
-import GroupTable, {GroupRow, LoadingGroupTable} from "../../components/group/GroupTable";
+import GroupTable, {LoadingGroupTable} from "../../components/group/GroupTable";
 import StatsBar from '../../components/StatsBar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-  faEllipsisV,
-  faPlusCircle,
+  faClose,
+  faFilter,
   faSearch,
-  faSlidersH,
 } from "@fortawesome/free-solid-svg-icons";
 import {useQuery, useQueryClient} from "react-query";
 import {getSources} from "../../api/sources";
@@ -31,6 +39,8 @@ import GroupModal from "../../components/group/GroupModal";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination from "../../components/AggiePagination";
+import {Field, Formik, Form} from "formik";
+import {CLOSED_OPTIONS, ESCALATED_OPTIONS, parseFilterFields, VERACITY_OPTIONS} from "../../helpers";
 const ITEMS_PER_PAGE = 50;
 
 interface IProps {
@@ -41,7 +51,9 @@ const GroupsIndex = (props: IProps) => {
   const navigate = useNavigate();
   const queryTags = useState<Tag[] | []>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchState, setSearchState] = useState<GroupSearchState>({
+
+  // This
+  const [queryState, setQueryState] = useState<GroupSearchState>({
     locationName: searchParams.get("locationName"),
     veracity: searchParams.get("veracity"),
     escalated: searchParams.get("escalated") === "true",
@@ -56,6 +68,40 @@ const GroupsIndex = (props: IProps) => {
     page: Number(searchParams.get("page") || "0")
   });
 
+  // This clears search state and search params
+  const clearSearchParams = () => { setSearchParams({}); setQueryState({
+    locationName: null,
+    title: null,
+    idnum: null,
+    veracity: queryState.veracity,
+    escalated: queryState.escalated,
+    closed: queryState.closed,
+    totalReports: queryState.totalReports,
+    assignedTo: queryState.assignedTo,
+    creator: queryState.creator,
+    after: queryState.after,
+    before: queryState.before,
+    page: null,
+  });
+  };
+
+  // This clears search state and search params
+  const clearFilterParams = () => { setSearchParams({}); setQueryState({
+    locationName: queryState.locationName,
+    title: queryState.title,
+    idnum: queryState.idnum,
+    veracity: null,
+    escalated: null,
+    closed: null,
+    totalReports: null,
+    assignedTo: null,
+    creator: null,
+    after: null,
+    before: null,
+    page: null,
+  });
+  };
+
   const [showFilterParams, setShowFilterParams] = useState(false);
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
     onError: (err: AxiosError) => {
@@ -64,7 +110,7 @@ const GroupsIndex = (props: IProps) => {
       }
     },
   });
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>("groups", ()=>{return getGroups(searchState)}, {
+  const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", queryState], ()=>{return getGroups(queryState)}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
@@ -88,16 +134,14 @@ const GroupsIndex = (props: IProps) => {
 
 
   const goToPage = (pageNum: number) => {
-    setSearchState({
-      ...searchState,
+    setQueryState({
+      ...queryState,
       page: pageNum
     });
     setSearchParams({
       ...searchParams,
       page: String(pageNum)
     });
-    queryClient.invalidateQueries("groups")
-    groupsQuery.refetch();
   }
   return (
       <div>
@@ -106,121 +150,180 @@ const GroupsIndex = (props: IProps) => {
             <Col>
             </Col>
             <Col xl={9}>
-              <Card className="mb-4">
-                <Card.Body>
-                  <InputGroup>
-                    <FormControl
-                        placeholder="Search groups"
-                        aria-label="Search groups"
-                        aria-describedby="basic-addon2"
-                    />
-                    <Button
-                        variant="outline-secondary"
-                        onClick={() => setShowFilterParams(!showFilterParams)}
-                        aria-controls="filterParams"
-                        aria-expanded={showFilterParams}
-                    >
-                      <FontAwesomeIcon icon={faSlidersH}/>
-                    </Button>
-                  </InputGroup>
-                  <Form>
-                    <Collapse in={showFilterParams}>
-                      <div id="filterParams">
-                        <Row className="mb-3 mt-3">
-                          <Col md>
-                            <Form.Group controlId="searchName">
-                              <Form.Label>Name</Form.Label>
-                              <Form.Control placeholder="Search by name"/>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Form.Group controlId="searchTag">
-                              <Form.Label>Tag</Form.Label>
-                              <Form.Control placeholder="Search by tag"/>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Form.Group controlId="searchAuthor">
-                              <Form.Label>ID#</Form.Label>
-                              <Form.Control placeholder="Search by ID#"/>
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row className="mb-3">
-                          <Col md>
-                            <Form.Group controlId="searchVeracity">
-                              <Form.Label>Veracity</Form.Label>
-                              <Form.Select aria-label="Default select example">
-                                <option>All</option>
-                                <option value={"confirmed true"}>Confirmed true</option>
-                                <option value={"confirmed false"}>Confirmed false</option>
-                                <option value={"unconfirmed"}>Unconfirmed</option>
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Form.Group controlId="searchPlatform">
-                              <Form.Label>Escalated</Form.Label>
-                              <Form.Select aria-label="Default select example">
-                                <option>All</option>
-                                <option value={"true"}>Yes</option>
-                                <option value={"false"}>No</option>
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Form.Group controlId="searchSource">
-                              <Form.Label>Assigned To</Form.Label>
-                              <Form.Select aria-label="Source search select">
-                                <option>All</option>
-                                {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
-                                  return (
-                                      <option value={user._id} key={user._id}>
-                                        {user.username}
-                                      </option>
-                                  )
-                                })}
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Form.Group controlId="search">
-                              <Form.Label>Created By</Form.Label>
-                              <Form.Select aria-label="Default select example">
-                                <option>All</option>
-                                {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
-                                  return (
-                                      <option value={user._id} key={user._id}>
-                                        {user.username}
-                                      </option>
-                                  )
-                                })}
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                          <Col md>
-                            <Button variant={"secondary"}> Date Created </Button>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Button variant={"primary"}><FontAwesomeIcon icon={faSearch}/> Search </Button>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Collapse>
-                  </Form>
-                </Card.Body>
-              </Card>
+              <Formik
+                  initialValues={{
+                    creator: searchParams.get("creator") || "",
+                    idnum: searchParams.get("idnum") || "",
+                    veracity: searchParams.get("veracity") || "",
+                    escalated: searchParams.get("sourceId") || "",
+                    closed: searchParams.get("list") || "",
+                    before: searchParams.get("before") || "",
+                    after: searchParams.get("after") || "",
+                    totalReports: searchParams.get("totalReports") || "",
+                    assignedTo: searchParams.get("assignedTo") || ""
+                  }}
+                  onSubmit={(values, {setSubmitting, resetForm}) => {
+                    setSearchParams(parseFilterFields(values));
+                    setQueryState(parseFilterFields(values));
+                  }}
+              >
+                {({
+                    values,
+                    errors,
+                    handleSubmit
+                  }) => (
+                    <Form>
+                      <Card className="mb-3" bg="light">
+                        <Card.Body className="pb-2 pt-2">
+                          <Row className={"justify-content-between"}>
+                            <Col>
+                              <InputGroup className={"mt-2 mb-2"}>
+                                <Field id="keyword" name="keywords" placeholder="Search by group name, location, or notes" className="form-control"/>
+                                <Button variant="primary" type="submit">
+                                  <FontAwesomeIcon icon={faSearch}/>
+                                </Button>
+                              </InputGroup>
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                      <Collapse in={showFilterParams}>
+                        <Card className="mb-4" bg="light">
+                          <Card.Body>
+                            <Row>
+                              <Col md>
+                                <FormGroup controlId="searchVeracity" className="mb-2 mt-2">
+                                  <FormLabel>Veracity</FormLabel>
+                                  <Field as="select" name="veracity" className="form-select">
+                                    <option key={"none"} value={""}>All</option>
+                                    {VERACITY_OPTIONS.map((option)=> {
+                                      return <option value={option} key={"veracity_" + option}>{option}</option>
+                                    })}
+                                  </Field>
+                                </FormGroup>
+                              </Col>
+                              <Col md>
+                                <FormGroup controlId="searchPlatform" className="mb-2 mt-2">
+                                  <FormLabel>Escalated</FormLabel>
+                                  <Field as="select" name="escalated" className="form-select">
+                                    <option value="">All</option>
+                                    {ESCALATED_OPTIONS.map((option) => {
+                                      return <option value={option} key={"escalated_" + option}>{option === "true" ? "Yes" : "No"}</option>
+                                    })}
+                                  </Field>
+                                </FormGroup>
+                              </Col>
+                              <Col md>
+                                <FormGroup controlId="searchSource" className="mb-2 mt-2">
+                                  <FormLabel>Assigned To</FormLabel>
+                                  <Field as="select" name="assignedTo" className="form-select">
+                                    <option value={""}>All</option>
+                                    {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
+                                      return (
+                                          <option value={user._id} key={user._id}>
+                                            {user.username}
+                                          </option>
+                                      )
+                                    })}
+                                  </Field>
+                                </FormGroup>
+                              </Col>
+                              <Col md>
+                                <FormGroup controlId="search" className="mb-2 mt-2">
+                                  <FormLabel>Created By</FormLabel>
+                                  <Field as="select" name="creator" className="form-select">
+                                    <option value={""} key={"none"}>All</option>
+                                    {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
+                                      return (
+                                          <option value={user._id} key={user._id}>
+                                            {user.username}
+                                          </option>
+                                      )
+                                    })}
+                                  </Field>
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md>
+                                <FormGroup controlId="searchPlatform" className="mb-2 mt-2">
+                                  <FormLabel>Closed</FormLabel>
+                                  <Field as="select" name="closed" className="form-select">
+                                    <option value={""} key={"none"}>All</option>
+                                    {CLOSED_OPTIONS.map((option) => {
+                                      return <option value={option} key={"closed_"+option}>{option === "true" ? "Yes" : "No"}</option>
+                                    })}
+                                  </Field>
+                                </FormGroup>
+                              </Col>
+                              <Col md>
+                                Tags
+                              </Col>
+                              <Col md>
+                                <FormLabel>Created before</FormLabel>
+
+                              </Col>
+                              <Col md>
+                                <FormLabel>Created after</FormLabel>
+                              </Col>
+                            </Row>
+                            <Row className={"float-end"}>
+                                  <ButtonToolbar className={"mt-2 mb-2"}>
+                                    {(queryState.escalated || queryState.closed || queryState.after ||
+                                        queryState.before || queryState.totalReports || queryState.assignedTo ||
+                                        queryState.creator || queryState.veracity) &&
+                                        <Button variant={"outline-secondary"} onClick={() => {
+                                          clearFilterParams();
+                                          values.escalated = "";
+                                          values.closed = "";
+                                          values.after = "";
+                                          values.before = "";
+                                          values.totalReports = "";
+                                          values.assignedTo = "";
+                                          values.creator = "";
+                                          values.veracity = "";
+                                        }} className={"me-2"}
+                                        >
+                                          <FontAwesomeIcon icon={faClose} className={"me-2"}/>
+                                          Clear filter(s)
+                                        </Button>
+                                    }
+                                    {(values.escalated || values.closed || values.after || values.before ||
+                                            values.totalReports || values.assignedTo || values.creator || values.veracity) &&
+                                        <Button variant="primary" type="submit">
+                                          Apply filter(s)
+                                        </Button>
+                                    }
+                                  </ButtonToolbar>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                      </Collapse>
+                    </Form>
+                    )}
+              </Formik>
               { groupsQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && usersQuery.isSuccess &&
                   groupsQuery.data && sourcesQuery.data && tagsQuery.data && usersQuery.data &&
                   <Card>
-                    <Card.Header>
+                    <Card.Header className="pe-2 ps-2">
                       <ButtonToolbar className={"justify-content-between"}>
-                        <GroupModal/>
+                        <div>
+                          <Button
+                              variant="outline-secondary"
+                              onClick={() => setShowFilterParams(!showFilterParams)}
+                              aria-controls="filterParams"
+                              aria-expanded={showFilterParams}
+                              size="sm"
+                              className="me-2"
+                          >
+                            <FontAwesomeIcon icon={faFilter} className="me-2"></FontAwesomeIcon>
+                            Filter(s)
+                          </Button>
+                          <GroupModal/>
+                        </div>
                         <div>
                           { groupsQuery.data.total &&
-                              <AggiePagination itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
+                              <AggiePagination size="sm" itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
                           }
                         </div>
                       </ButtonToolbar>
@@ -231,10 +334,10 @@ const GroupsIndex = (props: IProps) => {
                         tags={tagsQuery.data}
                         users={usersQuery.data}
                     />
-                    <Card.Footer>
+                    <Card.Footer className="pe-2 ps-2">
                       <ButtonToolbar className={"justify-content-end"}>
                         { groupsQuery.data && groupsQuery.data.total &&
-                            <AggiePagination itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
+                            <AggiePagination size="sm" itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
                         }
                       </ButtonToolbar>
                     </Card.Footer>

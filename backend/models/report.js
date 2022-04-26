@@ -21,6 +21,7 @@ let schema = new Schema({
   tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
+  closed: { type: Boolean, default: false, required: true },
   read: { type: Boolean, default: false, required: true, index: true },
   _sources: [{ type: String, ref: 'Source', index: true }],
   _media: { type: [String], index: true },

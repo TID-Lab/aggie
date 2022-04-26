@@ -41,15 +41,15 @@ interface ReportQuery {
   list: string | CTList | null,
 }
 
-interface ReportSearchState {
+interface ReportQueryState {
   keywords: string | null,
   author: string | null,
   groupId: string | null,
   media: string | null,
   sourceId: string | null,
   list: string | null,
-  before: string | null,
-  after: string | null,
+  before: Date | string | null,
+  after: Date | string | null,
   page:  number | null,
 }
 
@@ -341,5 +341,7 @@ interface VisualizationTimes {
   avgReadTimeCount: number
 }
 type MediaType = "twitter" | "instagram" | "RSS" | "elmo" | "SMS GH" | "whatsapp" | "facebook" | "comments"
-type Veracity = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
+type VeracityOptions = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
+type EscalatedOptions = "true" | "false";
+type ClosedOptions = "true" | "false";
 

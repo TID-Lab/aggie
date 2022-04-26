@@ -15,6 +15,7 @@ export const DatePickerField = ({ ...props }) => {
             setFieldValue(field.name, val);
           }}
           showTimeSelect
+          dateFormat="MMMM d, yyyy h:mm aa"
       />
   );
 };

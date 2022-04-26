@@ -1,6 +1,6 @@
 import React from "react";
 import Table from 'react-bootstrap/Table';
-import {Card, Image} from "react-bootstrap";
+import {ButtonToolbar, Card, Image} from "react-bootstrap";
 import { Container } from 'react-bootstrap';
 import UserModal from "./UserModal";
 import {Tag, User} from "../../objectTypes";
@@ -9,6 +9,7 @@ import {useQuery} from "react-query";
 import {getGroups} from "../../api/groups";
 import {AxiosError} from "axios";
 import {getTags} from "../../api/tags";
+import ConfirmModal from "../ConfirmModal";
 
 interface IProps {
   user: User | null,
@@ -20,6 +21,17 @@ const UserProfileTable = (props: IProps) => {
       <Container fluid>
         <h3 className={"mb-4"}>{props.isCurrentUser ? "Your profile" : "User profile" }</h3>
         <Card>
+          <Card.Header className="pe-2 ps-2">
+            <ButtonToolbar className="justify-content-end">
+              {props.user &&
+                  <>
+                    <UserModal user={props.user} variant={"button"}/>
+                    <div className={"me-2"}></div>
+                    <ConfirmModal type={"delete"} variant={"button"} user={props.user}/>
+                  </>
+              }
+            </ButtonToolbar>
+          </Card.Header>
           <Card.Body>
             <Table>
               <thead>
@@ -55,11 +67,6 @@ const UserProfileTable = (props: IProps) => {
               </tr>
               </thead>
             </Table>
-            {props.user &&
-                <div className={"float-end"}>
-                  <UserModal user={props.user} variant={"button"}/>
-                </div>
-            }
           </Card.Body>
         </Card>
       </Container>

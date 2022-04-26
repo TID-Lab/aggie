@@ -5,9 +5,7 @@ import {
   GroupEditableData,
   GroupSearchState,
   hasId,
-  ReportQuery,
-  ReportSearchState,
-  Veracity
+  VeracityOptions
 } from "../objectTypes";
 
 export const getGroups = async (searchState: GroupSearchState = {
@@ -67,7 +65,7 @@ export const getGroupReports = async (groupId: string | undefined, page: number)
   }
 }
 
-export const setSelectedVeracity = async (groupIds: string[], veracity: Veracity | string ) => {
+export const setSelectedVeracity = async (groupIds: string[], veracity: VeracityOptions | string ) => {
   const { data } = await axios.patch('/api/group/_veracity', {ids: groupIds, veracity: veracity});
   return data;
 }
@@ -82,23 +80,65 @@ export const setSelectedClosed = async (groupIds: string[], closed: boolean) => 
   return data;
 }
 
+export const setSelectedTitle = async (groupIds: string[], title: string) => {
+  const { data } = await axios.patch('/api/group/_title', {ids: groupIds, title: title});
+  return data;
+}
+
 export const setSelectedNotes = async (groupIds: string[], notes: string) => {
   const { data } = await axios.patch('/api/group/_notes', {ids: groupIds, notes: notes});
+  return data;
+}
+
+export const setSelectedLocationName = async (groupIds: string[], locationName: string) => {
+  const { data } = await axios.patch('/api/group/_locationName', {ids: groupIds, locationName: locationName});
   return data;
 }
 
 const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[]) => {
   let url = "";
   if (tagIds.length > 0) { url += "tags=" + tagIds; }
-  if (searchState.title) { url += "title=" + searchState.title; }
-  if (searchState.creator) { url += "creator=" + searchState.creator; }
-  if (searchState.idnum) { url += "idnum=" + searchState.idnum; }
-  if (searchState.locationName) { url += "location=" + searchState.locationName; }
-  if (searchState.assignedTo) { url += "sourceId=" + searchState.assignedTo; }
-  if (searchState.totalReports) { url += "totalReports=" + searchState.totalReports; }
-  if (searchState.closed) { url += "closed=" + searchState.closed; }
-  if (searchState.before) { url += "before=" + searchState.before; }
-  if (searchState.after) { url += "after=" + searchState.after; }
-  if (searchState.page) { url += "page=" + searchState.page; }
+  if (searchState.title) {
+    if (url === "") url += "title=" + searchState.title;
+    else url += "&title=" + searchState.title;
+  }
+  if (searchState.creator) {
+    if (url === "") url += "creator=" + searchState.creator;
+    else url += "&creator=" + searchState.creator;
+  }
+  if (searchState.idnum) {
+    if (url === "") url += "idnum=" + searchState.idnum;
+    else url += "&idnum=" + searchState.idnum;
+  }
+  if (searchState.locationName) {
+    if (url === "") url += "location=" + searchState.locationName;
+    else url += "&location=" + searchState.locationName;
+  }
+  if (searchState.assignedTo) {
+    if (url === "") url += "assignedTo=" + searchState.assignedTo;
+    else url += "&assignedTo=" + searchState.assignedTo;
+  }
+
+  if (searchState.totalReports) {
+    if (url === "") url += "totalReports=" + searchState.totalReports;
+    else url += "&totalReports=" + searchState.totalReports;
+  }
+  if (searchState.closed) {
+    if (url === "") url += "closed=" + searchState.closed;
+    else url += "&closed=" + searchState.closed;
+  }
+  if (searchState.before) {
+    if (url === "") url += "before=" + searchState.before;
+    else url += "&before=" + searchState.before;
+  }
+  if (searchState.after) {
+    if (url === "") url += "after=" + searchState.after;
+    else url += "&after=" + searchState.after;
+  }
+
+  if (searchState.page) {
+    if (url === "") url += "page=" + searchState.page;
+    else url += "&page=" + searchState.page;
+  }
   return url;
 }

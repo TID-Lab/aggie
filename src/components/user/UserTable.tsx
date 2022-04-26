@@ -13,7 +13,6 @@ interface IProps {
 
 export default function UserTable(props: IProps) {
   let userRows;
-  console.log(props.users);
   if (props.users.length > 0) {
     userRows = props.users.map((user: User) =>
         <tr key={user._id}>

@@ -1,14 +1,15 @@
 import React, {useState} from "react";
-import {Button, Container, Form, Modal, Dropdown, Row, Col} from "react-bootstrap";
+import {Button, Container, Modal, Dropdown, Row, Col, FormLabel, FormGroup, FormCheck} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {Group, GroupEditableData, User} from "../../objectTypes";
-import {Formik, FormikValues} from "formik";
+import {Formik, FormikValues, Form, Field} from "formik";
 import * as Yup from "yup";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {editGroup, newGroup} from "../../api/groups";
 import {AxiosError} from "axios";
 import {getUsers} from "../../api/users";
+import {VERACITY_OPTIONS} from "../../helpers";
 
 interface IProps {
   group?: Group,
@@ -23,7 +24,6 @@ const groupEditSchema = Yup.object().shape({
   groupLocation: Yup.string(),
   groupAssignedTo: Yup.string(),
   groupNotes: Yup.string(),
-  groupPublic: Yup.boolean(),
 });
 
 const veracityOptions = ['Confirmed true', 'Confirmed false', 'Unconfirmed'];
@@ -76,260 +76,141 @@ export default function GroupModal(props: IProps) {
     }
   }
 
-  // Editing a group modal
-  if (props.group) {
-    return (
-        <>
-          <Dropdown.Item onClick={()=>setModalShow(true)}> <FontAwesomeIcon icon={faEdit}/> Edit</Dropdown.Item>
-          <Modal
-              show={modalShow}
-              onHide={()=>setModalShow(false)}
-              backdrop="static"
-              keyboard={false}
-          >
-            <Formik
-                initialValues={{
-                  groupName: props.group.title,
-                  groupVeracity: props.group.veracity,
-                  groupClosed: props.group.closed,
-                  groupEscalated: props.group.escalated,
-                  groupLocation: props.group.locationName,
-                  groupAssignedTo: props.group.assignedTo?._id || "",
-                  groupNotes: props.group.notes,
-                  groupPublic: props.group.public,
-                }}
-                validationSchema={groupEditSchema}
-                onSubmit={(values, {setSubmitting, resetForm}) => {
+  return (
+      <>
+        {props.group &&
+            <Dropdown.Item onClick={()=>setModalShow(true)}> <FontAwesomeIcon icon={faEdit}/> Edit</Dropdown.Item>
+        }
+        {!props.group &&
+            <Button variant="primary" onClick={()=>setModalShow(true)} size="sm">
+              <FontAwesomeIcon icon={faPlusCircle} className={"me-1"}></FontAwesomeIcon>
+              <span> Create group </span>
+            </Button>
+        }
+        <Modal
+            show={modalShow}
+            onHide={()=>setModalShow(false)}
+            backdrop="static"
+            keyboard={false}
+        >
+          <Formik
+              initialValues={{
+                groupName: props.group ? props.group.title : "",
+                groupVeracity: props.group ? props.group.veracity : VERACITY_OPTIONS[0],
+                groupClosed: props.group ? props.group.closed : false,
+                groupEscalated: props.group ? props.group.escalated : false,
+                groupLocation: props.group ? props.group.locationName : "",
+                groupAssignedTo: props.group ? props.group.assignedTo?._id : "",
+                groupNotes: props.group ? props.group.notes : "",
+              }}
+              validationSchema={groupEditSchema}
+              onSubmit={(values, {setSubmitting, resetForm}) => {
+                if (props.group) {
                   editGroupMutation.mutate(formValuesToGroup(values));
-                }}
-            >
-              {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleSubmit,
-                  isSubmitting,
-                }) => (
-                    <Form noValidate onSubmit={handleSubmit}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Edit group</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Container>
-                          <Form.Group controlId="formUsername" className={"mb-3"}>
-                            <Form.Label>Group name</Form.Label>
-                            <Form.Control
-                                name="groupName"
-                                type="text"
-                                value={values.groupName}
-                                onChange={handleChange}
-                            />
-                          </Form.Group>
-                          <Form.Group controlId="formUserEmail" className={"mb-3"}>
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control
-                                name="groupLocation"
-                                type="text"
-                                value={values.groupLocation}
-                                onChange={handleChange}
-                            />
-                          </Form.Group>
-                          <Row>
-                            <Col md>
-                              <Form.Group controlId="formUserRole" className={"mb-3"}>
-                                <Form.Check
-                                    type="switch"
-                                    name="groupEscalated"
-                                    label="Escalated?"
-                                    onChange={handleChange}
-                                />
-                              </Form.Group>
-                            </Col>
-                            <Col md>
-                              <Form.Group className={"mb-3"}>
-                                <Form.Check
-                                    type="switch"
-                                    name="groupClosed"
-                                    label="Closed?"
-                                    onChange={handleChange}
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                          <Form.Group controlId="formUserRole" className={"mb-3"}>
-                            <Form.Label>Veracity</Form.Label>
-                            <Form.Select
-                                name="groupVeracity"
-                                value={values.groupVeracity}
-                                onChange={handleChange}
-                            >
-                              {veracityOptions.map((option) => {
-                                return <option key={option}>{option}</option>
-                              })}
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group controlId="formUserRole" className={"mb-3"}>
-                            <Form.Label>Assigned to</Form.Label>
-                            <Form.Select
-                                name="groupAssignedTo"
-                                value={values.groupAssignedTo}
-                                onChange={handleChange}
-                            >
-                              <option key="none" value={""}>None</option>
-                              {usersQuery.isSuccess && usersQuery.data && usersQuery.data.map((user) => {
-                                return <option key={user._id} value={user._id}>{user.username}</option>
-                              })}
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group controlId="formUserEmail" className={"mb-3"}>
-                            <Form.Label>Notes</Form.Label>
-                            <Form.Control
-                                as={"textarea"}
-                                placeholder={"Write notes here."}
-                                style={{ height : '100px'}}
-                                name="groupNotes"
-                                value={values.groupNotes}
-                                onChange={handleChange}
-                            />
-                          </Form.Group>
-                        </Container>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={()=>setModalShow(false)}>Cancel</Button>
-                        <Button variant="primary" type="submit" disabled={isSubmitting}>Save</Button>
-                      </Modal.Footer>
-                    </Form>
-                )}
-            </Formik>
-          </Modal>
-        </>
-    )
-  } else {
-    // New group modal
-    return (
-        <>
-          <Button variant={"primary"} onClick={()=>setModalShow(true)}>
-            <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}></FontAwesomeIcon>
-            <span> Create group </span>
-          </Button>
-          <Modal
-              show={modalShow}
-              onHide={()=>setModalShow(false)}
-              backdrop="static"
-              keyboard={false}
-          >
-            <Formik
-                initialValues={{
-                  groupName: "",
-                  groupVeracity: "Unconfirmed",
-                  groupClosed: false,
-                  groupEscalated: false,
-                  groupLocation: "",
-                  groupAssignedTo: "",
-                  groupNotes: "",
-                  groupPublic: false,
-                }}
-                validationSchema={groupEditSchema}
-                onSubmit={(values, {setSubmitting, resetForm}) => {
+                } else {
                   newGroupMutation.mutate(formValuesToGroup(values));
-                }}
-            >
-              {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleSubmit,
-                  isSubmitting,
-                }) => (
-                  <Form noValidate onSubmit={handleSubmit}>
+                }
+              }}
+          >
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                  <Form>
                     <Modal.Header closeButton>
-                      <Modal.Title>Create group</Modal.Title>
+                      <Modal.Title>Edit group</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       <Container>
-                        <Form.Group controlId="formUsername" className={"mb-3"}>
-                          <Form.Label>Group name</Form.Label>
-                          <Form.Control
-                              name="groupName"
+                        <FormGroup controlId="formUsername" className={"mb-3"}>
+                          <FormLabel>Name</FormLabel>
+                          <Field
                               type="text"
-                              value={values.groupName}
-                              onChange={handleChange}
+                              className="form-control"
+                              name="groupName"
                           />
-                        </Form.Group>
-                        <Form.Group controlId="formUserEmail" className={"mb-3"}>
-                          <Form.Label>Location</Form.Label>
-                          <Form.Control
+                        </FormGroup>
+                        <FormGroup controlId="formUserEmail" className={"mb-3"}>
+                          <FormLabel>Location</FormLabel>
+                          <Field
                               name="groupLocation"
                               type="text"
-                              value={values.groupLocation}
-                              onChange={handleChange}
+                              className="form-control"
                           />
-                        </Form.Group>
-                        <Form.Group controlId="formUserRole" className={"mb-3"}>
-                          <Form.Check
-                              type="switch"
-                              name="groupEscalated"
-                              label="Escalated?"
-                              onChange={handleChange}
-                          />
-                        </Form.Group>
-                        <Form.Group className={"mb-3"}>
-                          <Form.Check
-                              type="switch"
-                              name="groupClosed"
-                              label="Closed?"
-                              onChange={handleChange}
-                          />
-                        </Form.Group>
-                        <Form.Group controlId="formUserRole" className={"mb-3"}>
-                          <Form.Label>Veracity</Form.Label>
-                          <Form.Select
+                        </FormGroup>
+                        <Row>
+                          <Col md>
+                            <FormGroup controlId="formGroupEscalated" className={"mb-3"}>
+                              <FormCheck
+                                  checked={values.groupEscalated}
+                                  type="switch"
+                                  label="Escalated"
+                                  onChange={handleChange}
+                                  name="groupEscalated"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md>
+                            <FormGroup controlId="formGroupClosed" className={"mb-3"}>
+                              <FormCheck
+                                  checked={values.groupClosed}
+                                  type="switch"
+                                  label="Closed"
+                                  onChange={handleChange}
+                                  name="groupClosed"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <FormGroup controlId="formUserRole" className={"mb-3"}>
+                          <FormLabel>Veracity</FormLabel>
+                          <Field
+                              as={"select"}
                               name="groupVeracity"
-                              value={values.groupVeracity}
-                              onChange={handleChange}
+                              className="form-select"
                           >
                             {veracityOptions.map((option) => {
                               return <option key={option}>{option}</option>
                             })}
-                          </Form.Select>
-                        </Form.Group>
-                        <Form.Group controlId="formUserRole" className={"mb-3"}>
-                          <Form.Label>Assigned to</Form.Label>
-                          <Form.Select
+                          </Field>
+                        </FormGroup>
+                        <FormGroup controlId="formUserRole" className={"mb-3"}>
+                          <FormLabel>Assigned to</FormLabel>
+                          <Field
+                              as={"select"}
                               name="groupAssignedTo"
-                              value={values.groupAssignedTo}
-                              onChange={handleChange}
+                              className="form-select"
                           >
                             <option key="none" value={""}>None</option>
                             {usersQuery.isSuccess && usersQuery.data && usersQuery.data.map((user) => {
                               return <option key={user._id} value={user._id}>{user.username}</option>
                             })}
-                          </Form.Select>
-                        </Form.Group>
-                        <Form.Group controlId="formUserEmail" className={"mb-3"}>
-                          <Form.Label>Notes</Form.Label>
-                          <Form.Control
+                          </Field>
+                        </FormGroup>
+                        <FormGroup controlId="formGroupNotes" className={"mb-3"}>
+                          <FormLabel>Notes</FormLabel>
+                          <Field
                               as={"textarea"}
                               placeholder={"Write notes here."}
                               style={{ height : '100px'}}
                               name="groupNotes"
-                              value={values.groupNotes}
-                              onChange={handleChange}
+                              className="form-control"
                           />
-                        </Form.Group>
+                        </FormGroup>
                       </Container>
                     </Modal.Body>
                     <Modal.Footer>
-                      <Button variant="secondary" onClick={()=>setModalShow(false)}>Close</Button>
-                      <Button variant="primary" type="submit">Submit</Button>
+                      <Button variant="secondary" onClick={()=>setModalShow(false)}>Cancel</Button>
+                      <Button variant="primary" type="submit" disabled={isSubmitting}>Save</Button>
                     </Modal.Footer>
                   </Form>
-                  )}
-            </Formik>
-          </Modal>
-        </>
-    )
-  }
+              )}
+          </Formik>
+        </Modal>
+      </>
+  );
 }

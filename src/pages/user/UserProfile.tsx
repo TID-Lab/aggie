@@ -65,10 +65,12 @@ const UserProfile = (props: IProps) => {
               }
               { usersQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess && props.session &&
                   tagsQuery.data && groupsQuery.data && sourcesQuery.data &&
-                  <Container>
+                  <Container fluid>
                     <h3 className={"mb-3 mt-4"}>{compareIds(usersQuery.data, props.session) ? "Your groups" : "User groups" }</h3>
                     <Card>
-                      <GroupTable visibleGroups={groupsQuery.data.results} sources={sourcesQuery.data} users={usersQuery.data} tags={tagsQuery.data}/>
+                      <Card.Body className="p-0">
+                        <GroupTable visibleGroups={groupsQuery.data.results} sources={sourcesQuery.data} users={usersQuery.data} tags={tagsQuery.data}/>
+                      </Card.Body>
                     </Card>
                   </Container>
               }

@@ -1,4 +1,14 @@
-import {CTList, Group, hasId, Report, ReportSearchState, Source, Tag, Veracity} from "./objectTypes";
+import {
+  ClosedOptions,
+  CTList,
+  EscalatedOptions,
+  Group,
+  hasId,
+  Report,
+  Source,
+  Tag,
+  VeracityOptions
+} from "./objectTypes";
 import {useLocation} from "react-router-dom";
 import {FormikValues} from "formik";
 
@@ -239,7 +249,6 @@ export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
 export const parseFilterFields = (values: FormikValues) => {
   let parsedFields = Object.assign(removeEmptyStrings(values));
   if (parsedFields.tags && parsedFields.tags.length === 0) delete parsedFields.tags;
-  if (parsedFields.after) parsedFields.after = Date.parse(parsedFields.after);
   return parsedFields;
 }
 
@@ -249,4 +258,6 @@ function removeEmptyStrings(obj: FormikValues) {
 
 export const searchParamsToObj = (searchParams: URLSearchParams) => {return Object.fromEntries(searchParams.entries())};
 
-export const aggieVeracityOptions: Veracity[] = ["Unconfirmed", "Confirmed False", "Confirmed True"];
+export const VERACITY_OPTIONS: VeracityOptions[] = ["Unconfirmed", "Confirmed False", "Confirmed True"];
+export const ESCALATED_OPTIONS: EscalatedOptions[] = ["true", "false"];
+export const CLOSED_OPTIONS: ClosedOptions[] = ["true", "false"];

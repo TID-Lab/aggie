@@ -28,10 +28,10 @@ exports.group_all_groups = (req, res) => {
 
 exports.group_groups = (req, res) => {
   // Read query string parameters
-  var groupData = parseQueryData(req.query);
+  const groupData = parseQueryData(req.query);
   // Use paginated find
   Group.queryGroups(groupData, req.query.page,
-    { sort: '-updatedAt', populate: [{ path: 'creator', select: 'username' }, { path: 'assignedTo', select: 'username' }] }, function(err, groups) {
+    { sort: '-storedAt', populate: [{ path: 'creator', select: 'username' }, { path: 'assignedTo', select: 'username' }] }, (err, groups)=>{
       if (err) res.status(err.status).send(err.message);
       else res.status(200).send(groups);
   });
@@ -64,7 +64,6 @@ exports.group_update = (req, res, next) => {
     if (!group) return res.sendStatus(404);
     // Update the actual values
     group = _.extend(group, _.omit(req.body, 'creator'));
-
     // Save group
     group.save(function(err, numberAffected) {
       if (err) {
@@ -178,6 +177,51 @@ exports.group_escalated_update = (req, res) => {
     });
   });
 }
+
+// Change name of selected groups
+exports.group_title_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.title = req.body.title;
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'titleGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
+// change locationName for selected groups
+exports.group_locationName_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.locationName = req.body.locationName;
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, group, 'locationNameGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
+
 
 // Update group notes
 exports.group_closed_update = (req, res) => {

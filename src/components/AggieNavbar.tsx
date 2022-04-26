@@ -7,6 +7,7 @@ import { faUser, faTags, faUsersCog, faCog, faCloud, faKey, faChartLine } from "
 import ConfirmModal from "./ConfirmModal";
 import "./AggieNavbar.css";
 import {Session} from "../objectTypes";
+import {useQueryClient} from "react-query";
 
 interface IProps {
   isAuthenticated: boolean,
@@ -14,6 +15,8 @@ interface IProps {
 }
 
 const AggieNavbar = (props: IProps) => {
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries("groups")
   let location = useLocation();
   return(
       <Navbar className="color-nav" variant="dark" expand={false}>

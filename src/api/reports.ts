@@ -1,8 +1,8 @@
 import axios from "axios";
 import {FormikValues} from "formik";
-import {hasId, Report, ReportQuery, ReportSearchState, Source, Tag, Veracity} from "../objectTypes";
+import {hasId, Report, ReportQuery, ReportQueryState, Source, Tag, VeracityOptions} from "../objectTypes";
 
-export const getReports = async (searchState: ReportSearchState, tagIds: hasId[] = [], isRelevantReports = false) => {
+export const getReports = async (searchState: ReportQueryState, tagIds: hasId[] = [], isRelevantReports = false) => {
   if (generateReportsSearchURL(searchState, tagIds, isRelevantReports) != "") {
     const { data } = await axios.get('/api/report/?' + generateReportsSearchURL(searchState, tagIds, isRelevantReports));
     return data;
@@ -44,7 +44,7 @@ export const setSelectedRead = async (reportIds: string[], read = true) => {
   return data;
 }
 
-export const setSelectedVeracity = async (reportIds: string[], veracity: Veracity | string ) => {
+export const setSelectedVeracity = async (reportIds: string[], veracity: VeracityOptions | string ) => {
   const { data } = await axios.patch('/api/report/_veracity', {ids: reportIds, veracity: veracity});
   return data;
 }
@@ -69,7 +69,7 @@ export const setSelectedGroup = async (reportIds: string[], groupId: hasId | nul
   return data;
 }
 
-const generateReportsSearchURL = (searchState: ReportSearchState, tagIds: hasId[], isRelevantReports: boolean ) => {
+const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[], isRelevantReports: boolean ) => {
   // Writing this method because the readability of the API call url is much less readable than the page URL.
   let url = "";
   if (isRelevantReports) {

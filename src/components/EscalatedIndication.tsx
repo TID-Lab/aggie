@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faTimesCircle, faWarning} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import React from "react";
-import {Veracity} from "../objectTypes";
+import {VeracityOptions} from "../objectTypes";
 
 interface IProps {
   escalated: boolean,

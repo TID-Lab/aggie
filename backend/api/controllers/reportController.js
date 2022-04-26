@@ -21,13 +21,12 @@ const parseQueryData = (queryString) => {
 
 // Get a list of queried Reports
 exports.report_reports = (req, res) => {
-  const page = req.query.page;
   // Parse query string
   const queryData = parseQueryData(req.query);
   if (queryData) {
     let query = new ReportQuery(queryData);
     // Query for reports using fti
-    Report.queryReports(query, page, (err, reports) => {
+    Report.queryReports(query, req.query.page, (err, reports) => {
       if (err) return res.status(err.status).send(err.message);
       else {
         writelog.writeReport(req, reports, 'filter', query);

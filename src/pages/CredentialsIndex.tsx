@@ -18,7 +18,7 @@ const CredentialsIndex = (props: IProps) => {
   const credentialsQuery = useQuery("credentials", getCredentials, {
 
   });
-  const placeHolderValues = [3, 5, 4, 3];
+  const placeHolderValues = [3, 5, 4];
 
   return (
       <div className="mt-4" >
@@ -44,15 +44,15 @@ const CredentialsIndex = (props: IProps) => {
                         <Table hover>
                           <thead>
                           <tr>
-                            <th>Name</th>
                             <th>Type</th>
+                            <th>Name</th>
                             <th></th>
                           </tr>
                           </thead>
                           <tbody>
                           { placeHolderValues.map((value) => {
                             return (
-                                <tr>
+                                <tr key={value}>
                                   <td>
                                     <Placeholder as={Card.Text} animation="glow">
                                       <Placeholder xs={value} />

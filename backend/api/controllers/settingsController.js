@@ -1,4 +1,5 @@
 // Handles requests for manipulating backend settings
+// See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for sending correct error responses
 'use strict';
 
 var config = require('../../config/secrets');

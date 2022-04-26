@@ -5,24 +5,19 @@ import StatsBar from '../../components/StatsBar';
 import { Tweet } from "react-twitter-widgets";
 import {
   tagsById,
-  sourcesById,
   reportAuthorUrl,
   stringToDate,
   facebookUrlToEmbedUrl,
-  tagById,
-  groupById, sourcesNamesById, aggieVeracityOptions
+  sourcesNamesById, VERACITY_OPTIONS
 } from "../../helpers";
 import {
   faCopy,
-  faFlag,
   faEnvelope,
   faEnvelopeOpen,
-  faCheckCircle,
-  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {
   getReport,
@@ -37,12 +32,12 @@ import {getTags} from "../../api/tags";
 import "./ReportDetails.css";
 // @ts-ignore
 import { FacebookProvider, Like } from 'react-facebook';
-import {Group, Groups, hasId, Report, Source, Tag, Veracity} from "../../objectTypes";
+import {Group, Groups, hasId, Report, Source, Tag, VeracityOptions} from "../../objectTypes";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import ErrorCard from "../../components/ErrorCard";
-import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import VeracityIndication from "../../components/VeracityIndication";
 import EscalatedIndication from "../../components/EscalatedIndication";
+import EditGroupModal from "../../components/group/EditGroupModal";
 
 interface ReadUpdateInfo {
   reportId: string,
@@ -50,7 +45,7 @@ interface ReadUpdateInfo {
 }
 interface VeracityUpdateInfo {
   reportId: string,
-  veracity: Veracity | string,
+  veracity: VeracityOptions | string,
 }
 interface NotesUpdateInfo {
   reportId: string,
@@ -69,7 +64,7 @@ const ReportDetails = () => {
   let { id } = useParams<{id: string}>();
   const queryClient = useQueryClient();
   const [escalated, setEscalated] = useState<boolean>(false);
-  const [veracity, setVeracity] = useState<Veracity | string>("Unconfirmed");
+  const [veracity, setVeracity] = useState<VeracityOptions | string>("Unconfirmed");
   const [notes, setNotes] = useState("");
   const [tags, setTags] = useState<Tag[] | []>([]);
   const [showAlert, setShowAlert] = useState(false);
@@ -321,7 +316,7 @@ const ReportDetails = () => {
                                       }}
                                       value={veracity}
                                   >
-                                    {aggieVeracityOptions.map((veracityOption) => {
+                                    {VERACITY_OPTIONS.map((veracityOption) => {
                                       return <option key={veracityOption} value={veracityOption}>{veracityOption}</option>
                                     })}
                                   </Form.Select>
@@ -348,9 +343,16 @@ const ReportDetails = () => {
                               <tr key="reportGroup">
                                 <th className="details__th">Group</th>
                                 <td>
-                                  {reportGroupQuery.isSuccess && reportGroupQuery.data &&
-                                      <span>{reportGroupQuery.data.title}</span>
+                                  {reportQuery.data &&
+                                      <EditGroupModal
+                                          reports={new Set([reportQuery.data])}
+                                          tags={tagsQuery.data}
+                                          sources={sourcesQuery.data}
+                                          variant={"inline"}
+                                          groupId={reportQuery.data._group}
+                                      />
                                   }
+                                  <Link to={"/group/" + reportQuery.data._group}>Link to Group</Link>
                                 </td>
                               </tr>
                               <tr key="reportTags">

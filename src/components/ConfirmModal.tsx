@@ -11,11 +11,12 @@ import {deleteSource} from "../api/sources";
 import {deleteCredential} from "../api/credentials";
 import {logOut} from "../api/session";
 import {useNavigate} from "react-router-dom";
+import {AxiosError} from "axios";
 
 // Should have more obsticles to deleting credentials and sources.
 interface IProps {
   type: "cancel" | "delete" | "logout",
-  //TODO: I want to make variant into "as" as bootstrap react uses
+  //TODO: I want to make variant into "as" as bootstrap react uses. This is more transparent.
   variant: "button" | "dropdown" | "icon",
   tag?: Tag,
   group?: Group,
@@ -29,31 +30,68 @@ export default function ConfirmModal(props: IProps) {
   const [alertMessage, setAlertMessage] = useState({
     header: "",
     body: "",
-  })
+  });
+  const [alertShow, setAlertShow] = useState(false);
   const queryClient = useQueryClient();
   let navigate = useNavigate();
-  const deleteTagMutation = useMutation((tag: Tag) => {return deleteTag(tag)}, {
+  const deleteTagMutation = useMutation("tags", (tag: Tag) => {return deleteTag(tag)}, {
     onSuccess: () => {
       setModalShow(false);
       queryClient.invalidateQueries("tags");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   });
   const deleteGroupMutation = useMutation((group: Group) => {return deleteGroup(group)}, {
     onSuccess: () => {
       setModalShow(false);
       queryClient.invalidateQueries("groups");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   });
   const deleteUserMutation = useMutation((user: User) => {return deleteUser(user)}, {
     onSuccess: () => {
       setModalShow(false);
       queryClient.invalidateQueries("users");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   });
   const deleteSourceMutation = useMutation((source: Source) => {return deleteSource(source)}, {
     onSuccess: () => {
       setModalShow(false);
       queryClient.invalidateQueries("sources");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   });
   const deleteCredentialMutation = useMutation((credential: Credential) => {
@@ -62,6 +100,15 @@ export default function ConfirmModal(props: IProps) {
     onSuccess: () => {
       setModalShow(false);
       queryClient.invalidateQueries("credentials");
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   });
   const logOutMutation = useMutation(logOut, {
@@ -70,6 +117,15 @@ export default function ConfirmModal(props: IProps) {
       console.log("hello");
       queryClient.invalidateQueries('session');
       navigate('/login');
+    },
+    onError: (err: AxiosError) => {
+      if (err.response) {
+        setAlertMessage({
+          header: String(err.response.status),
+          body: err.response.data
+        });
+      }
+      setAlertShow(true);
     }
   })
 
@@ -141,7 +197,7 @@ export default function ConfirmModal(props: IProps) {
               }
             </Modal.Header>
             <Modal.Body>
-              <Alert variant={"danger"}>
+              <Alert variant={"danger"} show={alertShow}>
                 <Alert.Heading>{alertMessage.header}</Alert.Heading>
                 <p>
 
@@ -151,7 +207,10 @@ export default function ConfirmModal(props: IProps) {
               <p>Are you sure you want to delete the tag: <b>{props.tag.name}</b>?</p>
               }
               {props.group && props.group.title &&
-              <p>Are you sure you want to delete the group: <b>{props.group.title}</b>?</p>
+                  <>
+                    <p>Are you sure you want to delete the group: <b>{props.group.title}</b>?</p>
+                    <p>It contains <b>{props.group._reports.length}</b> reports</p>
+                  </>
               }
               {props.user && props.user.username &&
               <p>Are you sure you want to delete the user: <b>{props.user.username}</b>?</p>

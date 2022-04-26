@@ -17,7 +17,7 @@ import ConfirmModal from "../ConfirmModal";
 import EllipsisToggle from "../EllipsisToggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
-import {faCheckCircle, faEllipsisV, faPlusCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {faCheckCircle, faEllipsisV, faFilter, faPlusCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import GroupModal from "./GroupModal";
 import {
   stringToDate, tagById,
@@ -31,6 +31,7 @@ import "./GroupTable.css";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";
 import {AxiosError} from "axios";
+import {LoadingPagination} from "../AggiePagination";
 
 interface IProps {
   visibleGroups: Group[] | [];
@@ -100,8 +101,9 @@ interface GroupRowIProps {
   variant: "modal" | "table"
   setSelectedGroups?: Dispatch<SetStateAction<Set<string>>>,
   selectedGroups?: Set<string>,
-  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
-  className?: string
+  onClick?: React.MouseEventHandler<HTMLTableRowElement>,
+  className?: string,
+  selected?: boolean
 }
 
 export function GroupRow(props: GroupRowIProps) {
@@ -203,10 +205,21 @@ export function GroupRow(props: GroupRowIProps) {
             <tr key={props.group._id} className={"group__select " + props.className} onClick={props.onClick}>
               <td className={"align-middle"}>
                 <div className="d-flex justify-content-center">
-                  <Form.Check
-                      type="radio"
-                      id={props.group._id}
-                  />
+                  {props.selected &&
+                      <Form.Check
+                          type="radio"
+                          id={props.group._id}
+                          checked
+                          readOnly
+                      />
+                  }
+                  {!props.selected &&
+                      <Form.Check
+                          type="radio"
+                          id={props.group._id}
+                          readOnly
+                      />
+                  }
                 </div>
               </td>
               <td className={"td__groupInfo"}>
@@ -269,15 +282,26 @@ export const LoadingGroupTable = () => {
   const placeHolderValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
       <Card>
-        <Card.Header>
-          <ButtonToolbar
-              className="justify-content-end"
-              aria-label="Toolbar with Button groups"
-          >
-            <Button variant={"primary"} disabled>
-              <FontAwesomeIcon icon={faPlusCircle} className={"me-2"}></FontAwesomeIcon>
-              <span> Create group </span>
-            </Button>
+        <Card.Header className="pe-2 ps-2">
+          <ButtonToolbar className={"justify-content-between"}>
+            <div>
+              <Button
+                  variant="outline-secondary"
+                  disabled
+                  size="sm"
+                  className="me-2"
+              >
+                <FontAwesomeIcon icon={faFilter} className="me-2"></FontAwesomeIcon>
+                Filter(s)
+              </Button>
+              <Button variant="primary" size="sm" disabled>
+                <FontAwesomeIcon icon={faPlusCircle} className={"me-1"}></FontAwesomeIcon>
+                <span> Create group </span>
+              </Button>
+            </div>
+            <div>
+              <LoadingPagination/>
+            </div>
           </ButtonToolbar>
         </Card.Header>
         <Table striped bordered hover>

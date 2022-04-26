@@ -28,6 +28,9 @@ router.put('/:_id', User.can('edit data'), groupController.group_update);
 // User.can('edit data')
 router.post('/_selected', User.can('edit data'), groupController.group_selected_delete);
 
+// Route to escalate group
+router.patch('/_title', User.can('edit data'), groupController.group_title_update);
+
 // User.can('edit data')
 router.patch('/_tag', User.can('edit data'), groupController.group_tags_add);
 
@@ -39,6 +42,9 @@ router.patch('/_notes', User.can('edit data'), groupController.group_notes_updat
 
 // Route to change closed
 router.patch('/_closed', User.can('edit data'), groupController.group_closed_update);
+
+// Route to change locationName
+router.patch('/_locationName', User.can('edit data'), groupController.group_locationName_update);
 
 // Route to change veracity
 router.patch('/_veracity', User.can('edit data'), groupController.group_veracity_update);

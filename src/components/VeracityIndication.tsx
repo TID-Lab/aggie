@@ -3,10 +3,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import React from "react";
-import {Veracity} from "../objectTypes";
+import {VeracityOptions} from "../objectTypes";
 
 interface IProps {
-  veracity: Veracity,
+  veracity: VeracityOptions,
   id: string,
   variant: "table" | "title"
 }
