@@ -1,10 +1,10 @@
-import {Button, Container, Dropdown, Form, Modal} from "react-bootstrap";
-import React, {useState} from "react";
+import {Button, Container, Dropdown, Modal, FormGroup, FormText, FormLabel, FormSelect} from "react-bootstrap";
+import React, {ChangeEvent, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {capitalizeFirstLetter} from "../../helpers";
 import * as Yup from "yup";
-import { Formik, FormikValues } from "formik";
+import { Formik, Form, FormikValues } from "formik";
 import { Field } from "formik";
 import {Credential, MediaType, Source} from "../../objectTypes";
 import {useMutation, useQueryClient} from "react-query";
@@ -17,14 +17,14 @@ interface IProps {
 }
 
 const twitterFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source nickname required'),
-  sourceKeywords: Yup.string().required("Keywords required"),
-  sourceCredentials: Yup.string().required('Credentials required'),
+  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceKeywords: Yup.string().required("Keywords are required to create a Twitter source"),
+  sourceCredentials: Yup.string().required('A credential is required to create a source'),
 });
 
 const CrowdTangleFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source nickname required'),
-  sourceCredentials: Yup.string().required('Credentials required'),
+  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceCredentials: Yup.string().required('A credential is required to create a source'),
 });
 
 const sourceFormSchema = Yup.object().shape({
@@ -35,7 +35,7 @@ const sourceFormSchema = Yup.object().shape({
   sourceURL: Yup.string(),
 });
 
-const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "whatsapp", "facebook", "comments"];
+const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "facebook"];
 const mediaUrls = {
   twitter: "https://twitter.com/",
   facebook: "https://www.facebook.com/",
@@ -43,7 +43,7 @@ const mediaUrls = {
 }
 
 export default function SourceModal(props: IProps) {
-  const [sourceMediaType, setSourceMediaType] = useState<MediaType>("twitter"); // Default state of media type
+  const [sourceMediaType, setSourceMediaType] = useState<MediaType | string>("twitter"); // Default state of media type
   const [modalShow, setModalShow] = useState(false);
   const queryClient = useQueryClient();
   const newSourceMutation = useMutation((sourceData: any) => {
@@ -97,9 +97,8 @@ export default function SourceModal(props: IProps) {
           sourceCredentials: props.source?.credentials._id || defaultCredential?._id,
           sourceURL: props.source?.url || "",
         }}
-        validationSchema={sourceFormSchema}
+        validationSchema={twitterFormSchema}
         onSubmit={async (values, {setSubmitting, resetForm}) => {
-          console.log(values);
           if (props.source) {editSourceMutation.mutate(formValuesToSource(values));}
           else {newSourceMutation.mutate(formValuesToSource(values));}
         }}
@@ -113,22 +112,17 @@ export default function SourceModal(props: IProps) {
             isSubmitting,
             /* and other goodies */
           }) => (
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form>
               <Modal.Header closeButton>
                 <Modal.Title>Create source</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Container>
-                  <Form.Group controlId="sourceMedia" className="mb-3">
-                    <Form.Label>Media</Form.Label>
-                    <Form.Select
+                  <FormGroup controlId="sourceMedia" className="mb-3">
+                    <FormLabel>Media</FormLabel>
+                    <FormSelect
                         value={sourceMediaType}
-                        onChange={e=>{
-                          /*
-                          TODO: Getting a ts error because value is not always part of the EventTarget type.
-                          In order to fix we need a eventTarget type that has a value field.
-                           */
-                          //@ts-ignore
+                        onChange={(e: ChangeEvent<HTMLSelectElement>)=>{
                           setSourceMediaType(e.target.value);
                         }}
                     >
@@ -139,51 +133,58 @@ export default function SourceModal(props: IProps) {
                             </option>
                         )
                       })}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group controlId="sourceNickname" className={"mb-3"}>
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        required
+                    </FormSelect>
+                  </FormGroup>
+                  <FormGroup controlId="sourceNickname" className={"mb-3"}>
+                    <FormLabel>Name</FormLabel>
+                    <Field
                         type="text"
                         name="sourceNickname"
                         placeholder="Enter name"
-                        value={values.sourceNickname}
-                        onChange={handleChange}
+                        className={errors.sourceNickname ? "form-control is-invalid" : "form-control"}
                     />
-                  </Form.Group>
-                  <Form.Group controlId="sourceKeywords" className={"mb-3"}>
-                    <Form.Label>Keywords</Form.Label>
-                    <Form.Control
-                        required
+                    {errors.sourceNickname &&
+                        <div className="invalid-feedback" style={{display: "block"}}>{errors.sourceNickname}</div>
+                    }
+                  </FormGroup>
+                  <FormGroup controlId="sourceKeywords" className={"mb-3"}>
+                    <FormLabel>Keywords</FormLabel>
+                    <Field
                         type="text"
                         name="sourceKeywords"
                         placeholder="Enter keywords"
-                        value={values.sourceKeywords}
-                        onChange={handleChange}
+                        className={errors.sourceKeywords ? "form-control is-invalid" : "form-control"}
                     />
-                    <Form.Text muted>
+                    {errors.sourceKeywords &&
+                    <div className="invalid-feedback" style={{display: "block"}}>{errors.sourceKeywords}</div>
+                    }
+                    <FormText muted>
                       Separated by commas, e.g. <i>banana, apple, mango</i>. Click {" "}
                       <a href={"https://dev.twitter.com/streaming/overview/request-parameters#track"}>here</a>
                       {" "} for details on how this is used to find tweets.
-                    </Form.Text>
-                  </Form.Group>
-                  <Form.Group controlId="sourceCredentials" className="mb-3">
-                    <Form.Label>Credentials</Form.Label>
-                    <Form.Select
-                        value={values.sourceCredentials}
-                        onChange={handleChange}
+                    </FormText>
+                  </FormGroup>
+                  <FormGroup controlId="sourceCredentials" className="mb-3">
+                    <FormLabel>Credentials</FormLabel>
+                    <Field
+                        as="select"
+                        name="sourceCredentials"
+                        id="sourceCredentials"
+                        className={errors.sourceCredentials ? "form-control is-invalid" : "form-control"}
                     >
                       {props.credentials.map((cred: Credential)=>{
                         if (cred.type === "twitter") {
                           return <option key={cred._id} value={cred._id}>{cred.name}</option>
                         }
                       })}
-                    </Form.Select>
-                    <Form.Text muted>
+                    </Field>
+                    {errors.sourceCredentials &&
+                        <div className="invalid-feedback" style={{display: "block"}}>{errors.sourceCredentials}</div>
+                    }
+                    <FormText muted>
                       Select which credentials will be used for API calls.
-                    </Form.Text>
-                  </Form.Group>
+                    </FormText>
+                  </FormGroup>
                 </Container>
               </Modal.Body>
               <Modal.Footer>
@@ -202,7 +203,6 @@ export default function SourceModal(props: IProps) {
           }}
           validationSchema={CrowdTangleFormSchema}
           onSubmit={async (values, {setSubmitting, resetForm}) => {
-            console.log(values.sourceCredentials);
             if (props.source) {editSourceMutation.mutate(formValuesToSource(values));}
             else { newSourceMutation.mutate(formValuesToSource(values)); }
           }}
@@ -216,22 +216,17 @@ export default function SourceModal(props: IProps) {
             isSubmitting,
             /* and other goodies */
           }) => (
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form>
               <Modal.Header closeButton>
                 <Modal.Title>Create source</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Container>
-                  <Form.Group controlId="sourceMedia" className="mb-3">
-                    <Form.Label>Media</Form.Label>
-                    <Form.Select
+                  <FormGroup controlId="sourceMedia" className="mb-3">
+                    <FormLabel>Media</FormLabel>
+                    <FormSelect
                         value={sourceMediaType}
-                        onChange={(e)=>{
-                          /*
-                          TODO: Getting a ts error because value is not always part of the EventTarget type.
-                          In order to fix we need a eventTarget type that has a value field.
-                           */
-                          //@ts-ignore
+                        onChange={(e: ChangeEvent<HTMLSelectElement>)=>{
                           setSourceMediaType(e.target.value);
                         }}
                     >
@@ -242,24 +237,29 @@ export default function SourceModal(props: IProps) {
                             </option>
                         )
                       })}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group controlId="sourceNickname" className={"mb-3"}>
-                    <Form.Label>Name</Form.Label>
+                    </FormSelect>
+                  </FormGroup>
+                  <FormGroup controlId="sourceNickname" className={"mb-3"}>
+                    <FormLabel>Name</FormLabel>
+                    <Field
+                        name={"sourceNickname"}
+                        type="text"
+                        className={errors.sourceNickname ? "form-control is-invalid" : "form-control"}
+                    />
                     {errors.sourceNickname &&
-                        <p>{errors.sourceNickname}</p>
+                        <div className="invalid-feedback" style={{display: "block"}}>{errors.sourceNickname}</div>
                     }
-                    <Field name={"sourceNickname"} className={"form-control"}/>
-                    <Form.Text muted>
+                    <FormText muted>
                       Providing a name keeps track of which source a report is from.
-                    </Form.Text>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Credentials</Form.Label>
-                    {errors.sourceCredentials &&
-                        <p>{errors.sourceCredentials}</p>
-                    }
-                    <Field as="select" name="sourceCredentials" className={"form-select"}>
+                    </FormText>
+                  </FormGroup>
+                  <FormGroup className="mb-3">
+                    <FormLabel>Credentials</FormLabel>
+                    <Field
+                        as="select"
+                        name="sourceCredentials"
+                        className={errors.sourceCredentials ? "form-control is-invalid" : "form-control"}
+                    >
                       <option value="none"> Select credential </option>
                       {props.credentials.map((cred: Credential)=>{
                         if (cred.type === "crowdtangle") {
@@ -267,11 +267,14 @@ export default function SourceModal(props: IProps) {
                         }
                       })}
                     </Field>
-                    <Form.Text muted>
+                    {errors.sourceCredentials &&
+                        <div className="invalid-feedback" style={{display: "block"}}>{errors.sourceCredentials}</div>
+                    }
+                    <FormText muted>
                       Select which API credentials will be used for API calls. Find more info on the Crowdtangle API
                       {" "}<a href="https://help.crowdtangle.com/en/articles/1189612-crowdtangle-api">here</a>.
-                    </Form.Text>
-                  </Form.Group>
+                    </FormText>
+                  </FormGroup>
                 </Container>
               </Modal.Body>
               <Modal.Footer>

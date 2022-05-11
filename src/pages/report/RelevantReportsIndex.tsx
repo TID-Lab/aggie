@@ -1,14 +1,22 @@
 import React, {useState} from 'react';
 import {
   Button, Card, Col, Container, Form, Row, Collapse, InputGroup, FormControl, Table, ButtonToolbar, Placeholder,
-  Pagination, ButtonGroup,
+  Pagination, ButtonGroup, FormGroup, FormLabel,
 } from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClose, faEnvelopeOpen, faFilter, faPlusCircle, faSearch, faSlidersH} from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faEnvelope,
+  faEnvelopeOpen,
+  faFilter,
+  faPlusCircle,
+  faSearch,
+  faSlidersH
+} from "@fortawesome/free-solid-svg-icons";
 import ReportTable, {LoadingReportTable} from "../../components/report/ReportTable";
 import StatsBar from "../../components/StatsBar";
 import {AlertContent} from "../../components/AlertService";
-import {Formik} from "formik";
+import {Field, Formik} from "formik";
 import * as Yup from "yup";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -18,16 +26,19 @@ import {getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
 import {CTList, Groups, ReportQueryState, Reports, Source, Tag} from "../../objectTypes";
-import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
+import {capitalizeFirstLetter, ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
-import AggiePagination from "../../components/AggiePagination";
+import AggiePagination, {LoadingPagination} from "../../components/AggiePagination";
 import {getSession} from "../../api/session";
 import EditGroupModal from "../../components/group/EditGroupModal";
 import ReportCards from "../../components/report/ReportCards";
 const ITEMS_PER_PAGE = 50;
+
+const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "facebook"];
+
 const reportQuerySchema = Yup.object().shape({
   keywords: Yup.string(),
   tags: Yup.array(),
@@ -44,6 +55,7 @@ interface IProps {
   setGlobalAlert: (alertMessage: AlertContent) => void,
 }
 
+
 const RelevantReportsIndex = (props: IProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -52,7 +64,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const [cardView, setCardView] = useState(false);
 
   // This is the state of the Report Query
-  const [searchState, setSearchState] = useState<ReportQueryState>({
+  const [queryState, setQueryState] = useState<ReportQueryState>({
     keywords: searchParams.get("keywords"),
     author: searchParams.get("author"),
     groupId: searchParams.get("groupId"),
@@ -64,7 +76,7 @@ const RelevantReportsIndex = (props: IProps) => {
     page: Number(searchParams.get("page") || "0")
   });
 
-  const clearSearchParams = () => { setSearchParams({}); setSearchState({
+  const clearFilterParams = () => { setSearchParams({}); setQueryState({
     keywords: null,
     author: null,
     groupId: null,
@@ -81,14 +93,14 @@ const RelevantReportsIndex = (props: IProps) => {
       ...searchParams,
       page: String(pageNum)
     });
-    setSearchState({
-      ...searchState,
+    setQueryState({
+      ...queryState,
       page: pageNum
     });
     reportsQuery.refetch();
   }
 
-  const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", searchState], () => getReports(searchState, [], true), {
+  const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", queryState], () => getReports(queryState, [], true), {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
@@ -124,221 +136,223 @@ const RelevantReportsIndex = (props: IProps) => {
       }
     },
   });
+  const selectedReadStatusMutation = useMutation((read: boolean) => {
+    let selectedReportIdsArr = Array.from(selectedReportIds);
+    return setSelectedRead(selectedReportIdsArr, read);
+  }, {
+    onSuccess: (data) => {
+      reportsQuery.refetch();
+    }
+  });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
   const [selectedReportIds, setSelectedReportIds] = useState<Set<string>>(new Set());
-  const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
+  const [filterTags, setFilterTags] = useState<Tag[] | []>([]);
   return (
       <Container fluid className={"pt-4"}>
         <Row>
           <Col>
           </Col>
           <Col xl={9}>
-            <Card className="mb-4">
-              <Card.Body>
-                <InputGroup>
-                  <FormControl
-                      placeholder="Search reports"
-                      aria-label="Search reports"
-                      aria-describedby="basic-addon2"
-                  />
-                  <Button
-                      variant="outline-secondary"
-                      onClick={() => setShowFilterParams(!showFilterParams)}
-                      aria-controls="searchParams"
-                      className={"me-2"}
-                      aria-expanded={showFilterParams}
-                  >
-                    <FontAwesomeIcon icon={faFilter}/>
-                  </Button>
-                  <ButtonGroup>
-                    <Button variant={"secondary"} disabled={!cardView} onClick={()=>setCardView(false)}> List </Button>
-                    <Button variant={"secondary"} disabled={cardView} onClick={()=>setCardView(true)}> Card </Button>
-                  </ButtonGroup>
-                </InputGroup>
-
-                <Formik
-                    validationSchema={reportQuerySchema}
-                    initialValues={{
-                      keywords: searchParams.get("keywords") || "",
-                      author: searchParams.get("author") || "",
-                      groupId: searchParams.get("groupId") || "",
-                      media: searchParams.get("media") || "",
-                      sourceId: searchParams.get("sourceId") || "",
-                      list: searchParams.get("list") || "",
-                      before: searchParams.get("before") || "",
-                      after: searchParams.get("after") || "",
-                    }}
-                    onSubmit={(values, {setSubmitting, resetForm}) => {
-                      setSearchParams(parseFilterFields(values));
-                      setSearchState(parseFilterFields(values));
-                    }}
-                >
-                  {({
-                      values,
-                      errors,
-                      touched,
-                      handleChange,
-                      handleSubmit,
-                      setFieldValue,
-                      resetForm,
-                      isSubmitting,
-                      /* and other goodies */
-                    }) => (
-                      <Form noValidate onSubmit={handleSubmit}>
-                        <Collapse in={showFilterParams}>
-                          <div id="searchParams">
-                            <Row>
-                              <Col md>
-                                <Form.Group controlId="searchKeyword" className={"mt-2 mb-2"}>
-                                  <Form.Label>Keyword</Form.Label>
-                                  <Form.Control
-                                      type="text"
-                                      placeholder="Search by keywords"
-                                      name="keywords"
-                                      onChange={handleChange}
-                                      value={values.keywords}
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchTag" className={"mt-2 mb-2"}>
-                                  <Form.Label>Tag</Form.Label>
-                                  { tagsQuery.isFetched &&
-                                      <TagsTypeahead
-                                          options={tagsQuery.data}
-                                          selected={searchTags}
-                                          onChange={setSearchTags}
-                                          variant={"search"}
-                                      />
+            <Formik
+                validationSchema={reportQuerySchema}
+                initialValues={{
+                  keywords: searchParams.get("keywords") || "",
+                  author: searchParams.get("author") || "",
+                  groupId: searchParams.get("groupId") || "",
+                  media: searchParams.get("media") || "",
+                  sourceId: searchParams.get("sourceId") || "",
+                  list: searchParams.get("list") || "",
+                  before: searchParams.get("before") || "",
+                  after: searchParams.get("after") || "",
+                }}
+                onSubmit={(values, {setSubmitting, resetForm}) => {
+                  setSearchParams(parseFilterFields(values, filterTags));
+                  setQueryState(parseFilterFields(values));
+                }}
+            >
+              {({
+                  values,
+                  errors,
+                  handleSubmit
+                }) => (
+                  <Form>
+                    <Card className="mb-3" bg="light">
+                      <Card.Body className="pb-2 pt-2">
+                        <Row className={"justify-content-between"}>
+                          <Col>
+                            {errors.groupId}
+                            {errors.author}
+                            {errors.keywords}
+                            <InputGroup className={"mt-2 mb-2"}>
+                              <Field id="keyword" name="keywords" placeholder="Search by keyword, author, or group number" className="form-control"/>
+                              <Button variant="primary" type="submit">
+                                <FontAwesomeIcon icon={faSearch}/>
+                              </Button>
+                            </InputGroup>
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                    <Collapse in={showFilterParams}>
+                      <Card className="mb-3" bg="light">
+                        <Card.Body className="pb-2 pt-2">
+                          {errors.sourceId}
+                          {errors.media}
+                          {errors.after}
+                          {errors.before}
+                          {errors.list}
+                          <Row>
+                            <Col>
+                              <FormGroup className="mt-2 mb-2">
+                                <FormLabel >Tags</FormLabel>
+                                { tagsQuery.isFetched &&
+                                    <TagsTypeahead
+                                        options={tagsQuery.data}
+                                        selected={filterTags}
+                                        onChange={setFilterTags}
+                                        variant="search"
+                                        id="report-tags-filter"
+                                    />
+                                }
+                              </FormGroup>
+                            </Col>
+                            <Col md>
+                              <FormGroup controlId="searchMedia" className="mt-2 mb-2">
+                                <FormLabel>Platform</FormLabel>
+                                <Field as={"select"} name="media" className="form-select">
+                                  <option key="none" value={""}>All</option>
+                                  {mediaTypes.map((mediaType)=> {
+                                    return (<option key={mediaType} value={mediaType}>{capitalizeFirstLetter(mediaType)}</option>)
+                                  })}
+                                </Field>
+                              </FormGroup>
+                            </Col>
+                            <Col md>
+                              <FormGroup controlId="searchSource" className="mt-2 mb-2">
+                                <FormLabel>Source</FormLabel>
+                                <Field as={"select"} name="sourceId" className="form-select">
+                                  <option key={"none"} value={""}>All</option>
+                                  {sourcesQuery.isSuccess && sourcesQuery.data &&
+                                      sourcesQuery.data.map((source: Source) => {
+                                        return (
+                                            <option value={source._id} key={source._id}>
+                                              {source.nickname}
+                                            </option>
+                                        )
+                                      })}
+                                </Field>
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md>
+                              <FormGroup className="mt-2 mb-2">
+                                <FormLabel>CT List</FormLabel>
+                                <Field as={"select"} name="list" className="form-select">
+                                  <option key={"none"} value={""}>All</option>
+                                  {ctListsQuery.isSuccess && ctListsQuery.data &&
+                                      ctListToOptions(ctListsQuery.data)
                                   }
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchAuthor" className={"mt-2 mb-2"}>
-                                  <Form.Label>Author</Form.Label>
-                                  <Form.Control
-                                      placeholder="Search by author"
-                                      name="author"
-                                      onChange={handleChange}
-                                      value={values.author}
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchGroupId" className={"mt-2 mb-2"}>
-                                  <Form.Label>Group #</Form.Label>
-                                  <Form.Control
-                                      placeholder="Search by group #"
-                                      name="groupId"
-                                      onChange={handleChange}
-                                      value={values.groupId}
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Row className="mb-3">
-                              <Col md>
-                                <Form.Group controlId="searchPlatform" className={"mt-2 mb-2"}>
-                                  <Form.Label>Platform</Form.Label>
-                                  <Form.Select
-                                      name="media"
-                                      onChange={handleChange}
-                                      value={values.media}
-                                  >
-                                    <option>All</option>
-                                  </Form.Select>
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchSource" className={"mt-2 mb-2"}>
-                                  <Form.Label>Source</Form.Label>
-                                  <Form.Select
-                                      name="sourceId"
-                                      onChange={handleChange}
-                                      value={values.sourceId}
-                                  >
-                                    <option value={""}>All</option>
-                                    {sourcesQuery.isSuccess && sourcesQuery.data &&
-                                        sourcesQuery.data.map((source: Source) => {
-                                          return (
-                                              <option value={source._id} key={source._id}>
-                                                {source.nickname}
-                                              </option>
-                                          )
-                                        })}
-                                  </Form.Select>
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchCTList" className={"mt-2 mb-2"}>
-                                  <Form.Label>CT List</Form.Label>
-                                  <Form.Select
-                                      name="list"
-                                      onChange={handleChange}
-                                      value={values.list}
-                                  >
-                                    <option key={"none"} value={""}>All</option>
-                                    {ctListsQuery.isSuccess && ctListsQuery.data &&
-                                        ctListToOptions(ctListsQuery.data)
-                                    }
-                                  </Form.Select>
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchAfter" className={"mt-2 mb-2"}>
-                                  <Form.Label>Authored after</Form.Label>
-                                  <DatePickerField className={"form-control"} name="after"/>
-                                </Form.Group>
-                              </Col>
-                              <Col md>
-                                <Form.Group controlId="searchBefore" className={"mt-2 mb-2"}>
-                                  <Form.Label>Authored before</Form.Label>
-                                  <DatePickerField className={'form-control'} name="before"/>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Row className={"float-end"}>
-                              <ButtonToolbar>
-                                { hasSearchParams(searchParams) &&
-                                    <Button variant={"outline-secondary"} onClick={()=>{
-                                      clearSearchParams();
-                                      values.keywords = "";
-                                      values.groupId = "";
+                                </Field>
+                              </FormGroup>
+                            </Col>
+                            <Col md>
+                              <FormGroup className="mt-2 mb-2">
+                                <FormLabel>Authored after</FormLabel>
+                                <DatePickerField className={"form-control"} name="after"/>
+                              </FormGroup>
+                            </Col>
+                            <Col md>
+                              <FormGroup className="mt-2 mb-2">
+                                <FormLabel>Authored before</FormLabel>
+                                <DatePickerField className={'form-control'} name="before"/>
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <ButtonToolbar className={"justify-content-between"}>
+                              <ButtonGroup className={"mt-2 mb-2"}>
+                                {/*
+                                      <Button
+                                        variant={"outline-secondary"}
+                                        disabled={!gridView}
+                                        onClick={()=>setGridView(false)}
+                                    >
+                                      <FontAwesomeIcon icon={faList} className="me-2"/>
+                                      List
+                                    </Button>
+                                    <Button variant={"outline-secondary"} disabled={gridView} onClick={()=>setGridView(true)}>
+                                      <FontAwesomeIcon icon={faGrip} className="me-2"/>
+                                      Grid
+                                    </Button>
+                                    */}
+                              </ButtonGroup>
+                              {(values.sourceId || values.media || values.after || values.before || values.list || filterTags.length > 0) &&
+                                  <div className={"mt-2 mb-2"}>
+                                    <Button variant={"outline-secondary"} onClick={() => {
+                                      clearFilterParams();
                                       values.media = "";
-                                      values.author = "";
                                       values.sourceId = "";
                                       values.list = "";
                                       values.before = "";
                                       values.after = "";
-                                    }} className={"me-3"}>
+                                      setFilterTags([]);
+                                    }} className={"me-2"}
+                                    >
                                       <FontAwesomeIcon icon={faClose} className={"me-2"}/>
-                                      Clear Filter
+                                      Clear filter(s)
                                     </Button>
-                                }
-                                <Button variant="primary" type="submit">
-                                  <FontAwesomeIcon icon={faSearch} className={"me-2"}/>
-                                  Search
-                                </Button>
-                              </ButtonToolbar>
-                            </Row>
-                          </div>
-                        </Collapse>
-                      </Form>
-                  )}
-                </Formik>
-              </Card.Body>
-            </Card>
+                                    <Button variant="primary" type="submit">
+                                      Apply filter(s)
+                                    </Button>
+                                  </div>
+                              }
+                            </ButtonToolbar>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Collapse>
+                  </Form>
+              )}
+            </Formik>
             { !cardView && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
                 tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
                 <Card>
-                  <Card.Header>
+                  <Card.Header className="pe-2 ps-2">
                     <ButtonToolbar className={"justify-content-between"}>
                       <div>
-                        <Button variant={"secondary"} className="me-2">
-                          <FontAwesomeIcon className={"me-2"} icon={faEnvelopeOpen}/>
-                          Read/Unread
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => setShowFilterParams(!showFilterParams)}
+                            aria-controls="searchParams"
+                            aria-expanded={showFilterParams}
+                            className={"me-2"}
+                            size="sm"
+                        >
+                          <FontAwesomeIcon icon={faFilter} className="me-2" />
+                          Filter(s)
                         </Button>
+                        <ButtonGroup className="me-2">
+                          <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                  onClick={()=>selectedReadStatusMutation.mutate(true)}
+                          >
+                            <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
+                          </Button>
+                          <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                  onClick={()=>selectedReadStatusMutation.mutate(false)}
+                          >
+                            <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                          </Button>
+                        </ButtonGroup>
                       </div>
+                      { reportsQuery.data.total !== null &&
+                          <AggiePagination
+                              goToPage={goToPage}
+                              total={reportsQuery.data.total}
+                              itemsPerPage={ITEMS_PER_PAGE}
+                              size="sm"
+                          />
+                      }
                     </ButtonToolbar>
                   </Card.Header>
                   <ReportTable
@@ -373,12 +387,40 @@ const RelevantReportsIndex = (props: IProps) => {
                 </>
             }
             {reportsQuery.isLoading &&
-                <LoadingReportTable variant={"relevant"}/>
+                <Card>
+                  <Card.Header className="pe-2 ps-2">
+                    <ButtonToolbar className={"justify-content-between"}>
+                      <div>
+                        <Button
+                            variant="outline-secondary"
+                            className={"me-2"}
+                            size="sm"
+                            disabled
+                        >
+                          <FontAwesomeIcon icon={faFilter} className="me-2" />
+                          Filter(s)
+                        </Button>
+                        <ButtonGroup className="me-2">
+                          <Button disabled size="sm" variant={"secondary"}>
+                            <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
+                          </Button>
+                          <Button disabled size="sm" variant={"secondary"}>
+                            <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                          </Button>
+                        </ButtonGroup>
+                      </div>
+                      <LoadingPagination size="sm"/>
+                    </ButtonToolbar>
+                  </Card.Header>
+                  <Card.Body className="p-0">
+                    <LoadingReportTable variant={"relevant"}/>
+                  </Card.Body>
+                </Card>
+
             }
             { cardView && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess &&
                 tagsQuery.data && reportsQuery.data && groupsQuery.data && sourcesQuery.data &&
                 <ReportCards
-                    groups={groupsQuery.data.results}
                     sources={sourcesQuery.data}
                     visibleReports={reportsQuery.data.results}
                     tags={tagsQuery.data}
@@ -389,7 +431,7 @@ const RelevantReportsIndex = (props: IProps) => {
           </Col>
           <Col>
             <div className="d-none d-xl-block">
-              <StatsBar></StatsBar>
+              {/*<StatsBar/>*/}
             </div>
           </Col>
         </Row>

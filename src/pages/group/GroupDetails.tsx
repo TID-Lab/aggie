@@ -441,13 +441,15 @@ const GroupDetails = () => {
                       </Card>
                       <h3 className="mt-4">Group reports</h3>
                       {groupReportsQuery.isSuccess && sourcesQuery.isSuccess && groupReportsQuery.data && groupQuery.data && sourcesQuery.data && tagsQuery.data &&
-                      <Card>
-                        <ReportTable
-                            visibleReports={groupReportsQuery.data.results}
-                            sources={sourcesQuery.data}
-                            tags={tagsQuery.data}
-                            variant={"group-details"}
-                        />
+                      <Card className="mt-4">
+                        <Card.Body className="p-0">
+                          <ReportTable
+                              visibleReports={groupReportsQuery.data.results}
+                              sources={sourcesQuery.data}
+                              tags={tagsQuery.data}
+                              variant={"group-details"}
+                          />
+                        </Card.Body>
                         <Card.Footer>
                           {groupReportsQuery.data.total > ITEMS_PER_PAGE &&
                               <AggiePagination goToPage={goToPage} total={groupReportsQuery.data.total}
@@ -463,7 +465,7 @@ const GroupDetails = () => {
             </Col>
             <Col>
               <div className="d-none d-xl-block">
-                <StatsBar></StatsBar>
+                {/*<StatsBar/>*/}
               </div>
             </Col>
           </Row>

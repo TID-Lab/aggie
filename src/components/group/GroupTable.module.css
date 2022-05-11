@@ -1,0 +1,71 @@
+.td__groupInfo {
+    font-size: 12px;
+    word-break:break-word;
+    width: 16%
+}
+
+.td__location {
+    font-size: 12px;
+    width: 12%;
+}
+
+.td__creationInfo {
+    font-size: 12px;
+    width: 10%
+}
+
+.td__notes {
+    width: 40%;
+}
+
+.td__assignedTo {
+    font-size: 14px;
+    width: 8%;
+}
+
+.td__tags {
+    width: 16%
+}
+
+.group__name {
+    color:#000000;
+    text-decoration:none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.group__select {
+    cursor: pointer;
+}
+
+.title__link:hover {
+    text-decoration: underline;
+}
+
+.icon__veracity {
+    font-size: 18px;
+}
+
+.td__location a {
+    color:#000000;
+    text-decoration:none;
+}
+
+.td__location a:hover {
+    text-decoration: underline;
+}
+
+.td__assignedTo a {
+    color:#000000;
+    text-decoration:none;
+}
+
+.td__assignedTo a:hover {
+    text-decoration: underline;
+}
+
+span.creationInfo__user {
+    font-size: 14px;
+}
+
+

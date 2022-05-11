@@ -17,11 +17,11 @@ interface IProps {
 const AggieNavbar = (props: IProps) => {
   const queryClient = useQueryClient();
   queryClient.invalidateQueries("groups")
-  let location = useLocation();
+  const location = useLocation();
   return(
       <Navbar className="color-nav" variant="dark" expand={false}>
         <Container fluid>
-          { !props.session &&
+          {location.pathname === "/login" &&
               <Navbar.Brand>
                 <Image
                     alt="Aggie Logo"
@@ -29,7 +29,7 @@ const AggieNavbar = (props: IProps) => {
                 />
               </Navbar.Brand>
           }
-          { props.isAuthenticated &&
+          {location.pathname !== "/login" && props.isAuthenticated &&
               <>
                 <Nav variant={"pills"} className={"me-auto aggie-nav"}>
                   <LinkContainer to={'/reports'}>

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, Brush } from 'recharts';
 import {Report, VisualizationAuthor, VisualizationMedia} from "../../objectTypes";
+import {Col, Container, Row, Spinner} from "react-bootstrap";
 
 interface IProps {
   media: VisualizationMedia[],
@@ -48,8 +49,18 @@ const ReportsByMedia = (props: IProps) => {
   );
 }
 
-const LoadingReportsByAuthor = () => {
-
+export const LoadingReportsByMedia = () => {
+  return (
+      <Container fluid>
+        <Row className={"justify-content-center"}>
+          <Col md={"auto"}>
+            <Spinner animation="border" role="status" variant={"primary"}>
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Col>
+        </Row>
+      </Container>
+  )
 }
 
 export default ReportsByMedia;

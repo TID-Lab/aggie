@@ -11,14 +11,14 @@ const Query = require('../models/query');
 const ReportQuery = require('../models/query/report-query');
 const GroupQuery = require('../models/query/group-query');
 const SocketQueryGroup = require('./socket-query-group');
+require('dotenv').config()
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
-const logger = require('../logger');
 
 // override the emit function to add logging
 var emit = Socket.prototype.emit;
 Socket.prototype.emit = function(event, data) {
-  logger.debug(event, data);
+  console.debug(event, data);
   emit.apply(this, arguments);
 };
 
@@ -106,7 +106,7 @@ SocketHandler.prototype._configureSocketIO = function() {
       accept(null, true);
     },
     fail: function(data, message, error, accept) {
-      if (self.auth.adminParty) accept(null, true);
+      if (process.env.ADMIN_PARTY.toLowerCase() === "true") accept(null, true);
       else accept(message, false);
     }
   }));

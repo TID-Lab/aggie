@@ -14,6 +14,7 @@ import {
   AreaChart
 } from 'recharts';
 import {VisualizationTime} from "../../objectTypes";
+import {Col, Container, Row, Spinner} from "react-bootstrap";
 
 interface IProps {
   time: VisualizationTime[],
@@ -71,7 +72,6 @@ export const ReadReportsByTime = (props: IProps) => {
       read_count: value.count,
     });
   });
-
   return (
       <ResponsiveContainer width="100%" height={500}>
         <AreaChart
@@ -111,8 +111,18 @@ export const ReadReportsByTime = (props: IProps) => {
   );
 }
 
-const LoadingReportsByAuthor = () => {
-
+export const LoadingReportsByTime = () => {
+  return (
+      <Container fluid>
+        <Row className={"justify-content-center"}>
+          <Col md={"auto"}>
+            <Spinner animation="border" role="status" variant={"primary"}>
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Col>
+        </Row>
+      </Container>
+  )
 }
 
 export default TotalReportsByTime;

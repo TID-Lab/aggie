@@ -2,9 +2,9 @@ import axios from "axios";
 import {FormikValues} from "formik";
 import {hasId, Report, ReportQuery, ReportQueryState, Source, Tag, VeracityOptions} from "../objectTypes";
 
-export const getReports = async (searchState: ReportQueryState, tagIds: hasId[] = [], isRelevantReports = false) => {
+export const getReports = async (searchState: ReportQueryState, tagIds: hasId[] | string[] = [], isRelevantReports = false) => {
   if (generateReportsSearchURL(searchState, tagIds, isRelevantReports) != "") {
-    const { data } = await axios.get('/api/report/?' + generateReportsSearchURL(searchState, tagIds, isRelevantReports));
+    const { data } = await axios.get('/api/report?' + generateReportsSearchURL(searchState, tagIds, isRelevantReports));
     return data;
   } else {
     const { data } = await axios.get('/api/report');
@@ -69,15 +69,24 @@ export const setSelectedGroup = async (reportIds: string[], groupId: hasId | nul
   return data;
 }
 
-const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[], isRelevantReports: boolean ) => {
+const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[] | string[], isRelevantReports: boolean ) => {
   // Writing this method because the readability of the API call url is much less readable than the page URL.
   let url = "";
   if (isRelevantReports) {
     url += "isRelevantReports=true";
   }
   if (tagIds.length > 0) {
-    if (url === "") url += "tags=" + tagIds;
-    else url += "&tags=" + tagIds;
+    let tagsURL = "";
+    tagIds.forEach((tagId)=> {
+      if (typeof(tagId) === "string") {
+        tagsURL += (tagId + ",");
+      } else {
+        tagsURL += (tagId._id + ",");
+      }
+    });
+    tagsURL = tagsURL.slice(0, -1);
+    if (url === "") url += "tags=" + tagsURL;
+    else url += "&tags=" + tagsURL;
   }
   if (searchState.keywords) {
     if (url === "") url += "keywords=" + searchState.keywords;

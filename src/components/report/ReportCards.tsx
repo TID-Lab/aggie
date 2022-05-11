@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {Link, useSearchParams} from 'react-router-dom';
 import EditGroupModal from "../group/EditGroupModal";
-import "./ReportTable.css"
+import "./ReportTable.module.css"
 import {
   reportFullContent,
   reportImageUrl,
@@ -35,7 +35,6 @@ interface IProps {
   visibleReports: Report[],
   sources: Source[] | [],
   tags: Tag[] | [],
-  groups: Group[] | [] | undefined,
   batchMode?: boolean,
   setBatchMode?: (batchMode: boolean) => void,
   variant: "default" | "relevant" | "batch",
@@ -98,7 +97,6 @@ export default function ReportCards(props: IProps) {
                         report={report}
                         sources={props.sources}
                         variant={props.variant}
-                        groups={props.groups}
                         tags={props.tags}
                         setSelectedReports={setSelectedReports}
                         selectedReports={selectedReports}
@@ -115,7 +113,6 @@ export default function ReportCards(props: IProps) {
 interface ReportCardBodyIProps {
   report: Report | null,
   tags: Tag[] | null,
-  groups: Group[] | [] | undefined,
   sources: Source[] | [],
   variant: "default" | "relevant" | "batch",
   setSelectedReports?: Dispatch<SetStateAction<Set<Report>>>,
@@ -258,7 +255,7 @@ export function ReportCardBody(props: ReportCardBodyIProps) {
                 <ListGroupItem>
                   <div className="d-flex justify-content-center">
                     <EditGroupModal
-                        reports={new Set([props.report])}
+                        reports={[props.report]}
                         groupId={props.report._group}
                         tags={props.tags}
                         sources={props.sources}

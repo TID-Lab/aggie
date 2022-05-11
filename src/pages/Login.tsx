@@ -8,7 +8,7 @@ import {logIn} from "../api/session";
 import {useMutation, useQueryClient} from "react-query";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const loginFormSchema = Yup.object().shape({
   loginUsername: Yup.string().required('Username required'),

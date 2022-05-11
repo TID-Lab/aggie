@@ -23,6 +23,7 @@ interface IProps {
   user?: User,
   source?: Source,
   credential?: Credential,
+  size?: "sm" | "lg",
 }
 
 export default function ConfirmModal(props: IProps) {
@@ -165,11 +166,12 @@ export default function ConfirmModal(props: IProps) {
               type={"button"}
               variant={"danger"}
               onClick={()=>setModalShow(true)}
+              size={props.size ? props.size : undefined}
           >
             <FontAwesomeIcon icon={faTrash} className="me-2"/> Delete</Button>
           }
           {props.variant === "icon" &&
-              <Button variant="light" onClick={()=>setModalShow(true)}>
+              <Button variant="light" onClick={()=>setModalShow(true)} size={props.size ? props.size : undefined}>
                 <FontAwesomeIcon icon={faTrash}/>
               </Button>
           }

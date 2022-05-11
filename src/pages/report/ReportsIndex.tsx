@@ -16,11 +16,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faClose,
   faFilter,
-  faList,
   faSearch,
-  faGrip,
-  faCaretUp,
-  faEnvelopeOpen, faPlusCircle
+  faEnvelopeOpen,
+  faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import ReportTable, {LoadingReportTable} from "../../components/report/ReportTable";
 import StatsBar from "../../components/StatsBar";
@@ -31,29 +29,36 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {cancelBatch, getBatch, getNewBatch, getReports, setSelectedRead} from "../../api/reports";
 import {getSources} from "../../api/sources";
-import {getAllGroups, getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
 import {
   CTList,
-  Groups,
-  Report,
   ReportQueryState,
   Reports,
   Session,
   Source,
   Tag
 } from "../../objectTypes";
-import {ctListToOptions, hasSearchParams, objectsToIds, parseFilterFields, reportById} from "../../helpers";
+import {
+  capitalizeFirstLetter,
+  ctListToOptions,
+  hasSearchParams,
+  objectsToIds,
+  parseFilterFields,
+  reportById,
+  tagsById
+} from "../../helpers";
 import {getCTLists} from "../../api/ctlists";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
 import AggiePagination, { LoadingPagination } from "../../components/AggiePagination";
 import {getSession} from "../../api/session";
-import EditGroupModal from "../../components/group/EditGroupModal";
+import ReportCards from "../../components/report/ReportCards";
 
 const ITEMS_PER_PAGE = 50; // This also needs to be set on the backend. Make sure to do so when changing.
+
+const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "facebook"];
 
 // TODO: Finish up validating reportQueries using Yup.
 const reportQuerySchema = Yup.object().shape({
@@ -80,6 +85,7 @@ const ReportsIndex = (props: IProps) => {
   const [batchMode, setBatchMode] = useState(searchParams.get("batch") === "true" || false);
   // This is whether card or list view is on
   const [gridView, setGridView] = useState(false);
+  const [filterTags, setFilterTags] = useState<Tag[] | []>([]);
   // This is the state of the Report Query
   const [queryState, setQueryState] = useState<ReportQueryState>({
     keywords: searchParams.get("keywords"),
@@ -148,7 +154,6 @@ const ReportsIndex = (props: IProps) => {
   // Querying data
   // This is the batch query, it normally remains disabled until the batch mode is activated.
 
-
   const batchQuery = useQuery<Reports | undefined, AxiosError>('batch', () => getBatch(), {
     enabled: batchMode,
     onSuccess: data => {
@@ -179,7 +184,10 @@ const ReportsIndex = (props: IProps) => {
     },
     retry: sessionFetching
   });
-  const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", queryState], () => getReports(queryState), {
+  const reportsQuery = useQuery<Reports | undefined, AxiosError>(["reports", {
+    queryState: queryState,
+    tags: filterTags,
+  }], () => getReports(queryState, filterTags), {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         navigate('/login');
@@ -207,23 +215,25 @@ const ReportsIndex = (props: IProps) => {
         navigate('/login');
       }
     },
-  });
-  const selectedReadStatusMutation = useMutation(() => {
-    let allRead = true;
-    selectedReportIds.forEach((id)=> {
-      if (reportsQuery.data && reportById(id, reportsQuery.data.results)?.read === false) {
-        allRead = false;
+    onSuccess: (data: Tag[]) => {
+      let tagsString = searchParams.get('tags');
+      let tagsArray: string[] = [];
+      if (tagsString) {
+        tagsArray = tagsString.split(",");
+        //@ts-ignore
+        setFilterTags(tagsById(tagsArray, data));
       }
-    })
+    }
+  });
+  const selectedReadStatusMutation = useMutation((read: boolean) => {
     let selectedReportIdsArr = Array.from(selectedReportIds);
-    return setSelectedRead(selectedReportIdsArr, !allRead);
+    return setSelectedRead(selectedReportIdsArr, read);
   }, {
     onSuccess: (data) => {
       reportsQuery.refetch();
     }
   });
   const [showFilterParams, setShowFilterParams] = useState<boolean>(false);
-  const [searchTags, setSearchTags] = useState<Tag[] | [] | string[]>();
   const [selectedReportIds, setSelectedReportIds] = useState<Set<string>>(new Set());
 
   return (
@@ -246,7 +256,7 @@ const ReportsIndex = (props: IProps) => {
                       after: searchParams.get("after") || "",
                     }}
                     onSubmit={(values, {setSubmitting, resetForm}) => {
-                      setSearchParams(parseFilterFields(values));
+                      setSearchParams(parseFilterFields(values, filterTags));
                       setQueryState(parseFilterFields(values));
                     }}
                 >
@@ -284,23 +294,27 @@ const ReportsIndex = (props: IProps) => {
                               <Row>
                                 <Col>
                                   <FormGroup className="mt-2 mb-2">
-                                    <FormLabel htmlFor="firstName">Tags</FormLabel>
+                                    <FormLabel >Tags</FormLabel>
                                     { tagsQuery.isFetched &&
                                       <TagsTypeahead
                                       options={tagsQuery.data}
-                                      selected={searchTags}
-                                      onChange={setSearchTags}
-                                      variant={"search"}
+                                      selected={filterTags}
+                                      onChange={setFilterTags}
+                                      variant="search"
+                                      id="report-tags-filter"
                                       />
                                     }
                                   </FormGroup>
                                 </Col>
                                 <Col md>
                                   <FormGroup controlId="searchMedia" className="mt-2 mb-2">
-                                  <FormLabel>Platform</FormLabel>
+                                    <FormLabel>Platform</FormLabel>
                                     <Field as={"select"} name="media" className="form-select">
-                                    <option>All</option>
-                                  </Field>
+                                      <option key="none" value={""}>All</option>
+                                      {mediaTypes.map((mediaType)=> {
+                                        return (<option key={mediaType} value={mediaType}>{capitalizeFirstLetter(mediaType)}</option>)
+                                      })}
+                                    </Field>
                                   </FormGroup>
                                 </Col>
                                 <Col md>
@@ -345,26 +359,45 @@ const ReportsIndex = (props: IProps) => {
                                   </FormGroup>
                                 </Col>
                               </Row>
-                              <Row className={"float-end"}>
-                                {(values.sourceId || values.media || values.after || values.before || values.list) &&
-                                  <ButtonToolbar className={"mt-2 mb-2"}>
-                                  <Button variant={"outline-secondary"} onClick={() => {
-                                      clearFilterParams();
-                                      values.media = "";
-                                      values.sourceId = "";
-                                      values.list = "";
-                                      values.before = "";
-                                      values.after = "";
-                                    }} className={"me-2"}
-                                  >
-                                    <FontAwesomeIcon icon={faClose} className={"me-2"}/>
-                                    Clear filter(s)
-                                  </Button>
-                                  <Button variant="primary" type="submit">
-                                    Apply filter(s)
-                                  </Button>
-                                  </ButtonToolbar>
-                                }
+                              <Row>
+                                <ButtonToolbar className={"justify-content-between"}>
+                                  <ButtonGroup className={"mt-2 mb-2"}>
+                                    {/*
+                                      <Button
+                                        variant={"outline-secondary"}
+                                        disabled={!gridView}
+                                        onClick={()=>setGridView(false)}
+                                    >
+                                      <FontAwesomeIcon icon={faList} className="me-2"/>
+                                      List
+                                    </Button>
+                                    <Button variant={"outline-secondary"} disabled={gridView} onClick={()=>setGridView(true)}>
+                                      <FontAwesomeIcon icon={faGrip} className="me-2"/>
+                                      Grid
+                                    </Button>
+                                    */}
+                                  </ButtonGroup>
+                                  {(values.sourceId || values.media || values.after || values.before || values.list || filterTags.length > 0) &&
+                                      <div className={"mt-2 mb-2"}>
+                                        <Button variant={"outline-secondary"} onClick={() => {
+                                          clearFilterParams();
+                                          values.media = "";
+                                          values.sourceId = "";
+                                          values.list = "";
+                                          values.before = "";
+                                          values.after = "";
+                                          setFilterTags([]);
+                                        }} className={"me-2"}
+                                        >
+                                          <FontAwesomeIcon icon={faClose} className={"me-2"}/>
+                                          Clear filter(s)
+                                        </Button>
+                                        <Button variant="primary" type="submit">
+                                          Apply filter(s)
+                                        </Button>
+                                      </div>
+                                  }
+                                </ButtonToolbar>
                               </Row>
                             </Card.Body>
                           </Card>
@@ -379,13 +412,13 @@ const ReportsIndex = (props: IProps) => {
                     <Row className="justify-content-between">
                       <Card.Text as={"h2"} >Batch Mode</Card.Text>
                       {sessionQuery.isSuccess && sessionQuery.data &&
-                          <Card.Text>Hello, <strong>{sessionQuery.data.username}</strong>,
-                            a set of reports has been picked out for
+                          <Card.Text>Hello, <strong>{sessionQuery.data.username}</strong>.
+                            A set of reports has been picked out for
                             you.</Card.Text>
                       }
                     </Row>
                   </Card.Body>
-                  <Card.Footer>
+                  <Card.Footer className="pe-2">
                     <Button className={"float-end ms-2"} onClick={()=>{
                       if (batchQuery.data && batchQuery.data.results) {
                         setSelectedReadMutation.mutateAsync(objectsToIds(batchQuery.data.results)).then(
@@ -412,50 +445,69 @@ const ReportsIndex = (props: IProps) => {
             }
             { !batchMode && sourcesQuery.isSuccess && reportsQuery.isSuccess && tagsQuery.isSuccess &&
                 tagsQuery.data && reportsQuery.data && sourcesQuery.data &&
-                <Card>
-                  <Card.Header className="pe-2 ps-2">
-                    <ButtonToolbar className={"justify-content-between"}>
-                      <div>
-                        <Button
-                            variant="outline-secondary"
-                            onClick={() => setShowFilterParams(!showFilterParams)}
-                            aria-controls="searchParams"
-                            aria-expanded={showFilterParams}
-                            className={"me-2"}
-                            size="sm"
-                        >
-                          <FontAwesomeIcon icon={faFilter} className="me-2" />
-                          Filter(s)
-                        </Button>
-                        <ButtonGroup>
+                <>
+                  <Card>
+                    <Card.Header className="pe-2 ps-2">
+                      <ButtonToolbar className={"justify-content-between"}>
+                        <div>
                           <Button
-                              variant={"outline-secondary"}
+                              variant="outline-secondary"
+                              onClick={() => setShowFilterParams(!showFilterParams)}
+                              aria-controls="searchParams"
+                              aria-expanded={showFilterParams}
+                              className={"me-2"}
                               size="sm"
-                              disabled={!gridView}
-                              onClick={()=>setGridView(false)}
                           >
-                            <FontAwesomeIcon icon={faList} className="me-2"/>
-                            List
+                            <FontAwesomeIcon icon={faFilter} className="me-2" />
+                            Filter(s)
                           </Button>
-                          <Button variant={"outline-secondary"} size="sm" disabled={gridView} onClick={()=>setGridView(true)}>
-                            <FontAwesomeIcon icon={faGrip} className="me-2"/>
-                            Grid
+                          <Button variant={"primary"} className={"me-2"} size="sm" onClick={()=>{
+                            if (setBatchMode) {
+                              setSearchParams(
+                                  {
+                                    ...searchParams,
+                                    batch: "true"
+                                  }
+                              )
+                              setBatchMode(true);
+                            }
+                          }}>
+                            Batch mode
                           </Button>
-                        </ButtonGroup>
-                        <Button variant={"primary"} className={"ms-2 me-2"} size="sm" onClick={()=>{
-                          if (setBatchMode) {
-                            setSearchParams(
-                                {
-                                  ...searchParams,
-                                  batch: "true"
-                                }
-                            )
-                            setBatchMode(true);
-                          }
-                        }}>
-                          Batch mode
-                        </Button>
-                      </div>
+                          <ButtonGroup className="me-2">
+                            <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                    onClick={()=>selectedReadStatusMutation.mutate(true)}
+                            >
+                              <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
+                            </Button>
+                            <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                    onClick={()=>selectedReadStatusMutation.mutate(false)}
+                            >
+                              <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                            </Button>
+                          </ButtonGroup>
+                        </div>
+                        { reportsQuery.data.total !== null &&
+                            <AggiePagination
+                                goToPage={goToPage}
+                                total={reportsQuery.data.total}
+                                itemsPerPage={ITEMS_PER_PAGE}
+                                size="sm"
+                            />
+                        }
+                      </ButtonToolbar>
+                    </Card.Header>
+                    {!gridView &&
+                        <ReportTable
+                            visibleReports={reportsQuery.data.results}
+                            sources={sourcesQuery.data}
+                            tags={tagsQuery.data}
+                            setSelectedReportIds={setSelectedReportIds}
+                            selectedReportIds={selectedReportIds}
+                            variant={"default"}
+                        />
+                    }
+                    <Card.Footer className="pe-2 ps-2">
                       { reportsQuery.data.total !== null &&
                           <AggiePagination
                               goToPage={goToPage}
@@ -464,39 +516,47 @@ const ReportsIndex = (props: IProps) => {
                               size="sm"
                           />
                       }
-                    </ButtonToolbar>
-                  </Card.Header>
-                  <ReportTable
-                      visibleReports={reportsQuery.data.results}
-                      sources={sourcesQuery.data}
-                      tags={tagsQuery.data}
-                      setSelectedReportIds={setSelectedReportIds}
-                      selectedReportIds={selectedReportIds}
-                      variant={"default"}
-                  />
-                  <Card.Footer className="pe-2 ps-2">
-                    { reportsQuery.data.total !== null &&
-                        <AggiePagination
-                            goToPage={goToPage}
-                            total={reportsQuery.data.total}
-                            itemsPerPage={ITEMS_PER_PAGE}
-                            size="sm"
-                        />
-                    }
-                  </Card.Footer>
-                </Card>
+                    </Card.Footer>
+                  </Card>
+                  {gridView &&
+                      <ReportCards
+                          sources={sourcesQuery.data}
+                          visibleReports={reportsQuery.data.results}
+                          tags={tagsQuery.data}
+                          variant={"default"}
+                      ></ReportCards>
+                  }
+                </>
             }
             {batchMode && sourcesQuery.isSuccess && batchQuery.isSuccess && tagsQuery.isSuccess &&
                 tagsQuery.data && batchQuery.data && sourcesQuery.data &&
                 <Card>
-                  <ReportTable
-                      visibleReports={batchQuery.data.results}
-                      sources={sourcesQuery.data}
-                      tags={tagsQuery.data}
-                      selectedReportIds={selectedReportIds}
-                      setSelectedReportIds={setSelectedReportIds}
-                      variant={"batch"}
-                  />
+                  <Card.Header className="ps-2">
+                    <ButtonToolbar className={"justify-content-start"}>
+                      <ButtonGroup className="me-2">
+                        <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                onClick={()=>selectedReadStatusMutation.mutate(true)}
+                        >
+                          <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
+                        </Button>
+                        <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
+                                onClick={()=>selectedReadStatusMutation.mutate(false)}
+                        >
+                          <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                        </Button>
+                      </ButtonGroup>
+                    </ButtonToolbar>
+                  </Card.Header>
+                  {!gridView &&
+                      <ReportTable
+                          visibleReports={batchQuery.data.results}
+                          sources={sourcesQuery.data}
+                          tags={tagsQuery.data}
+                          selectedReportIds={selectedReportIds}
+                          setSelectedReportIds={setSelectedReportIds}
+                          variant={"batch"}
+                      />
+                  }
                   <Card.Footer className="pe-2 ps-2">
                     <ButtonToolbar className="justify-content-end">
                       <Button className={"float-end ms-2"} onClick={()=>{
@@ -530,7 +590,7 @@ const ReportsIndex = (props: IProps) => {
                   }
                 </>
             }
-            {((!batchMode && reportsQuery.isLoading ) || (batchMode && batchQuery.isLoading)) &&
+            {((!batchMode && reportsQuery.isLoading) || (batchMode && batchQuery.isLoading)) &&
                 <Card>
                   <Card.Header className="pe-2 ps-2">
                     <ButtonToolbar className={"justify-content-between"}>
@@ -544,23 +604,17 @@ const ReportsIndex = (props: IProps) => {
                           <FontAwesomeIcon icon={faFilter} className="me-2" />
                           Filter(s)
                         </Button>
-                        <ButtonGroup>
-                          <Button
-                              variant={"outline-secondary"}
-                              size="sm"
-                              disabled
-                          >
-                            <FontAwesomeIcon icon={faList} className="me-2"/>
-                            List
-                          </Button>
-                          <Button variant={"outline-secondary"} size="sm" disabled>
-                            <FontAwesomeIcon icon={faGrip} className="me-2"/>
-                            Grid
-                          </Button>
-                        </ButtonGroup>
-                        <Button variant={"primary"} className={"ms-2 me-2"} size="sm" disabled>
+                        <Button variant={"primary"} className={"me-2"} size="sm" disabled>
                           Batch mode
                         </Button>
+                        <ButtonGroup className="me-2">
+                          <Button disabled size="sm" variant={"secondary"}>
+                            <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
+                          </Button>
+                          <Button disabled size="sm" variant={"secondary"}>
+                            <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                          </Button>
+                        </ButtonGroup>
                       </div>
                       <LoadingPagination size="sm"/>
                     </ButtonToolbar>
@@ -572,7 +626,7 @@ const ReportsIndex = (props: IProps) => {
           </Col>
           <Col>
             <div className="d-none d-xl-block">
-              <StatsBar></StatsBar>
+              {/*<StatsBar/>*/}
             </div>
           </Col>
         </Row>

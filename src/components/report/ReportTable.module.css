@@ -1,20 +1,33 @@
-.content__link {
-    color:#212529;
-    text-decoration:none;
+.td__select {
+    width: fit-content;
 }
-
-.content__link:hover {
-    text-decoration: underline;
-}
-
-.sourceInfo {
+.td__sourceInfo {
+    width: 15%;
     font-size: 12px;
+}
+
+.td__content {
+    width: 40%;
+    font-size: 14px;
+}
+
+.td__tags {
+    width: 15%;
+}
+
+.td__image {
+    width: 15%;
+}
+
+.td__group {
+    width: 15%;
 }
 
 .sourceInfo__link {
     color:#000000;
-    font-size: 14px;
+    font-size: 12px;
     text-decoration:none;
+    word-break: break-word;
 }
 
 .sourceInfo__source {
@@ -25,18 +38,11 @@
     text-decoration: underline;
 }
 
-.content {
-    font-size: 14px;
-}
-
-.tr--read {
+.reportRead {
     background-color: ghostwhite;
 }
 
-.td__image {
-    width: 15%;
-}
-.tr--unread {
+.reportUnread {
     background-color: white;
 }
 
@@ -44,9 +50,7 @@
     font-size: 18px;
 }
 
-.td__notes {
-    width: 25%;
-}
+
 
 button.rbt-close {
     padding: 0;
@@ -62,7 +66,16 @@ button.rbt-close {
     white-space: nowrap;
 }
 
-.group__title {
-    font-size: 14px;
-    font-weight: bold;
+.group__totalReports {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.content__link {
+    color:#212529;
+    text-decoration:none;
+}
+
+.content__link:hover {
+    text-decoration: underline;
 }

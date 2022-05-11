@@ -4,17 +4,22 @@ import {Container} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faClock} from "@fortawesome/free-solid-svg-icons";
 
-const ENDPOINT = "http://localhost:3000";
-
 const StatsBar = () => {
   const [response, setResponse] = useState("");
-/*
+  const socket = socketIOClient('/', {
+    transports: ['websocket'],
+    path: '/socket', // added this line of code
+  });
+
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("stats", data => {
-      setResponse(data);
+    socket.on('connect', () => {
+      console.log('connected');
     });
-  }, []);*/
+    socket.on('event', (data) => {
+      console.log(data);
+    });
+
+  }, []);
 
   const stats = {
     totalReports: 10000,

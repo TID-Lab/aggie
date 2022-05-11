@@ -1,23 +1,32 @@
 import {Typeahead} from "react-bootstrap-typeahead";
-import React from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import {Form} from "react-bootstrap";
+import {Tag} from "../../objectTypes";
 
-const TagsTypeahead = (props) => {
-  if (props.options && props.selected && props.onChange && props.onBlur && props.id) {
-    if (props.variant === "search") {
+interface IProps {
+  variant: "search" | "modal" | "table",
+  id?: string,
+  selected: any,
+  options: any,
+  onBlur?: ()=>void,
+  onChange: any,
+}
+
+const TagsTypeahead = (props: IProps) => {
+  switch (props.variant) {
+    case "search":
       return (
           <Typeahead
-              id="tag-search"
+              id={props.id}
               labelKey="name"
               multiple
               onChange={props.onChange}
               options={props.options}
-              placeholder="Search by tags"
+              placeholder="Select tags"
               selected={props.selected}
           />
       )
-    } else if (props.variant === "modal") {
+    case "modal":
       return (
           <Typeahead
               id={props.id}
@@ -32,8 +41,7 @@ const TagsTypeahead = (props) => {
               selected={props.selected}
           />
       )
-    } else {
-      // Filter (n=>n) removes any undefined or null tags, which can happen when you delete tags
+    default:
       return (
           <Typeahead
               id={props.id}
@@ -44,14 +52,9 @@ const TagsTypeahead = (props) => {
               options={props.options}
               placeholder="Edit tags"
               style={{minWidth: "80px"}}
-              selected={props.selected.filter(n=>n)}
+              selected={props.selected.filter((n: any)=>n)}
           />
       )
-    }
-  } else {
-    return(
-        <Form.Control type="text" placeholder="Edit tags" />
-        )
   }
 }
 

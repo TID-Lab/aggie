@@ -8,14 +8,12 @@ import {
   Table
 } from "react-bootstrap";
 import React, {useState} from "react";
-// @ts-ignore
-import Tags from "@yaireo/tagify/dist/react.tagify";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {groupById, parseFilterFields, tagsById} from "../../helpers";
 import {ReportRow} from "../report/ReportTable";
-import './EditGroupModal.css';
-import axios, {AxiosError} from "axios";
-import {Group, Groups, GroupSearchState, Report, Reports, Source, Tag, User} from "../../objectTypes";
+import styles from './EditGroupModal.module.css';
+import {AxiosError} from "axios";
+import {Group, Groups, GroupSearchState, Report, Source, Tag, User} from "../../objectTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faFilter, faGrip, faList, faPlus, faPlusCircle, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {GroupRow} from "./GroupTable";
@@ -28,14 +26,18 @@ import {getTags} from "../../api/tags";
 import AggiePagination from "../AggiePagination";
 import { Field, Formik, Form } from "formik";
 
+// @ts-ignore
+import Tags from "@yaireo/tagify/dist/react.tagify";
+
 const ITEMS_PER_PAGE = 50;
 
 interface IProps {
-  reports: Set<Report>,
+  reports: Report[],
   tags: Tag[] | null,
   sources: Source[] | [],
   groupId?: string,
-  variant: "inline" | "selection"
+  variant: "inline" | "selection",
+  size?: "sm" | "lg"
 }
 
 interface ReportGroupUpdateInfo {
@@ -100,7 +102,7 @@ export default function EditGroupModal(props: IProps) {
     },
   });
 
-  const [reports, setReports] = useState<Report[]>(Array.from(props.reports));
+  const [reports, setReports] = useState<Report[]>(props.reports);
   const [tempSelectedGroup, setTempSelectedGroup] = useState<Group | null>(null);
 
   const reportGroupUpdateMutation = useMutation((reportGroupUpdateInfo: ReportGroupUpdateInfo) => {
@@ -157,7 +159,6 @@ export default function EditGroupModal(props: IProps) {
                     <th>Source info</th>
                     <th>Thumbnail</th>
                     <th>Content</th>
-                    <th>Notes</th>
                     <th>Tags</th>
                     <th>Group</th>
                   </tr>
@@ -187,7 +188,7 @@ export default function EditGroupModal(props: IProps) {
                       <Col xs={5} className="pe-1">
                         <Field id="title" name="title" placeholder="Search by name" className="form-control form-control-sm"/>
                       </Col>
-                      <Col xs={4} className="pe-0">
+                      <Col xs={4} className="pe-0 ps-1">
                         <Field id="idnum" name="idnum" placeholder="Search by ID" className="form-control form-control-sm"/>
                       </Col>
                     </Row>
@@ -227,7 +228,7 @@ export default function EditGroupModal(props: IProps) {
                                   variant='modal'
                                   tags={tagsQuery.data}
                                   selected
-                                  className={tempSelectedGroup === group ? "group--selected" : ""}
+                                  className={tempSelectedGroup === group ? styles.groupSelected : undefined}
                                   group={group}
                                   users={usersQuery.data}
                                   sources={props.sources}
@@ -242,7 +243,7 @@ export default function EditGroupModal(props: IProps) {
                                   key={group._id}
                                   variant='modal'
                                   tags={tagsQuery.data}
-                                  className={tempSelectedGroup === group ? "group--selected" : ""}
+                                  className={tempSelectedGroup === group ? styles.groupSelected : undefined}
                                   group={group}
                                   users={usersQuery.data}
                                   sources={props.sources}
@@ -268,17 +269,17 @@ export default function EditGroupModal(props: IProps) {
               {allGroupsQuery.isSuccess && allGroupsQuery.data ?
                   <>
                     {props.groupId ?
-                        <Button variant={"secondary"} className={"group__button"} onClick={handleShow}>
+                        <Button variant={"secondary"} className={styles.group__button} onClick={handleShow}>
                           {groupById(props.groupId, allGroupsQuery.data) &&
                               <>
-                                <span className={"group__title"}>{groupById(props.groupId, allGroupsQuery.data)?.title}</span>
+                                <span className={styles.group__title}>{groupById(props.groupId, allGroupsQuery.data)?.title}</span>
                                 <br/>
-                                <span className={"group__idnum"}>
+                                <span className={styles.group__totalReports}>
                                   {groupById(props.groupId, allGroupsQuery.data)?._reports.length === 1 ?
                                     groupById(props.groupId, allGroupsQuery.data)?._reports.length + " report" :
                                     groupById(props.groupId, allGroupsQuery.data)?._reports.length + " reports"}</span>
                                 <br/>
-                                <span className={"group__idnum"}>ID: {groupById(props.groupId, allGroupsQuery.data)?.idnum}</span>
+                                <span className={styles.group__idnum}>ID: {groupById(props.groupId, allGroupsQuery.data)?.idnum}</span>
                               </>
                           }
                         </Button>
@@ -287,14 +288,18 @@ export default function EditGroupModal(props: IProps) {
                         </Button>
                     }
                   </> :
-                  <Button variant="link" onClick={handleShow}>
-                    Loading Groups
-                  </Button>
+                  <>
+                    { props.reports[0] && props.reports[0]._group &&
+                        <Button variant="secondary" disabled>
+                          Loading...
+                        </Button>
+                    }
+                  </>
               }
             </>
         }
         { props.variant === "selection" &&
-            <Button variant={"secondary"} onClick={handleShow} disabled={reports.length === 0}>
+            <Button variant={"secondary"} onClick={handleShow} disabled={reports.length === 0} size={props.size ? props.size : undefined}>
               <FontAwesomeIcon icon={faPlusCircle} className={"me-2"} onClick={()=>{
               }}/>
               Add to group
@@ -334,10 +339,10 @@ export default function EditGroupModal(props: IProps) {
                         : <Modal.Title>Edit report's group</Modal.Title>
                     }
                   </Modal.Header>
-                  <Modal.Body className="edit__group__modal">
+                  <Modal.Body className={styles.editGroup__modal}>
                     {ReportGroupModalJSX()}
                   </Modal.Body>
-                  <Modal.Footer className="edit__group__modal">
+                  <Modal.Footer className={styles.editGroup__modal}>
                     <Button variant="secondary" onClick={handleClose}>Cancel</Button>
                     {/*@ts-ignore*/}
                     <Button variant="primary" type="submit" onClick={handleSubmit}>Save</Button>

@@ -246,9 +246,20 @@ export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
   return objectOne._id === objectTwo._id;
 }
 
-export const parseFilterFields = (values: FormikValues) => {
+export const parseFilterFields = (values: FormikValues, filterTags: Tag[] = []) => {
   let parsedFields = Object.assign(removeEmptyStrings(values));
-  if (parsedFields.tags && parsedFields.tags.length === 0) delete parsedFields.tags;
+  if (filterTags.length > 0) {
+    let tagsURL = "";
+    filterTags.forEach((tagId)=> {
+      if (typeof(tagId) === "string") {
+        tagsURL += (tagId + ",");
+      } else {
+        tagsURL += (tagId._id + ",");
+      }
+    });
+    tagsURL = tagsURL.slice(0, -1);
+    parsedFields.tags = tagsURL;
+  }
   return parsedFields;
 }
 

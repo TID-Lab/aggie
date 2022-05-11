@@ -7,7 +7,9 @@ import SourceModal from "./SourceModal";
 import {Source, Credential} from "../../objectTypes";
 import {useMutation} from "react-query";
 import {editSource, newSource} from "../../api/sources";
-import './SourceTable.css';
+import './SourceTable.module.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 
 interface IProps {
   sources: Source[] | [];
@@ -65,32 +67,61 @@ export default function SourceTable(props: IProps) {
   }
 
   return (
-    <Container fluid>
-      <h3>Sources</h3>
-      <Card className="mt-3">
-        <Card.Header as={ButtonToolbar} className="justify-content-end">
-            <SourceModal variant={"dropdown"} credentials={props.credentials}></SourceModal>
-        </Card.Header>
-        <Card.Body>
-          <Table hover>
-            <thead>
-            <tr>
-              <th>Media</th>
-              <th>Name</th>
-              <th>Credential</th>
-              <th>Keywords</th>
-              <th>Notes</th>
-              <th>New Warnings</th>
-              <th>Enabled</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody>
-              {sourceRows}
-            </tbody>
-          </Table>
-        </Card.Body>
-      </Card>
-    </Container>
+      <Table hover>
+        <thead>
+        <tr>
+          <th>Media</th>
+          <th>Name</th>
+          <th>Credential</th>
+          <th>Keywords</th>
+          <th>Notes</th>
+          <th>New Warnings</th>
+          <th>Enabled</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+          {sourceRows}
+        </tbody>
+      </Table>
+  );
+}
+
+export const LoadingSourceTable = () => {
+  return(
+      <Table hover>
+        <thead>
+        <tr>
+          <th>Media</th>
+          <th>Name</th>
+          <th>Credential</th>
+          <th>Keywords</th>
+          <th>Notes</th>
+          <th>New Warnings</th>
+          <th>Enabled</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <Form>
+              <Form.Switch
+                  disabled
+              />
+            </Form>
+          </td>
+          <td>
+            <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>
+          </td>
+        </tr>
+        </tbody>
+      </Table>
   );
 }

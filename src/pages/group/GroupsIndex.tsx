@@ -26,7 +26,7 @@ import StatsBar from '../../components/StatsBar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faClose,
-  faFilter,
+  faFilter, faPlusCircle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import {useQuery, useQueryClient} from "react-query";
@@ -38,9 +38,11 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import GroupModal from "../../components/group/GroupModal";
 import {AxiosError} from "axios";
 import ErrorCard from "../../components/ErrorCard";
-import AggiePagination from "../../components/AggiePagination";
+import AggiePagination, {LoadingPagination} from "../../components/AggiePagination";
 import {Field, Formik, Form} from "formik";
 import {CLOSED_OPTIONS, ESCALATED_OPTIONS, parseFilterFields, VERACITY_OPTIONS} from "../../helpers";
+import DatePickerField from "../../components/DatePickerField";
+import TagsTypeahead from "../../components/tag/TagsTypeahead";
 const ITEMS_PER_PAGE = 50;
 
 interface IProps {
@@ -49,7 +51,7 @@ interface IProps {
 const GroupsIndex = (props: IProps) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const queryTags = useState<Tag[] | []>([]);
+  const [filterTags, setFilterTags] = useState<Tag[] | []>([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // This
@@ -69,23 +71,6 @@ const GroupsIndex = (props: IProps) => {
   });
 
   // This clears search state and search params
-  const clearSearchParams = () => { setSearchParams({}); setQueryState({
-    locationName: null,
-    title: null,
-    idnum: null,
-    veracity: queryState.veracity,
-    escalated: queryState.escalated,
-    closed: queryState.closed,
-    totalReports: queryState.totalReports,
-    assignedTo: queryState.assignedTo,
-    creator: queryState.creator,
-    after: queryState.after,
-    before: queryState.before,
-    page: null,
-  });
-  };
-
-  // This clears search state and search params
   const clearFilterParams = () => { setSearchParams({}); setQueryState({
     locationName: queryState.locationName,
     title: queryState.title,
@@ -101,6 +86,15 @@ const GroupsIndex = (props: IProps) => {
     page: null,
   });
   };
+
+  const hasValues = (values: any) => {
+    if (values.escalated || values.closed || values.after || values.before ||
+        values.totalReports || values.assignedTo || values.creator || values.veracity) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   const [showFilterParams, setShowFilterParams] = useState(false);
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
@@ -155,8 +149,8 @@ const GroupsIndex = (props: IProps) => {
                     creator: searchParams.get("creator") || "",
                     idnum: searchParams.get("idnum") || "",
                     veracity: searchParams.get("veracity") || "",
-                    escalated: searchParams.get("sourceId") || "",
-                    closed: searchParams.get("list") || "",
+                    escalated: searchParams.get("escalated") || "",
+                    closed: searchParams.get("closed") || "",
                     before: searchParams.get("before") || "",
                     after: searchParams.get("after") || "",
                     totalReports: searchParams.get("totalReports") || "",
@@ -215,7 +209,7 @@ const GroupsIndex = (props: IProps) => {
                               </Col>
                               <Col md>
                                 <FormGroup controlId="searchSource" className="mb-2 mt-2">
-                                  <FormLabel>Assigned To</FormLabel>
+                                  <FormLabel>Assignee</FormLabel>
                                   <Field as="select" name="assignedTo" className="form-select">
                                     <option value={""}>All</option>
                                     {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
@@ -230,7 +224,7 @@ const GroupsIndex = (props: IProps) => {
                               </Col>
                               <Col md>
                                 <FormGroup controlId="search" className="mb-2 mt-2">
-                                  <FormLabel>Created By</FormLabel>
+                                  <FormLabel>Creator</FormLabel>
                                   <Field as="select" name="creator" className="form-select">
                                     <option value={""} key={"none"}>All</option>
                                     {usersQuery.isFetched && usersQuery.data && usersQuery.data.map((user: User) => {
@@ -257,21 +251,37 @@ const GroupsIndex = (props: IProps) => {
                                 </FormGroup>
                               </Col>
                               <Col md>
-                                Tags
+                                <FormGroup className="mt-2 mb-2">
+                                  <FormLabel >Tags</FormLabel>
+                                  { tagsQuery.isFetched &&
+                                      <TagsTypeahead
+                                          options={tagsQuery.data}
+                                          selected={filterTags}
+                                          onChange={setFilterTags}
+                                          variant="search"
+                                          id="report-tags-filter"
+                                      />
+                                  }
+                                </FormGroup>
                               </Col>
                               <Col md>
-                                <FormLabel>Created before</FormLabel>
-
+                                <FormGroup className="mt-2 mb-2">
+                                  <FormLabel>Created before</FormLabel>
+                                  <DatePickerField className={'form-control'} name="before"/>
+                                </FormGroup>
                               </Col>
                               <Col md>
-                                <FormLabel>Created after</FormLabel>
+                                <FormGroup className="mt-2 mb-2">
+                                  <FormLabel>Created after</FormLabel>
+                                  <DatePickerField className={'form-control'} name="after"/>
+                                </FormGroup>
                               </Col>
                             </Row>
                             <Row className={"float-end"}>
-                                  <ButtonToolbar className={"mt-2 mb-2"}>
+                                  <ButtonToolbar>
                                     {(queryState.escalated || queryState.closed || queryState.after ||
                                         queryState.before || queryState.totalReports || queryState.assignedTo ||
-                                        queryState.creator || queryState.veracity) &&
+                                        queryState.creator || queryState.veracity || hasValues(values)) || filterTags.length > 0 &&
                                         <Button variant={"outline-secondary"} onClick={() => {
                                           clearFilterParams();
                                           values.escalated = "";
@@ -282,14 +292,14 @@ const GroupsIndex = (props: IProps) => {
                                           values.assignedTo = "";
                                           values.creator = "";
                                           values.veracity = "";
+                                          setFilterTags([]);
                                         }} className={"me-2"}
                                         >
                                           <FontAwesomeIcon icon={faClose} className={"me-2"}/>
                                           Clear filter(s)
                                         </Button>
                                     }
-                                    {(values.escalated || values.closed || values.after || values.before ||
-                                            values.totalReports || values.assignedTo || values.creator || values.veracity) &&
+                                    {hasValues(values) || filterTags.length > 0 &&
                                         <Button variant="primary" type="submit">
                                           Apply filter(s)
                                         </Button>
@@ -322,7 +332,7 @@ const GroupsIndex = (props: IProps) => {
                           <GroupModal/>
                         </div>
                         <div>
-                          { groupsQuery.data.total &&
+                          { groupsQuery.data.total && groupsQuery.data.total > 0 &&
                               <AggiePagination size="sm" itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
                           }
                         </div>
@@ -336,14 +346,13 @@ const GroupsIndex = (props: IProps) => {
                     />
                     <Card.Footer className="pe-2 ps-2">
                       <ButtonToolbar className={"justify-content-end"}>
-                        { groupsQuery.data && groupsQuery.data.total &&
+                        { groupsQuery.data && groupsQuery.data.total && groupsQuery.data.total > 0 &&
                             <AggiePagination size="sm" itemsPerPage={50} total={groupsQuery.data.total} goToPage={goToPage}/>
                         }
                       </ButtonToolbar>
                     </Card.Footer>
                   </Card>
               }
-              {/* QUERY ERROR STATE */}
               {groupsQuery.isError &&
               <>
                 {groupsQuery.error.response && groupsQuery.error.response.status && groupsQuery.error.response.data &&
@@ -354,15 +363,38 @@ const GroupsIndex = (props: IProps) => {
                 }
               </>
               }
-              {/* LOADING STATE: TODO: Move this to the GroupTable component file */}
               { groupsQuery.isLoading &&
-                  <LoadingGroupTable/>
+                  <Card>
+                    <Card.Header className="pe-2 ps-2">
+                      <ButtonToolbar className={"justify-content-between"}>
+                        <div>
+                          <Button
+                              variant="outline-secondary"
+                              disabled
+                              size="sm"
+                              className="me-2"
+                          >
+                            <FontAwesomeIcon icon={faFilter} className="me-2"></FontAwesomeIcon>
+                            Filter(s)
+                          </Button>
+                          <Button variant="primary" size="sm" disabled>
+                            <FontAwesomeIcon icon={faPlusCircle} className={"me-1"}></FontAwesomeIcon>
+                            <span> Create group </span>
+                          </Button>
+                        </div>
+                        <div>
+                          <LoadingPagination size="sm"/>
+                        </div>
+                      </ButtonToolbar>
+                    </Card.Header>
+                    <LoadingGroupTable/>
+                  </Card>
               }
               <div className={"pb-5"}></div>
             </Col>
             <Col>
               <div className="d-none d-xl-block">
-                <StatsBar></StatsBar>
+                {/*<StatsBar/>*/}
               </div>
             </Col>
           </Row>

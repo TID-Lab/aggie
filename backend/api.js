@@ -23,6 +23,7 @@ var { version: packageVersion } = require("../package.json");
 const cors = require('cors');
 // Extend global error class
 require('./error');
+require('dotenv').config()
 
 // Get full path for certificate files
 var keyFile = path.resolve(__dirname, './config/key.pem');
@@ -71,6 +72,8 @@ if (cert) {
 }
 
 if (process.env.ENVIRONMENT === "development") {
+  if (process.env.ADMIN_PARTY.toLowerCase() === "true") console.log("Admin Party is enabled.")
+  if (process.env.ADMIN_PARTY.toLowerCase() === "false") console.log("Admin Party is disabled.")
   app.use(
       cors({
         origin: "http://localhost:8000", // allow to server to accept request from different origin
@@ -78,7 +81,6 @@ if (process.env.ENVIRONMENT === "development") {
         credentials: true, // allow session cookie from browser to pass through
       })
   );
-
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -174,7 +176,7 @@ if (process.env.ENVIRONMENT === "production") {
 }
 
 
-/*
+
 var SocketHandler = require('./api/socket-handler');
 var socketHandler = new SocketHandler(app, server, auth);
 var streamer = require('./api/streamer');
@@ -186,11 +188,13 @@ streamer.addListeners('report', childProcess.setupEventProxy({
   subclass: 'schema',
   emitterModule: 'fetching'
 }));
+
 socketHandler.addListeners('source', childProcess.setupEventProxy({
   emitter: './models/source',
   subclass: 'schema',
   emitterModule: 'fetching'
 }));
+
 socketHandler.addListeners('stats', childProcess.setupEventProxy({
   emitter: './analytics/stats-master',
   emitterModule: 'analytics'
@@ -203,6 +207,7 @@ setTimeout(function() {
   socketHandler.addListeners('tag', require('./models/tag').schema);
   streamer.addListeners('group', require('./models/group').schema);
   // Add listener to reload config and emit event to mailer
+  /*
   settingsController.addListener('settingsUpdated', function(arguments) {
     config.get({ reload: true });
     switch (arguments.setting) {
@@ -213,12 +218,12 @@ setTimeout(function() {
       _.bind(mailer.reloadConfig, mailer)();
       break;
     }
-  });
+  });*/
 }, 500);
 
 // Add CRON job for updating CrowdTangle List
 //app.use(require('./cron/ct-list-update'));
-*/
+
 
 
 

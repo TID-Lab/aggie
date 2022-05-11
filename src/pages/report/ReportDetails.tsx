@@ -32,6 +32,7 @@ import {getTags} from "../../api/tags";
 import "./ReportDetails.css";
 // @ts-ignore
 import { FacebookProvider, Like } from 'react-facebook';
+import {faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
 import {Group, Groups, hasId, Report, Source, Tag, VeracityOptions} from "../../objectTypes";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import ErrorCard from "../../components/ErrorCard";
@@ -242,7 +243,7 @@ const ReportDetails = () => {
                                 <td>
                                   <a href={reportAuthorUrl(reportQuery.data)}>
                                     {reportQuery.data._media[0] === "twitter" ? "@" : ""}
-                                    {reportQuery.data.author}
+                                    {reportQuery.data.author}<FontAwesomeIcon className="ms-1" icon={faArrowUpRightFromSquare}/>
                                   </a>
                                 </td>
                               </tr>
@@ -275,7 +276,7 @@ const ReportDetails = () => {
                               }
                               <tr key="reportUrl">
                                 <th className="details__th">URL</th>
-                                <td><a href={reportQuery.data.url}>External link</a></td>
+                                <td><a href={reportQuery.data.url}>External link<FontAwesomeIcon className="ms-1" icon={faArrowUpRightFromSquare}/></a></td>
                               </tr>
                               {reportQuery.data.metadata.location && reportQuery.data.metadata.location !== "" &&
                                   <tr key="reportLocation">
@@ -345,14 +346,18 @@ const ReportDetails = () => {
                                 <td>
                                   {reportQuery.data &&
                                       <EditGroupModal
-                                          reports={new Set([reportQuery.data])}
+                                          reports={[reportQuery.data]}
                                           tags={tagsQuery.data}
                                           sources={sourcesQuery.data}
                                           variant={"inline"}
                                           groupId={reportQuery.data._group}
                                       />
                                   }
-                                  <Link to={"/group/" + reportQuery.data._group}>Link to Group</Link>
+                                  {reportQuery.data._group &&
+                                      <Link to={"/group/" + reportQuery.data._group}>
+                                        Link to Group<FontAwesomeIcon className="ms-1" icon={faArrowUpRightFromSquare}/>
+                                      </Link>
+                                  }
                                 </td>
                               </tr>
                               <tr key="reportTags">
@@ -435,7 +440,7 @@ const ReportDetails = () => {
             </Col>
             <Col>
               <div className="d-none d-xl-block">
-                <StatsBar></StatsBar>
+                {/*<StatsBar/>*/}
               </div>
             </Col>
           </Row>

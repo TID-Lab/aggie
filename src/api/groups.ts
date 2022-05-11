@@ -23,7 +23,7 @@ export const getGroups = async (searchState: GroupSearchState = {
   escalated: null
 }, tagIds: hasId[] = []) => {
   if (generateGroupsSearchURL(searchState, tagIds) != "") {
-    const { data } = await axios.get('/api/group/?' + generateGroupsSearchURL(searchState, tagIds));
+    const { data } = await axios.get('/api/group?' + generateGroupsSearchURL(searchState, tagIds));
     return data;
   } else {
     const { data } = await axios.get('/api/group');
@@ -118,7 +118,10 @@ const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[])
     if (url === "") url += "assignedTo=" + searchState.assignedTo;
     else url += "&assignedTo=" + searchState.assignedTo;
   }
-
+  if (searchState.veracity) {
+    if (url === "") url += "veracity=" + searchState.veracity;
+    else url += "&veracity=" + searchState.veracity;
+  }
   if (searchState.totalReports) {
     if (url === "") url += "totalReports=" + searchState.totalReports;
     else url += "&totalReports=" + searchState.totalReports;
@@ -127,6 +130,12 @@ const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[])
     if (url === "") url += "closed=" + searchState.closed;
     else url += "&closed=" + searchState.closed;
   }
+
+  if (searchState.escalated) {
+    if (url === "") url += "escalated=" + searchState.escalated;
+    else url += "&escalated=" + searchState.escalated;
+  }
+
   if (searchState.before) {
     if (url === "") url += "before=" + searchState.before;
     else url += "&before=" + searchState.before;

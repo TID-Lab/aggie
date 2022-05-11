@@ -1,6 +1,7 @@
 import {TagCloud} from "react-tagcloud";
 import React from "react";
 import {VisualizationWord} from "../../objectTypes";
+import {Col, Container, Row, Spinner} from "react-bootstrap";
 // https://www.npmjs.com/package/react-tagcloud
 
 interface ReadReportsIProps {
@@ -46,6 +47,20 @@ export const AllReportsWordCloud = (props: AllReportsIProps) => {
           tags={words}
           colorOptions={options}
       />
+  )
+}
+
+export const LoadingReportsWordCloud = () => {
+  return (
+      <Container fluid>
+        <Row className={"justify-content-center"}>
+          <Col md={"auto"}>
+            <Spinner animation="border" role="status" variant={"primary"}>
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Col>
+        </Row>
+      </Container>
   )
 }
 

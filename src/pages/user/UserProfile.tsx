@@ -24,8 +24,23 @@ const UserProfile = (props: IProps) => {
     if (params.id) return getUser(params.id);
     else return null;
   });
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>("group", ()=> {return getGroups({
+  const groupsCreatorQuery = useQuery<Groups | undefined, AxiosError>(["group", {
+    creator: usersQuery.data ? usersQuery.data._id : null
+  }], ()=> {return getGroups({
     creator: usersQuery.data ? usersQuery.data._id : null,
+  })}, {
+    enabled: usersQuery.isSuccess,
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
+  });
+
+  const groupsAssignedQuery = useQuery<Groups | undefined, AxiosError>(["group", {
+    assignedTo: usersQuery.data ? usersQuery.data._id : null
+  }], ()=> {return getGroups({
+    assignedTo: usersQuery.data ? usersQuery.data._id : null,
   })}, {
     enabled: usersQuery.isSuccess,
     onError: (err: AxiosError) => {
@@ -58,18 +73,26 @@ const UserProfile = (props: IProps) => {
             </Col>
             <Col xl={9}>
               { usersQuery.isSuccess && props.session &&
-                  <>
-                    <UserProfileTable user={usersQuery.data} isCurrentUser={compareIds(usersQuery.data, props.session)}/>
-
-                  </>
+                  <UserProfileTable user={usersQuery.data} isCurrentUser={compareIds(usersQuery.data, props.session)}/>
               }
-              { usersQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && groupsQuery.isSuccess && props.session &&
-                  tagsQuery.data && groupsQuery.data && sourcesQuery.data &&
-                  <Container fluid>
-                    <h3 className={"mb-3 mt-4"}>{compareIds(usersQuery.data, props.session) ? "Your groups" : "User groups" }</h3>
+              { usersQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && groupsCreatorQuery.isSuccess && props.session &&
+                  tagsQuery.data && groupsCreatorQuery.data && sourcesQuery.data &&
+                  <Container fluid className="mb-4">
+                    <h3 className={"mb-4 mt-4"}>{compareIds(usersQuery.data, props.session) ? "Your groups" : "Created groups" }</h3>
                     <Card>
                       <Card.Body className="p-0">
-                        <GroupTable visibleGroups={groupsQuery.data.results} sources={sourcesQuery.data} users={usersQuery.data} tags={tagsQuery.data}/>
+                        <GroupTable visibleGroups={groupsCreatorQuery.data.results} sources={sourcesQuery.data} users={usersQuery.data} tags={tagsQuery.data}/>
+                      </Card.Body>
+                    </Card>
+                  </Container>
+              }
+              { usersQuery.isSuccess && sourcesQuery.isSuccess && tagsQuery.isSuccess && groupsAssignedQuery.isSuccess && props.session &&
+                  tagsQuery.data && groupsAssignedQuery.data && sourcesQuery.data &&
+                  <Container fluid className="mb-4">
+                    <h3 className={"mb-4 mt-4"}>Assigned Groups</h3>
+                    <Card>
+                      <Card.Body className="p-0">
+                        <GroupTable visibleGroups={groupsAssignedQuery.data.results} sources={sourcesQuery.data} users={usersQuery.data} tags={tagsQuery.data}/>
                       </Card.Body>
                     </Card>
                   </Container>
@@ -77,7 +100,7 @@ const UserProfile = (props: IProps) => {
             </Col>
             <Col>
               <div className="d-none d-xl-block">
-                <StatsBar></StatsBar>
+                {/*<StatsBar/>*/}
               </div>
             </Col>
           </Row>

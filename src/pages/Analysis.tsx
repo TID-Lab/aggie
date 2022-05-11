@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios, {AxiosError} from 'axios';
-import ReportsByTags from '../components/analysis/ReportsByTags';
-import ReportsByAuthor from '../components/analysis/ReportsByAuthor';
-import ReportsByTime, {ReadReportsByTime} from '../components/analysis/ReportsByTime';
-import ReportsByMedia from '../components/analysis/ReportsByMedia';
+import ReportsByTags, {LoadingReportsByTags} from '../components/analysis/ReportsByTags';
+import ReportsByAuthor, {LoadingReportsByAuthor} from '../components/analysis/ReportsByAuthor';
+import ReportsByTime, {LoadingReportsByTime, ReadReportsByTime} from '../components/analysis/ReportsByTime';
+import ReportsByMedia, {LoadingReportsByMedia} from '../components/analysis/ReportsByMedia';
 import {Container, Card, Col, Row} from "react-bootstrap";
 import {
   VisualizationAuthors, VisualizationMedias,
@@ -12,7 +12,7 @@ import {
 import {useQuery} from "react-query";
 import {getVizAuthors, getVizTags, getVizMedia, getVizTime, getVizWords} from "../api/analytics";
 import { TagCloud } from 'react-tagcloud';
-import ReportsWordCloud, {AllReportsWordCloud} from "../components/analysis/ReportsWordCloud";
+import ReportsWordCloud, {AllReportsWordCloud, LoadingReportsWordCloud} from "../components/analysis/ReportsWordCloud";
 import ReadReportsWordCloud from "../components/analysis/ReportsWordCloud";
 import TotalReportsByTime from "../components/analysis/ReportsByTime";
 
@@ -21,46 +21,26 @@ interface IProps {
 
 const Analysis = () => {
   const vizAuthorsQuery = useQuery<VisualizationAuthors | undefined, AxiosError>("analyticsAuthors", getVizAuthors, {
-    onSuccess: data => {
-      console.log("Authors");
-      console.log(data);
-    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
   const vizTagsQuery = useQuery<VisualizationTags | undefined, AxiosError>("analyticsTags", getVizTags, {
-    onSuccess: data => {
-      console.log("Tags");
-      console.log(data);
-    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
   const vizMediaQuery = useQuery<VisualizationMedias | undefined, AxiosError>("analyticsMedia", getVizMedia, {
-    onSuccess: data => {
-      console.log("media");
-      console.log(data);
-    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
   const vizWordsQuery = useQuery<VisualizationWords | undefined, AxiosError>("analyticsWords", getVizWords, {
-    onSuccess: data => {
-      console.log("words");
-      console.log(data)
-    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
   const vizTimeQuery = useQuery<VisualizationTimes | undefined, AxiosError>("analyticsTime", getVizTime, {
-    onSuccess: data => {
-      console.log("time");
-      console.log(data);
-    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
@@ -82,6 +62,9 @@ const Analysis = () => {
                           avg_time_count={vizTimeQuery.data.avgTimeCount}
                       />
                   }
+                  {vizTimeQuery.isLoading &&
+                      <LoadingReportsByTime/>
+                  }
                 </Card.Body>
               </Card>
             </Col>
@@ -100,6 +83,9 @@ const Analysis = () => {
                           avg_time_count={vizTimeQuery.data.avgReadTimeCount}
                       />
                   }
+                  {vizTimeQuery.isLoading &&
+                      <LoadingReportsByTime/>
+                  }
                 </Card.Body>
               </Card>
             </Col>
@@ -114,6 +100,9 @@ const Analysis = () => {
                       <ReadReportsWordCloud
                           words_read={vizWordsQuery.data.words_read}
                       />
+                  }
+                  {vizWordsQuery.isLoading &&
+                      <LoadingReportsWordCloud/>
                   }
                 </Card.Body>
               </Card>
@@ -130,6 +119,9 @@ const Analysis = () => {
                           words={vizWordsQuery.data.words}
                       />
                   }
+                  {vizWordsQuery.isLoading &&
+                      <LoadingReportsWordCloud/>
+                  }
                 </Card.Body>
               </Card>
             </Col>
@@ -144,6 +136,9 @@ const Analysis = () => {
                       <ReportsByAuthor authors={vizAuthorsQuery.data.authors}
                                        authors_read={vizAuthorsQuery.data.authors_read}/>
                   }
+                  {vizAuthorsQuery.isLoading &&
+                      <LoadingReportsByAuthor/>
+                  }
                 </Card.Body>
               </Card>
             </Col>
@@ -156,7 +151,9 @@ const Analysis = () => {
                   <Card.Subtitle className="mb-2 text-muted">Distribution of ALL Reports by Media</Card.Subtitle>
                   {vizMediaQuery.isSuccess && vizMediaQuery.data &&
                       <ReportsByMedia media={vizMediaQuery.data.media} media_read={vizMediaQuery.data.media_read}/>
-
+                  }
+                  {vizMediaQuery.isLoading &&
+                      <LoadingReportsByMedia/>
                   }
                 </Card.Body>
               </Card>
@@ -170,6 +167,9 @@ const Analysis = () => {
                   <Card.Subtitle className="mb-2 text-muted">Distribution of ALL reports by Tags</Card.Subtitle>
                   {vizTagsQuery.isSuccess && vizTagsQuery.data &&
                       <ReportsByTags tags={vizTagsQuery.data.tags}/>
+                  }
+                  {vizTagsQuery.isLoading &&
+                      <LoadingReportsByTags/>
                   }
                 </Card.Body>
               </Card>

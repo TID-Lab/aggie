@@ -4,6 +4,7 @@ const mongoose = database.mongoose;
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 const config = require('../config/secrets.json');
+require('dotenv').config()
 
 var userSchema = new Schema({
   provider: { type: String, default: 'local' },
@@ -40,7 +41,7 @@ User.permissions = {
 User.can = (permission) => {
   return (req, res, next) => {
     const user = req.user;
-    if (config.adminParty) {
+    if (process.env.ADMIN_PARTY.toLowerCase() === "true") {
       next();
     }
     User.findById(user.id, (err, foundUser) => {

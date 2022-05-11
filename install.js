@@ -32,20 +32,17 @@ function enableIndexing(callback) {
 tasks.push(enableIndexing);
 
 // Verify that an admin user exists
-function createAdminUser(callback) {
+const createAdminUser = (callback) => {
   User.findOne({ role: 'admin' }, function(err, user) {
     if (!user) {
-      var userData = {
-        provider: 'aggie',
+      User.register({
+        username:'username',
         email: config.adminEmail,
         username: 'admin',
-        password: config.adminPassword,
         role: 'admin',
-        hasDefaultPassword: true
-      };
-      // Create new admin user
-      User.create(userData, function(err, user) {
-        if (err) console.error(err);
+        hasDefaultPassword: 'true',
+      }, config.adminPassword, function(err, user) {
+        if (err) {console.error(err)}
         else console.log('"admin" user created with password "' + config.adminPassword + '"');
         callback();
       });

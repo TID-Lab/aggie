@@ -13,6 +13,7 @@ import {UserEditableData} from "../../objectTypes";
 interface IProps {
   user?: User,
   variant: "button" | "dropdown",
+  size?: "sm" | "lg",
 }
 
 const userFormSchema = Yup.object().shape({
@@ -74,7 +75,7 @@ export default function UserModal(props: IProps) {
     return (
         <>
           {props.variant === "button" &&
-          <Button onClick={handleModalShow}><FontAwesomeIcon icon={faEdit}/> Edit</Button>
+          <Button size={props.size ? props.size : undefined} onClick={handleModalShow}><FontAwesomeIcon icon={faEdit}/> Edit</Button>
           }
           {props.variant === "dropdown" &&
           <Dropdown.Item onClick={handleModalShow}><FontAwesomeIcon icon={faEdit}/> Edit</Dropdown.Item>

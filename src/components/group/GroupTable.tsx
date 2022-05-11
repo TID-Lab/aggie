@@ -16,7 +16,6 @@ import {
 import ConfirmModal from "../ConfirmModal";
 import EllipsisToggle from "../EllipsisToggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {faCheckCircle, faEllipsisV, faFilter, faPlusCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import GroupModal from "./GroupModal";
 import {
@@ -27,7 +26,7 @@ import {Group, Groups, GroupSearchState, Source, Tag, User} from "../../objectTy
 import TagsTypeahead from "../tag/TagsTypeahead";
 import {useMutation, useQuery} from "react-query";
 import {editGroup, getGroups} from "../../api/groups";
-import "./GroupTable.css";
+import styles from "./GroupTable.module.css";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";
 import {AxiosError} from "axios";
@@ -88,6 +87,20 @@ export default function GroupTable(props: IProps) {
           />
         })
         }
+        { props.visibleGroups && props.visibleGroups.length === 0 &&
+            <tr key="empty">
+              <td>
+                No groups found.
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+        }
         </tbody>
       </Table>
   );
@@ -143,10 +156,10 @@ export function GroupRow(props: GroupRowIProps) {
                       checked={props.selectedGroups?.has(props.group._id)}/>
                 </Form>
               </td>
-              <td className={"td__groupInfo"}>
+              <td className={styles.td__groupInfo}>
                 <VeracityIndication veracity={props.group.veracity} id={props.group._id} variant={"table"}/>
                 <EscalatedIndication escalated={props.group.escalated} id={props.group._id} variant={"table"}/>
-                <Link to={"/group/" + props.group._id} className={"me-1 title__link"}>
+                <Link to={"/group/" + props.group._id} className={styles.group__name + " me-1"}>
                   {props.group.title}
                 </Link>
                 <br/>
@@ -154,11 +167,11 @@ export function GroupRow(props: GroupRowIProps) {
                 <br/>
                 <span>ID: {props.group.idnum}</span>
               </td>
-              <td className="text-break td__location">
+              <td className={styles.td__location + " text-break"}>
                 <Linkify options={{target: '_blank'}}>{props.group.locationName}</Linkify>
               </td>
-              <td className={"td__creationInfo"}>
-                <span className={"creationInfo__user"}>
+              <td className={styles.td__creationInfo}>
+                <span className={styles.creationInfo__user}>
                   {props.group.creator ? props.group.creator.username : "Deleted user"}
                 </span>
                 <br/>
@@ -167,15 +180,22 @@ export function GroupRow(props: GroupRowIProps) {
                 <span>{stringToDate(props.group.storedAt).toLocaleDateString()}</span>
               </td>
               {props.group.notes
-                  ? <td className={"td__notes"}><Form.Control
+                  ? <td className={styles.td__notes}><Form.Control
                       as="textarea" rows={4} disabled defaultValue={props.group.notes}/></td>
-                  : <td></td>
+                  : <td className={styles.td__notes}>
+                    <Form.Control
+                        as="textarea" rows={4} disabled/>
+                  </td>
               }
               {props.group.assignedTo
-                  ? <td>{props.group.assignedTo.username ? props.group.assignedTo.username : "Deleted user"}</td>
-                  : <td></td>
+                  ? <td className={styles.td__assignedTo}>
+                      <Link to={"/user/" + props.group.assignedTo._id}>
+                        {props.group.assignedTo.username ? props.group.assignedTo.username : "Deleted user"}
+                      </Link>
+                    </td>
+                  : <td className={styles.td__assignedTo}></td>
               }
-              <td>
+              <td className={styles.td__tags}>
                 {props.tags && props.group && props.group._id && queryTags &&
                 <TagsTypeahead
                     id={props.group._id}
@@ -281,120 +301,85 @@ export function GroupRow(props: GroupRowIProps) {
 export const LoadingGroupTable = () => {
   const placeHolderValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
-      <Card>
-        <Card.Header className="pe-2 ps-2">
-          <ButtonToolbar className={"justify-content-between"}>
-            <div>
-              <Button
-                  variant="outline-secondary"
-                  disabled
-                  size="sm"
-                  className="me-2"
-              >
-                <FontAwesomeIcon icon={faFilter} className="me-2"></FontAwesomeIcon>
-                Filter(s)
-              </Button>
-              <Button variant="primary" size="sm" disabled>
-                <FontAwesomeIcon icon={faPlusCircle} className={"me-1"}></FontAwesomeIcon>
-                <span> Create group </span>
-              </Button>
-            </div>
-            <div>
-              <LoadingPagination/>
-            </div>
-          </ButtonToolbar>
-        </Card.Header>
-        <Table striped bordered hover>
-          <thead>
-          <tr>
-            <th>
-              <Form>
-                <Form.Check
-                    type="checkbox"
-                    id={"select-all"}
-                />
-              </Form>
-            </th>
-            <th>#</th>
-            <th>Title</th>
-            <th>Location</th>
-            <th>Notes</th>
-            <th>Assigned To</th>
-            <th>Creation Info</th>
-            <th>Tags</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          { placeHolderValues.map(value => {
-            return (
-                <tr key={value}>
-                  <td>
-                    <Form>
-                      <Form.Check
-                          type="checkbox"
-                          disabled
-                      />
-                    </Form>
-                  </td>
-                  <td><Placeholder animation="glow">
-                    <Placeholder xs={6} ></Placeholder>
-                  </Placeholder></td>
-                  <td>
-                    <Placeholder animation="glow">
-                      <Placeholder xs={12} ></Placeholder>
-                    </Placeholder>
-                    <br/>
-                    <small>
-                      <Placeholder animation="glow">
-                        <Placeholder xs={3} ></Placeholder>
-                      </Placeholder>
-                      {' '}reports
-                    </small>
-                  </td>
-                  <td className="text-break">
-                    <Placeholder animation="glow">
-                      <Placeholder xs={12} ></Placeholder>
-                    </Placeholder>
-                  </td>
-                  <td>
-                    <Placeholder animation="glow">
-                      <Placeholder xs={12} ></Placeholder>
-                      <Placeholder xs={12} ></Placeholder>
-                    </Placeholder>
-                  </td>
-                  <td>
-                    <Placeholder animation="glow">
-                      <Placeholder xs={8} ></Placeholder>
-                    </Placeholder>
-                  </td>
-                  <td>
-                    <Placeholder animation="glow">
-                      <Placeholder xs={9} ></Placeholder>
-                    </Placeholder>
-                    <br/>
-                    <small>
-                      <Placeholder animation="glow">
-                        <Placeholder xs={3} ></Placeholder>
-                      </Placeholder>
-                    </small>
-                  </td>
-                  <td>
-                    <Form.Control
-                        as="textarea"
-                        style={{ height: '80px' }}
+      <Table bordered size="sm" hover>
+        <thead>
+        <tr>
+          <th>
+            <Form>
+              <Form.Check
+                  type="checkbox"
+                  id={"select-all"}
+              />
+            </Form>
+          </th>
+          <th>Group Info</th>
+          <th>Location</th>
+          <th>Created</th>
+          <th>Notes</th>
+          <th>Assignee</th>
+          <th>Tags</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        { placeHolderValues.map(value => {
+          return (
+              <tr key={value}>
+                <td>
+                  <Form>
+                    <Form.Check
+                        type="checkbox"
                         disabled
                     />
-                  </td>
-                  <td>
+                  </Form>
+                </td>
+                <td className={styles.td__groupInfo}><Placeholder animation="glow">
+                  <Placeholder xs={6} ></Placeholder>
+                  <br/>
+                  <small>
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} ></Placeholder>
+                    </Placeholder>
+                    {' '}reports
+                  </small>
+                </Placeholder></td>
+                <td className={styles.td__location}>
+                  <Placeholder animation="glow">
+                    <Placeholder xs={12} ></Placeholder>
+                  </Placeholder>
+                </td>
+                <td className={styles.td__creationInfo + " text-break"}>
+                  <Placeholder animation="glow">
+                    <Placeholder xs={12} ></Placeholder>
+                  </Placeholder>
+                </td>
+                <td className={styles.td__notes}>
+                  <Placeholder animation="glow">
+                    <Placeholder xs={12} ></Placeholder>
+                    <Placeholder xs={12} ></Placeholder>
+                  </Placeholder>
+                </td>
+                <td className={styles.td__assignedTo}>
+                  <Placeholder animation="glow">
+                    <Placeholder xs={8} ></Placeholder>
+                  </Placeholder>
+                </td>
+                <td className={styles.td__tags}>
+                  <Form.Control
+                      placeholder="Edit tags"
+                      disabled
+                  />
+                </td>
+                <td style={{width: 32}}>
+                  <Button variant="light">
                     <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon>
-                  </td>
-                </tr>
-            );
-          })
-          }
-          </tbody>
-        </Table>
-      </Card>
+                  </Button>
+                </td>
+              </tr>
+          );
+        })
+        }
+        </tbody>
+      </Table>
   )
 }

@@ -37,5 +37,13 @@ if (process.env.ENVIRONMENT === "development") {
           cookieDomainRewrite: 'http://127.0.0.1'
         })
     );
+    app.use('/socket',
+        createProxyMiddleware({
+          target: 'http://127.0.0.1:3000/',
+          changeOrigin: true,
+          ws: true,
+          logLevel: 'debug',
+        })
+    );
   };
 }

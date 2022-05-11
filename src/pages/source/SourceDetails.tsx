@@ -142,7 +142,7 @@ const SourceDetails = () => {
             </Col>
             <Col>
               <div className="d-none d-xl-block">
-                <StatsBar></StatsBar>
+                {/*<StatsBar/>*/}
               </div>
             </Col>
           </Row>
