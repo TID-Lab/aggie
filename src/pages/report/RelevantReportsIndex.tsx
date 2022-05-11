@@ -39,16 +39,16 @@ const ITEMS_PER_PAGE = 50;
 
 const mediaTypes = ["twitter", "instagram", "RSS", "elmo", "SMS GH", "facebook"];
 
+// TODO: Finish up validating reportQueries using Yup.
 const reportQuerySchema = Yup.object().shape({
-  keywords: Yup.string(),
-  tags: Yup.array(),
-  sourceId: Yup.array(),
-  groupId: Yup.array(),
+  sourceId: Yup.array().nullable(),
   media: Yup.string(),
-  author: Yup.string(),
   before: Yup.date(),
   after: Yup.date(),
   page: Yup.number(),
+  keywords: Yup.string(),
+  groupId: Yup.array().nullable(),
+  author: Yup.string()
 });
 
 interface IProps {
@@ -73,20 +73,27 @@ const RelevantReportsIndex = (props: IProps) => {
     list: searchParams.get("list"),
     before: searchParams.get("before"),
     after: searchParams.get("after"),
+    tags: (searchParams.get("tags") || "").split(","),
     page: Number(searchParams.get("page") || "0")
   });
 
-  const clearFilterParams = () => { setSearchParams({}); setQueryState({
-    keywords: null,
-    author: null,
-    groupId: null,
-    media: null,
-    sourceId: null,
-    list: null,
-    before: null,
-    after: null,
-    page: null,
-  })};
+  // This clears search state and search params
+  const clearFilterParams = () => {
+    setSearchParams({});
+    setFilterTags([]);
+    setQueryState({
+      keywords: queryState.keywords,
+      author: queryState.author,
+      groupId: queryState.groupId,
+      media: null,
+      sourceId: null,
+      list: null,
+      before: null,
+      after: null,
+      page: null,
+      tags: null,
+    });
+  };
 
   const goToPage = (pageNum: number) => {
     setSearchParams({
@@ -166,8 +173,9 @@ const RelevantReportsIndex = (props: IProps) => {
                   after: searchParams.get("after") || "",
                 }}
                 onSubmit={(values, {setSubmitting, resetForm}) => {
-                  setSearchParams(parseFilterFields(values, filterTags));
-                  setQueryState(parseFilterFields(values));
+                  console.log(parseFilterFields(values, filterTags))
+                  //setSearchParams(parseFilterFields(values, filterTags));
+                  //setQueryState(parseFilterFields(values));
                 }}
             >
               {({
@@ -332,18 +340,6 @@ const RelevantReportsIndex = (props: IProps) => {
                           <FontAwesomeIcon icon={faFilter} className="me-2" />
                           Filter(s)
                         </Button>
-                        <ButtonGroup className="me-2">
-                          <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
-                                  onClick={()=>selectedReadStatusMutation.mutate(true)}
-                          >
-                            <FontAwesomeIcon icon={faEnvelopeOpen}></FontAwesomeIcon>
-                          </Button>
-                          <Button disabled={selectedReportIds.size === 0} size="sm" variant={"secondary"}
-                                  onClick={()=>selectedReadStatusMutation.mutate(false)}
-                          >
-                            <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
-                          </Button>
-                        </ButtonGroup>
                       </div>
                       { reportsQuery.data.total !== null &&
                           <AggiePagination

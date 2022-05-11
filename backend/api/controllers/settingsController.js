@@ -21,8 +21,8 @@ exports.setting_update_fetch = (req, res, app) => {
   // save fetching status
   config.updateFetching(fetching, (err) => {
     if (err) return res.sendStatus(500);
-    app.emit(fetching ? 'fetching:start' : 'fetching:stop');
     res.sendStatus(200);
+    app.emit(fetching ? 'fetching:start' : 'fetching:stop');
   });
 }
 

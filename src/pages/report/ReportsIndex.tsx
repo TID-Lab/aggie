@@ -96,11 +96,15 @@ const ReportsIndex = (props: IProps) => {
     list: searchParams.get("list"),
     before: searchParams.get("before"),
     after: searchParams.get("after"),
+    tags: (searchParams.get("tags") || "").split(","),
     page: Number(searchParams.get("page") || "0")
   });
 
   // This clears search state and search params
-  const clearFilterParams = () => { setSearchParams({}); setQueryState({
+  const clearFilterParams = () => {
+    setSearchParams({});
+    setFilterTags([]);
+    setQueryState({
     keywords: queryState.keywords,
     author: queryState.author,
     groupId: queryState.groupId,
@@ -110,23 +114,8 @@ const ReportsIndex = (props: IProps) => {
     before: null,
     after: null,
     page: null,
+    tags: null,
   });
-  };
-
-  // This clears search state and search params
-  const clearSearchParams = () => {
-    setSearchParams({});
-    setQueryState({
-      keywords: null,
-      author: null,
-      groupId: null,
-      media: queryState.media,
-      sourceId: queryState.sourceId,
-      list: queryState.list,
-      before: queryState.before,
-      after: queryState.after,
-      page: null
-    });
   };
 
   const goToPage = (pageNum: number) => {

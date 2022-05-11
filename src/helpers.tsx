@@ -248,6 +248,7 @@ export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
 
 export const parseFilterFields = (values: FormikValues, filterTags: Tag[] = []) => {
   let parsedFields = Object.assign(removeEmptyStrings(values));
+  console.log(parsedFields);
   if (filterTags.length > 0) {
     let tagsURL = "";
     filterTags.forEach((tagId)=> {

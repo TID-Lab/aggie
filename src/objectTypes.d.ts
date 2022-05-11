@@ -50,6 +50,7 @@ interface ReportQueryState {
   list: string | null,
   before: Date | string | null,
   after: Date | string | null,
+  tags: string[] | null,
   page:  number | null,
 }
 

@@ -71,12 +71,12 @@ const Configuration = () => {
                         />
                       </Form.Group>
                     </Form>
-                    <Row>
+                    {/* <Row>
                       <Col>
                         <h5>CSV Export</h5>
                         <ExportCSVModal/>
                       </Col>
-                    </Row>
+                    </Row> */}
                   </Card.Body>
                 </Card>
               </Container>
