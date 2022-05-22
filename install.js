@@ -3,7 +3,7 @@ process.title = 'aggie-setup';
 var database = require('./backend/database');
 var Report = require('./backend/models/report');
 var User = require('./backend/models/user');
-var config = require('./backend/config/secrets').get();
+require('dotenv').config();
 var tasks = [];
 
 // Enable full-text indexing for Reports
@@ -37,13 +37,13 @@ const createAdminUser = (callback) => {
     if (!user) {
       User.register({
         username:'username',
-        email: config.adminEmail,
+        email: process.env.ADMIN_EMAIL,
         username: 'admin',
         role: 'admin',
         hasDefaultPassword: 'true',
-      }, config.adminPassword, function(err, user) {
+      }, process.env.ADMIN_PASSWORD, function(err, user) {
         if (err) {console.error(err)}
-        else console.log('"admin" user created with password "' + config.adminPassword + '"');
+        else console.log('"admin" user created with password "' + process.env.ADMIN_PASSWORD + '"');
         callback();
       });
     } else callback();

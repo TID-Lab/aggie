@@ -84,7 +84,6 @@ export default function TagModal(props: IProps) {
 
   // This is the edit tag modal.
   if (props.tag) {
-    console.log(props.tag);
     return (
         <>
           <Dropdown.Item onClick={handleModalShow}>

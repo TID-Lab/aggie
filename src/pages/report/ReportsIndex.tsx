@@ -162,11 +162,11 @@ const ReportsIndex = (props: IProps) => {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
         sessionFetching = false;
-        navigate('/reports');
+        navigate('/login');
       }
     },
     onSuccess: data => {
-      sessionFetching = true
+      sessionFetching = true;
       if (location.pathname === "/login") {
         navigate('/reports');
       }

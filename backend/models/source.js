@@ -29,15 +29,15 @@ var mediaValues = ['facebook', 'instagram', 'comments', 'elmo', 'twitter', 'rss'
 
 var sourceSchema = new mongoose.Schema({
   media: { type: String, enum: mediaValues },
-  nickname: { type: String, required: true, validate: lengthValidator },
+  nickname: { type: String, required: true, validate: lengthValidator, index: true },
   resource_id: String,
   url: { type: String, validate: urlValidator },
   keywords: String,
   enabled: { type: Boolean, default: true },
   events: { type: Array, default: [] },
   unreadErrorCount: { type: Number, default: 0 },
-  lastReportDate: Date,
-  lastReportDateSavedSearch: Date,
+  lastReportDate: { type: Date, index: true },
+  lastReportDateSavedSearch: { type: Date, index: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   tags: { type: [String], default: [] },
   credentials:{ type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: true },

@@ -1,14 +1,9 @@
 import * as React from 'react';
 import Table from 'react-bootstrap/Table';
-import {Card, Pagination, Button, ButtonToolbar, Form, Image, Dropdown} from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import EllipsisToggle from "../EllipsisToggle";
+import {Card, ButtonToolbar, Image} from "react-bootstrap";
 import ConfirmModal from "../ConfirmModal";
 import CredentialModal from "./CredentialModal";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { Credential } from "../../objectTypes";
 import "./CredentialsTable.css"
 

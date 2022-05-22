@@ -18,7 +18,6 @@ let schema = new Schema({
   veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
   url: String,
   metadata: Schema.Types.Mixed,
-  tags: { type: [String], default: [] },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
   hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   closed: { type: Boolean, default: false, required: true },

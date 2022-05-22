@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {
   getReport,
@@ -29,7 +29,7 @@ import {
 import {getSources} from "../../api/sources";
 import {getGroup, getGroups} from "../../api/groups";
 import {getTags} from "../../api/tags";
-import "./ReportDetails.css";
+import styles from "./ReportDetails.module.css";
 // @ts-ignore
 import { FacebookProvider, Like } from 'react-facebook';
 import {faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
@@ -74,6 +74,7 @@ const ReportDetails = () => {
   const handleEscalatedChange = (event: React.ChangeEvent<HTMLInputElement>) => setEscalated(event.target.checked);
   const handleVeracityChange = (event: React.ChangeEvent<HTMLSelectElement>) => setVeracity(event.target.value);
   const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => setNotes(event.target.value);
+  const navigate = useNavigate();
   const readStatusMutation = useMutation((readUpdateInfo: ReadUpdateInfo) => {
     return setSelectedRead([readUpdateInfo.reportId], readUpdateInfo.read);
   }, {
@@ -82,7 +83,9 @@ const ReportDetails = () => {
       reportQuery.refetch();
     },
     onError: (error: AxiosError) => {
-      if (error && error.response && error.response.status && error.response.data) {
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else if (error && error.response && error.response.status && error.response.data) {
         setShowAlert(false);
         setAlertMessage({
           header: "Failed to update read status (" + error.response.status + ")",
@@ -190,6 +193,11 @@ const ReportDetails = () => {
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources);
   const reportGroupQuery = useQuery<Group | undefined, AxiosError>(["group", reportQuery.data?._group], ()=> getGroup(reportQuery.data?._group), {
     enabled: (reportQuery.isSuccess && reportQuery.data && reportQuery.data._group != ""),
+    onError: (err: AxiosError) => {
+      if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+    },
   })
   const groupsQuery = useQuery<Groups | undefined, AxiosError>("groups", ()=>{return getGroups()});
 
@@ -219,7 +227,8 @@ const ReportDetails = () => {
                                 <FontAwesomeIcon icon={faEnvelopeOpen} className={"me-2"}/>}
                             {reportQuery.data.read ?
                                 "Mark unread" :
-                                "Mark read"}
+                                "Mark read"
+                            }
                           </Button>
                         </ButtonToolbar>
                       </Card.Header>
@@ -239,7 +248,7 @@ const ReportDetails = () => {
                             <Table>
                               <tbody>
                               <tr key="reportAuthor">
-                                <th className="details__th">Author</th>
+                                <th className={styles.details__th}>Author</th>
                                 <td>
                                   <a href={reportAuthorUrl(reportQuery.data)}>
                                     {reportQuery.data._media[0] === "twitter" ? "@" : ""}
@@ -248,24 +257,24 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportAuthoredAt">
-                                <th className="details__th">Authored time</th>
+                                <th className={styles.details__th}>Authored time</th>
                                 <td>{stringToDate(reportQuery.data.authoredAt).toLocaleString("en-us")}</td>
                               </tr>
                               {reportQuery.data.metadata.subscriberCount &&
                                   <tr key="reportSubscriberCount">
-                                    <th className="details__th">Subscriber count</th>
+                                    <th className={styles.details__th}>Subscriber count</th>
                                     <td>{reportQuery.data.metadata.subscriberCount}</td>
                                   </tr>
                               }
                               {reportQuery.data.metadata.followerCount &&
                                   <tr key="reportFollowerCount">
-                                    <th className="details__th">Followers</th>
+                                    <th className={styles.details__th}>Followers</th>
                                     <td>{reportQuery.data.metadata.followerCount}</td>
                                   </tr>
                               }
                               {reportQuery.data.metadata.crowdtangleId &&
                                   <tr key="reportCrowdtangleId">
-                                    <th className="details__th">Crowdtangle Id</th>
+                                    <th className={styles.details__th}>Crowdtangle Id</th>
                                     <td>
                                       <span className="me-2">{reportQuery.data.metadata.crowdtangleId}</span>
                                       <CopyToClipboard text={reportQuery.data.metadata.crowdtangleId}>
@@ -275,7 +284,7 @@ const ReportDetails = () => {
                                   </tr>
                               }
                               <tr key="reportUrl">
-                                <th className="details__th">URL</th>
+                                <th className={styles.details__th}>URL</th>
                                 <td><a href={reportQuery.data.url}>External link<FontAwesomeIcon className="ms-1" icon={faArrowUpRightFromSquare}/></a></td>
                               </tr>
                               {reportQuery.data.metadata.location && reportQuery.data.metadata.location !== "" &&
@@ -285,7 +294,7 @@ const ReportDetails = () => {
                                   </tr>
                               }
                               <tr key="reportSource">
-                                <th className="details__th">Source</th>
+                                <th className={styles.details__th}>Source</th>
                                 <td>
                                   {sourcesQuery.data && !sourcesNamesById(reportQuery.data._sources, sourcesQuery.data) &&
                                       <s>Source not found.</s>
@@ -296,11 +305,11 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportFetchedAt">
-                                <th className="details__th">Fetched Time</th>
+                                <th className={styles.details__th}>Fetched Time</th>
                                 <td>{stringToDate(reportQuery.data.fetchedAt).toLocaleString()}</td>
                               </tr>
                               <tr key="reportVeracity">
-                                <th className="details__th">
+                                <th className={styles.details__th}>
                                   <VeracityIndication veracity={reportQuery.data.veracity} id={reportQuery.data._id} variant={"title"}/>
                                   Veracity
                                 </th>
@@ -324,7 +333,7 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportEscalated">
-                                <th className="details__th">
+                                <th className={styles.details__th}>
                                   <EscalatedIndication escalated={reportQuery.data.escalated} id={reportQuery.data._id} variant={"title"}/>
                                   Escalated
                                 </th>
@@ -342,7 +351,7 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportGroup">
-                                <th className="details__th">Group</th>
+                                <th className={styles.details__th}>Group</th>
                                 <td>
                                   {reportQuery.data &&
                                       <EditGroupModal
@@ -361,7 +370,7 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportTags">
-                                <th className="details__th">Tags</th>
+                                <th className={styles.details__th}>Tags</th>
                                 <td>
                                   {tagsQuery.data && reportQuery.data._id &&
                                       <TagsTypeahead
@@ -381,7 +390,7 @@ const ReportDetails = () => {
                                 </td>
                               </tr>
                               <tr key="reportNotes">
-                                <th className="details__th">Notes</th>
+                                <th className={styles.details__th}>Notes</th>
                                 <td>
                                   <Form.Control
                                       as="textarea"

@@ -10,7 +10,7 @@ import {
   VisualizationTags, VisualizationTimes, VisualizationWords
 } from "../objectTypes";
 import {useQuery} from "react-query";
-import {getVizAuthors, getVizTags, getVizMedia, getVizTime, getVizWords} from "../api/analytics";
+import {getVizAuthors, getVizTags, getVizMedia, getVizTime, getVizWords} from "../api/analysis";
 import { TagCloud } from 'react-tagcloud';
 import ReportsWordCloud, {AllReportsWordCloud, LoadingReportsWordCloud} from "../components/analysis/ReportsWordCloud";
 import ReadReportsWordCloud from "../components/analysis/ReportsWordCloud";

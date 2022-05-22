@@ -18,17 +18,17 @@ require('./tag');
 require('../error');
 
 
-var lengthValidator = function(str) {
+const lengthValidator = function(str) {
   return validator.isLength(str, {min: 0, max: 42})
 }
 
-var schema = new mongoose.Schema({
+let schema = new mongoose.Schema({
   title: { type: String, required: true, validate: lengthValidator },
   locationName: String,
   latitude: Number,
   longitude: Number,
   updatedAt: Date,
-  storedAt: Date,
+  storedAt: { type: Date, index: true },
   tags: { type: [String], default: [] },
   assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
   smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},

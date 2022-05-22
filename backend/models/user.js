@@ -3,7 +3,6 @@ var database = require('../database');
 const mongoose = database.mongoose;
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
-const config = require('../config/secrets.json');
 require('dotenv').config()
 
 var userSchema = new Schema({

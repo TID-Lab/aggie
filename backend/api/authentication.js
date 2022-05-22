@@ -2,6 +2,7 @@
 const User = require('../models/user');
 const passport = require('passport');
 const config = require('../config/secrets').get();
+require('dotenv').config();
 const passportJWT = require("passport-jwt");
 const Strategy = passportJWT.Strategy;
 
@@ -15,7 +16,7 @@ const cookieExtractor = function(req) {
 };
 
 const params = {
-  secretOrKey: config.secret,
+  secretOrKey: process.env.SECRET,
   jwtFromRequest: cookieExtractor
 };
 

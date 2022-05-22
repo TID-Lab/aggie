@@ -96,7 +96,7 @@ if (process.env.ENVIRONMENT === "development") {
 
 // Handle request time outs, return 500 in case of timeouts
 function handleRequestTimeouts(req, res, next) {
-  var requestTimeout = parseInt(config.get().api_request_timeout) * 1000;
+  var requestTimeout = parseInt(process.env.API_REQUEST_TIMEOUT);
 
   // exit if disabled
   if (requestTimeout <= 0) return next();

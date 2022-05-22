@@ -29,7 +29,7 @@ const AggieNavbar = (props: IProps) => {
                 />
               </Navbar.Brand>
           }
-          {location.pathname !== "/login" && props.isAuthenticated &&
+          {location.pathname !== "/login" &&
               <>
                 <Nav variant={"pills"} className={"me-auto aggie-nav"}>
                   <LinkContainer to={'/reports'}>
@@ -83,7 +83,7 @@ const AggieNavbar = (props: IProps) => {
                   </Offcanvas.Header>
                   <Offcanvas.Body>
                     <Nav variant={"pills"}>
-                      { props.session && props.session.role ? (
+                      { props.isAuthenticated && props.session && props.session.role ? (
                           <Nav.Item>
                             <LinkContainer to={'/user/' + props.session._id}>
                               <Nav.Link eventKey="5" className="ps-2">

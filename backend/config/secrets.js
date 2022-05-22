@@ -42,7 +42,6 @@ mkdirp.sync(path.dirname(_configuration.logger.analytics.filename));
 // return configuration
 module.exports.get = function(options) {
   if (options && options.reload) {
-
     // Load again to get changes done in different processes
     nconf.load();
     _configuration = nconf.get();

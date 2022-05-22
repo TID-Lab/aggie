@@ -9,7 +9,7 @@ import {
   Placeholder,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import EditGroupModal from "../group/EditGroupModal";
 import styles from "./ReportTable.module.css"
 import {
@@ -27,7 +27,6 @@ import {editReport} from "../../api/reports";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import {faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
-import {faCheckCircle, faEnvelopeOpen, faLink, faPlusCircle, faTimesCircle, faWarning} from "@fortawesome/free-solid-svg-icons";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";
 import {AxiosError} from "axios";

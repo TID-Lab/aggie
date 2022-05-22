@@ -26,7 +26,7 @@ const groupEditSchema = Yup.object().shape({
   groupNotes: Yup.string(),
 });
 
-const veracityOptions = ['Confirmed true', 'Confirmed false', 'Unconfirmed'];
+const veracityOptions = ['Confirmed True', 'Confirmed False', 'Unconfirmed'];
 
 export default function GroupModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
