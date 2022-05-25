@@ -58,7 +58,7 @@ const renderError = (message: string) => {
   );
 };
 
-export default function UserModal(props: IProps): React.FC {
+export default function UserModal(props: IProps) {
   const queryClient = useQueryClient();
   const formValuesToEditUser = (values: FormikValues) => {
     return {
