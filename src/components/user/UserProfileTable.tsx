@@ -35,12 +35,12 @@ const UserProfileTable = (props: IProps) => {
                 <th>{props.user?.username}</th>
               </tr>
               <tr>
-                <th> User Role</th>
+                <th>Role</th>
                 <th>{props.user?.role}</th>
               </tr>
               <tr>
                 <th>
-                  User Email
+                  Email
                 </th>
                 <th>{props.user?.email}</th>
               </tr>

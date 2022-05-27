@@ -26,6 +26,7 @@ import {AxiosError} from "axios";
 import {Session} from "./objectTypes";
 import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
 import {getAllGroups} from "./api/groups";
+import DataExport from "./pages/DataExport";
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
 const App = () => {
@@ -82,13 +83,14 @@ const App = () => {
                   <Route path='config' element={<Configuration/>}/>
                   <Route path='credentials' element={<CredentialsIndex/>}/>
                   <Route path='analysis' element={<Analysis/>}/>
+                  <Route path='export' element={<DataExport/>}/>
                   <Route path='reset-password' element={<ResetPassword/>}/>
                   <Route path='404' element={<NotFound/>}/>
                   <Route path="*" element={<Navigate replace to="/404"/>}/>
                 </>
             }
-            {/*@ts-ignore*/}
-            {sessionQuery.isError && sessionQuery.error && sessionQuery.error.response && sessionQuery.error.response.status === 401 &&
+            {sessionQuery.isError && sessionQuery.error && sessionQuery.error.response &&
+                sessionQuery.error.response.status === 401 &&
                 <>
                   <Route path='reset-password' element={<ResetPassword/>}/>
                   <Route path="login" element={<Login/>}/>

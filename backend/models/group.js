@@ -49,7 +49,6 @@ schema.pre('save', function(next) {
   if (!_.contains(Group.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
-
   next();
 });
 

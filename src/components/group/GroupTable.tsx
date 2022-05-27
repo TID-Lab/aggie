@@ -11,7 +11,7 @@ import {
   Image,
   Container,
   Table,
-  Button, Placeholder, InputGroup
+  Button, Placeholder, InputGroup, Badge
 } from "react-bootstrap";
 import ConfirmModal from "../ConfirmModal";
 import EllipsisToggle from "../EllipsisToggle";
