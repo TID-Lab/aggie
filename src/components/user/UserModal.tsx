@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  Container,
-  Dropdown,
-  Form,
-  Modal,
-} from 'react-bootstrap';
+import { Button, Container, Dropdown, Form, Modal } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -48,15 +41,6 @@ const userCreateFormSchema = Yup.object().shape({
     .required('Email address is required.'),
   userPassword: Yup.string().required('Password is required.').min(4),
 });
-
-const renderError = (message: string) => {
-  console.log('Render Error', message);
-  return (
-    <Alert key='danger' variant='danger' className='mt-1 p-2'>
-      {message}
-    </Alert>
-  );
-};
 
 export default function UserModal(props: IProps) {
   const queryClient = useQueryClient();
@@ -147,7 +131,6 @@ export default function UserModal(props: IProps) {
             }}
             validationSchema={userEditFormSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
-              console.log('Submit', values);
               editUserMutation.mutate(formValuesToEditUser(values));
             }}
           >
@@ -175,12 +158,13 @@ export default function UserModal(props: IProps) {
                         value={values.userUsername}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        isInvalid={
+                          touched.userUsername && !!errors.userUsername
+                        }
                       />
-                      {errors.userUsername && touched.userUsername ? (
-                        renderError(errors.userUsername)
-                      ) : (
-                        <></>
-                      )}
+                      <Form.Control.Feedback type='invalid'>
+                        {errors.userUsername}
+                      </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId='userEmail' className={'mb-3'}>
                       <Form.Label>Email address</Form.Label>
@@ -192,16 +176,14 @@ export default function UserModal(props: IProps) {
                         value={values.userEmail}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        isInvalid={touched.userEmail && !!errors.userEmail}
                       />
                       <Form.Text className='text-muted'>
                         We'll never share your email with anyone else.
                       </Form.Text>
-
-                      {errors.userEmail && touched.userEmail ? (
-                        renderError(errors.userEmail)
-                      ) : (
-                        <></>
-                      )}
+                      <Form.Control.Feedback type='invalid'>
+                        {errors.userEmail}
+                      </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId='userRole'>
                       <Form.Label>User Role</Form.Label>
@@ -209,17 +191,16 @@ export default function UserModal(props: IProps) {
                         value={values.userRole}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        isInvalid={touched.userRole && !!errors.userRole}
                       >
                         {userRoles.map((userRole) => {
                           return <option key={userRole}>{userRole}</option>;
                         })}
                       </Form.Select>
 
-                      {errors.userRole && touched.userRole ? (
-                        renderError(errors.userRole)
-                      ) : (
-                        <></>
-                      )}
+                      <Form.Control.Feedback type='invalid'>
+                        {errors.userRole}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Container>
                 </Modal.Body>
@@ -297,12 +278,13 @@ export default function UserModal(props: IProps) {
                           value={values.userUsername}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={
+                            touched.userUsername && !!errors.userUsername
+                          }
                         />
-                        {errors.userUsername && touched.userUsername ? (
-                          renderError(errors.userUsername)
-                        ) : (
-                          <></>
-                        )}
+                        <Form.Control.Feedback type='invalid'>
+                          {errors.userUsername}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId='userEmail' className={'mb-3'}>
                         <Form.Label>Email address</Form.Label>
@@ -314,15 +296,15 @@ export default function UserModal(props: IProps) {
                           value={values.userEmail}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={touched.userEmail && !!errors.userEmail}
                         />
                         <Form.Text className='text-muted'>
                           We'll never share your email with anyone else.
                         </Form.Text>
-                        {errors.userEmail && touched.userEmail ? (
-                          renderError(errors.userEmail)
-                        ) : (
-                          <></>
-                        )}
+
+                        <Form.Control.Feedback type='invalid'>
+                          {errors.userEmail}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId='userPassword' className={'mb-3'}>
                         <Form.Label>Password</Form.Label>
@@ -334,12 +316,14 @@ export default function UserModal(props: IProps) {
                           value={values.userPassword}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={
+                            touched.userPassword && !!errors.userPassword
+                          }
                         />
-                        {errors.userPassword && touched.userPassword ? (
-                          renderError(errors.userPassword)
-                        ) : (
-                          <></>
-                        )}
+
+                        <Form.Control.Feedback type='invalid'>
+                          {errors.userPassword}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId='userRole'>
                         <Form.Label>User Role</Form.Label>
@@ -347,16 +331,16 @@ export default function UserModal(props: IProps) {
                           value={values.userRole}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={touched.userRole && !!errors.userRole}
                         >
                           {userRoles.map((userRole) => {
                             return <option key={userRole}>{userRole}</option>;
                           })}
                         </Form.Select>
-                        {errors.userRole && touched.userRole ? (
-                          renderError(errors.userRole)
-                        ) : (
-                          <></>
-                        )}
+
+                        <Form.Control.Feedback type='invalid'>
+                          {errors.userRole}
+                        </Form.Control.Feedback>
                       </Form.Group>
                     </Container>
                   </Modal.Body>
