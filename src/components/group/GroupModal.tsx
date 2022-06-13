@@ -32,7 +32,7 @@ const groupEditSchema = Yup.object().shape({
   groupEscalated: Yup.boolean(),
   groupClosed: Yup.boolean(),
   groupVeracity: Yup.string(),
-  groupAssignedTo: Yup.string(),
+  groupAssignedTo: Yup.array().of(Yup.string()),
   groupNotes: Yup.string(),
 });
 
@@ -131,7 +131,9 @@ export default function GroupModal(props: IProps) {
             groupClosed: props.group ? props.group.closed : false,
             groupEscalated: props.group ? props.group.escalated : false,
             groupLocation: props.group ? props.group.locationName : '',
-            groupAssignedTo: props.group ? props.group.assignedTo?._id : '',
+            groupAssignedTo: props.group
+              ? props.group.assignedTo?.map((user) => user._id)
+              : '',
             groupNotes: props.group ? props.group.notes : '',
           }}
           validationSchema={groupEditSchema}
@@ -246,13 +248,14 @@ export default function GroupModal(props: IProps) {
                       value={values.groupAssignedTo}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      multiple={true}
                       isInvalid={
                         touched.groupAssignedTo && !!errors.groupAssignedTo
                       }
                     >
-                      <option key='none' value={''}>
+                      {/* <option key='none' value={''}>
                         None
-                      </option>
+                      </option> */}
                       {usersQuery.isSuccess &&
                         usersQuery.data &&
                         usersQuery.data.map((user) => {

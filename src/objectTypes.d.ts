@@ -97,7 +97,7 @@ interface Group extends hasId {
   assignedTo?: {
     _id: string;
     username: string;
-  } | null;
+  }[];
   creator: {
     _id: string;
     username: string;
@@ -110,16 +110,7 @@ interface Group extends hasId {
   locationName: string;
 }
 
-export interface GroupCreateData {
-  title: string;
-  notes: string;
-  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed';
-  closed: boolean;
-  assignedTo: string;
-  locationName: string;
-  public: boolean;
-  escalated: boolean;
-  _id?: string;
+export interface GroupCreateData extends GroupEditableData {
   user: User;
 }
 
@@ -128,7 +119,7 @@ export interface GroupEditableData {
   notes: string;
   veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed';
   closed: boolean;
-  assignedTo: string;
+  assignedTo: string[];
   locationName: string;
   public: boolean;
   escalated: boolean;
