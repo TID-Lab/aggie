@@ -28,6 +28,7 @@ import {
 import GroupModal from './GroupModal';
 import { stringToDate, tagById, tagsById } from '../../helpers';
 import {
+  AssignedToUser,
   Group,
   Groups,
   GroupSearchState,
@@ -164,6 +165,16 @@ export function GroupRow(props: GroupRowIProps) {
     }
   };
 
+  let assignedTo: AssignedToUser[] = [];
+
+  if (props.group && props.group.assignedTo) {
+    if (!Array.isArray(props.group.assignedTo)) {
+      assignedTo = [props.group.assignedTo];
+    } else {
+      assignedTo = props.group.assignedTo;
+    }
+  }
+
   if (props.group) {
     switch (props.variant) {
       case 'table':
@@ -241,7 +252,7 @@ export function GroupRow(props: GroupRowIProps) {
             )}
             {props.group.assignedTo ? (
               <td className={styles.td__assignedTo}>
-                {props.group.assignedTo.map((user) => (
+                {assignedTo.map((user) => (
                   <Link
                     key={user._id}
                     to={'/user/' + user._id}
@@ -365,7 +376,7 @@ export function GroupRow(props: GroupRowIProps) {
             )}
             {props.group.assignedTo ? (
               <td>
-                {props.group.assignedTo
+                {assignedTo
                   .map((user) =>
                     user.username ? user.username : 'Deleted user'
                   )

@@ -83,6 +83,11 @@ interface Source extends hasId {
   lastReportDate?: string;
 }
 
+interface AssignedToUser {
+  _id: string;
+  username: string;
+}
+
 interface Group extends hasId {
   tags: string[];
   id?: number;
@@ -94,10 +99,7 @@ interface Group extends hasId {
   public: boolean;
   _reports: string[];
   title: string;
-  assignedTo?: {
-    _id: string;
-    username: string;
-  }[];
+  assignedTo?: AssignedToUser | AssignedToUser[];
   creator: {
     _id: string;
     username: string;
@@ -178,6 +180,8 @@ interface Tag extends hasId {
   updatedAt: string;
   storedAt: string;
   __v: number;
+  isBeingEdited?: boolean;
+  isBeingEditedBy?: string;
 }
 
 interface TagEditableData {
@@ -186,6 +190,8 @@ interface TagEditableData {
   isCommentTag: boolean;
   color: string;
   _id?: string;
+  isBeingEdited?: boolean;
+  isBeingEditedBy?: string;
 }
 
 interface Setting {

@@ -2,6 +2,7 @@
 var SMTCTag = require('../../models/tag');
 var _ = require('lodash');
 const validator = require('validator');
+const eventRouter = require('../../event-router');
 
 // Get a list of all Tags
 exports.tag_tags = (req, res) => {
@@ -25,7 +26,9 @@ exports.tag_create = (req, res) => {
       console.log(err);
       res.status(err.status).send(err.message);
     } else {
-      res.status(200).send(tag);
+      eventRouter.publish('tags:create', tag).then(() => {
+        res.status(200).send(tag);
+      });
     }
   });
 };
@@ -44,7 +47,9 @@ exports.tag_update = (req, res) => {
       if (err) {
         res.status(err.status).send(err.message);
       } else {
-        res.sendStatus(200);
+        eventRouter.publish('tags:update', tag).then(() => {
+          res.sendStatus(200);
+        });
       }
     });
   });
@@ -58,7 +63,11 @@ exports.tag_delete = (req, res) => {
     tag.remove((err) => {
       err = Error.decode(err);
       if (err) res.status(err.status).send(err.message);
-      else res.sendStatus(200);
+      else {
+        eventRouter.publish('tags:delete', tag).then(() => {
+          res.sendStatus(200);
+        });
+      }
     });
   });
 };

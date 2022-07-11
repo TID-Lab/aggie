@@ -13,7 +13,12 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Group, GroupEditableData, User } from '../../objectTypes';
+import {
+  AssignedToUser,
+  Group,
+  GroupEditableData,
+  User,
+} from '../../objectTypes';
 import { Formik, FormikValues, Field } from 'formik';
 import * as Yup from 'yup';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -99,6 +104,16 @@ export default function GroupModal(props: IProps) {
     }
   };
 
+  let assignedTo: AssignedToUser[] = [];
+
+  if (props.group && props.group.assignedTo) {
+    if (!Array.isArray(props.group.assignedTo)) {
+      assignedTo = [props.group.assignedTo];
+    } else {
+      assignedTo = props.group.assignedTo;
+    }
+  }
+
   return (
     <>
       {props.group && (
@@ -132,8 +147,8 @@ export default function GroupModal(props: IProps) {
             groupEscalated: props.group ? props.group.escalated : false,
             groupLocation: props.group ? props.group.locationName : '',
             groupAssignedTo: props.group
-              ? props.group.assignedTo?.map((user) => user._id)
-              : '',
+              ? assignedTo.map((user) => user._id)
+              : [''],
             groupNotes: props.group ? props.group.notes : '',
           }}
           validationSchema={groupEditSchema}
