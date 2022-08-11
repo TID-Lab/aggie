@@ -17,10 +17,9 @@ require('./tag');
 
 require('../error');
 
-
-const lengthValidator = function(str) {
-  return validator.isLength(str, {min: 0, max: 42})
-}
+const lengthValidator = function (str) {
+  return validator.isLength(str, { min: 0, max: 42 });
+};
 
 let schema = new mongoose.Schema({
   title: { type: String, required: true, validate: lengthValidator },
@@ -30,20 +29,30 @@ let schema = new mongoose.Schema({
   updatedAt: Date,
   storedAt: { type: Date, index: true },
   tags: { type: [String], default: [] },
-  assignedTo: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  assignedTo: { type: [mongoose.Schema.ObjectId], ref: 'User' },
+  smtcTags: {
+    type: [{ type: SchemaTypes.ObjectId, ref: 'SMTCTag' }],
+    default: [],
+  },
   creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
   status: { type: String, default: 'new', required: true },
-  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
+  veracity: {
+    type: String,
+    default: 'Unconfirmed',
+    enum: ['Unconfirmed', 'Confirmed True', 'Confirmed False'],
+  },
   escalated: { type: Boolean, default: false, required: true },
   closed: { type: Boolean, default: false, required: true },
   public: { type: Boolean, default: false, required: true },
   publicDescription: String,
-  _reports: {type: [{type: SchemaTypes.ObjectId, ref: 'Report'}], default: []},
-  notes: String
+  _reports: {
+    type: [{ type: SchemaTypes.ObjectId, ref: 'Report' }],
+    default: [],
+  },
+  notes: String,
 });
 
-schema.pre('save', function(next) {
+schema.pre('save', function (next) {
   if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
   if (!_.contains(Group.statusOptions, this.status)) {
@@ -53,71 +62,69 @@ schema.pre('save', function(next) {
   next();
 });
 
-schema.post('save', function() {
+schema.post('save', function () {
   schema.emit('group:save', { _id: this._id.toString() });
 });
 
-schema.post('remove', function() {
+schema.post('remove', function () {
   // Unlink removed group from reports
-  Report.find({ _group: this._id.toString() }, function(err, reports) {
+  Report.find({ _group: this._id.toString() }, function (err, reports) {
     if (err) {
       logger.error(err);
     }
-    reports.forEach(function(report) {
+    reports.forEach(function (report) {
       report._group = null;
       report.save();
     });
   });
-
 });
 
-schema.methods.setVeracity = function(veracity) {
+schema.methods.setVeracity = function (veracity) {
   this.veracity = veracity;
 };
 
-schema.methods.setEscalated = function(escalated) {
+schema.methods.setEscalated = function (escalated) {
   this.escalated = escalated;
 };
 
-schema.methods.addSMTCTag = function(smtcTagId, callback) {
+schema.methods.addSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to add (if it doesn't exists) then add it.
   let isRepeat = false;
-  this.smtcTags.forEach(function(tag) {
-    if(smtcTagId === tag.toString()) {
+  this.smtcTags.forEach(function (tag) {
+    if (smtcTagId === tag.toString()) {
       isRepeat = true;
     }
   });
   if (isRepeat === false) {
-    this.smtcTags.push({_id: smtcTagId});
+    this.smtcTags.push({ _id: smtcTagId });
   }
   callback();
-}
+};
 
-schema.methods.removeSMTCTag = function(smtcTagId, callback) {
+schema.methods.removeSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to remove (if it exists) then remove it.
   if (this.smtcTags) {
     let fndIndex = -1;
-    this.smtcTags.forEach(function(tag, index) {
+    this.smtcTags.forEach(function (tag, index) {
       let string = tag.toString();
       if (smtcTagId === tag.toString()) {
         fndIndex = index;
       }
-    })
+    });
     if (fndIndex !== -1) {
       this.smtcTags.splice(fndIndex, 1);
     }
   }
   callback();
-}
+};
 
-schema.methods.clearSMTCTags = function(callback) {
-
+schema.methods.clearSMTCTags = function (callback) {
   const cb = () => {
     this.smtcTags = [];
     callback();
-  }
+  };
 
   if (!this.commentTo) {
     var remaining = this.smtcTags.length;
@@ -135,7 +142,7 @@ schema.methods.clearSMTCTags = function(callback) {
     return;
   }
   cb();
-}
+};
 
 schema.plugin(AutoIncrement, { inc_field: 'idnum' });
 var Group = mongoose.model('Group', schema);
@@ -154,9 +161,8 @@ SMTCTag.schema.on('tag:removed', function(id) {
   });
 })*/
 
-
 // Query groups based on passed query data
-Group.queryGroups = function(query, page, options, callback) {
+Group.queryGroups = function (query, page, options, callback) {
   if (typeof query === 'function') return Group.findPage(query);
   if (typeof page === 'function') {
     callback = page;
@@ -175,7 +181,7 @@ Group.queryGroups = function(query, page, options, callback) {
   options.limit = 100;
 
   // Create filter object
-  Group.filterAttributes.forEach(function(attr) {
+  Group.filterAttributes.forEach(function (attr) {
     if (!_.isUndefined(query[attr])) filter[attr] = query[attr];
   });
 
@@ -203,7 +209,8 @@ Group.queryGroups = function(query, page, options, callback) {
   // Search for substrings
   if (query.title) filter.title = new RegExp(query.title, 'i');
   else delete filter.title;
-  if (query.locationName) filter.locationName = new RegExp(query.locationName, 'i');
+  if (query.locationName)
+    filter.locationName = new RegExp(query.locationName, 'i');
   else delete filter.locationName;
 
   // Checking for multiple tags in group

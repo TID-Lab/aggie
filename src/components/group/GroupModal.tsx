@@ -13,7 +13,12 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Group, GroupEditableData, User } from '../../objectTypes';
+import {
+  AssignedToUser,
+  Group,
+  GroupEditableData,
+  User,
+} from '../../objectTypes';
 import { Formik, FormikValues, Field } from 'formik';
 import * as Yup from 'yup';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -32,7 +37,7 @@ const groupEditSchema = Yup.object().shape({
   groupEscalated: Yup.boolean(),
   groupClosed: Yup.boolean(),
   groupVeracity: Yup.string(),
-  groupAssignedTo: Yup.string(),
+  groupAssignedTo: Yup.array().of(Yup.string()),
   groupNotes: Yup.string(),
 });
 
@@ -99,6 +104,16 @@ export default function GroupModal(props: IProps) {
     }
   };
 
+  let assignedTo: AssignedToUser[] = [];
+
+  if (props.group && props.group.assignedTo) {
+    if (!Array.isArray(props.group.assignedTo)) {
+      assignedTo = [props.group.assignedTo];
+    } else {
+      assignedTo = props.group.assignedTo;
+    }
+  }
+
   return (
     <>
       {props.group && (
@@ -131,7 +146,9 @@ export default function GroupModal(props: IProps) {
             groupClosed: props.group ? props.group.closed : false,
             groupEscalated: props.group ? props.group.escalated : false,
             groupLocation: props.group ? props.group.locationName : '',
-            groupAssignedTo: props.group ? props.group.assignedTo?._id : '',
+            groupAssignedTo: props.group
+              ? assignedTo.map((user) => user._id)
+              : [''],
             groupNotes: props.group ? props.group.notes : '',
           }}
           validationSchema={groupEditSchema}
@@ -246,13 +263,14 @@ export default function GroupModal(props: IProps) {
                       value={values.groupAssignedTo}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      multiple={true}
                       isInvalid={
                         touched.groupAssignedTo && !!errors.groupAssignedTo
                       }
                     >
-                      <option key='none' value={''}>
+                      {/* <option key='none' value={''}>
                         None
-                      </option>
+                      </option> */}
                       {usersQuery.isSuccess &&
                         usersQuery.data &&
                         usersQuery.data.map((user) => {

@@ -1,14 +1,15 @@
 import { Button, Container, Modal, Form, Alert } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
 import axios, { AxiosError } from 'axios';
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
-import { Tag, TagEditableData } from '../../objectTypes';
-import { useMutation, useQueryClient } from 'react-query';
+import { Session, Tag, TagEditableData } from '../../objectTypes';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editTag, newTag } from '../../api/tags';
+import { getSession } from '../../api/session';
 
 interface IProps {
   tag?: Tag;
@@ -80,10 +81,47 @@ export default function TagModal(props: IProps) {
     }
   };
 
+  const sessionQuery = useQuery<Session | undefined, AxiosError>(
+    'session',
+    getSession
+  );
+
   /* Modal state handling */
   const [modalShow, setModalShow] = useState(false);
-  const handleModalClose = () => setModalShow(false);
-  const handleModalShow = () => setModalShow(true);
+  const handleModalClose = () => {
+    console.log('Handle Modal Show');
+    if (props.tag) {
+      // editTagMutation.mutate({
+      //   ...props.tag,
+      //   isBeingEdited: false,
+      //   isBeingEditedBy: undefined,
+      // });
+      editTag({
+        ...props.tag,
+        isBeingEdited: false,
+        isBeingEditedBy: undefined,
+      });
+    }
+
+    setModalShow(false);
+  };
+  const handleModalShow = () => {
+    console.log('Handle Modal Show');
+    if (props.tag) {
+      // editTagMutation.mutate({
+      //   ...props.tag,
+      //   isBeingEdited: true,
+      //   isBeingEditedBy: sessionQuery.data?._id,
+      // });
+      editTag({
+        ...props.tag,
+        isBeingEdited: true,
+        isBeingEditedBy: sessionQuery.data?._id,
+      });
+    }
+
+    setModalShow(true);
+  };
 
   /* Alert state handling */
   const [alertShow, setAlertShow] = useState(true);

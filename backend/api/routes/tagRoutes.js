@@ -11,7 +11,7 @@ router.get('', User.can('view data'), tagController.tag_tags);
 router.post('', User.can('edit tags'), tagController.tag_create);
 
 // Update a Tag
-router.put('/:_id', User.can('edit tags'), tagController.tag_create);
+router.put('/:_id', User.can('edit tags'), tagController.tag_update);
 
 // Delete a tag
 router.delete('/:_id', User.can('edit tags'), tagController.tag_delete);

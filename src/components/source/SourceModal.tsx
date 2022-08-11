@@ -3,17 +3,19 @@ import {
   Container,
   Dropdown,
   Modal,
+  Form,
   FormGroup,
   FormText,
   FormLabel,
   FormSelect,
+  Alert,
 } from 'react-bootstrap';
 import React, { ChangeEvent, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { capitalizeFirstLetter } from '../../helpers';
 import * as Yup from 'yup';
-import { Formik, Form, FormikValues } from 'formik';
+import { Formik, FormikValues } from 'formik';
 import { Field } from 'formik';
 import { Credential, MediaType, Source } from '../../objectTypes';
 import { useMutation, useQueryClient } from 'react-query';
@@ -118,6 +120,14 @@ export default function SourceModal(props: IProps) {
     props.credentials.find(
       (credential) => credential.type === sourceMediaType
     ) || null;
+
+  const twitterCredentials = props.credentials.filter(
+    (cred) => cred.type === 'twitter'
+  );
+  const crowdtangleCredentials = props.credentials.filter(
+    (cred) => cred.type === 'crowdtangle'
+  );
+
   const twitterFormJSX = (
     <Formik
       initialValues={{
@@ -173,51 +183,39 @@ export default function SourceModal(props: IProps) {
                   })}
                 </FormSelect>
               </FormGroup>
-              <FormGroup controlId='sourceNickname' className={'mb-3'}>
-                <FormLabel>Name</FormLabel>
-                <Field
+              <Form.Group controlId='sourceNickname' className={'mb-3'}>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  required
                   type='text'
-                  name='sourceNickname'
                   placeholder='Enter name'
-                  className={
-                    errors.sourceNickname
-                      ? 'form-control is-invalid'
-                      : 'form-control'
-                  }
+                  name='sourceNickname'
+                  value={values.sourceNickname}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  isInvalid={touched.sourceNickname && !!errors.sourceNickname}
                 />
-                {errors.sourceNickname && (
-                  <div
-                    className='invalid-feedback'
-                    style={{ display: 'block' }}
-                  >
-                    {errors.sourceNickname}
-                  </div>
-                )}
-              </FormGroup>
-              <FormGroup controlId='sourceKeywords' className={'mb-3'}>
-                <FormLabel>Keywords</FormLabel>
-                <Field
+
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceNickname}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId='sourceKeywords' className={'mb-3'}>
+                <Form.Label>Keywords</Form.Label>
+
+                <Form.Control
+                  required
                   type='text'
-                  name='sourceKeywords'
                   placeholder='Enter keywords'
-                  className={
-                    errors.sourceKeywords
-                      ? 'form-control is-invalid'
-                      : 'form-control'
-                  }
+                  name='sourceKeywords'
+                  value={values.sourceKeywords}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  isInvalid={touched.sourceKeywords && !!errors.sourceKeywords}
                 />
-                {errors.sourceKeywords && (
-                  <div
-                    className='invalid-feedback'
-                    style={{ display: 'block' }}
-                  >
-                    {errors.sourceKeywords}
-                  </div>
-                )}
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceKeywords}
+                </Form.Control.Feedback>
                 <FormText muted>
                   Separated by commas, e.g. <i>banana, apple, mango</i>. Click{' '}
                   <a
@@ -229,9 +227,10 @@ export default function SourceModal(props: IProps) {
                   </a>{' '}
                   for details on how this is used to find tweets.
                 </FormText>
-              </FormGroup>
-              <FormGroup controlId='sourceCredentials' className='mb-3'>
-                <FormLabel>Credentials</FormLabel>
+              </Form.Group>
+
+              <Form.Group controlId='sourceCredentials' className='mb-3'>
+                <Form.Label>Credentials</Form.Label>
                 <Field
                   as='select'
                   name='sourceCredentials'
@@ -243,7 +242,12 @@ export default function SourceModal(props: IProps) {
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  disabled={!twitterCredentials.length}
+                  isInvalid={
+                    touched.sourceCredentials && errors.sourceCredentials
+                  }
                 >
+                  <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
                     if (cred.type === 'twitter') {
                       return (
@@ -254,18 +258,27 @@ export default function SourceModal(props: IProps) {
                     }
                   })}
                 </Field>
-                {errors.sourceCredentials && (
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceCredentials}
+                </Form.Control.Feedback>
+                {/* {errors.sourceCredentials && (
                   <div
                     className='invalid-feedback'
                     style={{ display: 'block' }}
                   >
                     {errors.sourceCredentials}
                   </div>
-                )}
+                )} */}
+
                 <FormText muted>
                   Select which credentials will be used for API calls.
                 </FormText>
-              </FormGroup>
+                {!twitterCredentials.length && (
+                  <Alert key='danger' variant='danger' className='mt-2'>
+                    No credentials found. Please create credentials first.
+                  </Alert>
+                )}
+              </Form.Group>
             </Container>
           </Modal.Body>
           <Modal.Footer>
@@ -368,6 +381,7 @@ export default function SourceModal(props: IProps) {
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  disabled={!crowdtangleCredentials.length}
                 >
                   <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
@@ -388,6 +402,7 @@ export default function SourceModal(props: IProps) {
                     {errors.sourceCredentials}
                   </div>
                 )}
+
                 <FormText muted>
                   Select which API credentials will be used for API calls. Find
                   more info on the Crowdtangle API{' '}
@@ -396,6 +411,11 @@ export default function SourceModal(props: IProps) {
                   </a>
                   .
                 </FormText>
+                {!crowdtangleCredentials.length && (
+                  <Alert key='danger' variant='danger' className='mt-2'>
+                    No credentials found. Please create credentials first.
+                  </Alert>
+                )}
               </FormGroup>
             </Container>
           </Modal.Body>
