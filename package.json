@@ -55,7 +55,7 @@
     "graceful-fs": "^4.2.4",
     "growl": ">=1.10.0",
     "gulp": "^4.0.2",
-    "gulp-jshint": "^1.11.2",
+    "gulp-jshint": "^2.1.0",
     "gulp-livereload": "^4.0.2",
     "gulp-mocha": "^8.0.0",
     "gulp-plumber": "^1.2.1",
