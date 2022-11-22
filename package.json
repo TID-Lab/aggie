@@ -90,7 +90,7 @@
     "sanitize-html": "^2.3.2",
     "sass": "^1.44.0",
     "single-line-log": "^1.1.2",
-    "socket.io": "^4.3.1",
+    "socket.io": "^4.5.3",
     "timekeeper": "^2.2.0",
     "timezone": "^1.0.23",
     "tweet-matches": "^1.0.2",
